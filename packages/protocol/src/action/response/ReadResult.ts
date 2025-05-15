@@ -33,13 +33,7 @@ export interface ReadResult<Chunk = ReadResult.Chunk> extends AsyncIterable<Read
 export namespace ReadResult {
     export type Chunk = Iterable<Report>;
 
-    export type Report =
-        | AttributeValue
-        | GlobalAttributeStatus
-        | ClusterAttributeStatus
-        | EventValue
-        | GlobalEventStatus
-        | ClusterEventStatus;
+    export type Report = AttributeValue | AttributeStatus | EventValue | EventStatus;
 
     export interface ConcreteAttributePath extends AttributePath {
         nodeId?: NodeId;
@@ -56,17 +50,11 @@ export namespace ReadResult {
         tlv: TlvSchema<unknown>;
     }
 
-    export interface GlobalAttributeStatus {
+    export interface AttributeStatus {
         kind: "attr-status";
         path: ConcreteAttributePath;
         status: StatusCode;
-    }
-
-    export interface ClusterAttributeStatus {
-        kind: "attr-cluster-status";
-        path: ConcreteAttributePath;
-        status: number;
-        clusterStatus: number;
+        clusterStatus?: number;
     }
 
     export interface ConcreteEventPath extends EventPath {
@@ -86,15 +74,10 @@ export namespace ReadResult {
         tlv: TlvSchema<unknown>;
     }
 
-    export interface GlobalEventStatus {
+    export interface EventStatus {
         kind: "event-status";
         path: ConcreteEventPath;
         status: Status;
-    }
-
-    export interface ClusterEventStatus {
-        kind: "event-cluster-status";
-        path: ConcreteEventPath;
-        clusterStatus: number;
+        clusterStatus?: number;
     }
 }

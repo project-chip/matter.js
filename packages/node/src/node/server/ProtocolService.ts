@@ -20,13 +20,14 @@ import type {
     ClusterTypeProtocol,
     CollectionProtocol,
     EndpointProtocol,
+    InteractionSession,
     NodeProtocol,
 } from "#protocol";
-import { AccessControl, FabricManager } from "#protocol";
+import { FabricManager } from "#protocol";
 import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, TlvSchema } from "#types";
 import { WildcardPathFlags as WildcardPathFlagsType } from "#types";
 import { camelize, Observable, ObserverGroup } from "@matter/general";
-import { EventTypeProtocol, OccurrenceManager } from "@matter/protocol";
+import { EventTypeProtocol, OccurrenceManager, Val } from "@matter/protocol";
 import { AttributePath, EventId, EventPath } from "@matter/types";
 import { DescriptorBehavior } from "../../behaviors/descriptor/DescriptorBehavior.js";
 
@@ -311,14 +312,20 @@ class ClusterState implements DisposableClusterProtocol {
         return this.#datasource.location;
     }
 
+    readState(session: InteractionSession): Val.ProtocolStruct {
+        return this.#datasource.reference(session as ValueSupervisor.Session);
+    }
+
     get stateChanged() {
         return this.#stateChanged;
     }
 
-    open(session: AccessControl.Session) {
-        if (!("transaction" in session)) {
+    async openForWrite(session: InteractionSession): Promise<Val.ProtocolStruct> {
+        if (session.transaction === undefined) {
             throw new ImplementationError("Cluster protocol must be opened with a supervisor session");
         }
+        await session.transaction.addResources(this.#datasource);
+        await session.transaction.begin();
         return this.#datasource.reference(session as ValueSupervisor.Session);
     }
 
@@ -501,26 +508,27 @@ function toWildcardOrHex(value: number | bigint | undefined) {
 function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath) {
     const { endpointId, clusterId } = path;
     const isUrgentString = "isUrgent" in path && path.isUrgent ? "!" : "";
+    const listIndexString = "listIndex" in path && path.listIndex === null ? "[ADD]" : "";
 
     const elementId = "attributeId" in path ? path.attributeId : "eventId" in path ? path.eventId : undefined;
 
     if (endpointId === undefined) {
-        return `*/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${isUrgentString}`;
+        return `*/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
     }
 
     const endpoint = node[endpointId];
     if (endpoint === undefined) {
-        return `unknown(${toWildcardOrHex(endpointId)})/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${isUrgentString}`;
+        return `unknown(${toWildcardOrHex(endpointId)})/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
     }
     const endpointName = `${endpoint.name}(${toWildcardOrHex(endpointId)})`;
 
     if (clusterId === undefined) {
-        return `${endpointName}/*/${toWildcardOrHex(elementId)}${isUrgentString}`;
+        return `${endpointName}/*/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
     }
 
     const cluster = endpoint[clusterId];
     if (cluster === undefined) {
-        return `${endpointName}/unknown(${toWildcardOrHex(clusterId)})/${toWildcardOrHex(elementId)}${isUrgentString}`;
+        return `${endpointName}/unknown(${toWildcardOrHex(clusterId)})/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
     }
     const clusterName = `${cluster.type.name}(${toWildcardOrHex(clusterId)})`;
 
@@ -529,8 +537,8 @@ function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath)
         return `${endpointName}/${clusterName}/${event?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${isUrgentString}`;
     } else if ("attributeId" in path && elementId !== undefined) {
         const attribute = cluster.type.attributes[elementId];
-        return `${endpointName}/${clusterName}/${attribute?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${isUrgentString}`;
+        return `${endpointName}/${clusterName}/${attribute?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${listIndexString}${isUrgentString}`;
     } else {
-        return `${endpointName}/${clusterName}/*${isUrgentString}`;
+        return `${endpointName}/${clusterName}/*${listIndexString}${isUrgentString}`;
     }
 }

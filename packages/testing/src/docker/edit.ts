@@ -60,6 +60,14 @@ export namespace edit {
             }
         };
     }
+
+    export function js(edit: (str: string) => string): Editor {
+        return async (container, paths) => {
+            for (const path of paths) {
+                await container.write(path, edit(await container.read(path)));
+            }
+        };
+    }
 }
 
 interface CompiledLineEditor {

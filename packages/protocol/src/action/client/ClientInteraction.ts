@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interactable } from "#action/Interactable.js";
+import { Interactable, InteractionSession } from "#action/Interactable.js";
 import { Invoke } from "#action/request/Invoke.js";
 import { Read } from "#action/request/Read.js";
 import { Subscribe } from "#action/request/Subscribe.js";
@@ -13,13 +13,11 @@ import { InvokeResult } from "#action/response/InvokeResult.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { SubscribeResult } from "#action/response/SubscribeResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
-import { AccessControl } from "#action/server/AccessControl.js";
-import { CancelablePromise, Environment, Environmental, NotImplementedError, PromiseQueue } from "#general";
+import { Environment, Environmental, NotImplementedError, PromiseQueue } from "#general";
 import { InteractionClientMessenger } from "#interaction/InteractionMessenger.js";
 import { SubscriptionClient } from "#interaction/SubscriptionClient.js";
 import { InteractionQueue } from "#peer/InteractionQueue.js";
 import { ExchangeProvider } from "#protocol/ExchangeProvider.js";
-import { WriteResponse } from "#types";
 
 export interface ClientInteractableContext {
     exchanges: ExchangeProvider;
@@ -30,7 +28,7 @@ export interface ClientInteractableContext {
 /**
  * This is a WIP and currently largely a stub.
  */
-export class ClientInteraction<SessionT extends AccessControl.Session = AccessControl.Session>
+export class ClientInteraction<SessionT extends InteractionSession = InteractionSession>
     implements Interactable<SessionT>
 {
     readonly #exchanges: ExchangeProvider;
@@ -66,28 +64,38 @@ export class ClientInteraction<SessionT extends AccessControl.Session = AccessCo
         throw new NotImplementedError();
     }
 
-    write<T extends Write>(request: T, _session?: SessionT) {
-        return new CancelablePromise<void | WriteResponse>((resolve, reject) => {
-            InteractionClientMessenger.create(this.#exchanges).then(messenger => {
-                const send = messenger.sendWriteCommand(request);
-
-                let sendResolve;
-                if (request.suppressResponse) {
-                    sendResolve = send.then(() => {
-                        resolve();
-                    });
-                } else {
-                    sendResolve = send.then(resolve);
-                }
-
-                sendResolve.catch(reject);
-            }, reject);
-        }) as WriteResult<T>;
+    async write<T extends Write>(request: T, _session?: SessionT): WriteResult<T> {
+        const messenger = await InteractionClientMessenger.create(this.#exchanges);
+        const response = await messenger.sendWriteCommand(request);
+        if (request.suppressResponse) {
+            return undefined as Awaited<WriteResult<T>>;
+        }
+        if (!response || !response.writeResponses?.length) {
+            return new Array<WriteResult.AttributeStatus>() as Awaited<WriteResult<T>>;
+        } else {
+            return response.writeResponses.map(
+                ({
+                    path: { nodeId, endpointId, clusterId, attributeId, listIndex },
+                    status: { status, clusterStatus },
+                }) => ({
+                    kind: "attr-status",
+                    path: {
+                        nodeId,
+                        endpointId: endpointId!,
+                        clusterId: clusterId!,
+                        attributeId: attributeId!,
+                        listIndex,
+                    },
+                    status: status!,
+                    clusterStatus,
+                }),
+            ) as Awaited<WriteResult<T>>;
+        }
     }
 
     invoke<T extends Invoke>(request: Invoke, _session?: SessionT): InvokeResult<T> {
         if (request.suppressResponse) {
-            return new CancelablePromise<void>((resolve, reject) => {
+            return new Promise<void>((resolve, reject) => {
                 InteractionClientMessenger.create(this.#exchanges)
                     .then(messenger =>
                         messenger

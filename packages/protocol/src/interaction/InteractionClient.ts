@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AccessControl } from "#clusters/access-control";
 import {
     Diagnostic,
     Environment,
@@ -62,6 +63,15 @@ const logger = Logger.get("InteractionClient");
 const REQUEST_ALL = [{}];
 const DEFAULT_TIMED_REQUEST_TIMEOUT_MS = 10_000; // 10 seconds
 const DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE_MS = 30_000; // 30 seconds
+
+const AclClusterId = AccessControl.Complete.id;
+const AclAttributeId = AccessControl.Complete.attributes.acl.id;
+const AclExtensionAttributeId = AccessControl.Complete.attributes.extension.id;
+
+function isAclOrExtensionPath(path: { clusterId: ClusterId; attributeId: AttributeId }) {
+    const { clusterId, attributeId } = path;
+    return clusterId === AclClusterId && (attributeId === AclAttributeId || attributeId === AclExtensionAttributeId);
+}
 
 export interface AttributeStatus {
     path: {
@@ -554,9 +564,18 @@ export class InteractionClient {
                 )
                 .join(", ")}`,
         );
+        // TODO Add multi message write handling with streamed encoding
         const writeRequests = attributes.flatMap(
             ({ endpointId, clusterId, attribute: { id, schema }, value, dataVersion }) => {
-                if (chunkLists && Array.isArray(value) && schema instanceof ArraySchema) {
+                if (
+                    chunkLists &&
+                    Array.isArray(value) &&
+                    schema instanceof ArraySchema &&
+                    // As implemented for Matter 1.4.2 in https://github.com/project-chip/connectedhomeip/pull/38263
+                    // Acl writes will no longer be chunked by default, all others still
+                    // Will be streamlined later ... see https://github.com/project-chip/connectedhomeip/issues/38270
+                    !isAclOrExtensionPath({ clusterId, attributeId: id })
+                ) {
                     return schema
                         .encodeAsChunkedArray(value, { forWriteInteraction: true })
                         .map(({ element: data, listIndex }) => ({

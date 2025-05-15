@@ -5,8 +5,9 @@
  */
 
 export * from "./AccessControl.js";
-export * from "./AttributeResponse.js";
+export * from "./AttributeReadResponse.js";
 export * from "./AttributeSubscriptionResponse.js";
+export * from "./AttributeWriteResponse.js";
 export * from "./DataResponse.js";
-export * from "./EventResponse.js";
+export * from "./EventReadResponse.js";
 export * from "./ServerInteraction.js";

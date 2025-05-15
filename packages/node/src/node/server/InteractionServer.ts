@@ -7,10 +7,9 @@
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
-import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
 import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { AccessControlServer } from "#behaviors/access-control";
-import { AccessControlCluster } from "#clusters/access-control";
+import { AccessControl as AccessControlClusterType } from "#clusters/access-control";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
 import { EndpointServer } from "#endpoint/server/EndpointServer.js";
@@ -28,25 +27,15 @@ import { ClusterModel, CommandModel, GLOBAL_IDS, MatterModel, Specification } fr
 import {
     AccessControl,
     AccessDeniedError,
-    AnyAttributeServer,
-    AnyEventServer,
     assertSecureSession,
-    AttributePath,
-    attributePathToId,
-    AttributeServer,
     clusterPathToId,
     CommandPath,
     commandPathToId,
     CommandServer,
     DataReport,
     DataReportPayloadIterator,
-    decodeAttributeValueWithSchema,
-    decodeListAttributeValueWithSchema,
     EndpointInterface,
-    EventPath,
     ExchangeManager,
-    expandPathsInAttributeData,
-    FabricScopedAttributeServer,
     InteractionEndpointStructure,
     InteractionRecipient,
     InteractionServerMessenger,
@@ -66,7 +55,6 @@ import {
     WriteResponse,
 } from "#protocol";
 import {
-    ArraySchema,
     ClusterId,
     CommandId,
     DEFAULT_MAX_PATHS_PER_INVOKE,
@@ -77,7 +65,6 @@ import {
     TlvAny,
     TlvAttributePath,
     TlvCommandPath,
-    TlvEventFilter,
     TlvEventPath,
     TlvInvokeResponseData,
     TlvInvokeResponseForSend,
@@ -87,8 +74,9 @@ import {
     TypeFromSchema,
     ValidationError,
 } from "#types";
-import { ServerInteraction } from "@matter/protocol";
+import { WriteResult } from "@matter/protocol";
 import { ServerNode } from "../ServerNode.js";
+import { OnlineServerInteraction } from "./OnlineServerInteraction.js";
 import { ServerSubscription, ServerSubscriptionConfig, ServerSubscriptionContext } from "./ServerSubscription.js";
 
 const logger = Logger.get("InteractionServer");
@@ -99,8 +87,9 @@ export interface WithActivity {
     [activityKey]?: NodeActivity.Activity;
 }
 
-const AclClusterId = AccessControlCluster.id;
-const AclAttributeId = AccessControlCluster.attributes.acl.id;
+const AclClusterId = AccessControlClusterType.Complete.id;
+const AclAttributeId = AccessControlClusterType.Complete.attributes.acl.id;
+const AclExtensionAttributeId = AccessControlClusterType.Complete.attributes.extension.id;
 
 export interface PeerSubscription {
     subscriptionId: number;
@@ -115,13 +104,6 @@ export interface PeerSubscription {
     operationalAddress?: ServerAddressIp;
 }
 
-function isConcreteAttributePath(
-    path: TypeFromSchema<typeof TlvAttributePath>,
-): path is TypeFromSchema<typeof TlvAttributePath> & AttributePath {
-    const { endpointId, clusterId, attributeId } = path;
-    return endpointId !== undefined && clusterId !== undefined && attributeId !== undefined;
-}
-
 function validateReadAttributesPath(path: TypeFromSchema<typeof TlvAttributePath>, isGroupSession = false) {
     if (isGroupSession) {
         throw new StatusResponseError("Illegal read request with group session", StatusCode.InvalidAction);
@@ -134,19 +116,6 @@ function validateReadAttributesPath(path: TypeFromSchema<typeof TlvAttributePath
                 StatusCode.InvalidAction,
             );
         }
-    }
-}
-
-function validateWriteAttributesPath(path: TypeFromSchema<typeof TlvAttributePath>, isGroupSession = false) {
-    const { endpointId, clusterId, attributeId } = path;
-    if (clusterId === undefined || attributeId === undefined) {
-        throw new StatusResponseError(
-            "Illegal write request with wildcard cluster or attribute ID",
-            StatusCode.InvalidAction,
-        );
-    }
-    if (isGroupSession && endpointId !== undefined) {
-        throw new StatusResponseError("Illegal write request with group ID and endpoint ID", StatusCode.InvalidAction);
     }
 }
 
@@ -216,7 +185,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     #newActivityBlocked = false;
     #aclServer?: AccessControlServer;
     #aclUpdateIsDelayedInExchange = new Set<MessageExchange>();
-    #serverInteraction: ServerInteraction;
+    #serverInteraction: OnlineServerInteraction;
 
     constructor(node: ServerNode, sessions: SessionManager) {
         this.#context = {
@@ -238,7 +207,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
         // ServerInteraction is the "new way" and will replace most logic here over time and especially
         // the InteractionEndpointStructure, which is currently a duplication of the node protocol
-        this.#serverInteraction = new ServerInteraction(node.protocol);
+        this.#serverInteraction = new OnlineServerInteraction(node.protocol);
 
         // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
         this.#updateStructure();
@@ -325,8 +294,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         this.#clientHandler = clientHandler;
     }
 
-    #createOnlineReadOnlyContext(exchange: MessageExchange, message: Message, fabricFiltered: boolean) {
-        return OnlineContext({
+    #createOnlineContext(exchange: MessageExchange, message: Message, fabricFiltered: boolean) {
+        return {
             activity: (exchange as WithActivity)[activityKey],
             fabricFiltered,
             message,
@@ -334,21 +303,20 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             tracer: this.#tracer,
             actionType: ActionTracer.ActionType.Read,
             node: this.#node,
-        }).beginReadOnly();
+        };
     }
 
     /**
      * Returns an iterator that yields the data reports and events data for the given read request.
      */
     async *#executeReadInteraction(readRequest: ReadRequest, exchange: MessageExchange, message: Message) {
-        const context = this.#createOnlineReadOnlyContext(exchange, message, readRequest.isFabricFiltered);
+        const context = this.#createOnlineContext(exchange, message, readRequest.isFabricFiltered);
 
         for await (const chunk of this.#serverInteraction.read(readRequest, context)) {
             for (const report of chunk) {
                 yield InteractionServerMessenger.convertServerInteractionReport(report);
             }
         }
-        context[Symbol.dispose]();
     }
 
     async handleReadRequest(
@@ -402,179 +370,17 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         };
     }
 
-    protected readAttribute(
-        path: AttributePath,
-        attribute: AnyAttributeServer<any>,
-        exchange: MessageExchange,
-        fabricFiltered: boolean,
-        message: Message,
-        offline = false,
-    ) {
-        const readAttribute = () =>
-            attribute.getWithVersion(exchange.session, fabricFiltered, offline ? undefined : message);
-
-        const endpoint = this.#context.structure.getEndpoint(path.endpointId);
-        if (!endpoint) {
-            throw new InternalError("Endpoint not found for ACL check. This should never happen.");
-        }
-
-        const result = offline
-            ? OfflineContext.act("offline-read", this.#activity, readAttribute)
-            : OnlineContext({
-                  activity: (exchange as WithActivity)[activityKey],
-                  fabricFiltered,
-                  message,
-                  exchange,
-                  tracer: this.#tracer,
-                  actionType: ActionTracer.ActionType.Read,
-                  node: this.#node,
-              }).act(readAttribute);
-
-        if (MaybePromise.is(result)) {
-            throw new InternalError("Reads should not return a promise.");
-        }
-        return result;
-    }
-
-    /**
-     * Reads the attributes for the given endpoint.
-     * This can currently only be used for subscriptions because errors are ignored!
-     */
-    protected readEndpointAttributesForSubscription(
-        attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
-        exchange: MessageExchange,
-        fabricFiltered: boolean,
-        message: Message,
-        offline = false,
-    ) {
-        const readAttributes = () => {
-            const result = new Array<{
-                path: AttributePath;
-                attribute: AnyAttributeServer<unknown>;
-                value: any;
-                version: number;
-            }>();
-            for (const { path, attribute } of attributes) {
-                try {
-                    const value = attribute.getWithVersion(
-                        exchange.session,
-                        fabricFiltered,
-                        offline ? undefined : message,
-                    );
-                    result.push({ path, attribute, value: value.value, version: value.version });
-                } catch (error) {
-                    if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
-                        logger.warn(
-                            `Permission denied reading attribute ${this.#context.structure.resolveAttributeName(path)}`,
-                        );
-                    } else {
-                        logger.warn(
-                            `Error reading attribute ${this.#context.structure.resolveAttributeName(path)}:`,
-                            error,
-                        );
-                    }
-                }
-            }
-            return result;
-        };
-
-        const result = offline
-            ? OfflineContext.act("offline-read", this.#activity, readAttributes)
-            : OnlineContext({
-                  activity: (exchange as WithActivity)[activityKey],
-                  fabricFiltered,
-                  message,
-                  exchange,
-                  tracer: this.#tracer,
-                  actionType: ActionTracer.ActionType.Read,
-                  node: this.#node,
-              }).act(readAttributes);
-        if (MaybePromise.is(result)) {
-            throw new InternalError("Online read should not return a promise.");
-        }
-        return result;
-    }
-
-    protected async readEvent(
-        path: EventPath,
-        eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
-        event: AnyEventServer<any, any>,
-        exchange: MessageExchange,
-        fabricFiltered: boolean,
-        message: Message,
-    ) {
-        const readEvent = (context: ActionContext) => {
-            if (
-                context.authorityAt(event.readAcl, {
-                    endpoint: path.endpointId,
-                    cluster: path.clusterId,
-                } as AccessControl.Location) !== AccessControl.Authority.Granted
-            ) {
-                throw new AccessDeniedError(
-                    `Access to ${path.endpointId}/${Diagnostic.hex(path.clusterId)} denied on ${exchange.session.name}.`,
-                );
-            }
-            return event.get(exchange.session, fabricFiltered, message, eventFilters);
-        };
-
-        return OnlineContext({
-            activity: (exchange as WithActivity)[activityKey],
-            fabricFiltered,
-            message,
-            exchange,
-            tracer: this.#tracer,
-            actionType: ActionTracer.ActionType.Read,
-            node: this.#node,
-        }).act(readEvent);
-    }
-
     async handleWriteRequest(
         exchange: MessageExchange,
         writeRequest: WriteRequest,
         message: Message,
     ): Promise<WriteResponse> {
-        let result: WriteResponse;
-        try {
-            result = await this.#handleWriteRequestLogic(exchange, writeRequest, message);
-        } catch (error) {
-            if (this.#aclUpdateIsDelayedInExchange.has(exchange)) {
-                // Unlikely to get there at all, but make sure we handle it best we can for now
-                this.#aclUpdateIsDelayedInExchange.delete(exchange);
-
-                if (this.#aclUpdateIsDelayedInExchange.size === 0) {
-                    // only that one ACl change in flight, so we can reset the delayed ACL
-                    this.aclServer.resetDelayedAccessControlList();
-                } else {
-                    // TODO: we should restore the delayed data just for this errored fabric?
-                    logger.error("One of multiple concurrent ACL writes failed, unhandled case for now.");
-                }
-            }
-            throw error;
-        }
-        // We delayed the ACL update during this write transaction, so we need to update it now that anything is written
-        if (this.#aclUpdateIsDelayedInExchange.has(exchange)) {
-            this.#aclUpdateIsDelayedInExchange.delete(exchange);
-
-            if (this.#aclUpdateIsDelayedInExchange.size === 0) {
-                //  Committing the ACL changes in case of an unhandled exception might be dangerous, but we do it anyway
-                this.aclServer.aclUpdateDelayed = false;
-            } else {
-                logger.info("Multiple concurrent ACL writes, waiting for all to finish.");
-            }
-        }
-
-        return result;
-    }
-
-    async #handleWriteRequestLogic(
-        exchange: MessageExchange,
-        { suppressResponse, timedRequest, writeRequests, interactionModelRevision, moreChunkedMessages }: WriteRequest,
-        message: Message,
-    ): Promise<WriteResponse> {
+        const { suppressResponse, timedRequest, writeRequests, interactionModelRevision, moreChunkedMessages } =
+            writeRequest;
         const sessionType = message.packetHeader.sessionType;
         logger.debug(
             `Received write request from ${exchange.channel.name}: ${writeRequests
-                .map(req => this.#context.structure.resolveAttributeName(req.path))
+                .map(req => this.#node.protocol.inspectPath(req.path))
                 .join(", ")}, suppressResponse=${suppressResponse}, moreChunkedMessages=${moreChunkedMessages}`,
         );
 
@@ -632,288 +438,66 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             );
         }
 
-        const writeData = expandPathsInAttributeData(writeRequests, true);
-
-        const writeResults = new Array<{
-            path: TypeFromSchema<typeof TlvAttributePath>;
-            statusCode: StatusCode;
-            clusterStatusCode?: number;
-        }>();
-        const attributeListWrites = new Set<AttributeServer<any>>();
-        const clusterDataVersionInfo = new Map<string, number>();
-        const inaccessiblePaths = new Set<string>();
-
-        // TODO Add handling for moreChunkedMessages here when adopting for Matter 1.4
-
-        for (const writeRequest of writeData) {
-            const { path: writePath, dataVersion } = writeRequest;
-
-            validateWriteAttributesPath(writePath);
-
-            const attributes = this.#context.structure.getAttributes([writePath], true);
-
-            // No existing attribute matches the given path and is writable
-            if (attributes.length === 0) {
-                if (isConcreteAttributePath(writePath)) {
-                    const { endpointId, clusterId, attributeId } = writePath;
-
-                    // was a concrete path
-                    try {
-                        this.#context.structure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
-
-                        // Ok it is a valid  concrete path, so it is not writable
-                        throw new StatusResponseError(
-                            `Attribute ${attributeId} is not writable.`,
-                            StatusCode.UnsupportedWrite,
-                        );
-                    } catch (e) {
-                        StatusResponseError.accept(e);
-
-                        logger.debug(
-                            `Write from ${exchange.channel.name}: ${this.#context.structure.resolveAttributeName(
-                                writePath,
-                            )} not allowed: Status=${e.code}`,
-                        );
-                        writeResults.push({ path: writePath, statusCode: e.code });
-                    }
-                } else {
-                    // Wildcard path: Just ignore
-                    logger.debug(
-                        `Write from ${exchange.channel.name}: ${this.#context.structure.resolveAttributeName(
-                            writePath,
-                        )}: ignore non-existing (wildcard) attribute`,
-                    );
-                }
-                continue;
-            }
-
-            // Concrete path and found and writable
-            if (attributes.length === 1 && isConcreteAttributePath(writePath)) {
-                const { endpointId, clusterId } = writePath;
-                const { attribute } = attributes[0];
-
-                if (attribute.requiresTimedInteraction && !receivedWithinTimedInteraction) {
-                    logger.debug(`This write requires a timed interaction which is not initialized.`);
-                    writeResults.push({ path: writePath, statusCode: StatusCode.NeedsTimedInteraction });
-                    continue;
-                }
-
-                if (
-                    attribute instanceof FabricScopedAttributeServer &&
-                    (!exchange.session.isSecure || !(exchange.session as SecureSession).fabric)
-                ) {
-                    logger.debug(`This write requires a secure session with a fabric assigned which is missing.`);
-                    writeResults.push({ path: writePath, statusCode: StatusCode.UnsupportedAccess });
-                    continue;
-                }
-
-                // Check the provided dataVersion with the dataVersion of the cluster
-                // And remember this initial dataVersion for all checks inside this write transaction to allow proper
-                // processing of chunked lists
-                if (dataVersion !== undefined) {
-                    const datasource = this.#context.structure.getClusterServer(endpointId, clusterId)?.datasource;
-                    const { nodeId } = writePath;
-                    const clusterKey = clusterPathToId({ nodeId, endpointId, clusterId });
-                    const currentDataVersion = clusterDataVersionInfo.get(clusterKey) ?? datasource?.version;
-
-                    if (currentDataVersion !== undefined) {
-                        if (dataVersion !== currentDataVersion) {
-                            logger.debug(
-                                `This write requires a specific data version (${dataVersion}) which do not match the current cluster data version (${currentDataVersion}).`,
-                            );
-                            writeResults.push({ path: writePath, statusCode: StatusCode.DataVersionMismatch });
-                            continue;
-                        }
-                        clusterDataVersionInfo.set(clusterKey, currentDataVersion);
-                    }
-                }
-            }
-
-            for (const { path, attribute } of attributes) {
-                const { schema, defaultValue } = attribute;
-                const pathId = attributePathToId(path);
-
-                try {
-                    if (
-                        !(attribute instanceof AttributeServer) &&
-                        !(attribute instanceof FabricScopedAttributeServer)
-                    ) {
-                        throw new StatusResponseError(
-                            "Fixed attributes cannot be written",
-                            StatusCode.UnsupportedWrite,
-                        );
-                    }
-
-                    if (inaccessiblePaths.has(pathId)) {
-                        logger.debug(`This write is not allowed due to previous access denied.`);
-                        continue;
-                    }
-
-                    const { endpointId } = path;
-                    const { listIndex } = writePath;
-                    const value =
-                        listIndex === undefined
-                            ? decodeAttributeValueWithSchema(schema, [writeRequest], defaultValue)
-                            : decodeListAttributeValueWithSchema(
-                                  schema as ArraySchema<any>,
-                                  [writeRequest],
-                                  this.readAttribute(path, attribute, exchange, true, message).value ?? defaultValue,
-                              );
-                    logger.debug(
-                        `Handle write request from ${
-                            exchange.channel.name
-                        } resolved to: ${this.#context.structure.resolveAttributeName(path)}=${Diagnostic.json(
-                            value,
-                        )} (listIndex=${listIndex}, for-version=${dataVersion})`,
-                    );
-
-                    if (attribute.requiresTimedInteraction && !receivedWithinTimedInteraction) {
-                        logger.debug(`This write requires a timed interaction which is not initialized.`);
-                        throw new StatusResponseError(
-                            "This write requires a timed interaction which is not initialized.",
-                            StatusCode.NeedsTimedInteraction,
-                        );
-                    }
-
-                    await this.writeAttribute(
-                        path,
-                        attribute,
-                        value,
-                        exchange,
-                        message,
-                        this.#context.structure.getEndpoint(endpointId)!,
-                        receivedWithinTimedInteraction,
-                        schema instanceof ArraySchema,
-                    );
-                    if (schema instanceof ArraySchema && !attributeListWrites.has(attribute)) {
-                        attributeListWrites.add(attribute);
-                    }
-                } catch (error: any) {
-                    if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
-                        inaccessiblePaths.add(pathId);
-                    }
-                    if (attributes.length === 1 && isConcreteAttributePath(writePath)) {
-                        // For Multi-Attribute-Writes we ignore errors
-                        logger.error(
-                            `Error while handling write request from ${
-                                exchange.channel.name
-                            } to ${this.#context.structure.resolveAttributeName(path)}:`,
-                            error instanceof StatusResponseError ? error.message : error,
-                        );
-                        if (error instanceof StatusResponseError) {
-                            writeResults.push({ path, statusCode: error.code, clusterStatusCode: error.clusterCode });
-                            continue;
-                        }
-                        writeResults.push({ path, statusCode: StatusCode.ConstraintError });
-                        continue;
-                    } else {
-                        logger.debug(
-                            `While handling write request from ${
-                                exchange.channel.name
-                            } to ${this.#context.structure.resolveAttributeName(path)} ignored: ${error.message}`,
-                        );
-
-                        // TODO - This behavior may be wrong.
-                        //
-                        // If a wildcard write fails we should either:
-                        //
-                        //   1. Ignore entirely (add nothing to write results), or
-                        //   2. Add an error response for the concrete attribute that failed.
-                        //
-                        // Spec is a little ambiguous.  After request path expansion, in core 1.2 8.7.3.2 it states:
-                        //
-                        //   "If the path indicates attribute data that is not writable, then the path SHALL be
-                        //    discarded"
-                        //
-                        // So is this "not writable" -- so it should be #1 -- or is this "writable" but with invalid
-                        // data?  The latter is error case #2 but spec doesn't make clear what the status code would
-                        // be...  We could fall back to CONSTRAINT_ERROR like we do above though
-                        //
-                        // Currently what we do is add a success response for every concrete path that fails.
-                    }
-                }
-                writeResults.push({ path, statusCode: StatusCode.Success });
-            }
-            //.filter(({ statusCode }) => statusCode !== StatusCode.Success); // see https://github.com/project-chip/connectedhomeip/issues/26198
-        }
-
-        const errorResults = writeResults.filter(({ statusCode }) => statusCode !== StatusCode.Success);
-        logger.debug(
-            `Write request from ${exchange.channel.name} done ${
-                errorResults.length
-                    ? `with following errors: ${errorResults
-                          .map(
-                              ({ path, statusCode }) =>
-                                  `${this.#context.structure.resolveAttributeName(path)}=${Diagnostic.json(statusCode)}`,
-                          )
-                          .join(", ")}`
-                    : "without errors"
-            }`,
-        );
-
-        const response = {
-            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-            writeResponses: writeResults.map(({ path, statusCode, clusterStatusCode }) => ({
-                path,
-                status: { status: statusCode, clusterStatus: clusterStatusCode },
-            })),
-        };
-
-        // Trigger attribute events for delayed list writes
-        for (const attribute of attributeListWrites.values()) {
-            try {
-                attribute.triggerDelayedChangeEvents();
-            } catch (error) {
-                logger.error(
-                    `Ignored Error while writing attribute from ${exchange.channel.name} to ${attribute.name}:`,
-                    error,
-                );
+        // This is a hack to prevent the ACL from updating while we are in the middle of a write transaction
+        // and is needed because Acl should not become effective during writing of the ACL itself.
+        // We check if any ACL path is written and assume that acl write will happen, so we delay the update.
+        // If nothing changed in the end this does not matter
+        for (const {
+            path: { endpointId, clusterId, attributeId },
+        } of writeRequest.writeRequests) {
+            if (
+                (endpointId === undefined || endpointId === 0) &&
+                clusterId === AclClusterId &&
+                (attributeId === AclAttributeId || attributeId === AclExtensionAttributeId)
+            ) {
+                this.aclServer.aclUpdateDelayed = true;
+                this.#aclUpdateIsDelayedInExchange.add(exchange);
             }
         }
 
-        return response;
-    }
+        let result: Awaited<WriteResult<any>>;
+        try {
+            // TODO: We still need to add multi message writes!
 
-    protected async writeAttribute(
-        path: AttributePath,
-        attribute: AttributeServer<any>,
-        value: any,
-        exchange: MessageExchange,
-        message: Message,
-        _endpoint: EndpointInterface,
-        timed?: boolean,
-        isListWrite = false,
-    ) {
-        const writeAttribute = () => attribute.set(value, exchange.session, message, isListWrite);
-
-        if (path.endpointId === 0 && path.clusterId === AclClusterId && path.attributeId === AclAttributeId) {
-            // This is a hack to prevent the ACL from updating while we are in the middle of a write transaction
-            // and is needed because Acl should not become effective during writing of the ACL itself.
-            this.aclServer.aclUpdateDelayed = true;
-            this.#aclUpdateIsDelayedInExchange.add(exchange);
-        } else {
-            // Ok it seems that acl was written, but we now write another path, so we can update Acl attribute now
+            result = await this.#serverInteraction.write(
+                writeRequest,
+                this.#createOnlineContext(exchange, message, true),
+            );
+        } catch (error) {
             if (this.#aclUpdateIsDelayedInExchange.has(exchange)) {
+                // Unlikely to get there at all, but make sure we handle it best we can for now
                 this.#aclUpdateIsDelayedInExchange.delete(exchange);
 
                 if (this.#aclUpdateIsDelayedInExchange.size === 0) {
-                    this.aclServer.aclUpdateDelayed = false;
+                    // only that one ACl change in flight, so we can reset the delayed ACL
+                    this.aclServer.resetDelayedAccessControlList();
                 } else {
-                    logger.info("Multiple concurrent ACL writes, waiting for all to finish.");
+                    // TODO: we should restore the delayed data just for this errored fabric?
+                    logger.error("One of multiple concurrent ACL writes failed, unhandled case for now.");
                 }
+            }
+            throw error;
+        }
+
+        // We delayed the ACL update during this write transaction, so we need to update it now that anything is written
+        if (this.#aclUpdateIsDelayedInExchange.has(exchange)) {
+            this.#aclUpdateIsDelayedInExchange.delete(exchange);
+
+            if (this.#aclUpdateIsDelayedInExchange.size === 0) {
+                //  Committing the ACL changes in case of an unhandled exception might be dangerous, but we do it anyway
+                this.aclServer.aclUpdateDelayed = false;
+            } else {
+                logger.info("Multiple concurrent ACL writes, waiting for all to finish.");
             }
         }
 
-        return OnlineContext({
-            activity: (exchange as WithActivity)[activityKey],
-            timed,
-            message,
-            exchange,
-            fabricFiltered: true,
-            tracer: this.#tracer,
-            actionType: ActionTracer.ActionType.Write,
-            node: this.#node,
-        }).act(writeAttribute);
+        return {
+            writeResponses: result?.map(({ path, status, clusterStatus }) => ({
+                path,
+                status: { status, clusterStatus },
+            })),
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+        };
     }
 
     async handleSubscribeRequest(
@@ -1115,15 +699,13 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             subscriptionOptions: this.#subscriptionConfig,
         });
 
-        const readContext = this.#createOnlineReadOnlyContext(exchange, message, isFabricFiltered);
+        const readContext = this.#createOnlineContext(exchange, message, isFabricFiltered);
         try {
             // Send the initial data report to prime the subscription with initial data
             await subscription.sendInitialReport(messenger, readContext);
         } catch (error) {
             await subscription.close(); // Cleanup
             throw error;
-        } finally {
-            readContext[Symbol.dispose]();
         }
 
         logger.info(
@@ -1176,7 +758,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             useAsSendInterval: sendInterval,
         });
 
-        const readContext = this.#createOnlineReadOnlyContext(exchange, message, isFabricFiltered);
+        const readContext = this.#createOnlineContext(exchange, message, isFabricFiltered);
         try {
             // Send initial data report to prime the subscription with initial data
             await subscription.sendInitialReport(
@@ -1193,8 +775,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         } catch (error) {
             await subscription.close(); // Cleanup
             throw error;
-        } finally {
-            readContext[Symbol.dispose]();
         }
         return subscription;
     }

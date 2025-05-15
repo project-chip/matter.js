@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InteractionSession } from "#action/Interactable.js";
 import { OccurrenceManager } from "#events/OccurrenceManager.js";
 import { MaybePromise, Observable } from "#general";
 import { DataModelPath, MatterModel } from "#model";
@@ -106,12 +107,17 @@ export interface ClusterProtocol {
     stateChanged: Observable<[changes: AttributeId[], version: number], MaybePromise>;
 
     /**
-     * Access a record of attribute values, keyed by attribute ID.
+     * Read-only state of the cluster
+     */
+    readState(session: InteractionSession): Val.ProtocolStruct;
+
+    /**
+     * Writeable record of attribute values, keyed by attribute ID.
      *
      * Note that current protocol implementations do not filter data within this responsibility based on the
      * session.  So doing is the responsibility of the node implementation.
      */
-    open(session: AccessControl.Session): Val.ProtocolStruct;
+    openForWrite(session: InteractionSession): Promise<Val.ProtocolStruct>;
 }
 
 /**

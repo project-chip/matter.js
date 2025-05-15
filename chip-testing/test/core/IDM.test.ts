@@ -6,9 +6,6 @@
 
 describe("IDM", () => {
     chip("IDM/*").exclude(
-        // test excluded till we adjusted for https://github.com/project-chip/connectedhomeip/pull/38263
-        "IDM/1.2",
-
         // We fail conformance tests, mainly for groups though there are DoorLock and OccupancySensor issues too
         // TODO - revisit once we have groups
         "IDM/10.2",

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InteractionSession } from "#action/index.js";
 import { AttributeTypeProtocol, ClusterProtocol, EndpointProtocol, NodeProtocol } from "#action/protocols.js";
 import { Read } from "#action/request/Read.js";
 import { ReadResult } from "#action/response/ReadResult.js";
@@ -24,7 +25,7 @@ import {
 } from "#types";
 import { StatusCode } from "@matter/types";
 
-const logger = Logger.get("AttributeResponse");
+const logger = Logger.get("AttributeReadResponse");
 
 export const GlobalAttrIds = new Set(Object.values(GlobalAttributes({})).map(attr => attr.id));
 
@@ -33,14 +34,14 @@ export const GlobalAttrIds = new Set(Object.values(GlobalAttributes({})).map(att
  *
  * TODO - profile; ensure nested functions are properly JITed and/or inlined
  */
-export class AttributeResponse<
-    SessionT extends AccessControl.Session = AccessControl.Session,
+export class AttributeReadResponse<
+    SessionT extends InteractionSession = InteractionSession,
 > extends DataResponse<SessionT> {
     #versions?: Record<EndpointNumber, Record<ClusterId, number>>;
 
     // Each input AttributePathIB that does not have an error installs a producer.  Producers run after validation and
     // generate actual attribute data
-    #dataProducers?: Array<(this: AttributeResponse) => Iterable<ReadResult.Chunk>>;
+    #dataProducers?: Array<(this: AttributeReadResponse) => Iterable<ReadResult.Chunk>>;
 
     // The initial "chunk" may be a list of errors.  As producers execute it is a set of records associated with the
     // most recently touched endpoint.  When the endpoint changes the previous chunk emits
@@ -124,7 +125,7 @@ export class AttributeResponse<
     get counts() {
         return {
             status: this.#statusCount,
-            value: this.#valueCount,
+            success: this.#valueCount,
             existent: this.#valueCount + this.#filteredCount,
         };
     }
@@ -149,7 +150,7 @@ export class AttributeResponse<
         const wpf = wildcardPathFlags ? WildcardPathFlagsCodec.encode(wildcardPathFlags) : 0;
 
         if (endpointId === undefined) {
-            this.#addProducer(function* (this: AttributeResponse) {
+            this.#addProducer(function* (this: AttributeReadResponse) {
                 this.#wildcardPathFlags = wpf;
                 for (const endpoint of this.node) {
                     yield* this.readEndpointForWildcard(endpoint, path);
@@ -160,7 +161,7 @@ export class AttributeResponse<
 
         const endpoint = this.node[endpointId];
         if (endpoint) {
-            this.#addProducer(function (this: AttributeResponse) {
+            this.#addProducer(function (this: AttributeReadResponse) {
                 this.#wildcardPathFlags = wpf;
                 return this.readEndpointForWildcard(endpoint, path);
             });
@@ -263,12 +264,12 @@ export class AttributeResponse<
                 }
                 this.#currentEndpoint = endpoint;
                 this.#currentCluster = cluster;
-                this.#currentState = cluster.open(this.session);
+                this.#currentState = cluster.readState(this.session);
             } else if (this.#currentCluster !== cluster) {
                 this.#currentCluster = cluster;
-                this.#currentState = cluster.open(this.session);
+                this.#currentState = cluster.readState(this.session);
             } else if (this.#currentState === undefined) {
-                this.#currentState = cluster.open(this.session);
+                this.#currentState = cluster.readState(this.session);
             }
 
             const value = this.#currentState[attributeId];
@@ -386,7 +387,7 @@ export class AttributeResponse<
         }
 
         if (this.#currentState === undefined) {
-            this.#currentState = this.#guardedCurrentCluster.open(this.session);
+            this.#currentState = this.#guardedCurrentCluster.readState(this.session);
         }
         const value = this.#currentState[attribute.id];
         if (value === undefined) {
@@ -411,7 +412,7 @@ export class AttributeResponse<
     /**
      * Add a function that produces data.  These functions are run after validation of input paths.
      */
-    #addProducer(producer: (this: AttributeResponse) => Iterable<ReadResult.Chunk>) {
+    #addProducer(producer: (this: AttributeReadResponse) => Iterable<ReadResult.Chunk>) {
         if (this.#dataProducers) {
             this.#dataProducers.push(producer);
         } else {
@@ -435,7 +436,7 @@ export class AttributeResponse<
             () => `Error reading attribute ${this.node.inspectPath(path)}: Status=${StatusCode[status]}(${status})`,
         );
 
-        const report: ReadResult.GlobalAttributeStatus = {
+        const report: ReadResult.AttributeStatus = {
             kind: "attr-status",
             path,
             status,

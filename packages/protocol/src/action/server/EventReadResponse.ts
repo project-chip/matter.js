@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InteractionSession } from "#action/index.js";
 import { ClusterProtocol, EndpointProtocol, EventTypeProtocol, NodeProtocol } from "#action/protocols.js";
 import { Read } from "#action/request/Read.js";
 import { ReadResult } from "#action/response/ReadResult.js";
@@ -23,7 +24,7 @@ import {
     TlvSchema,
 } from "#types";
 
-const logger = Logger.get("EventResponse");
+const logger = Logger.get("EventReadResponse");
 
 /**
  * Implements read of event data for Matter "read" and "subscribe" interactions.
@@ -32,8 +33,8 @@ const logger = Logger.get("EventResponse");
  *
  * TODO - profile; ensure nested functions are properly JITed and/or inlined
  */
-export class EventResponse<
-    SessionT extends AccessControl.Session = AccessControl.Session,
+export class EventReadResponse<
+    SessionT extends InteractionSession = InteractionSession,
 > extends DataResponse<SessionT> {
     // Normalized Event Filter to just our node-id
     #eventMinVersion?: EventNumber;
@@ -102,7 +103,7 @@ export class EventResponse<
     get counts() {
         return {
             status: this.#statusCount,
-            value: this.#valueCount,
+            success: this.#valueCount,
             existent: this.#allowedEventPaths.size,
         };
     }
@@ -352,7 +353,7 @@ export class EventResponse<
     #asStatus(path: ReadResult.ConcreteEventPath, status: Status) {
         logger.debug(`Error reading event ${this.node.inspectPath(path)}: Status=${StatusCode[status]}(${status})`);
 
-        const report: ReadResult.GlobalEventStatus = {
+        const report: ReadResult.EventStatus = {
             kind: "event-status",
             path,
             status,

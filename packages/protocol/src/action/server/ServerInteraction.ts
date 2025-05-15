@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interactable } from "#action/Interactable.js";
+import { Interactable, InteractionSession } from "#action/Interactable.js";
 import { NodeProtocol } from "#action/protocols.js";
 import { Invoke } from "#action/request/Invoke.js";
 import { Read } from "#action/request/Read.js";
@@ -14,10 +14,10 @@ import { InvokeResult } from "#action/response/InvokeResult.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { SubscribeResult } from "#action/response/SubscribeResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
-import { AccessControl } from "#action/server/AccessControl.js";
-import { EventResponse } from "#action/server/EventResponse.js";
+import { EventReadResponse } from "#action/server/EventReadResponse.js";
 import { Logger, NotImplementedError } from "#general";
-import { AttributeResponse } from "./AttributeResponse.js";
+import { AttributeReadResponse } from "./AttributeReadResponse.js";
+import { AttributeWriteResponse } from "./AttributeWriteResponse.js";
 
 const logger = Logger.get("ServerInteraction");
 
@@ -31,7 +31,7 @@ const logger = Logger.get("ServerInteraction");
  *
  * - InteractionEndpointStructure ({@link NodeProtocol} is largely duplicative)
  */
-export class ServerInteraction<SessionT extends AccessControl.Session = AccessControl.Session>
+export class ServerInteraction<SessionT extends InteractionSession = InteractionSession>
     implements Interactable<SessionT>
 {
     #node: NodeProtocol;
@@ -45,18 +45,18 @@ export class ServerInteraction<SessionT extends AccessControl.Session = AccessCo
 
         let readInfo = "";
         if (Read.containsAttribute(request)) {
-            const attributeReader = new AttributeResponse(this.#node, session);
+            const attributeReader = new AttributeReadResponse(this.#node, session);
             yield* attributeReader.process(request);
 
-            const { existent, status, value } = attributeReader.counts;
-            readInfo = `${existent} matching attributes (${status ? `${status} status, ` : ""}${value ? `${value} values` : ""})`;
+            const { existent, status, success } = attributeReader.counts;
+            readInfo = `${existent} matching attributes (${status ? `${status} status, ` : ""}${success ? `${success} values` : ""})`;
         }
 
         if (Read.containsEvent(request)) {
-            const eventReader = new EventResponse(this.#node, session);
+            const eventReader = new EventReadResponse(this.#node, session);
             yield* eventReader.process(request);
-            const { existent, status, value } = eventReader.counts;
-            readInfo += `${readInfo.length > 0 ? ", " : ""}${existent} matching events (${status ? `${status} status, ` : ""}${value ? `${value} values` : ""})`;
+            const { existent, status, success } = eventReader.counts;
+            readInfo += `${readInfo.length > 0 ? ", " : ""}${existent} matching events (${status ? `${status} status, ` : ""}${success ? `${success} values` : ""})`;
         }
         logger.debug(`Read request resolved to ${readInfo}`);
     }
@@ -66,9 +66,11 @@ export class ServerInteraction<SessionT extends AccessControl.Session = AccessCo
         throw new NotImplementedError();
     }
 
-    write<T extends Write>(_request: T, _session?: SessionT): WriteResult<T> {
-        // TODO
-        throw new NotImplementedError();
+    write<T extends Write>(request: T, session: SessionT): WriteResult<T> {
+        // TODO - validate request
+
+        const writer = new AttributeWriteResponse(this.#node, session);
+        return writer.process(request);
     }
 
     invoke<T extends Invoke>(_request: T, _session?: SessionT): InvokeResult<T> {

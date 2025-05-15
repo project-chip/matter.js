@@ -4,10 +4,26 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Write } from "#action/request/Write.js";
-import type { CancelablePromise } from "#general";
-import type { WriteResponse } from "#types";
+import { Write } from "#action/request/Write.js";
+import type { AttributeId, AttributePath, ClusterId, EndpointNumber, NodeId, StatusCode } from "#types";
 
-export type WriteResult<T extends Write> = CancelablePromise<
-    T extends { suppressResponse: true } ? void : WriteResponse
+export type WriteResult<T extends Write> = Promise<
+    T extends { suppressResponse: true } ? void : WriteResult.AttributeStatus[]
 >;
+
+export namespace WriteResult {
+    export interface ConcreteAttributePath extends AttributePath {
+        nodeId?: NodeId;
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        attributeId: AttributeId;
+        listIndex?: number | null;
+    }
+
+    export interface AttributeStatus {
+        kind: "attr-status";
+        path: ConcreteAttributePath;
+        status: StatusCode;
+        clusterStatus?: number;
+    }
+}

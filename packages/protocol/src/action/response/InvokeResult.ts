@@ -6,10 +6,9 @@
 
 import type { Invoke } from "#action/request/Invoke.js";
 import type { CommandData } from "#types";
-import { CancelablePromise } from "@matter/general";
 
 export type InvokeResult<T extends Invoke> = T extends { suppressResponse: true }
-    ? CancelablePromise<void>
+    ? Promise<void>
     : AsyncIterable<InvokeResult.Chunk>;
 
 export namespace InvokeResult {
