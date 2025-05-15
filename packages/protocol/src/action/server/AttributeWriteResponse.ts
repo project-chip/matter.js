@@ -182,7 +182,8 @@ export class AttributeWriteResponse<
             }),
             owningFabric: this.session.fabric,
         };
-        const permission = this.session.authorityAt(limits.readLevel, location);
+
+        const permission = this.session.authorityAt(limits.writeLevel, location);
         switch (permission) {
             case AccessControl.Authority.Granted:
                 break;
@@ -196,6 +197,7 @@ export class AttributeWriteResponse<
             default:
                 throw new InternalError(`Unsupported authorization state ${permission}`);
         }
+
         if (endpoint === undefined) {
             return this.#asStatus(path, Status.UnsupportedEndpoint);
         }
@@ -205,10 +207,16 @@ export class AttributeWriteResponse<
         if (attribute === undefined || !cluster.type.attributes[attribute.id]) {
             return this.#asStatus(path, Status.UnsupportedAttribute);
         }
+
         if (!limits.writable) {
             this.#errorCount++;
             return this.#asStatus(path, Status.UnsupportedWrite);
         }
+
+        // Old implementation aka Matter 1.2 and lower need the ACL check moved here.
+        // see https://github.com/project-chip/connectedhomeip/issues/33735
+        // We have patched our tests for now
+
         if (limits.timed && !this.session.timed) {
             this.#errorCount++;
             return this.#asStatus(path, Status.NeedsTimedInteraction);
