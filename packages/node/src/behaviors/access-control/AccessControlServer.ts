@@ -6,7 +6,7 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { AccessControl as AccessControlTypes } from "#clusters/access-control";
-import { deepCopy, InternalError, isDeepEqual, Logger, MaybePromise } from "#general";
+import { deepCopy, InternalError, Logger, MaybePromise } from "#general";
 import { AccessLevel } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import {
@@ -229,26 +229,24 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
 
         let i = 0;
         for (; i < fabricAcls.length; i++) {
-            if (!isDeepEqual(fabricAcls[i], oldFabricAcls[i])) {
-                const changeType =
-                    oldFabricAcls[i] === undefined
-                        ? AccessControlTypes.ChangeType.Added
-                        : fabricAcls[i] === undefined
-                          ? AccessControlTypes.ChangeType.Removed
-                          : AccessControlTypes.ChangeType.Changed;
-                this.events.accessControlEntryChanged.emit(
-                    {
-                        changeType,
-                        adminNodeId,
-                        adminPasscodeId,
-                        latestValue:
-                            (changeType === AccessControlTypes.ChangeType.Removed ? oldFabricAcls[i] : fabricAcls[i]) ??
-                            null,
-                        fabricIndex: relevantFabricIndex,
-                    },
-                    this.context,
-                );
-            }
+            const changeType =
+                oldFabricAcls[i] === undefined
+                    ? AccessControlTypes.ChangeType.Added
+                    : fabricAcls[i] === undefined
+                      ? AccessControlTypes.ChangeType.Removed
+                      : AccessControlTypes.ChangeType.Changed;
+            this.events.accessControlEntryChanged.emit(
+                {
+                    changeType,
+                    adminNodeId,
+                    adminPasscodeId,
+                    latestValue:
+                        (changeType === AccessControlTypes.ChangeType.Removed ? oldFabricAcls[i] : fabricAcls[i]) ??
+                        null,
+                    fabricIndex: relevantFabricIndex,
+                },
+                this.context,
+            );
         }
         if (oldFabricAcls.length > i) {
             for (let j = oldFabricAcls.length - 1; j >= i; j--) {
