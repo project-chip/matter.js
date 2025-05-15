@@ -414,6 +414,7 @@ export class AttributeWriteResponse<
                 await this.session.transaction?.commit();
             }
         } catch (error) {
+            await this.session.transaction?.rollback();
             if (StatusResponseError.is(error)) {
                 this.#errorCount++;
                 return this.#asStatus(path, error.code, error.clusterCode);
