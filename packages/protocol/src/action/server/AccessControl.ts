@@ -286,7 +286,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                     );
                 }
 
-                if (location?.owningFabric && location.owningFabric !== session.fabric) {
+                if (location?.owningFabric !== undefined && location.owningFabric !== session.fabric) {
                     throw new ReadError(
                         location,
                         "Permission denied: Owning/accessing fabric mismatch",
@@ -307,7 +307,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                 return false;
             }
 
-            if (location?.owningFabric && location.owningFabric !== session.fabric) {
+            if (location?.owningFabric !== undefined && location.owningFabric !== session.fabric) {
                 return false;
             }
 
@@ -323,7 +323,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                 throw new WriteError(location, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
             }
 
-            if (location?.owningFabric && location.owningFabric !== session.fabric) {
+            if (location?.owningFabric !== undefined && location.owningFabric !== session.fabric) {
                 throw new WriteError(location, "Permission denied: Owning/accessing fabric mismatch");
             }
 
@@ -339,7 +339,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                 return false;
             }
 
-            if (location?.owningFabric && location.owningFabric !== session.fabric) {
+            if (location?.owningFabric !== undefined && location.owningFabric !== session.fabric) {
                 return false;
             }
 
