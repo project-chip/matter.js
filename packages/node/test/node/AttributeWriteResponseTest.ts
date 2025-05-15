@@ -12,7 +12,7 @@ import { MockServerNode } from "./mock-server-node.js";
 describe("AttributeWriteRequest", () => {
     it("writes concrete attribute", async () => {
         const node = await MockServerNode.createOnline();
-        const response = await writeAttr(
+        const response = await writeAttrAsAdmin(
             node,
             Write.Attribute({
                 endpoint: node,
@@ -65,7 +65,7 @@ describe("AttributeWriteRequest", () => {
 
     it("writes non-writable concrete attribute with error", async () => {
         const node = await MockServerNode.createOnline();
-        const response = await writeAttr(
+        const response = await writeAttrAsAdmin(
             node,
             Write.Attribute({
                 endpoint: node,
@@ -107,7 +107,7 @@ describe("AttributeWriteRequest", () => {
 
     it("writes version mismatch concrete attribute with error", async () => {
         const node = await MockServerNode.createOnline();
-        const response = await writeAttr(
+        const response = await writeAttrAsAdmin(
             node,
             Write.Attribute({
                 endpoint: node,
@@ -162,7 +162,7 @@ describe("AttributeWriteRequest", () => {
 
     it("writes concrete attribute with constraint error", async () => {
         const node = await MockServerNode.createOnline();
-        const response = await writeAttr(
+        const response = await writeAttrAsAdmin(
             node,
             Write.Attribute({
                 endpoint: node,
@@ -246,6 +246,26 @@ async function writeAttrRaw(node: MockServerNode, data: Partial<WriteRequest>) {
     } as Write;
 
     return node.online({ command: true }, async ({ context }) => {
+        const response = new AttributeWriteResponse(node.protocol, context);
+        return { data: await response.process(request), counts: response.counts };
+    });
+}
+
+async function writeAttrAsAdmin(node: MockServerNode, ...args: Parameters<typeof Write>) {
+    const request = Write(...args);
+
+    return writeAttrRawAsAdmin(node, request);
+}
+
+async function writeAttrRawAsAdmin(node: MockServerNode, data: Partial<WriteRequest>) {
+    const request = {
+        suppressResponse: false,
+        ...data,
+    } as Write;
+
+    const fabric = await node.addFabric(1);
+    const exchange = await node.createExchange({ fabric });
+    return node.online({ command: true, exchange }, async ({ context }) => {
         const response = new AttributeWriteResponse(node.protocol, context);
         return { data: await response.process(request), counts: response.counts };
     });
