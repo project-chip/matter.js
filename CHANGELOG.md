@@ -27,6 +27,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - (@spudwebb) Fix: Increase BLE connect timeout fo 120seconds to optimize pairing
   
 -   @matter/protocol
+    - Adjustment: ACL writes are not sent chunked by default from now on like also in chip SDK
     - Fix: Handles messages only that are secured as required for the relevant protocol
 
 -   @matter/general
