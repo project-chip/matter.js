@@ -205,8 +205,33 @@
         let currentEndpoint = null;
         let currentEndpointType = "";
         let pendingLog = [];
+        let logTimeout;
 
+        const ON_OFF = 6;
+        const ILLUMINANCE = 1024;
+        const TEMPERATURE = 1026;
+        const PRESSURE = 1027;
+        const HUMIDITY = 1029;
+        const VOLTAGE = 144; // etc.
+
+        const valueFormat = {
+            [VOLTAGE]: (value, units = 'v') => { return (value / 1000).toFixed(1) + units },
+            [ILLUMINANCE]: (value, units = 'lux') => { return (value / 100).toFixed(1) + units },
+            [TEMPERATURE]: (value, units = 'F') => { return (units === "F" ? (value / 100 * 9 / 5 + 32) : (value / 100)).toFixed(1) + '°' + units },
+            [PRESSURE]: (value, units = 'mb') => { return (value / 10000).toFixed(1) + units },
+            [HUMIDITY]: (value, units = '%') => { return (value / 100).toFixed(1) + units },
+        }
+        function initConsole(clear) {
+            if (clear) consoleDiv.innerHTML = ''; // Clear the console
+            const dummy = document.createElement('div'); // Inject invisible wide line to reserve width
+            dummy.style.visibility = 'hidden';
+            dummy.style.height = '0';
+            dummy.textContent = 'X'.repeat(120);
+            consoleDiv.appendChild(dummy);
+        }
         function logMessage(message, type) {
+            const MAX_MESSAGES = 1000; // Maximum number of messages to keep in the consol
+            const shouldScroll = consoleDiv.scrollTop + consoleDiv.clientHeight >= consoleDiv.scrollHeight - 5;
             const lines = message.split('\n');
             lines.forEach(line => {
                 const msg = document.createElement('div');
@@ -214,24 +239,26 @@
                 msg.className = type;
                 consoleDiv.appendChild(msg);
             });
+            while (consoleDiv.children.length > MAX_MESSAGES) consoleDiv.removeChild(consoleDiv.children[0]);
 
             // Only scroll if the user is already at the bottom
-            if (consoleDiv.scrollTop + consoleDiv.clientHeight >= consoleDiv.scrollHeight - 50) consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            if (shouldScroll) consoleDiv.scrollTop = consoleDiv.scrollHeight;
         }
         function setupWebSocket() {
             ws = new WebSocket(wsUrl);
+            initConsole(false);
 
             ws.onopen = () => {
                 sendCommand('config loglevel set info'); // info level required for some msgs to be passed
                 sendCommand('nodes connect');
+                reconnectAttempts = 0;
             }
             ws.onclose = () => {
                 logMessage('WebSocket connection closed. Attempting to reconnect...', 'error');
                 scheduleReconnect();
             };
             ws.onerror = () => {
-                logMessage('WebSocket error. Attempting to reconnect...', 'error');
-                scheduleReconnect();
+                logMessage('WebSocket error...', 'error');
             };
             ws.onmessage = (event) => {
                 if (typeof event.data === 'string') {
@@ -256,17 +283,30 @@
                     matches = message.match(/"deviceTypeList"\s*\([^)]*\):\s*value\s*=\s*(\[[^\]]*\])/);
                     if (matches) logMessage(`Device Type List: ${matches[1]}`, 'status');
 
-                    // could also check and handle others, i.e. toggle|on|off|moveToLevel|moveToColorTemperature etc.
-                    matches = message.match(/"(toggle)"/);
+                    // could also check and handle others, "moveToLevel", "movetohueandsaturation", etc.
+                    matches = message.match(/"(toggle|on|off|measuredValue|voltage)"/);
                     if (matches) {
-                        if (!document.getElementById(`btn-${currentNode}/${currentEndpoint}`)) {
-                            const btn = document.createElement('button');
-                            btn.id = `btn-${currentNode}/${currentEndpoint}`;
-                            btn.textContent = "Toggle"; // + ": " + currentEndpointType;
-                            const cmd = `commands onoff toggle ${currentNode} ${currentEndpoint}`;
-                            btn.onclick = () => sendCommand(cmd);
-                            document.getElementById(`container-${currentNode}`).appendChild(btn);
-                            sendCommand(`attributes onoff read onoff ${currentNode} ${currentEndpoint}`); // get initial state
+                        if (!document.getElementById(`attr-${currentNode}/${currentEndpoint}/${matches[1]}`)) {
+                            let element;
+                            if (matches[1] === "toggle" || matches[1] === "on" || matches[1] === "off") {
+                                element = document.createElement('button');
+                                element.textContent = matches[1];
+                                const cmd = `commands onoff ${matches[1]} ${currentNode} ${currentEndpoint}`;
+                                element.onclick = () => sendCommand(cmd);
+                                if (matches[1] === "on" ) sendCommand(`attributes onoff read onoff ${currentNode} ${currentEndpoint}`); // get initial state
+                            } else {
+                                element = document.createElement('span');
+                                element.innerHTML = `<small></small>`; // could read to get initial value. would need cluster name
+                            }
+                            element.id = `attr-${currentNode}/${currentEndpoint}/${matches[1]}`;
+                            if (!document.getElementById(`${currentEndpoint}-container-${currentNode}`)) {
+                                endpointContainer = document.createElement('div');
+                                endpointContainer.id = `${currentEndpoint}-container-${currentNode}`;
+                                endpointContainer.className = 'node-container';
+                                endpointContainer.innerHTML = `<small>${currentEndpointType.replace('MA-', '')}<small><br>`;
+                                document.getElementById(`container-${currentNode}`).appendChild(endpointContainer);
+                            }
+                            document.getElementById(`container-${currentNode}`)?.appendChild(element);
                         }
                         nodeLogCollection(true); // restart the timeout for the current node log
                     }
@@ -285,10 +325,18 @@
                     }
 
                     matches = message.match(/(\d+): Attribute (\w+|\d+)\/(\d+)\/(\d+)\/(\w+) changed to (.+)/); // attribute changed
-                    if (matches && matches[4] == 6) styleButton(matches[1], matches[3], matches[6]);
+                    if (matches) {
+                        if (matches[4] == ON_OFF) styleContainer(matches[1], matches[3], matches[6]);
+                        else if (matches[4] == ILLUMINANCE || matches[4] == TEMPERATURE || matches[4] == PRESSURE || matches[4] == HUMIDITY || matches[4] == VOLTAGE) {
+                            const value = valueFormat[matches[4]] ? valueFormat[matches[4]](matches[6]) : matches[6];
+                            document.getElementById(`attr-${matches[1]}/${matches[3]}/${matches[5]}`).innerHTML = `<small>${value}</small>`;
+                        }
+                    }
 
-                    matches = message.match(/Attribute value for onOff (\d+)\/(\d+)\/(\d+)\/(\w+): (.+)/); // from "read attribute onOff"
-                    if (matches) styleButton(matches[1], matches[2], matches[5])
+                     matches = message.match(/Attribute value for (\w+) (\d+)\/(\d+)\/(\d+)\/(\w+): (.+)/); // from "read attribute"
+                    if (matches ) 
+                       if ( matches[1] === "onOff" ) styleContainer(matches[2], matches[3], matches[6])
+                       else console.log( `read of ${matches[1]} = ${matches[6]}` ) 
                 }
             }
         }
@@ -301,16 +349,15 @@
                 if (pendingLog.length > 0) nodeLogCollection(false); // start the next one
             }, 500); // 1/2 second timeout after the last log message to make sure we get them all
         }
-        function styleButton(nodeId, endpoint, state) {
-            const button = document.getElementById(`btn-${nodeId}/${endpoint}`);
-            if (!button) return;
-            button.classList.remove("on", "off");
-            button.classList.add(state === "true" ? "on" : "off");
+        function styleContainer(nodeId, endpoint, state) {
+            const element = document.getElementById(`${endpoint}-container-${nodeId}`);
+            element.classList.remove("on", "off");
+            element.classList.add(state === "true" ? "on" : "off");
         }
         function updateTile(nodeId, status) {
             let tile = document.getElementById(`tile-${nodeId}`);
             if (!tile) {
-                container = document.createElement('div');
+                let container = document.createElement('div');
                 container.id = `container-${nodeId}`;
                 container.className = 'node-container';
                 tile = document.createElement('div');
@@ -324,7 +371,7 @@
         }
         matterCommand.onkeypress = (e) => {
             if (e.key === 'Enter') {
-                if (matterCommand.value === 'clear') consoleDiv.innerHTML = '';
+                if (matterCommand.value === 'clear') initConsole(true);
                 else sendCommand(matterCommand.value ? matterCommand.value : "help");
                 matterCommand.value = '';
             }
