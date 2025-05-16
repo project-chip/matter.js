@@ -269,11 +269,12 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             interactionModelRevision,
         } = readRequest;
         logger.debug(
-            `Received read request from ${exchange.channel.name}: attributes:${
-                attributeRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
-            }${dataVersionFilters?.length ? ` with ${dataVersionFilters?.length} filters` : ""}, events:${
-                eventRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
-            }${eventFilters?.length ? `, ${eventFilters?.length} filters` : ""}, isFabricFiltered=${isFabricFiltered}`,
+            () =>
+                `Received read request from ${exchange.channel.name}: attributes:${
+                    attributeRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
+                }${dataVersionFilters?.length ? ` with ${dataVersionFilters?.length} filters` : ""}, events:${
+                    eventRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
+                }${eventFilters?.length ? `, ${eventFilters?.length} filters` : ""}, isFabricFiltered=${isFabricFiltered}`,
         );
 
         if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
@@ -315,9 +316,10 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             writeRequest;
         const sessionType = message.packetHeader.sessionType;
         logger.debug(
-            `Received write request from ${exchange.channel.name}: ${writeRequests
-                .map(req => this.#node.protocol.inspectPath(req.path))
-                .join(", ")}, suppressResponse=${suppressResponse}, moreChunkedMessages=${moreChunkedMessages}`,
+            () =>
+                `Received write request from ${exchange.channel.name}: ${writeRequests
+                    .map(req => this.#node.protocol.inspectPath(req.path))
+                    .join(", ")}, suppressResponse=${suppressResponse}, moreChunkedMessages=${moreChunkedMessages}`,
         );
 
         if (moreChunkedMessages && suppressResponse) {
@@ -505,9 +507,10 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         }
 
         logger.debug(
-            `Subscribe to attributes:${
-                attributeRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
-            }, events:${eventRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"}`,
+            () =>
+                `Subscribe to attributes:${
+                    attributeRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
+                }, events:${eventRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"}`,
         );
 
         if (dataVersionFilters !== undefined && dataVersionFilters.length > 0) {
@@ -727,11 +730,12 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     ): Promise<void> {
         const { invokeRequests, timedRequest, suppressResponse, interactionModelRevision } = request;
         logger.debug(
-            `Received invoke request from ${exchange.channel.name}${invokeRequests.length > 0 ? ` with ${invokeRequests.length} commands` : ""}: ${invokeRequests
-                .map(({ commandPath: { endpointId, clusterId, commandId } }) =>
-                    this.#node.protocol.inspectPath({ endpointId, clusterId, commandId }),
-                )
-                .join(", ")}, suppressResponse=${suppressResponse}`,
+            () =>
+                `Received invoke request from ${exchange.channel.name}${invokeRequests.length > 0 ? ` with ${invokeRequests.length} commands` : ""}: ${invokeRequests
+                    .map(({ commandPath: { endpointId, clusterId, commandId } }) =>
+                        this.#node.protocol.inspectPath({ endpointId, clusterId, commandId }),
+                    )
+                    .join(", ")}, suppressResponse=${suppressResponse}`,
         );
 
         if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
@@ -811,7 +815,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 if (invokeResponseMessage.invokeResponses.length > 0) {
                     if (invokeRequests.length > 1) {
                         logger.debug(
-                            `Send ${lastMessageProcessed ? "final " : ""}invoke response for ${invokeResponseMessage.invokeResponses} commands`,
+                            `Send ${lastMessageProcessed ? "final " : ""}invoke response for ${invokeResponseMessage.invokeResponses.length} commands`,
                         );
                     }
                     const moreChunkedMessages = lastMessageProcessed ? undefined : true;
