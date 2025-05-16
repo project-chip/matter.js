@@ -4,10 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ActionContext } from "#behavior/context/ActionContext.js";
 import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
-import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { AccessControlServer } from "#behaviors/access-control";
 import { AccessControl as AccessControlClusterType } from "#clusters/access-control";
 import { Endpoint } from "#endpoint/Endpoint.js";
@@ -23,18 +21,12 @@ import {
     Observable,
     ServerAddressIp,
 } from "#general";
-import { ClusterModel, CommandModel, GLOBAL_IDS, MatterModel, Specification } from "#model";
+import { GLOBAL_IDS, Specification } from "#model";
 import {
-    AccessControl,
-    AccessDeniedError,
     assertSecureSession,
     clusterPathToId,
-    CommandPath,
-    commandPathToId,
-    CommandServer,
     DataReport,
     DataReportPayloadIterator,
-    EndpointInterface,
     ExchangeManager,
     InteractionEndpointStructure,
     InteractionRecipient,
@@ -55,8 +47,6 @@ import {
     WriteResponse,
 } from "#protocol";
 import {
-    ClusterId,
-    CommandId,
     DEFAULT_MAX_PATHS_PER_INVOKE,
     INTERACTION_PROTOCOL_ID,
     ReceivedStatusResponseError,
@@ -64,15 +54,11 @@ import {
     StatusResponseError,
     TlvAny,
     TlvAttributePath,
-    TlvCommandPath,
     TlvEventPath,
     TlvInvokeResponseData,
     TlvInvokeResponseForSend,
-    TlvNoArguments,
-    TlvNoResponse,
     TlvSubscribeResponse,
     TypeFromSchema,
-    ValidationError,
 } from "#types";
 import { WriteResult } from "@matter/protocol";
 import { ServerNode } from "../ServerNode.js";
@@ -129,7 +115,7 @@ function validateReadEventPath(path: TypeFromSchema<typeof TlvEventPath>, isGrou
     }
 }
 
-function isConcreteCommandPath(
+/*function isConcreteCommandPath(
     path: TypeFromSchema<typeof TlvCommandPath>,
 ): path is TypeFromSchema<typeof TlvCommandPath> & CommandPath {
     const { endpointId, clusterId, commandId } = path;
@@ -155,7 +141,7 @@ function getMatterModelCluster(clusterId: ClusterId) {
 
 function getMatterModelClusterCommand(clusterId: ClusterId, commandId: CommandId) {
     return getMatterModelCluster(clusterId)?.get(CommandModel, commandId);
-}
+}*/
 
 /**
  * Interfaces {@link InteractionServer} with other components.
@@ -294,14 +280,21 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         this.#clientHandler = clientHandler;
     }
 
-    #createOnlineContext(exchange: MessageExchange, message: Message, fabricFiltered: boolean) {
+    #createOnlineContext(
+        exchange: MessageExchange,
+        message: Message,
+        fabricFiltered?: boolean,
+        timed = false,
+        actionType = ActionTracer.ActionType.Read,
+    ) {
         return {
             activity: (exchange as WithActivity)[activityKey],
             fabricFiltered,
+            timed,
             message,
             exchange,
             tracer: this.#tracer,
-            actionType: ActionTracer.ActionType.Read,
+            actionType,
             node: this.#node,
         };
     }
@@ -310,9 +303,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
      * Returns an iterator that yields the data reports and events data for the given read request.
      */
     async *#executeReadInteraction(readRequest: ReadRequest, exchange: MessageExchange, message: Message) {
-        const context = this.#createOnlineContext(exchange, message, readRequest.isFabricFiltered);
+        const readContext = this.#createOnlineContext(exchange, message, readRequest.isFabricFiltered);
 
-        for await (const chunk of this.#serverInteraction.read(readRequest, context)) {
+        for await (const chunk of this.#serverInteraction.read(readRequest, readContext)) {
             for (const report of chunk) {
                 yield InteractionServerMessenger.convertServerInteractionReport(report);
             }
@@ -461,7 +454,13 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
             result = await this.#serverInteraction.write(
                 writeRequest,
-                this.#createOnlineContext(exchange, message, true),
+                this.#createOnlineContext(
+                    exchange,
+                    message,
+                    true, // always fabric filtered
+                    receivedWithinTimedInteraction,
+                    ActionTracer.ActionType.Write,
+                ),
             );
         } catch (error) {
             if (this.#aclUpdateIsDelayedInExchange.has(exchange)) {
@@ -781,14 +780,15 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
     async handleInvokeRequest(
         exchange: MessageExchange,
-        { invokeRequests, timedRequest, suppressResponse, interactionModelRevision }: InvokeRequest,
+        request: InvokeRequest,
         messenger: InteractionServerMessenger,
         message: Message,
     ): Promise<void> {
+        const { invokeRequests, timedRequest, suppressResponse, interactionModelRevision } = request;
         logger.debug(
             `Received invoke request from ${exchange.channel.name}${invokeRequests.length > 0 ? ` with ${invokeRequests.length} commands` : ""}: ${invokeRequests
                 .map(({ commandPath: { endpointId, clusterId, commandId } }) =>
-                    this.#context.structure.resolveCommandName({ endpointId, clusterId, commandId }),
+                    this.#node.protocol.inspectPath({ endpointId, clusterId, commandId }),
                 )
                 .join(", ")}, suppressResponse=${suppressResponse}`,
         );
@@ -830,6 +830,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             );
         }
 
+        /*
         // Validate all commandPaths before proceeding to make sure not to have executed partial commands
         invokeRequests.forEach(({ commandPath }) => validateCommandPath(commandPath));
 
@@ -867,7 +868,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 pathsUsed.add(commandPathId);
                 commandRefsUsed.add(commandRef);
             });
-        }
+        }*/
 
         const isGroupSession = message.packetHeader.sessionType === SessionType.Group;
         const invokeResponseMessage: TypeFromSchema<typeof TlvInvokeResponseForSend> = {
@@ -940,9 +941,47 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             }
         };
 
+        await this.#serverInteraction.invoke(
+            request,
+            this.#createOnlineContext(
+                exchange,
+                message,
+                undefined,
+                receivedWithinTimedInteraction,
+                ActionTracer.ActionType.Invoke,
+            ),
+            async chunk => {
+                if (suppressResponse) {
+                    throw new InternalError("Received response that should be suppressed for invoke");
+                }
+                for (const data of chunk) {
+                    switch (data.kind) {
+                        case "cmd-response": {
+                            const { path: commandPath, commandRef, data: commandFields } = data;
+                            await processResponseResult({
+                                command: {
+                                    commandPath,
+                                    commandFields,
+                                    commandRef,
+                                },
+                            });
+                            break;
+                        }
+
+                        case "cmd-status": {
+                            const { path, commandRef, status, clusterStatus } = data;
+                            await processResponseResult({
+                                status: { commandPath: path, status: { status, clusterStatus }, commandRef },
+                            });
+                        }
+                    }
+                }
+            },
+        );
+
         // We could do more fancy parallel command processing, but it makes no sense for now, so lets simply process
         // invoked commands one by one sequentially
-        for (const { commandPath, commandFields, commandRef } of invokeRequests) {
+        /*for (const { commandPath, commandFields, commandRef } of invokeRequests) {
             const commands = this.#context.structure.getCommands([commandPath]);
 
             if (commands.length === 0) {
@@ -1097,10 +1136,10 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                     });
                 }
             }
-        }
+        }*/
     }
 
-    protected async invokeCommand(
+    /*protected async invokeCommand(
         path: CommandPath,
         command: CommandServer<any, any>,
         exchange: MessageExchange,
@@ -1133,7 +1172,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             actionType: ActionTracer.ActionType.Invoke,
             node: this.#node,
         }).act(invokeCommand);
-    }
+    }*/
 
     handleTimedRequest(exchange: MessageExchange, { timeout, interactionModelRevision }: TimedRequest) {
         logger.debug(`Received timed request (${timeout}ms) from ${exchange.channel.name}`);
