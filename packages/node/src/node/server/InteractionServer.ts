@@ -8,8 +8,6 @@ import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { AccessControlServer } from "#behaviors/access-control";
 import { AccessControl as AccessControlClusterType } from "#clusters/access-control";
-import { Endpoint } from "#endpoint/Endpoint.js";
-import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
 import { EndpointServer } from "#endpoint/server/EndpointServer.js";
 import {
     Crypto,
@@ -24,11 +22,9 @@ import {
 import { GLOBAL_IDS, Specification } from "#model";
 import {
     assertSecureSession,
-    clusterPathToId,
     DataReport,
     DataReportPayloadIterator,
     ExchangeManager,
-    InteractionEndpointStructure,
     InteractionRecipient,
     InteractionServerMessenger,
     InvokeRequest,
@@ -54,6 +50,7 @@ import {
     StatusResponseError,
     TlvAny,
     TlvAttributePath,
+    TlvClusterPath,
     TlvEventPath,
     TlvInvokeResponseData,
     TlvInvokeResponseForSend,
@@ -115,11 +112,8 @@ function validateReadEventPath(path: TypeFromSchema<typeof TlvEventPath>, isGrou
     }
 }
 
-/*function isConcreteCommandPath(
-    path: TypeFromSchema<typeof TlvCommandPath>,
-): path is TypeFromSchema<typeof TlvCommandPath> & CommandPath {
-    const { endpointId, clusterId, commandId } = path;
-    return endpointId !== undefined && clusterId !== undefined && commandId !== undefined;
+function clusterPathToId({ nodeId, endpointId, clusterId }: TypeFromSchema<typeof TlvClusterPath>) {
+    return `${nodeId}/${endpointId}/${clusterId}`;
 }
 
 function validateCommandPath(path: TypeFromSchema<typeof TlvCommandPath>, isGroupSession = false) {
@@ -149,7 +143,6 @@ function getMatterModelClusterCommand(clusterId: ClusterId, commandId: CommandId
 export interface InteractionContext {
     readonly sessions: SessionManager;
     readonly exchangeManager: ExchangeManager;
-    readonly structure: InteractionEndpointStructure; // Remove later
 }
 
 /**
@@ -165,7 +158,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     readonly #subscriptionConfig: ServerSubscriptionConfig;
     readonly #maxPathsPerInvoke;
     readonly #subscriptionEstablishmentStarted = Observable<[peerAddress: PeerAddress]>();
-    #changeListener: (type: EndpointLifecycle.Change, endpoint: Endpoint) => void;
     #node: ServerNode;
     #activity: NodeActivity;
     #newActivityBlocked = false;
@@ -177,48 +169,20 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         this.#context = {
             sessions,
             exchangeManager: node.env.get(ExchangeManager),
-            structure: new InteractionEndpointStructure(),
         };
 
         this.#subscriptionConfig = ServerSubscriptionConfig.of(node.state.network.subscriptionOptions);
         this.#maxPathsPerInvoke = node.state.basicInformation.maxPathsPerInvoke ?? DEFAULT_MAX_PATHS_PER_INVOKE;
 
-        this.#context.structure.change.on(async () => {
-            this.#context.sessions.updateAllSubscriptions();
-        });
-
         this.#activity = node.env.get(NodeActivity);
 
         this.#node = node;
 
-        // ServerInteraction is the "new way" and will replace most logic here over time and especially
-        // the InteractionEndpointStructure, which is currently a duplication of the node protocol
         this.#serverInteraction = new OnlineServerInteraction(node.protocol);
-
-        // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
-        this.#updateStructure();
-        this.#changeListener = (type, endpoint) => {
-            switch (type) {
-                case EndpointLifecycle.Change.ServersChanged:
-                    EndpointServer.forEndpoint(endpoint).updateServers();
-                    this.#updateStructure();
-                    break;
-
-                case EndpointLifecycle.Change.PartsReady:
-                case EndpointLifecycle.Change.ClientsChanged:
-                case EndpointLifecycle.Change.Destroyed:
-                    this.#updateStructure();
-                    break;
-            }
-        };
-
-        node.lifecycle.changed.on(this.#changeListener);
     }
 
     async [Symbol.asyncDispose]() {
-        this.#node.lifecycle.changed.off(this.#changeListener);
         await this.close();
-        this.#context.structure.close();
         await EndpointServer.forEndpoint(this.#node)[Symbol.asyncDispose]();
     }
 
@@ -563,10 +527,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
         logger.debug(
             `Subscribe to attributes:${
-                attributeRequests?.map(path => this.#context.structure.resolveAttributeName(path)).join(", ") ?? "none"
-            }, events:${
-                eventRequests?.map(path => this.#context.structure.resolveEventName(path)).join(", ") ?? "none"
-            }`,
+                attributeRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
+            }, events:${eventRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"}`,
         );
 
         if (dataVersionFilters !== undefined && dataVersionFilters.length > 0) {
@@ -1193,13 +1155,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     get #tracer() {
         if (this.#node.env.has(ActionTracer)) {
             return this.#node.env.get(ActionTracer);
-        }
-    }
-
-    #updateStructure() {
-        if (this.#node.lifecycle.isPartsReady) {
-            const server = EndpointServer.forEndpoint(this.#node);
-            this.#context.structure.initializeFromEndpoint(server);
         }
     }
 }
