@@ -164,8 +164,6 @@ export namespace TimeFormatLocalization {
 
         features: {
             /**
-             * CalendarFormat
-             *
              * The Node can be configured to use different calendar formats when conveying values to a user.
              */
             calendarFormat: BitFlag(0)

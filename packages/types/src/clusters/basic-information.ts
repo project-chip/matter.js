@@ -365,7 +365,7 @@ export namespace BasicInformation {
             nodeLabel: WritableAttribute(
                 0x5,
                 TlvString.bound({ maxLength: 32 }),
-                { persistent: true, default: "", writeAcl: AccessLevel.Manage }
+                { persistent: true, writeAcl: AccessLevel.Manage }
             ),
 
             /**

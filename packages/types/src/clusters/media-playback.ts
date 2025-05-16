@@ -896,8 +896,6 @@ export namespace MediaPlayback {
 
         features: {
             /**
-             * AdvancedSeek
-             *
              * This feature provides access to the time offset location within current playback media and allows for
              * jumping to a specific location using time offsets. This enables clients to implement more advanced media
              * seeking behavior in their user interface, for instance a "seek bar".
@@ -907,8 +905,6 @@ export namespace MediaPlayback {
             advancedSeek: BitFlag(0),
 
             /**
-             * VariableSpeed
-             *
              * This feature is for a device which supports variable speed playback on media that supports it.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 6.10.4.2
@@ -916,8 +912,6 @@ export namespace MediaPlayback {
             variableSpeed: BitFlag(1),
 
             /**
-             * TextTracks
-             *
              * This feature is for a device or app that supports Text Tracks.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 6.10.4.3
@@ -925,8 +919,6 @@ export namespace MediaPlayback {
             textTracks: BitFlag(2),
 
             /**
-             * AudioTracks
-             *
              * This feature is for a device or app that supports Audio Tracks.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 6.10.4.4
@@ -934,8 +926,6 @@ export namespace MediaPlayback {
             audioTracks: BitFlag(3),
 
             /**
-             * AudioAdvance
-             *
              * This feature is for a device or app that supports playing audio during fast and slow advance and rewind
              * (e.g., while playback speed is not 1). A device that supports this feature may only support playing audio
              * during certain speeds.

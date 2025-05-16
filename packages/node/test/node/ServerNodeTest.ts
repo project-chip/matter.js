@@ -543,8 +543,9 @@ describe("ServerNode", () => {
                     .length,
             );
 
-            expect(ep0).has.property(`${BasicInformation.id}`);
-            const bi = ep0[BasicInformation.id]!;
+            const id = BasicInformation.id as number;
+            expect(ep0).has.property(`${id}`);
+            const bi = ep0[id]!;
             expect(typeof bi).equals("object");
 
             expect(bi.version).equals(1);

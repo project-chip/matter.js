@@ -33,6 +33,13 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/general
     - Enhancement: Allows async implementation of crypto methods
 
+-   @matter/model
+    - Feature: We no longer load data model fields that are not required for operational purposes by default.  You can load `@matter/model/resources` to populate the model with these fields.  This saves a significant amount of memory for nodes
+    - Enhancement: Model elements now instantiates with a reduced number of fields and object shapes to reduce memory usage and decrease the likelihood of megamorphic function deoptimization in runtimes with a JIT
+    - Enhancement: We have optimized resolution of global datatypes in the Matter model.  This reduces startup for large nodes such as bridges with many devices
+    - Enhancement: The serialized model now stores cross references as strings and parses as necessary
+    - Enhancement: FieldModel now contains a dedicated `title` field to capture the full name of features
+
 ## 0.13.0 (2025-04-28)
 
 -   IMPORTANT: This release upgrades Matter support from Matter 1.3 to the latest release, Matter 1.4.0. This includes BREAKING CHANGES in a number of areas due to specification changes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js or when Datatypes or elements got renamed.

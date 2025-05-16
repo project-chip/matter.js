@@ -520,50 +520,36 @@ export namespace PumpConfigurationAndControl {
 
         features: {
             /**
-             * ConstantPressure
-             *
              * Supports operating in constant pressure mode
              */
             constantPressure: BitFlag(0),
 
             /**
-             * CompensatedPressure
-             *
              * Supports operating in compensated pressure mode
              */
             compensatedPressure: BitFlag(1),
 
             /**
-             * ConstantFlow
-             *
              * Supports operating in constant flow mode
              */
             constantFlow: BitFlag(2),
 
             /**
-             * ConstantSpeed
-             *
              * Supports operating in constant speed mode
              */
             constantSpeed: BitFlag(3),
 
             /**
-             * ConstantTemperature
-             *
              * Supports operating in constant temperature mode
              */
             constantTemperature: BitFlag(4),
 
             /**
-             * Automatic
-             *
              * Supports operating in automatic mode
              */
             automatic: BitFlag(5),
 
             /**
-             * LocalOperation
-             *
              * Supports operating using local settings
              */
             localOperation: BitFlag(6)

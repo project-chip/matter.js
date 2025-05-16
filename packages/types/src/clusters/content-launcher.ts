@@ -772,37 +772,27 @@ export namespace ContentLauncher {
 
         features: {
             /**
-             * ContentSearch
-             *
              * Device supports content search (non-app specific)
              */
             contentSearch: BitFlag(0),
 
             /**
-             * UrlPlayback
-             *
              * Device supports basic URL-based file playback
              */
             urlPlayback: BitFlag(1),
 
             /**
-             * AdvancedSeek
-             *
              * Enables clients to implement more advanced media seeking behavior in their user interface, such as for
              * example a "seek bar".
              */
             advancedSeek: BitFlag(2),
 
             /**
-             * TextTracks
-             *
              * Device or app supports Text Tracks.
              */
             textTracks: BitFlag(3),
 
             /**
-             * AudioTracks
-             *
              * Device or app supports Audio Tracks.
              */
             audioTracks: BitFlag(4)

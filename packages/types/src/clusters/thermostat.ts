@@ -2226,50 +2226,36 @@ export namespace Thermostat {
 
         features: {
             /**
-             * Heating
-             *
              * Thermostat is capable of managing a heating device
              */
             heating: BitFlag(0),
 
             /**
-             * Cooling
-             *
              * Thermostat is capable of managing a cooling device
              */
             cooling: BitFlag(1),
 
             /**
-             * Occupancy
-             *
              * Supports Occupied and Unoccupied setpoints
              */
             occupancy: BitFlag(2),
 
             /**
-             * ScheduleConfiguration
-             *
              * Supports remote configuration of a weekly schedule of setpoint transitions
              */
             scheduleConfiguration: BitFlag(3),
 
             /**
-             * Setback
-             *
              * Supports configurable setback (or span)
              */
             setback: BitFlag(4),
 
             /**
-             * AutoMode
-             *
              * Supports a System Mode of Auto
              */
             autoMode: BitFlag(5),
 
             /**
-             * LocalTemperatureNotExposed
-             *
              * This feature indicates that the Calculated Local Temperature used internally is unavailable to report
              * externally, for example due to the temperature control being done by a separate subsystem which does not
              * offer a view into the currently measured temperature, but allows setpoints to be provided.
@@ -2279,15 +2265,11 @@ export namespace Thermostat {
             localTemperatureNotExposed: BitFlag(6),
 
             /**
-             * MatterScheduleConfiguration
-             *
              * Supports enhanced schedules
              */
             matterScheduleConfiguration: BitFlag(7),
 
             /**
-             * Presets
-             *
              * Thermostat supports setpoint presets
              */
             presets: BitFlag(8)

@@ -30,7 +30,7 @@ export function translateBitmap(bitmap: FeatureBitmap, cluster: ClusterModel) {
     return Object.fromEntries(
         Object.entries(bitmap).map(([k, v]) => {
             const feature = cluster.featureMap.get(FieldModel, k);
-            return [camelize(feature?.description ?? k), v];
+            return [camelize(feature?.title ?? k), v];
         }),
     );
 }

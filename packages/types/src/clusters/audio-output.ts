@@ -150,8 +150,6 @@ export namespace AudioOutput {
 
         features: {
             /**
-             * NameUpdates
-             *
              * Supports updates to output names
              */
             nameUpdates: BitFlag(0)

@@ -238,14 +238,7 @@ export namespace PowerSource {
          */
         Aa = 2,
 
-        /**
-         * Common type is as specified
-         */
         C = 3,
-
-        /**
-         * Common type is as specified
-         */
         D = 4,
 
         /**
@@ -273,24 +266,9 @@ export namespace PowerSource {
          */
         Aaaa = 9,
 
-        /**
-         * Common type is as specified
-         */
         A = 10,
-
-        /**
-         * Common type is as specified
-         */
         B = 11,
-
-        /**
-         * Common type is as specified
-         */
         F = 12,
-
-        /**
-         * Common type is as specified
-         */
         N = 13,
 
         /**
@@ -363,9 +341,6 @@ export namespace PowerSource {
          */
         "67V5" = 27,
 
-        /**
-         * Common type is as specified
-         */
         J = 28,
 
         /**
@@ -1291,29 +1266,21 @@ export namespace PowerSource {
 
         features: {
             /**
-             * Wired
-             *
              * A wired power source
              */
             wired: BitFlag(0),
 
             /**
-             * Battery
-             *
              * A battery power source
              */
             battery: BitFlag(1),
 
             /**
-             * Rechargeable
-             *
              * A rechargeable battery power source
              */
             rechargeable: BitFlag(2),
 
             /**
-             * Replaceable
-             *
              * A replaceable battery power source
              */
             replaceable: BitFlag(3)

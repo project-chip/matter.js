@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Mei } from "../common/Mei.js";
 import { AttributeElement } from "../elements/index.js";
 import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
@@ -14,7 +13,6 @@ export const GLOBAL_IDS = new Set([0xfffd, 0xfffc, 0xfffb, 0xfffa, 0xfff9, 0xfff
 
 export class AttributeModel extends PropertyModel<AttributeElement> implements AttributeElement {
     override tag: AttributeElement.Tag = AttributeElement.Tag;
-    declare id: Mei;
 
     get readable() {
         return this.effectiveAccess.readable;
@@ -40,8 +38,8 @@ export class AttributeModel extends PropertyModel<AttributeElement> implements A
         return { ...super.requiredFields, id: this.id };
     }
 
-    constructor(definition: AttributeElement.Properties) {
-        super(definition);
+    constructor(definition: Model.Definition<AttributeModel>, ...children: Model.ChildDefinition<AttributeModel>[]) {
+        super(definition, ...children);
     }
 
     static isGlobal(model: Model) {

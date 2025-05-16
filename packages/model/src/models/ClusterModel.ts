@@ -4,18 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ModelTraversal } from "#logic/ModelTraversal.js";
 import { camelize, describeList } from "@matter/general";
 import { Access } from "../aspects/Access.js";
 import { Quality } from "../aspects/Quality.js";
 import { SchemaImplementationError } from "../common/errors.js";
 import { ElementTag, FeatureSet, Metatype } from "../common/index.js";
-import { Mei } from "../common/Mei.js";
 import { ClusterElement } from "../elements/index.js";
-import { ClusterRevision } from "../standard/elements/ClusterRevision.js";
-import { FeatureMap } from "../standard/elements/FeatureMap.js";
-import { Aspects } from "./Aspects.js";
+import { ClusterRevision, FeatureMap } from "../standard/elements/definitions.js";
 import { AttributeModel } from "./AttributeModel.js";
-import { Children } from "./Children.js";
 import { CommandModel } from "./CommandModel.js";
 import { DatatypeModel } from "./DatatypeModel.js";
 import { EventModel } from "./EventModel.js";
@@ -23,34 +20,23 @@ import type { FieldModel } from "./FieldModel.js";
 import { Model } from "./Model.js";
 import { ScopeModel } from "./ScopeModel.js";
 
-const QUALITY = Symbol("quality");
-
-export class ClusterModel extends ScopeModel<ClusterElement> implements ClusterElement {
+export class ClusterModel extends ScopeModel<ClusterElement, ClusterModel.Child> implements ClusterElement {
     override tag: ClusterElement.Tag = ClusterElement.Tag;
-    declare id: Mei;
-    declare classification?: ClusterElement.Classification;
-    declare pics?: string;
 
-    override get children(): Children<ClusterModel.Child> {
-        return super.children as Children<ClusterModel.Child>;
-    }
-
-    override set children(children: Children.InputIterable<ClusterModel.Child>) {
-        super.children = children;
-    }
+    #quality: Quality;
 
     get diagnostics() {
         return this.effectiveQuality.diagnostics;
     }
 
     get quality(): Quality {
-        return Aspects.getAspect(this, QUALITY, Quality);
+        return this.#quality;
     }
     set quality(definition: Quality | Quality.Definition) {
-        Aspects.setAspect(this, QUALITY, Quality, definition);
+        this.#quality = Quality.create(definition);
     }
     get effectiveQuality(): Quality {
-        return Aspects.getEffectiveAspect(this, QUALITY, Quality);
+        return new ModelTraversal().findAspect(this, "quality", Quality) ?? this.#quality;
     }
 
     get attributes() {
@@ -67,6 +53,26 @@ export class ClusterModel extends ScopeModel<ClusterElement> implements ClusterE
 
     get datatypes() {
         return this.scope.membersOf(this, { tags: [ElementTag.Datatype] }) as DatatypeModel[];
+    }
+
+    get classification(): ClusterElement.Classification | undefined {
+        return this.resource?.classification as ClusterElement.Classification | undefined;
+    }
+
+    set classification(classification: `${ClusterElement.Classification}` | undefined) {
+        if (classification || this.hasLocalResource) {
+            this.localResource.classification = classification;
+        }
+    }
+
+    get pics() {
+        return this.hasLocalResource ? this.localResource.pics : undefined;
+    }
+
+    set pics(pics: string | undefined) {
+        if (pics || this.hasLocalResource) {
+            this.localResource.pics = pics;
+        }
     }
 
     /**
@@ -122,7 +128,7 @@ export class ClusterModel extends ScopeModel<ClusterElement> implements ClusterE
         }
 
         for (const feature of featureMap.children) {
-            const desc = feature.description && camelize(feature.description);
+            const desc = feature.title && camelize(feature.title);
             if (desc !== undefined && featureSet.has(desc)) {
                 feature.default = true;
                 featureSet.delete(desc);
@@ -154,20 +160,21 @@ export class ClusterModel extends ScopeModel<ClusterElement> implements ClusterE
         return Access.Default;
     }
 
-    override valueOf() {
-        const result = super.valueOf() as any;
-        if (this.quality && !this.quality.empty) {
-            result.quality = this.quality.valueOf();
-        }
-        return result as ClusterElement;
-    }
-
-    constructor(definition: ClusterModel.Definition, ...children: Model.Definition<ClusterModel.Child>[]) {
+    constructor(definition: ClusterModel.Definition, ...children: Model.ChildDefinition<ClusterModel>[]) {
         super(definition, ...children);
 
-        if (definition instanceof Model) {
-            Aspects.cloneAspects(definition, this, QUALITY);
+        this.#quality = Quality.create(definition.quality);
+        if (!(definition instanceof Model)) {
+            this.pics = definition.pics;
+            this.classification = definition.classification as ClusterElement.Classification;
         }
+    }
+
+    override toElement(omitResources = false, extra?: Record<string, unknown>) {
+        return super.toElement(omitResources, {
+            quality: this.quality.valueOf(),
+            ...extra,
+        });
     }
 
     static Tag = ClusterElement.Tag;
@@ -176,7 +183,7 @@ export class ClusterModel extends ScopeModel<ClusterElement> implements ClusterE
 ClusterModel.register();
 
 export namespace ClusterModel {
-    export type Definition = ClusterElement.Properties & { supportedFeatures?: FeatureSet.Definition };
+    export type Definition = Model.Definition<ClusterModel> & { supportedFeatures?: FeatureSet.Definition };
 
     export type Child =
         | DatatypeModel

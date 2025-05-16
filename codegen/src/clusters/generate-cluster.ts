@@ -144,7 +144,7 @@ function generateMutableCluster(
             featureMap.children.forEach(feature => {
                 if (typeof feature.constraint.value === "number") {
                     if (supportedFeatures & (1 << feature.constraint.value)) {
-                        defaultFeatures.add(camelize(feature.description ?? feature.name));
+                        defaultFeatures.add(camelize(feature.title ?? feature.name));
                     }
                 }
             });
@@ -259,9 +259,9 @@ function generateFeatures(file: ClusterFile, base: Block) {
             xref: file.cluster.featureMap.xref,
         });
         for (const f of file.cluster.features) {
-            const name = camelize(f.description ?? f.name, true);
+            const name = camelize(f.title ?? f.name, true);
             featureEnum.atom(`${name} = ${serialize(name)}`).document({
-                description: f.description ? `${f.description} (${f.name})` : f.name,
+                description: f.title ? `${f.title} (${f.name})` : f.name,
                 details: f.details,
                 xref: f.xref,
             });
@@ -271,7 +271,7 @@ function generateFeatures(file: ClusterFile, base: Block) {
     const featureBlock = base.expressions("features: {", "}");
     base.file.addImport("!types/schema/BitmapSchema.js", "BitFlag");
     features.forEach(feature => {
-        const name = camelize(feature.description ?? feature.name);
+        const name = camelize(feature.title ?? feature.name);
         featureBlock.atom(name, `BitFlag(${feature.constraint.value})`).document(feature);
     });
 }

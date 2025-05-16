@@ -6,12 +6,11 @@
 
 import { NodeElement } from "../elements/index.js";
 import { Children } from "./Children.js";
-import { EndpointModel } from "./EndpointModel.js";
+import type { EndpointModel } from "./EndpointModel.js";
 import { Model } from "./Model.js";
 
 export class NodeModel extends Model<NodeElement> implements NodeElement {
     override tag: NodeElement.Tag = NodeElement.Tag;
-    declare id: number;
 
     override get children(): Children<EndpointModel> {
         return super.children as Children<EndpointModel>;
@@ -23,6 +22,14 @@ export class NodeModel extends Model<NodeElement> implements NodeElement {
 
     get endpoints() {
         return this.children;
+    }
+
+    override get id() {
+        return super.id;
+    }
+
+    override set id(id: number) {
+        super.id = id;
     }
 
     static Tag = NodeElement.Tag;

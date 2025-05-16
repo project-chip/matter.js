@@ -39,6 +39,7 @@ export function finalizeModel(matter: MatterModel) {
     }
 
     ejectZigbee(matter);
+    deleteRedundantXrefs(matter);
 
     logger.info(`validate ${matter.name}`);
 
@@ -248,6 +249,23 @@ function patchStatusTypes(cluster: ClusterModel) {
         }
 
         status.type = statusType.name;
+    }
+}
+
+/**
+ * Remove xrefs from children that are identical to their parent.  They only add bloat.
+ */
+function deleteRedundantXrefs(model: Model) {
+    const toDereference = Array<Model>();
+
+    model.visit(m => {
+        if (m !== model && m.xref && m.xref === m.parent?.xref) {
+            toDereference.push(m);
+        }
+    });
+
+    for (const model of toDereference) {
+        model.xref = undefined;
     }
 }
 

@@ -22,13 +22,17 @@ Subfolders support specific functions:
 -   [aspects/](src/aspects) - parsers and ASTs for fields that utilize domain specific languages
 -   [logic/](src/logic) - various algorithms that operate on models
 
-The datatypes in [elements](src/elements) model Matter elements using TypeScript types. _Elements_ are a formal component
-of the Matter specification that describe individual structures in the data model. Our element definitions are subtypes
-of [BaseElement](src/elements/BaseElement.ts).
+The datatypes in [elements](src/elements) model Matter elements using TypeScript types. _Elements_ are a formal
+component of the Matter specification that describe individual structures in the data model. Our element definitions are
+subtypes of [BaseElement](src/elements/BaseElement.ts).
 
-For each element definition, a class in [models](src/models) offers a concrete operational implementation. This is the API
-to use if you need to work with the data model beyond simple data modeling. Our models are all subtypes of
+For each element definition, a class in [models](src/models) offers a concrete operational implementation. This is the
+API to use if you need to work with the data model beyond simple data modeling. Our models are all subtypes of
 [Model](src/models/Model.ts).
+
+For a richer model you can load `@matter/model/resources`.  This package installs additional human-facing details for
+data elements, such as long-form descriptions and cross references.  These fields will be `undefined` in the model if
+you do not load the resources module.
 
 [MatterModel](src/models/MatterModel.ts) is the primary entrypoint to the API.
 

@@ -12,7 +12,6 @@ import { DatatypeElement } from "./DatatypeElement.js";
 import { DeviceTypeElement } from "./DeviceTypeElement.js";
 import { FabricElement } from "./FabricElement.js";
 import { FieldElement } from "./FieldElement.js";
-import { NodeElement } from "./NodeElement.js";
 import { SemanticNamespaceElement } from "./SemanticNamespaceElement.js";
 
 /**
@@ -41,7 +40,6 @@ export namespace MatterElement {
         | ClusterElement
         | DeviceTypeElement
         | FabricElement
-        | NodeElement
         | DatatypeElement
         | FieldElement
         | AttributeElement

@@ -478,8 +478,6 @@ export namespace Messages {
 
         features: {
             /**
-             * ReceivedConfirmation
-             *
              * This feature shall indicate that the device can get confirmation from a user that the message was
              * received.
              *
@@ -488,8 +486,6 @@ export namespace Messages {
             receivedConfirmation: BitFlag(0),
 
             /**
-             * ConfirmationResponse
-             *
              * This feature shall indicate that the device is capable of presenting a list of responses to the user and
              * recording the user’s choice of response.
              *
@@ -498,8 +494,6 @@ export namespace Messages {
             confirmationResponse: BitFlag(1),
 
             /**
-             * ConfirmationReply
-             *
              * This feature shall indicate that the device is capable of collecting a free-form text response to a
              * message.
              *
@@ -508,8 +502,6 @@ export namespace Messages {
             confirmationReply: BitFlag(2),
 
             /**
-             * ProtectedMessages
-             *
              * This feature shall indicate that the device is capable of requiring the user to authenticate before
              * viewing a message; e.g. entering a PIN or password before viewing a message with billing information.
              *

@@ -335,8 +335,6 @@ export namespace GroupKeyManagement {
 
         features: {
             /**
-             * CacheAndSync
-             *
              * The ability to support CacheAndSync security policy and MCSP.
              */
             cacheAndSync: BitFlag(0)

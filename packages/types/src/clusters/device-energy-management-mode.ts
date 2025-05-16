@@ -231,8 +231,6 @@ export namespace DeviceEnergyManagementMode {
 
         features: {
             /**
-             * OnOff
-             *
              * Dependency with the OnOff cluster
              */
             onOff: BitFlag(0)

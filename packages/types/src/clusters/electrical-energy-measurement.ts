@@ -472,8 +472,6 @@ export namespace ElectricalEnergyMeasurement {
 
         features: {
             /**
-             * ImportedEnergy
-             *
              * The feature indicates the server is capable of measuring how much energy is imported by the server.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 2.12.4.1
@@ -481,8 +479,6 @@ export namespace ElectricalEnergyMeasurement {
             importedEnergy: BitFlag(0),
 
             /**
-             * ExportedEnergy
-             *
              * The feature indicates the server is capable of measuring how much energy is exported by the server.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 2.12.4.2
@@ -490,8 +486,6 @@ export namespace ElectricalEnergyMeasurement {
             exportedEnergy: BitFlag(1),
 
             /**
-             * CumulativeEnergy
-             *
              * The feature indicates the server is capable of measuring how much energy has been imported or exported by
              * the server over the device’s lifetime. This measurement may start from when a device’s firmware is
              * updated to include this feature, when a device’s firmware is updated to correct measurement errors, or
@@ -502,8 +496,6 @@ export namespace ElectricalEnergyMeasurement {
             cumulativeEnergy: BitFlag(2),
 
             /**
-             * PeriodicEnergy
-             *
              * The feature indicates the server is capable of measuring how much energy has been imported or exported by
              * the server during a certain period of time. The start and end times for measurement periods shall be
              * determined by the server, and may represent overlapping periods.

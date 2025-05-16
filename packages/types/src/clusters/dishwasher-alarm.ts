@@ -215,8 +215,6 @@ export namespace DishwasherAlarm {
 
         features: {
             /**
-             * Reset
-             *
              * This feature indicates that alarms can be reset via the Reset command.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.15.4.1
