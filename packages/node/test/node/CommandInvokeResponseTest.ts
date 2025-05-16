@@ -141,7 +141,8 @@ async function invokeCmdRaw(node: MockServerNode, data: Partial<InvokeRequest>) 
     return node.online({ command: true, exchange }, async ({ context }) => {
         const response = new CommandInvokeResponse(node.protocol, context);
         if (request.suppressResponse) {
-            return { data: await response.process(request), counts: response.counts };
+            const data = await (response.process(request) as unknown as Promise<void>);
+            return { data, counts: response.counts };
         } else {
             const chunks = new Array<InvokeResult.Data>();
             for await (const chunk of response.process(request)) {
