@@ -8,15 +8,25 @@ import { InteractionSession } from "#action/Interactable.js";
 import { OccurrenceManager } from "#events/OccurrenceManager.js";
 import { MaybePromise, Observable } from "#general";
 import { DataModelPath, MatterModel } from "#model";
-import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, NodeId, TlvSchema } from "#types";
-import { AttributePath, EventId, EventPath } from "#types";
+import type {
+    AttributeId,
+    ClusterId,
+    CommandId,
+    DeviceTypeId,
+    EndpointNumber,
+    FabricIndex,
+    NodeId,
+    TlvSchema,
+} from "#types";
+import { AttributePath, CommandPath, EventId, EventPath } from "#types";
 import { AccessControl } from "./server/AccessControl.js";
 import { Val } from "./Val.js";
 
-export interface AvailableElementIds {
-    attributes: Set<AttributeId>;
-    events: Set<EventId>;
-}
+export type CommandInvokeHandler = (
+    command: CommandTypeProtocol,
+    request: Val.Struct | undefined,
+    session: InteractionSession,
+) => MaybePromise<Val.Struct | undefined>;
 
 /**
  * Optimized Matter protocol<->JS object interface
@@ -65,7 +75,7 @@ export interface NodeProtocol extends CollectionProtocol<EndpointProtocol> {
     /**
      * Inspects an Attribute- or Event path and log in human-readable form if possible
      */
-    inspectPath(path: AttributePath | EventPath): string;
+    inspectPath(path: AttributePath | EventPath | CommandPath): string;
 }
 
 /**
@@ -74,6 +84,11 @@ export interface NodeProtocol extends CollectionProtocol<EndpointProtocol> {
 export interface EndpointProtocol
     extends CollectionProtocol<ClusterProtocol>,
         AddressableElementProtocol<EndpointNumber> {
+    /**
+     * Bitmap with each wildcard path flag bit set where this value should be skipped.
+     */
+    wildcardPathFlags: number;
+
     /**
      * Path to the endpoint within the data model.
      */
@@ -118,6 +133,11 @@ export interface ClusterProtocol {
      * session.  So doing is the responsibility of the node implementation.
      */
     openForWrite(session: InteractionSession): Promise<Val.ProtocolStruct>;
+
+    /**
+     * Invoke handler for the commands of the cluster
+     */
+    invokeCommand: CommandInvokeHandler;
 }
 
 /**
@@ -127,6 +147,11 @@ export interface ClusterProtocol {
  */
 export interface ClusterTypeProtocol extends AddressableElementProtocol<ClusterId> {
     /**
+     * Bitmap with each wildcard path flag bit set where this value should be skipped.
+     */
+    wildcardPathFlags: number;
+
+    /**
      * Attribute metadata.
      */
     attributes: CollectionProtocol<AttributeTypeProtocol>;
@@ -135,12 +160,22 @@ export interface ClusterTypeProtocol extends AddressableElementProtocol<ClusterI
      * Event metadata.
      */
     events: CollectionProtocol<EventTypeProtocol>;
+
+    /**
+     * Command metadata.
+     */
+    commands: CollectionProtocol<CommandTypeProtocol>;
 }
 
 /**
- * Descriptor for a specific property type.
+ * Descriptor for a specific attribute property type.
  */
 export interface AttributeTypeProtocol extends AddressableElementProtocol<AttributeId> {
+    /**
+     * Bitmap with each wildcard path flag bit set where this value should be skipped.
+     */
+    wildcardPathFlags: number;
+
     /**
      * The TLV schema for this property.
      */
@@ -163,16 +198,41 @@ export interface AttributeTypeProtocol extends AddressableElementProtocol<Attrib
 }
 
 /**
- * Descriptor for a specific property type.
+ * Descriptor for a specific event property type.
  */
-export interface EventTypeProtocol extends Omit<AddressableElementProtocol<EventId>, "wildcardPathFlags"> {
+export interface EventTypeProtocol extends AddressableElementProtocol<EventId> {
     /**
      * The TLV schema for this property.
      */
     tlv: TlvSchema<unknown>;
 
     /**
-     * Access control information for the attribute.
+     * Access control information for the event.
+     */
+    limits: AccessControl.Limits;
+}
+
+/**
+ * Descriptor for a specific command property type.
+ */
+export interface CommandTypeProtocol extends AddressableElementProtocol<CommandId> {
+    /**
+     * The TLV schema for the command request.
+     */
+    requestTlv: TlvSchema<unknown>;
+
+    /**
+     * The TLV schema for the command response.
+     */
+    responseTlv: TlvSchema<unknown>;
+
+    /**
+     * The Response command Id
+     */
+    responseId: CommandId;
+
+    /**
+     * Access control information for the command.
      */
     limits: AccessControl.Limits;
 }
@@ -190,11 +250,6 @@ export interface AddressableElementProtocol<N extends number> {
      * Human readable name of the element.
      */
     name: string;
-
-    /**
-     * Bitmap with each wildcard path flag bit set where this value should be skipped.
-     */
-    wildcardPathFlags: number;
 }
 
 /**
