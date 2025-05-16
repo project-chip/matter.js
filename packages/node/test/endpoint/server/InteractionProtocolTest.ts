@@ -879,6 +879,13 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
     invokeResponses: [
         {
             status: {
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) },
+                commandRef: 4,
+                status: { status: 129 },
+            },
+        },
+        {
+            status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(0), endpointId: EndpointNumber(0) },
                 commandRef: 1,
                 status: { status: 0 },
@@ -896,13 +903,6 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(2), endpointId: EndpointNumber(0) },
                 commandRef: 3,
                 status: { status: 0 },
-            },
-        },
-        {
-            status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) },
-                commandRef: 4,
-                status: { status: 129 },
             },
         },
     ],
@@ -1487,7 +1487,7 @@ describe("InteractionProtocol", () => {
                     new InteractionServerMessenger(exchange),
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith("(128) Illegal wildcard path in batch invoke");
+            ).rejectedWith("(128) Wildcard path must not be used with multiple invokes");
             expect(result).equals(undefined);
         });
 
@@ -1627,7 +1627,7 @@ describe("InteractionProtocol", () => {
                     new InteractionServerMessenger(exchange),
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith("(128) Duplicate command path (0/6/1) in batch invoke");
+            ).rejectedWith("Duplicate concrete command path RootNode(0x0)/OnOff(0x6)/on(0x1) on batch invoke");
 
             expect(result).equals(undefined);
         });
@@ -1836,7 +1836,7 @@ describe("InteractionProtocol", () => {
             expect(timedInteractionCleared).equals(false);
         });
 
-        it("invoke command with with timed interaction required by command success", async () => {
+        it("invoke command with timed interaction required by command success", async () => {
             const fabric = await node.addFabric();
 
             let timedInteractionCleared = false;
