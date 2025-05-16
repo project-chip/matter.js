@@ -305,15 +305,11 @@ export namespace WaterHeaterManagement {
 
         features: {
             /**
-             * EnergyManagement
-             *
              * Allows energy management control of the tank
              */
             energyManagement: BitFlag(0),
 
             /**
-             * TankPercent
-             *
              * Supports monitoring the percentage of hot water in the tank
              */
             tankPercent: BitFlag(1)

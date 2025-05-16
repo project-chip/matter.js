@@ -143,8 +143,6 @@ export namespace RefrigeratorAlarm {
 
         features: {
             /**
-             * Reset
-             *
              * Supports the ability to reset alarms
              */
             reset: BitFlag(0)

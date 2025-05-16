@@ -4,6 +4,7 @@
 models/src/chip.ts
 models/src/spec.ts
 packages/model/src/standard/elements/*
+packages/model/src/standard/resources/*
 packages/types/src/clusters/*
 packages/types/src/globals/*
 packages/node/src/tags/*

@@ -58,6 +58,17 @@
                 "types": "./dist/cjs/index.d.ts",
                 "default": "./dist/cjs/index.js"
             }
+        },
+
+        "./resources": {
+            "import": {
+                "types": "./dist/esm/standard/resources/index.d.ts",
+                "default": "./dist/esm/standard/resources/index.js"
+            },
+            "require": {
+                "types": "./dist/cjs/standard/resources/index.d.ts",
+                "default": "./dist/cjs/standard/resources/index.js"
+            }
         }
     },
     "imports": {

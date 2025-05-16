@@ -5,20 +5,10 @@
  */
 
 import { SemanticTagElement } from "../elements/index.js";
-import { Children } from "./Children.js";
 import { Model } from "./Model.js";
 
-export class SemanticTagModel extends Model<SemanticTagElement> implements SemanticTagElement {
+export class SemanticTagModel extends Model<SemanticTagElement, never> implements SemanticTagElement {
     override tag: SemanticTagElement.Tag = SemanticTagElement.Tag;
-    declare id: number;
-
-    override get children(): Children<never> {
-        return super.children as Children<never>;
-    }
-
-    override set children(children: Children.InputIterable<never>) {
-        super.children = children;
-    }
 
     static Tag = SemanticTagElement.Tag;
 }

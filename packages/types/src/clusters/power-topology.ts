@@ -94,29 +94,21 @@ export namespace PowerTopology {
 
         features: {
             /**
-             * NodeTopology
-             *
              * This endpoint provides or consumes power to/from the entire node
              */
             nodeTopology: BitFlag(0),
 
             /**
-             * TreeTopology
-             *
              * This endpoint provides or consumes power to/from itself and its child endpoints
              */
             treeTopology: BitFlag(1),
 
             /**
-             * SetTopology
-             *
              * This endpoint provides or consumes power to/from a specified set of endpoints
              */
             setTopology: BitFlag(2),
 
             /**
-             * DynamicPowerFlow
-             *
              * The specified set of endpoints may change
              */
             dynamicPowerFlow: BitFlag(3)

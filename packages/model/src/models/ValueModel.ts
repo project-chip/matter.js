@@ -4,80 +4,77 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Scope } from "#logic/Scope.js";
 import { Access, Aspect, Conformance, Constraint, Quality } from "../aspects/index.js";
 import { ElementTag, FieldValue, Metatype } from "../common/index.js";
-import { BaseElement, ValueElement } from "../elements/index.js";
+import { ValueElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
-import { Aspects } from "./Aspects.js";
 import { Model } from "./Model.js";
 import type { PropertyModel } from "./PropertyModel.js";
 
 // These are circular dependencies so just to be safe we only import the types.  We also need the class, though, at
 // runtime.  So we use the references in the Model.constructors factory pool.
-import { Scope } from "#logic/Scope.js";
-import { Children } from "./Children.js";
-import { type FieldModel } from "./FieldModel.js";
-
-const CONSTRAINT: unique symbol = Symbol("constraint");
-const CONFORMANCE: unique symbol = Symbol("conformance");
-const ACCESS: unique symbol = Symbol("access");
-const QUALITY: unique symbol = Symbol("quality");
+import type { FieldModel } from "./FieldModel.js";
 
 /**
  * Each {@link ValueElement} type has a corresponding implementation that derives from this class.
  */
-export abstract class ValueModel<T extends ValueElement = ValueElement> extends Model<T> implements ValueElement {
-    declare byteSize?: ValueElement.ByteSize;
-    declare default?: FieldValue;
-    declare metatype?: Metatype;
+export abstract class ValueModel<T extends ValueElement = ValueElement>
+    extends Model<T, FieldModel>
+    implements ValueElement
+{
+    byteSize?: ValueElement.ByteSize;
+    default?: FieldValue;
+    metatype?: Metatype;
     override isType? = true;
 
-    override get children(): Children<FieldModel> {
-        return super.children as Children<FieldModel>;
-    }
-
-    override set children(children: Children.InputIterable<FieldModel>) {
-        super.children = children;
-    }
+    #constraint: Constraint;
+    #conformance: Conformance;
+    #access: Access;
+    #quality: Quality;
 
     get constraint(): Constraint {
-        return Aspects.getAspect(this, CONSTRAINT, Constraint);
+        return this.#constraint;
     }
     set constraint(definition: Constraint | Constraint.Definition) {
-        Aspects.setAspect(this, CONSTRAINT, Constraint, definition);
+        this.#constraint = Constraint.create(definition);
     }
     get effectiveConstraint(): Constraint {
-        return new ModelTraversal().findConstraint(this, CONSTRAINT) || this.constraint;
+        return new ModelTraversal().findConstraint(this) || this.constraint;
     }
 
     get conformance(): Conformance {
-        return Aspects.getAspect(this, CONFORMANCE, Conformance);
+        return this.#conformance;
     }
     set conformance(definition: Conformance | Conformance.Definition) {
-        Aspects.setAspect(this, CONFORMANCE, Conformance, definition);
+        this.#conformance = Conformance.create(definition);
     }
     get effectiveConformance(): Conformance {
-        return Aspects.getEffectiveAspect(this, CONFORMANCE, Conformance);
+        return new ModelTraversal().findAspect(this, "conformance", Conformance) ?? this.#conformance;
     }
 
     get access(): Access {
-        return Aspects.getAspect(this, ACCESS, Access);
+        return this.#access;
     }
     set access(definition: Access | Access.Definition) {
-        Aspects.setAspect(this, ACCESS, Access, definition);
+        this.#access = Access.create(definition);
     }
     get effectiveAccess(): Access {
-        return new ModelTraversal().findAccess(this, ACCESS, ValueModel);
+        return new ModelTraversal().findAccess(this, ValueModel);
     }
 
     get quality(): Quality {
-        return Aspects.getAspect(this, QUALITY, Quality);
+        return this.#quality;
     }
     set quality(definition: Quality | Quality.Definition) {
-        Aspects.setAspect(this, QUALITY, Quality, definition);
+        this.#quality = Quality.create(definition);
     }
     get effectiveQuality(): Quality {
-        return Aspects.getEffectiveAspect(this, QUALITY, Quality);
+        return new ModelTraversal().findAspect(this, "quality", Quality) ?? this.#quality;
+    }
+
+    get fields() {
+        return Scope(this).membersOf(this, { tags: [ElementTag.Field] }) as FieldModel[];
     }
 
     /**
@@ -180,10 +177,10 @@ export abstract class ValueModel<T extends ValueElement = ValueElement> extends 
 
         new ModelTraversal().visitInheritance(this, model => {
             if (model instanceof ValueModel) {
-                if (!model.conformance.empty && model.conformance.type !== Conformance.Special.Desc) {
+                if (!model.conformance.isEmpty && model.conformance.type !== Conformance.Special.Desc) {
                     aspects.push(model.conformance);
                 }
-                if (!model.constraint.empty && !model.constraint.desc) {
+                if (!model.constraint.isEmpty && !model.constraint.desc) {
                     aspects.push(model.constraint);
                 }
                 if (model.quality.nullable === false) {
@@ -235,16 +232,16 @@ export abstract class ValueModel<T extends ValueElement = ValueElement> extends 
         if (this.type && this.type !== shadow.type) {
             return true;
         }
-        if (!this.conformance.empty && !this.conformance.equals(shadow.conformance)) {
+        if (!this.conformance.isEmpty && !this.conformance.equals(shadow.conformance)) {
             return true;
         }
-        if (!this.quality.empty && !this.quality.equals(shadow.quality)) {
+        if (!this.quality.isEmpty && !this.quality.equals(shadow.quality)) {
             return true;
         }
-        if (!this.constraint.empty && !this.constraint.equals(shadow.constraint)) {
+        if (!this.constraint.isEmpty && !this.constraint.equals(shadow.constraint)) {
             return true;
         }
-        if (!this.access.empty && !this.access.equals(shadow.access)) {
+        if (!this.access.isEmpty && !this.access.equals(shadow.access)) {
             return true;
         }
     }
@@ -268,31 +265,32 @@ export abstract class ValueModel<T extends ValueElement = ValueElement> extends 
         return { name: this.name } as T;
     }
 
-    override valueOf() {
-        const result = super.valueOf() as any;
-        for (const k of ["conformance", "access", "quality", "constraint"]) {
-            const v = (this as any)[k] as Aspect<any>;
-            if (v && !v.empty) {
-                result[k] = v.valueOf();
-            }
-        }
-        if (result.default === undefined) {
-            delete result.default;
-        }
-        return result as T;
-    }
-
-    constructor(definition: BaseElement.Properties<T>, ...children: Model.Definition<FieldModel>[]) {
+    constructor(definition: Model.Definition<ValueModel<T>>, ...children: Model.ChildDefinition<FieldModel>[]) {
         super(definition, ...children);
+
+        this.byteSize = definition.byteSize;
+        this.default = definition.default;
+        this.#constraint = Constraint.create(definition.constraint);
+        this.#conformance = Conformance.create(definition.conformance);
+        this.#access = Access.create(definition.access);
+        this.#quality = Quality.create(definition.quality);
 
         const match = this.type?.match(/^list\[(.*)\]$/);
         if (match) {
             this.type = "list";
             this.children.push(new Model.types.field({ name: "entry", type: match[1] }) as FieldModel);
         }
+    }
 
-        if (definition instanceof Model) {
-            Aspects.cloneAspects(definition, this, CONSTRAINT, CONFORMANCE, ACCESS, QUALITY);
-        }
+    override toElement(omitResources = false, extra?: Record<string, unknown>) {
+        return super.toElement(omitResources, {
+            byteSize: this.byteSize,
+            default: this.default,
+            constraint: this.#constraint.valueOf(),
+            conformance: this.#conformance.valueOf(),
+            access: this.#access.valueOf(),
+            quality: this.#quality.valueOf(),
+            ...extra,
+        });
     }
 }

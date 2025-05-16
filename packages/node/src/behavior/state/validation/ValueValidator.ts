@@ -157,7 +157,7 @@ function createBitmapValidator(schema: ValueModel, supervisor: RootSupervisor): 
         }
         let name;
         if (field?.parent?.id === FeatureMap.id) {
-            name = camelize(field.description ?? field.name);
+            name = camelize(field.title ?? field.name);
         } else {
             name = camelize(field.name);
         }

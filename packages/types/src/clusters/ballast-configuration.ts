@@ -175,7 +175,7 @@ export namespace BallastConfiguration {
             lampType: OptionalWritableAttribute(
                 0x30,
                 TlvString.bound({ maxLength: 16 }),
-                { default: "", writeAcl: AccessLevel.Manage }
+                { writeAcl: AccessLevel.Manage }
             ),
 
             /**
@@ -186,7 +186,7 @@ export namespace BallastConfiguration {
             lampManufacturer: OptionalWritableAttribute(
                 0x31,
                 TlvString.bound({ maxLength: 16 }),
-                { default: "", writeAcl: AccessLevel.Manage }
+                { writeAcl: AccessLevel.Manage }
             ),
 
             /**

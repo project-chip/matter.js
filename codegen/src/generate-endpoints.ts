@@ -6,6 +6,7 @@
 
 import { decamelize } from "#general";
 import { ClusterModel, ClusterVariance, CommandModel, MatterModel } from "#model";
+import "@matter/model/resources";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { BehaviorFile } from "./endpoints/BehaviorFile.js";

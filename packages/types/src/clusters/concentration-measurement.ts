@@ -276,43 +276,31 @@ export namespace ConcentrationMeasurement {
     export const Base = MutableCluster.Component({
         features: {
             /**
-             * NumericMeasurement
-             *
              * Cluster supports numeric measurement of substance
              */
             numericMeasurement: BitFlag(0),
 
             /**
-             * LevelIndication
-             *
              * Cluster supports basic level indication for substance using the ConcentrationLev el enum
              */
             levelIndication: BitFlag(1),
 
             /**
-             * MediumLevel
-             *
              * Cluster supports the Medium Concentration Level
              */
             mediumLevel: BitFlag(2),
 
             /**
-             * CriticalLevel
-             *
              * Cluster supports the Critical Concentration Level
              */
             criticalLevel: BitFlag(3),
 
             /**
-             * PeakMeasurement
-             *
              * Cluster supports peak numeric measurement of substance
              */
             peakMeasurement: BitFlag(4),
 
             /**
-             * AverageMeasurement
-             *
              * Cluster supports average numeric measurement of substance
              */
             averageMeasurement: BitFlag(5)

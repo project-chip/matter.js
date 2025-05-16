@@ -161,8 +161,6 @@ export namespace MediaInput {
 
         features: {
             /**
-             * NameUpdates
-             *
              * Supports updates to the input names
              */
             nameUpdates: BitFlag(0)

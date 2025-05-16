@@ -317,8 +317,6 @@ export namespace Groups {
 
         features: {
             /**
-             * GroupNames
-             *
              * The Group Names feature indicates the ability to store a name for a group when a group is added.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.3.4.1

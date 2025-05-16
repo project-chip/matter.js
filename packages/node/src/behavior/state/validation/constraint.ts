@@ -51,7 +51,7 @@ function create(
     schema: ValueModel,
     nameResolverFactory: NameResolverFactory,
 ): ValueSupervisor.Validate | undefined {
-    if (constraint.empty) {
+    if (constraint.isEmpty) {
         return;
     }
 

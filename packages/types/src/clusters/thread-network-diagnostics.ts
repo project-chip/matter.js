@@ -954,30 +954,22 @@ export namespace ThreadNetworkDiagnostics {
 
         features: {
             /**
-             * PacketCounts
-             *
              * Server supports the counts for the number of received and transmitted packets on the Thread interface.
              */
             packetCounts: BitFlag(0),
 
             /**
-             * ErrorCounts
-             *
              * Server supports the counts for the number of errors that have occurred during the reception and
              * transmission of packets on the Thread interface.
              */
             errorCounts: BitFlag(1),
 
             /**
-             * MleCounts
-             *
              * Server supports the counts for various MLE layer happenings.
              */
             mleCounts: BitFlag(2),
 
             /**
-             * MacCounts
-             *
              * Server supports the counts for various MAC layer happenings.
              */
             macCounts: BitFlag(3)

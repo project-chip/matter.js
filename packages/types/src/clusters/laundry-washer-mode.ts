@@ -181,8 +181,6 @@ export namespace LaundryWasherMode {
 
         features: {
             /**
-             * OnOff
-             *
              * Dependency with the OnOff cluster
              */
             onOff: BitFlag(0)

@@ -81,11 +81,13 @@ function generateAllAttributeHandlersForCluster(yargs: Argv, theNode: MatterNode
 }
 
 function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, theNode: MatterNode) {
-    if (cluster.id === undefined) {
+    const clusterId = cluster.id;
+    if (clusterId === undefined) {
         return yargs;
     }
+
     yargs = yargs.command(
-        [cluster.name.toLowerCase(), `0x${cluster.id.toString(16)}`],
+        [cluster.name.toLowerCase(), `0x${clusterId.toString(16)}`],
         `Read/Write ${cluster.name} attributes`,
         yargs => {
             yargs = yargs.command(
@@ -123,7 +125,7 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
 
                             const clusterClient = node
                                 .getDeviceById(endpointId)
-                                ?.getClusterClientById(ClusterId(clusterId));
+                                ?.getClusterClientById(ClusterId(clusterId!));
                             if (clusterClient === undefined) {
                                 console.log(
                                     `ERROR: Cluster ${node.nodeId.toString()}/${endpointId}/${clusterId} not found.`,
@@ -147,7 +149,7 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                     );
 
                     cluster.attributes.forEach(attribute => {
-                        yargs = generateAttributeReadHandler(yargs, cluster.id, cluster.name, attribute, theNode);
+                        yargs = generateAttributeReadHandler(yargs, clusterId, cluster.name, attribute, theNode);
                     });
                     return yargs;
                 },
@@ -165,7 +167,7 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                             if (!attribute.writable) {
                                 return;
                             }
-                            yargs = generateAttributeWriteHandler(yargs, cluster.id, cluster.name, attribute, theNode);
+                            yargs = generateAttributeWriteHandler(yargs, clusterId, cluster.name, attribute, theNode);
                         });
                         return yargs;
                     },

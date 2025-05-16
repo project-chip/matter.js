@@ -11,8 +11,8 @@ import { MergedModel } from "#logic/index.js";
 // without the global types in MatterModel so we fake that up even though we're
 // only actuall merge the input models
 function merge({ spec, chip }: { spec: MatterElement.Child; chip: MatterElement.Child }) {
-    const specMatter = new MatterModel({ name: "Spec", children: [...Matter.seedGlobals, spec] });
-    const chipMatter = new MatterModel({ name: "Chip", children: [...Matter.seedGlobals, chip] });
+    const specMatter = new MatterModel({ name: "Spec" }, ...Matter.seedGlobals, spec);
+    const chipMatter = new MatterModel({ name: "Chip" }, ...Matter.seedGlobals, chip);
 
     return MergedModel("1.1", {
         spec: specMatter.children[specMatter.children.length - 1],

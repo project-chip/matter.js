@@ -640,8 +640,6 @@ export namespace ServiceArea {
 
         features: {
             /**
-             * SelectWhileRunning
-             *
              * This feature indicates whether this device allows changing the selected areas, by using the SelectAreas
              * command, while operating.
              *
@@ -650,15 +648,11 @@ export namespace ServiceArea {
             selectWhileRunning: BitFlag(0),
 
             /**
-             * ProgressReporting
-             *
              * The device implements the progress reporting feature
              */
             progressReporting: BitFlag(1),
 
             /**
-             * Maps
-             *
              * The device has map support
              */
             maps: BitFlag(2)

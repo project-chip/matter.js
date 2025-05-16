@@ -221,8 +221,6 @@ export namespace EnergyPreference {
 
         features: {
             /**
-             * EnergyBalance
-             *
              * This feature allows a user to select from a list of energy balances with associated descriptions of which
              * strategies a device will use to target the specified balance.
              *
@@ -231,8 +229,6 @@ export namespace EnergyPreference {
             energyBalance: BitFlag(0),
 
             /**
-             * LowPowerModeSensitivity
-             *
              * This feature allows the user to select a condition or set of conditions which will cause the device to
              * switch to a mode using less power. For example, a device might provide a scale of durations that must
              * elapse without user interaction before it goes to sleep.

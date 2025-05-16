@@ -220,8 +220,6 @@ export namespace BridgedDeviceBasicInformation {
 
         features: {
             /**
-             * BridgedIcdSupport
-             *
              * Support bridged ICDs.
              */
             bridgedIcdSupport: BitFlag(20)

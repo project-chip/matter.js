@@ -4,76 +4,55 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Access, Aspect, Conformance, Constraint, Quality } from "../aspects/index.js";
+import { Access, Conformance, Constraint, Quality } from "../aspects/index.js";
 import { RequirementElement } from "../elements/index.js";
-import { Aspects } from "./Aspects.js";
-import { Children } from "./Children.js";
 import { FieldModel } from "./FieldModel.js";
 import { Model } from "./Model.js";
 
-const CONSTRAINT: unique symbol = Symbol("constraint");
-const CONFORMANCE: unique symbol = Symbol("conformance");
-const ACCESS: unique symbol = Symbol("access");
-const QUALITY: unique symbol = Symbol("quality");
-
-export class RequirementModel extends Model<RequirementElement> implements RequirementElement {
+export class RequirementModel extends Model<RequirementElement, RequirementModel.Child> implements RequirementElement {
     override tag: RequirementElement.Tag = RequirementElement.Tag;
     declare element: RequirementElement.ElementType;
     declare default?: any;
 
-    override get children(): Children<RequirementModel.Child> {
-        return super.children as Children<RequirementModel.Child>;
-    }
-
-    override set children(children: Children.InputIterable<RequirementModel.Child>) {
-        super.children = children;
-    }
+    #constraint: Constraint;
+    #conformance: Conformance;
+    #access: Access;
+    #quality: Quality;
 
     override get discriminator() {
         return this.element;
     }
 
-    get access(): Access {
-        return Aspects.getAspect(this, ACCESS, Access);
-    }
-    set access(definition: Access | Access.Definition) {
-        Aspects.setAspect(this, ACCESS, Access, definition);
-    }
-
     get constraint(): Constraint {
-        return Aspects.getAspect(this, CONSTRAINT, Constraint);
+        return this.#constraint;
     }
     set constraint(definition: Constraint | Constraint.Definition) {
-        Aspects.setAspect(this, CONSTRAINT, Constraint, definition);
+        this.#constraint = Constraint.create(definition);
     }
 
     get conformance(): Conformance {
-        return Aspects.getAspect(this, CONFORMANCE, Conformance);
+        return this.#conformance;
     }
     set conformance(definition: Conformance | Conformance.Definition) {
-        Aspects.setAspect(this, CONFORMANCE, Conformance, definition);
+        this.#conformance = Conformance.create(definition);
+    }
+
+    get access(): Access {
+        return this.#access;
+    }
+    set access(definition: Access | Access.Definition) {
+        this.#access = Access.create(definition);
     }
 
     get quality(): Quality {
-        return Aspects.getAspect(this, QUALITY, Quality);
+        return this.#quality;
     }
     set quality(definition: Quality | Quality.Definition) {
-        Aspects.setAspect(this, QUALITY, Quality, definition);
+        this.#quality = Quality.create(definition);
     }
 
     get requirements() {
         return this.all(RequirementModel);
-    }
-
-    override valueOf() {
-        const result = super.valueOf() as any;
-        for (const k of ["conformance", "access", "quality", "constraint"]) {
-            const v = (this as any)[k] as Aspect<any>;
-            if (v && !v.empty) {
-                result[k] = v.valueOf();
-            }
-        }
-        return result;
     }
 
     /**
@@ -81,6 +60,32 @@ export class RequirementModel extends Model<RequirementElement> implements Requi
      */
     get isMandatory() {
         return this.conformance.isMandatory;
+    }
+
+    constructor(
+        definition: Model.Definition<RequirementModel>,
+        ...children: Model.ChildDefinition<RequirementModel>[]
+    ) {
+        super(definition, ...children);
+
+        this.element = definition.element as RequirementElement.ElementType;
+        this.default = definition.default;
+        this.#constraint = Constraint.create(definition.constraint);
+        this.#conformance = Conformance.create(definition.conformance);
+        this.#access = Access.create(definition.access);
+        this.#quality = Quality.create(definition.quality);
+    }
+
+    override toElement(omitResources = false, extra?: Record<string, unknown>) {
+        return super.toElement(omitResources, {
+            element: this.element,
+            default: this.default,
+            constraint: this.#constraint.valueOf(),
+            conformance: this.#conformance.valueOf(),
+            access: this.#access.valueOf(),
+            quality: this.#quality.valueOf(),
+            ...extra,
+        });
     }
 
     static Tag = RequirementElement.Tag;

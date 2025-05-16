@@ -1464,36 +1464,26 @@ export namespace ColorControl {
 
         features: {
             /**
-             * HueSaturation
-             *
              * Supports color specification via hue/saturation.
              */
             hueSaturation: BitFlag(0),
 
             /**
-             * EnhancedHue
-             *
              * Enhanced hue is supported.
              */
             enhancedHue: BitFlag(1),
 
             /**
-             * ColorLoop
-             *
              * Color loop is supported.
              */
             colorLoop: BitFlag(2),
 
             /**
-             * Xy
-             *
              * Supports color specification via XY.
              */
             xy: BitFlag(3),
 
             /**
-             * ColorTemperature
-             *
              * Supports specification of color temperature.
              */
             colorTemperature: BitFlag(4)

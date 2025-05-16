@@ -448,8 +448,6 @@ export namespace GeneralCommissioning {
 
         features: {
             /**
-             * TermsAndConditions
-             *
              * Supports Terms & Conditions acknowledgement
              */
             termsAndConditions: BitFlag(0)

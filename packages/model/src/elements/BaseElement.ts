@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { CrossReference } from "#models/CrossReference.js";
 import { ElementTag, Specification } from "../common/index.js";
 
 /**
@@ -44,7 +45,7 @@ export interface BaseElement {
     /**
      * Reference to Matter specification document.
      */
-    xref?: Specification.CrossReference;
+    xref?: CrossReference.Definition;
 
     /**
      * Child elements.
@@ -101,7 +102,7 @@ export namespace BaseElement {
     /**
      * Element with optional tag; used for factory functions and constructors.
      */
-    export type Properties<T extends BaseElement> = T extends { tag: `${ElementTag}` }
+    export type Properties<T extends BaseElement = BaseElement> = T extends { tag: `${ElementTag}` }
         ? Omit<T, "tag"> & Partial<Pick<T, "tag">>
         : T;
 

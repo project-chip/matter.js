@@ -9,20 +9,7 @@
 /**
  * Status Code
  *
- * An enumeration value that means a success or error status. A status code is indicated as a response to an action in
- * an interaction (see Interaction Model).
- *
- * A status code shall be one of:
- *
- *   • a common status code from the set defined in the Interaction Model status code table;
- *
- *   • a cluster status code that is scoped to a particular cluster.
- *
- * The following table defines the enumeration ranges for status codes.
- *
- * Status codes in an undefined range, or status codes undefined within a range are reserved and shall NOT be indicated.
- *
- * @see {@link MatterSpecification.v14.Core} § 7.19.2.18
+ * @see {@link MatterSpecification.v14.Core} § 7.19.2
  */
 export enum Status {
     /**

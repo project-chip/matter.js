@@ -180,8 +180,6 @@ export namespace SoftwareDiagnostics {
 
         features: {
             /**
-             * Watermarks
-             *
              * Node makes available the metrics for high watermark related to memory consumption.
              */
             watermarks: BitFlag(0)

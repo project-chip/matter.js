@@ -102,29 +102,21 @@ export namespace AirQuality {
 
         features: {
             /**
-             * Fair
-             *
              * Cluster supports the Fair air quality level
              */
             fair: BitFlag(0),
 
             /**
-             * Moderate
-             *
              * Cluster supports the Moderate air quality level
              */
             moderate: BitFlag(1),
 
             /**
-             * VeryPoor
-             *
              * Cluster supports the Very poor air quality level
              */
             veryPoor: BitFlag(2),
 
             /**
-             * ExtremelyPoor
-             *
              * Cluster supports the Extremely poor air quality level
              */
             extremelyPoor: BitFlag(3)

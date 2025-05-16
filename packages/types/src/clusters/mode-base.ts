@@ -317,8 +317,6 @@ export namespace ModeBase {
     export const Base = MutableCluster.Component({
         features: {
             /**
-             * OnOff
-             *
              * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
              * endpoint. See OnMode for more information.
              *

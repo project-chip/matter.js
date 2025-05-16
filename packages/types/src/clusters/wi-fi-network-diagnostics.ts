@@ -87,24 +87,9 @@ export namespace WiFiNetworkDiagnostics {
      * @see {@link MatterSpecification.v14.Core} § 11.15.5.2
      */
     export enum WiFiVersion {
-        /**
-         * Indicate the network interface is currently using 802.11a against the wireless access point.
-         */
         A = 0,
-
-        /**
-         * Indicate the network interface is currently using 802.11b against the wireless access point.
-         */
         B = 1,
-
-        /**
-         * Indicate the network interface is currently using 802.11g against the wireless access point.
-         */
         G = 2,
-
-        /**
-         * Indicate the network interface is currently using 802.11n against the wireless access point.
-         */
         N = 3,
 
         /**
@@ -341,16 +326,12 @@ export namespace WiFiNetworkDiagnostics {
 
         features: {
             /**
-             * PacketCounts
-             *
              * Node makes available the counts for the number of received and transmitted packets on the Wi-Fi
              * interface.
              */
             packetCounts: BitFlag(0),
 
             /**
-             * ErrorCounts
-             *
              * Node makes available the counts for the number of errors that have occurred during the reception and
              * transmission of packets on the Wi-Fi interface.
              */

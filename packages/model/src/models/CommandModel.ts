@@ -4,16 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Mei } from "../common/Mei.js";
 import { CommandElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
+import type { Model } from "./Model.js";
 import { ValueModel } from "./ValueModel.js";
 
 export class CommandModel extends ValueModel<CommandElement> implements CommandElement {
     override tag: CommandElement.Tag = CommandElement.Tag;
-    declare id: Mei;
-    declare direction?: CommandElement.Direction;
-    declare response?: string;
+    direction?: CommandElement.Direction;
+    response?: string;
 
     get fabricScoped() {
         return !!this.effectiveAccess.fabric;
@@ -54,6 +53,21 @@ export class CommandModel extends ValueModel<CommandElement> implements CommandE
         }
 
         return this.direction;
+    }
+
+    constructor(definition: Model.Definition<CommandModel>, ...children: Model.ChildDefinition<CommandModel>[]) {
+        super(definition, ...children);
+
+        this.direction = definition.direction as CommandElement.Direction;
+        this.response = definition.response;
+    }
+
+    override toElement(omitResources = false, extra?: Record<string, unknown>) {
+        return super.toElement(omitResources, {
+            direction: this.direction,
+            response: this.response,
+            ...extra,
+        });
     }
 
     static Tag = CommandElement.Tag;

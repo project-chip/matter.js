@@ -274,11 +274,6 @@ export namespace LevelControl {
              */
             remainingTime: Attribute(0x1, TlvUInt16, { default: 0 }),
 
-            /**
-             * Indicates the minimum value of CurrentLevel that is capable of being assigned.
-             *
-             * @see {@link MatterSpecification.v14.Cluster} § 1.6.6.4
-             */
             minLevel: OptionalAttribute(0x2, TlvUInt8.bound({ min: 1, max: 254 }), { default: 1 }),
 
             /**
@@ -369,15 +364,11 @@ export namespace LevelControl {
 
         features: {
             /**
-             * OnOff
-             *
              * Dependency with the On/Off cluster
              */
             onOff: BitFlag(0),
 
             /**
-             * Lighting
-             *
              * This feature supports an interface for controlling the level of a light source. For the CurrentLevel
              * attribute:
              *
@@ -394,8 +385,6 @@ export namespace LevelControl {
             lighting: BitFlag(1),
 
             /**
-             * Frequency
-             *
              * Supports frequency attributes and behavior.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.6.4.3

@@ -357,58 +357,42 @@ export namespace OccupancySensing {
 
         features: {
             /**
-             * Other
-             *
              * Supports sensing using a modality not listed in the other bits
              */
             other: BitFlag(0),
 
             /**
-             * PassiveInfrared
-             *
              * Supports sensing using PIR (Passive InfraRed)
              */
             passiveInfrared: BitFlag(1),
 
             /**
-             * Ultrasonic
-             *
              * Supports sensing using UltraSound
              */
             ultrasonic: BitFlag(2),
 
             /**
-             * PhysicalContact
-             *
              * Supports sensing using a physical contact
              */
             physicalContact: BitFlag(3),
 
             /**
-             * ActiveInfrared
-             *
              * Supports sensing using Active InfraRed measurement (e.g. time-of-flight or transflective/reflec tive IR
              * sensing)
              */
             activeInfrared: BitFlag(4),
 
             /**
-             * Radar
-             *
              * Supports sensing using radar waves (microwave)
              */
             radar: BitFlag(5),
 
             /**
-             * RfSensing
-             *
              * Supports sensing based on RF signal analysis
              */
             rfSensing: BitFlag(6),
 
             /**
-             * Vision
-             *
              * Supports sensing based on analyzing images
              */
             vision: BitFlag(7)

@@ -865,8 +865,6 @@ export namespace ScenesManagement {
 
         features: {
             /**
-             * SceneNames
-             *
              * This feature indicates the ability to store a name for a scene when a scene is added.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.4.4.1

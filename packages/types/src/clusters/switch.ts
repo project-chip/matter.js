@@ -447,8 +447,6 @@ export namespace Switch {
 
         features: {
             /**
-             * LatchingSwitch
-             *
              * This feature flag is for a switch that maintains its position after being pressed (or turned).
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.13.4.1
@@ -456,8 +454,6 @@ export namespace Switch {
             latchingSwitch: BitFlag(0),
 
             /**
-             * MomentarySwitch
-             *
              * This feature flag is for a switch that does not maintain its position after being pressed (or turned).
              * After releasing, it goes back to its idle position.
              *
@@ -466,8 +462,6 @@ export namespace Switch {
             momentarySwitch: BitFlag(1),
 
             /**
-             * MomentarySwitchRelease
-             *
              * This feature flag is for a momentary switch that can distinguish and report release events.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.13.4.3
@@ -475,8 +469,6 @@ export namespace Switch {
             momentarySwitchRelease: BitFlag(2),
 
             /**
-             * MomentarySwitchLongPress
-             *
              * This feature flag is for a momentary switch that can distinguish and report long presses from short
              * presses.
              *
@@ -485,8 +477,6 @@ export namespace Switch {
             momentarySwitchLongPress: BitFlag(3),
 
             /**
-             * MomentarySwitchMultiPress
-             *
              * This feature flag is for a momentary switch that can distinguish and report double press and potentially
              * multiple presses with more events, such as triple press, etc.
              *
@@ -495,8 +485,6 @@ export namespace Switch {
             momentarySwitchMultiPress: BitFlag(4),
 
             /**
-             * ActionSwitch
-             *
              * This feature flag indicates simplified handling of events for multi-press-capable switches. See Multi
              * Press Details.
              *
