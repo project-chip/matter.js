@@ -54,6 +54,7 @@ export class InvokeResponse<SessionT extends InteractionSession = InteractionSes
     #currentCluster?: ClusterProtocol;
 
     #registeredPaths = new Set<string>();
+    #registeredCommandRefs = new Set<number>();
 
     // Count how many command status (on error) and command invokes (success) we have emitted
     #statusCount = 0;
@@ -80,6 +81,12 @@ export class InvokeResponse<SessionT extends InteractionSession = InteractionSes
                 }
                 this.#addWildcard(path, commandRef, commandFields);
             } else {
+                if (multipleInvokes && commandRef === undefined) {
+                    throw new StatusResponseError(
+                        "The CommandRef field must be specified for all commands in a batch invoke",
+                        StatusCode.InvalidAction,
+                    );
+                }
                 this.#addConcrete(path as InvokeResult.ConcreteCommandPath, commandRef, commandFields);
             }
         }
@@ -190,6 +197,15 @@ export class InvokeResponse<SessionT extends InteractionSession = InteractionSes
             );
         }
         this.#registeredPaths.add(pathKey);
+        if (commandRef !== undefined) {
+            if (this.#registeredCommandRefs.has(commandRef)) {
+                throw new StatusResponseError(
+                    `Duplicate commandRef ${commandRef} on batch invoke`,
+                    StatusCode.InvalidAction,
+                );
+            }
+            this.#registeredCommandRefs.add(commandRef);
+        }
 
         if (nodeId !== undefined && this.nodeId !== nodeId) {
             return this.#addStatus(path, commandRef, Status.UnsupportedNode);
