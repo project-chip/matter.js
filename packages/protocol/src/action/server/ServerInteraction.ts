@@ -15,6 +15,7 @@ import { ReadResult } from "#action/response/ReadResult.js";
 import { SubscribeResult } from "#action/response/SubscribeResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
 import { EventReadResponse } from "#action/server/EventReadResponse.js";
+import { InvokeResponse } from "#action/server/InvokeResponse.js";
 import { Logger, NotImplementedError } from "#general";
 import { AttributeReadResponse } from "./AttributeReadResponse.js";
 import { AttributeWriteResponse } from "./AttributeWriteResponse.js";
@@ -73,8 +74,10 @@ export class ServerInteraction<SessionT extends InteractionSession = Interaction
         return writer.process(request);
     }
 
-    invoke<T extends Invoke>(_request: T, _session?: SessionT): InvokeResult<T> {
-        // TODO
-        throw new NotImplementedError();
+    invoke<T extends Invoke>(_request: T, session: SessionT): InvokeResult<T> {
+        // TODO -  validate request
+
+        const invoker = new InvokeResponse(this.#node, session);
+        return invoker.process(_request);
     }
 }

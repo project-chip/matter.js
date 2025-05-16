@@ -9,9 +9,7 @@ import { ClusterType, CommandData, InvokeRequest, TlvSchema, TypeFromSchema } fr
 import { MalformedRequestError } from "./MalformedRequestError.js";
 import { Specifier } from "./Specifier.js";
 
-export interface Invoke extends InvokeRequest {
-    timeout?: number;
-}
+export interface Invoke extends InvokeRequest {}
 
 /**
  * Request invocation of one or more commands.
