@@ -29,8 +29,6 @@ const logger = Logger.get("ServerInteraction");
  * completion there will be redundancy with other components including:
  *
  * - InteractionServer (significant overlap with this class)
- *
- * - InteractionEndpointStructure ({@link NodeProtocol} is largely duplicative)
  */
 export class ServerInteraction<SessionT extends InteractionSession = InteractionSession>
     implements Interactable<SessionT>
