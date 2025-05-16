@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { camelize } from "#general";
 import { FALLBACK_INTERACTIONMODEL_REVISION } from "#session/Session.js";
 import type {
     AttributePath,
@@ -14,7 +15,6 @@ import type {
     GlobalAttributes,
     ReadRequest,
 } from "#types";
-import { camelize } from "@matter/general";
 import { MalformedRequestError } from "./MalformedRequestError.js";
 import { Specifier } from "./Specifier.js";
 

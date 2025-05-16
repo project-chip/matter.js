@@ -9,18 +9,47 @@ import { ClusterType, CommandData, InvokeRequest, TlvSchema, TypeFromSchema } fr
 import { MalformedRequestError } from "./MalformedRequestError.js";
 import { Specifier } from "./Specifier.js";
 
-export interface Invoke extends InvokeRequest {}
+export interface Invoke extends InvokeRequest {
+    /** Timeout only relevant for Client Interactions */
+    timeout?: number;
+}
 
 /**
  * Request invocation of one or more commands.
  */
-export function Invoke(definition: Invoke.Definition): Invoke {
+export function Invoke(definition: Invoke.Definition): Invoke;
+
+/**
+ * Request invocation multiple commands with defined options
+ */
+export function Invoke(options: Invoke.Definition, ...data: CommandData[]): Invoke;
+
+/**
+ * Request invocation multiple commands as list of Commands with default options.
+ */
+export function Invoke(...data: CommandData[]): Invoke;
+
+export function Invoke(optionsOrData: Invoke.Definition | CommandData, ...data: CommandData[]): Invoke {
+    let options;
+    if ("commands" in optionsOrData) {
+        options = optionsOrData;
+    } else {
+        data = [optionsOrData, ...data];
+        options = {};
+    }
+
     const {
-        commands,
+        commands = [],
         interactionModelRevision = FALLBACK_INTERACTIONMODEL_REVISION,
         suppressResponse = false,
         timed: timedRequest = false,
-    } = definition;
+    } = options;
+
+    if (data.length) {
+        for (const entry of data) {
+            commands.push(entry);
+        }
+    }
 
     if (!commands?.length) {
         throw new MalformedRequestError(`Invocation requires at least one command`);

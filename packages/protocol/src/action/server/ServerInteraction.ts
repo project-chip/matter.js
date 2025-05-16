@@ -14,8 +14,8 @@ import { InvokeResult } from "#action/response/InvokeResult.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { SubscribeResult } from "#action/response/SubscribeResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
+import { CommandInvokeResponse } from "#action/server/CommandInvokeResponse.js";
 import { EventReadResponse } from "#action/server/EventReadResponse.js";
-import { InvokeResponse } from "#action/server/InvokeResponse.js";
 import { Logger, NotImplementedError } from "#general";
 import { AttributeReadResponse } from "./AttributeReadResponse.js";
 import { AttributeWriteResponse } from "./AttributeWriteResponse.js";
@@ -75,7 +75,7 @@ export class ServerInteraction<SessionT extends InteractionSession = Interaction
     invoke<T extends Invoke>(_request: T, session: SessionT): InvokeResult<T> {
         // TODO -  validate request
 
-        const invoker = new InvokeResponse(this.#node, session);
+        const invoker = new CommandInvokeResponse(this.#node, session);
         return invoker.process(_request);
     }
 }

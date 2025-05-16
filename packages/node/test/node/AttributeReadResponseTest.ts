@@ -8,8 +8,7 @@ import { BasicInformationCluster } from "#clusters/basic-information";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { Endpoint } from "#endpoint/index.js";
 import { Read } from "#protocol";
-import { ClusterId, EndpointNumber, StatusCode } from "#types";
-import { AttributeId } from "@matter/types";
+import { AttributeId, ClusterId, EndpointNumber, StatusCode } from "#types";
 import { MockServerNode } from "./mock-server-node.js";
 import { countAttrs, readAttr, readAttrRaw } from "./read-helpers.js";
 

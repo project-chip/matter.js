@@ -9,7 +9,7 @@ import { InteractionSession } from "#action/Interactable.js";
 import { ClusterProtocol, CommandTypeProtocol, EndpointProtocol, NodeProtocol } from "#action/protocols.js";
 import { AccessControl } from "#action/server/AccessControl.js";
 import { DataResponse, FallbackLimits } from "#action/server/DataResponse.js";
-import { Diagnostic, InternalError, Logger } from "#general";
+import { Diagnostic, InternalError, Logger, MatterAggregateError } from "#general";
 import { CommandModel, DataModelPath, ElementTag, FabricIndex as FabricIndexField } from "#model";
 import {
     CommandPath,
@@ -22,7 +22,6 @@ import {
     TlvStream,
     ValidationError,
 } from "#types";
-import { MatterAggregateError } from "@matter/general";
 
 // On Encoding level there is no nodeId, bit the Interaction Model allows a Node to be specified which can only be the
 // target node
@@ -30,14 +29,16 @@ type InteractionCommandPath = CommandPath & {
     nodeId?: NodeId;
 };
 
-const logger = Logger.get("InvokeResponse");
+const logger = Logger.get("CommandInvokeResponse");
 
 /**
  * Implements invoking of commands for matter "invoke" interactions.
  *
  * TODO - profile; ensure nested functions are properly JITed and/or inlined
  */
-export class InvokeResponse<SessionT extends InteractionSession = InteractionSession> extends DataResponse<SessionT> {
+export class CommandInvokeResponse<
+    SessionT extends InteractionSession = InteractionSession,
+> extends DataResponse<SessionT> {
     #fabricIndex: FabricIndex;
 
     // The initial "chunk" may be a list of errors.  As producers execute it is a set of records associated with the
@@ -46,7 +47,7 @@ export class InvokeResponse<SessionT extends InteractionSession = InteractionSes
 
     // Each input CommandDataIB that does not have an error installs a producer.  Producers run after validation and
     // generate actual command data
-    #dataProducers?: Array<(this: InvokeResponse) => AsyncIterable<InvokeResult.Chunk>>;
+    #dataProducers?: Array<(this: CommandInvokeResponse) => AsyncIterable<InvokeResult.Chunk>>;
 
     // The following state updates as data producers execute.  This serves both to convey state between functions and as
     // a cache between producers that touch the same endpoint and/or cluster
@@ -164,7 +165,7 @@ export class InvokeResponse<SessionT extends InteractionSession = InteractionSes
         */
 
         if (endpointId === undefined) {
-            this.#addProducer(async function* (this: InvokeResponse) {
+            this.#addProducer(async function* (this: CommandInvokeResponse) {
                 for (const endpoint of this.node) {
                     yield* this.#addEndpointForWildcard(endpoint, path, commandRef, commandFields);
                 }
@@ -172,7 +173,7 @@ export class InvokeResponse<SessionT extends InteractionSession = InteractionSes
         } else {
             const endpoint = this.node[endpointId];
             if (endpoint) {
-                this.#addProducer(async function* (this: InvokeResponse) {
+                this.#addProducer(async function* (this: CommandInvokeResponse) {
                     yield* this.#addEndpointForWildcard(endpoint, path, commandRef, commandFields);
                 });
             }
@@ -406,7 +407,7 @@ export class InvokeResponse<SessionT extends InteractionSession = InteractionSes
     /**
      * Add a function that produces data.  These functions are run after validation of input paths.
      */
-    #addProducer(producer: (this: InvokeResponse) => AsyncIterable<InvokeResult.Chunk>) {
+    #addProducer(producer: (this: CommandInvokeResponse) => AsyncIterable<InvokeResult.Chunk>) {
         if (this.#dataProducers) {
             this.#dataProducers.push(producer);
         } else {
