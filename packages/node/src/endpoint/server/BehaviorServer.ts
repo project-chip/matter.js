@@ -52,7 +52,7 @@ export interface BehaviorServer extends ClusterServer {
  * Note that we only create servers for cluster behaviors.  Other {@link Behavior} implementations do not have proper
  * metadata to go online.
  *
- * TODO - refactor element server management after we remove the old API
+ * @deprecated
  */
 export function BehaviorServer(endpointServer: EndpointServer, type: ClusterBehavior.Type): BehaviorServer {
     const { id, name, attributes, commands, events } = type.cluster;
