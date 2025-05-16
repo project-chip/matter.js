@@ -81,7 +81,9 @@ pip install --break-system-packages -r scripts/tests/requirements.txt
 pip install --break-system-packages nest_asyncio
 
 # Install CHIP wheels globally
-find out -name \*.whl | xargs pip install --break-system-packages --upgrade
+find out -name \*.whl \
+    | grep -v matter_yamltests-0.0.1 \
+    | xargs pip install --break-system-packages --upgrade
 
 # Nuke build artifacts
 rm -rf out

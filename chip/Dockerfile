@@ -154,10 +154,9 @@ COPY --from=bins /usr/lib/python3/dist-packages /usr/lib/python3/dist-packages
 COPY --from=bins /usr/local/lib /usr/local/lib
 
 # Other python packages CHIP has scattered randomly and adds to path in relative_importer.py
+# Note - this is shrinking as they create wheels for these packages
 WORKDIR /usr/local/lib/python3.12/dist-packages
 COPY --from=source /connectedhomeip/scripts/tests/chiptest chiptest
-COPY --from=source /connectedhomeip/scripts/py_matter_idl/matter matter
-COPY --from=source /connectedhomeip/scripts/py_matter_yamltests/matter_yamltests matter_yamltests
 COPY --from=source /connectedhomeip/examples/chip-tool/py_matter_chip_tool_adapter/matter_chip_tool_adapter matter_chip_tool_adapter
 COPY --from=source /connectedhomeip/examples/placeholder/py_matter_placeholder_adapter/matter_placeholder_adapter matter_placeholder_adapter
 COPY --from=source /connectedhomeip/src/controller/python/py_matter_yamltest_repl_adapter/matter_yamltest_repl_adapter matter_yamltest_repl_adapter
@@ -165,8 +164,6 @@ COPY --from=source /connectedhomeip/src/controller/python/py_matter_yamltest_rep
 # Link various bits to original connectedhomeip locations for discovery and/or convenience
 RUN mkdir -p /scripts/tests
 RUN ln -s "$(realpath chiptest)" /scripts/tests/chiptest
-RUN mkdir -p /scripts/py_matter_yamltests
-RUN ln -s "$(realpath matter_yamltests)" /scripts/py_matter_yamltests/matter_yamltests
 
 # YAML test logic
 WORKDIR /
