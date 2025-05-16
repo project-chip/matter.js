@@ -964,29 +964,21 @@ export namespace Channel {
 
         features: {
             /**
-             * ChannelList
-             *
              * Provides list of available channels.
              */
             channelList: BitFlag(0),
 
             /**
-             * LineupInfo
-             *
              * Provides lineup info, which is a reference to an external source of lineup information.
              */
             lineupInfo: BitFlag(1),
 
             /**
-             * ElectronicGuide
-             *
              * Provides electronic program guide information.
              */
             electronicGuide: BitFlag(2),
 
             /**
-             * RecordProgram
-             *
              * Provides ability to record program.
              */
             recordProgram: BitFlag(3)

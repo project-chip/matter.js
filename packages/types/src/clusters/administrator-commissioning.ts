@@ -231,8 +231,6 @@ export namespace AdministratorCommissioning {
 
         features: {
             /**
-             * Basic
-             *
              * Node supports Basic Commissioning Method.
              */
             basic: BitFlag(0)

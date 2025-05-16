@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Mei } from "../common/Mei.js";
 import { DeviceClassification, ElementTag } from "../common/index.js";
 import { BaseElement } from "./BaseElement.js";
 import { FieldElement } from "./FieldElement.js";
@@ -16,9 +15,8 @@ import { RequirementElement } from "./RequirementElement.js";
  * TODO - extract/merge DeviceTypes.ts?
  */
 export interface DeviceTypeElement extends BaseElement {
-    id?: Mei;
     tag: `${DeviceTypeElement.Tag}`;
-    classification: `${DeviceClassification}`;
+    classification?: `${DeviceClassification}`;
     category?: string;
     children?: (RequirementElement | FieldElement)[];
 }

@@ -995,8 +995,6 @@ export namespace AccessControl {
 
         features: {
             /**
-             * Extension
-             *
              * This feature indicates the device supports ACL Extension attribute.
              *
              * @see {@link MatterSpecification.v14.Core} § 9.10.4.1
@@ -1004,8 +1002,6 @@ export namespace AccessControl {
             extension: BitFlag(0),
 
             /**
-             * ManagedDevice
-             *
              * This feature is for a device that is managed by a service associated with the device vendor and which
              * imposes default access restrictions upon each new fabric added to it. This could arise, for example, if
              * the device is managed by a service provider under contract to an end-user, in such a way that the manager

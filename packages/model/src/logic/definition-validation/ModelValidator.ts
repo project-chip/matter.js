@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { CrossReference } from "#models/CrossReference.js";
 import { ElementTag } from "../../common/index.js";
 import { CommandModel, Model, RequirementModel, ValueModel } from "../../models/index.js";
 
@@ -19,7 +20,8 @@ export class ModelValidator<T extends Model> {
         this.validateProperty({ name: "details", type: "string" });
         this.validateProperty({ name: "children", type: Array });
         this.validateProperty({ name: "type", type: "string" });
-        this.validateProperty({ name: "xref", type: Model.CrossReference });
+        this.validateProperty({ name: "xref", type: CrossReference });
+        this.validateProperty({ name: "root", type: "object", required: true });
 
         if (this.model.type) {
             const base = this.model.base;
@@ -42,7 +44,7 @@ export class ModelValidator<T extends Model> {
         this.model.error(code, message);
     }
 
-    protected validateStructure(requireId: boolean, ...childTypes: (new (...args: any) => Model)[]) {
+    protected validateStructure(requireId: boolean, ...childTypes: Model.Type[]) {
         this.validateProperty({ name: "id", type: "number", required: requireId });
         if (this.model.children && childTypes.length) {
             let index = 0;

@@ -492,15 +492,11 @@ export namespace SmokeCoAlarm {
 
         features: {
             /**
-             * SmokeAlarm
-             *
              * Supports Smoke alarm
              */
             smokeAlarm: BitFlag(0),
 
             /**
-             * CoAlarm
-             *
              * Supports CO alarm
              */
             coAlarm: BitFlag(1)

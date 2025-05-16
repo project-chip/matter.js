@@ -88,8 +88,6 @@ export namespace PressureMeasurement {
 
         features: {
             /**
-             * Extended
-             *
              * Extended range and resolution
              */
             extended: BitFlag(0)

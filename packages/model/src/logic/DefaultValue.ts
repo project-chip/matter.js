@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { FieldModel } from "#models/FieldModel.js";
+import { FeatureMap } from "#standard/elements/definitions.js";
 import { Bytes, camelize, NotImplementedError } from "@matter/general";
 import { ElementTag, FieldValue, Metatype } from "../common/index.js";
 import { Model } from "../models/Model.js";
 import type { ValueModel } from "../models/ValueModel.js";
-import { FeatureMap } from "../standard/elements/FeatureMap.js";
 import { Scope } from "./Scope.js";
 
 /**
@@ -251,9 +252,9 @@ function decodeBitmap(model: ValueModel, value: number | bigint) {
 
     let nameGenerator;
     if (Model.types[ElementTag.Attribute] && model.id === FeatureMap.id) {
-        // Special case for feature map; use the description as the key rather than the name
+        // Special case for feature map; use the long name as the key rather than the name
         nameGenerator = (model: ValueModel) =>
-            model.description === undefined ? camelize(model.name) : camelize(model.description);
+            (model as FieldModel).title === undefined ? camelize(model.name) : camelize((model as FieldModel).title!);
     } else {
         nameGenerator = (model: ValueModel) => camelize(model.name);
     }

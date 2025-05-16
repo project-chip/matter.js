@@ -181,8 +181,6 @@ export namespace TemperatureControl {
 
         features: {
             /**
-             * TemperatureNumber
-             *
              * For devices that use an actual temperature value for the temperature setpoint, such as some water
              * heaters, the feature TN shall be used. Note that this cluster provides and supports temperatures in
              * degrees Celsius via the temperature data type.
@@ -192,8 +190,6 @@ export namespace TemperatureControl {
             temperatureNumber: BitFlag(0),
 
             /**
-             * TemperatureLevel
-             *
              * For devices that use vendor-specific temperature levels for the temperature setpoint, such as some
              * washers, the feature TL shall be used.
              *
@@ -202,8 +198,6 @@ export namespace TemperatureControl {
             temperatureLevel: BitFlag(1),
 
             /**
-             * TemperatureStep
-             *
              * For devices that support discrete temperature setpoints that are larger than the temperature resolution
              * imposed via the temperature data type, the Step feature may be used.
              *

@@ -5,25 +5,13 @@
  */
 
 import { DeviceClassification } from "../common/DeviceClassification.js";
-import { Mei } from "../common/Mei.js";
 import { DeviceTypeElement } from "../elements/index.js";
-import { Children } from "./Children.js";
 import { FieldModel } from "./FieldModel.js";
 import { Model } from "./Model.js";
 import { RequirementModel } from "./RequirementModel.js";
 
-export class DeviceTypeModel extends Model<DeviceTypeElement> implements DeviceTypeElement {
+export class DeviceTypeModel extends Model<DeviceTypeElement, DeviceTypeModel.Child> implements DeviceTypeElement {
     override tag: DeviceTypeElement.Tag = DeviceTypeElement.Tag;
-    declare id: Mei;
-    declare classification: DeviceClassification;
-
-    override get children(): Children<DeviceTypeModel.Child> {
-        return super.children as Children<DeviceTypeModel.Child>;
-    }
-
-    override set children(children: Children.InputIterable<DeviceTypeModel.Child>) {
-        super.children = children;
-    }
 
     get requirements() {
         return this.all(RequirementModel);
@@ -33,6 +21,45 @@ export class DeviceTypeModel extends Model<DeviceTypeElement> implements DeviceT
         return (
             this?.get(RequirementModel, "Descriptor")?.get(RequirementModel, "DeviceTypeList")?.default[0].revision ?? 1
         );
+    }
+
+    get classification() {
+        return this.hasLocalResource
+            ? (this.localResource.classification as DeviceClassification)
+            : DeviceClassification.Simple;
+    }
+
+    set classification(classification: DeviceClassification) {
+        if (classification || this.hasLocalResource) {
+            this.localResource.classification = classification;
+        }
+    }
+
+    constructor(definition: Model.Definition<DeviceTypeModel>, ...children: Model.ChildDefinition<DeviceTypeModel>[]) {
+        super(definition, ...children);
+
+        if (!(definition instanceof Model)) {
+            this.classification = definition.classification as DeviceClassification;
+        }
+    }
+
+    override toElement(omitResources = false, extra?: Record<string, unknown>) {
+        if (omitResources) {
+            return super.toElement(omitResources, extra);
+        }
+
+        return super.toElement(omitResources, {
+            classification: this.classification,
+            ...extra,
+        });
+    }
+
+    override get id() {
+        return super.id as number;
+    }
+
+    override set id(id: number) {
+        super.id = id;
     }
 
     static Tag = DeviceTypeElement.Tag;

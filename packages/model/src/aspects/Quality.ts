@@ -18,7 +18,7 @@ export class Quality extends Aspect<Quality.Definition> implements Quality.Ast {
     /**
      * The value may be null.
      */
-    declare nullable?: boolean;
+    nullable?: boolean;
 
     /**
      * An attribute persists across restarts.
@@ -26,57 +26,57 @@ export class Quality extends Aspect<Quality.Definition> implements Quality.Ast {
      * Note that Matter designates any configuration as persistent so matter.js persists writable attributes even
      * without this flag.
      */
-    declare nonvolatile?: boolean;
+    nonvolatile?: boolean;
 
     /**
      * An attribute never changes unless software revision changes.
      */
-    declare fixed?: boolean;
+    fixed?: boolean;
 
     /**
      * An attribute changes rapidly so subscriptions would not be useful.  Not available for subscription.
      */
-    declare changesOmitted?: boolean;
+    changesOmitted?: boolean;
 
     /**
      * An attribute contributes to a scene.
      */
-    declare scene?: boolean;
+    scene?: boolean;
 
     /**
      * An attribute generates data useful for interval or change reporting.
      */
-    declare reportable?: boolean;
+    reportable?: boolean;
 
     /**
      * A cluster only appears once on a node for a given device type.
      */
-    declare singleton?: boolean;
+    singleton?: boolean;
 
     /**
      * An attribute or event broadcasts a limited number of occurrences for performance reasons.
      */
-    declare quieter?: boolean;
+    quieter?: boolean;
 
     /**
      * A command's input or output may be larger than than an IPv6 MTU of 1280 bytes.
      */
-    declare largeMessage?: boolean;
+    largeMessage?: boolean;
 
     /**
      * A cluster provides verbose diagnostics and will be omitted from wildcard expansion.
      */
-    declare diagnostics?: boolean;
+    diagnostics?: boolean;
 
     /**
      * Writes to an attribute are legal only in the context of a transaction.
      */
-    declare atomic?: boolean;
+    atomic?: boolean;
 
     /**
      * A set of properties disallowed for a device type.
      */
-    declare disallowed?: Quality.AllProperties;
+    disallowed?: Quality.AllProperties;
 
     /**
      * Initialize from a Quality.All definition or a string conforming to the
@@ -85,18 +85,72 @@ export class Quality extends Aspect<Quality.Definition> implements Quality.Ast {
     constructor(definition: Quality.Definition) {
         super(definition);
 
+        let ast: Quality.Definition;
         if (typeof definition === "string") {
-            this.parse(this, definition);
+            ast = {};
+            this.#parse(ast, definition);
         } else if (Array.isArray(definition)) {
-            definition.map(f => this.parse(this, f));
+            ast = {};
+            definition.map(f => this.#parse(this, f));
         } else {
-            Object.assign(this, definition);
+            ast = definition;
         }
+
+        this.nullable = ast?.nullable;
+        this.nonvolatile = ast?.nonvolatile;
+        this.fixed = ast?.fixed;
+        this.changesOmitted = ast?.changesOmitted;
+        this.scene = ast?.scene;
+        this.reportable = ast?.reportable;
+        this.singleton = ast?.singleton;
+        this.quieter = ast?.quieter;
+        this.largeMessage = ast?.largeMessage;
+        this.diagnostics = ast?.diagnostics;
+        this.atomic = ast?.atomic;
+        this.disallowed = ast?.disallowed;
+
+        this.isEmpty = !(
+            this.nullable ||
+            this.nonvolatile ||
+            this.fixed ||
+            this.changesOmitted ||
+            this.scene ||
+            this.reportable ||
+            this.singleton ||
+            this.quieter ||
+            this.largeMessage ||
+            this.diagnostics ||
+            this.atomic
+        );
 
         this.freeze();
     }
 
-    private parse(quality: Quality, definition: string) {
+    override extend(other: Quality) {
+        if (other.isEmpty) {
+            return this;
+        }
+
+        if (this.isEmpty) {
+            return other;
+        }
+
+        return new Quality({
+            nullable: other.nullable ?? this.nullable,
+            nonvolatile: other.nonvolatile ?? this.nonvolatile,
+            fixed: other.fixed ?? this.fixed,
+            changesOmitted: other.changesOmitted ?? this.changesOmitted,
+            scene: other.scene ?? this.scene,
+            reportable: other.reportable ?? this.reportable,
+            singleton: other.singleton ?? this.singleton,
+            quieter: other.quieter ?? this.quieter,
+            largeMessage: other.largeMessage ?? this.largeMessage,
+            diagnostics: other.diagnostics ?? this.diagnostics,
+            disallowed: other.disallowed ?? this.disallowed,
+        });
+    }
+
+    #parse(ast: Quality.Ast, definition: string) {
         const text = definition.toUpperCase();
         if (text === "DERIVED") {
             return;
@@ -115,21 +169,21 @@ export class Quality extends Aspect<Quality.Definition> implements Quality.Ast {
 
             const field = Quality.Flag[char as Quality.FlagName];
             if (field) {
-                if (this.disallowed?.[field]) {
+                if (ast.disallowed?.[field]) {
                     continue;
                 }
                 if (disallow) {
-                    delete this[field];
-                    if (!this.disallowed) {
-                        this.disallowed = {};
+                    delete ast[field];
+                    if (!ast.disallowed) {
+                        ast.disallowed = {};
                     }
-                    this.disallowed[field] = true;
+                    ast.disallowed[field] = true;
                     disallow = false;
                 } else {
-                    this[field] = true;
+                    ast[field] = true;
                 }
             } else {
-                quality.error("UNKNOWN_QUALITY_FLAG", `Unknown flag "${char}"`);
+                this.error("UNKNOWN_QUALITY_FLAG", `Unknown flag "${char}"`);
             }
         }
     }
@@ -299,5 +353,5 @@ export namespace Quality {
      * Values for all qualities designated as "other qualities" in the Matter
      * specification.
      */
-    export type Ast = DeviceType;
+    export interface Ast extends DeviceType {}
 }

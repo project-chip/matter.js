@@ -159,8 +159,6 @@ export namespace ThreadBorderRouterManagement {
 
         features: {
             /**
-             * PanChange
-             *
              * This feature shall indicate the ability of the Border Router to change its already configured PAN to
              * another, by setting a pending dataset.
              *

@@ -552,8 +552,6 @@ export namespace IcdManagement {
 
         features: {
             /**
-             * CheckInProtocolSupport
-             *
              * When this feature is supported, the device shall support all the associated commands and attributes to
              * properly support the Check-In Protocol.
              *
@@ -562,8 +560,6 @@ export namespace IcdManagement {
             checkInProtocolSupport: BitFlag(0),
 
             /**
-             * UserActiveModeTrigger
-             *
              * This feature is supported if and only if the device has a user active mode trigger.
              *
              * @see {@link MatterSpecification.v14.Core} § 9.17.4.2
@@ -571,8 +567,6 @@ export namespace IcdManagement {
             userActiveModeTrigger: BitFlag(1),
 
             /**
-             * LongIdleTimeSupport
-             *
              * This feature is supported if and only the device is a Long Idle Time ICD.
              *
              * @see {@link MatterSpecification.v14.Core} § 9.17.4.3
@@ -580,8 +574,6 @@ export namespace IcdManagement {
             longIdleTimeSupport: BitFlag(2),
 
             /**
-             * DynamicSitLitSupport
-             *
              * This feature is supported if and only if the device can switch between SIT and LIT operating modes even
              * if it has a valid registered client. See the dynamic SIT / LIT operating mode switching for more details.
              *
@@ -642,11 +634,7 @@ export namespace IcdManagement {
              *
              * @see {@link MatterSpecification.v14.Core} § 9.17.6.8
              */
-            userActiveModeTriggerInstruction: OptionalFixedAttribute(
-                0x7,
-                TlvString.bound({ maxLength: 128 }),
-                { default: "" }
-            )
+            userActiveModeTriggerInstruction: OptionalFixedAttribute(0x7, TlvString.bound({ maxLength: 128 }))
         },
 
         commands: {

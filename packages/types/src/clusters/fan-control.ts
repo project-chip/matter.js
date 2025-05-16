@@ -413,8 +413,6 @@ export namespace FanControl {
 
         features: {
             /**
-             * MultiSpeed
-             *
              * Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic speed
              * control but left it up to the implementer to decide what was supported. Therefore, it is assumed that
              * legacy client implementations are capable of determining, from the server, the number of speeds supported
@@ -430,36 +428,26 @@ export namespace FanControl {
             multiSpeed: BitFlag(0),
 
             /**
-             * Auto
-             *
              * Automatic mode supported for fan speed
              */
             auto: BitFlag(1),
 
             /**
-             * Rocking
-             *
              * Rocking movement supported
              */
             rocking: BitFlag(2),
 
             /**
-             * Wind
-             *
              * Wind emulation supported
              */
             wind: BitFlag(3),
 
             /**
-             * Step
-             *
              * Step command supported
              */
             step: BitFlag(4),
 
             /**
-             * AirflowDirection
-             *
              * Airflow Direction attribute is supported
              */
             airflowDirection: BitFlag(5)

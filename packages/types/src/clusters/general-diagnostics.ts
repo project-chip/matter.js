@@ -654,8 +654,6 @@ export namespace GeneralDiagnostics {
 
         features: {
             /**
-             * DataModelTest
-             *
              * This feature indicates support for extended Data Model testing commands, which are required in some
              * situations.
              *

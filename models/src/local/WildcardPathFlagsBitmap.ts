@@ -16,7 +16,7 @@ LocalMatter.children.push({
             tag: "field",
             name: "Reserved",
             constraint: "3",
-            description: "Reserved",
+            title: "Reserved",
             until: "1.3",
         },
     ],

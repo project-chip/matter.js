@@ -58,7 +58,7 @@ export class ClusterRequirements {
         );
         if (!feature) {
             const desc = (str?: string) => str?.toLowerCase().replace(/\s/g, "");
-            feature = this.cluster.featureMap.children.find(f => desc(f.description) === desc(requirement.name));
+            feature = this.cluster.featureMap.children.find(f => desc(f.title) === desc(requirement.name));
         }
         if (!feature) {
             logger.error(
@@ -66,7 +66,7 @@ export class ClusterRequirements {
             );
             return;
         }
-        this.mandatoryFeatures.push(feature.description ?? feature.name);
+        this.mandatoryFeatures.push(feature.title ?? feature.name);
     }
 
     private ingestElement(requirement: RequirementModel) {

@@ -207,22 +207,16 @@ export namespace KeypadInput {
 
         features: {
             /**
-             * NavigationKeyCodes
-             *
              * Supports UP, DOWN, LEFT, RIGHT, SELECT, BACK, EXIT, MENU
              */
             navigationKeyCodes: BitFlag(0),
 
             /**
-             * LocationKeys
-             *
              * Supports CEC keys 0x0A (Settings) and 0x09 (Home)
              */
             locationKeys: BitFlag(1),
 
             /**
-             * NumberKeys
-             *
              * Supports numeric input 0..9
              */
             numberKeys: BitFlag(2)

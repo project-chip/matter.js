@@ -237,22 +237,16 @@ export namespace MicrowaveOvenControl {
 
         features: {
             /**
-             * PowerAsNumber
-             *
              * Power is specified as a unitless number or a percentage
              */
             powerAsNumber: BitFlag(0),
 
             /**
-             * PowerInWatts
-             *
              * Power is specified in Watts
              */
             powerInWatts: BitFlag(1),
 
             /**
-             * PowerNumberLimits
-             *
              * Supports the limit attributes used with the PWRNUM feature
              */
             powerNumberLimits: BitFlag(2)

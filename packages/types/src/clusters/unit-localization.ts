@@ -79,8 +79,6 @@ export namespace UnitLocalization {
 
         features: {
             /**
-             * TemperatureUnit
-             *
              * The Node can be configured to use different units of temperature when conveying values to a user.
              */
             temperatureUnit: BitFlag(0)

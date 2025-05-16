@@ -28,7 +28,7 @@ export function NamedComponents(cluster: ClusterModel, inferredComponents: Infer
     let base = { mandatory: [], optional: [] } as InferredComponent;
     const components = [] as NamedComponents;
     const namedComponentMap = {} as { [name: string]: NamedComponent };
-    const featureNames = Object.fromEntries(cluster.features.map(f => [f.name, f.description || f.name]));
+    const featureNames = Object.fromEntries(cluster.features.map(f => [f.name, f.title || f.name]));
 
     for (const component of inferredComponents) {
         let name;

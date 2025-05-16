@@ -4061,8 +4061,6 @@ export namespace DoorLock {
 
         features: {
             /**
-             * PinCredential
-             *
              * If the User Feature is also supported then any PIN Code stored in the lock shall be associated with a
              * User.
              *
@@ -4075,8 +4073,6 @@ export namespace DoorLock {
             pinCredential: BitFlag(0),
 
             /**
-             * RfidCredential
-             *
              * If the User Feature is also supported then any RFID credential stored in the lock shall be associated
              * with a User.
              *
@@ -4089,8 +4085,6 @@ export namespace DoorLock {
             rfidCredential: BitFlag(1),
 
             /**
-             * FingerCredentials
-             *
              * Currently the cluster only defines the metadata format for notifications when a fingerprint/ finger vein
              * credential is used to access the lock and doesn’t describe how to create fingerprint/finger vein
              * credentials. If the Users feature is also supported then the User that a fingerprint/finger vein is
@@ -4105,8 +4099,6 @@ export namespace DoorLock {
             fingerCredentials: BitFlag(2),
 
             /**
-             * WeekDayAccessSchedules
-             *
              * If the User feature is supported then Week Day Schedules are applied to a User and not a credential.
              *
              * Week Day Schedules are used to restrict access to a specified time window on certain days of the week.
@@ -4122,8 +4114,6 @@ export namespace DoorLock {
             weekDayAccessSchedules: BitFlag(4),
 
             /**
-             * DoorPositionSensor
-             *
              * If this feature is supported this indicates that the lock has the ability to determine the position of
              * the door which is separate from the state of the lock.
              *
@@ -4132,8 +4122,6 @@ export namespace DoorLock {
             doorPositionSensor: BitFlag(5),
 
             /**
-             * FaceCredentials
-             *
              * Currently the cluster only defines the metadata format for notifications when a face recognition, iris,
              * or retina credential is used to access the lock and doesn’t describe how to create face recognition,
              * iris, or retina credentials. If the Users feature is also supported then the User that a face
@@ -4148,8 +4136,6 @@ export namespace DoorLock {
             faceCredentials: BitFlag(6),
 
             /**
-             * CredentialOverTheAirAccess
-             *
              * If this feature is supported then the lock supports the ability to verify a credential provided in a
              * lock/unlock command. Currently the cluster only supports providing the PIN credential to the lock/unlock
              * commands. If this feature is supported then the PIN Credential feature shall also be supported.
@@ -4159,8 +4145,6 @@ export namespace DoorLock {
             credentialOverTheAirAccess: BitFlag(7),
 
             /**
-             * User
-             *
              * If the User Feature is supported then a lock employs a User database. A User within the User database is
              * used to associate credentials and schedules to single user record within the lock. This also means the
              * UserType and UserStatus fields are associated with a User and not a credential.
@@ -4170,8 +4154,6 @@ export namespace DoorLock {
             user: BitFlag(8),
 
             /**
-             * YearDayAccessSchedules
-             *
              * If the User feature is supported then Year Day Schedules are applied to a User and not a credential. Year
              * Day Schedules are used to restrict access to a specified date and time window.
              *
@@ -4185,8 +4167,6 @@ export namespace DoorLock {
             yearDayAccessSchedules: BitFlag(10),
 
             /**
-             * HolidaySchedules
-             *
              * This feature is used to setup Holiday Schedule in the lock device. A Holiday Schedule sets a start and
              * stop end date/time for the lock to use the specified operating mode set by the Holiday Schedule.
              *
@@ -4197,8 +4177,6 @@ export namespace DoorLock {
             holidaySchedules: BitFlag(11),
 
             /**
-             * Unbolting
-             *
              * Locks that support this feature differentiate between unbolting and unlocking. The Unbolt Door command
              * retracts the bolt without pulling the latch. The Unlock Door command fully unlocks the door by retracting
              * the bolt and briefly pulling the latch. While the latch is pulled, the lock state changes to Unlatched.
@@ -4210,8 +4188,6 @@ export namespace DoorLock {
             unbolting: BitFlag(12),
 
             /**
-             * AliroProvisioning
-             *
              * Locks that support this feature implement the Aliro specification as defined in [Aliro] and support
              * Matter as a method for provisioning Aliro credentials.
              *
@@ -4220,8 +4196,6 @@ export namespace DoorLock {
             aliroProvisioning: BitFlag(13),
 
             /**
-             * AliroBleuwb
-             *
              * Locks that support this feature implement the Bluetooth LE + UWB Access Control Flow as defined in
              * [Aliro].
              *

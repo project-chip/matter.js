@@ -40,7 +40,7 @@ describe("Access", () => {
     FLAG_PERMUTATIONS.forEach(([text, ast]) => {
         describe(text, () => {
             it("parses", () => {
-                expect({ ...new Access(text) }).deep.equal({ ...ast, definition: text });
+                expect({ ...new Access(text) }).deep.equal({ ...new Access(ast), definition: text });
             });
 
             it("serializes", () => {

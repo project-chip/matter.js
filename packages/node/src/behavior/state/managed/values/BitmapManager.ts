@@ -5,7 +5,7 @@
  */
 
 import { camelize, GeneratedClass, isObject } from "#general";
-import type { Schema } from "#model";
+import type { FieldModel, Schema } from "#model";
 import { DataModelPath, FeatureMap, ValueModel } from "#model";
 import { ConstraintError, PhantomReferenceError, SchemaImplementationError, Val } from "#protocol";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
@@ -45,7 +45,7 @@ export function BitmapManager(owner: RootSupervisor, schema: Schema): ValueSuper
         if (schema.id === FeatureMap.id) {
             // We require special casing for feature maps because the spec code uses "feature" field from spec as name
             // and model uses "code".  The model should probably be inverted but we just special case for now
-            name = camelize(member.description ?? member.name);
+            name = camelize((member as FieldModel).title ?? member.name);
         } else {
             name = camelize(member.name);
         }

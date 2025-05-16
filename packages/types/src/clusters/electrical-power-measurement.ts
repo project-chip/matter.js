@@ -554,8 +554,6 @@ export namespace ElectricalPowerMeasurement {
 
         features: {
             /**
-             * DirectCurrent
-             *
              * This feature indicates the cluster can measure a direct current.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 2.13.4.1
@@ -563,8 +561,6 @@ export namespace ElectricalPowerMeasurement {
             directCurrent: BitFlag(0),
 
             /**
-             * AlternatingCurrent
-             *
              * This feature indicates the cluster can measure an alternating current.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 2.13.4.2
@@ -572,8 +568,6 @@ export namespace ElectricalPowerMeasurement {
             alternatingCurrent: BitFlag(1),
 
             /**
-             * PolyphasePower
-             *
              * This feature indicates the cluster represents the collective measurements for a Polyphase power supply.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 2.13.4.3
@@ -581,8 +575,6 @@ export namespace ElectricalPowerMeasurement {
             polyphasePower: BitFlag(2),
 
             /**
-             * Harmonics
-             *
              * This feature indicates the cluster can measure the harmonics of an alternating current.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 2.13.4.4
@@ -590,8 +582,6 @@ export namespace ElectricalPowerMeasurement {
             harmonics: BitFlag(3),
 
             /**
-             * PowerQuality
-             *
              * This feature indicates the cluster can measure the harmonic phases of an alternating current.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 2.13.4.5

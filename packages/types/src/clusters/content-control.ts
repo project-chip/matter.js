@@ -1123,57 +1123,41 @@ export namespace ContentControl {
 
         features: {
             /**
-             * ScreenTime
-             *
              * Supports managing screen time limits.
              */
             screenTime: BitFlag(0),
 
             /**
-             * PinManagement
-             *
              * Supports managing a PIN code which is used for restricting access to configuration of this feature.
              */
             pinManagement: BitFlag(1),
 
             /**
-             * BlockUnrated
-             *
              * Supports managing content controls for unrated content.
              */
             blockUnrated: BitFlag(2),
 
             /**
-             * OnDemandContentRating
-             *
              * Supports managing content controls based upon rating threshold for on demand content.
              */
             onDemandContentRating: BitFlag(3),
 
             /**
-             * ScheduledContentRating
-             *
              * Supports managing content controls based upon rating threshold for scheduled content.
              */
             scheduledContentRating: BitFlag(4),
 
             /**
-             * BlockChannels
-             *
              * Supports managing a set of channels that are prohibited.
              */
             blockChannels: BitFlag(5),
 
             /**
-             * BlockApplications
-             *
              * Supports managing a set of applications that are prohibited.
              */
             blockApplications: BitFlag(6),
 
             /**
-             * BlockContentTimeWindow
-             *
              * Supports managing content controls based upon setting time window in which all contents and applications
              * SHALL be blocked.
              */

@@ -110,8 +110,6 @@ export namespace Descriptor {
 
         features: {
             /**
-             * TagList
-             *
              * See the Disambiguation section in the System Model spec for conformance requirements for this feature and
              * the corresponding attribute.
              *

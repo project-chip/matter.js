@@ -216,8 +216,6 @@ export namespace RefrigeratorAndTemperatureControlledCabinetMode {
 
         features: {
             /**
-             * OnOff
-             *
              * Dependency with the OnOff cluster
              */
             onOff: BitFlag(0)

@@ -88,7 +88,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
 
         const metabase = this.model.metabase;
         if (metabase === undefined) {
-            this.error("METATYPE_UNKNOWN", `No metatype for ${this.model.type}`);
+            this.error("METATYPE_UNKNOWN", `No metatype for ${this.model.name}`);
             return;
         }
         const metatype = metabase.metatype;

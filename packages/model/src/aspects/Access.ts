@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isObject } from "@matter/general";
 import { Aspect } from "./Aspect.js";
 
 /**
@@ -26,11 +25,11 @@ export enum AccessLevel {
  * "Access" controls the operations a remote party may perform on a data field or cluster element.
  */
 export class Access extends Aspect<Access.Definition> implements Access.Ast {
-    declare rw?: Access.Rw;
-    declare readPriv?: Access.Privilege;
-    declare writePriv?: Access.Privilege;
-    declare fabric?: Access.Fabric;
-    declare timed?: boolean;
+    rw?: Access.Rw;
+    readPriv?: Access.Privilege;
+    writePriv?: Access.Privilege;
+    fabric?: Access.Fabric;
+    timed?: boolean;
 
     get readable() {
         return !this.rw || this.rw !== Access.Rw.Write;
@@ -46,12 +45,6 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
 
     get fabricSensitive() {
         return this.fabric === Access.Fabric.Sensitive;
-    }
-
-    override get empty() {
-        return (
-            (!this.rw || this.rw === Access.Rw.Read) && !this.fabric && !this.readPriv && !this.writePriv && !this.timed
-        );
     }
 
     /**
@@ -73,14 +66,43 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
         super(definition);
 
         if (Array.isArray(definition)) {
-            this.set(definition.flat());
-        } else if (isObject(definition)) {
-            Object.assign(this, definition);
-        } else if (definition !== undefined && definition !== null) {
-            this.set(Array.from(Access.parse(this, definition)));
+            definition = translateFlags(definition.flat());
+        } else if (typeof definition === "string") {
+            definition = translateFlags(Array.from(Access.parse(this, definition)));
         }
 
+        this.rw = definition?.rw as Access.Rw;
+        this.readPriv = definition?.readPriv as Access.Privilege;
+        this.writePriv = definition?.writePriv as Access.Privilege;
+        this.fabric = definition?.fabric as Access.Fabric;
+        this.timed = definition?.timed;
+
+        this.isEmpty =
+            (!this.rw || this.rw === Access.Rw.Read) &&
+            !this.fabric &&
+            !this.readPriv &&
+            !this.writePriv &&
+            !this.timed;
+
         this.freeze();
+    }
+
+    override extend(other: Access) {
+        if (other.isEmpty) {
+            return this;
+        }
+
+        if (this.isEmpty) {
+            return other;
+        }
+
+        return new Access({
+            rw: other.rw ?? this.rw,
+            readPriv: other.readPriv ?? this.readPriv,
+            writePriv: other.writePriv ?? this.writePriv,
+            fabric: other.fabric ?? this.fabric,
+            timed: other.timed ?? this.timed,
+        });
     }
 
     /**
@@ -193,69 +215,72 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
 
         return parts.join(" ");
     }
+}
 
-    private set(flags: Access.Flags) {
-        flags.forEach(f => {
-            switch (f) {
-                case Access.Rw.Read:
-                    if (!this.rw) {
-                        this.rw = f;
-                    }
-                    break;
+function translateFlags(input: Access.Flags) {
+    const output = {} as Access.Ast;
+    input.forEach(f => {
+        switch (f) {
+            case Access.Rw.Read:
+                if (!output.rw) {
+                    output.rw = f;
+                }
+                break;
 
-                case Access.Rw.Write:
-                    if (!this.rw) {
-                        this.rw = f;
-                    } else if (this.rw === Access.Rw.Read) {
-                        this.rw = Access.Rw.ReadWrite;
-                    }
-                    break;
+            case Access.Rw.Write:
+                if (!output.rw) {
+                    output.rw = f;
+                } else if (output.rw === Access.Rw.Read) {
+                    output.rw = Access.Rw.ReadWrite;
+                }
+                break;
 
-                case Access.Rw.ReadWrite:
-                    if (this.rw !== Access.Rw.ReadWriteOption) {
-                        this.rw = f;
-                    }
-                    break;
+            case Access.Rw.ReadWrite:
+                if (output.rw !== Access.Rw.ReadWriteOption) {
+                    output.rw = f;
+                }
+                break;
 
-                case Access.Rw.ReadWriteOption:
-                    this.rw = f;
-                    break;
+            case Access.Rw.ReadWriteOption:
+                output.rw = f;
+                break;
 
-                case Access.Fabric.Unaware:
-                    this.fabric = Access.Fabric.Unaware;
-                    break;
+            case Access.Fabric.Unaware:
+                output.fabric = Access.Fabric.Unaware;
+                break;
 
-                case Access.Fabric.Scoped:
-                    if (this.fabric !== Access.Fabric.Sensitive) {
-                        this.fabric = f;
-                    }
-                    break;
+            case Access.Fabric.Scoped:
+                if (output.fabric !== Access.Fabric.Sensitive) {
+                    output.fabric = f;
+                }
+                break;
 
-                case Access.Fabric.Sensitive:
-                    this.fabric = f;
-                    break;
+            case Access.Fabric.Sensitive:
+                output.fabric = f;
+                break;
 
-                case Access.Privilege.View:
-                    this.readPriv = f;
-                    break;
+            case Access.Privilege.View:
+                output.readPriv = f;
+                break;
 
-                case Access.Privilege.Operate:
-                case Access.Privilege.Manage:
-                case Access.Privilege.Administer:
-                    if (!this.readPriv || Access.PrivilegeLevel[f] < Access.PrivilegeLevel[this.readPriv]) {
-                        this.readPriv = f;
-                    }
-                    if (!this.writePriv || Access.PrivilegeLevel[f] > Access.PrivilegeLevel[this.writePriv]) {
-                        this.writePriv = f;
-                    }
-                    break;
+            case Access.Privilege.Operate:
+            case Access.Privilege.Manage:
+            case Access.Privilege.Administer:
+                if (!output.readPriv || Access.PrivilegeLevel[f] < Access.PrivilegeLevel[output.readPriv]) {
+                    output.readPriv = f;
+                }
+                if (!output.writePriv || Access.PrivilegeLevel[f] > Access.PrivilegeLevel[output.writePriv]) {
+                    output.writePriv = f;
+                }
+                break;
 
-                case Access.Timed.Required:
-                    this.timed = true;
-                    break;
-            }
-        });
-    }
+            case Access.Timed.Required:
+                output.timed = true;
+                break;
+        }
+    });
+
+    return output;
 }
 
 export namespace Access {

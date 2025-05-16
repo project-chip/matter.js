@@ -89,6 +89,7 @@ export function translateTable<T extends TableSchema>(
 
     nextField: for (const kv of Object.entries(schema)) {
         const [k] = kv;
+
         let [, v] = kv;
         while (isObject(v)) {
             switch (v.option) {
@@ -197,7 +198,6 @@ export function translateRecordsToMatter<R, E extends { id?: number; name: strin
         if (!mapped) {
             continue;
         }
-
         logger.debug(`${desc} ${mapped.name} = ${mapped.id ?? "(anon)"}`);
         result.push(mapped);
     }
@@ -238,11 +238,11 @@ function installPreciseDetails(
             titleSuffix = tag;
         }
 
-        // We identify the detail section associated with a row using both "name" and "description", optionally followed
+        // We identify the detail section associated with a row using both "name" and "title", optionally followed
         // by a suffix specific to the type of thing
         let detail: HtmlReference | undefined;
         let identifiedAs = "";
-        for (let identifier of [record.name, (record as { description?: string }).description]) {
+        for (let identifier of [(record as { title?: string }).title, record.name]) {
             if (identifier === undefined) {
                 continue;
             }

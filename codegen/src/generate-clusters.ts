@@ -6,6 +6,7 @@
 
 import { Logger } from "#general";
 import { ClusterModel, MatterModel } from "#model";
+import "@matter/model/resources";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { ClusterFile } from "./clusters/ClusterFile.js";

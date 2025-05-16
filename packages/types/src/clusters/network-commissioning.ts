@@ -1162,22 +1162,16 @@ export namespace NetworkCommissioning {
 
         features: {
             /**
-             * WiFiNetworkInterface
-             *
              * Wi-Fi related features
              */
             wiFiNetworkInterface: BitFlag(0),
 
             /**
-             * ThreadNetworkInterface
-             *
              * Thread related features
              */
             threadNetworkInterface: BitFlag(1),
 
             /**
-             * EthernetNetworkInterface
-             *
              * Ethernet related features
              */
             ethernetNetworkInterface: BitFlag(2)
