@@ -463,7 +463,7 @@ export class CommandInvokeResponse<
             const { requestTlv, responseTlv } = command;
             const request = this.#decodeWithSchema(requestTlv, commandFields);
             requestTlv.validate(request);
-            const response = await this.#guardedCurrentCluster.invokeCommand(command, request, this.session);
+            const response = await this.#guardedCurrentCluster.commands[command.id](request, this.session);
             await this.session.transaction?.commit();
 
             this.#successCount++;

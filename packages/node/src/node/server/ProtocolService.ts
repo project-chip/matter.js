@@ -296,7 +296,7 @@ class ClusterState implements DisposableClusterProtocol {
     readonly #endpointId: EndpointNumber;
     readonly #stateChanged = new Observable<[changes: AttributeId[], version: number]>();
     readonly #quieterObservers = new ObserverGroup();
-    readonly invokeCommand: CommandInvokeHandler;
+    readonly commands: Record<CommandId, CommandInvokeHandler> = {};
 
     constructor(type: ClusterTypeProtocol, backing: BehaviorBacking) {
         this.type = type;
@@ -328,7 +328,9 @@ class ClusterState implements DisposableClusterProtocol {
             }
         });
 
-        this.invokeCommand = (command, request, session) => invokeCommand(backing, command, request, session);
+        for (const cmd of type.commands) {
+            this.commands[cmd.id] = (args, session) => invokeCommand(backing, cmd, args, session);
+        }
     }
 
     get version() {

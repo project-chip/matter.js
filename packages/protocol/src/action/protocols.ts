@@ -23,10 +23,9 @@ import { AccessControl } from "./server/AccessControl.js";
 import { Val } from "./Val.js";
 
 export type CommandInvokeHandler = (
-    command: CommandTypeProtocol,
-    request: Val.Struct | undefined,
+    args: Val.Struct | undefined,
     session: InteractionSession,
-) => MaybePromise<Val.Struct | undefined>;
+) => MaybePromise<Val.Struct | void>;
 
 /**
  * Optimized Matter protocol<->JS object interface
@@ -137,7 +136,7 @@ export interface ClusterProtocol {
     /**
      * Invoke handler for the commands of the cluster
      */
-    invokeCommand: CommandInvokeHandler;
+    commands: Record<CommandId, CommandInvokeHandler>;
 }
 
 /**
