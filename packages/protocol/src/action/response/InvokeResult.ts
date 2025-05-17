@@ -4,12 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Invoke } from "#action/request/Invoke.js";
 import type { ClusterId, CommandId, CommandPath, EndpointNumber, StatusCode, TlvStream } from "#types";
 
-export type InvokeResult<T extends Invoke> = T extends { suppressResponse: true }
-    ? Promise<void>
-    : AsyncIterable<InvokeResult.Chunk>;
+export type InvokeResult = AsyncIterable<InvokeResult.Chunk>;
 
 export namespace InvokeResult {
     export type Chunk = Iterable<Data>;

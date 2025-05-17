@@ -13,7 +13,7 @@ import {
     WriteResult,
 } from "#protocol";
 
-export class OnlineServerInteraction {
+export class OnlineServerInteraction /*implements Interactable<OnlineContext.Options>*/ {
     readonly #interaction: ServerInteraction;
 
     constructor(node: NodeProtocol) {
@@ -39,6 +39,8 @@ export class OnlineServerInteraction {
         return OnlineContext(context).act(session => this.#interaction.write(request, session));
     }
 
+    // TODO: Find a way howe OnlineContext.act does not destroy the AsyncIterator returned here, then we can also
+    //  adjust the commented out "implements" for the class
     invoke(
         request: Invoke,
         context: OnlineContext.Options,

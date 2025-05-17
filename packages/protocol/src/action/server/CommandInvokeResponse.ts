@@ -9,7 +9,7 @@ import { InteractionSession } from "#action/Interactable.js";
 import { CommandTypeProtocol, EndpointProtocol, NodeProtocol } from "#action/protocols.js";
 import { AccessControl } from "#action/server/AccessControl.js";
 import { DataResponse, FallbackLimits } from "#action/server/DataResponse.js";
-import { Diagnostic, InternalError, Logger, MatterAggregateError } from "#general";
+import { Diagnostic, InternalError, Logger } from "#general";
 import { CommandModel, DataModelPath, ElementTag, FabricIndex as FabricIndexField } from "#model";
 import {
     CommandPath,
@@ -59,7 +59,7 @@ export class CommandInvokeResponse<
         this.#fabricIndex = session.fabric ?? FabricIndex.NO_FABRIC;
     }
 
-    process<T extends Invoke>({ invokeRequests, suppressResponse }: T): InvokeResult<T> {
+    async *process<T extends Invoke>({ invokeRequests, suppressResponse }: T): InvokeResult {
         const multipleInvokes = invokeRequests.length > 1;
 
         // Register paths
@@ -84,33 +84,19 @@ export class CommandInvokeResponse<
             }
         }
 
-        if (suppressResponse) {
-            if (this.#invokers) {
-                const promises = this.#invokers.map(async producer => {
-                    for await (const _chunk of producer.apply(this)) {
-                        // we just need to process it, not emit it
-                    }
-                });
-                return MatterAggregateError.allSettled(promises).then(() => {}) as InvokeResult<T>;
-            }
-            return Promise.resolve() as InvokeResult<T>;
-        } else {
-            return this.processResponses() as InvokeResult<T>;
-        }
-    }
-
-    async *processResponses(): AsyncIterable<InvokeResult.Chunk> {
         if (this.#invokers) {
             for (const producer of this.#invokers) {
                 for await (const chunk of producer.apply(this)) {
-                    yield chunk;
+                    if (!suppressResponse) {
+                        yield chunk;
+                    }
                 }
             }
         }
 
         // We emit chunks lazily when the endpoint changes so there may be one remaining chunk.  There may also be a
         // chunk with errors even if there are no data producers
-        if (this.#chunk !== undefined) {
+        if (!suppressResponse && this.#chunk !== undefined) {
             yield this.#chunk;
         }
     }

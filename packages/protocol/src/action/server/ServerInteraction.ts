@@ -72,10 +72,10 @@ export class ServerInteraction<SessionT extends InteractionSession = Interaction
         return writer.process(request);
     }
 
-    invoke<T extends Invoke>(_request: T, session: SessionT): InvokeResult<T> {
+    invoke(request: Invoke, session: SessionT): InvokeResult {
         // TODO -  validate request
 
         const invoker = new CommandInvokeResponse(this.#node, session);
-        return invoker.process(_request);
+        return invoker.process(request);
     }
 }

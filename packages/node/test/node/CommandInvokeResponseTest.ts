@@ -94,7 +94,7 @@ describe("CommandInvokeResponse", () => {
             }),
         );
 
-        expect(response.data).deep.equals([]);
+        expect(response.data).deep.equals(undefined);
         expect(response.counts).deep.equals({ status: 0, success: 0, existent: 0 });
     });
 
@@ -140,15 +140,13 @@ async function invokeCmdRaw(node: MockServerNode, data: Partial<InvokeRequest>) 
     const exchange = await node.createExchange({ fabric });
     return node.online({ command: true, exchange }, async ({ context }) => {
         const response = new CommandInvokeResponse(node.protocol, context);
-        if (request.suppressResponse) {
-            const data = await (response.process(request) as unknown as Promise<void>);
-            return { data, counts: response.counts };
-        } else {
-            const chunks = new Array<InvokeResult.Data>();
-            for await (const chunk of response.process(request)) {
-                chunks.push(...chunk);
+        let chunks: InvokeResult.Data[] | undefined;
+        for await (const chunk of response.process(request)) {
+            if (chunks === undefined) {
+                chunks = new Array<InvokeResult.Data>();
             }
-            return { data: chunks, counts: response.counts };
+            chunks.push(...chunk);
         }
+        return { data: chunks, counts: response.counts };
     });
 }
