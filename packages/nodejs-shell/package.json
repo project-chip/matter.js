@@ -26,7 +26,8 @@
         "clean": "matter-build clean",
         "build": "matter-build",
         "build-clean": "matter-build --clean",
-        "shell": "matter-run src/app.ts"
+        "shell": "matter-run src/app.ts",
+        "bundle-device": "esbuild src/app.ts --bundle --platform=node --conditions=esbuild --external:@stoprocent/noble --external:@stoprocent/bluetooth-hci-socket --sourcemap --minify --keep-names --outfile=build/bundle/app.cjs"
     },
     "bin": {
         "matter-shell": "dist/cjs/app.js"
@@ -41,6 +42,7 @@
         "@matter/nodejs-ble": "*",
         "@matter/tools": "*",
         "@project-chip/matter.js": "*",
+        "ws": "^8.18.2",
         "yargs": "^17.7.2"
     },
     "engines": {
