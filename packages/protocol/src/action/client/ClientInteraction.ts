@@ -86,7 +86,7 @@ export class ClientInteraction<SessionT extends InteractionSession = Interaction
                         attributeId: attributeId!,
                         listIndex,
                     },
-                    status: status!,
+                    status,
                     clusterStatus,
                 }),
             ) as Awaited<WriteResult<T>>;
