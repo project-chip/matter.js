@@ -47,13 +47,10 @@ export class OnlineServerInteraction /*implements Interactable<OnlineContext.Opt
         responseData?: (chunk: InvokeResult.Chunk) => Promise<void>,
     ) {
         return OnlineContext({ ...context, command: true }).act(async session => {
-            if (request.suppressResponse) {
-                return this.#interaction.invoke(request, session) as unknown as Promise<void>;
-            } else {
-                for await (const chunk of this.#interaction.invoke(request, session)) {
-                    if (responseData !== undefined) {
-                        await responseData(chunk);
-                    }
+            const { suppressResponse } = request;
+            for await (const chunk of this.#interaction.invoke(request, session)) {
+                if (!suppressResponse && responseData !== undefined) {
+                    await responseData(chunk);
                 }
             }
         });
