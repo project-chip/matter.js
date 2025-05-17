@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Invoke, InvokeResult } from "#action/index.js";
+import { CommandInvokeHandler, Invoke, InvokeResult } from "#action/index.js";
 import { InteractionSession } from "#action/Interactable.js";
-import { ClusterProtocol, CommandTypeProtocol, EndpointProtocol, NodeProtocol } from "#action/protocols.js";
+import { CommandTypeProtocol, EndpointProtocol, NodeProtocol } from "#action/protocols.js";
 import { AccessControl } from "#action/server/AccessControl.js";
 import { DataResponse, FallbackLimits } from "#action/server/DataResponse.js";
 import { Diagnostic, InternalError, Logger, MatterAggregateError } from "#general";
@@ -14,7 +14,6 @@ import { CommandModel, DataModelPath, ElementTag, FabricIndex as FabricIndexFiel
 import {
     CommandPath,
     FabricIndex,
-    NodeId,
     Status,
     StatusCode,
     StatusResponseError,
@@ -22,12 +21,6 @@ import {
     TlvStream,
     ValidationError,
 } from "#types";
-
-// On Encoding level there is no nodeId, bit the Interaction Model allows a Node to be specified which can only be the
-// target node
-type InteractionCommandPath = CommandPath & {
-    nodeId?: NodeId;
-};
 
 const logger = Logger.get("CommandInvokeResponse");
 
@@ -47,12 +40,11 @@ export class CommandInvokeResponse<
 
     // Each input CommandDataIB that does not have an error installs a producer.  Producers run after validation and
     // generate actual command data
-    #dataProducers?: Array<(this: CommandInvokeResponse) => AsyncIterable<InvokeResult.Chunk>>;
+    #invokers?: Array<(this: CommandInvokeResponse) => AsyncIterable<InvokeResult.Chunk>>;
 
     // The following state updates as data producers execute.  This serves both to convey state between functions and as
     // a cache between producers that touch the same endpoint and/or cluster
     #currentEndpoint?: EndpointProtocol;
-    #currentCluster?: ClusterProtocol;
 
     #registeredPaths = new Set<string>();
     #registeredCommandRefs = new Set<number>();
@@ -80,7 +72,7 @@ export class CommandInvokeResponse<
                         StatusCode.InvalidAction,
                     );
                 }
-                this.#addWildcard(path, commandRef, commandFields);
+                this.#processWildcard(path, commandRef, commandFields);
             } else {
                 if (multipleInvokes && commandRef === undefined) {
                     throw new StatusResponseError(
@@ -88,13 +80,13 @@ export class CommandInvokeResponse<
                         StatusCode.InvalidAction,
                     );
                 }
-                this.#addConcrete(path as InvokeResult.ConcreteCommandPath, commandRef, commandFields);
+                this.#processConcrete(path as InvokeResult.ConcreteCommandPath, commandRef, commandFields);
             }
         }
 
         if (suppressResponse) {
-            if (this.#dataProducers) {
-                const promises = this.#dataProducers.map(async producer => {
+            if (this.#invokers) {
+                const promises = this.#invokers.map(async producer => {
                     for await (const _chunk of producer.apply(this)) {
                         // we just need to process it, not emit it
                     }
@@ -108,8 +100,8 @@ export class CommandInvokeResponse<
     }
 
     async *processResponses(): AsyncIterable<InvokeResult.Chunk> {
-        if (this.#dataProducers) {
-            for (const producer of this.#dataProducers) {
+        if (this.#invokers) {
+            for (const producer of this.#invokers) {
                 for await (const chunk of producer.apply(this)) {
                     yield chunk;
                 }
@@ -123,22 +115,6 @@ export class CommandInvokeResponse<
         }
     }
 
-    /** Guarded accessor for this.#currentEndpoint.  This should never be undefined */
-    get #guardedCurrentEndpoint() {
-        if (this.#currentEndpoint === undefined) {
-            throw new InternalError("currentEndpoint is not set. Should never happen");
-        }
-        return this.#currentEndpoint;
-    }
-
-    /** Guarded accessor for this.#currentCluster.  This should never be undefined */
-    get #guardedCurrentCluster(): ClusterProtocol {
-        if (this.#currentCluster === undefined) {
-            throw new InternalError("currentCluster is not set. Should never happen");
-        }
-        return this.#currentCluster;
-    }
-
     get counts() {
         return {
             status: this.#statusCount,
@@ -148,14 +124,12 @@ export class CommandInvokeResponse<
     }
 
     /**
-     * Validate a wildcard path and update internal state.
+     * Process a wildcard path and invoke commands on all endpoints that match the path.
      */
-    #addWildcard(path: InteractionCommandPath, commandRef: number | undefined, commandFields: TlvStream | undefined) {
-        const { nodeId, endpointId } = path;
+    #processWildcard(path: CommandPath, commandRef: number | undefined, commandFields: TlvStream | undefined) {
+        const { clusterId, commandId } = path;
 
-        if (nodeId !== undefined && nodeId !== this.nodeId) {
-            return;
-        }
+        // Formally, according to spec, we should check for node mismatch here but commandPath do not have a nodeId
 
         // TODO: Add Group handling and validation
         /*
@@ -164,26 +138,25 @@ export class CommandInvokeResponse<
         }
         */
 
-        if (endpointId === undefined) {
-            this.#addProducer(async function* (this: CommandInvokeResponse) {
-                for (const endpoint of this.node) {
-                    yield* this.#addEndpointForWildcard(endpoint, path, commandRef, commandFields);
-                }
-            });
-        } else {
-            const endpoint = this.node[endpointId];
-            if (endpoint) {
-                this.#addProducer(async function* (this: CommandInvokeResponse) {
-                    yield* this.#addEndpointForWildcard(endpoint, path, commandRef, commandFields);
-                });
-            }
+        if (clusterId === undefined || commandId === undefined) {
+            throw new StatusResponseError(
+                "Wildcard path write must specify a clusterId and commandId",
+                StatusCode.InvalidAction,
+            );
         }
+
+        // If we are here, then endpointId must be wildcard aka undefined
+        this.#addInvoker(async function* invokeWildcardEndpoints(this: CommandInvokeResponse) {
+            for (const endpoint of this.node) {
+                yield* this.#processEndpointForWildcard(endpoint, path, commandRef, commandFields);
+            }
+        });
     }
 
     /**
-     * Write to a concrete path and update internal state.
+     * Invoke a command specified by a concrete path
      */
-    #addConcrete(
+    #processConcrete(
         path: InvokeResult.ConcreteCommandPath,
         commandRef: number | undefined,
         commandFields: TlvStream | undefined,
@@ -282,7 +255,7 @@ export class CommandInvokeResponse<
         }
 
         // This path contributes an command value
-        this.#addProducer(async function* () {
+        this.#addInvoker(async function* invokeConcretePath() {
             // Update internal state for target endpoint
             if (this.#currentEndpoint !== endpoint) {
                 if (this.#chunk) {
@@ -290,12 +263,9 @@ export class CommandInvokeResponse<
                     this.#chunk = undefined;
                 }
                 this.#currentEndpoint = endpoint;
-                this.#currentCluster = cluster;
-            } else if (this.#currentCluster !== cluster) {
-                this.#currentCluster = cluster;
             }
 
-            await this.#invokeCommand(command, path, commandRef, commandFields);
+            await this.#invokeCommand(command, path, commandRef, commandFields, cluster.commands[command.id]);
         });
     }
 
@@ -304,24 +274,16 @@ export class CommandInvokeResponse<
      *
      * Emits previous chunk if it exists and was not for this endpoint.  This means that our chunk size is one endpoint
      * worth of data, except for the initial error chunk if there are path errors.
-     *
-     * {@link this.#wildcardPathFlags} to numeric bitmap must be set prior to invocation.
-     *
+     **
      * TODO - skip endpoints for which subject is unauthorized as optimization
      */
-    async *#addEndpointForWildcard(
+    async *#processEndpointForWildcard(
         endpoint: EndpointProtocol,
         path: CommandPath,
         commandRef: number | undefined,
         commandFields: TlvStream | undefined,
     ) {
-        const { clusterId, commandId } = path;
-        if (clusterId === undefined || commandId === undefined) {
-            throw new StatusResponseError(
-                "Wildcard path write must specify a clusterId and commandId",
-                StatusCode.InvalidAction,
-            );
-        }
+        const { clusterId } = path;
 
         if (this.#currentEndpoint !== endpoint) {
             if (this.#chunk) {
@@ -329,87 +291,44 @@ export class CommandInvokeResponse<
                 this.#chunk = undefined;
             }
             this.#currentEndpoint = endpoint;
-            this.#currentCluster = undefined;
         }
 
         const cluster = endpoint[clusterId];
         if (cluster !== undefined) {
-            await this.#addClusterForWildcard(cluster, path, commandRef, commandFields);
-        }
-    }
+            const { commandId } = path;
 
-    /**
-     * Read values from a specific {@link cluster} for a wildcard path.
-     *
-     * Depends on state initialized by {@link #addEndpointForWildcard}.
-     *
-     * TODO - skip clusters for which subject is unauthorized
-     */
-    async #addClusterForWildcard(
-        cluster: ClusterProtocol,
-        path: CommandPath,
-        commandRef: number | undefined,
-        commandFields: TlvStream | undefined,
-    ) {
-        if (this.#currentCluster !== cluster) {
-            this.#currentCluster = cluster;
-        }
-        const { commandId } = path;
-
-        if (commandId === undefined) {
-            throw new StatusResponseError("Wildcard path write must specify an commandId", StatusCode.InvalidAction);
-        } else {
             const command = cluster.type.commands[commandId];
             if (command !== undefined) {
-                await this.#addCommandForWildcard(command, path, commandRef, commandFields);
+                if (
+                    this.session.authorityAt(command.limits.writeLevel, cluster.location) !==
+                        AccessControl.Authority.Granted ||
+                    (command.limits.timed && !this.session.timed)
+                ) {
+                    return;
+                }
+
+                await this.#invokeCommand(
+                    command,
+                    {
+                        ...path,
+                        endpointId: endpoint.id,
+                    },
+                    commandRef,
+                    commandFields,
+                    cluster.commands[command.id],
+                );
             }
         }
     }
 
     /**
-     * Read values from a specific {@link command} for a wildcard path.
-     *
-     * Depends on state initialized by {@link #addClusterForWildcard}.
+     * Add a function that invokes commands and produces data.  These functions are run after validation of input paths.
      */
-    async #addCommandForWildcard(
-        command: CommandTypeProtocol,
-        path: CommandPath,
-        commandRef: number | undefined,
-        commandFields: TlvStream | undefined,
-    ) {
-        if (!this.#guardedCurrentCluster.type.commands[command.id]) {
-            return;
-        }
-
-        if (
-            this.session.authorityAt(command.limits.writeLevel, this.#guardedCurrentCluster.location) !==
-                AccessControl.Authority.Granted ||
-            (command.limits.timed && !this.session.timed)
-        ) {
-            return;
-        }
-
-        await this.#invokeCommand(
-            command,
-            {
-                ...path,
-                endpointId: this.#guardedCurrentEndpoint.id,
-                clusterId: this.#guardedCurrentCluster.type.id,
-                commandId: command.id,
-            },
-            commandRef,
-            commandFields,
-        );
-    }
-
-    /**
-     * Add a function that produces data.  These functions are run after validation of input paths.
-     */
-    #addProducer(producer: (this: CommandInvokeResponse) => AsyncIterable<InvokeResult.Chunk>) {
-        if (this.#dataProducers) {
-            this.#dataProducers.push(producer);
+    #addInvoker(producer: (this: CommandInvokeResponse) => AsyncIterable<InvokeResult.Chunk>) {
+        if (this.#invokers) {
+            this.#invokers.push(producer);
         } else {
-            this.#dataProducers = [producer];
+            this.#invokers = [producer];
         }
     }
 
@@ -431,9 +350,9 @@ export class CommandInvokeResponse<
         clusterStatus?: number,
     ) {
         if (status !== StatusCode.Success) {
-            logger.debug(
+            logger.info(
                 () =>
-                    `Error invoking command ${this.node.inspectPath(path)}: Status=${StatusCode[status]}(${status}), ClusterStatus=${clusterStatus}`,
+                    `Invoke error ${this.node.inspectPath(path)}: Status=${StatusCode[status]}(${status}), ClusterStatus=${clusterStatus}`,
             );
         }
 
@@ -456,12 +375,13 @@ export class CommandInvokeResponse<
         path: InvokeResult.ConcreteCommandPath,
         commandRef: number | undefined,
         commandFields: TlvStream | undefined,
+        invoker: CommandInvokeHandler,
     ) {
         try {
             const { requestTlv, responseTlv } = command;
             const request = this.#decodeWithSchema(requestTlv, commandFields);
             requestTlv.validate(request);
-            const response = await this.#guardedCurrentCluster.commands[command.id](request, this.session);
+            const response = await invoker(request, this.session);
             await this.session.transaction?.commit();
 
             this.#successCount++;
