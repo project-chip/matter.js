@@ -1,7 +1,6 @@
 import { OnlineContext } from "#behavior/index.js";
 import { NotImplementedError } from "#general";
 import {
-    Interactable,
     Invoke,
     InvokeResult,
     NodeProtocol,
@@ -14,7 +13,7 @@ import {
     WriteResult,
 } from "#protocol";
 
-export class OnlineServerInteraction implements Interactable<OnlineContext.Options> {
+export class OnlineServerInteraction /*implements Interactable<OnlineContext.Options>*/ {
     readonly #interaction: ServerInteraction;
 
     constructor(node: NodeProtocol) {
@@ -40,7 +39,20 @@ export class OnlineServerInteraction implements Interactable<OnlineContext.Optio
         return OnlineContext(context).act(session => this.#interaction.write(request, session));
     }
 
-    invoke<T extends Invoke>(_request: T, _context: OnlineContext.Options): InvokeResult<T> {
-        throw new NotImplementedError("invoke not implemented");
+    // TODO: Find a way howe OnlineContext.act does not destroy the AsyncIterator returned here, then we can also
+    //  adjust the commented out "implements" for the class
+    invoke(
+        request: Invoke,
+        context: OnlineContext.Options,
+        responseData?: (chunk: InvokeResult.Chunk) => Promise<void>,
+    ) {
+        return OnlineContext({ ...context, command: true }).act(async session => {
+            const { suppressResponse } = request;
+            for await (const chunk of this.#interaction.invoke(request, session)) {
+                if (!suppressResponse && responseData !== undefined) {
+                    await responseData(chunk);
+                }
+            }
+        });
     }
 }

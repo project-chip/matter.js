@@ -47,7 +47,7 @@ export namespace ReadResult {
         path: ConcreteAttributePath;
         value: unknown;
         version: number;
-        tlv: TlvSchema<unknown>;
+        tlv: TlvSchema<unknown>; // TODO: Remove when we also move encoding to the new format
     }
 
     export interface AttributeStatus {

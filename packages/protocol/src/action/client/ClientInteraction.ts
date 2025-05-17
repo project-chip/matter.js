@@ -86,29 +86,66 @@ export class ClientInteraction<SessionT extends InteractionSession = Interaction
                         attributeId: attributeId!,
                         listIndex,
                     },
-                    status: status!,
+                    status,
                     clusterStatus,
                 }),
             ) as Awaited<WriteResult<T>>;
         }
     }
 
-    invoke<T extends Invoke>(request: Invoke, _session?: SessionT): InvokeResult<T> {
-        if (request.suppressResponse) {
-            return new Promise<void>((resolve, reject) => {
-                InteractionClientMessenger.create(this.#exchanges)
-                    .then(messenger =>
-                        messenger
-                            .sendInvokeCommand(request)
-                            .then(() => resolve())
-                            .catch(reject),
-                    )
-                    .then(resolve, reject);
-            }) as InvokeResult<T>;
+    async *invoke(request: Invoke, _session?: SessionT): InvokeResult {
+        const messenger = await InteractionClientMessenger.create(this.#exchanges);
+        const result = await messenger.sendInvokeCommand(request);
+        if (!request.suppressResponse) {
+            if (result && result.invokeResponses?.length) {
+                const chunk: InvokeResult.Chunk = result.invokeResponses
+                    .map(response => {
+                        if (response.command !== undefined) {
+                            const {
+                                commandPath: { endpointId, clusterId, commandId },
+                                commandRef,
+                                commandFields,
+                            } = response.command;
+                            const res: InvokeResult.CommandResponse = {
+                                kind: "cmd-response",
+                                path: {
+                                    endpointId: endpointId!,
+                                    clusterId: clusterId,
+                                    commandId: commandId,
+                                },
+                                commandRef,
+                                data: commandFields!, // TODO add decoding
+                            };
+                            return res;
+                        } else if (response.status !== undefined) {
+                            const {
+                                commandPath: { endpointId, clusterId, commandId },
+                                commandRef,
+                                status: { status, clusterStatus },
+                            } = response.status;
+                            const res: InvokeResult.CommandStatus = {
+                                kind: "cmd-status",
+                                path: {
+                                    endpointId: endpointId!,
+                                    clusterId: clusterId,
+                                    commandId: commandId,
+                                },
+                                commandRef,
+                                status,
+                                clusterStatus,
+                            };
+                            return res;
+                        } else {
+                            // Should not happen but if we ignore the response?
+                            return undefined;
+                        }
+                    })
+                    .filter(r => r !== undefined);
+                yield chunk;
+            } else {
+                yield [];
+            }
         }
-
-        // TODO
-        throw new NotImplementedError();
     }
 
     subscribe(_request: Subscribe, _session?: SessionT): SubscribeResult {

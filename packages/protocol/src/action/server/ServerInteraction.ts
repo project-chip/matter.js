@@ -14,6 +14,7 @@ import { InvokeResult } from "#action/response/InvokeResult.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { SubscribeResult } from "#action/response/SubscribeResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
+import { CommandInvokeResponse } from "#action/server/CommandInvokeResponse.js";
 import { EventReadResponse } from "#action/server/EventReadResponse.js";
 import { Logger, NotImplementedError } from "#general";
 import { AttributeReadResponse } from "./AttributeReadResponse.js";
@@ -28,8 +29,6 @@ const logger = Logger.get("ServerInteraction");
  * completion there will be redundancy with other components including:
  *
  * - InteractionServer (significant overlap with this class)
- *
- * - InteractionEndpointStructure ({@link NodeProtocol} is largely duplicative)
  */
 export class ServerInteraction<SessionT extends InteractionSession = InteractionSession>
     implements Interactable<SessionT>
@@ -73,8 +72,10 @@ export class ServerInteraction<SessionT extends InteractionSession = Interaction
         return writer.process(request);
     }
 
-    invoke<T extends Invoke>(_request: T, _session?: SessionT): InvokeResult<T> {
-        // TODO
-        throw new NotImplementedError();
+    invoke(request: Invoke, session: SessionT): InvokeResult {
+        // TODO -  validate request
+
+        const invoker = new CommandInvokeResponse(this.#node, session);
+        return invoker.process(request);
     }
 }

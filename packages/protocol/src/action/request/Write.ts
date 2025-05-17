@@ -9,7 +9,10 @@ import { AttributeData, ClusterType, WriteRequest } from "#types";
 import { MalformedRequestError } from "./MalformedRequestError.js";
 import { Specifier } from "./Specifier.js";
 
-export interface Write extends WriteRequest {}
+export interface Write extends WriteRequest {
+    /** Timeout only relevant for Client Interactions */
+    timeout?: number;
+}
 
 /**
  * Formulate a write-request using Matter numeric IDs.

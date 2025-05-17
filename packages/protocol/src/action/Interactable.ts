@@ -41,5 +41,5 @@ export interface Interactable<SessionT = InteractionSession> {
     /**
      * Perform a Matter invoke interaction.
      */
-    invoke<T extends Invoke>(request: T, session?: SessionT): InvokeResult<T>;
+    invoke(request: Invoke, session?: SessionT): InvokeResult;
 }

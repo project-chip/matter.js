@@ -10,26 +10,53 @@ import { MalformedRequestError } from "./MalformedRequestError.js";
 import { Specifier } from "./Specifier.js";
 
 export interface Invoke extends InvokeRequest {
+    /** Timeout only relevant for Client Interactions */
     timeout?: number;
 }
 
 /**
  * Request invocation of one or more commands.
  */
-export function Invoke(definition: Invoke.Definition): Invoke {
+export function Invoke(options: Invoke.Definition): Invoke;
+
+/**
+ * Request invocation multiple commands with defined options
+ */
+export function Invoke(options: Invoke.Definition, ...commands: CommandData[]): Invoke;
+
+/**
+ * Request invocation multiple commands as list of Commands with default options.
+ */
+export function Invoke(...commands: CommandData[]): Invoke;
+
+export function Invoke(optionsOrData: Invoke.Definition | CommandData, ...commands: CommandData[]): Invoke {
+    let options;
+    if ("commands" in optionsOrData) {
+        options = optionsOrData;
+    } else {
+        commands = [optionsOrData, ...commands];
+        options = {};
+    }
+
     const {
-        commands,
+        commands: invokeRequests = [],
         interactionModelRevision = FALLBACK_INTERACTIONMODEL_REVISION,
         suppressResponse = false,
         timed: timedRequest = false,
-    } = definition;
+    } = options;
 
-    if (!commands?.length) {
+    if (commands.length) {
+        for (const entry of commands) {
+            invokeRequests.push(entry);
+        }
+    }
+
+    if (!invokeRequests?.length) {
         throw new MalformedRequestError(`Invocation requires at least one command`);
     }
 
     return {
-        invokeRequests: commands,
+        invokeRequests,
         interactionModelRevision,
         suppressResponse,
         timedRequest,
