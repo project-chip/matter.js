@@ -706,7 +706,7 @@ function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath 
     if (endpoint === undefined) {
         return `?:.${toWildcardOrHex(endpointId)}.:${toWildcardOrHex(clusterId)}.:${toWildcardOrHex(elementId)}${postString}`;
     }
-    const endpointName = `${endpoint.name}.${toWildcardOrHex(endpointId)}`;
+    const endpointName = `${endpoint.name}:${toWildcardOrHex(endpointId)}`;
 
     if (clusterId === undefined) {
         return `${endpointName}.*.:${toWildcardOrHex(elementId)}${postString}`;
@@ -716,7 +716,7 @@ function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath 
     if (cluster === undefined) {
         return `${endpointName}.?:${toWildcardOrHex(clusterId)}.:${toWildcardOrHex(elementId)}${postString}`;
     }
-    const clusterName = `${cluster.type.name}.:${toWildcardOrHex(clusterId)}`;
+    const clusterName = `${cluster.type.name}:${toWildcardOrHex(clusterId)}`;
 
     if ("eventId" in path && elementId !== undefined) {
         const event = cluster.type.events[elementId];
