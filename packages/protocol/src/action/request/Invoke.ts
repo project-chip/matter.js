@@ -17,46 +17,46 @@ export interface Invoke extends InvokeRequest {
 /**
  * Request invocation of one or more commands.
  */
-export function Invoke(definition: Invoke.Definition): Invoke;
+export function Invoke(options: Invoke.Definition): Invoke;
 
 /**
  * Request invocation multiple commands with defined options
  */
-export function Invoke(options: Invoke.Definition, ...data: CommandData[]): Invoke;
+export function Invoke(options: Invoke.Definition, ...commands: CommandData[]): Invoke;
 
 /**
  * Request invocation multiple commands as list of Commands with default options.
  */
-export function Invoke(...data: CommandData[]): Invoke;
+export function Invoke(...commands: CommandData[]): Invoke;
 
-export function Invoke(optionsOrData: Invoke.Definition | CommandData, ...data: CommandData[]): Invoke {
+export function Invoke(optionsOrData: Invoke.Definition | CommandData, ...commands: CommandData[]): Invoke {
     let options;
     if ("commands" in optionsOrData) {
         options = optionsOrData;
     } else {
-        data = [optionsOrData, ...data];
+        commands = [optionsOrData, ...commands];
         options = {};
     }
 
     const {
-        commands = [],
+        commands: invokeRequests = [],
         interactionModelRevision = FALLBACK_INTERACTIONMODEL_REVISION,
         suppressResponse = false,
         timed: timedRequest = false,
     } = options;
 
-    if (data.length) {
-        for (const entry of data) {
-            commands.push(entry);
+    if (commands.length) {
+        for (const entry of commands) {
+            invokeRequests.push(entry);
         }
     }
 
-    if (!commands?.length) {
+    if (!invokeRequests?.length) {
         throw new MalformedRequestError(`Invocation requires at least one command`);
     }
 
     return {
-        invokeRequests: commands,
+        invokeRequests,
         interactionModelRevision,
         suppressResponse,
         timedRequest,
