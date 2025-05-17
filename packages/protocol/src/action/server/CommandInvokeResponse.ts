@@ -188,7 +188,7 @@ export class CommandInvokeResponse<
         commandRef: number | undefined,
         commandFields: TlvStream | undefined,
     ) {
-        const { nodeId, endpointId, clusterId, commandId } = path;
+        const { endpointId, clusterId, commandId } = path;
 
         const pathKey = `${endpointId}-${clusterId}-${commandId}`;
         if (this.#registeredPaths.has(pathKey)) {
@@ -208,9 +208,7 @@ export class CommandInvokeResponse<
             this.#registeredCommandRefs.add(commandRef);
         }
 
-        if (nodeId !== undefined && this.nodeId !== nodeId) {
-            return this.#addStatus(path, commandRef, Status.UnsupportedNode);
-        }
+        // Formally, according to spec, we should check for node mismatch here but commandPath do not have a nodeId
 
         // Resolve path elements
         const endpoint = this.node[endpointId];

@@ -5,7 +5,7 @@
  */
 
 import type { Invoke } from "#action/request/Invoke.js";
-import type { ClusterId, CommandId, CommandPath, EndpointNumber, NodeId, StatusCode, TlvStream } from "#types";
+import type { ClusterId, CommandId, CommandPath, EndpointNumber, StatusCode, TlvStream } from "#types";
 
 export type InvokeResult<T extends Invoke> = T extends { suppressResponse: true }
     ? Promise<void>
@@ -17,9 +17,6 @@ export namespace InvokeResult {
     export type Data = CommandStatus | CommandResponse;
 
     export interface ConcreteCommandPath extends CommandPath {
-        /** Exists here but not on the encoding level, so only allowed to be empty or "the target node" */
-        nodeId?: NodeId;
-
         endpointId: EndpointNumber;
         clusterId: ClusterId;
         commandId: CommandId;
