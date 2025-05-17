@@ -681,11 +681,13 @@ function toWildcardOrHex(value: number | bigint | undefined) {
 
 /**
  * Resolve a path into a human readable textual form for logging
+ * TODO: Add a Diagnostic display formatter for this
  */
 function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath | CommandPath) {
     const { endpointId, clusterId } = path;
     const isUrgentString = "isUrgent" in path && path.isUrgent ? "!" : "";
     const listIndexString = "listIndex" in path && path.listIndex === null ? "[ADD]" : "";
+    const postString = `${listIndexString}${isUrgentString}`;
 
     const elementId =
         "attributeId" in path
@@ -697,35 +699,35 @@ function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath 
                 : undefined;
 
     if (endpointId === undefined) {
-        return `*/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
+        return `*.:${toWildcardOrHex(clusterId)}.:${toWildcardOrHex(elementId)}${postString}`;
     }
 
     const endpoint = node[endpointId];
     if (endpoint === undefined) {
-        return `unknown(${toWildcardOrHex(endpointId)})/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
+        return `?:.${toWildcardOrHex(endpointId)}.:${toWildcardOrHex(clusterId)}.:${toWildcardOrHex(elementId)}${postString}`;
     }
-    const endpointName = `${endpoint.name}(${toWildcardOrHex(endpointId)})`;
+    const endpointName = `${endpoint.name}.${toWildcardOrHex(endpointId)}`;
 
     if (clusterId === undefined) {
-        return `${endpointName}/*/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
+        return `${endpointName}.*.:${toWildcardOrHex(elementId)}${postString}`;
     }
 
     const cluster = endpoint[clusterId];
     if (cluster === undefined) {
-        return `${endpointName}/unknown(${toWildcardOrHex(clusterId)})/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
+        return `${endpointName}.?:${toWildcardOrHex(clusterId)}.:${toWildcardOrHex(elementId)}${postString}`;
     }
-    const clusterName = `${cluster.type.name}(${toWildcardOrHex(clusterId)})`;
+    const clusterName = `${cluster.type.name}.:${toWildcardOrHex(clusterId)}`;
 
     if ("eventId" in path && elementId !== undefined) {
         const event = cluster.type.events[elementId];
-        return `${endpointName}/${clusterName}/${event?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${isUrgentString}`;
+        return `${endpointName}.${clusterName}.${event?.name ?? "?"}:${toWildcardOrHex(elementId)}${postString}`;
     } else if ("attributeId" in path && elementId !== undefined) {
         const attribute = cluster.type.attributes[elementId];
-        return `${endpointName}/${clusterName}/${attribute?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${listIndexString}${isUrgentString}`;
+        return `${endpointName}.${clusterName}.${attribute?.name ?? "?"}:${toWildcardOrHex(elementId)}${postString}`;
     } else if ("commandId" in path && elementId !== undefined) {
         const command = cluster.type.commands[elementId];
-        return `${endpointName}/${clusterName}/${command?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${listIndexString}${isUrgentString}`;
+        return `${endpointName}.${clusterName}.${command?.name ?? "?"}:${toWildcardOrHex(elementId)}${postString}`;
     } else {
-        return `${endpointName}/${clusterName}/*${listIndexString}${isUrgentString}`;
+        return `${endpointName}.${clusterName}.*${postString}`;
     }
 }
