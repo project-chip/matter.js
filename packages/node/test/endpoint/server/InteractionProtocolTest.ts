@@ -1627,7 +1627,7 @@ describe("InteractionProtocol", () => {
                     new InteractionServerMessenger(exchange),
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith("Duplicate concrete command path RootNode(0x0)/OnOff(0x6)/on(0x1) on batch invoke");
+            ).rejectedWith("Duplicate concrete command path RootNode.0x0.OnOff.:0x6.on:0x1 on batch invoke");
 
             expect(result).equals(undefined);
         });
