@@ -42,6 +42,7 @@ import {
     AttributeId,
     AttributePath,
     ClusterId,
+    ClusterType,
     CommandId,
     CommandPath,
     DeviceTypeId,
@@ -49,7 +50,6 @@ import {
     EventId,
     EventPath,
     FabricIndex,
-    TlvSchema,
     WildcardPathFlags as WildcardPathFlagsType,
 } from "#types";
 
@@ -387,9 +387,9 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
     const nonMandatorySupportedCommands = new Set<CommandId>();
 
     // Collect Attribute Metadata
-    const attrTlvs = {} as Record<number, TlvSchema<unknown>>;
+    const attrDef = {} as Record<number, ClusterType.Attribute>;
     for (const attr of Object.values(cluster.attributes)) {
-        attrTlvs[attr.id] = attr.schema;
+        attrDef[attr.id] = attr;
     }
     let wildcardPathFlags = schema.effectiveQuality.diagnostics ? WildcardPathFlags.skipDiagnosticsClusters : 0;
     if (schema.id & 0xffff0000) {
@@ -401,9 +401,9 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
     };
 
     // Collect Event Metadata
-    const eventTlvs = {} as Record<number, TlvSchema<unknown>>;
+    const eventDef = {} as Record<number, ClusterType.Event>;
     for (const ev of Object.values(cluster.events)) {
-        eventTlvs[ev.id] = ev.schema;
+        eventDef[ev.id] = ev;
     }
     const eventList = Array<EventTypeProtocol>();
     const events: CollectionProtocol<EventTypeProtocol> = {
@@ -411,16 +411,9 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
     };
 
     // Collect Command Metadata
-    const commandData = {} as Record<
-        number,
-        { request: TlvSchema<unknown>; response: TlvSchema<unknown>; responseId: CommandId }
-    >;
+    const cmdDef = {} as Record<number, ClusterType.Command>;
     for (const cmd of Object.values(cluster.commands)) {
-        commandData[cmd.requestId] = {
-            request: cmd.requestSchema,
-            response: cmd.responseSchema,
-            responseId: cmd.responseId,
-        };
+        cmdDef[cmd.requestId] = cmd;
     }
     const commandList = Array<CommandTypeProtocol>();
     const commands: CollectionProtocol<CommandTypeProtocol> = {
@@ -445,7 +438,7 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
                     continue;
                 }
 
-                const tlv = attrTlvs[id];
+                const tlv = attrDef[id]?.schema;
                 if (tlv === undefined) {
                     continue;
                 }
@@ -510,7 +503,7 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
                     continue;
                 }
 
-                const tlv = eventTlvs[id];
+                const tlv = eventDef[id]?.schema;
                 if (tlv === undefined) {
                     continue;
                 }
@@ -532,11 +525,11 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
                     continue;
                 }
 
-                const data = commandData[id];
-                if (data === undefined) {
+                const def = cmdDef[id];
+                if (def === undefined) {
                     continue;
                 }
-                const { request: requestTlv, response: responseTlv, responseId } = data;
+                const { requestSchema: requestTlv, responseSchema: responseTlv, responseId } = def;
 
                 const {
                     access: { limits },
