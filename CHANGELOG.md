@@ -10,6 +10,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 -->
 
 ## __WORK IN PROGRESS__
+-   
+- NOTE: This version is compatible with Node.js 20.x, 22.x and 24.x. Node.js 18.x is also supported as long as you do not use:
+    - the BLE packages on device or controller side because the BLE libraries we use (noble/bleno) are only compatible with Node.js 20+.
+    - The matter.js tools for building and running test and applications (matter-*) which are mainly used by the npm scripts which use the "commander" dependency.
 
 -   @matter/*
     - Upgraded to Matter specification version 1.4.1
@@ -41,6 +45,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: FieldModel now contains a dedicated `title` field to capture the full name of features
 
 ## 0.13.0 (2025-04-28)
+
+-   NOTE: This version is compatible with Node.js 20.x, 22.x and 24.x. Node.js 18.x is also supported as long as you do not use the BLE packages on device or controller side because the BLE libraries we use (noble/bleno) are only compatible with Node.js 20+. 
 
 -   IMPORTANT: This release upgrades Matter support from Matter 1.3 to the latest release, Matter 1.4.0. This includes BREAKING CHANGES in a number of areas due to specification changes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js or when Datatypes or elements got renamed.
     - Especially please note that `colorTempPhysicalMinMireds` and `colorTempPhysicalMaxMireds` now need to be set when using ColorControl because the former unrealistic default values were removed from the specification. Please set proper values for your device Hint: realistic color temperature Mireds values are usually roughly between 150 (6500K) and 500 (2000K).
