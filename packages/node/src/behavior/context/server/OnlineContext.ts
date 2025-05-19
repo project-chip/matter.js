@@ -12,9 +12,8 @@ import { Diagnostic, ImplementationError, InternalError, MaybePromise, Transacti
 import { AccessLevel } from "#model";
 import { Node } from "#node/Node.js";
 import type { Message, NodeProtocol, SecureSession } from "#protocol";
-import { AccessControl, assertSecureSession, MessageExchange } from "#protocol";
+import { AccessControl, AclEndpointContext, assertSecureSession, MessageExchange } from "#protocol";
 import { FabricIndex, NodeId, StatusResponseError, SubjectId } from "#types";
-import { AclEndpointContext } from "@matter/protocol";
 import { ActionContext } from "../ActionContext.js";
 import { ActionTracer } from "../ActionTracer.js";
 import { Contextual } from "../Contextual.js";

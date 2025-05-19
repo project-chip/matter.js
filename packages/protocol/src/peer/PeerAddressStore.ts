@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Construction, MaybePromise } from "#general";
 import { DecodedAttributeReportValue } from "#interaction/index.js";
-import { Construction, MaybePromise } from "@matter/general";
-import { AttributeId, ClusterId, EndpointNumber, EventNumber } from "@matter/types";
+import { AttributeId, ClusterId, EndpointNumber, EventNumber } from "#types";
 import { OperationalPeer } from "./OperationalPeer.js";
 import { PeerAddress } from "./PeerAddress.js";
 import type { PeerSet } from "./PeerSet.js";

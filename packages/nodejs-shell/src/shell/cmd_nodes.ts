@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { capitalize, decamelize, Diagnostic } from "@matter/general";
-import { NodeId } from "@matter/types";
+import { capitalize, decamelize, Diagnostic } from "#general";
+import { NodeId } from "#types";
 import { CommissioningControllerNodeOptions, NodeStateInformation } from "@project-chip/matter.js/device";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";

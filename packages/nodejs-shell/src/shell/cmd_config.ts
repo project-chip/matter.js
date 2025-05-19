@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter/general";
+import { Logger } from "#general";
 import { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { setLogLevel } from "../app";

@@ -5,10 +5,20 @@
  */
 
 import { camelize, InternalError } from "#general";
-import { AttributeModel, ClusterModel, FeatureMap, FeatureSet, Matter, Model, Schema, Scope, ValueModel } from "#model";
+import {
+    AttributeModel,
+    ClusterModel,
+    ElementTag,
+    FeatureMap,
+    FeatureSet,
+    Matter,
+    Model,
+    Schema,
+    Scope,
+    ValueModel,
+} from "#model";
 import { AccessControl, Val } from "#protocol";
-import { ElementTag } from "@matter/model";
-import { AttributeId } from "@matter/types";
+import { AttributeId } from "#types";
 import { ValueCaster } from "../state/managed/values/ValueCaster.js";
 import { ValueManager } from "../state/managed/values/ValueManager.js";
 import { ValuePatcher } from "../state/managed/values/ValuePatcher.js";

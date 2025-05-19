@@ -6,8 +6,7 @@
 
 import { Bytes, Crypto, ec, Logger, PbkdfParameters, Spake2p, UnexpectedDataError } from "#general";
 import { SessionManager } from "#session/SessionManager.js";
-import { CommissioningOptions, NodeId } from "#types";
-import { ProtocolStatusCode } from "@matter/types";
+import { CommissioningOptions, NodeId, ProtocolStatusCode } from "#types";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { SessionParameters } from "../Session.js";
 import { DEFAULT_PASSCODE_ID, PaseClientMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";

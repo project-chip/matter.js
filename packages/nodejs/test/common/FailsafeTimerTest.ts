@@ -5,7 +5,7 @@
  */
 
 import { createPromise } from "#general";
-import { FailsafeTimer } from "@matter/protocol";
+import { FailsafeTimer } from "#protocol";
 import * as assert from "node:assert";
 
 // TODO identify more cases that are not handled by chip tool tests

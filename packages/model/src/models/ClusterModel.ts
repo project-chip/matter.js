@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { camelize, describeList } from "#general";
 import { ModelTraversal } from "#logic/ModelTraversal.js";
-import { camelize, describeList } from "@matter/general";
 import { Access } from "../aspects/Access.js";
 import { Quality } from "../aspects/Quality.js";
 import { SchemaImplementationError } from "../common/errors.js";

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FabricIndex, NodeId } from "@matter/types";
+import { FabricIndex, NodeId } from "#types";
 
 /**
  * This is the "logical" address of a peer node consisting of a fabric and node ID.

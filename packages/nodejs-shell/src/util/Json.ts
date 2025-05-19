@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "@matter/general";
-import { ValueModel } from "@matter/model";
-import { ValidationDatatypeMismatchError } from "@matter/types";
+import { Bytes } from "#general";
+import { ValueModel } from "#model";
+import { ValidationDatatypeMismatchError } from "#types";
 import { camelize } from "./String";
 
 export function convertJsonDataWithModel(model: ValueModel, data: any): any {

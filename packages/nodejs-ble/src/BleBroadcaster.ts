@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, Logger } from "@matter/general";
+import { ImplementationError, Logger } from "#general";
 import {
     BtpCodec,
     CommissionerInstanceData,
     CommissioningMode,
     CommissioningModeInstanceData,
     InstanceBroadcaster,
-} from "@matter/protocol";
-import { VendorId } from "@matter/types";
+} from "#protocol";
+import { VendorId } from "#types";
 import { BlenoBleServer } from "./BlenoBleServer.js";
 
 const logger = Logger.get("BleBroadcaster");

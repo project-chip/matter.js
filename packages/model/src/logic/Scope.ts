@@ -7,7 +7,7 @@
 import { ElementTag } from "#common/ElementTag.js";
 import { SchemaImplementationError } from "#common/errors.js";
 import { FeatureSet } from "#common/FeatureSet.js";
-import { ImplementationError } from "@matter/general";
+import { ImplementationError } from "#general";
 import { ModelTraversal } from "./ModelTraversal.js";
 
 // These must be types to avoid circular references

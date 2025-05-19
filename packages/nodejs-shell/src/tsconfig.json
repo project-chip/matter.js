@@ -13,13 +13,25 @@
             "path": "../../matter.js/src"
         },
         {
+            "path": "../../model/src"
+        },
+        {
+            "path": "../../node/src"
+        },
+        {
             "path": "../../nodejs-ble/src"
         },
         {
             "path": "../../nodejs/src"
         },
         {
+            "path": "../../protocol/src"
+        },
+        {
             "path": "../../tools/src"
+        },
+        {
+            "path": "../../types/src"
         }
     ]
 }
