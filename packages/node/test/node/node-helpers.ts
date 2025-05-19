@@ -8,6 +8,7 @@ import { BasicInformationBehavior } from "#behaviors/basic-information";
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { Bytes, Crypto, Key, PrivateKey } from "#general";
 import { CommissioningServer, InteractionServer } from "#index.js";
+import { Specification } from "#model";
 import {
     ChannelManager,
     Fabric,
@@ -31,7 +32,6 @@ import {
     TypeFromSchema,
     VendorId,
 } from "#types";
-import { Specification } from "@matter/model";
 import { MockServerNode } from "./mock-server-node.js";
 
 let activeCommissioning: undefined | ReturnType<typeof CommissioningHelper>;

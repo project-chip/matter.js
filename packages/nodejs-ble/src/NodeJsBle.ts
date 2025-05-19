@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Environment, NetInterface, TransportInterface } from "@matter/general";
-import { Ble, InstanceBroadcaster, Scanner } from "@matter/protocol";
+import { Environment, NetInterface, TransportInterface } from "#general";
+import { Ble, InstanceBroadcaster, Scanner } from "#protocol";
 import { BleBroadcaster } from "./BleBroadcaster.js";
 import { BlePeripheralInterface } from "./BlePeripheralInterface.js";
 import { BleScanner } from "./BleScanner.js";

@@ -5,10 +5,10 @@
  */
 
 import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
+import { camelize } from "#general";
 import type { Schema } from "#model";
+import { ClusterModel, Model, ValueModel } from "#model";
 import { Val } from "#protocol";
-import { camelize } from "@matter/general";
-import { ClusterModel, Model, ValueModel } from "@matter/model";
 import { Internal } from "./Internal.js";
 
 /**

@@ -4,8 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { DataReadQueue, MAX_UDP_MESSAGE_SIZE } from "#general";
-import { ExchangeSendOptions, MATTER_MESSAGE_OVERHEAD, Message, MessageExchange, SecureSession } from "#protocol";
-import { SessionManager } from "@matter/protocol";
+import {
+    ExchangeSendOptions,
+    MATTER_MESSAGE_OVERHEAD,
+    Message,
+    MessageExchange,
+    SecureSession,
+    SessionManager,
+} from "#protocol";
 import { MockServerNode } from "../../node/mock-server-node.js";
 import { interaction } from "../../node/node-helpers.js";
 

@@ -5,10 +5,10 @@
  */
 
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { Environment, Logger, StorageContext, StorageService } from "@matter/general";
-import { ControllerStore } from "@matter/node";
-import { EndpointInterface } from "@matter/protocol";
-import { NodeId } from "@matter/types";
+import { Environment, Logger, StorageContext, StorageService } from "#general";
+import { ControllerStore } from "#node";
+import { EndpointInterface } from "#protocol";
+import { NodeId } from "#types";
 import { CommissioningController } from "@project-chip/matter.js";
 import { CommissioningControllerNodeOptions, PairedNode } from "@project-chip/matter.js/device";
 import { join } from "node:path";

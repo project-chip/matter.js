@@ -18,7 +18,7 @@ import {
     TransportInterface,
     asError,
     createPromise,
-} from "@matter/general";
+} from "#general";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
@@ -33,7 +33,7 @@ import {
     BtpCodec,
     BtpFlowError,
     BtpSessionHandler,
-} from "@matter/protocol";
+} from "#protocol";
 import type { Characteristic, Peripheral } from "@stoprocent/noble";
 import { BleScanner } from "./BleScanner.js";
 

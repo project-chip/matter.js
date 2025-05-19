@@ -16,8 +16,7 @@ import { Endpoint } from "#endpoint/index.js";
 import { RootEndpoint } from "#endpoints/root";
 import { AsyncObservable, Logger, MaybePromise } from "#general";
 import { Val } from "#protocol";
-import { StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
-import { ClusterType } from "@matter/types";
+import { ClusterType, StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
 import { LevelControlBehavior } from "./LevelControlBehavior.js";
 
 const logger = Logger.get("LevelControlServer");

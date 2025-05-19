@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic } from "@matter/general";
+import { Diagnostic } from "#general";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode.js";
 
