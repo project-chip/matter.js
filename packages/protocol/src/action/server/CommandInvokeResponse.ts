@@ -85,8 +85,8 @@ export class CommandInvokeResponse<
         }
 
         if (this.#invokers) {
-            for (const producer of this.#invokers) {
-                for await (const chunk of producer.apply(this)) {
+            for (const invoker of this.#invokers) {
+                for await (const chunk of invoker.apply(this)) {
                     if (!suppressResponse) {
                         yield chunk;
                     }
