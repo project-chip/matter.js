@@ -165,6 +165,13 @@
             background-color: #d0d0d0;
             transform: scale(0.98);
         }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
     </style>
 </head>
 
@@ -178,6 +185,14 @@
             <div class="input-section">
                 <h2>Pair Device</h2>
                 <input type="text" id="pairingCode" placeholder="Enter pairing code">
+            </div>
+            <div class="input-section">
+                <h2>Console</h2>
+                <div class="button-container">
+                    <input type="button" id="toggleconsole" value="Toggle"
+                        onclick="document.getElementById('console').style.display = document.getElementById('console').style.display === 'none' ? 'block' : 'none';">
+                    <input type="button" id="clearconsole" value="Clear" onclick="initConsole(true);">
+                </div>
             </div>
         </div>
         <div>
@@ -215,11 +230,11 @@
         const VOLTAGE = 144; // etc.
 
         const valueFormat = {
-            [VOLTAGE]: (value, units = 'v') => { return (value / 1000).toFixed(1) + units },
-            [ILLUMINANCE]: (value, units = 'lux') => { return (value / 100).toFixed(1) + units },
-            [TEMPERATURE]: (value, units = 'F') => { return (units === "F" ? (value / 100 * 9 / 5 + 32) : (value / 100)).toFixed(1) + '°' + units },
-            [PRESSURE]: (value, units = 'mb') => { return (value / 10000).toFixed(1) + units },
-            [HUMIDITY]: (value, units = '%') => { return (value / 100).toFixed(1) + units },
+            [VOLTAGE]: (value, units = 'v') => { return (value / 1000).toFixed(1) + units; },
+            [ILLUMINANCE]: (value, units = 'lux') => { return (value / 100).toFixed(1) + units; },
+            [TEMPERATURE]: (value, units = 'F') => { return (units === "F" ? (value / 100 * 9 / 5 + 32) : (value / 100)).toFixed(1) + '°' + units; },
+            [PRESSURE]: (value, units = 'mb') => { return (value / 10000).toFixed(1) + units; },
+            [HUMIDITY]: (value, units = '%') => { return (value / 100).toFixed(1) + units; },
         }
         function initConsole(clear) {
             if (clear) consoleDiv.innerHTML = ''; // Clear the console
@@ -293,17 +308,20 @@
                                 element.textContent = matches[1];
                                 const cmd = `commands onoff ${matches[1]} ${currentNode} ${currentEndpoint}`;
                                 element.onclick = () => sendCommand(cmd);
-                                if (matches[1] === "on" ) sendCommand(`attributes onoff read onoff ${currentNode} ${currentEndpoint}`); // get initial state
-                            } else {
-                                element = document.createElement('span');
-                                element.innerHTML = `<small></small>`; // could read to get initial value. would need cluster name
-                            }
+                                if (matches[1] === "on") sendCommand(`attributes onoff read onoff ${currentNode} ${currentEndpoint}`); // get initial state
+                            } else element = document.createElement('span');
+
                             element.id = `attr-${currentNode}/${currentEndpoint}/${matches[1]}`;
                             if (!document.getElementById(`${currentEndpoint}-container-${currentNode}`)) {
-                                endpointContainer = document.createElement('div');
+                                let endpointContainer = document.createElement('div');
                                 endpointContainer.id = `${currentEndpoint}-container-${currentNode}`;
                                 endpointContainer.className = 'node-container';
-                                endpointContainer.innerHTML = `<small>${currentEndpointType.replace('MA-', '')}<small><br>`;
+                                const small = document.createElement('small');
+                                small.textContent = currentEndpointType.replace('MA-', '');
+                                const br = document.createElement('br');
+                                endpointContainer.innerHTML = '';
+                                endpointContainer.appendChild(small);
+                                endpointContainer.appendChild(br);
                                 document.getElementById(`container-${currentNode}`).appendChild(endpointContainer);
                             }
                             document.getElementById(`container-${currentNode}`)?.appendChild(element);
@@ -327,16 +345,23 @@
                     matches = message.match(/(\d+): Attribute (\w+|\d+)\/(\d+)\/(\d+)\/(\w+) changed to (.+)/); // attribute changed
                     if (matches) {
                         if (matches[4] == ON_OFF) styleContainer(matches[1], matches[3], matches[6]);
-                        else if (matches[4] == ILLUMINANCE || matches[4] == TEMPERATURE || matches[4] == PRESSURE || matches[4] == HUMIDITY || matches[4] == VOLTAGE) {
-                            const value = valueFormat[matches[4]] ? valueFormat[matches[4]](matches[6]) : matches[6];
-                            document.getElementById(`attr-${matches[1]}/${matches[3]}/${matches[5]}`).innerHTML = `<small>${value}</small>`;
+                        else if ([ILLUMINANCE, TEMPERATURE, PRESSURE, HUMIDITY, VOLTAGE].includes(Number(matches[4]))) {
+                            const formatter = valueFormat[matches[4]];
+                            const value = typeof formatter === 'function' ? formatter(matches[6]) : matches[6];
+                            const element = document.getElementById(`attr-${matches[1]}/${matches[3]}/${matches[5]}`);
+                            if (element) {
+                                const small = document.createElement("small");
+                                small.textContent = value;
+                                element.innerHTML = "";
+                                element.appendChild(small);
+                            }
                         }
                     }
 
-                     matches = message.match(/Attribute value for (\w+) (\d+)\/(\d+)\/(\d+)\/(\w+): (.+)/); // from "read attribute"
-                    if (matches ) 
-                       if ( matches[1] === "onOff" ) styleContainer(matches[2], matches[3], matches[6])
-                       else console.log( `read of ${matches[1]} = ${matches[6]}` ) 
+                    matches = message.match(/Attribute value for (\w+) (\d+)\/(\d+)\/(\d+)\/(\w+): (.+)/); // from "read attribute"
+                    if (matches)
+                        if (matches[1] === "onOff") styleContainer(matches[2], matches[3], matches[6]);
+                    // else if (matches[1] === etc. process as needed
                 }
             }
         }
@@ -366,8 +391,15 @@
                 container.appendChild(tile);
                 tiles.appendChild(container);
             }
-            tile.innerHTML = "<small>Node " + nodeId + "<br><span class=" +
-                ((status === "connected") ? "connected-node-status>" : "connecting-node-status>") + status + "</span></small>";
+            const small = document.createElement("small");
+            small.appendChild(document.createTextNode("Node " + nodeId));
+            small.appendChild(document.createElement("br"));
+            const span = document.createElement("span");
+            span.className = status === "connected" ? "connected-node-status" : "connecting-node-status";
+            span.textContent = status;
+            small.appendChild(span);
+            tile.innerHTML = "";
+            tile.appendChild(small);
         }
         matterCommand.onkeypress = (e) => {
             if (e.key === 'Enter') {
