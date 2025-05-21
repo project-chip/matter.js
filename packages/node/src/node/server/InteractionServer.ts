@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ActionContext } from "#behavior/context/ActionContext.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
+import { OnlineContext } from "#behavior/index.js";
 import { AccessControlServer } from "#behaviors/access-control";
 import { AccessControl as AccessControlClusterType } from "#clusters/access-control";
 import {
@@ -223,20 +223,18 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         this.#clientHandler = clientHandler;
     }
 
-    #createOnlineContext(
+    #prepareOnlineContext(
         exchange: MessageExchange,
         message: Message,
         fabricFiltered?: boolean,
         timed = false,
-        actionType = ActionTracer.ActionType.Read,
-    ) {
+    ): OnlineContext.Options {
         return {
             activity: (exchange as WithActivity)[activityKey],
             fabricFiltered,
             timed,
             message,
             exchange,
-            actionType,
             node: this.#node,
         };
     }
@@ -245,7 +243,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
      * Returns an iterator that yields the data reports and events data for the given read request.
      */
     async *#executeReadInteraction(readRequest: ReadRequest, exchange: MessageExchange, message: Message) {
-        const readContext = this.#createOnlineContext(exchange, message, readRequest.isFabricFiltered);
+        const readContext = this.#prepareOnlineContext(exchange, message, readRequest.isFabricFiltered);
 
         for await (const chunk of this.#serverInteraction.read(readRequest, readContext)) {
             for (const report of chunk) {
@@ -398,12 +396,11 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
             result = await this.#serverInteraction.write(
                 writeRequest,
-                this.#createOnlineContext(
+                this.#prepareOnlineContext(
                     exchange,
                     message,
                     true, // always fabric filtered
                     receivedWithinTimedInteraction,
-                    ActionTracer.ActionType.Write,
                 ),
             );
         } catch (error) {
@@ -640,7 +637,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             subscriptionOptions: this.#subscriptionConfig,
         });
 
-        const readContext = this.#createOnlineContext(exchange, message, isFabricFiltered);
+        const readContext = this.#prepareOnlineContext(exchange, message, isFabricFiltered);
         try {
             // Send the initial data report to prime the subscription with initial data
             await subscription.sendInitialReport(messenger, readContext);
@@ -698,7 +695,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             useAsSendInterval: sendInterval,
         });
 
-        const readContext = this.#createOnlineContext(exchange, message, isFabricFiltered);
+        const readContext = this.#prepareOnlineContext(exchange, message, isFabricFiltered);
         try {
             // Send initial data report to prime the subscription with initial data
             await subscription.sendInitialReport(
@@ -844,43 +841,36 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             }
         };
 
-        await this.#serverInteraction.invoke(
+        for await (const chunk of this.#serverInteraction.invoke(
             request,
-            this.#createOnlineContext(
-                exchange,
-                message,
-                undefined,
-                receivedWithinTimedInteraction,
-                ActionTracer.ActionType.Invoke,
-            ),
-            async chunk => {
-                if (suppressResponse) {
-                    throw new InternalError("Received response that should be suppressed for invoke");
-                }
-                for (const data of chunk) {
-                    switch (data.kind) {
-                        case "cmd-response": {
-                            const { path: commandPath, commandRef, data: commandFields } = data;
-                            await processResponseResult({
-                                command: {
-                                    commandPath,
-                                    commandFields,
-                                    commandRef,
-                                },
-                            });
-                            break;
-                        }
+            this.#prepareOnlineContext(exchange, message, undefined, receivedWithinTimedInteraction),
+        )) {
+            if (suppressResponse) {
+                throw new InternalError("Received response that should be suppressed for invoke");
+            }
+            for (const data of chunk) {
+                switch (data.kind) {
+                    case "cmd-response": {
+                        const { path: commandPath, commandRef, data: commandFields } = data;
+                        await processResponseResult({
+                            command: {
+                                commandPath,
+                                commandFields,
+                                commandRef,
+                            },
+                        });
+                        break;
+                    }
 
-                        case "cmd-status": {
-                            const { path, commandRef, status, clusterStatus } = data;
-                            await processResponseResult({
-                                status: { commandPath: path, status: { status, clusterStatus }, commandRef },
-                            });
-                        }
+                    case "cmd-status": {
+                        const { path, commandRef, status, clusterStatus } = data;
+                        await processResponseResult({
+                            status: { commandPath: path, status: { status, clusterStatus }, commandRef },
+                        });
                     }
                 }
-            },
-        );
+            }
+        }
     }
 
     handleTimedRequest(exchange: MessageExchange, { timeout, interactionModelRevision }: TimedRequest) {

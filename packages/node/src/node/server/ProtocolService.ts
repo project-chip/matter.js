@@ -592,12 +592,6 @@ function invokeCommand(
     const { path, endpoint } = backing;
     const context = session as ActionContext;
 
-    const trace = context.trace;
-    if (trace) {
-        trace.path = path;
-        trace.input = request;
-    }
-
     logger.info("Invoke", Diagnostic.strong(path.toString()), session.transaction.via, requestDiagnostic);
 
     const agent = context.agentFor(endpoint);
@@ -639,9 +633,6 @@ function invokeCommand(
             isAsync = true;
             result = Promise.resolve(result)
                 .then(result => {
-                    if (trace) {
-                        trace.output = result;
-                    }
                     if (isObject(result)) {
                         logger.debug(
                             "Invoke result",
@@ -661,9 +652,6 @@ function invokeCommand(
                     session.transaction.via,
                     Diagnostic.dict(result),
                 );
-            }
-            if (trace) {
-                trace.output = result;
             }
         }
     } finally {
