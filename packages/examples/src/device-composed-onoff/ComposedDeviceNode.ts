@@ -12,12 +12,13 @@
  * It can be used as CLI script and starting point for your own device node implementation.
  */
 
-import { Endpoint, EndpointServer, Environment, ServerNode, StorageService, Time } from "@matter/main";
+import { Endpoint, Environment, Logger, ServerNode, StorageService, Time } from "@matter/main";
 import { OnOffLightDevice } from "@matter/main/devices/on-off-light";
 import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
-import { logEndpoint } from "@matter/main/protocol";
 import { DeviceTypeId, VendorId } from "@matter/main/types";
 import { execSync } from "node:child_process";
+
+const logger = Logger.get("ComposedDeviceNode");
 
 /** Initialize configuration values */
 const { isSocket, deviceName, vendorName, passcode, discriminator, vendorId, productName, productId, port, uniqueId } =
@@ -103,7 +104,7 @@ for (let idx = 0; idx < isSocket.length; idx++) {
 /**
  * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
  */
-logEndpoint(EndpointServer.forEndpoint(server));
+logger.info(server);
 
 /**
  * In order to start the node and announce it into the network we use the run method which resolves when the node goes

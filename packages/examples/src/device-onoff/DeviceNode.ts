@@ -11,18 +11,8 @@
  * This example is CJS conform and do not use top level await's.
  */
 
-import {
-    DeviceTypeId,
-    Endpoint,
-    EndpointServer,
-    Environment,
-    ServerNode,
-    StorageService,
-    Time,
-    VendorId,
-} from "@matter/main";
+import { DeviceTypeId, Endpoint, Environment, Logger, ServerNode, StorageService, Time, VendorId } from "@matter/main";
 import { OnOffLightDevice, OnOffPlugInUnitDevice } from "@matter/main/devices";
-import { logEndpoint } from "@matter/main/protocol";
 import { execSync } from "node:child_process";
 
 async function main() {
@@ -112,14 +102,16 @@ async function main() {
     /**
      * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
      */
-    logEndpoint(EndpointServer.forEndpoint(server));
+    //logEndpoint(EndpointServer.forEndpoint(server));
+    const logger = Logger.get("DeviceNode");
+    logger.info(server);
 
     /**
      * In order to start the node and announce it into the network we use the run method which resolves when the node goes
      * offline again because we do not need anything more here. See the Full example for other starting options.
      * The QR Code is printed automatically.
      */
-    await server.run();
+    await server.start();
 }
 
 main().catch(error => console.error(error));

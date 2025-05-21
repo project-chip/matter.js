@@ -5,4 +5,3 @@
  */
 
 export * from "./EndpointInterface.js";
-export * from "./EndpointStructureLogger.js";
