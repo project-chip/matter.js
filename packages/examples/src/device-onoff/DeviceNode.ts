@@ -15,6 +15,8 @@ import { DeviceTypeId, Endpoint, Environment, Logger, ServerNode, StorageService
 import { OnOffLightDevice, OnOffPlugInUnitDevice } from "@matter/main/devices";
 import { execSync } from "node:child_process";
 
+const logger = Logger.get("DeviceNode");
+
 async function main() {
     /** Initialize configuration values */
     const {
@@ -102,8 +104,6 @@ async function main() {
     /**
      * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
      */
-    //logEndpoint(EndpointServer.forEndpoint(server));
-    const logger = Logger.get("DeviceNode");
     logger.info(server);
 
     /**
@@ -111,7 +111,7 @@ async function main() {
      * offline again because we do not need anything more here. See the Full example for other starting options.
      * The QR Code is printed automatically.
      */
-    await server.start();
+    await server.run();
 }
 
 main().catch(error => console.error(error));
