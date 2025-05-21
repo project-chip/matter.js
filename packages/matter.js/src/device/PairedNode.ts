@@ -1386,4 +1386,30 @@ export class PairedNode {
     ): ClusterClientObj<T> | undefined {
         return this.getDeviceById(endpointId)?.getClusterClient(cluster);
     }
+
+    get [Diagnostic.value](): unknown {
+        const root = this.getRootEndpoint();
+
+        let statusIcon = "✗";
+        switch (this.#connectionState) {
+            case NodeStates.Reconnecting:
+                statusIcon = "⌛";
+                break;
+            case NodeStates.WaitingForDeviceDiscovery:
+                statusIcon = "💤";
+                break;
+            case NodeStates.Connected:
+                statusIcon = "✓";
+                break;
+        }
+
+        return Diagnostic.node(statusIcon, this.nodeId, {
+            children: [
+                Diagnostic.strong("Information"),
+                Diagnostic.list([Diagnostic.dict(this.deviceInformation as object)]),
+                Diagnostic.strong("Structure"),
+                root ? Diagnostic.list([root]) : "Unknown",
+            ],
+        });
+    }
 }
