@@ -398,6 +398,30 @@ export class InteractionClient {
         return response?.value;
     }
 
+    getStoredAttribute<A extends Attribute<any, any>>(options: {
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        attribute: A;
+    }): AttributeJsType<A> | undefined {
+        return this.getStoredAttributeWithVersion(options)?.value;
+    }
+
+    getStoredAttributeWithVersion<A extends Attribute<any, any>>(options: {
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        attribute: A;
+    }): { value: AttributeJsType<A>; version: number } | undefined {
+        const { endpointId, clusterId, attribute } = options;
+        const { id: attributeId } = attribute;
+        if (this.#nodeStore !== undefined) {
+            const { value, version } = this.#nodeStore.retrieveAttribute(endpointId, clusterId, attributeId) ?? {};
+            if (value !== undefined && version !== undefined) {
+                return { value, version } as { value: AttributeJsType<A>; version: number };
+            }
+        }
+        return undefined;
+    }
+
     async getAttributeWithVersion<A extends Attribute<any, any>>(options: {
         endpointId: EndpointNumber;
         clusterId: ClusterId;
