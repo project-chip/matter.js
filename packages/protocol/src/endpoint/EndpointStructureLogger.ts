@@ -234,7 +234,18 @@ export function logEndpoint(
         logNotSupportedClusterCommands: false,
     },
 ) {
-    if (options.endpointFilter !== undefined && !options.endpointFilter(endpoint)) return;
+    if (options.endpointFilter !== undefined && !options.endpointFilter(endpoint)) {
+        // TODO Remove when we remove EndpointServer and BehaviorServer
+        // Very temporary hack to free up all memory used by logEndpoint calls with the deprecated logic before we remove that
+        // @ts-expect-error We try to detect EndpointServer instances that are just build temporarily
+        if (typeof endpoint[Symbol.asyncDispose] === "function") {
+            // @ts-expect-error We try to detect EndpointServer instances that are just build temporarily
+            endpoint[Symbol.asyncDispose]().catch(error =>
+                logger.error("Error while disposing temporary EndpointServer", error),
+            );
+        }
+        return;
+    }
 
     logger.info(`Endpoint ${endpoint.number} (${endpoint.name}):`);
     if (options.logClusterServers !== false) {
@@ -266,5 +277,15 @@ export function logEndpoint(
                 }
             });
         });
+    }
+
+    // TODO Remove when we remove EndpointServer and BehaviorServer
+    // Very temporary hack to free up all memory used by logEndpoint calls with the deprecated logic before we remove that
+    // @ts-expect-error We try to detect EndpointServer instances that are just build temporarily
+    if (typeof endpoint[Symbol.asyncDispose] === "function") {
+        // @ts-expect-error We try to detect EndpointServer instances that are just build temporarily
+        endpoint[Symbol.asyncDispose]().catch(error =>
+            logger.error("Error while disposing temporary EndpointServer", error),
+        );
     }
 }
