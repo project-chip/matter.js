@@ -13,10 +13,16 @@ import { ColorControl } from "#clusters/color-control";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { RootEndpoint } from "#endpoints/root";
-import { addValueWithOverflow, cropValueRange, ImplementationError, Logger, MaybePromise } from "#general";
+import {
+    addValueWithOverflow,
+    AsyncObservable,
+    cropValueRange,
+    ImplementationError,
+    Logger,
+    MaybePromise,
+} from "#general";
+import { Val } from "#protocol";
 import { ClusterType, StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
-import { AsyncObservable } from "@matter/general";
-import { Val } from "@matter/protocol";
 import { ColorControlBehavior } from "./ColorControlBehavior.js";
 import {
     hsvToMireds,

@@ -5,7 +5,7 @@
  */
 
 import { SmokeCoAlarm } from "#clusters/smoke-co-alarm";
-import { ClusterType } from "@matter/types";
+import { ClusterType } from "#types";
 import { SmokeCoAlarmBehavior } from "./SmokeCoAlarmBehavior.js";
 
 const SmokeCoAlarmBase = SmokeCoAlarmBehavior.with(SmokeCoAlarm.Feature.SmokeAlarm, SmokeCoAlarm.Feature.CoAlarm);

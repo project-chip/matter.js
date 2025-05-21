@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic } from "@matter/general";
-import { ClusterModel, EventModel, MatterModel } from "@matter/model";
-import { ClusterId } from "@matter/types";
+import { Diagnostic } from "#general";
+import { ClusterModel, EventModel, MatterModel } from "#model";
+import { ClusterId } from "#types";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { camelize } from "../util/String";

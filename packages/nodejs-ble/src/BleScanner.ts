@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, ChannelType, createPromise, Diagnostic, Logger, Time, Timer } from "@matter/general";
-import { BleError, BtpCodec, CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "@matter/protocol";
-import { VendorId } from "@matter/types";
+import { Bytes, ChannelType, createPromise, Diagnostic, Logger, Time, Timer } from "#general";
+import { BleError, BtpCodec, CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "#protocol";
+import { VendorId } from "#types";
 import type { Peripheral } from "@stoprocent/noble";
 import { NobleBleClient } from "./NobleBleClient.js";
 

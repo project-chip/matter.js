@@ -33,7 +33,7 @@ import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { CaseClient, SecureSession, Session } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
-import { SECURE_CHANNEL_PROTOCOL_ID } from "@matter/types";
+import { SECURE_CHANNEL_PROTOCOL_ID } from "#types";
 import { ChannelManager } from "../protocol/ChannelManager.js";
 import { ChannelNotConnectedError, ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
 import { DedicatedChannelExchangeProvider, ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";

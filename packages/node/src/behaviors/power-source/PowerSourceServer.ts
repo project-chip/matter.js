@@ -5,8 +5,8 @@
  */
 
 import { DescriptorServer } from "#behaviors/descriptor";
-import { ClusterType } from "@matter/types";
-import { PowerSource } from "@matter/types/clusters/power-source";
+import { PowerSource } from "#clusters/power-source";
+import { ClusterType } from "#types";
 import { PowerSourceBehavior } from "./PowerSourceBehavior.js";
 
 const PowerSourceLevelBase = PowerSourceBehavior.with(PowerSource.Feature.Battery, PowerSource.Feature.Rechargeable);

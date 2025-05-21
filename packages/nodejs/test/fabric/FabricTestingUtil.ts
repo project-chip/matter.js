@@ -5,8 +5,8 @@
  */
 
 import { Bytes, Crypto, Key, PrivateKey } from "#general";
-import { FabricBuilder } from "@matter/protocol";
-import { FabricIndex, NodeId, VendorId } from "@matter/types";
+import { FabricBuilder } from "#protocol";
+import { FabricIndex, NodeId, VendorId } from "#types";
 
 // These are temporary until we get proper crypto.subtle support
 Crypto.get().createKeyPair = () => {

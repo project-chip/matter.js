@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic } from "@matter/general";
-import { AttributeModel, ClusterModel, MatterModel } from "@matter/model";
-import { SupportedAttributeClient } from "@matter/protocol";
-import { AttributeId, ClusterId, EndpointNumber, ValidationError } from "@matter/types";
+import { Diagnostic } from "#general";
+import { AttributeModel, ClusterModel, MatterModel } from "#model";
+import { SupportedAttributeClient } from "#protocol";
+import { AttributeId, ClusterId, EndpointNumber, ValidationError } from "#types";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { convertJsonDataWithModel } from "../util/Json";

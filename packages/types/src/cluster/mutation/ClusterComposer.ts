@@ -5,7 +5,7 @@
  */
 
 import { camelize, MatterError, serialize } from "#general";
-import { FeatureSet } from "@matter/model";
+import { FeatureSet } from "#model";
 import { BitFlags } from "../../schema/BitmapSchema.js";
 import { ClusterType } from "../ClusterType.js";
 

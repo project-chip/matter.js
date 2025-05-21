@@ -38,7 +38,7 @@ import {
     SecureChannelProtocol,
     SessionManager,
 } from "#protocol";
-import { CommissioningOptions } from "@matter/types";
+import { CommissioningOptions } from "#types";
 import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { ProductDescriptionServer } from "../product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";

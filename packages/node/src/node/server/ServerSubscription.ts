@@ -11,11 +11,15 @@ import { Specification } from "#model";
 import { ServerNode } from "#node/index.js";
 import type { AttributeResponseFilter, Message, MessageExchange } from "#protocol";
 import {
+    AttributeReadResponse,
     AttributeSubscriptionResponse,
+    EventReadResponse,
     InteractionServerMessenger,
     NoChannelError,
     NumberedOccurrence,
     PeerAddress,
+    Read,
+    ReadResult,
     SecureSession,
     Subscription,
     SubscriptionCriteria,
@@ -29,7 +33,6 @@ import {
     StatusCode,
     StatusResponseError,
 } from "#types";
-import { AttributeReadResponse, EventReadResponse, Read, ReadResult } from "@matter/protocol";
 import { WithActivity, activityKey } from "./InteractionServer.js";
 
 const logger = Logger.get("ServerSubscription");

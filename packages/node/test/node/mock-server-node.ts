@@ -23,10 +23,8 @@ import {
 } from "#general";
 import { Node } from "#node/Node.js";
 import { ServerNode } from "#node/ServerNode.js";
-import { ExchangeManager, MessageExchange, SessionManager } from "#protocol";
-import { FabricIndex, NodeId } from "#types";
-import { FabricBuilder, FabricManager } from "@matter/protocol";
-import { VendorId } from "@matter/types";
+import { ExchangeManager, FabricBuilder, FabricManager, MessageExchange, SessionManager } from "#protocol";
+import { FabricIndex, NodeId, VendorId } from "#types";
 import { MockExchange } from "./mock-exchange.js";
 
 // These are temporary until we get proper crypto.subtle support

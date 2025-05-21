@@ -5,7 +5,7 @@
  */
 
 import { OnOffServer } from "#behaviors/on-off";
-import { MaybePromise } from "@matter/general";
+import { MaybePromise } from "#general";
 
 describe("OnOffServer", () => {
     it("accepts extensions of off-only commands", () => {

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataReadQueue } from "@matter/general";
-import { Specification } from "@matter/model";
-import { Message, MessageExchange, MessageExchangeContext, MessageType, PeerAddress, Session } from "@matter/protocol";
-import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, StatusCode, TlvStatusResponse } from "@matter/types";
+import { DataReadQueue } from "#general";
+import { Specification } from "#model";
+import { Message, MessageExchange, MessageExchangeContext, MessageType, PeerAddress, Session } from "#protocol";
+import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, StatusCode, TlvStatusResponse } from "#types";
 
 /**
  * A mock message exchange.
