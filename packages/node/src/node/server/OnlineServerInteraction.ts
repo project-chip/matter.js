@@ -41,9 +41,13 @@ export class OnlineServerInteraction implements Interactable<OnlineContext.Optio
 
     async *invoke(request: Invoke, context: OnlineContext.Options) {
         const session = OnlineContext({ ...context, command: true }).open();
-        for await (const chunk of this.#interaction.invoke(request, session)) {
-            yield chunk;
+        try {
+            for await (const chunk of this.#interaction.invoke(request, session)) {
+                yield chunk;
+            }
+            return session.resolve(undefined);
+        } catch (error) {
+            session.reject(error);
         }
-        return session.resolve(undefined);
     }
 }
