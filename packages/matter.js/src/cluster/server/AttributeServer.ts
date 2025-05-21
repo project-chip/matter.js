@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Endpoint } from "#device/Endpoint.js";
 import {
     Diagnostic,
     ImplementationError,
@@ -15,6 +16,7 @@ import {
     isDeepEqual,
 } from "#general";
 import { AccessLevel, AttributeModel, ClusterModel, DatatypeModel, FabricIndex, MatterModel } from "#model";
+import { Fabric, Message, NoAssociatedFabricError, SecureSession, Session, assertSecureSession } from "#protocol";
 import {
     Attribute,
     AttributeId,
@@ -29,11 +31,6 @@ import {
     TypeFromPartialBitSchema,
     ValidationError,
 } from "#types";
-import { Message } from "../../codec/MessageCodec.js";
-import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { Fabric } from "../../fabric/Fabric.js";
-import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
-import { Session } from "../../session/Session.js";
 import { ClusterDatasource } from "./ClusterDatasource.js";
 
 const logger = Logger.get("AttributeServer");
@@ -70,9 +67,9 @@ export function createAttributeServer<
     attributeName: string,
     initValue: T,
     datasource: ClusterDatasource,
-    getter?: (session?: Session, endpoint?: EndpointInterface, isFabricFiltered?: boolean, message?: Message) => T,
-    setter?: (value: T, session?: Session, endpoint?: EndpointInterface, message?: Message) => boolean,
-    validator?: (value: T, session?: Session, endpoint?: EndpointInterface) => void,
+    getter?: (session?: Session, endpoint?: Endpoint, isFabricFiltered?: boolean, message?: Message) => T,
+    setter?: (value: T, session?: Session, endpoint?: Endpoint, message?: Message) => boolean,
+    validator?: (value: T, session?: Session, endpoint?: Endpoint) => void,
 ) {
     const {
         id,
@@ -150,7 +147,7 @@ export abstract class BaseAttributeServer<T> {
      * The value is undefined when getter/setter are used. But we still handle the version number here.
      */
     protected value: T | undefined = undefined;
-    protected endpoint?: EndpointInterface;
+    protected endpoint?: Endpoint;
     readonly defaultValue: T;
     #readAcl: AccessLevel | undefined;
     #writeAcl: AccessLevel | undefined;
@@ -203,7 +200,7 @@ export abstract class BaseAttributeServer<T> {
         }
     }
 
-    assignToEndpoint(endpoint: EndpointInterface) {
+    assignToEndpoint(endpoint: Endpoint) {
         this.endpoint = endpoint;
     }
 
@@ -230,7 +227,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
     readonly isFixed: boolean = true;
     protected readonly getter: (
         session?: Session,
-        endpoint?: EndpointInterface,
+        endpoint?: Endpoint,
         isFabricFiltered?: boolean,
         message?: Message,
     ) => T;
@@ -256,7 +253,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
          * @param isFabricFiltered whether the read request is fabric scoped or not
          * @param message the wire message that initiated the request (if any)
          */
-        getter?: (session?: Session, endpoint?: EndpointInterface, isFabricFiltered?: boolean, message?: Message) => T,
+        getter?: (session?: Session, endpoint?: Endpoint, isFabricFiltered?: boolean, message?: Message) => T,
     ) {
         super(
             id,
@@ -375,13 +372,8 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     override readonly isFixed = false;
     protected readonly valueChangeListeners = new Array<(value: T, version: number) => void>();
     protected readonly valueSetListeners = new Array<(newValue: T, oldValue: T) => void>();
-    protected readonly setter: (
-        value: T,
-        session?: Session,
-        endpoint?: EndpointInterface,
-        message?: Message,
-    ) => boolean;
-    protected readonly validator: (value: T, session?: Session, endpoint?: EndpointInterface) => void;
+    protected readonly setter: (value: T, session?: Session, endpoint?: Endpoint, message?: Message) => boolean;
+    protected readonly validator: (value: T, session?: Session, endpoint?: Endpoint) => void;
     protected delayedChangeData?: DelayedChangeData = undefined;
 
     constructor(
@@ -396,7 +388,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         initValue: T,
         defaultValue: T | undefined,
         datasource: ClusterDatasource,
-        getter?: (session?: Session, endpoint?: EndpointInterface, isFabricFiltered?: boolean, message?: Message) => T,
+        getter?: (session?: Session, endpoint?: Endpoint, isFabricFiltered?: boolean, message?: Message) => T,
 
         /**
          * Optional setter function to handle special requirements or the data are stored in different places. If a
@@ -408,7 +400,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
          * @param endpoint the endpoint the cluster server of this attribute is assigned to.
          * @returns true if the value has changed, false otherwise.
          */
-        setter?: (value: T, session?: Session, endpoint?: EndpointInterface, message?: Message) => boolean,
+        setter?: (value: T, session?: Session, endpoint?: Endpoint, message?: Message) => boolean,
 
         /**
          * Optional Validator function to handle special requirements for verification of stored data. The method should
@@ -421,7 +413,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
          * @param session the session that is requesting the value (if any).
          * @param endpoint the endpoint the cluster server of this attribute is assigned to.
          */
-        validator?: (value: T, session?: Session, endpoint?: EndpointInterface) => void,
+        validator?: (value: T, session?: Session, endpoint?: Endpoint) => void,
     ) {
         if (
             isWritable &&
@@ -746,9 +738,9 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         defaultValue: T | undefined,
         readonly cluster: Cluster<any, any, any, any, any>,
         datasource: ClusterDatasource,
-        getter?: (session?: Session, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
-        setter?: (value: T, session?: Session, endpoint?: EndpointInterface, message?: Message) => boolean,
-        validator?: (value: T, session?: Session, endpoint?: EndpointInterface) => void,
+        getter?: (session?: Session, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
+        setter?: (value: T, session?: Session, endpoint?: Endpoint, message?: Message) => boolean,
+        validator?: (value: T, session?: Session, endpoint?: Endpoint) => void,
     ) {
         if (
             isWritable &&

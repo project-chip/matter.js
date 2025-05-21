@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Endpoint } from "#device/Endpoint.js";
 import { Diagnostic, Logger } from "#general";
 import { AccessLevel, FabricIndex } from "#model";
+import { Message, SecureSession, Session } from "#protocol";
 import { CommandId, StatusCode, TlvSchema, TlvStream } from "#types";
-import { Message } from "../../codec/MessageCodec.js";
-import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { SecureSession } from "../../session/SecureSession.js";
-import { Session } from "../../session/Session.js";
 
 const logger = Logger.get("CommandServer");
 
@@ -29,7 +27,7 @@ export class CommandServer<RequestT = any, ResponseT = any> {
             request: RequestT,
             session: Session,
             message: Message,
-            endpoint: EndpointInterface,
+            endpoint: Endpoint,
         ) => Promise<ResponseT> | ResponseT,
     ) {
         this.#invokeAcl = invokeAcl;
@@ -39,7 +37,7 @@ export class CommandServer<RequestT = any, ResponseT = any> {
         session: Session,
         args: TlvStream,
         message: Message,
-        endpoint: EndpointInterface,
+        endpoint: Endpoint,
     ): Promise<{
         /** Primary StatusCode of the invoke request  as defined by Interaction proptocol. */
         code: StatusCode;

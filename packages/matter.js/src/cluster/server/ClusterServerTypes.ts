@@ -5,17 +5,7 @@
  */
 
 import { Merge } from "#general";
-import {
-    AnyEventServer,
-    AttributeServer,
-    ClusterClientObj,
-    CommandServer,
-    Fabric,
-    FabricScopedAttributeServer,
-    FixedAttributeServer,
-    Message,
-    Session,
-} from "#protocol";
+import { ClusterClientObj, Fabric, Message, Session } from "#protocol";
 import {
     Attribute,
     AttributeId,
@@ -48,7 +38,10 @@ import {
     WritableFabricScopedAttribute,
 } from "#types";
 import { Endpoint } from "../../device/Endpoint.js";
+import { AttributeServer, FabricScopedAttributeServer, FixedAttributeServer } from "./AttributeServer.js";
 import { type ClusterServer } from "./ClusterServer.js";
+import { CommandServer } from "./CommandServer.js";
+import { AnyEventServer } from "./EventServer.js";
 
 /** Cluster attributes accessible on the cluster server */
 type MandatoryAttributeServers<A extends Attributes> = Omit<

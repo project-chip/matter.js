@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { OccurrenceManager } from "#events/OccurrenceManager.js";
-import { Fabric } from "#fabric/Fabric.js";
 import { SupportedStorageTypes } from "#general";
+import { Fabric, OccurrenceManager } from "#protocol";
 
 export interface ClusterDatasource {
     readonly version: number;

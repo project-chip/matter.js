@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NumberedOccurrence, Occurrence } from "#events/Occurrence.js";
-import { OccurrenceManager } from "#events/OccurrenceManager.js";
+import { Endpoint } from "#device/Endpoint.js";
 import {
     ImplementationError,
     InternalError,
@@ -17,6 +16,7 @@ import {
     Time,
 } from "#general";
 import { AccessLevel, ClusterModel, EventModel, MatterModel } from "#model";
+import { Message, NumberedOccurrence, Occurrence, OccurrenceManager, SecureSession, Session } from "#protocol";
 import {
     Attributes,
     BitSchema,
@@ -33,10 +33,6 @@ import {
     TypeFromPartialBitSchema,
     TypeFromSchema,
 } from "#types";
-import { Message } from "../../codec/MessageCodec.js";
-import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { SecureSession } from "../../session/SecureSession.js";
-import { Session } from "../../session/Session.js";
 
 export type AnyEventServer<T = any, S extends Storage = any> = EventServer<T, S> | FabricSensitiveEventServer<T, S>;
 
@@ -73,7 +69,7 @@ export function createEventServer<
 export class EventServer<T = any, S extends Storage = any> {
     private eventList = new Array<Occurrence>();
     private readonly listeners = new Array<(event: NumberedOccurrence) => void>();
-    protected endpoint?: EndpointInterface;
+    protected endpoint?: Endpoint;
     protected eventHandler?: OccurrenceManager;
     #readAcl: AccessLevel | undefined;
     hasFabricSensitiveData = false;
@@ -93,7 +89,7 @@ export class EventServer<T = any, S extends Storage = any> {
         return this.#readAcl ?? AccessLevel.View; // ???
     }
 
-    assignToEndpoint(endpoint: EndpointInterface) {
+    assignToEndpoint(endpoint: Endpoint) {
         this.endpoint = endpoint;
     }
 
