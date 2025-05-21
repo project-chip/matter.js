@@ -645,17 +645,6 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
                 context.onChange(oldValues);
             }
         }
-
-        if (session.trace && changes.persistent) {
-            let mutations = session.trace.mutations;
-            if (!mutations) {
-                mutations = session.trace.mutations = [];
-            }
-            mutations.push({
-                path: internals.location.path,
-                values: changes.persistent,
-            });
-        }
     }
 
     /**
@@ -688,7 +677,12 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
             Array.from(changes.changeList.values()),
             internals.version,
         );
-        return MaybePromise.then(changeSetResult, () => emitChanged());
+
+        if (MaybePromise.is(changeSetResult)) {
+            return changeSetResult.then(emitChanged);
+        }
+
+        return emitChanged();
     }
 
     /**

@@ -242,6 +242,7 @@ describe("Transaction", () => {
         await transaction.rollback();
 
         p.expect("rollback", "rollback");
+
         validateUnlocked(transaction);
     });
 

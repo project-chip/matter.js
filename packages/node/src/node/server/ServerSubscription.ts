@@ -5,7 +5,6 @@
  */
 
 import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
-import { ActionTracer } from "#behavior/index.js";
 import { Logger, MatterError, NetworkError, NoResponseTimeoutError, ObserverGroup, Time, Timer } from "#general";
 import { Specification } from "#model";
 import { ServerNode } from "#node/index.js";
@@ -98,7 +97,6 @@ export namespace ServerSubscriptionConfig {
 export interface ServerSubscriptionContext {
     session: SecureSession;
     node: ServerNode;
-    tracer: ActionTracer | undefined;
     initiateExchange(address: PeerAddress, protocolId: number): MessageExchange;
 }
 
@@ -621,8 +619,6 @@ export class ServerSubscription extends Subscription {
             fabricFiltered: request.isFabricFiltered,
             message: {} as Message,
             exchange,
-            tracer: this.#context.tracer,
-            actionType: ActionTracer.ActionType.Read,
             node: this.#context.node,
         }).beginReadOnly();
 

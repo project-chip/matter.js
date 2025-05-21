@@ -8,7 +8,6 @@ import type { Transaction } from "#general";
 import { AsyncObservable } from "#general";
 import { DataModelPath, Schema } from "#model";
 import type { AccessControl, Val } from "#protocol";
-import { ActionTracer } from "../context/ActionTracer.js";
 import type { ValidationLocation } from "../state/validation/location.js";
 import type { RootSupervisor } from "./RootSupervisor.js";
 
@@ -75,12 +74,6 @@ export namespace ValueSupervisor {
          * The transaction used for isolating state changes associated with this session.
          */
         transaction: Transaction;
-
-        /**
-         * A target for instrumentation information.  If present, various components will populate with diagnostic
-         * information during the action.
-         */
-        trace?: ActionTracer.Action;
 
         /**
          * If this is true, data validation is disabled.  This should only be used in contexts where data validation is
