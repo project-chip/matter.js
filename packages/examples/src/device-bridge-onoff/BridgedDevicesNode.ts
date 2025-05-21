@@ -19,36 +19,10 @@ import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit"
 import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
 import { execSync } from "node:child_process";
 
-import fs from "node:fs";
-function collectStatistics() {
-    // Open a file and register a interval which writes to this file every second
-    // and add in a CSV style the timestamp and memory consumption of the nodejs process, rss and heap
-    const file = fs.createWriteStream(`statistics_${Date.now()}.csv`);
-    file.write("timestamp;rss;heapUsed;heapTotal;external;arrayBuffers;cpuUser;cpuSystem\n");
-    const memory = process.memoryUsage();
-    const cpuUsage = process.cpuUsage();
-    let formerCpuUsageUser = cpuUsage.user;
-    let formerCpuUsageSystem = cpuUsage.system;
-    let counter = 0;
-    file.write(
-        `${counter};${(memory.rss / 1024).toString().replace(".", ",")};${(memory.heapUsed / 1024).toString().replace(".", ",")};${(memory.heapTotal / 1024).toString().replace(".", ",")};${(memory.external / 1024).toString().replace(".", ",")};${(memory.arrayBuffers / 1024).toString().replace(".", ",")};${cpuUsage.user.toString().replace(".", ",")};${cpuUsage.system.toString().replace(".", ",")}\n`,
-    );
-    setInterval(() => {
-        const memory = process.memoryUsage();
-        const cpuUsage = process.cpuUsage();
-        file.write(
-            `${++counter};${(memory.rss / 1024).toString().replace(".", ",")};${(memory.heapUsed / 1024).toString().replace(".", ",")};${(memory.heapTotal / 1024).toString().replace(".", ",")};${(memory.external / 1024).toString().replace(".", ",")};${(memory.arrayBuffers / 1024).toString().replace(".", ",")};${(cpuUsage.user - formerCpuUsageUser).toString().replace(".", ",")};${(cpuUsage.system - formerCpuUsageSystem).toString().replace(".", ",")}\n`,
-        );
-        formerCpuUsageUser = cpuUsage.user;
-        formerCpuUsageSystem = cpuUsage.system;
-    }, 1000);
-}
-
 /** Initialize configuration values */
 const { isSocket, deviceName, vendorName, passcode, discriminator, vendorId, productName, productId, port, uniqueId } =
     await getConfiguration();
 
-collectStatistics();
 /**
  * Create a Matter ServerNode, which contains the Root Endpoint and all relevant data and configuration
  */
