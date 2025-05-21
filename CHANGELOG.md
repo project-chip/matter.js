@@ -22,6 +22,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Logger allows to use a function as log value which is only executed when the log level matches
 
 -   @matter/node
+    - Enhancement: Expose `endpointProtocol` property on Endpoint
     - Enhancement: Refactors InteractionServer to cut out Reading legacy logic and move to Behavior logic
     - Fix: Fixes special-case in Wildcard Filtering where not all fixed attributes were filtered out
     - Fix: Fixes ACL check logic order on attribute reads
@@ -31,6 +32,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - (@spudwebb) Fix: Increase BLE connect timeout fo 120seconds to optimize pairing
   
 -   @matter/protocol
+    - Breaking: `logEndpoint()` was removed. The Endpoints support logging directly via Diagnostics
+    - Feature: Added `getLocal()` to AttributeClient to retrieve the currently stored/cached value 
     - Adjustment: ACL writes are not sent chunked by default from now on like also in chip SDK
     - Fix: Handles messages only that are secured as required for the relevant protocol
 
