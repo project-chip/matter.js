@@ -229,12 +229,6 @@ export type ClusterClientObj<T extends ClusterType = ClusterType> = {
     /** Returns if a given Attribute with provided name is present and supported at the connected cluster server. */
     isAttributeSupportedByName: (attributeName: string) => boolean;
 
-    /** Returns if a given Event Id is present and supported at the connected cluster server. */
-    isEventSupported: (eventId: EventId) => boolean;
-
-    /** Returns if a given Event with provided name is present and supported at the connected cluster server. */
-    isEventSupportedByName: (eventName: string) => boolean;
-
     /** Returns if a given Command Id is present and supported at the connected cluster server. */
     isCommandSupported: (commandId: CommandId) => boolean;
 

@@ -28,13 +28,11 @@ import {
     DecodedAttributeReportValue,
     DecodedEventReportValue,
     EndpointInterface,
-    EndpointLoggingOptions,
     InteractionClient,
     NodeDiscoveryType,
     PaseClient,
     SecureSession,
     UnknownNodeError,
-    logEndpoint,
     structureReadAttributeDataToClusterObject,
 } from "#protocol";
 import {
@@ -722,13 +720,13 @@ export class PairedNode {
     }
 
     /** Method to log the structure of this node with all endpoint and clusters. */
-    logStructure(options?: EndpointLoggingOptions) {
+    logStructure() {
         const rootEndpoint = this.#endpoints.get(EndpointNumber(0));
         if (rootEndpoint === undefined) {
             logger.info(`Node ${this.nodeId} has not yet been initialized!`);
             return;
         }
-        logEndpoint(rootEndpoint, options);
+        logger.info(this);
     }
 
     /**
@@ -1387,5 +1385,31 @@ export class PairedNode {
         cluster: T,
     ): ClusterClientObj<T> | undefined {
         return this.getDeviceById(endpointId)?.getClusterClient(cluster);
+    }
+
+    get [Diagnostic.value](): unknown {
+        const root = this.getRootEndpoint();
+
+        let statusIcon = "✗";
+        switch (this.#connectionState) {
+            case NodeStates.Reconnecting:
+                statusIcon = "⌛";
+                break;
+            case NodeStates.WaitingForDeviceDiscovery:
+                statusIcon = "💤";
+                break;
+            case NodeStates.Connected:
+                statusIcon = "✓";
+                break;
+        }
+
+        return Diagnostic.node(statusIcon, this.nodeId, {
+            children: [
+                Diagnostic.strong("Information"),
+                Diagnostic.list([Diagnostic.dict(this.deviceInformation as object)]),
+                Diagnostic.strong("Structure"),
+                root ? Diagnostic.list([root]) : "Unknown",
+            ],
+        });
     }
 }
