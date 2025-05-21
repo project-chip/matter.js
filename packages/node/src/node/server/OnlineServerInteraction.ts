@@ -45,9 +45,9 @@ export class OnlineServerInteraction implements Interactable<OnlineContext.Optio
             for await (const chunk of this.#interaction.invoke(request, session)) {
                 yield chunk;
             }
-            return session.resolve(undefined);
         } catch (error) {
             session.reject(error);
         }
+        return session.resolve(undefined);
     }
 }
