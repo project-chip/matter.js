@@ -19,7 +19,7 @@ import {
     TypeFromPartialBitSchema,
 } from "#types";
 import { Endpoint } from "../../device/Endpoint.js";
-import { AnyAttributeServer, createAttributeServer } from "./AttributeServer.js";
+import { createAttributeServer } from "./AttributeServer.js";
 import { ClusterDatasource } from "./ClusterDatasource.js";
 import {
     AttributeInitialValues,
@@ -31,7 +31,7 @@ import {
     SupportedEventsList,
 } from "./ClusterServerTypes.js";
 import { CommandServer } from "./CommandServer.js";
-import { AnyEventServer, createEventServer } from "./EventServer.js";
+import { createEventServer } from "./EventServer.js";
 
 const logger = Logger.get("ClusterServer");
 
@@ -50,42 +50,7 @@ function isConditionMatching<F extends BitSchema, SF extends TypeFromPartialBitS
 /**
  * A collection of servers for a cluster's attributes, commands and events.
  */
-export interface BaseClusterServer {
-    /**
-     * Cluster ID
-     */
-    id: ClusterId;
-
-    /**
-     * Cluster name
-     */
-    readonly name: string;
-
-    /**
-     * Cluster datasource
-     */
-    datasource?: ClusterDatasource;
-
-    /**
-     * Cluster attributes as named object that can be used to programmatically work with available attributes
-     */
-    readonly attributes: Record<string, AnyAttributeServer>;
-
-    /**
-     * Cluster commands as array
-     */
-    readonly commands: Record<string, CommandServer>;
-
-    /**
-     * Cluster events as named object
-     */
-    readonly events: Record<string, AnyEventServer>;
-}
-
-/**
- * A collection of servers for a cluster's attributes, commands and events.
- */
-export interface ClusterServer<T extends ClusterType = ClusterType> extends BaseClusterServer {
+export interface ClusterServer<T extends ClusterType = ClusterType> {
     /**
      * Cluster ID
      */
