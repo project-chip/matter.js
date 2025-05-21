@@ -21,6 +21,7 @@ import {
 import { DataModelPath } from "#model";
 import type { Node } from "#node/Node.js";
 import { IdentityService } from "#node/server/IdentityService.js";
+import { ProtocolService } from "#node/server/ProtocolService.js";
 import { EndpointNumber } from "#types";
 import { RootEndpoint } from "../endpoints/root.js";
 import { Agent } from "./Agent.js";
@@ -107,6 +108,13 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     get owner(): Endpoint | undefined {
         return this.#owner;
+    }
+
+    get endpointProtocol() {
+        if (this.#number === undefined || !this.env.has(ProtocolService)) {
+            return undefined;
+        }
+        return this.env.get(ProtocolService).protocol[this.#number];
     }
 
     /**

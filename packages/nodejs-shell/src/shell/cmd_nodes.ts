@@ -113,7 +113,7 @@ export default function commands(theNode: MatterNode) {
                         const node = (await theNode.connectAndGetNodes(nodeId))[0];
 
                         console.log("Logging structure of Node ", node.nodeId.toString());
-                        node.logStructure({});
+                        node.logStructure();
                     },
                 )
                 .command(

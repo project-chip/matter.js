@@ -7,12 +7,16 @@
 import {
     BasicInformationCluster,
     BridgedDeviceBasicInformationCluster,
-    DescriptorCluster,
     FixedLabelCluster,
     UserLabelCluster,
 } from "#clusters";
-import { AtLeastOne, ImplementationError, InternalError, NotImplementedError } from "#general";
-import { ClusterClientObj, EndpointInterface } from "#protocol";
+import { AtLeastOne, Diagnostic, ImplementationError, InternalError, NotImplementedError } from "#general";
+import {
+    ClusterClientObj,
+    EndpointInterface,
+    SupportedAttributeClient,
+    UnknownSupportedAttributeClient,
+} from "#protocol";
 import {
     Attributes,
     BitSchema,
@@ -46,8 +50,6 @@ export class Endpoint implements EndpointInterface {
         /** noop until officially set **/
     };
 
-    private descriptorCluster: ClusterServerObj<typeof DescriptorCluster>;
-
     /**
      * Create a new Endpoint instance.
      *
@@ -58,20 +60,6 @@ export class Endpoint implements EndpointInterface {
         protected deviceTypes: AtLeastOne<DeviceTypeDefinition>,
         options: EndpointOptions = {},
     ) {
-        this.descriptorCluster = ClusterServer(
-            DescriptorCluster,
-            {
-                deviceTypeList: deviceTypes.map(deviceType => ({
-                    deviceType: deviceType.code,
-                    revision: deviceType.revision,
-                })),
-                serverList: [],
-                clientList: [],
-                partsList: [],
-            },
-            {},
-        );
-        this.addClusterServer(this.descriptorCluster);
         this.setDeviceTypes(deviceTypes);
 
         if (options.endpointId !== undefined) {
@@ -158,9 +146,6 @@ export class Endpoint implements EndpointInterface {
             asClusterServerInternal(currentCluster)._close();
         }
         asClusterServerInternal(cluster)._assignToEndpoint(this);
-        if (cluster.id === DescriptorCluster.id) {
-            this.descriptorCluster = cluster as unknown as ClusterServerObj<typeof DescriptorCluster>;
-        }
 
         // In ts4 the cast to "any" here was unnecessary.  In TS5 the fact that
         // the string index signature in Attributes and Events doesn't allow
@@ -174,15 +159,10 @@ export class Endpoint implements EndpointInterface {
         // assertions everywhere those interfaces are used.  I'm treating that
         // as low priority for now
         this.clusterServers.set(cluster.id, cluster as any);
-
-        this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).sort((a, b) => a - b));
-        this.structureChangedCallback(); // Inform parent about structure change
     }
 
     addClusterClient(cluster: ClusterClientObj) {
         this.clusterClients.set(cluster.id, cluster);
-        this.descriptorCluster.attributes.clientList.init(Array.from(this.clusterClients.keys()).sort((a, b) => a - b));
-        this.structureChangedCallback(); // Inform parent about structure change
     }
 
     // TODO cleanup with id number vs ClusterId
@@ -238,14 +218,6 @@ export class Endpoint implements EndpointInterface {
         deviceTypes.forEach(deviceType => deviceTypeList.set(deviceType.code, deviceType));
         this.deviceTypes = Array.from(deviceTypeList.values()) as AtLeastOne<DeviceTypeDefinition>;
         this.name = deviceTypes[0].name;
-
-        // Update descriptor cluster
-        this.descriptorCluster.attributes.deviceTypeList.init(
-            this.deviceTypes.map(deviceType => ({
-                deviceType: deviceType.code,
-                revision: deviceType.revision,
-            })),
-        );
     }
 
     addChildEndpoint(endpoint: EndpointInterface): void {
@@ -360,8 +332,137 @@ export class Endpoint implements EndpointInterface {
             newPartsList.push(...childPartsList);
         }
 
-        this.descriptorCluster.attributes.partsList.setLocal(newPartsList);
-
         return newPartsList;
+    }
+
+    /**
+     * Hierarchical diagnostics of endpoint and children.
+     */
+    get [Diagnostic.value](): unknown[] {
+        return [
+            Diagnostic.strong(this.name),
+            Diagnostic.dict({
+                "endpoint#": this.number,
+                type: this.deviceTypes.map(
+                    ({ name, code, revision }) => `${name} (0x${code.toString(16)}, ${revision})`,
+                ),
+            }),
+            Diagnostic.list([...this.#clusterDiagnostics(), ...this.getChildEndpoints()]),
+        ];
+    }
+
+    #clusterDiagnostics(): unknown[] {
+        const clusterDiagnostics = new Array<unknown>();
+
+        const clients = this.getAllClusterClients();
+        if (clients.length) {
+            clusterDiagnostics.push([
+                Diagnostic.strong("clients"),
+                Diagnostic.list(clients.map(client => this.#clusterClientDiagnostics(client))),
+            ]);
+        }
+
+        const servers = this.getAllClusterServers();
+        if (servers.length) {
+            clusterDiagnostics.push([
+                Diagnostic.strong("servers"),
+                Diagnostic.list(servers.map(server => this.#clusterServerDiagnostics(server))),
+            ]);
+        }
+
+        const childs = this.getChildEndpoints();
+        if (childs.length) {
+            clusterDiagnostics.push([Diagnostic.strong("childs"), Diagnostic.list([])]);
+        }
+
+        return clusterDiagnostics;
+    }
+
+    #clusterClientDiagnostics(client: ClusterClientObj) {
+        const result = [
+            Diagnostic.strong(client.name),
+            Diagnostic.dict({
+                id: Diagnostic.hex(client.id),
+                rev: client.revision,
+                flags: Diagnostic.asFlags({
+                    unknown: client.isUnknown,
+                }),
+            }),
+        ];
+        const elementDiagnostic = Array<unknown>();
+
+        const { supportedFeatures: features } = client;
+        const supportedFeatures = new Array<string>();
+        for (const featureName in features) {
+            if (features[featureName] === true) supportedFeatures.push(featureName);
+        }
+        if (supportedFeatures.length) {
+            elementDiagnostic.push([Diagnostic.strong("features"), supportedFeatures]);
+        }
+
+        if (Object.keys(client.attributes).length) {
+            const clusterData = new Array<unknown>();
+            for (const attributeName in client.attributes) {
+                const attribute = client.attributes[attributeName];
+                if (attribute === undefined || !(attribute instanceof SupportedAttributeClient)) continue;
+
+                clusterData.push([
+                    attribute.name,
+                    Diagnostic.dict({
+                        id: Diagnostic.hex(attribute.id),
+                        val: attribute.getLocal(),
+                        flags: Diagnostic.asFlags({
+                            unknown: attribute instanceof UnknownSupportedAttributeClient,
+                            fabricScoped: attribute.fabricScoped,
+                        }),
+                    }),
+                ]);
+            }
+            if (clusterData.length) {
+                elementDiagnostic.push([Diagnostic.strong("attributes"), Diagnostic.list(clusterData)]);
+            }
+        }
+
+        if (Object.keys(client.commands).length) {
+            const clusterData = new Array<unknown>();
+            for (const commandName in client.commands) {
+                if (commandName.match(/^\d+$/)) continue;
+                const command = client.commands[commandName];
+                if (command === undefined || !client.isCommandSupportedByName(commandName)) continue;
+
+                clusterData.push([commandName]);
+            }
+            if (clusterData.length) {
+                elementDiagnostic.push([Diagnostic.strong("commands"), Diagnostic.list(clusterData)]);
+            }
+        }
+
+        if (Object.keys(client.events).length) {
+            const clusterData = new Array<unknown>();
+            for (const eventName in client.events) {
+                const event = client.events[eventName];
+                if (event === undefined) continue;
+
+                clusterData.push([
+                    event.name,
+                    Diagnostic.dict({
+                        id: Diagnostic.hex(event.id),
+                    }),
+                ]);
+            }
+            if (clusterData.length) {
+                elementDiagnostic.push([Diagnostic.strong("events"), Diagnostic.list(clusterData)]);
+            }
+        }
+
+        if (elementDiagnostic.length) {
+            result.push(Diagnostic.list(elementDiagnostic));
+        }
+
+        return result;
+    }
+
+    #clusterServerDiagnostics(server: ClusterServerObj) {
+        return [Diagnostic.strong(server.name)];
     }
 }

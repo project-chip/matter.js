@@ -106,6 +106,18 @@ export class AttributeClient<T = any> {
         });
     }
 
+    get fabricScoped() {
+        return this.#isFabricScoped;
+    }
+
+    getLocal() {
+        return this.#interactionClient.getStoredAttribute({
+            endpointId: this.endpointId,
+            clusterId: this.clusterId,
+            attribute: this.attribute,
+        });
+    }
+
     /**
      * Get the value of the attribute. Fabric scoped reads are always done with the remote.
      * The `requestFromRemote` parameter allowed to force or prevent remote reads:

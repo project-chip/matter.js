@@ -12,20 +12,12 @@
  * It can be used as CLI script and starting point for your own device node implementation.
  */
 
-import {
-    DeviceTypeId,
-    Endpoint,
-    EndpointServer,
-    Environment,
-    ServerNode,
-    StorageService,
-    Time,
-    VendorId,
-} from "@matter/main";
+import { DeviceTypeId, Endpoint, Environment, Logger, ServerNode, StorageService, Time, VendorId } from "@matter/main";
 import { OnOffLightDevice } from "@matter/main/devices/on-off-light";
 import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
-import { logEndpoint } from "@matter/main/protocol";
 import { execSync } from "node:child_process";
+
+const logger = Logger.get("MultiDeviceNode");
 
 const devices = await getConfiguration();
 for (let idx = 1; idx < devices.length; idx++) {
@@ -112,7 +104,7 @@ for (let idx = 1; idx < devices.length; idx++) {
     /**
      * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
      */
-    logEndpoint(EndpointServer.forEndpoint(server));
+    logger.info(server);
 
     console.log("----------------------------");
     console.log(`QR Code for Device ${i} on port ${port}:`);
