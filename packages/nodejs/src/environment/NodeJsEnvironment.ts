@@ -20,7 +20,6 @@ import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { NodeJsNetwork } from "../net/NodeJsNetwork.js";
 import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
-import { NodeJsActionTracer } from "./NodeJsActionTracer.js";
 import { ProcessManager } from "./ProcessManager.js";
 
 /**
@@ -74,8 +73,6 @@ export function NodeJsEnvironment() {
     if (!env.vars.has("logger.format") && Logger.format === LogFormat.PLAIN && process.stdin?.isTTY) {
         env.vars.set("logger.format", LogFormat.ANSI);
     }
-
-    NodeJsActionTracer.configure(env);
 
     config.isInitialized = true;
 

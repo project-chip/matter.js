@@ -7,7 +7,6 @@
 import { Behavior } from "#behavior/Behavior.js";
 import type { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
-import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
 import { Events } from "#behavior/Events.js";
@@ -189,21 +188,13 @@ export class Behaviors {
 
         // Initialize instrumentation
         const activity = this.#endpoint.env.get(NodeActivity);
-        const trace: ActionTracer.Action | undefined = this.#endpoint.env.has(ActionTracer)
-            ? { type: ActionTracer.ActionType.Initialize }
-            : undefined;
 
         // Perform initialization
-        let promise = OfflineContext.act(`initialize<${this.#endpoint}>`, activity, initializeBehaviors, { trace });
+        let promise = OfflineContext.act(`initialize<${this.#endpoint}>`, activity, initializeBehaviors);
 
         // Once behaviors are ready the endpoint we consider the endpoint "ready"
         const onReady = () => {
             this.#endpoint.lifecycle.change(EndpointLifecycle.Change.Ready);
-
-            if (trace) {
-                trace.path = this.#endpoint.path;
-                this.#endpoint.env.get(ActionTracer).record(trace);
-            }
         };
         if (promise) {
             promise = promise.then(onReady);

@@ -132,20 +132,11 @@ function createAttributeServer(
 
         behavior.context.activity?.frame(`read ${name}`);
 
-        const trace = behavior.context.trace;
-        if (trace) {
-            trace.path = endpoint.path.at(name);
-        }
-
         //logger.debug("Read", Diagnostic.strong(`${endpoint}.state.${name}`), "via", behavior.context.transaction.via);
 
         const state = behavior.state as Val.Struct;
 
         StructManager.assertDirectReadAuthorized(state, definition.id);
-
-        if (trace) {
-            trace.output = state[name];
-        }
 
         return state[name];
     }

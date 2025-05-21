@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ActionTracer } from "#behavior/context/ActionTracer.js";
+import { ActionContext } from "#behavior/context/ActionContext.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { AccessControlServer } from "#behaviors/access-control";
 import { AccessControl as AccessControlClusterType } from "#clusters/access-control";
@@ -236,7 +236,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             timed,
             message,
             exchange,
-            tracer: this.#tracer,
             actionType,
             node: this.#node,
         };
@@ -622,7 +621,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         const context: ServerSubscriptionContext = {
             session,
             node: this.#node,
-            tracer: this.#tracer,
             initiateExchange: (address: PeerAddress, protocolId) =>
                 this.#context.exchangeManager.initiateExchange(address, protocolId),
         };
@@ -681,7 +679,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         const context: ServerSubscriptionContext = {
             session,
             node: this.#node,
-            tracer: this.#tracer,
             initiateExchange: (address: PeerAddress, protocolId) =>
                 this.#context.exchangeManager.initiateExchange(address, protocolId),
         };
@@ -900,11 +897,5 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
     async close() {
         this.#isClosing = true;
-    }
-
-    get #tracer() {
-        if (this.#node.env.has(ActionTracer)) {
-            return this.#node.env.get(ActionTracer);
-        }
     }
 }

@@ -755,7 +755,7 @@ export class QuietObservable<T extends any[] = any[]> extends BasicObservable<T>
         if (this.#source && this.#sourceObserver) {
             this.#source.off(this.#sourceObserver);
         } else if (this.#sourceObserver === undefined) {
-            this.#sourceObserver = (...payload) => this.emit(...payload);
+            this.#sourceObserver = this.emit.bind(this);
         }
         this.#source = source;
         if (source) {

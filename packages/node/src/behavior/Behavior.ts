@@ -246,7 +246,7 @@ export abstract class Behavior {
 
         this.reactTo(observable, reactor, options);
 
-        return (...args: A) => observable.emit(...args);
+        return observable.emit.bind(observable);
     }
 
     /**
@@ -259,7 +259,7 @@ export abstract class Behavior {
 
         this.reactTo(observable, reactor, options);
 
-        return (...args: A) => observable.emit(...args);
+        return observable.emit.bind(observable);
     }
 
     /**
