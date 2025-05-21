@@ -5,6 +5,5 @@
  */
 
 import "./register.js";
-export * from "./NodeJsActionTracer.js";
 export * from "./NodeJsEnvironment.js";
 export * from "./ProcessManager.js";

@@ -382,7 +382,8 @@ class ReactorBacking<T extends any[], R> {
             return this.#lockThenReact(context, backing, args);
         }
 
-        return this.#reactWithLocks(context, backing, args);
+        const reactor = this.#bindReactor(context, backing);
+        return reactor(...args);
     }
 
     /**
@@ -402,19 +403,20 @@ class ReactorBacking<T extends any[], R> {
             }
         }
 
-        return await this.#reactWithLocks(context, backing, args);
+        const reactor = this.#bindReactor(context, backing);
+        return await reactor(...args);
     }
 
     /**
-     * Invoke the actual reactor.
+     * Bind the reactor to a behavior instance once locks are held.
      */
-    #reactWithLocks(context: ActionContext, backing: BehaviorBacking, args: T): MaybePromise<Awaited<R> | undefined> {
+    #bindReactor(context: ActionContext, backing: BehaviorBacking): Reactor<T, Awaited<R>> {
         const agent = context.agentFor(this.#endpoint);
 
         // Do not use Agent.get because it will throw during initialization
         const behavior = backing.createBehavior(agent, backing.type);
 
-        return this.#reactor.apply(behavior, args);
+        return this.#reactor.bind(behavior);
     }
 
     /**

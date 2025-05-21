@@ -164,20 +164,11 @@ function createAttributeServer(
 
         behavior.context.activity?.frame(`read ${name}`);
 
-        const trace = behavior.context.trace;
-        if (trace) {
-            trace.path = endpoint.path.at(name);
-        }
-
         //logger.debug("Read", Diagnostic.strong(`${endpoint}.state.${name}`), "via", behavior.context.transaction.via);
 
         const state = behavior.state as Val.Struct;
 
         StructManager.assertDirectReadAuthorized(state, definition.id);
-
-        if (trace) {
-            trace.output = state[name];
-        }
 
         return state[name];
     }
@@ -188,12 +179,6 @@ function createAttributeServer(
         behavior.context.activity?.frame(`write ${name}`);
 
         logger.info("Write", Diagnostic.strong(`${endpoint}.state.${name}`), "via", behavior.context.transaction.via);
-
-        const trace = behavior.context.trace;
-        if (trace) {
-            trace.path = endpoint.path.at(name);
-            trace.input = value;
-        }
 
         const state = behavior.state as Val.Struct;
 
@@ -258,12 +243,6 @@ function createCommandServer(
 
         const path = endpoint.path.at(name);
 
-        const trace = behavior.context.trace;
-        if (trace) {
-            trace.path = endpoint.path.at(name);
-            trace.input = request;
-        }
-
         logger.info("Invoke", Diagnostic.strong(path.toString()), behavior.context.transaction.via, requestDiagnostic);
 
         access.authorizeInvoke(behavior.context, {
@@ -303,16 +282,7 @@ function createCommandServer(
 
             if (MaybePromise.is(result)) {
                 isAsync = true;
-                result = Promise.resolve(result)
-                    .then(result => {
-                        if (trace) {
-                            trace.output = result;
-                        }
-                        return result;
-                    })
-                    .finally(() => activity?.[Symbol.dispose]());
-            } else if (trace) {
-                trace.output = result;
+                result = Promise.resolve(result).finally(() => activity?.[Symbol.dispose]());
             }
         } finally {
             if (!isAsync) {

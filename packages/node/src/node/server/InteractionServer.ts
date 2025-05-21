@@ -5,7 +5,6 @@
  */
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
-import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { AccessControlServer } from "#behaviors/access-control";
@@ -300,8 +299,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             fabricFiltered,
             message,
             exchange,
-            tracer: this.#tracer,
-            actionType: ActionTracer.ActionType.Read,
             node: this.#node,
         };
     }
@@ -679,7 +676,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         const context: ServerSubscriptionContext = {
             session,
             node: this.#node,
-            tracer: this.#tracer,
             initiateExchange: (address: PeerAddress, protocolId) =>
                 this.#context.exchangeManager.initiateExchange(address, protocolId),
         };
@@ -738,7 +734,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         const context: ServerSubscriptionContext = {
             session,
             node: this.#node,
-            tracer: this.#tracer,
             initiateExchange: (address: PeerAddress, protocolId) =>
                 this.#context.exchangeManager.initiateExchange(address, protocolId),
         };
@@ -1129,8 +1124,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             timed,
             message,
             exchange,
-            tracer: this.#tracer,
-            actionType: ActionTracer.ActionType.Invoke,
             node: this.#node,
         }).act(invokeCommand);
     }
@@ -1149,12 +1142,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
     async close() {
         this.#isClosing = true;
-    }
-
-    get #tracer() {
-        if (this.#node.env.has(ActionTracer)) {
-            return this.#node.env.get(ActionTracer);
-        }
     }
 
     #updateStructure() {
