@@ -20,10 +20,10 @@ import {
     GlobalAttributes,
     NodeId,
     Status,
+    StatusCode,
     StatusResponseError,
     TlvSchema,
 } from "#types";
-import { StatusCode } from "@matter/types";
 
 const logger = Logger.get("AttributeReadResponse");
 

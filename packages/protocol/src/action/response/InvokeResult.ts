@@ -4,13 +4,33 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Invoke } from "#action/request/Invoke.js";
-import type { CommandData } from "#types";
+import type { ClusterId, CommandId, CommandPath, EndpointNumber, StatusCode, TlvStream } from "#types";
 
-export type InvokeResult<T extends Invoke> = T extends { suppressResponse: true }
-    ? Promise<void>
-    : AsyncIterable<InvokeResult.Chunk>;
+export type InvokeResult = AsyncIterable<InvokeResult.Chunk>;
 
 export namespace InvokeResult {
-    export type Chunk = CommandData[];
+    export type Chunk = Iterable<Data>;
+
+    export type Data = CommandStatus | CommandResponse;
+
+    export interface ConcreteCommandPath extends CommandPath {
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        commandId: CommandId;
+    }
+
+    export interface CommandStatus {
+        kind: "cmd-status";
+        path: ConcreteCommandPath;
+        commandRef?: number;
+        status: StatusCode;
+        clusterStatus?: number;
+    }
+
+    export interface CommandResponse {
+        kind: "cmd-response";
+        path: ConcreteCommandPath;
+        commandRef?: number;
+        data: TlvStream;
+    }
 }

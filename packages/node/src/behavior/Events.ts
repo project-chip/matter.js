@@ -13,13 +13,17 @@ import {
     EventEmitter,
     ImplementationError,
     Logger,
+    MaybePromise,
     Observable,
     ObserverErrorHandler,
     ObserverPromiseHandler,
     QuietObservable,
+    Time,
     type Observer,
 } from "#general";
-import { ElementTag, type AttributeElement, type EventElement, type ValueModel } from "#model";
+import { ElementTag, EventElement, EventModel, type AttributeElement, type ValueModel } from "#model";
+import { Occurrence, OccurrenceManager } from "@matter/protocol";
+import { ClusterId, EventId, EventPriority } from "@matter/types";
 import type { Behavior } from "./Behavior.js";
 import { NodeActivity } from "./context/NodeActivity.js";
 
@@ -124,6 +128,8 @@ export class OfflineEvent<T extends any[] = any[], S extends ValueModel = ValueM
  */
 export class OnlineEvent<T extends any[] = any[], S extends ValueModel = ValueModel> extends ElementEvent<T> {
     readonly isQuieter: boolean = false;
+    readonly #baseOccurrence: Omit<Occurrence, "epochTimestamp" | "payload"> | undefined;
+    #occurrenceTrigger?: (payload: any) => void;
 
     constructor(schema: S, owner: Events) {
         super(
@@ -143,6 +149,44 @@ export class OnlineEvent<T extends any[] = any[], S extends ValueModel = ValueMo
                 }
             },
         );
+
+        // If it is a "real" Matter event, then we connect this event instance with the OccurrenceManager
+        const eventSchema = this.schema as EventModel;
+        if (
+            this.schema.tag === ElementTag.Event &&
+            this.schema.id !== undefined &&
+            this.owner.endpoint !== undefined &&
+            this.owner.behavior !== undefined &&
+            eventSchema.priority !== undefined
+        ) {
+            this.#baseOccurrence = {
+                eventId: EventId(this.schema.id),
+                clusterId: ClusterId(this.owner.behavior.schema!.id!),
+                endpointId: this.owner.endpoint.number,
+                priority: EventElement.PriorityId[eventSchema.priority] as unknown as EventPriority,
+            };
+            this.#connectWithOccuranceManager();
+        }
+    }
+
+    #connectWithOccuranceManager() {
+        if (this.owner.endpoint === undefined) {
+            throw new ImplementationError("Event is not assigned to an endpoint");
+        }
+        const occurrenceManager = this.owner.endpoint.env.get(OccurrenceManager);
+        const trigger = (payload?: any) => {
+            const maybePromise = occurrenceManager.add({
+                ...this.#baseOccurrence!,
+                epochTimestamp: Time.nowMs(),
+                payload,
+            });
+
+            if (MaybePromise.is(maybePromise)) {
+                this.owner.endpoint!.env.runtime.add(maybePromise);
+            }
+        };
+        this.online.on(trigger as unknown as Observer<T, void>);
+        this.#occurrenceTrigger = trigger;
     }
 
     /**
@@ -173,6 +217,13 @@ export class OnlineEvent<T extends any[] = any[], S extends ValueModel = ValueMo
             return `${base}$Changed`;
         }
         return base;
+    }
+
+    override [Symbol.dispose]() {
+        if (this.#occurrenceTrigger) {
+            this.online.off(this.#occurrenceTrigger as unknown as Observer<T, void>);
+            this.#occurrenceTrigger = undefined;
+        }
     }
 }
 

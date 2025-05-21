@@ -6,12 +6,24 @@
 
 import type { Behavior } from "#behavior/Behavior.js";
 import { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
+import { ActionContext } from "#behavior/context/ActionContext.js";
 import { QuietEvent } from "#behavior/Events.js";
 import type { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
+import { DescriptorBehavior } from "#behaviors/descriptor";
 import type { Endpoint } from "#endpoint/Endpoint.js";
-import { ImplementationError } from "#general";
+import {
+    camelize,
+    Diagnostic,
+    ImplementationError,
+    isObject,
+    Logger,
+    MaybePromise,
+    Observable,
+    ObserverGroup,
+    Transaction,
+} from "#general";
 import { AcceptedCommandList, AttributeList, ElementTag, GeneratedCommandList, Matter } from "#model";
 import type { Node } from "#node/Node.js";
 import type {
@@ -19,17 +31,29 @@ import type {
     ClusterProtocol,
     ClusterTypeProtocol,
     CollectionProtocol,
+    CommandInvokeHandler,
+    CommandTypeProtocol,
     EndpointProtocol,
     InteractionSession,
     NodeProtocol,
 } from "#protocol";
-import { FabricManager } from "#protocol";
-import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, TlvSchema } from "#types";
-import { WildcardPathFlags as WildcardPathFlagsType } from "#types";
-import { camelize, Observable, ObserverGroup } from "@matter/general";
-import { EventTypeProtocol, OccurrenceManager, Val } from "@matter/protocol";
-import { AttributePath, EventId, EventPath } from "@matter/types";
-import { DescriptorBehavior } from "../../behaviors/descriptor/DescriptorBehavior.js";
+import { EventTypeProtocol, FabricManager, OccurrenceManager, Val } from "#protocol";
+import {
+    AttributeId,
+    AttributePath,
+    ClusterId,
+    ClusterType,
+    CommandId,
+    CommandPath,
+    DeviceTypeId,
+    EndpointNumber,
+    EventId,
+    EventPath,
+    FabricIndex,
+    WildcardPathFlags as WildcardPathFlagsType,
+} from "#types";
+
+const logger = Logger.get("ProtocolService");
 
 interface DisposableClusterProtocol extends ClusterProtocol {
     [Symbol.dispose]: () => void;
@@ -125,7 +149,7 @@ class NodeState {
                 return this.toString();
             },
 
-            inspectPath(path: AttributePath | EventPath) {
+            inspectPath(path: AttributePath | EventPath | CommandPath) {
                 return resolvePathForNode(this, path);
             },
         } satisfies NodeProtocol & { toString(): string; inspect(): string } as NodeProtocol;
@@ -272,6 +296,7 @@ class ClusterState implements DisposableClusterProtocol {
     readonly #endpointId: EndpointNumber;
     readonly #stateChanged = new Observable<[changes: AttributeId[], version: number]>();
     readonly #quieterObservers = new ObserverGroup();
+    readonly commands: Record<CommandId, CommandInvokeHandler> = {};
 
     constructor(type: ClusterTypeProtocol, backing: BehaviorBacking) {
         this.type = type;
@@ -302,6 +327,10 @@ class ClusterState implements DisposableClusterProtocol {
                 this.stateChanged.emit(data, version);
             }
         });
+
+        for (const cmd of type.commands) {
+            this.commands[cmd.id] = (args, session) => invokeCommand(backing, cmd, args, session);
+        }
     }
 
     get version() {
@@ -355,11 +384,12 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
     const supportedElements = backing.endpoint.behaviors.elementsOf(behavior);
     const nonMandatorySupportedAttributes = new Set<AttributeId>();
     const nonMandatorySupportedEvents = new Set<EventId>();
+    const nonMandatorySupportedCommands = new Set<CommandId>();
 
     // Collect Attribute Metadata
-    const attrTlvs = {} as Record<number, TlvSchema<unknown>>;
+    const attrDef = {} as Record<number, ClusterType.Attribute>;
     for (const attr of Object.values(cluster.attributes)) {
-        attrTlvs[attr.id] = attr.schema;
+        attrDef[attr.id] = attr;
     }
     let wildcardPathFlags = schema.effectiveQuality.diagnostics ? WildcardPathFlags.skipDiagnosticsClusters : 0;
     if (schema.id & 0xffff0000) {
@@ -371,18 +401,30 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
     };
 
     // Collect Event Metadata
-    const eventTlvs = {} as Record<number, TlvSchema<unknown>>;
+    const eventDef = {} as Record<number, ClusterType.Event>;
     for (const ev of Object.values(cluster.events)) {
-        eventTlvs[ev.id] = ev.schema;
+        eventDef[ev.id] = ev;
     }
     const eventList = Array<EventTypeProtocol>();
     const events: CollectionProtocol<EventTypeProtocol> = {
         [Symbol.iterator]: eventList[Symbol.iterator].bind(eventList),
     };
 
+    // Collect Command Metadata
+    const cmdDef = {} as Record<number, ClusterType.Command>;
+    for (const cmd of Object.values(cluster.commands)) {
+        cmdDef[cmd.requestId] = cmd;
+    }
+    const commandList = Array<CommandTypeProtocol>();
+    const commands: CollectionProtocol<CommandTypeProtocol> = {
+        [Symbol.iterator]: commandList[Symbol.iterator].bind(commandList),
+    };
+
     // Collect all attributes and events from model and generate type protocol
     // TODO: Potentially combine the two searches again once the issue os fixed when selecting attributes and events
-    for (const member of behavior.supervisor.membersOf(schema, { tags: [ElementTag.Attribute, ElementTag.Event] })) {
+    for (const member of behavior.supervisor.membersOf(schema, {
+        tags: [ElementTag.Attribute, ElementTag.Event, ElementTag.Command],
+    })) {
         const { id, tag, effectiveQuality: quality } = member;
 
         if (id === undefined) {
@@ -396,7 +438,7 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
                     continue;
                 }
 
-                const tlv = attrTlvs[id];
+                const tlv = attrDef[id]?.schema;
                 if (tlv === undefined) {
                     continue;
                 }
@@ -461,7 +503,7 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
                     continue;
                 }
 
-                const tlv = eventTlvs[id];
+                const tlv = eventDef[id]?.schema;
                 if (tlv === undefined) {
                     continue;
                 }
@@ -478,10 +520,33 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
                 }
                 break;
             }
+            case "command": {
+                if (!member.effectiveConformance.isMandatory && !supportedElements.commands.has(name)) {
+                    continue;
+                }
+
+                const def = cmdDef[id];
+                if (def === undefined) {
+                    continue;
+                }
+                const { requestSchema: requestTlv, responseSchema: responseTlv, responseId } = def;
+
+                const {
+                    access: { limits },
+                } = behavior.supervisor.get(member);
+
+                const command = { id: id as CommandId, responseId, requestTlv, responseTlv, limits, name };
+                commandList.push(command);
+                commands[id] = command;
+                if (!member.effectiveConformance.isMandatory) {
+                    nonMandatorySupportedCommands.add(id as CommandId);
+                }
+                break;
+            }
         }
     }
 
-    const elementsCacheKey = `a:${[...nonMandatorySupportedAttributes.values()].sort().join(",")},e:${[...nonMandatorySupportedEvents.values()].sort().join(",")}`;
+    const elementsCacheKey = `a:${[...nonMandatorySupportedAttributes.values()].sort().join(",")},e:${[...nonMandatorySupportedEvents.values()].sort().join(",")},c:${[...nonMandatorySupportedCommands.values()].sort().join(",")}`;
     const existingCache = behaviorCache.get(behavior)?.get(elementsCacheKey);
     if (existingCache) {
         return existingCache;
@@ -492,6 +557,7 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
         name: schema.name,
         attributes,
         events,
+        commands,
         wildcardPathFlags,
     };
     const elementCache = behaviorCache.get(behavior) ?? new Map();
@@ -501,44 +567,155 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
     return descriptor;
 }
 
+/**
+ * Invokes a command on a backing behavior
+ */
+function invokeCommand(
+    backing: BehaviorBacking,
+    command: CommandTypeProtocol,
+    request: Val.Struct | undefined,
+    session: InteractionSession,
+): MaybePromise<Val.Struct | undefined> {
+    if (session.transaction === undefined) {
+        throw new ImplementationError("Cluster protocol must be opened with a supervisor session");
+    }
+
+    let requestDiagnostic: unknown;
+    if (isObject(request)) {
+        requestDiagnostic = Diagnostic.dict(request);
+    } else if (request !== undefined) {
+        requestDiagnostic = request;
+    } else {
+        requestDiagnostic = Diagnostic.weak("(no payload)");
+    }
+
+    const { path, endpoint } = backing;
+    const context = session as ActionContext;
+
+    logger.info("Invoke", Diagnostic.strong(path.toString()), session.transaction.via, requestDiagnostic);
+
+    const agent = context.agentFor(endpoint);
+    const behavior = agent.get(backing.type);
+
+    let isAsync = false;
+    let activity: undefined | Disposable;
+    let result: unknown;
+    const { name } = command;
+    try {
+        activity = context.activity?.frame(`invoke ${name}`);
+
+        const invoke = (behavior as unknown as Record<string, (arg: unknown) => unknown>)[camelize(name)].bind(
+            behavior,
+        );
+
+        // Lock if necessary, then invoke
+        if ((behavior.constructor as ClusterBehavior.Type).lockOnInvoke) {
+            const tx = session.transaction;
+            if (Transaction.Resource.isLocked(behavior)) {
+                // Automatic locking with locked resource; requires async lock acquisition
+                result = (async function invokeAsync() {
+                    await tx.addResources(behavior);
+                    await tx.begin();
+                    return invoke(request);
+                })();
+            } else {
+                // Automatic locking on unlocked resource; may proceed synchronously
+                tx.addResourcesSync(behavior);
+                tx.beginSync();
+                result = invoke(request);
+            }
+        } else {
+            // Automatic locking disabled
+            result = invoke(request);
+        }
+
+        if (MaybePromise.is(result)) {
+            isAsync = true;
+            result = Promise.resolve(result)
+                .then(result => {
+                    if (isObject(result)) {
+                        logger.debug(
+                            "Invoke result",
+                            Diagnostic.strong(path.toString()),
+                            session.transaction!.via,
+                            Diagnostic.dict(result),
+                        );
+                    }
+                    return result;
+                })
+                .finally(() => activity?.[Symbol.dispose]());
+        } else {
+            if (isObject(result)) {
+                logger.debug(
+                    "Invoke result",
+                    Diagnostic.strong(path.toString()),
+                    session.transaction.via,
+                    Diagnostic.dict(result),
+                );
+            }
+        }
+    } finally {
+        if (!isAsync) {
+            activity?.[Symbol.dispose]();
+        }
+    }
+
+    return result as MaybePromise<Val.Struct | undefined>;
+}
+
 function toWildcardOrHex(value: number | bigint | undefined) {
     return value === undefined ? "*" : `0x${value.toString(16)}`;
 }
 
-function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath) {
+/**
+ * Resolve a path into a human readable textual form for logging
+ * TODO: Add a Diagnostic display formatter for this
+ */
+function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath | CommandPath) {
     const { endpointId, clusterId } = path;
     const isUrgentString = "isUrgent" in path && path.isUrgent ? "!" : "";
     const listIndexString = "listIndex" in path && path.listIndex === null ? "[ADD]" : "";
+    const postString = `${listIndexString}${isUrgentString}`;
 
-    const elementId = "attributeId" in path ? path.attributeId : "eventId" in path ? path.eventId : undefined;
+    const elementId =
+        "attributeId" in path
+            ? path.attributeId
+            : "eventId" in path
+              ? path.eventId
+              : "commandId" in path
+                ? path.commandId
+                : undefined;
 
     if (endpointId === undefined) {
-        return `*/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
+        return `*.:${toWildcardOrHex(clusterId)}.:${toWildcardOrHex(elementId)}${postString}`;
     }
 
     const endpoint = node[endpointId];
     if (endpoint === undefined) {
-        return `unknown(${toWildcardOrHex(endpointId)})/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
+        return `?:.${toWildcardOrHex(endpointId)}.:${toWildcardOrHex(clusterId)}.:${toWildcardOrHex(elementId)}${postString}`;
     }
-    const endpointName = `${endpoint.name}(${toWildcardOrHex(endpointId)})`;
+    const endpointName = `${endpoint.name}:${toWildcardOrHex(endpointId)}`;
 
     if (clusterId === undefined) {
-        return `${endpointName}/*/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
+        return `${endpointName}.*.:${toWildcardOrHex(elementId)}${postString}`;
     }
 
     const cluster = endpoint[clusterId];
     if (cluster === undefined) {
-        return `${endpointName}/unknown(${toWildcardOrHex(clusterId)})/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
+        return `${endpointName}.?:${toWildcardOrHex(clusterId)}.:${toWildcardOrHex(elementId)}${postString}`;
     }
-    const clusterName = `${cluster.type.name}(${toWildcardOrHex(clusterId)})`;
+    const clusterName = `${cluster.type.name}:${toWildcardOrHex(clusterId)}`;
 
     if ("eventId" in path && elementId !== undefined) {
         const event = cluster.type.events[elementId];
-        return `${endpointName}/${clusterName}/${event?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${isUrgentString}`;
+        return `${endpointName}.${clusterName}.${event?.name ?? "?"}:${toWildcardOrHex(elementId)}${postString}`;
     } else if ("attributeId" in path && elementId !== undefined) {
         const attribute = cluster.type.attributes[elementId];
-        return `${endpointName}/${clusterName}/${attribute?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${listIndexString}${isUrgentString}`;
+        return `${endpointName}.${clusterName}.${attribute?.name ?? "?"}:${toWildcardOrHex(elementId)}${postString}`;
+    } else if ("commandId" in path && elementId !== undefined) {
+        const command = cluster.type.commands[elementId];
+        return `${endpointName}.${clusterName}.${command?.name ?? "?"}:${toWildcardOrHex(elementId)}${postString}`;
     } else {
-        return `${endpointName}/${clusterName}/*${listIndexString}${isUrgentString}`;
+        return `${endpointName}.${clusterName}.*${postString}`;
     }
 }

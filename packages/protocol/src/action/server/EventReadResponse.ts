@@ -50,7 +50,7 @@ export class EventReadResponse<
     // Collected allowed and existing event paths to consider when reading events
     #allowedEventPaths = new Map<string, TlvSchema<unknown>>();
 
-    // Count how many attribute status (on error) and attribute values (on success) we have emitted
+    // Count how many events status (on error) and event values (on success) we have emitted
     #statusCount = 0;
     #valueCount = 0;
 

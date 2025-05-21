@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/index.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvCommandId } from "../../datatype/CommandId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
@@ -17,3 +18,5 @@ export const TlvCommandPath = TlvTaggedList({
     clusterId: TlvField(1, TlvClusterId),
     commandId: TlvField(2, TlvCommandId),
 });
+
+export type CommandPath = TypeFromSchema<typeof TlvCommandPath>;

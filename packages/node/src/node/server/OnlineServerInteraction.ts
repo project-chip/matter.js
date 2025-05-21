@@ -3,7 +3,6 @@ import { NotImplementedError } from "#general";
 import {
     Interactable,
     Invoke,
-    InvokeResult,
     NodeProtocol,
     Read,
     ReadResult,
@@ -40,7 +39,15 @@ export class OnlineServerInteraction implements Interactable<OnlineContext.Optio
         return OnlineContext(context).act(session => this.#interaction.write(request, session));
     }
 
-    invoke<T extends Invoke>(_request: T, _context: OnlineContext.Options): InvokeResult<T> {
-        throw new NotImplementedError("invoke not implemented");
+    async *invoke(request: Invoke, context: OnlineContext.Options) {
+        const session = OnlineContext({ ...context, command: true }).open();
+        try {
+            for await (const chunk of this.#interaction.invoke(request, session)) {
+                yield chunk;
+            }
+        } catch (error) {
+            session.reject(error);
+        }
+        return session.resolve(undefined);
     }
 }

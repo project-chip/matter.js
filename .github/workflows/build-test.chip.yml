@@ -201,7 +201,7 @@ jobs:
           CHIP_SHA: ${{ needs.chip-image.outputs.chip-sha }}
         run: |
           cd chip
-          echo "$CHIP_SHA" > SHA.txt
+          echo "$CHIP_SHA" > sha.txt
 
       - name: Publish docker image
         run: |

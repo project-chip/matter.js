@@ -19,6 +19,7 @@ interface ServerEndpoint extends Endpoint {
 
 /**
  * EndpointServer makes an {@link Endpoint} available for remote access as an Endpoint on a Matter network.
+ * @deprecated
  */
 export class EndpointServer implements EndpointInterface {
     #endpoint: Endpoint;
@@ -209,6 +210,7 @@ export class EndpointServer implements EndpointInterface {
 
     /**
      * Retrieve the server for an endpoint.
+     * @deprecated - Use XXX instead
      */
     static forEndpoint(endpoint: Endpoint) {
         let server = (endpoint as ServerEndpoint)[SERVER];
