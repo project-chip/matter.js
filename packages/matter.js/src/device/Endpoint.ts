@@ -11,12 +11,7 @@ import {
     UserLabelCluster,
 } from "#clusters";
 import { AtLeastOne, Diagnostic, ImplementationError, InternalError, NotImplementedError } from "#general";
-import {
-    ClusterClientObj,
-    EndpointInterface,
-    SupportedAttributeClient,
-    UnknownSupportedAttributeClient,
-} from "#protocol";
+import { ClusterClientObj, SupportedAttributeClient, UnknownSupportedAttributeClient } from "#protocol";
 import {
     Attributes,
     BitSchema,
@@ -39,7 +34,7 @@ export interface EndpointOptions {
     uniqueStorageKey?: string;
 }
 
-export class Endpoint implements EndpointInterface {
+export class Endpoint {
     private readonly clusterServers = new Map<ClusterId, ClusterServerObj>();
     private readonly clusterClients = new Map<ClusterId, ClusterClientObj>();
     private readonly childEndpoints: Endpoint[] = [];
@@ -220,7 +215,7 @@ export class Endpoint implements EndpointInterface {
         this.name = deviceTypes[0].name;
     }
 
-    addChildEndpoint(endpoint: EndpointInterface): void {
+    addChildEndpoint(endpoint: Endpoint): void {
         if (!(endpoint instanceof Endpoint)) {
             throw new Error("Only supported EndpointInterface implementation is Endpoint");
         }

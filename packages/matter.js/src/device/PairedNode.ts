@@ -27,7 +27,6 @@ import {
     ClusterClientObj,
     DecodedAttributeReportValue,
     DecodedEventReportValue,
-    EndpointInterface,
     InteractionClient,
     NodeDiscoveryType,
     PaseClient,
@@ -1179,7 +1178,7 @@ export class PairedNode {
     }
 
     /** Returns the functional devices/endpoints (the "childs" of the Root Endpoint) known for this node. */
-    getDevices(): EndpointInterface[] {
+    getDevices(): Endpoint[] {
         return this.#endpoints.get(EndpointNumber(0))?.getChildEndpoints() ?? [];
     }
 
