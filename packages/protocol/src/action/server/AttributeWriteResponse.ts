@@ -9,7 +9,7 @@ import { AttributeTypeProtocol, ClusterProtocol, EndpointProtocol, NodeProtocol 
 import { Write } from "#action/request/Write.js";
 import { WriteResult } from "#action/response/WriteResult.js";
 import { AccessControl } from "#action/server/AccessControl.js";
-import { DataResponse, FallbackLimits, WildcardPathFlagsCodec } from "#action/server/DataResponse.js";
+import { DataResponse, FallbackLimits } from "#action/server/DataResponse.js";
 import { Diagnostic, InternalError, Logger } from "#general";
 import { AttributeModel, DataModelPath, ElementTag, FabricIndex as FabricIndexField } from "#model";
 import {
@@ -39,7 +39,6 @@ export class AttributeWriteResponse<
     #currentEndpoint?: EndpointProtocol;
     #currentCluster?: ClusterProtocol;
     #previousProcessedAttributePath?: WriteResult.ConcreteAttributePath;
-    #wildcardPathFlags = 0;
 
     // Count how many attribute status (on error) and attribute values (on success) we have emitted
     #statusCount = 0;
@@ -101,14 +100,11 @@ export class AttributeWriteResponse<
      * Validate a wildcard path and update internal state.
      */
     async #processWildcard(path: AttributePath, value: TlvStream) {
-        const { nodeId, endpointId, wildcardPathFlags } = path;
+        const { nodeId, endpointId } = path;
 
         if (nodeId !== undefined && nodeId !== this.nodeId) {
             return;
         }
-
-        // TODO clarify isf that's needed or not
-        this.#wildcardPathFlags = wildcardPathFlags ? WildcardPathFlagsCodec.encode(wildcardPathFlags) : 0;
 
         // TODO: Add Group handling and validation
         /*
@@ -248,8 +244,6 @@ export class AttributeWriteResponse<
      * Emits previous chunk if it exists and was not for this endpoint.  This means that our chunk size is one endpoint
      * worth of data, except for the initial error chunk if there are path errors.
      *
-     * {@link this.#wildcardPathFlags} to numeric bitmap must be set prior to invocation.
-     *
      * TODO - skip endpoints for which subject is unauthorized as optimization
      */
     #writeEndpointForWildcard(endpoint: EndpointProtocol, path: AttributePath, value: TlvStream) {
@@ -259,10 +253,6 @@ export class AttributeWriteResponse<
                 "Wildcard path write must specify a clusterId and attributeId",
                 StatusCode.InvalidAction,
             );
-        }
-
-        if (endpoint.wildcardPathFlags & this.#wildcardPathFlags) {
-            return; // TODO ???
         }
 
         if (this.#currentEndpoint !== endpoint) {
@@ -284,10 +274,6 @@ export class AttributeWriteResponse<
      * TODO - skip clusters for which subject is unauthorized
      */
     #writeClusterForWildcard(cluster: ClusterProtocol, path: AttributePath, value: TlvStream) {
-        if (cluster.type.wildcardPathFlags & this.#wildcardPathFlags) {
-            return; // TODO ???
-        }
-
         if (this.#currentCluster !== cluster) {
             this.#currentCluster = cluster;
         }
@@ -311,10 +297,6 @@ export class AttributeWriteResponse<
     #writeAttributeForWildcard(attribute: AttributeTypeProtocol, path: AttributePath, value: TlvStream) {
         if (!this.#guardedCurrentCluster.type.attributes[attribute.id]) {
             return;
-        }
-
-        if (attribute.wildcardPathFlags & this.#wildcardPathFlags) {
-            return; // TODO ????
         }
 
         if (
