@@ -526,7 +526,7 @@ export class PairedNode {
         }
         if (this.#reconnectionInProgress || this.#remoteInitializationInProgress) {
             logger.debug(
-                `Node ${this.nodeId}: Ignoring reconnect request because ${this.#remoteInitializationInProgress ? "init" : "reconnect"} already underway.`,
+                `Node ${this.nodeId}: Ignoring reconnect request because ${this.#remoteInitializationInProgress ? "initialization" : "reconnect"} already underway.`,
             );
             return;
         }
