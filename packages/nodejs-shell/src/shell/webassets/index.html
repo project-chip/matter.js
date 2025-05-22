@@ -278,18 +278,18 @@
                 if (typeof event.data === 'string') {
                     const message = event.data;
                     let trimmed = message.slice(0, 5000); // don't let message to log get too long
-                    if (trimmed.length != message.length) trimmed += ' ...'
+                    if (trimmed.length != message.length) trimmed += ' ...';
                     logMessage(`Received: "${trimmed}"`, trimmed.toLowerCase().includes('error') ? 'error' : 'received');
 
                     // result of nodes log command
-                    matches = message.match(/INFO\s+PairedNode [^0-9]*(\d+)\D*/)
+                    let matches = message.match(/INFO\s+PairedNode [^0-9]*(\d+)\D*/);
                     if (matches) { // could save this message of extensive node data for later use
                         let currentNode = matches[1];
                         let currentEndpoint = null;
                         let currentEndpointType = "";
                         const lines = message.split('\n');
                         lines.forEach(line => {
-                            matches = line.match(/ MA-[\w*]+ endpoint#: (\d+) type: MA-([\w*]+) \(([^)]+)\)/);
+                            let matches = line.match(/ MA-[\w*]+ endpoint#: (\d+) type: MA-([\w*]+) \(([^)]+)\)/);
                             if (matches) { // could start collecting upcoming messages that define this endpoint
                                 currentEndpoint = matches[1];
                                 currentEndpointType = matches[2];
