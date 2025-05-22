@@ -171,7 +171,6 @@
             gap: 10px;
             align-items: center;
         }
-
     </style>
 </head>
 
@@ -216,11 +215,6 @@
 
         let ws = null;
         let reconnectAttempts = 0;
-        let currentNode = null;
-        let currentEndpoint = null;
-        let currentEndpointType = "";
-        let pendingLog = [];
-        let logTimeout;
 
         const ON_OFF = 6;
         const ILLUMINANCE = 1024;
@@ -245,18 +239,23 @@
             consoleDiv.appendChild(dummy);
         }
         function logMessage(message, type) {
-            const MAX_MESSAGES = 1000; // Maximum number of messages to keep in the consol
-            const shouldScroll = consoleDiv.scrollTop + consoleDiv.clientHeight >= consoleDiv.scrollHeight - 5;
+            const MAX_MESSAGES = 1000; // Maximum number of messages to keep in the console
+            const fragment = document.createDocumentFragment();
             const lines = message.split('\n');
+
             lines.forEach(line => {
                 const msg = document.createElement('div');
-                msg.innerText = line;
+                msg.textContent = line;
                 msg.className = type;
-                consoleDiv.appendChild(msg);
+                fragment.appendChild(msg);
             });
-            while (consoleDiv.children.length > MAX_MESSAGES) consoleDiv.removeChild(consoleDiv.children[0]);
 
-            // Only scroll if the user is already at the bottom
+            consoleDiv.appendChild(fragment);
+
+            while (consoleDiv.children.length > MAX_MESSAGES) consoleDiv.removeChild(consoleDiv.firstChild);
+
+            // Only scroll if the user was already at the bottom
+            const shouldScroll = consoleDiv.scrollTop + consoleDiv.clientHeight >= consoleDiv.scrollHeight - consoleDiv.lastChild.offsetHeight - 5; // Adjusted for new content
             if (shouldScroll) consoleDiv.scrollTop = consoleDiv.scrollHeight;
         }
         function setupWebSocket() {
@@ -278,67 +277,66 @@
             ws.onmessage = (event) => {
                 if (typeof event.data === 'string') {
                     const message = event.data;
-                    logMessage(`Received: ${message}`, message.toLowerCase().includes('error') ? 'error' : 'received');
+                    let trimmed = message.slice(0, 5000); // don't let message to log get too long
+                    if (trimmed.length != message.length) trimmed += ' ...'
+                    logMessage(`Received: "${trimmed}"`, trimmed.toLowerCase().includes('error') ? 'error' : 'received');
 
-                    // Note that the following 4 regex checks are for "node log NNN" messages. Processing is fragile as the messages
-                    // come one line at a time asyncronously and could be interleaved with other messages including
-                    // other "node log" messages. In this example, we only send one "node log" command at a time,
-
-                    let matches = message.match(/Logging structure of Node\s+(\d+)/); // logging structure of Node is underway
-                    if (matches) currentNode = matches[1];
-
-                    matches = message.match(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\.\d{3}\s+INFO\s+EndpointStructureLogger\s+⎸\s+Endpoint\s(\d+)\s\(([^)]+)\):$/);
-                    if (matches) { // could start collecting upcoming messages that define this endpoint
-                        currentEndpoint = matches[1];
-                        currentEndpointType = matches[2];
-                        nodeLogCollection(true); // restart the timeout for the current node log
-                    }
-
-                    // device type list for the "current" node and "current" endpoint
-                    matches = message.match(/"deviceTypeList"\s*\([^)]*\):\s*value\s*=\s*(\[[^\]]*\])/);
-                    if (matches) logMessage(`Device Type List: ${matches[1]}`, 'status');
-
-                    // could also check and handle others, "moveToLevel", "movetohueandsaturation", etc.
-                    matches = message.match(/"(toggle|on|off|measuredValue|voltage)"/);
-                    if (matches) {
-                        if (!document.getElementById(`attr-${currentNode}/${currentEndpoint}/${matches[1]}`)) {
-                            let element;
-                            if (matches[1] === "toggle" || matches[1] === "on" || matches[1] === "off") {
-                                element = document.createElement('button');
-                                element.textContent = matches[1];
-                                const cmd = `commands onoff ${matches[1]} ${currentNode} ${currentEndpoint}`;
-                                element.onclick = () => sendCommand(cmd);
-                                if (matches[1] === "on") sendCommand(`attributes onoff read onoff ${currentNode} ${currentEndpoint}`); // get initial state
-                            } else element = document.createElement('span');
-
-                            element.id = `attr-${currentNode}/${currentEndpoint}/${matches[1]}`;
-                            if (!document.getElementById(`${currentEndpoint}-container-${currentNode}`)) {
-                                let endpointContainer = document.createElement('div');
-                                endpointContainer.id = `${currentEndpoint}-container-${currentNode}`;
-                                endpointContainer.className = 'node-container';
-                                const small = document.createElement('small');
-                                small.textContent = currentEndpointType.replace('MA-', '');
-                                const br = document.createElement('br');
-                                endpointContainer.innerHTML = '';
-                                endpointContainer.appendChild(small);
-                                endpointContainer.appendChild(br);
-                                document.getElementById(`container-${currentNode}`).appendChild(endpointContainer);
+                    // result of nodes log command
+                    matches = message.match(/INFO\s+PairedNode [^0-9]*(\d+)\D*/)
+                    if (matches) { // could save this message of extensive node data for later use
+                        let currentNode = matches[1];
+                        let currentEndpoint = null;
+                        let currentEndpointType = "";
+                        const lines = message.split('\n');
+                        lines.forEach(line => {
+                            matches = line.match(/ MA-[\w*]+ endpoint#: (\d+) type: MA-([\w*]+) \(([^)]+)\)/);
+                            if (matches) { // could start collecting upcoming messages that define this endpoint
+                                currentEndpoint = matches[1];
+                                currentEndpointType = matches[2];
                             }
-                            document.getElementById(`container-${currentNode}`)?.appendChild(element);
-                        }
-                        nodeLogCollection(true); // restart the timeout for the current node log
-                    }
-                    // end of "node log NNNN" messages processing
 
-                    // start of asynchronous messages processing
+                            // device type list for the this node and endpoint
+                            matches = line.match(/deviceTypeList id: 0x0 val: ((\{.*?\})(?:\s*\{.*?\})*)/);
+                            if (matches) logMessage(`Device Type List: ${currentNode}/${currentEndpoint} ${matches[1]}`, 'status');
+
+                            // could also check and handle others, "moveToLevel", "movetohueandsaturation", etc.
+                            matches = line.match(/ (toggle$|on$|off$|measuredValue |voltage )/);
+                            if (matches) {
+                                if (!document.getElementById(`attr-${currentNode}/${currentEndpoint}/${matches[1]}`)) {
+                                    let element;
+                                    if (["on", "off", "toggle"].includes(matches[1])) {
+                                        element = document.createElement('button');
+                                        element.textContent = matches[1];
+                                        const cmd = `commands onoff ${matches[1]} ${currentNode} ${currentEndpoint}`;
+                                        element.onclick = () => sendCommand(cmd);
+                                        if (matches[1] === "on") sendCommand(`attributes onoff read onoff ${currentNode} ${currentEndpoint}`); // get initial state
+                                    } else element = document.createElement('span');
+
+                                    element.id = `attr-${currentNode}/${currentEndpoint}/${matches[1].trim()}`;
+                                    if (!document.getElementById(`${currentEndpoint}-container-${currentNode}`)) {
+                                        let endpointContainer = document.createElement('div');
+                                        endpointContainer.id = `${currentEndpoint}-container-${currentNode}`;
+                                        endpointContainer.className = 'node-container';
+                                        const small = document.createElement('small');
+                                        small.textContent = currentEndpointType.replace('MA-', '');
+                                        const br = document.createElement('br');
+                                        endpointContainer.innerHTML = '';
+                                        endpointContainer.appendChild(small);
+                                        endpointContainer.appendChild(br);
+                                        document.getElementById(`container-${currentNode}`).appendChild(endpointContainer);
+                                    }
+                                    document.getElementById(`container-${currentNode}`)?.appendChild(element);
+                                }
+                            }
+                        });
+                    }
 
                     matches = message.match(/stateInformationCallback Node (\d+) (\S+)/);
                     if (matches) {
                         updateTile(matches[1], matches[2]);
                         if (matches[2] === "connected") {
                             sendCommand(`subscribe ${matches[1]}`);
-                            pendingLog.push(matches[1]);
-                            if (pendingLog.length === 1) nodeLogCollection(false);
+                            sendCommand(`nodes log ${matches[1]}`);
                         }
                     }
 
@@ -364,15 +362,6 @@
                     // else if (matches[1] === etc. process as needed
                 }
             }
-        }
-        function nodeLogCollection(resetTimer) {
-            if (resetTimer) clearTimeout(logTimeout); // stop the timeout for the previous node log
-            else sendCommand(`node log ${pendingLog[0]}`);  // start collection
-
-            logTimeout = setTimeout(() => {
-                pendingLog.shift(); // timed out getting logs for this one - assume we're done
-                if (pendingLog.length > 0) nodeLogCollection(false); // start the next one
-            }, 500); // 1/2 second timeout after the last log message to make sure we get them all
         }
         function styleContainer(nodeId, endpoint, state) {
             const element = document.getElementById(`${endpoint}-container-${nodeId}`);
