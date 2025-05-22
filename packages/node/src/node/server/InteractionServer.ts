@@ -477,13 +477,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
         const session = exchange.session;
         const fabric = session.fabric;
-        if (fabric === undefined)
-            throw new StatusResponseError(
-                "Subscriptions are only implemented after a fabric has been assigned",
-                StatusCode.InvalidAction,
-            );
 
-        if (!keepSubscriptions) {
+        if (fabric !== undefined && !keepSubscriptions) {
             const clearedCount = await this.#context.sessions.clearSubscriptionsForNode(
                 fabric.addressOf(session.peerNodeId),
                 true,
@@ -504,9 +499,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
         logger.debug(
             () =>
-                `Subscribe to attributes:${
+                `Subscribe to attributes: ${
                     attributeRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
-                }, events:${eventRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"}`,
+                }, events: ${eventRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"}`,
         );
 
         if (dataVersionFilters !== undefined && dataVersionFilters.length > 0) {

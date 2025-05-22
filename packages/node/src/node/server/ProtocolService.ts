@@ -663,8 +663,11 @@ function invokeCommand(
     return result as MaybePromise<Val.Struct | undefined>;
 }
 
-function toWildcardOrHex(value: number | bigint | undefined) {
-    return value === undefined ? "*" : `0x${value.toString(16)}`;
+function toWildcardOrHex(name: string, value: number | bigint | undefined) {
+    if (value === undefined) {
+        return "*";
+    }
+    return `${name}:0x${value.toString(16)}`;
 }
 
 /**
@@ -687,34 +690,38 @@ function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath 
                 : undefined;
 
     if (endpointId === undefined) {
-        return `*.:${toWildcardOrHex(clusterId)}.:${toWildcardOrHex(elementId)}${postString}`;
+        return `*.${toWildcardOrHex("", clusterId)}.${toWildcardOrHex("", elementId)}${postString}`;
     }
 
     const endpoint = node[endpointId];
     if (endpoint === undefined) {
-        return `?:.${toWildcardOrHex(endpointId)}.:${toWildcardOrHex(clusterId)}.:${toWildcardOrHex(elementId)}${postString}`;
+        return `${toWildcardOrHex("?", endpointId)}.${toWildcardOrHex("", clusterId)}.${toWildcardOrHex("", elementId)}${postString}`;
     }
-    const endpointName = `${endpoint.name}:${toWildcardOrHex(endpointId)}`;
+    const endpointName = toWildcardOrHex(endpoint.name, endpointId);
 
     if (clusterId === undefined) {
-        return `${endpointName}.*.:${toWildcardOrHex(elementId)}${postString}`;
+        return `${endpointName}.*.${toWildcardOrHex("", elementId)}${postString}`;
     }
 
     const cluster = endpoint[clusterId];
     if (cluster === undefined) {
-        return `${endpointName}.?:${toWildcardOrHex(clusterId)}.:${toWildcardOrHex(elementId)}${postString}`;
+        return `${endpointName}.${toWildcardOrHex("?", clusterId)}.${toWildcardOrHex("", elementId)}${postString}`;
     }
-    const clusterName = `${cluster.type.name}:${toWildcardOrHex(clusterId)}`;
+    const clusterName = toWildcardOrHex(cluster.type.name, clusterId);
 
-    if ("eventId" in path && elementId !== undefined) {
-        const event = cluster.type.events[elementId];
-        return `${endpointName}.${clusterName}.${event?.name ?? "?"}:${toWildcardOrHex(elementId)}${postString}`;
-    } else if ("attributeId" in path && elementId !== undefined) {
-        const attribute = cluster.type.attributes[elementId];
-        return `${endpointName}.${clusterName}.${attribute?.name ?? "?"}:${toWildcardOrHex(elementId)}${postString}`;
-    } else if ("commandId" in path && elementId !== undefined) {
-        const command = cluster.type.commands[elementId];
-        return `${endpointName}.${clusterName}.${command?.name ?? "?"}:${toWildcardOrHex(elementId)}${postString}`;
+    if (elementId !== undefined) {
+        if ("eventId" in path) {
+            const event = cluster.type.events[elementId];
+            return `${endpointName}.${clusterName}.${toWildcardOrHex(event?.name ?? "?", elementId)}${postString}`;
+        } else if ("attributeId" in path) {
+            const attribute = cluster.type.attributes[elementId];
+            return `${endpointName}.${clusterName}.${toWildcardOrHex(attribute?.name ?? "?", elementId)}${postString}`;
+        } else if ("commandId" in path) {
+            const command = cluster.type.commands[elementId];
+            return `${endpointName}.${clusterName}.${toWildcardOrHex(command?.name ?? "?", elementId)}${postString}`;
+        } else {
+            throw new ImplementationError("Invalid path");
+        }
     } else {
         return `${endpointName}.${clusterName}.*${postString}`;
     }
