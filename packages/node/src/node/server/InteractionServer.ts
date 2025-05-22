@@ -499,9 +499,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
         logger.debug(
             () =>
-                `Subscribe to attributes:${
+                `Subscribe to attributes: ${
                     attributeRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
-                }, events:${eventRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"}`,
+                }, events: ${eventRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"}`,
         );
 
         if (dataVersionFilters !== undefined && dataVersionFilters.length > 0) {
