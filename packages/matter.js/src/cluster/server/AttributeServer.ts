@@ -5,16 +5,7 @@
  */
 
 import { Endpoint } from "#device/Endpoint.js";
-import {
-    Diagnostic,
-    ImplementationError,
-    InternalError,
-    Logger,
-    MatterError,
-    MaybePromise,
-    camelize,
-    isDeepEqual,
-} from "#general";
+import { Diagnostic, ImplementationError, InternalError, Logger, MatterError, camelize, isDeepEqual } from "#general";
 import { AccessLevel, AttributeModel, ClusterModel, DatatypeModel, FabricIndex, MatterModel } from "#model";
 import { Fabric, Message, NoAssociatedFabricError, SecureSession, Session, assertSecureSession } from "#protocol";
 import {
@@ -634,95 +625,11 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     }
 }
 
-export function genericFabricScopedAttributeGetterFromFabric<T>(
-    fabric: Fabric,
-    cluster: Cluster<any, any, any, any, any>,
-    attributeName: string,
-    defaultValue: T,
-) {
-    const data = fabric.getScopedClusterDataValue<{ value: T }>(cluster, attributeName);
-    return data?.value ?? defaultValue;
-}
-
-export function genericFabricScopedAttributeGetter<T>(
-    session: Session | undefined,
-    isFabricFiltered: boolean,
-    cluster: Cluster<any, any, any, any, any>,
-    attributeName: string,
-    defaultValue: T,
-    fabrics: Fabric[],
-) {
-    if (session === undefined) {
-        throw new FabricScopeError(`Session is required for fabric scoped attribute ${attributeName}`);
-    }
-
-    if (isFabricFiltered) {
-        assertSecureSession(session);
-        return genericFabricScopedAttributeGetterFromFabric(
-            session.associatedFabric,
-            cluster,
-            attributeName,
-            defaultValue,
-        );
-    } else {
-        const values = new Array<any>();
-        for (const fabric of fabrics) {
-            const value = genericFabricScopedAttributeGetterFromFabric(fabric, cluster, attributeName, defaultValue);
-            if (!Array.isArray(value)) {
-                throw new FabricScopeError(
-                    `Fabric scoped attribute "${attributeName}" can only be read for all fabrics if they are arrays.`,
-                );
-            }
-            values.push(...value);
-        }
-        return values as T;
-    }
-}
-
-export function genericFabricScopedAttributeSetterForFabric<T>(
-    fabric: Fabric,
-    cluster: Cluster<any, any, any, any, any>,
-    attributeName: string,
-    value: T,
-    defaultValue?: T,
-) {
-    const oldValue = genericFabricScopedAttributeGetterFromFabric(fabric, cluster, attributeName, defaultValue);
-    if (!isDeepEqual(value, oldValue)) {
-        const setResult = fabric.setScopedClusterDataValue(cluster, attributeName, { value });
-        if (MaybePromise.is(setResult)) {
-            throw new ImplementationError(
-                "Seems like an Asynchronous Storage is used with Legacy code paths which is forbidden!",
-            );
-        }
-        return true;
-    }
-    return false;
-}
-
-export function genericFabricScopedAttributeSetter<T>(
-    value: T,
-    session: Session | undefined,
-    cluster: Cluster<any, any, any, any, any>,
-    attributeName: string,
-    defaultValue?: T,
-) {
-    if (session === undefined) {
-        throw new FabricScopeError(`Session is required for fabric scoped attribute "${attributeName}".`);
-    }
-
-    assertSecureSession(session);
-    const fabric = session.associatedFabric;
-
-    return genericFabricScopedAttributeSetterForFabric(fabric, cluster, attributeName, value, defaultValue);
-}
-
 /**
  * Attribute server which is getting and setting the value for a defined fabric. The values are automatically persisted
  * on fabric level if no custom getter or setter is defined.
  */
 export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
-    private readonly isCustomGetter: boolean;
-    private readonly isCustomSetter: boolean;
     private readonly fabricSensitiveElementsToRemove = new Array<string>();
 
     constructor(
@@ -752,7 +659,6 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             );
         }
 
-        let isCustomGetter = false;
         if (getter === undefined) {
             getter = (session, _endpoint, isFabricFiltered) => {
                 if (session === undefined)
@@ -775,16 +681,12 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
                     return values as T;
                 }
             };
-        } else {
-            isCustomGetter = true;
         }
 
-        let isCustomSetter = false;
         if (setter === undefined) {
-            setter = (value, session) =>
-                genericFabricScopedAttributeSetter(value, session, this.cluster, this.name, this.defaultValue);
-        } else {
-            isCustomSetter = true;
+            setter = () => {
+                throw new ImplementationError("Legacy FabricScopedAttributeServer data set is not supported anymore.");
+            };
         }
 
         super(
@@ -803,8 +705,6 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             setter,
             validator,
         );
-        this.isCustomGetter = isCustomGetter;
-        this.isCustomSetter = isCustomSetter;
 
         this.#determineSensitiveFieldsToRemove();
     }
@@ -932,25 +832,8 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      * If a validator is defined the value is validated before it is stored.
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
-    setLocalForFabric(value: T, fabric: Fabric) {
-        if (this.isCustomSetter) {
-            throw new FabricScopeError(
-                `Fabric scoped attribute "${this.name}" cannot be set locally when a custom setter is defined.`,
-            );
-        }
-        this.validator(value, undefined, this.endpoint);
-
-        const oldValue = this.getLocalForFabric(fabric);
-        const valueChanged = !isDeepEqual(value, oldValue);
-        if (valueChanged) {
-            const setResult = fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
-            if (MaybePromise.is(setResult)) {
-                throw new ImplementationError(
-                    "Seems like an Asynchronous Storage is used with Legacy code paths which is forbidden!",
-                );
-            }
-        }
-        this.handleVersionAndTriggerListeners(value, oldValue, valueChanged); // TODO Make callbacks sense without fabric, but then they would have other signature?
+    setLocalForFabric(_value: T, _fabric: Fabric) {
+        throw new ImplementationError("Legacy FabricScopedAttributeServer data write is not supported anymore.");
     }
 
     /**
@@ -978,12 +861,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      * does not include the ACL check.
      * If a getter is defined this method returns an error and the value should be retrieved directly internally.
      */
-    getLocalForFabric(fabric: Fabric): T {
-        if (this.isCustomGetter) {
-            throw new FabricScopeError(
-                `Fabric scoped attribute "${this.name}" cannot be read locally when a custom getter is defined.`,
-            );
-        }
-        return genericFabricScopedAttributeGetterFromFabric(fabric, this.cluster, this.name, this.defaultValue);
+    getLocalForFabric(_fabric: Fabric): T {
+        throw new ImplementationError("Legacy FabricScopedAttributeServer data read is not supported anymore.");
     }
 }
