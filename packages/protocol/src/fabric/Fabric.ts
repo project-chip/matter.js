@@ -25,7 +25,6 @@ import {
     MatterFlowError,
     MaybePromise,
     PrivateKey,
-    SupportedStorageTypes,
 } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { CaseAuthenticatedTag, FabricId, FabricIndex, NodeId, TypeFromSchema, VendorId } from "#types";
@@ -467,8 +466,6 @@ export class FabricBuilder {
 }
 
 export namespace Fabric {
-    export interface ScopedClusterData extends Map<number, Map<string, SupportedStorageTypes>> {}
-
     export type Config = {
         fabricIndex: FabricIndex;
         fabricId: FabricId;
@@ -484,6 +481,5 @@ export namespace Fabric {
         intermediateCACert: Uint8Array | undefined;
         operationalCert: Uint8Array;
         label: string;
-        scopedClusterData?: ScopedClusterData;
     };
 }
