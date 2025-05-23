@@ -28,7 +28,7 @@ import {
     SupportedStorageTypes,
 } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
-import { CaseAuthenticatedTag, Cluster, FabricId, FabricIndex, NodeId, TypeFromSchema, VendorId } from "#types";
+import { CaseAuthenticatedTag, FabricId, FabricIndex, NodeId, TypeFromSchema, VendorId } from "#types";
 import { SecureSession } from "../session/SecureSession.js";
 
 const logger = Logger.get("Fabric");
@@ -99,7 +99,6 @@ export class Fabric {
     readonly intermediateCACert: Uint8Array | undefined;
     readonly operationalCert: Uint8Array;
 
-    readonly #scopedClusterData: Fabric.ScopedClusterData;
     readonly #keyPair: Key;
 
     readonly #sessions = new Set<SecureSession>();
@@ -124,8 +123,6 @@ export class Fabric {
         this.#label = config.label;
 
         this.#keyPair = PrivateKey(config.keyPair);
-
-        this.#scopedClusterData = config.scopedClusterData ?? new Map();
     }
 
     get config(): Fabric.Config {
@@ -144,7 +141,6 @@ export class Fabric {
             intermediateCACert: this.intermediateCACert,
             operationalCert: this.operationalCert,
             label: this.#label,
-            scopedClusterData: this.#scopedClusterData,
         };
     }
 
@@ -239,46 +235,6 @@ export class Fabric {
 
     persist(isUpdate = true) {
         return this.#persistCallback?.(isUpdate);
-    }
-
-    getScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string): T | undefined {
-        const dataMap = this.#scopedClusterData.get(cluster.id);
-        if (dataMap === undefined) {
-            return undefined;
-        }
-        return dataMap.get(clusterDataKey) as T;
-    }
-
-    setScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string, value: T) {
-        if (!this.#scopedClusterData.has(cluster.id)) {
-            this.#scopedClusterData.set(cluster.id, new Map<string, SupportedStorageTypes>());
-        }
-        this.#scopedClusterData.get(cluster.id)!.set(clusterDataKey, value as SupportedStorageTypes);
-        return this.persist(false);
-    }
-
-    deleteScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
-        if (!this.#scopedClusterData.has(cluster.id)) {
-            return;
-        }
-        this.#scopedClusterData.get(cluster.id)!.delete(clusterDataKey);
-        return this.persist(false);
-    }
-
-    hasScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
-        return this.#scopedClusterData.has(cluster.id) && this.#scopedClusterData.get(cluster.id)!.has(clusterDataKey);
-    }
-
-    deleteScopedClusterData(cluster: Cluster<any, any, any, any, any>) {
-        this.#scopedClusterData.delete(cluster.id);
-        return this.persist(false);
-    }
-
-    getScopedClusterDataKeys(cluster: Cluster<any, any, any, any, any>): string[] {
-        if (!this.#scopedClusterData.has(cluster.id)) {
-            return [];
-        }
-        return Array.from(this.#scopedClusterData.get(cluster.id)!.keys());
     }
 
     getGroupKeySet(groupKeySetId: number) {
