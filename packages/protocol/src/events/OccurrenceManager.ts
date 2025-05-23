@@ -16,7 +16,15 @@ import {
     MaybePromise,
     Observable,
 } from "#general";
-import { EventNumber, FabricIndex, resolveEventName, TlvEventFilter, TlvEventPath, TypeFromSchema } from "#types";
+import {
+    EventNumber,
+    EventPriority,
+    FabricIndex,
+    resolveEventName,
+    TlvEventFilter,
+    TlvEventPath,
+    TypeFromSchema,
+} from "#types";
 import { EventStore, OccurrenceSummary } from "./EventStore.js";
 import { NumberedOccurrence, Occurrence } from "./Occurrence.js";
 
@@ -49,7 +57,7 @@ export class OccurrenceManager {
 
     // As we don't (yet) have storage with secondary indices we currently maintain indices in memory regardless of
     // whether underlying store is volatile
-    readonly #occurrences = new Array<OccurrenceSummary>();
+    #occurrences = new Array<OccurrenceSummary>();
 
     #construction: Construction<OccurrenceManager>;
 
@@ -298,23 +306,82 @@ export class OccurrenceManager {
     }
 
     #dropOldOccurrences() {
-        const count = this.#storedEventCount - this.#bufferConfig.minEventAllowance;
-        if (count <= 0) {
+        let toDelete = this.#storedEventCount - this.#bufferConfig.minEventAllowance;
+        if (toDelete <= 0) {
             return;
         }
 
-        logger.debug(`Event store is full; dropping ${count} old occurrence${count === 1 ? "s" : ""}`);
+        logger.debug(`Event store is full; dropping ${toDelete} old occurrence${toDelete === 1 ? "s" : ""}`);
+
+        const prioData = {
+            [EventPriority.Info]: {
+                count: this.#bufferConfig.minPriorityEventAllowance["info"],
+                minPosition: -1,
+            },
+            [EventPriority.Debug]: {
+                count: this.#bufferConfig.minPriorityEventAllowance["debug"],
+                minPosition: -1,
+            },
+        };
 
         const asyncDrops = Array<PromiseLike<void>>();
 
-        for (const entry of this.#occurrences.splice(0, count)) {
-            const drop = MaybePromise.catch(this.#store.delete(entry.number), error =>
-                logger.warn(`Error dropping occurrence #${entry}: ${error}`),
-            );
-            if (MaybePromise.is(drop)) {
-                asyncDrops.push(drop);
+        // Find out on which index positions we reached the minimum allowed entries for each priority.
+        // For that we count the entries for Non-Critical priorities from the end of the list to the beginning.
+        for (let i = this.#occurrences.length - 1; i >= 0; i--) {
+            const { priority } = this.#occurrences[i];
+
+            if (priority !== EventPriority.Critical) {
+                const data = prioData[priority];
+                if (data.count > 0) {
+                    data.count--;
+                    if (data.count === 0) {
+                        data.minPosition = i;
+                        if (
+                            prioData[EventPriority.Info].minPosition > -1 &&
+                            prioData[EventPriority.Debug].minPosition > -1
+                        ) {
+                            // We have found the minimum position for both priorities, we can stop
+                            break;
+                        }
+                    }
+                }
             }
         }
+
+        // Now we can drop the occurrences from the beginning of the list until we reach the minimum allowed entries
+        // for each priority, started with the lowest priority, until we reached the maximum number of entries we need
+        // to remove. Critical events are removed last from the beginning as many as needed to reach the maximum number
+        // of entries to remove.
+        // Deleted entries are marked as undefined in the array, so we can filter them out later in one pass.
+        const occurrences = this.#occurrences as Array<OccurrenceSummary | undefined>;
+        for (const priority of [EventPriority.Debug, EventPriority.Info, EventPriority.Critical]) {
+            const checkUpTo =
+                priority === EventPriority.Critical ? this.#storedEventCount : prioData[priority].minPosition;
+            if (checkUpTo === -1) {
+                // We have less than the minimum of this event type, so we can not remove any
+                continue;
+            }
+            for (let i = 0; i < checkUpTo && toDelete > 0; i++) {
+                if (occurrences[i] === undefined) continue;
+                const { priority: entryPriority, number } = occurrences[i]!;
+                if (entryPriority === priority) {
+                    const drop = MaybePromise.catch(this.#store.delete(number), error =>
+                        logger.warn(`Error dropping occurrence #${number}: ${error}`),
+                    );
+                    if (MaybePromise.is(drop)) {
+                        asyncDrops.push(drop);
+                    }
+                    occurrences[i] = undefined;
+                    toDelete--;
+                }
+            }
+            if (toDelete <= 0) {
+                break;
+            }
+        }
+        this.#occurrences = occurrences.filter(entry => entry) as OccurrenceSummary[];
+
         this.#storedEventCount = this.#occurrences.length;
 
         if (asyncDrops.length) {
@@ -342,10 +409,23 @@ export namespace OccurrenceManager {
          * {@link minimumEventAllowance}.
          */
         maxEventAllowance: number;
+
+        /**
+         * Minimum allowances by priority.  This ensures a minimum number of non-critical events avoid LRU
+         * harvesting. Critical events take the rest of the entries up to the defined global minimum.
+         */
+        minPriorityEventAllowance: {
+            info: number;
+            debug: number;
+        };
     }
 
     export const DefaultBufferConfig: BufferConfig = {
         minEventAllowance: 10_000,
         maxEventAllowance: 11_000,
+        minPriorityEventAllowance: {
+            info: 2_000,
+            debug: 2_000,
+        },
     };
 }
