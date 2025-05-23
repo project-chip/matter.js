@@ -5,6 +5,7 @@
  */
 
 import {
+    BasicSet,
     Bytes,
     ChannelType,
     Diagnostic,
@@ -16,10 +17,12 @@ import {
     DnsRecordClass,
     DnsRecordType,
     ImplementationError,
+    InternalError,
     Lifespan,
     Logger,
     MAX_MDNS_MESSAGE_SIZE,
     Network,
+    ObserverGroup,
     ServerAddressIp,
     SrvRecordValue,
     Time,
@@ -91,6 +94,28 @@ type StructuredDnsAnswers = {
 const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
 
 /**
+ * Interface to add criteria for MDNS discovery a node is interested in
+ *
+ * This interface is used to define criteria for mDNS scanner targets.
+ * It includes the information if commissionable devices are relevant for the target
+ * and a list of operational targets. Operational targets can consist of operational IDs
+ * and optional node IDs.
+ *
+ * When no commissionable devices are relevant and no operational targets are defined, it is
+ * not required to add a criteria to the scanner.
+ */
+export interface MdnsScannerTargetCriteria {
+    /** Are commissionable MDNS records relevant? */
+    commissionable: boolean;
+
+    /** List of operational targets. */
+    operationalTargets: {
+        operationalId: Uint8Array;
+        nodeId?: NodeId;
+    }[];
+}
+
+/**
  * This class implements the Scanner interface for a MDNS scanner via UDP messages in a IP based network. It sends out
  * queries to discover various types of Matter device types and listens for announcements.
  */
@@ -133,6 +158,7 @@ export class MdnsScanner implements Scanner {
             timer?: Timer;
             resolveOnUpdatedRecords: boolean;
             cancelResolver?: (value: void) => void;
+            commissionable: boolean;
         }
     >();
 
@@ -143,6 +169,15 @@ export class MdnsScanner implements Scanner {
     readonly #multicastServer: UdpMulticastServer;
     readonly #enableIpv4?: boolean;
 
+    readonly #targetCriteriaProviders = new BasicSet<MdnsScannerTargetCriteria>();
+    #scanForCommissionableDevices = false;
+    #hasCommissionableWaiters = false;
+    readonly #operationalScanTargets = new Set<string>();
+    readonly #observers = new ObserverGroup();
+
+    /** True, if any node is interested in MDNS traffic, else we ignore all traffic */
+    #listening = false;
+
     constructor(multicastServer: UdpMulticastServer, enableIpv4?: boolean) {
         multicastServer.onMessage((message, remoteIp, netInterface) =>
             this.#handleDnsMessage(message, remoteIp, netInterface),
@@ -152,6 +187,73 @@ export class MdnsScanner implements Scanner {
         this.#periodicTimer = Time.getPeriodicTimer("Discovered node expiration", 60 * 1000 /* 1 mn */, () =>
             this.#expire(),
         ).start();
+
+        this.#observers.on(this.#targetCriteriaProviders.added, () => this.#handleChangedScanTargets());
+        this.#observers.on(this.#targetCriteriaProviders.deleted, () => this.#handleChangedScanTargets());
+    }
+
+    /** Set to add or delete criteria for MDNS discovery */
+    get targetCriteriaProviders() {
+        return this.#targetCriteriaProviders;
+    }
+
+    #handleChangedScanTargets() {
+        this.#updateScanTargets();
+        logger.info(
+            "MDNS Scan targets updated :",
+            `commissionable = ${this.#scanForCommissionableDevices}`,
+            "Targets:",
+            this.#operationalScanTargets,
+        );
+    }
+
+    /** Update the MDNS scan criteria state and collect the desired operational targets */
+    #updateScanTargets() {
+        if (this.#closing) {
+            return;
+        }
+
+        // Add all operational targets from the criteria providers
+        this.#operationalScanTargets.clear();
+        let cacheCommissionableDevices = false;
+        for (const criteria of this.#targetCriteriaProviders) {
+            const { operationalTargets, commissionable } = criteria;
+            cacheCommissionableDevices = cacheCommissionableDevices || commissionable;
+            for (const { operationalId, nodeId } of operationalTargets) {
+                const operationalIdString = Bytes.toHex(operationalId).toUpperCase();
+                if (nodeId === undefined) {
+                    this.#operationalScanTargets.add(operationalIdString);
+                } else {
+                    this.#operationalScanTargets.add(`${operationalIdString}-${NodeId.toHexString(nodeId)}`);
+                }
+            }
+        }
+        this.#scanForCommissionableDevices = cacheCommissionableDevices;
+
+        // Register all operational targets for running queries
+        for (const queryId of this.#recordWaiters.keys()) {
+            this.#registerOperationalQuery(queryId);
+        }
+        this.#updateListeningStatus();
+    }
+
+    /** Update the status of we care about MDNS messages or not */
+    #updateListeningStatus() {
+        const formerListenStatus = this.#listening;
+        // Are we interested in MDNS traffic or not?
+        this.#listening =
+            this.#scanForCommissionableDevices ||
+            this.#operationalScanTargets.size > 0 ||
+            this.#recordWaiters.size > 0 ||
+            this.#activeAnnounceQueries.size > 0;
+        if (!this.#listening) {
+            this.#discoveredIpRecords.clear();
+            this.#operationalDeviceRecords.clear();
+            this.#commissionableDeviceRecords.clear();
+        }
+        if (this.#listening !== formerListenStatus) {
+            logger.debug(`MDNS Scanner ${this.#listening ? "started" : "stopped"} listening for MDNS messages`);
+        }
     }
 
     #effectiveTTL(ttl: number) {
@@ -348,12 +450,22 @@ export class MdnsScanner implements Scanner {
         });
     }
 
+    #registerOperationalQuery(queryId: string) {
+        const separator = queryId.indexOf(".");
+        if (separator !== -1) {
+            this.#operationalScanTargets.add(queryId.substring(0, separator));
+        } else {
+            throw new InternalError(`Invalid queryId ${queryId} for operational device, no separator found`);
+        }
+    }
+
     /**
      * Registers a deferred promise for a specific queryId together with a timeout and return the promise.
      * The promise will be resolved when the timer runs out latest.
      */
     async #registerWaiterPromise(
         queryId: string,
+        commissionable: boolean,
         timeoutSeconds?: number,
         resolveOnUpdatedRecords = true,
         cancelResolver?: (value: void) => void,
@@ -366,7 +478,12 @@ export class MdnsScanner implements Scanner {
                       this.#finishWaiter(queryId, true);
                   }).start()
                 : undefined;
-        this.#recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords, cancelResolver });
+        this.#listening = true;
+        this.#recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords, cancelResolver, commissionable });
+        this.#hasCommissionableWaiters = this.#hasCommissionableWaiters || commissionable;
+        if (!commissionable) {
+            this.#registerOperationalQuery(queryId);
+        }
         logger.debug(
             `Registered waiter for query ${queryId} with ${
                 timeoutSeconds !== undefined ? `timeout ${timeoutSeconds} seconds` : "no timeout"
@@ -382,7 +499,7 @@ export class MdnsScanner implements Scanner {
     #finishWaiter(queryId: string, resolvePromise: boolean, isUpdatedRecord = false) {
         const waiter = this.#recordWaiters.get(queryId);
         if (waiter === undefined) return;
-        const { timer, resolver, resolveOnUpdatedRecords } = waiter;
+        const { timer, resolver, resolveOnUpdatedRecords, commissionable } = waiter;
         if (isUpdatedRecord && !resolveOnUpdatedRecords) return;
         logger.debug(`Finishing waiter for query ${queryId}, resolving: ${resolvePromise}`);
         if (timer !== undefined) {
@@ -392,6 +509,33 @@ export class MdnsScanner implements Scanner {
             resolver();
         }
         this.#recordWaiters.delete(queryId);
+        this.#removeQuery(queryId);
+
+        if (!this.#closing) {
+            // We removed a waiter, so update what we still have left
+            this.#hasCommissionableWaiters = false;
+            let hasOperationalWaiters = false;
+            for (const { commissionable } of this.#recordWaiters.values()) {
+                if (commissionable) {
+                    this.#hasCommissionableWaiters = true;
+                    if (hasOperationalWaiters) {
+                        break; // No need to check further
+                    }
+                } else {
+                    hasOperationalWaiters = true;
+                    if (this.#hasCommissionableWaiters) {
+                        break; // No need to check further
+                    }
+                }
+            }
+
+            if (!commissionable) {
+                // We removed an operational device waiter, so we need to update the scan targets
+                this.#updateScanTargets();
+            } else {
+                this.#updateListeningStatus();
+            }
+        }
     }
 
     /** Returns weather a waiter promise is registered for a specific queryId. */
@@ -421,7 +565,7 @@ export class MdnsScanner implements Scanner {
 
         let storedDevice = ignoreExistingRecords ? undefined : this.#getOperationalDeviceRecords(deviceMatterQname);
         if (storedDevice === undefined) {
-            const promise = this.#registerWaiterPromise(deviceMatterQname, timeoutSeconds);
+            const promise = this.#registerWaiterPromise(deviceMatterQname, false, timeoutSeconds);
 
             this.#setQueryRecords(deviceMatterQname, [
                 {
@@ -433,7 +577,6 @@ export class MdnsScanner implements Scanner {
 
             await promise;
             storedDevice = this.#getOperationalDeviceRecords(deviceMatterQname);
-            this.#removeQuery(deviceMatterQname);
         }
         return storedDevice;
     }
@@ -446,7 +589,7 @@ export class MdnsScanner implements Scanner {
     cancelCommissionableDeviceDiscovery(identifier: CommissionableDeviceIdentifiers, resolvePromise = true) {
         const queryId = this.#buildCommissionableQueryIdentifier(identifier);
         const { cancelResolver } = this.#recordWaiters.get(queryId) ?? {};
-        // Mark as cancelled to not loop further in discovery, if cancel resolver is used
+        // Mark as canceled to not loop further in discovery, if cancel-resolver is used
         cancelResolver?.();
         this.#finishWaiter(queryId, resolvePromise);
     }
@@ -649,13 +792,12 @@ export class MdnsScanner implements Scanner {
             : this.#getCommissionableDeviceRecords(identifier).filter(({ addresses }) => addresses.length > 0);
         if (storedRecords.length === 0) {
             const queryId = this.#buildCommissionableQueryIdentifier(identifier);
-            const promise = this.#registerWaiterPromise(queryId, timeoutSeconds);
+            const promise = this.#registerWaiterPromise(queryId, true, timeoutSeconds);
 
             this.#setQueryRecords(queryId, this.#getCommissionableQueryRecords(identifier));
 
             await promise;
             storedRecords = this.#getCommissionableDeviceRecords(identifier);
-            this.#removeQuery(queryId);
         }
 
         return storedRecords;
@@ -714,7 +856,7 @@ export class MdnsScanner implements Scanner {
                     break;
                 }
             }
-            await this.#registerWaiterPromise(queryId, remainingTime, false, queryResolver);
+            await this.#registerWaiterPromise(queryId, true, remainingTime, false, queryResolver);
         }
         return this.#getCommissionableDeviceRecords(identifier);
     }
@@ -728,6 +870,7 @@ export class MdnsScanner implements Scanner {
      */
     async close() {
         this.#closing = true;
+        this.#observers.close();
         this.#periodicTimer.stop();
         this.#queryTimer?.stop();
         await this.#multicastServer.close();
@@ -1039,6 +1182,19 @@ export class MdnsScanner implements Scanner {
         }
     }
 
+    #matchesOperationalCriteria(matterName: string) {
+        const nameParts = matterName.match(/^([\dA-F]{16})-([\dA-F]{16})\._matter\._tcp\.local$/i);
+        if (!nameParts) {
+            return false;
+        }
+        const operationalId = nameParts[1];
+        const nodeId = nameParts[2];
+        return (
+            this.#operationalScanTargets.has(operationalId) ||
+            this.#operationalScanTargets.has(`${operationalId}-${nodeId}`)
+        );
+    }
+
     #handleOperationalTxtRecord(record: DnsRecord<any>, netInterface: string) {
         const { name: matterName, value, ttl } = record as DnsRecord<string[]>;
         const discoveredAt = Time.nowMs();
@@ -1055,8 +1211,15 @@ export class MdnsScanner implements Scanner {
         }
         if (!Array.isArray(value)) return;
 
+        // Existing records are always updated if relevant, but no new are added if they are not matching the criteria
+        if (!this.#operationalDeviceRecords.has(matterName) && !this.#matchesOperationalCriteria(matterName)) {
+            //logger.debug(`Operational device ${matterName} is not in the list of operational scan targets, ignoring.`);
+            return;
+        }
+
         const txtData = this.#parseTxtRecord(record);
         if (txtData === undefined) return;
+
         let device = this.#operationalDeviceRecords.get(matterName);
         if (device !== undefined) {
             device = {
@@ -1093,9 +1256,8 @@ export class MdnsScanner implements Scanner {
             ttl,
             value: { target, port },
         } = record;
-        const discoveredAt = Time.nowMs();
 
-        // we got an expiry info, so we can remove the record if we know it already and are done
+        // We got device expiry info, so we can remove the record if we know it already and are done
         if (ttl === 0) {
             if (this.#operationalDeviceRecords.has(matterName)) {
                 logger.debug(
@@ -1103,11 +1265,19 @@ export class MdnsScanner implements Scanner {
                 );
                 this.#operationalDeviceRecords.delete(matterName);
             }
-            return true;
+            return;
         }
 
         const ips = this.#handleIpRecords([formerAnswers, answers], target, netInterface);
         const deviceExisted = this.#operationalDeviceRecords.has(matterName);
+
+        // Existing records are always updated if relevant, but no new are added if they are not matching the criteria
+        if (!deviceExisted && !this.#matchesOperationalCriteria(matterName)) {
+            //logger.debug(`Operational device ${matterName} is not in the list of operational scan targets, ignoring.`);
+            return;
+        }
+
+        const discoveredAt = Time.nowMs();
         const device = this.#operationalDeviceRecords.get(matterName) ?? {
             deviceIdentifier: matterName,
             addresses: new Map<string, MatterServerRecordWithExpire>(),
@@ -1152,7 +1322,7 @@ export class MdnsScanner implements Scanner {
         } else if (addresses.size > 0) {
             this.#finishWaiter(matterName, true, deviceExisted);
         }
-        return true;
+        return;
     }
 
     #handleCommissionableRecords(
@@ -1160,6 +1330,11 @@ export class MdnsScanner implements Scanner {
         formerAnswers: StructuredDnsAnswers,
         netInterface: string,
     ) {
+        if (!this.#scanForCommissionableDevices && !this.#hasCommissionableWaiters) {
+            // We are not interested in commissionable devices, so we can skip this
+            return;
+        }
+
         // Does the message contain a SRV record for an operational service we are interested in?
         let commissionableRecords = answers.commissionable ?? {};
         if (!commissionableRecords[DnsRecordType.SRV]?.length && !commissionableRecords[DnsRecordType.TXT]?.length) {

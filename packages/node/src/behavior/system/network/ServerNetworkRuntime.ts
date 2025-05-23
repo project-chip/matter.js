@@ -347,7 +347,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         this.#observers.close();
 
-        await this.owner.env.close(DeviceCommissioner);
+        const { env } = this.owner;
+
+        await env.close(DeviceCommissioner);
         // Shutdown the Broadcaster if DeviceAdvertiser is not initialized
         // We kick-off the Advertiser shutdown to prevent re-announces when removing sessions and wait a bit later
         const advertisementShutdown = this.owner.env.has(DeviceAdvertiser)
@@ -360,10 +362,10 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         // Now all sessions are closed, so we wait for Advertiser to be gone
         await advertisementShutdown;
 
-        await this.owner.env.close(ExchangeManager);
-        await this.owner.env.close(SecureChannelProtocol);
-        await this.owner.env.close(TransportInterfaceSet);
-        await this.owner.env.close(InteractionServer);
+        await env.close(ExchangeManager);
+        await env.close(SecureChannelProtocol);
+        await env.close(TransportInterfaceSet);
+        await env.close(InteractionServer);
     }
 
     protected override blockNewActivity() {

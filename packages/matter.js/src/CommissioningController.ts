@@ -48,7 +48,7 @@ import {
     TypeFromPartialBitSchema,
     VendorId,
 } from "#types";
-import { CertificateAuthority, Fabric } from "@matter/protocol";
+import { CertificateAuthority, Fabric, MdnsScannerTargetCriteria } from "@matter/protocol";
 import { CommissioningControllerNodeOptions, NodeStates, PairedNode } from "./device/PairedNode.js";
 import { MatterController } from "./MatterController.js";
 
@@ -172,6 +172,8 @@ export class CommissioningController {
     readonly #initializedNodes = new Map<NodeId, PairedNode>();
     readonly #nodeUpdateLabelHandlers = new Map<NodeId, (nodeState: NodeStates) => Promise<void>>();
     readonly #sessionDisconnectedHandler = new Map<NodeId, () => Promise<void>>();
+
+    #mdnsTargetCriteria?: MdnsScannerTargetCriteria;
 
     /**
      * Creates a new CommissioningController instance
@@ -546,6 +548,11 @@ export class CommissioningController {
             node.close();
         }
         await this.#controllerInstance?.close();
+
+        if (this.#mdnsScanner !== undefined && this.#mdnsTargetCriteria !== undefined) {
+            this.#mdnsScanner.targetCriteriaProviders.delete(this.#mdnsTargetCriteria);
+        }
+
         this.#controllerInstance = undefined;
         this.#initializedNodes.clear();
         this.#ipv4Disabled = undefined;
@@ -591,20 +598,20 @@ export class CommissioningController {
                 throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
             }
 
-            const { environment } = this.#options.environment;
+            const { environment: env } = this.#options.environment;
 
-            if (!environment.has(ControllerStore)) {
+            if (!env.has(ControllerStore)) {
                 await this.initializeControllerStore();
             }
 
             // Load the MDNS service from the environment and set onto the controller
-            const mdnsService = await environment.load(MdnsService);
+            const mdnsService = await env.load(MdnsService);
             this.#ipv4Disabled = !mdnsService.enableIpv4;
             this.setMdnsBroadcaster(mdnsService.broadcaster);
             this.setMdnsScanner(mdnsService.scanner);
 
-            this.#environment = environment;
-            const runtime = this.#environment.runtime;
+            this.#environment = env;
+            const runtime = env.runtime;
             runtime.add(this);
         }
 
@@ -612,6 +619,17 @@ export class CommissioningController {
         if (this.#controllerInstance === undefined) {
             this.#controllerInstance = await this.#initializeController();
         }
+
+        this.#mdnsTargetCriteria = {
+            commissionable: true,
+            operationalTargets: [
+                {
+                    operationalId: this.#controllerInstance.fabricConfig.operationalId,
+                },
+            ],
+        };
+        this.#mdnsScanner?.targetCriteriaProviders.add(this.#mdnsTargetCriteria);
+
         await this.#controllerInstance.announce();
         if (this.#options.autoConnect !== false && this.#controllerInstance.isCommissioned()) {
             await this.connect();
