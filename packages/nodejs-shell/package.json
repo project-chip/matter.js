@@ -27,7 +27,7 @@
         "build": "matter-build",
         "build-clean": "matter-build --clean",
         "shell": "matter-run src/app.ts",
-        "bundle-device": "esbuild src/app.ts --bundle --platform=node --conditions=esbuild --external:@stoprocent/noble --external:@stoprocent/bluetooth-hci-socket --sourcemap --minify --keep-names --outfile=build/bundle/app.cjs"
+        "bundle-shell": "esbuild src/app.ts --bundle --platform=node --conditions=esbuild --external:@stoprocent/noble --external:@stoprocent/bluetooth-hci-socket --sourcemap --minify --keep-names --outfile=build/bundle/app.cjs"
     },
     "bin": {
         "matter-shell": "dist/cjs/app.js"
