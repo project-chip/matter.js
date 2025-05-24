@@ -224,10 +224,10 @@ export namespace GroupKeyManagement {
          *
          * The AllNodes method minimizes the number of multicast addresses to which a receiver node needs to subscribe.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * Support for GroupKeyMulticastPolicy is provisional. Correct default behavior is that implied by value
-         * PerGroupID.
+         * > Support for GroupKeyMulticastPolicy is provisional. Correct default behavior is that implied by value
+         *   PerGroupID.
          *
          * @see {@link MatterSpecification.v14.Core} § 11.2.5.4.9
          */
@@ -335,8 +335,6 @@ export namespace GroupKeyManagement {
 
         features: {
             /**
-             * CacheAndSync
-             *
              * The ability to support CacheAndSync security policy and MCSP.
              */
             cacheAndSync: BitFlag(0)
@@ -357,10 +355,9 @@ export namespace GroupKeyManagement {
 
             /**
              * This attribute is a list of GroupInfoMapStruct entries. Each entry provides read-only information about
-             * how a given logical Group ID maps to a particular set of endpoints, and a name for the group.
-             *
-             * The content of this attribute reflects data managed via the Groups cluster (see AppClusters), and is in
-             * general terms referred to as the 'node-wide Group Table'.
+             * how a given logical Group ID maps to a particular set of endpoints, and a name for the group. The content
+             * of this attribute reflects data managed via the Groups cluster (see AppClusters), and is in general terms
+             * referred to as the 'node-wide Group Table'.
              *
              * The GroupTable shall NOT contain any entry whose GroupInfoMapStruct has an empty Endpoints list. If a
              * RemoveGroup or RemoveAllGroups command causes the removal of a group mapping from its last mapped
@@ -394,7 +391,7 @@ export namespace GroupKeyManagement {
              * This command is used by Administrators to set the state of a given Group Key Set, including atomically
              * updating the state of all epoch keys.
              *
-             * Effect on Receipt
+             * ### Effect on Receipt
              *
              * The following validations shall be done against the content of the GroupKeySet field:
              *
@@ -436,13 +433,12 @@ export namespace GroupKeyManagement {
              *     being null, then this command shall fail with an INVALID_COMMAND status code responded to the client.
              *
              * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as
-             * that provided in the GroupKeySet field, then the contents of that group key set shall be
-             *
-             * replaced. A replacement shall be done by executing the equivalent of entirely removing the previous Group
-             * Key Set with the given GroupKeySetID, followed by an addition of a Group Key Set with the provided
-             * configuration. Otherwise, if the GroupKeySetID did not match an existing entry, a new Group Key Set
-             * associated with the accessing fabric shall be created with the provided data. The Group Key Set shall be
-             * written to non-volatile storage.
+             * that provided in the GroupKeySet field, then the contents of that group key set shall be replaced. A
+             * replacement shall be done by executing the equivalent of entirely removing the previous Group Key Set
+             * with the given GroupKeySetID, followed by an addition of a Group Key Set with the provided configuration.
+             * Otherwise, if the GroupKeySetID did not match an existing entry, a new Group Key Set associated with the
+             * accessing fabric shall be created with the provided data. The Group Key Set shall be written to
+             * non-volatile storage.
              *
              * Upon completion, this command shall send a status code back to the initiator:
              *
@@ -461,7 +457,7 @@ export namespace GroupKeyManagement {
             /**
              * This command is used by Administrators to read the state of a given Group Key Set.
              *
-             * Effect on Receipt
+             * ### Effect on Receipt
              *
              * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as
              * that provided in the GroupKeySetID field, then the contents of that Group Key Set shall be sent in a
@@ -483,7 +479,7 @@ export namespace GroupKeyManagement {
             /**
              * This command is used by Administrators to remove all state of a given Group Key Set.
              *
-             * Effect on Receipt
+             * ### Effect on Receipt
              *
              * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as
              * that provided in the GroupKeySetID field, then the contents of that Group Key Set shall be removed,
@@ -514,7 +510,7 @@ export namespace GroupKeyManagement {
              * This command is used by Administrators to query a list of all Group Key Sets associated with the
              * accessing fabric.
              *
-             * Effect on Receipt
+             * ### Effect on Receipt
              *
              * Upon receipt, this command shall iterate all stored GroupKeySetStruct associated with the accessing
              * fabric and generate a KeySetReadAllIndicesResponse command containing the list of GroupKeySetID values
@@ -551,9 +547,8 @@ export namespace GroupKeyManagement {
      * require Administer privilege.
      *
      * Each group entry includes a membership list of zero of more endpoints that are members of the group on the node.
-     * Modification of this membership list is done via the Groups cluster, which is
-     *
-     * scoped to an endpoint. Please see the System Model specification for more information on groups.
+     * Modification of this membership list is done via the Groups cluster, which is scoped to an endpoint. Please see
+     * the System Model specification for more information on groups.
      *
      * GroupKeyManagementCluster supports optional features that you can enable with the
      * GroupKeyManagementCluster.with() factory method.

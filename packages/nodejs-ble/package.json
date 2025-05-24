@@ -29,15 +29,15 @@
     },
     "dependencies": {
         "@matter/general": "*",
-        "@matter/types": "*",
-        "@matter/protocol": "*"
+        "@matter/protocol": "*",
+        "@matter/types": "*"
     },
     "devDependencies": {
         "@matter/tools": "*"
     },
     "optionalDependencies": {
-        "@stoprocent/bleno": "^0.11.3",
-        "@stoprocent/noble": "^2.3.0"
+        "@stoprocent/bleno": "^0.11.4",
+        "@stoprocent/noble": "^2.3.1"
     },
     "engines": {
         "node": ">=18.0.0"
@@ -48,6 +48,11 @@
         "require/**/*",
         "LICENSE"
     ],
+    "imports": {
+        "#general": "@matter/general",
+        "#protocol": "@matter/protocol",
+        "#types": "@matter/types"
+    },
     "type": "module",
     "main": "dist/cjs/index.js",
     "types": "dist/cjs/index.d.ts",

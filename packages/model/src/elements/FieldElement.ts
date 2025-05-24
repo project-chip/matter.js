@@ -16,15 +16,27 @@ export interface FieldElement extends ValueElement {
     tag: `${FieldElement.Tag}`;
 
     /**
-     * Fields must have IDs but they may be implied by the field's position
-     * in its parent.
+     * Fields must have IDs but they may be implied by the field's position in its parent.
      */
     id?: Mei;
+
+    /**
+     * Alternate field name.
+     *
+     * This is used for the full name of feature bitfields.
+     */
+    title?: string;
 
     children?: FieldElement[];
 }
 
 export function FieldElement(definition: FieldElement.Properties, ...children: FieldElement[]) {
+    // Support legacy long name definition
+    if (definition.title === undefined && definition.description && definition.name.match(/^[A-Z_]+$/)) {
+        definition.title = definition.description;
+        delete definition.description;
+    }
+
     return ValueElement(FieldElement.Tag, definition, children) as FieldElement;
 }
 

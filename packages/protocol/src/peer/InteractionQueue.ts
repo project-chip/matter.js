@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Environment, Environmental, PromiseQueue } from "@matter/general";
+import { Environment, Environmental, PromiseQueue } from "#general";
 
 const CONCURRENT_QUEUED_INTERACTIONS = 4;
 const INTERACTION_QUEUE_DELAY_MS = 100;

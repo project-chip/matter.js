@@ -34,13 +34,22 @@
     },
     "imports": {
         "#general": "@matter/general",
+        "#model": "@matter/model",
+        "#node": "@matter/node",
+        "#nodejs": "@matter/nodejs",
+        "#nodejs-ble": "@matter/nodejs-ble",
+        "#protocol": "@matter/protocol",
         "#types": "@matter/types"
     },
     "dependencies": {
         "@matter/general": "*",
+        "@matter/model": "*",
+        "@matter/node": "*",
         "@matter/nodejs": "*",
         "@matter/nodejs-ble": "*",
+        "@matter/protocol": "*",
         "@matter/tools": "*",
+        "@matter/types": "*",
         "@project-chip/matter.js": "*",
         "ws": "^8.18.2",
         "yargs": "^17.7.2"

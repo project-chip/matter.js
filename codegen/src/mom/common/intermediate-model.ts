@@ -55,7 +55,13 @@ export class IntermediateModel {
 
         if (save) {
             const file = new TsFile(`!intermediate/v${this.#version}/${this.#source}`);
-            generateElement(file, "#model", matter, `export const ${camelize(this.#source, true)}Matter = `);
+            generateElement({
+                target: file,
+                importFrom: "#model",
+                element: matter,
+                prefix: `export const ${camelize(this.#source, true)}Matter = `,
+                operational: false,
+            });
             file.save();
         }
 

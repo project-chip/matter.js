@@ -13,6 +13,3 @@ export * from "./DeviceInformation.js";
 export * from "./DeviceTypes.js";
 export * from "./Endpoint.js";
 export * from "./PairedNode.js";
-
-// Compat
-export { logEndpoint } from "#protocol";

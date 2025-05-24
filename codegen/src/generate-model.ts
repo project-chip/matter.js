@@ -6,7 +6,7 @@
 
 // Generates the runtime Matter model
 
-import { InternalError, Logger } from "#general";
+import { decamelize, InternalError, Logger } from "#general";
 import { LocalMatter } from "#intermediate-models";
 import {
     AttributeModel,
@@ -19,6 +19,7 @@ import {
     Specification,
     TraverseMap,
 } from "#model";
+import { generateResource } from "#mom/common/generate-resource.js";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { generateElement } from "./mom/common/generate-element.js";
@@ -42,11 +43,14 @@ const args = await yargs(hideBin(process.argv))
     })
     .strict().argv;
 
-let revisionComponents = args.revision.split(".");
-if (revisionComponents.length > 2) {
-    revisionComponents = revisionComponents.slice(0, 2);
-    args.revision = revisionComponents.join(".");
+const revisionComponents = args.revision.split(".");
+if (revisionComponents.length > 3) {
+    revisionComponents.length = 3;
 }
+if (revisionComponents.length > 2 && revisionComponents[2] === "0") {
+    revisionComponents.length = 2;
+}
+args.revision = revisionComponents.join(".");
 
 function elementDiscriminatedName(element: Model) {
     const { name } = element;
@@ -59,6 +63,12 @@ function elementDiscriminatedName(element: Model) {
     return name;
 }
 
+const assignedFilenames = new Map<Model, string>();
+
+function elementFilename(element: Model, type: "element" | "resource") {
+    return `${assignedFilenames.get(element)}.${type}`;
+}
+
 function elementIdentifierName(element: Model) {
     const name = elementDiscriminatedName(element);
     return camelize(name, name[0] < "a" || name[0] > "z");
@@ -67,11 +77,16 @@ function elementIdentifierName(element: Model) {
 function generateElementFile(element: Model) {
     logger.debug(element.name);
 
-    const file = new TsFile(`!elements/${elementDiscriminatedName(element)}`);
+    const file = new TsFile(`!elements/${elementFilename(element, "element")}`);
 
     file.addImport(`../MatterDefinition.js`, `MatterDefinition`);
     const exportName = elementIdentifierName(element);
-    generateElement(file, "!model/elements/index.js", element, `export const ${exportName} = `);
+    generateElement({
+        target: file,
+        importFrom: "!model/elements/index.js",
+        element,
+        prefix: `export const ${exportName} = `,
+    });
     file.atom(`MatterDefinition.children.push(${exportName})`);
 
     if (args.save) {
@@ -79,10 +94,25 @@ function generateElementFile(element: Model) {
     }
 }
 
-function generateDefinitions(elements: Model[]) {
+function generateResourceFile(element: Model) {
+    logger.debug(`${element.name} resources`);
+
+    const file = new TsFile(`!resources/${elementFilename(element, "resource")}`);
+    if (!generateResource(file, element)) {
+        return false;
+    }
+
+    if (args.save) {
+        file.save();
+    }
+
+    return true;
+}
+
+function generateElementIndex(elements: Model[]) {
     const file = new TsFile(`!elements/definitions`);
     for (const element of elements) {
-        file.addReexport(`./${elementDiscriminatedName(element)}.js`);
+        file.addReexport(`./${elementFilename(element, "element")}.js`);
     }
 
     if (args.save) {
@@ -90,7 +120,7 @@ function generateDefinitions(elements: Model[]) {
     }
 }
 
-function generateModels(elements: Model[]) {
+function generateModelIndex(elements: Model[]) {
     const file = new TsFile(`!elements/models`);
     file.addImport("./definitions.js", "* as definitions");
     for (const element of elements) {
@@ -98,6 +128,18 @@ function generateModels(elements: Model[]) {
         file.addImport(`../../models/${type}.js`, type);
         const exportName = elementIdentifierName(element);
         file.atom(`export const ${exportName} = new ${type}(definitions.${exportName})`);
+    }
+
+    if (args.save) {
+        file.save();
+    }
+}
+
+function generateResourceIndex(elements: Model[]) {
+    const file = new TsFile(`!resources/index`);
+    file.addImport("../elements/models.js");
+    for (const element of elements) {
+        file.addImport(`./${elementFilename(element, "resource")}.js`);
     }
 
     if (args.save) {
@@ -136,20 +178,66 @@ if (
     throw new InternalError("Model is missing key elements that would break codebase, aborting");
 }
 
+{
+    const nameMap = new Map<string, Model[]>();
+    for (const child of matter.children) {
+        const name = decamelize(child.name);
+        const entry = nameMap.get(name);
+        if (entry) {
+            entry.push(child);
+        } else {
+            nameMap.set(name, [child]);
+        }
+    }
+
+    for (const [name, models] of nameMap.entries()) {
+        if (models.length === 1) {
+            assignedFilenames.set(models[0], name);
+        } else {
+            for (const model of models) {
+                let suffix = model.tag as string;
+                switch (suffix) {
+                    case "deviceType":
+                        suffix = "device";
+                        break;
+
+                    case "semanticNamespace":
+                        suffix = "namespace";
+                        break;
+
+                    case "semanticTag":
+                        suffix = "tag";
+                        break;
+                }
+                assignedFilenames.set(model, `${name}-${suffix}`);
+            }
+        }
+    }
+}
+
 logger.info("remove matter model elements");
 if (args.save) {
     clean("!elements");
+    clean("!resources");
 }
 
 logger.info("generate matter model");
 Logger.nest(() => {
+    const withResources = Array<Model>();
+
     for (const child of matter.children) {
-        Logger.nest(() => generateElementFile(child));
+        Logger.nest(() => {
+            generateElementFile(child);
+            if (generateResourceFile(child)) {
+                withResources.push(child);
+            }
+        });
     }
 
     logger.info("index");
-    generateDefinitions(matter.children as Model[]);
-    generateModels(matter.children as Model[]);
+    generateElementIndex(matter.children as Model[]);
+    generateModelIndex(matter.children as Model[]);
+    generateResourceIndex(withResources);
 });
 
 validationResult.report();

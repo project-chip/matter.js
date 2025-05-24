@@ -5,6 +5,5 @@
  */
 
 export * from "./ActionContext.js";
-export * from "./ActionTracer.js";
 export * from "./Contextual.js";
 export * from "./server/index.js";

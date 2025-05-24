@@ -190,22 +190,16 @@ export namespace ResourceMonitoring {
     export const Base = MutableCluster.Component({
         features: {
             /**
-             * Condition
-             *
              * Supports monitoring the condition of the resource in percentage
              */
             condition: BitFlag(0),
 
             /**
-             * Warning
-             *
              * Supports warning indication
              */
             warning: BitFlag(1),
 
             /**
-             * ReplacementProductList
-             *
              * Supports specifying the list of replacement products
              */
             replacementProductList: BitFlag(2)

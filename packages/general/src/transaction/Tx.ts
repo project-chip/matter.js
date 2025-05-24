@@ -8,6 +8,7 @@ import { Diagnostic } from "#log/Diagnostic.js";
 import { Logger } from "#log/Logger.js";
 import { ImplementationError, ReadOnlyError } from "#MatterError.js";
 import { Time, Timer } from "#time/Time.js";
+import { asError } from "#util/Error.js";
 import { Observable } from "#util/Observable.js";
 import { MaybePromise } from "#util/Promises.js";
 import { describeList } from "#util/String.js";
@@ -29,106 +30,14 @@ const MAX_CHAINED_COMMITS = 5;
 /**
  * This is the only public interface to this file.
  */
-export function act<T>(via: string, actor: (transaction: Transaction) => T): T {
-    const tx = new Tx(via);
-    let commits = 0;
-
-    // Post-commit logic may result in the transaction requiring commit again so commit iteratively up to
-    // MAX_CHAINED_COMMITS times
-    function commitTransaction(finalResult: T): MaybePromise<T> {
-        commits++;
-
-        if (commits > MAX_CHAINED_COMMITS) {
-            throw new TransactionFlowError(
-                `Transaction commits have cascaded ${MAX_CHAINED_COMMITS} times which likely indicates an infinite loop`,
-            );
-        }
-
-        // Avoid MaybePromise.then to shorten stack traces
-        const result = tx.commit();
-        if (MaybePromise.is(result)) {
-            return result.then(() => {
-                if (tx.status === Status.Exclusive) {
-                    return commitTransaction(finalResult);
-                }
-                return finalResult;
-            });
-        } else if (tx.status === Status.Exclusive) {
-            return commitTransaction(finalResult);
-        }
-
-        return finalResult;
-    }
-
-    const handleTransactionError = ((error: any) => {
-        // If we've committed, error happened during commit and we've already logged and cleaned up
-        if (commits) {
-            throw error;
-        }
-
-        logger.error("Rolling back", tx.via, "due to error:", Diagnostic.weak(error?.message || `${error}`));
-
-        try {
-            const result = tx.rollback();
-            if (MaybePromise.is(result)) {
-                return Promise.resolve(result).catch(error2 => {
-                    if (error2 !== error) {
-                        logger.error("Secondary error in", tx.via, "rollback:", error2);
-                    }
-                    throw error;
-                });
-            }
-        } catch (error2) {
-            if (error2 !== error) {
-                logger.error("Secondary error in", tx.via, "rollback:", error2);
-            }
-        }
-
-        throw error;
-    }) as (error: any) => MaybePromise<T>; // Cast because otherwise type is MaybePromise<void>
-
-    const closeTransaction = tx.close.bind(tx);
-
-    let isAsync = false;
-    try {
-        // Execute the actor
-        const actorResult = actor(tx);
-
-        // If actor is async, chain commit and close asynchronously
-        if (MaybePromise.is(actorResult)) {
-            // If the actor is async mark the transaction as async; this will enable reporting on lock changes
-            isAsync = tx.isAsync = true;
-            return Promise.resolve(actorResult)
-                .then(commitTransaction, handleTransactionError)
-                .finally(closeTransaction) as T;
-        }
-
-        // Actor is not async but if commit is, chain closeTransaction
-        const commitResult = commitTransaction(actorResult);
-        if (MaybePromise.is(commitResult)) {
-            isAsync = true;
-            return Promise.resolve(commitResult).catch(handleTransactionError).finally(closeTransaction) as T;
-        }
-
-        // Fully synchronous action
-        return commitResult;
-    } catch (e) {
-        const result = handleTransactionError(e);
-
-        // Above throws if synchronous so this is async code path
-        isAsync = true;
-        return Promise.resolve(result).finally(closeTransaction) as T;
-    } finally {
-        if (!isAsync) {
-            tx.close();
-        }
-    }
+export function open(via: string): Transaction & Transaction.Finalization {
+    return new Tx(via);
 }
 
 /**
  * The concrete implementation of the Transaction interface.
  */
-class Tx implements Transaction {
+class Tx implements Transaction, Transaction.Finalization {
     #participants = new Set<Participant>();
     #roles = new Map<{}, Participant>();
     #resources = new Set<Resource>();
@@ -149,12 +58,9 @@ class Tx implements Transaction {
         }
     }
 
-    close() {
-        Monitor.delete(this);
+    [Symbol.dispose]() {
+        this.#reset("dropped");
         this.#status = Status.Destroyed;
-        this.#resources.clear();
-        this.#roles.clear();
-        this.#participants.clear();
         this.#closed?.emit();
     }
 
@@ -182,6 +88,9 @@ class Tx implements Transaction {
         return this.#isAsync;
     }
 
+    /**
+     * We set this during async processing.  This enables the lock reporting when too much time ellapses.
+     */
     set isAsync(isAsync: true) {
         // When the transaction is noted as async we start reporting locks.  A further optimization would be to not even
         // acquire locks for synchronous transactions
@@ -318,34 +227,130 @@ class Tx implements Transaction {
     }
 
     commit() {
-        this.#assertAvailable();
-
-        if (this.#status === Status.Shared) {
-            // Use rollback() to reset state
+        if (this.status === Status.Shared) {
             return this.rollback();
         }
 
-        // Perform the actual commit once preCommit completes
-        const performCommit = () => {
-            const participants = [...this.#participants];
-            const result = this.#finalize(Status.CommittingPhaseOne, "committed", this.#executeCommit.bind(this));
-            if (MaybePromise.is(result)) {
-                return result.then(() => this.#executePostCommit(participants));
-            }
-            return this.#executePostCommit(participants);
-        };
+        this.#assertAvailable();
 
-        const result = this.#executePreCommit();
-        if (MaybePromise.is(result)) {
-            return result.then(performCommit);
+        const result = this.#executeCommitCycle(0);
+        if (result) {
+            this.isAsync = true;
         }
-        return performCommit();
+
+        return result;
+    }
+
+    resolve<T>(result: T): MaybePromise<Awaited<T>> {
+        // If result is a promise, we wait for resolution and then commit (success) or roll back (error)
+        if (MaybePromise.is(result)) {
+            this.isAsync = true;
+            return result.then(this.resolve.bind(this), this.reject.bind(this));
+        }
+
+        // Result is not a promise.  Commit immediately
+        let promise;
+        try {
+            promise = this.commit();
+        } catch (e) {
+            // Commit failed synchronously
+            return this.reject(e);
+        }
+
+        // If commit is async then wait for commit before destruction
+        if (MaybePromise.is(promise)) {
+            this.isAsync = true;
+
+            return Promise.resolve(promise)
+                .then(() => {
+                    this[Symbol.dispose]();
+                    return result as Awaited<T>;
+                }, this.reject.bind(this))
+                .finally(this[Symbol.dispose].bind(this));
+        }
+
+        // Result and commit succeeded synchronously
+        this[Symbol.dispose]();
+        return result as Awaited<T>;
     }
 
     rollback() {
         this.#assertAvailable();
 
         return this.#finalize(Status.RollingBack, "rolled back", () => this.#executeRollback());
+    }
+
+    reject(cause: unknown): MaybePromise<never> {
+        if (this.#status === Status.Shared) {
+            this.#reset("released");
+            throw cause;
+        }
+
+        logger.error("Rolling back", this.via, "due to error:", Diagnostic.weak(asError(cause).message));
+
+        try {
+            const result = this.rollback();
+            if (MaybePromise.is(result)) {
+                return Promise.resolve(result)
+                    .catch(cause2 => {
+                        if (cause2 === cause) {
+                            return;
+                        }
+
+                        // TODO - once SuppressedError support is confirmed solid, consider using it here
+                        logger.error("Secondary error in", this.via, "rollback:", cause2);
+                    })
+                    .finally(() => {
+                        this[Symbol.dispose]();
+                        throw cause;
+                    }) as Promise<never>;
+            }
+        } catch (cause2) {
+            if (cause2 !== cause) {
+                logger.error("Secondary error in", this.via, "rollback:", cause2);
+            }
+        }
+
+        this[Symbol.dispose]();
+
+        throw cause;
+    }
+
+    /**
+     * Execute commit logic for a single commit cycle.
+     *
+     * A "cycle" performs all commit logic and normally brings us back to shared state.  But we allow post-commit
+     * handlers to re-enter exclusive state.  If that happens, we trigger another commit cycle.
+     */
+    #executeCommitCycle(count: number): MaybePromise<void> {
+        count++;
+
+        if (count > MAX_CHAINED_COMMITS) {
+            throw new TransactionFlowError(
+                `Transaction commits have cascaded ${count} times which likely indicates an infinite loop`,
+            );
+        }
+
+        // Precommit first
+        let result = this.#createPreCommitExecutor()();
+
+        // Then rest of normal commit
+        if (MaybePromise.is(result)) {
+            result = result.then(this.#executeCommit.bind(this));
+        } else {
+            result = this.#executeCommit();
+        }
+
+        // Then, if transaction is once again exclusive, recurse
+        if (MaybePromise.is(result)) {
+            return result.then(() => {
+                if (this.#status === Status.Exclusive) {
+                    return this.#executeCommitCycle(count);
+                }
+            });
+        } else if (this.#status === Status.Exclusive) {
+            return this.#executeCommitCycle(count);
+        }
     }
 
     waitFor(others: Set<Transaction>) {
@@ -401,27 +406,6 @@ class Tx implements Transaction {
             );
         }
 
-        // Post-finalization state reset
-        const cleanup = () => {
-            // Release locks
-            const set = new ResourceSet(this, this.#resources);
-            const unlocked = set.releaseLocks();
-            this.#locksChanged(unlocked, `${why} and unlocked`);
-
-            // Reset "slow" transaction state
-            Monitor.delete(this);
-            this.#reportingLocks = false;
-
-            // Release participants
-            this.#participants.clear();
-
-            // Revert to shared
-            this.#status = Status.Shared;
-
-            // Notify listeners
-            this.#shared?.emit();
-        };
-
         // Perform the commit or rollback
         let isAsync = false;
         try {
@@ -429,19 +413,47 @@ class Tx implements Transaction {
             const result = finalizer();
             if (MaybePromise.is(result)) {
                 isAsync = true;
-                return Promise.resolve(result).finally(cleanup);
+                return Promise.resolve(result).finally(() => this.#reset(why));
             }
         } finally {
             if (!isAsync) {
-                cleanup();
+                this.#reset(why);
             }
         }
     }
 
     /**
+     * Reset state to shared with no resources or participants.
+     */
+    #reset(why: string) {
+        // Post-finalization state reset
+        // Release locks
+        const set = new ResourceSet(this, this.#resources);
+        const unlocked = set.releaseLocks();
+        this.#locksChanged(unlocked, `${why} and unlocked`);
+
+        // Remove resources
+        this.#resources.clear();
+
+        // Reset "slow" transaction state
+        Monitor.delete(this);
+        this.#reportingLocks = false;
+
+        // Release participants
+        this.#participants.clear();
+        this.#roles.clear();
+
+        // Revert to shared
+        this.#status = Status.Shared;
+
+        // Notify listeners
+        this.#shared?.emit();
+    }
+
+    /**
      * Iteratively execute pre-commit until all participants "settle" and report no possible mutation.
      */
-    #executePreCommit(): MaybePromise<void> {
+    #createPreCommitExecutor(): () => MaybePromise<void> {
         let mayHaveMutated = false;
         let abortedDueToError = false;
         let iterator = this.participants[Symbol.iterator]();
@@ -482,7 +494,7 @@ class Tx implements Transaction {
             iterator = this.participants[Symbol.iterator]();
         };
 
-        const nextPreCommit = (previousResult?: boolean): MaybePromise<void> => {
+        const executePreCommit = (previousResult?: boolean): MaybePromise<void> => {
             // If an error occurred
             if (abortedDueToError) {
                 return;
@@ -526,7 +538,7 @@ class Tx implements Transaction {
                 try {
                     const result = participant.preCommit?.();
                     if (MaybePromise.is(result)) {
-                        return Promise.resolve(result).catch(handleError).then(nextPreCommit);
+                        return Promise.resolve(result).catch(handleError).then(executePreCommit);
                     }
                     if (result) {
                         mayHaveMutated = true;
@@ -537,19 +549,33 @@ class Tx implements Transaction {
             }
         };
 
-        return nextPreCommit();
+        return executePreCommit;
     }
 
     /**
-     * Commit logic passed to #finalize.
+     * Handle actual commit and post-commit.
      */
-    #executeCommit(): MaybePromise {
-        //this.#log("commit");
-        const result = this.#executeCommit1();
+    #executeCommit() {
+        // Ensure participants are immutable
+        const participants = [...this.#participants];
+
+        // Commit phases 1 & 2
+        const executeCommit = (): MaybePromise => {
+            const result = this.#executeCommit1();
+
+            if (MaybePromise.is(result)) {
+                return Promise.resolve(result).then(this.#executeCommit2.bind(this));
+            }
+            return this.#executeCommit2();
+        };
+        const result = this.#finalize(Status.CommittingPhaseOne, "committed", executeCommit);
+
+        // Post commit
+        const executePostCommit = this.#createPostCommitExecutor(participants);
         if (MaybePromise.is(result)) {
-            return Promise.resolve(result).then(this.#executeCommit2.bind(this));
+            return result.then(executePostCommit);
         }
-        return this.#executeCommit2();
+        return executePostCommit();
     }
 
     #executeCommit1(): MaybePromise {
@@ -636,28 +662,39 @@ class Tx implements Transaction {
         }
     }
 
-    #executePostCommit(participants: Participant[]) {
-        const participantIterator = participants[Symbol.iterator]();
+    /**
+     * Execute post-commit phase.
+     *
+     * We notify each participant sequentially.  If a participant throws, we log the error and move on to the next
+     * participant.
+     */
+    #createPostCommitExecutor(participants: Participant[]): () => MaybePromise {
+        let i = 0;
 
-        const postCommitNextParticipant = (): MaybePromise => {
-            const next = participantIterator.next();
+        const executePostCommit = (): MaybePromise => {
+            for (; i < participants.length; i++) {
+                const participant = participants[i];
 
-            if (next.done) {
-                return;
+                try {
+                    const promise = participant.postCommit?.();
+
+                    if (MaybePromise.is(promise)) {
+                        return Promise.resolve(promise).then(executePostCommit, e => {
+                            reportParticipantError(e);
+                            executePostCommit();
+                        });
+                    }
+                } catch (e) {
+                    reportParticipantError(e);
+                }
+
+                function reportParticipantError(e: unknown) {
+                    logger.error(`Error post-commit of ${participant}:`, e);
+                }
             }
-
-            const participant = next.value;
-
-            return MaybePromise.then(
-                () => participant.postCommit?.(),
-                () => postCommitNextParticipant(),
-                error => {
-                    logger.error(`Error post-commit of ${participant}:`, error);
-                },
-            );
         };
 
-        return postCommitNextParticipant();
+        return executePostCommit;
     }
 
     /**
@@ -684,7 +721,7 @@ class Tx implements Transaction {
                 },
             );
 
-            // If commit is asynchronous, collect the promise
+            // If rollback is asynchronous, collect the promise
             if (MaybePromise.is(promise)) {
                 if (ongoing) {
                     ongoing.push(promise as Promise<void>);

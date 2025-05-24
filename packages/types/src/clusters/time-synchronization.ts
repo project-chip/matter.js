@@ -402,14 +402,14 @@ export namespace TimeSynchronization {
         SecondsGranularity = 2,
 
         /**
-         * This indicates the node is synchronized to an upstream source using high resolution time- synchronization
+         * This indicates the node is synchronized to an upstream source using high resolution time-synchronization
          * protocol such as NTP, or has built-in GNSS with some amount of jitter applying its GNSS timestamp. UTC Time
          * is accurate to ± 50 ms.
          */
         MillisecondsGranularity = 3,
 
         /**
-         * This indicates the node is synchronized to an upstream source using a highly precise time- synchronization
+         * This indicates the node is synchronized to an upstream source using a highly precise time-synchronization
          * protocol such as PTP, or has built-in GNSS. UTC time is accurate to ± 10 μs.
          */
         MicrosecondsGranularity = 4
@@ -790,8 +790,7 @@ export namespace TimeSynchronization {
              * This command is used to set the DST offsets for a node.
              *
              *   • If the length of DSTOffset is larger than DSTOffsetListMaxSize, the node shall respond with
-             *
-             * RESOURCE_EXHAUSTED.
+             *     RESOURCE_EXHAUSTED.
              *
              *   • Else if the list entries do not conform to the list requirements for DSTOffset attribute, the node
              *     shall respond with CONSTRAINT_ERROR.
@@ -865,8 +864,6 @@ export namespace TimeSynchronization {
 
         features: {
             /**
-             * TimeZone
-             *
              * Allows a server to translate a UTC time to a local time using the time zone and daylight savings time
              * (DST) offsets. If a server supports the TimeZone feature, it shall support the SetTimeZone and
              * SetDSTOffset commands, and TimeZone and DSTOffset attributes, and shall expose the local time through the
@@ -877,8 +874,6 @@ export namespace TimeSynchronization {
             timeZone: BitFlag(0),
 
             /**
-             * NtpClient
-             *
              * Allows a node to use NTP/SNTP for time synchronization.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.17.5.2
@@ -886,8 +881,6 @@ export namespace TimeSynchronization {
             ntpClient: BitFlag(1),
 
             /**
-             * NtpServer
-             *
              * Allows a Node to host an NTP server for the network so that other Nodes can achieve a high accuracy time
              * synchronization within the network. See Section 11.17.15, “Acting as an NTP Server”.
              *
@@ -896,8 +889,6 @@ export namespace TimeSynchronization {
             ntpServer: BitFlag(2),
 
             /**
-             * TimeSyncClient
-             *
              * This node also supports a time synchronization client and can connect to and read time from other nodes.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.17.5.4
@@ -950,9 +941,8 @@ export namespace TimeSynchronization {
              * time source, it may send a Granularity of NoTimeGranularity.
              *
              * Upon receipt of this command, the node may update its UTCTime attribute to match the time specified in
-             * the command, if the stated Granularity and TimeSource are acceptable. The node shall
-             *
-             * update its UTCTime attribute if its current Granularity is NoTimeGranularity.
+             * the command, if the stated Granularity and TimeSource are acceptable. The node shall update its UTCTime
+             * attribute if its current Granularity is NoTimeGranularity.
              *
              * If the time is updated, the node shall also update its Granularity attribute based on the granularity
              * specified in the command and the expected clock drift of the node. This SHOULD normally be one level

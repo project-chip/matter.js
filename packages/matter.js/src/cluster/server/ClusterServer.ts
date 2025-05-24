@@ -6,14 +6,7 @@
 
 import { capitalize, Diagnostic, ImplementationError, InternalError, Logger, MaybePromise } from "#general";
 import { AccessLevel } from "#model";
-import {
-    ClusterServer as BaseClusterServer,
-    ClusterDatasource,
-    CommandServer,
-    createAttributeServer,
-    createEventServer,
-    Fabric,
-} from "#protocol";
+import { Fabric } from "#protocol";
 import {
     AttributeId,
     BitSchema,
@@ -26,6 +19,8 @@ import {
     TypeFromPartialBitSchema,
 } from "#types";
 import { Endpoint } from "../../device/Endpoint.js";
+import { createAttributeServer } from "./AttributeServer.js";
+import { ClusterDatasource } from "./ClusterDatasource.js";
 import {
     AttributeInitialValues,
     AttributeServers,
@@ -35,6 +30,8 @@ import {
     EventServers,
     SupportedEventsList,
 } from "./ClusterServerTypes.js";
+import { CommandServer } from "./CommandServer.js";
+import { createEventServer } from "./EventServer.js";
 
 const logger = Logger.get("ClusterServer");
 
@@ -53,7 +50,7 @@ function isConditionMatching<F extends BitSchema, SF extends TypeFromPartialBitS
 /**
  * A collection of servers for a cluster's attributes, commands and events.
  */
-export interface ClusterServer<T extends ClusterType = ClusterType> extends BaseClusterServer {
+export interface ClusterServer<T extends ClusterType = ClusterType> {
     /**
      * Cluster ID
      */

@@ -7,7 +7,6 @@
 import { Behavior } from "#behavior/Behavior.js";
 import type { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
-import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
 import { Events } from "#behavior/Events.js";
@@ -28,7 +27,7 @@ import {
 import { FeatureSet } from "#model";
 import { ProtocolService } from "#node/server/ProtocolService.js";
 import { ClusterTypeProtocol, Val } from "#protocol";
-import { ClusterType } from "#types";
+import { ClusterType, VoidSchema } from "#types";
 import { DescriptorServer } from "../../behaviors/descriptor/DescriptorServer.js";
 import type { Agent } from "../Agent.js";
 import type { Endpoint } from "../Endpoint.js";
@@ -79,9 +78,15 @@ export class Behaviors {
         return Object.entries(this.#supported).map(([name, type]) => {
             const backing = this.#backings[name];
 
-            const result = [Diagnostic(backing?.status ?? Lifecycle.Status.Inactive, name)];
-
             const cluster = clusterOf(type);
+
+            const result = [
+                Diagnostic(backing?.status ?? Lifecycle.Status.Inactive, name),
+                Diagnostic.dict({
+                    id: cluster ? Diagnostic.hex(cluster.id) : undefined,
+                }),
+            ];
+
             if (!cluster) {
                 return result;
             }
@@ -95,13 +100,45 @@ export class Behaviors {
             }
 
             if (elements.attributes.size) {
-                elementDiagnostic.push([Diagnostic.strong("attributes"), elements.attributes]);
+                const behaviorData = new Array<unknown>();
+                for (const attributeName of elements.attributes) {
+                    const attr = cluster.attributes[attributeName];
+                    behaviorData.push([
+                        attributeName,
+                        Diagnostic.dict({
+                            id: Diagnostic.hex(attr.id),
+                            val: (backing?.stateView as Val.Struct)[attributeName],
+                            flags: Diagnostic.asFlags({
+                                fabricScoped: attr.fabricScoped,
+                            }),
+                        }),
+                    ]);
+                }
+                elementDiagnostic.push([Diagnostic.strong("attributes"), Diagnostic.list(behaviorData)]);
             }
             if (elements.commands.size) {
-                elementDiagnostic.push([Diagnostic.strong("commands"), elements.commands]);
+                elementDiagnostic.push([
+                    Diagnostic.strong("commands"),
+                    Diagnostic.list(
+                        [...elements.commands].map(name => [
+                            name,
+                            Diagnostic.weak(
+                                `(${Diagnostic.hex(cluster.commands[name].requestId)}${cluster.commands[name].responseSchema instanceof VoidSchema ? "" : `/${Diagnostic.hex(cluster.commands[name].responseId)}`})`,
+                            ),
+                        ]),
+                    ),
+                ]);
             }
             if (elements.events.size) {
-                elementDiagnostic.push([Diagnostic.strong("events"), elements.events]);
+                elementDiagnostic.push(
+                    Diagnostic.strong("events"),
+                    Diagnostic.list([
+                        [...elements.events].map(name => [
+                            name,
+                            Diagnostic.weak(`(${Diagnostic.hex(cluster.events[name].id)})`),
+                        ]),
+                    ]),
+                );
             }
 
             if (elementDiagnostic.length) {
@@ -189,21 +226,13 @@ export class Behaviors {
 
         // Initialize instrumentation
         const activity = this.#endpoint.env.get(NodeActivity);
-        const trace: ActionTracer.Action | undefined = this.#endpoint.env.has(ActionTracer)
-            ? { type: ActionTracer.ActionType.Initialize }
-            : undefined;
 
         // Perform initialization
-        let promise = OfflineContext.act(`initialize<${this.#endpoint}>`, activity, initializeBehaviors, { trace });
+        let promise = OfflineContext.act(`initialize<${this.#endpoint}>`, activity, initializeBehaviors);
 
         // Once behaviors are ready the endpoint we consider the endpoint "ready"
         const onReady = () => {
             this.#endpoint.lifecycle.change(EndpointLifecycle.Change.Ready);
-
-            if (trace) {
-                trace.path = this.#endpoint.path;
-                this.#endpoint.env.get(ActionTracer).record(trace);
-            }
         };
         if (promise) {
             promise = promise.then(onReady);
@@ -418,7 +447,7 @@ export class Behaviors {
                     continue;
                 }
 
-                name = `${name} (0x${cluster.id.toString(16)})`;
+                name = `${name} (${Diagnostic.hex(cluster.id)})`;
             }
 
             missing.push(name);
@@ -582,9 +611,8 @@ export class Behaviors {
         if (!this.#protocol) {
             this.#protocol = this.#endpoint.env.get(ProtocolService);
         }
-        this.#protocol.addCluster(backing);
+        backing.initializeDataSource();
         backing.construction.start(agent);
-
         return backing;
     }
 

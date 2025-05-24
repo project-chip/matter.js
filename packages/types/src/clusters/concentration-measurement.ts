@@ -30,7 +30,7 @@ export namespace ConcentrationMeasurement {
         /**
          * LevelIndication (LEV)
          *
-         * Cluster supports basic level indication for substance using the ConcentrationLevel enum
+         * Cluster supports basic level indication for substance using the ConcentrationLev el enum
          */
         LevelIndication = "LevelIndication",
 
@@ -246,7 +246,8 @@ export namespace ConcentrationMeasurement {
             averageMeasuredValue: Attribute(0x5, TlvNullable(TlvFloat), { default: null }),
 
             /**
-             * Indicates the window of time used for determining the AverageMeasuredValue. The value is in seconds.
+             * This attribute shall represent the window of time used for determining the AverageMeasuredValue. The
+             * value is in seconds.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 2.10.6.7
              */
@@ -275,43 +276,31 @@ export namespace ConcentrationMeasurement {
     export const Base = MutableCluster.Component({
         features: {
             /**
-             * NumericMeasurement
-             *
              * Cluster supports numeric measurement of substance
              */
             numericMeasurement: BitFlag(0),
 
             /**
-             * LevelIndication
-             *
-             * Cluster supports basic level indication for substance using the ConcentrationLevel enum
+             * Cluster supports basic level indication for substance using the ConcentrationLev el enum
              */
             levelIndication: BitFlag(1),
 
             /**
-             * MediumLevel
-             *
              * Cluster supports the Medium Concentration Level
              */
             mediumLevel: BitFlag(2),
 
             /**
-             * CriticalLevel
-             *
              * Cluster supports the Critical Concentration Level
              */
             criticalLevel: BitFlag(3),
 
             /**
-             * PeakMeasurement
-             *
              * Cluster supports peak numeric measurement of substance
              */
             peakMeasurement: BitFlag(4),
 
             /**
-             * AverageMeasurement
-             *
              * Cluster supports average numeric measurement of substance
              */
             averageMeasurement: BitFlag(5)

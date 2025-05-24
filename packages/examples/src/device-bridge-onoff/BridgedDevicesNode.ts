@@ -12,12 +12,11 @@
  * It can be used as CLI script and starting point for your own device node implementation.
  */
 
-import { Endpoint, EndpointServer, Environment, ServerNode, StorageService, Time, VendorId } from "@matter/main";
+import { Endpoint, Environment, ServerNode, StorageService, Time, VendorId } from "@matter/main";
 import { BridgedDeviceBasicInformationServer } from "@matter/main/behaviors/bridged-device-basic-information";
 import { OnOffLightDevice } from "@matter/main/devices/on-off-light";
 import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
 import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
-import { logEndpoint } from "@matter/main/protocol";
 import { execSync } from "node:child_process";
 
 /** Initialize configuration values */
@@ -132,7 +131,7 @@ await server.start();
 /**
  * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
  */
-logEndpoint(EndpointServer.forEndpoint(server));
+//logEndpoint(EndpointServer.forEndpoint(server));
 
 /*
   If you want to dynamically add another device during runtime you can do so by doing the following:

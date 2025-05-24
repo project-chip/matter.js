@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@matter/general";
+import { InternalError } from "#general";
 import { Constraint } from "../aspects/index.js";
 import { ElementTag, Metatype, Specification } from "../common/index.js";
 import { AnyElement } from "../elements/index.js";
@@ -77,7 +77,7 @@ export function MergedModel(
             for (const key of priority.get("*", "constraint")) {
                 const definition = (variants.map[key] as ValueModel | undefined)?.constraint;
                 const constraint = new Constraint(definition);
-                if (!constraint?.empty && !constraint?.desc) {
+                if (!constraint?.isEmpty && !constraint?.desc) {
                     properties.constraint = definition;
                     break;
                 }

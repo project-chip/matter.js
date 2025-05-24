@@ -15,7 +15,10 @@ import { Model } from "./Model.js";
  *
  * {@link Model#type} must reference a model named in a parent scope.
  */
-export abstract class ScopeModel<T extends BaseElement = BaseElement> extends Model<T> {
+export abstract class ScopeModel<
+    T extends BaseElement = BaseElement,
+    C extends Model = Model<BaseElement, any>,
+> extends Model<T, C> {
     #operationalScope: undefined | Scope;
 
     readonly isScope = true;

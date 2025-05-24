@@ -72,7 +72,7 @@ export { HepaFilterMonitoringCluster, HepaFilterMonitoring } from "./hepa-filter
 export { IcdManagementCluster, IcdManagement } from "./icd-management.js";
 export { IdentifyCluster, Identify } from "./identify.js";
 export { IlluminanceMeasurementCluster, IlluminanceMeasurement } from "./illuminance-measurement.js";
-export { JointFabricDatastoreClusterCluster, JointFabricDatastoreCluster } from "./joint-fabric-datastore-cluster.js";
+export { JointFabricDatastoreCluster, JointFabricDatastore } from "./joint-fabric-datastore.js";
 export { JointFabricPkiCluster, JointFabricPki } from "./joint-fabric-pki.js";
 export { KeypadInputCluster, KeypadInput } from "./keypad-input.js";
 export { Label } from "./label.js";

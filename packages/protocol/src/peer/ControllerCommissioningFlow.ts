@@ -250,7 +250,7 @@ export class ControllerCommissioningFlow {
                 }
             } catch (error) {
                 if (error instanceof RecoverableCommissioningError) {
-                    logger.error(
+                    logger.warn(
                         `Commissioning step ${step.stepNumber}.${step.subStepNumber}: ${step.name} failed with recoverable error: ${error.message} ... Continuing with process`,
                     );
                 } else if (error instanceof CommissioningError || error instanceof StatusResponseError) {
@@ -762,7 +762,7 @@ export class ControllerCommissioningFlow {
         }
         // TODO: validate csrSignature using device public key
         const { certSigningRequest } = TlvCertSigningRequest.decode(nocsrElements);
-        const operationalPublicKey = CertificateManager.getPublicKeyFromCsr(certSigningRequest);
+        const operationalPublicKey = await CertificateManager.getPublicKeyFromCsr(certSigningRequest);
 
         await operationalCredentialsClusterClient.addTrustedRootCertificate(
             {
@@ -770,7 +770,7 @@ export class ControllerCommissioningFlow {
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
-        const peerOperationalCert = this.ca.generateNoc(
+        const peerOperationalCert = await this.ca.generateNoc(
             operationalPublicKey,
             this.fabric.fabricId,
             this.interactionClient.address.nodeId,

@@ -84,7 +84,7 @@ export namespace MediaInput {
         index: TlvField(0, TlvUInt8),
 
         /**
-         * This field shall indicate the type of input
+         * ### This field shall indicate the type of input
          *
          * @see {@link MatterSpecification.v14.Cluster} § 6.9.5.2.2
          */
@@ -161,8 +161,6 @@ export namespace MediaInput {
 
         features: {
             /**
-             * NameUpdates
-             *
              * Supports updates to the input names
              */
             nameUpdates: BitFlag(0)
@@ -186,9 +184,8 @@ export namespace MediaInput {
 
         commands: {
             /**
-             * Upon receipt, this command shall change the media input on the device to the input at a specific
-             *
-             * index in the Input List.
+             * Upon receipt, this command shall change the media input on the device to the input at a specific index in
+             * the Input List.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 6.9.7.1
              */

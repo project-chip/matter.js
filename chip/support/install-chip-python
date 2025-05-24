@@ -4,6 +4,68 @@
 # Copyright 2022-2025 Matter.js Authors
 # SPDX-License-Identifier: Apache-2.0
 
+set -e
+
+# Create build directory
+#mkdir -p out
+
+# This is how you build using CHIP but flexibility is limited so we do it manually
+#
+# # Activation is unnecessary and will fail because we've dropped things it expects 
+# sed -i '/scripts\/activate.sh/d' scripts/build_python.sh
+#
+# # Not sure why boringssl is hard-coded but it's expensive to install and unnecessary
+# sed -i 's/boringssl/openssl/' scripts/build_python.sh
+#
+# # Build
+# scripts/build_python.sh --chip_mdns platform --enable_ble false
+
+# Generate ninja files for python
+GN_ARGS=(
+    matter_log_json_payload_hex=true
+    matter_log_json_payload_decode_full=true
+    chip_detail_logging=true
+    chip_project_config_include_dirs='["//config/python"]'
+    chip_mdns='"platform"'
+    chip_config_network_layer_ble=false
+    chip_enable_ble=false
+
+    # Perfetto is hard-coded in the python controller so these don't really benefit us much
+    matter_enable_tracing_support=false
+    matter_trace_config='"///src/tracing/none"'
+    matter_commandline_enable_perfetto_tracing=false
+
+    # Note - not using boringssl or enabling tracing which build_python.sh does unconditionally
+)
+gn gen out \
+    --fail-on-unused-args \
+    --args="${GN_ARGS[*]}"
+
+PYTHON_GN=src/controller/python/BUILD.gn
+
+# ipython is the Python side of Jupyter and adds a ton of bloat.  We don't need it because we don't use chip-repl.py
+sed -i /ipython/d $PYTHON_GN
+
+# also Jupyter
+sed -i /ipykernel/d $PYTHON_GN
+
+# ipdb also brings in ipython and is normally a dependency of chip-core.  We don't need it because we don't debug python
+sed -i /ipdb/d  $PYTHON_GN
+
+# We don't need this either, not sure why it's there, possibly because it installs glib
+sed -i /pygobject/d $PYTHON_GN
+
+# We've left something behind that breaks dbus-python 1.2.18 (version requested by chip) but newest version works so
+# install manually
+sed -i s/dbus-python==1.2.18/dbus-python==1.4.0/ $PYTHON_GN
+
+# Build wheels
+# NINJA_WHEELS=(
+#     matter_yamltests_distribution.wheel
+# )
+# ninja -C out "${NINJA_WHEELS[@]}"
+ninja -C out python_wheels
+
 # Revert to standard path so Python doesn't think packages are already installed
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
@@ -14,12 +76,21 @@ sed -i /mypy/d scripts/tests/requirements.txt
 pip install --break-system-packages -r src/python_testing/requirements.txt
 pip install --break-system-packages -r scripts/tests/requirements.txt
 
+# Install some additional dependencies CHIP uses but would normally be installed as side effect of installing jupyter
+# stuff
+pip install --break-system-packages nest_asyncio
+
 # Install CHIP wheels globally
-find out -name \*.whl | xargs pip install --break-system-packages --upgrade
+find out -name \*.whl \
+    | grep -v matter_yamltests-0.0.1 \
+    | xargs pip install --break-system-packages --upgrade
+
+# Nuke build artifacts
+rm -rf out
 
 # Nuke some of the larger dependencies we don't need
 rm -rf \
-    /usr/local/lib/python*/dist-packages/{debugpy,jedi,language_data} \
+    /usr/local/lib/python*/dist-packages/{debugpy,jedi,language_data,IPython} \
     /usr/local/lib/python*/dist-packages/*.dist-info \
     /usr/local/lib/python*/dist-packages/*/tests \
     /usr/lib/python*/dist-packages/*.dist-info

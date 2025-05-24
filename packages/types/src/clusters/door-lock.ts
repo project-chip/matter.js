@@ -131,7 +131,6 @@ export namespace DoorLock {
          * CredentialOverTheAirAccess (COTA)
          *
          * If this feature is supported then the lock supports the ability to verify a credential provided in a
-         *
          * lock/unlock command. Currently the cluster only supports providing the PIN credential to the lock/unlock
          * commands. If this feature is supported then the PIN Credential feature shall also be supported.
          *
@@ -1073,10 +1072,9 @@ export namespace DoorLock {
         /**
          * This field shall indicate the next occupied index in the database for the credential type requested, which is
          * useful for quickly identifying occupied credential slots in the database. This shall NOT be null if there is
-         * at least one occupied entry after the requested credential index in the corresponding
-         *
-         * database and shall be null if there are no more occupied entries. The NextCredentialIndex reported shall NOT
-         * exceed the maximum number of credentials for a particular credential type.
+         * at least one occupied entry after the requested credential index in the corresponding database and shall be
+         * null if there are no more occupied entries. The NextCredentialIndex reported shall NOT exceed the maximum
+         * number of credentials for a particular credential type.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.39.5
          */
@@ -1093,10 +1091,10 @@ export namespace DoorLock {
          * Otherwise, the value of this field shall be the value of the relevant credential, as a 65-byte uncompressed
          * elliptic curve public key as defined in section 2.3.3 of SEC 1.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * Since the Aliro credentials are public keys, there is no security risk in allowing them to be read.
-         * Possession of the credential octet string does not allow operating the lock.
+         * > Since the Aliro credentials are public keys, there is no security risk in allowing them to be read.
+         *   Possession of the credential octet string does not allow operating the lock.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.39.6
          */
@@ -1742,12 +1740,12 @@ export namespace DoorLock {
      *
      * * Interface Operational: Yes, No or N/A
      *
-     * NOTE
+     * > [!NOTE]
      *
-     * For modes that disable the remote interface, the door lock shall respond to Lock, Unlock, Toggle, and Unlock with
-     * Timeout commands with a response status Failure and not take the action requested by those commands. The door
-     * lock shall NOT disable the radio or otherwise unbind or leave the network. It shall still respond to all other
-     * commands and requests.
+     * > For modes that disable the remote interface, the door lock shall respond to Lock, Unlock, Toggle, and Unlock
+     *   with Timeout commands with a response status Failure and not take the action requested by those commands. The
+     *   door lock shall NOT disable the radio or otherwise unbind or leave the network. It shall still respond to all
+     *   other commands and requests.
      *
      * @see {@link MatterSpecification.v14.Cluster} § 5.2.6.15
      */
@@ -3217,7 +3215,6 @@ export namespace DoorLock {
              * Fields used for different use cases:
              *
              * Return status is a global status code or a cluster-specific status code from the Status Codes table and
-             *
              * shall be one of the following values:
              *
              *   • SUCCESS, if setting User was successful.
@@ -3242,10 +3239,8 @@ export namespace DoorLock {
             /**
              * Retrieve user.
              *
-             * An InvokeResponse command shall be sent with an appropriate error
-             *
-             * COMMAND, etc.) as needed otherwise the GetUserResponse Command shall be sent implying a status of
-             * SUCCESS.
+             * An InvokeResponse command shall be sent with an appropriate error (e.g. FAILURE, INVALID_COMMAND, etc.)
+             * as needed otherwise the GetUserResponse Command shall be sent implying a status of SUCCESS.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.33
              */
@@ -3638,11 +3633,10 @@ export namespace DoorLock {
              * door lock server to send PINs over the air. This attribute determines the behavior of the server’s TX
              * operation. If it is false, then it is not ok for the device to send PIN in any messages over the air.
              *
-             * The PIN field within any door lock cluster message shall keep the first octet unchanged and
-             *
-             * masks the actual code by replacing with 0xFF. For example (PIN "1234" ): If the attribute value is True,
-             * 0x04 0x31 0x32 0x33 0x34 shall be used in the PIN field in any door lock cluster message payload. If the
-             * attribute value is False, 0x04 0xFF 0xFF 0xFF 0xFF shall be used.
+             * The PIN field within any door lock cluster message shall keep the first octet unchanged and masks the
+             * actual code by replacing with 0xFF. For example (PIN "1234" ): If the attribute value is True, 0x04 0x31
+             * 0x32 0x33 0x34 shall be used in the PIN field in any door lock cluster message payload. If the attribute
+             * value is False, 0x04 0xFF 0xFF 0xFF 0xFF shall be used.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 5.2.9.34
              */
@@ -3703,10 +3697,10 @@ export namespace DoorLock {
             /**
              * Clear out all PINs on the lock.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * On the server, the clear all PIN codes command SHOULD have the same effect as the ClearPINCode command
-             * with respect to the setting of user status, user type and schedules.
+             * > On the server, the clear all PIN codes command SHOULD have the same effect as the ClearPINCode command
+             *   with respect to the setting of user status, user type and schedules.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.8
              */
@@ -3806,13 +3800,13 @@ export namespace DoorLock {
              * applies to the sum of the number of AliroEvictableEndpointKey credentials and the number of
              * AliroNonEvictableEndpointKey credentials.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * The credential indices used for these two credential types are independent of each other, similar to all
-             * other credential types. As long as NumberOfAliroEndpointKeysSupported is at least 2 a client could add a
-             * credential of type AliroEvictableEndpointKey at any index from 1 to NumberOfAliroEndpointKeysSupported
-             * and also add a credential of type AliroNonEvictableEndpointKey at the same index, and both credentials
-             * would exist on the server.
+             * > The credential indices used for these two credential types are independent of each other, similar to
+             *   all other credential types. As long as NumberOfAliroEndpointKeysSupported is at least 2 a client could
+             *   add a credential of type AliroEvictableEndpointKey at any index from 1 to
+             *   NumberOfAliroEndpointKeysSupported and also add a credential of type AliroNonEvictableEndpointKey at
+             *   the same index, and both credentials would exist on the server.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 5.2.9.46
              */
@@ -3837,11 +3831,11 @@ export namespace DoorLock {
              * This command allows clearing an existing Aliro Reader configuration for the lock. Administrators shall
              * NOT clear an Aliro Reader configuration without explicit user permission.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * Using this command will revoke the ability of all existing Aliro user devices that have the old
-             * verification key to interact with the lock. This effect is not restricted to a single fabric or otherwise
-             * scoped in any way.
+             * > Using this command will revoke the ability of all existing Aliro user devices that have the old
+             *   verification key to interact with the lock. This effect is not restricted to a single fabric or
+             *   otherwise scoped in any way.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.43
              */
@@ -4046,10 +4040,10 @@ export namespace DoorLock {
              * an optional code for the lock. The door lock may require a code depending on the value of the
              * RequirePINForRemoteOperation attribute.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * If the attribute AutoRelockTime is supported, the lock will transition to the locked state when the auto
-             * relock time has expired.
+             * > If the attribute AutoRelockTime is supported, the lock will transition to the locked state when the
+             *   auto relock time has expired.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.41
              */
@@ -4067,8 +4061,6 @@ export namespace DoorLock {
 
         features: {
             /**
-             * PinCredential
-             *
              * If the User Feature is also supported then any PIN Code stored in the lock shall be associated with a
              * User.
              *
@@ -4081,8 +4073,6 @@ export namespace DoorLock {
             pinCredential: BitFlag(0),
 
             /**
-             * RfidCredential
-             *
              * If the User Feature is also supported then any RFID credential stored in the lock shall be associated
              * with a User.
              *
@@ -4095,8 +4085,6 @@ export namespace DoorLock {
             rfidCredential: BitFlag(1),
 
             /**
-             * FingerCredentials
-             *
              * Currently the cluster only defines the metadata format for notifications when a fingerprint/ finger vein
              * credential is used to access the lock and doesn’t describe how to create fingerprint/finger vein
              * credentials. If the Users feature is also supported then the User that a fingerprint/finger vein is
@@ -4111,8 +4099,6 @@ export namespace DoorLock {
             fingerCredentials: BitFlag(2),
 
             /**
-             * WeekDayAccessSchedules
-             *
              * If the User feature is supported then Week Day Schedules are applied to a User and not a credential.
              *
              * Week Day Schedules are used to restrict access to a specified time window on certain days of the week.
@@ -4128,8 +4114,6 @@ export namespace DoorLock {
             weekDayAccessSchedules: BitFlag(4),
 
             /**
-             * DoorPositionSensor
-             *
              * If this feature is supported this indicates that the lock has the ability to determine the position of
              * the door which is separate from the state of the lock.
              *
@@ -4138,8 +4122,6 @@ export namespace DoorLock {
             doorPositionSensor: BitFlag(5),
 
             /**
-             * FaceCredentials
-             *
              * Currently the cluster only defines the metadata format for notifications when a face recognition, iris,
              * or retina credential is used to access the lock and doesn’t describe how to create face recognition,
              * iris, or retina credentials. If the Users feature is also supported then the User that a face
@@ -4154,10 +4136,7 @@ export namespace DoorLock {
             faceCredentials: BitFlag(6),
 
             /**
-             * CredentialOverTheAirAccess
-             *
              * If this feature is supported then the lock supports the ability to verify a credential provided in a
-             *
              * lock/unlock command. Currently the cluster only supports providing the PIN credential to the lock/unlock
              * commands. If this feature is supported then the PIN Credential feature shall also be supported.
              *
@@ -4166,8 +4145,6 @@ export namespace DoorLock {
             credentialOverTheAirAccess: BitFlag(7),
 
             /**
-             * User
-             *
              * If the User Feature is supported then a lock employs a User database. A User within the User database is
              * used to associate credentials and schedules to single user record within the lock. This also means the
              * UserType and UserStatus fields are associated with a User and not a credential.
@@ -4177,8 +4154,6 @@ export namespace DoorLock {
             user: BitFlag(8),
 
             /**
-             * YearDayAccessSchedules
-             *
              * If the User feature is supported then Year Day Schedules are applied to a User and not a credential. Year
              * Day Schedules are used to restrict access to a specified date and time window.
              *
@@ -4192,8 +4167,6 @@ export namespace DoorLock {
             yearDayAccessSchedules: BitFlag(10),
 
             /**
-             * HolidaySchedules
-             *
              * This feature is used to setup Holiday Schedule in the lock device. A Holiday Schedule sets a start and
              * stop end date/time for the lock to use the specified operating mode set by the Holiday Schedule.
              *
@@ -4204,8 +4177,6 @@ export namespace DoorLock {
             holidaySchedules: BitFlag(11),
 
             /**
-             * Unbolting
-             *
              * Locks that support this feature differentiate between unbolting and unlocking. The Unbolt Door command
              * retracts the bolt without pulling the latch. The Unlock Door command fully unlocks the door by retracting
              * the bolt and briefly pulling the latch. While the latch is pulled, the lock state changes to Unlatched.
@@ -4217,8 +4188,6 @@ export namespace DoorLock {
             unbolting: BitFlag(12),
 
             /**
-             * AliroProvisioning
-             *
              * Locks that support this feature implement the Aliro specification as defined in [Aliro] and support
              * Matter as a method for provisioning Aliro credentials.
              *
@@ -4227,8 +4196,6 @@ export namespace DoorLock {
             aliroProvisioning: BitFlag(13),
 
             /**
-             * AliroBleuwb
-             *
              * Locks that support this feature implement the Bluetooth LE + UWB Access Control Flow as defined in
              * [Aliro].
              *
@@ -4310,7 +4277,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * Indicates the current operating mode of the lock as defined in OperatingModeEnum.
+             * This attribute shall indicate the current operating mode of the lock as defined in OperatingModeEnum.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 5.2.9.24
              */
@@ -4337,10 +4304,8 @@ export namespace DoorLock {
 
             /**
              * Indicates the default configurations as they are physically set on the device (example: hardware dip
-             * switch setting, etc…) and represents the default setting for some of the
-             *
-             * attributes within this cluster (for example: LED, Auto Lock, Sound Volume, and Operating Mode
-             * attributes).
+             * switch setting, etc…) and represents the default setting for some of the attributes within this cluster
+             * (for example: LED, Auto Lock, Sound Volume, and Operating Mode attributes).
              *
              * This is a read-only attribute and is intended to allow clients to determine what changes may need to be
              * made without having to query all the included attributes. It may be beneficial for the clients to know
@@ -4461,10 +4426,10 @@ export namespace DoorLock {
              * lock. The door lock may require a code depending on the value of the RequirePINForRemoteOperation
              * attribute.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * If the attribute AutoRelockTime is supported the lock will transition to the locked state when the auto
-             * relock time has expired.
+             * > If the attribute AutoRelockTime is supported the lock will transition to the locked state when the auto
+             *   relock time has expired.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.2
              */
@@ -4515,9 +4480,8 @@ export namespace DoorLock {
              *     ◦ shall generate a LockOperation event of LockOperationType Unlatch when it is actuated from the
              *       outside.
              *
-             *     ◦ may generate a LockOperation event of LockOperationType Unlatch when it is actuated
-             *
-             * from the inside.
+             *     ◦ may generate a LockOperation event of LockOperationType Unlatch when it is actuated from the
+             *       inside.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 5.2.11.3
              */
@@ -4587,8 +4551,6 @@ export namespace DoorLock {
      * The door lock cluster provides an interface to a generic way to secure a door. The physical object that provides
      * the locking functionality is abstracted from the cluster. The cluster has a small list of mandatory attributes
      * and functions and a list of optional features.
-     *
-     * Figure 16. Typical Usage of the Door Lock Cluster
      *
      * DoorLockCluster supports optional features that you can enable with the DoorLockCluster.with() factory method.
      *

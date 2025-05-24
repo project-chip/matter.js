@@ -1,6 +1,6 @@
-# This workflow reacts on a PR that is labeled with "automated pr", will automatically merge it and
+# This workflow reacts on a PR that is labeled with "automated-npm-release" will automatically merge it and
 # create a new release on npm.
-name: Automatic Labeled Release
+name: Automatic Labeled NPM Release
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   check-and-lint:
-    if: github.repository == 'project-chip/matter.js' && contains(github.event.pull_request.labels.*.name, 'automated pr')
+    if: github.repository == 'project-chip/matter.js' && contains(github.event.pull_request.labels.*.name, 'automated-npm-release')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,12 +23,12 @@ jobs:
       - run: npm run lint
 
   build-non-linux:
-    if: github.repository == 'project-chip/matter.js' && contains(github.event.pull_request.labels.*.name, 'automated pr')
+    if: github.repository == 'project-chip/matter.js' && contains(github.event.pull_request.labels.*.name, 'automated-npm-release')
     needs: [ check-and-lint ]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 18.x, 20.x, 22.x ]
+        node-version: [ 18.x, 20.x, 22.x, 24.x ]
         os: [ macos-latest, windows-2019 ]
     steps:
       - uses: actions/checkout@v4
@@ -43,12 +43,12 @@ jobs:
           os: ${{ matrix.os }}
 
   test:
-    if: github.repository == 'project-chip/matter.js' && contains(github.event.pull_request.labels.*.name, 'automated pr')
+    if: github.repository == 'project-chip/matter.js' && contains(github.event.pull_request.labels.*.name, 'automated-npm-release')
     needs: [ check-and-lint ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 18.x, 20.x, 22.x ]
+        node-version: [ 18.x, 20.x, 22.x, 24.x ]
     steps:
       - uses: actions/checkout@v4
       - name: Prepare testing environment
@@ -65,7 +65,7 @@ jobs:
       always() &&
       github.event_name == 'pull_request' &&
       github.repository == 'project-chip/matter.js' &&
-      contains(github.event.pull_request.labels.*.name, 'automated pr')
+      contains(github.event.pull_request.labels.*.name, 'automated-npm-release')
     needs: [ test, build-non-linux, check-and-lint ]
     runs-on: ubuntu-latest
     steps:
@@ -74,11 +74,11 @@ jobs:
         uses: "pascalgn/automerge-action@v0.16.4"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          MERGE_LABELS: "automated pr"
+          MERGE_LABELS: "automated-npm-release"
           MERGE_FILTER_AUTHOR: "Automator77"
           MERGE_FORKS: "false"
           MERGE_DELETE_BRANCH: "false"
-          UPDATE_LABELS: "automated pr"
+          UPDATE_LABELS: "automated-npm-release"
           MERGE_METHOD: "squash"
           MERGE_RETRIES: "50"
           MERGE_RETRY_SLEEP: "60000"

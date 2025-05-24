@@ -60,7 +60,7 @@ export namespace LevelControl {
         /**
          * Frequency (FQ)
          *
-         * NOTE The Frequency feature is provisional.
+         * Supports frequency attributes and behavior.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 1.6.4.3
          */
@@ -156,9 +156,7 @@ export namespace LevelControl {
          * close to this rate as the device is able. If the Rate field is null, then the value of the DefaultMoveRate
          * attribute shall be used if that attribute is supported and its value is not null. If the Rate field is null
          * and the DefaultMoveRate attribute is either not supported or set to null, then the device SHOULD move as fast
-         * as it is able. If the device is not able to move at a variable rate, this
-         *
-         * field may be disregarded.
+         * as it is able. If the device is not able to move at a variable rate, this field may be disregarded.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 1.6.7.2.2
          */
@@ -212,10 +210,8 @@ export namespace LevelControl {
 
         /**
          * This field shall indicate the time that shall be taken to perform the step, in tenths of a second. A step is
-         * a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close to
-         *
-         * this as the device is able. If the TransitionTime field is equal to null, the device SHOULD move as fast as
-         * it is able.
+         * a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close to this as the
+         * device is able. If the TransitionTime field is equal to null, the device SHOULD move as fast as it is able.
          *
          * If the device is not able to move at a variable rate, the TransitionTime field may be disregarded.
          *
@@ -278,11 +274,6 @@ export namespace LevelControl {
              */
             remainingTime: Attribute(0x1, TlvUInt16, { default: 0 }),
 
-            /**
-             * Indicates the minimum value of CurrentLevel that is capable of being assigned.
-             *
-             * @see {@link MatterSpecification.v14.Cluster} § 1.6.6.4
-             */
             minLevel: OptionalAttribute(0x2, TlvUInt8.bound({ min: 1, max: 254 }), { default: 1 }),
 
             /**
@@ -323,7 +314,8 @@ export namespace LevelControl {
     export const FrequencyComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the frequency at which the device is at CurrentLevel. A CurrentFrequency of 0 is unknown.
+             * This attribute shall indicate the frequency at which the device is at CurrentLevel. A CurrentFrequency of
+             * 0 is unknown.
              *
              * Changes to this attribute shall only be marked as reportable in the following cases:
              *
@@ -372,15 +364,11 @@ export namespace LevelControl {
 
         features: {
             /**
-             * OnOff
-             *
              * Dependency with the On/Off cluster
              */
             onOff: BitFlag(0),
 
             /**
-             * Lighting
-             *
              * This feature supports an interface for controlling the level of a light source. For the CurrentLevel
              * attribute:
              *
@@ -397,9 +385,7 @@ export namespace LevelControl {
             lighting: BitFlag(1),
 
             /**
-             * Frequency
-             *
-             * NOTE The Frequency feature is provisional.
+             * Supports frequency attributes and behavior.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.6.4.3
              */

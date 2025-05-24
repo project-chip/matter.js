@@ -19,6 +19,7 @@ const DIR_MAPPING = {
     "!globals": Package.workspace.resolve("packages/types/src/globals"),
     "!model": Package.workspace.resolve("packages/model/src"),
     "!elements": Package.workspace.resolve("packages/model/src/standard/elements"),
+    "!resources": Package.workspace.resolve("packages/model/src/standard/resources"),
     "!node": Package.workspace.resolve("packages/node/src/"),
     "!behaviors": Package.workspace.resolve("packages/node/src/behaviors"),
     "!tags": Package.workspace.resolve("packages/node/src/tags"),

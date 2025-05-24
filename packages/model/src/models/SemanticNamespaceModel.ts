@@ -6,27 +6,36 @@
 
 import { SemanticNamespaceElement } from "../elements/index.js";
 import { SemanticTagModel } from "../index.js";
-import { Children } from "./Children.js";
 import { Model } from "./Model.js";
 
-export class SemanticNamespaceModel extends Model<SemanticNamespaceElement> implements SemanticNamespaceElement {
+export class SemanticNamespaceModel
+    extends Model<SemanticNamespaceElement, SemanticTagModel>
+    implements SemanticNamespaceElement
+{
     override tag: SemanticNamespaceElement.Tag = SemanticNamespaceElement.Tag;
-    declare id: number;
     mfgCode?: number;
-
-    override get children(): Children<SemanticTagModel> {
-        return super.children as Children<SemanticTagModel>;
-    }
-
-    override set children(children: Children.InputIterable<SemanticTagModel>) {
-        super.children = children;
-    }
 
     get endpoints() {
         return this.children;
     }
 
     static Tag = SemanticNamespaceElement.Tag;
+
+    constructor(
+        definition: Model.Definition<SemanticNamespaceModel>,
+        ...children: Model.ChildDefinition<SemanticNamespaceModel>[]
+    ) {
+        super(definition, ...children);
+
+        this.mfgCode = definition.mfgCode;
+    }
+
+    override toElement(omitResources = false, extra?: Record<string, unknown>) {
+        return super.toElement(omitResources, {
+            mfgCode: this.mfgCode,
+            ...extra,
+        });
+    }
 }
 
 SemanticNamespaceModel.register();

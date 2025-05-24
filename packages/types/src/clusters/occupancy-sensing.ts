@@ -61,7 +61,7 @@ export namespace OccupancySensing {
         /**
          * ActiveInfrared (AIR)
          *
-         * Supports sensing using Active InfraRed measurement (e.g. time-of- flight or transflective/reflective IR
+         * Supports sensing using Active InfraRed measurement (e.g. time-of-flight or transflective/reflec tive IR
          * sensing)
          */
         ActiveInfrared = "ActiveInfrared",
@@ -104,12 +104,10 @@ export namespace OccupancySensing {
     };
 
     /**
-     * NOTE
+     * > [!NOTE]
      *
-     * This enum is as defined in ClusterRevision 4 and its definition shall NOT be
-     *
-     * extended; the feature flags provide the sensor modality (or modalities) for later cluster revisions. See Backward
-     * Compatibility section.
+     * > This enum is as defined in ClusterRevision 4 and its definition shall NOT be extended; the feature flags
+     *   provide the sensor modality (or modalities) for later cluster revisions. See Backward Compatibility section.
      *
      * @see {@link MatterSpecification.v14.Cluster} § 2.7.5.3
      */
@@ -136,10 +134,10 @@ export namespace OccupancySensing {
     }
 
     /**
-     * NOTE
+     * > [!NOTE]
      *
-     * This enum is as defined in ClusterRevision 4 and its definition shall NOT be extended; the feature flags provide
-     * the sensor modality (or modalities) for later cluster revisions. See Backward Compatibility section.
+     * > This enum is as defined in ClusterRevision 4 and its definition shall NOT be extended; the feature flags
+     *   provide the sensor modality (or modalities) for later cluster revisions. See Backward Compatibility section.
      *
      * @see {@link MatterSpecification.v14.Cluster} § 2.7.5.2
      */
@@ -359,58 +357,42 @@ export namespace OccupancySensing {
 
         features: {
             /**
-             * Other
-             *
              * Supports sensing using a modality not listed in the other bits
              */
             other: BitFlag(0),
 
             /**
-             * PassiveInfrared
-             *
              * Supports sensing using PIR (Passive InfraRed)
              */
             passiveInfrared: BitFlag(1),
 
             /**
-             * Ultrasonic
-             *
              * Supports sensing using UltraSound
              */
             ultrasonic: BitFlag(2),
 
             /**
-             * PhysicalContact
-             *
              * Supports sensing using a physical contact
              */
             physicalContact: BitFlag(3),
 
             /**
-             * ActiveInfrared
-             *
-             * Supports sensing using Active InfraRed measurement (e.g. time-of- flight or transflective/reflective IR
+             * Supports sensing using Active InfraRed measurement (e.g. time-of-flight or transflective/reflec tive IR
              * sensing)
              */
             activeInfrared: BitFlag(4),
 
             /**
-             * Radar
-             *
              * Supports sensing using radar waves (microwave)
              */
             radar: BitFlag(5),
 
             /**
-             * RfSensing
-             *
              * Supports sensing based on RF signal analysis
              */
             rfSensing: BitFlag(6),
 
             /**
-             * Vision
-             *
              * Supports sensing based on analyzing images
              */
             vision: BitFlag(7)
@@ -439,13 +421,12 @@ export namespace OccupancySensing {
             /**
              * This attribute shall specify the time delay, in seconds, before the sensor changes to its unoccupied
              * state after the last detection of occupancy in the sensed area. This is equivalent to the legacy
+             *
              * *OccupiedToUnoccupiedDelay attributes.
              *
              * The value of HoldTime shall be within the limits provided in the HoldTimeLimits attribute, i.e.
-             * HoldTimeMin <= HoldTime <= HoldTimeMax
-             *
-             * Low values of HoldTime SHOULD be avoided since they could lead to many reporting messages. A value 0 for
-             * HoldTime shall NOT be used.
+             * HoldTimeMin <= HoldTime <= HoldTimeMax Low values of HoldTime SHOULD be avoided since they could lead to
+             * many reporting messages. A value 0 for HoldTime shall NOT be used.
              *
              * The figure below illustrates this with an example of how this attribute is used for a PIR sensor. It uses
              * threshold detection to generate an "internal detection" signal, which needs post-processing to become
@@ -459,8 +440,6 @@ export namespace OccupancySensing {
              * has expired; this results in a single period of the bit in the Occupancy attribute being 1. The bit in
              * the Occupancy attribute will be set to 1 from the start of the first period where the PIR signal exceeds
              * the threshold until HoldTime after the last moment where the PIR exceeded the threshold.
-             *
-             * Figure 13. Processing of PIR signal towards Occupancy attribute using HoldTime
              *
              * @see {@link MatterSpecification.v14.Cluster} § 2.7.6.3
              */

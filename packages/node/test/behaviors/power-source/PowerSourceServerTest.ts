@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { PowerSourceDt } from "@matter/model";
-import { PowerSource } from "@matter/types/clusters/power-source";
-import { PowerSourceServer } from "../../../src/behaviors/power-source/PowerSourceServer.js";
-import { HumiditySensorDevice } from "../../../src/devices/humidity-sensor.js";
+import { PowerSourceServer } from "#behaviors/power-source";
+import { PowerSource } from "#clusters/power-source";
+import { HumiditySensorDevice } from "#devices/humidity-sensor";
+import { PowerSourceDt } from "#model";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 import { MockServerNode } from "../../node/mock-server-node.js";
 

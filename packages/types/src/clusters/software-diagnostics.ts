@@ -154,7 +154,7 @@ export namespace SoftwareDiagnostics {
              *
              *   • The CurrentHeapHighWatermark attribute This command has no payload.
              *
-             * Effect on Receipt
+             * ### Effect on Receipt
              *
              * On receipt of this command, the Node shall make the following modifications to attributes it supports:
              *
@@ -180,8 +180,6 @@ export namespace SoftwareDiagnostics {
 
         features: {
             /**
-             * Watermarks
-             *
              * Node makes available the metrics for high watermark related to memory consumption.
              */
             watermarks: BitFlag(0)

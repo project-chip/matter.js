@@ -5,8 +5,8 @@
  */
 
 import { Bytes, Crypto, Key, PrivateKey } from "#general";
-import { FabricBuilder } from "@matter/protocol";
-import { FabricIndex, NodeId, VendorId } from "@matter/types";
+import { FabricBuilder } from "#protocol";
+import { FabricIndex, NodeId, VendorId } from "#types";
 
 // These are temporary until we get proper crypto.subtle support
 Crypto.get().createKeyPair = () => {
@@ -31,12 +31,12 @@ const IPK_KEY = Bytes.fromHex("74656d706f726172792069706b203031");
 const TEST_FABRIC_INDEX = FabricIndex(1);
 const TEST_ROOT_NODE = NodeId(BigInt(1));
 
-export function buildFabric(index = TEST_FABRIC_INDEX) {
-    const builder = new FabricBuilder();
+export async function buildFabric(index = TEST_FABRIC_INDEX) {
+    const builder = await FabricBuilder.create();
     builder.setRootVendorId(VendorId(0));
     builder.setRootNodeId(TEST_ROOT_NODE);
-    builder.setRootCert(ROOT_CERT);
-    builder.setOperationalCert(NEW_OP_CERT);
+    await builder.setRootCert(ROOT_CERT);
+    await builder.setOperationalCert(NEW_OP_CERT);
     builder.setIdentityProtectionKey(IPK_KEY);
     return builder.build(index);
 }

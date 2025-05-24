@@ -11,7 +11,6 @@ import { Diagnostic, MaybePromise, Transaction } from "#general";
 import { AccessLevel } from "#model";
 import { AccessControl } from "#protocol";
 import type { ActionContext } from "../ActionContext.js";
-import type { ActionTracer } from "../ActionTracer.js";
 import { Contextual } from "../Contextual.js";
 import type { NodeActivity } from "../NodeActivity.js";
 import { ContextAgents } from "./ContextAgents.js";
@@ -92,7 +91,6 @@ export namespace OfflineContext {
      * {@link OfflineContext} configuration options.
      */
     export interface Options {
-        trace?: ActionTracer.Action;
         command?: boolean;
     }
 }

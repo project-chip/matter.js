@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic } from "@matter/general";
-import { ClusterModel, CommandModel, MatterModel } from "@matter/model";
-import { ClusterId, ValidationError } from "@matter/types";
+import { Diagnostic } from "#general";
+import { ClusterModel, CommandModel, MatterModel } from "#model";
+import { ClusterId, ValidationError } from "#types";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { convertJsonDataWithModel } from "../util/Json";
@@ -20,15 +20,17 @@ function generateAllCommandHandlersForCluster(yargs: Argv, theNode: MatterNode) 
 }
 
 function generateClusterCommandHandlers(yargs: Argv, cluster: ClusterModel, theNode: MatterNode) {
-    if (cluster.id === undefined) {
+    const clusterId = cluster.id;
+    if (clusterId === undefined) {
         return yargs;
     }
+
     yargs = yargs.command(
-        [cluster.name.toLowerCase(), `0x${cluster.id.toString(16)}`],
+        [cluster.name.toLowerCase(), `0x${clusterId.toString(16)}`],
         `Invoke ${cluster.name} commands`,
         yargs => {
             cluster.commands.forEach(command => {
-                yargs = generateCommandHandler(yargs, cluster.id, cluster.name, command, theNode);
+                yargs = generateCommandHandler(yargs, clusterId, cluster.name, command, theNode);
             });
             return yargs;
         },

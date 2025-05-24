@@ -47,6 +47,14 @@ const AllTests = Tests({
 
                 "allows omission": {},
             }),
+
+            mandatoryNullable: Tests(Fields({ conformance: "M", quality: "X" }), {
+                accepts: {
+                    record: { test: 1234 },
+                },
+
+                "allows ommission": {},
+            }),
         }),
 
         feature: Tests(Features({ F: "Foo" }), {

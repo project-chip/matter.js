@@ -33,29 +33,39 @@ export class AttestationCertificateManager {
 
     // We use the official PAA cert for now because else pairing with Chip tool do not work because
     // only this one is the Certificate store
-    private readonly paaKeyPair = PrivateKey(TestCert_PAA_NoVID_PrivateKey, {
+    readonly #paaKeyPair = PrivateKey(TestCert_PAA_NoVID_PrivateKey, {
         publicKey: TestCert_PAA_NoVID_PublicKey,
     });
-    private readonly paaKeyIdentifier = TestCert_PAA_NoVID_SKID;
-    private readonly paiCertId = BigInt(1);
-    private readonly paiKeyPair = Crypto.createKeyPair();
-    private readonly paiKeyIdentifier = Crypto.hash(this.paiKeyPair.publicKey).slice(0, 20);
-    private readonly paiCertBytes;
-    private nextCertificateId = 2;
+    readonly #vendorId: VendorId;
+    readonly #paiKeyPair: PrivateKey;
+    readonly #paiKeyIdentifier: Uint8Array;
+    readonly #paaKeyIdentifier = TestCert_PAA_NoVID_SKID;
+    readonly #paiCertId = BigInt(1);
+    readonly #paiCertBytes;
+    #nextCertificateId = 2;
 
-    constructor(private readonly vendorId: VendorId) {
-        this.paiCertBytes = this.generatePAICert(vendorId);
+    constructor(vendorId: VendorId, paiKeyPair: PrivateKey, paiKeyIdentifier: Uint8Array) {
+        this.#vendorId = vendorId;
+        this.#paiKeyPair = paiKeyPair;
+        this.#paiKeyIdentifier = paiKeyIdentifier;
+        this.#paiCertBytes = this.generatePAICert(vendorId);
+    }
+
+    static async create(vendorId: VendorId) {
+        const key = await Crypto.createKeyPair();
+        const identifier = await Crypto.hash(key.publicKey);
+        return new AttestationCertificateManager(vendorId, key, identifier.slice(0, 20));
     }
 
     getPAICert() {
-        return this.paiCertBytes;
+        return this.#paiCertBytes;
     }
 
-    getDACert(productId: number) {
-        const dacKeyPair = Crypto.createKeyPair();
+    async getDACert(productId: number) {
+        const dacKeyPair = await Crypto.createKeyPair();
         return {
             keyPair: dacKeyPair,
-            dac: this.generateDaCert(dacKeyPair.publicKey, this.vendorId, productId),
+            dac: await this.generateDaCert(dacKeyPair.publicKey, this.#vendorId, productId),
         };
     }
 
@@ -79,7 +89,7 @@ export class AttestationCertificateManager {
                 commonName: getPaaCommonName(),
                 vendorId: vendorId,
             },
-            ellipticCurvePublicKey: this.paaKeyPair.publicKey,
+            ellipticCurvePublicKey: this.#paaKeyPair.publicKey,
             extensions: {
                 basicConstraints: {
                     isCa: true,
@@ -89,17 +99,17 @@ export class AttestationCertificateManager {
                     keyCertSign: true,
                     cRLSign: true,
                 },
-                subjectKeyIdentifier: this.paaKeyIdentifier,
-                authorityKeyIdentifier: this.paaKeyIdentifier,
+                subjectKeyIdentifier: this.#paaKeyIdentifier,
+                authorityKeyIdentifier: this.#paaKeyIdentifier,
             },
         };
-        return CertificateManager.productAttestationAuthorityCertToAsn1(unsignedCertificate, this.paaKeyPair);
+        return CertificateManager.productAttestationAuthorityCertToAsn1(unsignedCertificate, this.#paaKeyPair);
     }
 
     private generatePAICert(vendorId: VendorId, productId?: number) {
         const now = Time.get().now();
         const unsignedCertificate = {
-            serialNumber: Bytes.fromHex(toHex(this.paiCertId)),
+            serialNumber: Bytes.fromHex(toHex(this.#paiCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
@@ -113,7 +123,7 @@ export class AttestationCertificateManager {
                 vendorId: vendorId,
                 productId: productId,
             },
-            ellipticCurvePublicKey: this.paiKeyPair.publicKey,
+            ellipticCurvePublicKey: this.#paiKeyPair.publicKey,
             extensions: {
                 basicConstraints: {
                     isCa: true,
@@ -123,16 +133,16 @@ export class AttestationCertificateManager {
                     keyCertSign: true,
                     cRLSign: true,
                 },
-                subjectKeyIdentifier: this.paiKeyIdentifier,
-                authorityKeyIdentifier: this.paaKeyIdentifier,
+                subjectKeyIdentifier: this.#paiKeyIdentifier,
+                authorityKeyIdentifier: this.#paaKeyIdentifier,
             },
         };
-        return CertificateManager.productAttestationIntermediateCertToAsn1(unsignedCertificate, this.paaKeyPair);
+        return CertificateManager.productAttestationIntermediateCertToAsn1(unsignedCertificate, this.#paaKeyPair);
     }
 
-    generateDaCert(publicKey: Uint8Array, vendorId: VendorId, productId: number) {
+    async generateDaCert(publicKey: Uint8Array, vendorId: VendorId, productId: number) {
         const now = Time.get().now();
-        const certId = this.nextCertificateId++;
+        const certId = this.#nextCertificateId++;
         const unsignedCertificate = {
             serialNumber: Bytes.fromHex(toHex(certId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
@@ -157,10 +167,10 @@ export class AttestationCertificateManager {
                 keyUsage: {
                     digitalSignature: true,
                 },
-                subjectKeyIdentifier: Crypto.hash(publicKey).slice(0, 20),
-                authorityKeyIdentifier: this.paiKeyIdentifier,
+                subjectKeyIdentifier: (await Crypto.hash(publicKey)).slice(0, 20),
+                authorityKeyIdentifier: this.#paiKeyIdentifier,
             },
         };
-        return CertificateManager.deviceAttestationCertToAsn1(unsignedCertificate, this.paiKeyPair);
+        return CertificateManager.deviceAttestationCertToAsn1(unsignedCertificate, this.#paiKeyPair);
     }
 }

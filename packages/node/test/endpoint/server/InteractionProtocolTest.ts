@@ -9,8 +9,13 @@
 import { AdministratorCommissioningServer } from "#behaviors/administrator-commissioning";
 import { OnOffServer } from "#behaviors/on-off";
 import { WiFiNetworkDiagnosticsServer } from "#behaviors/wi-fi-network-diagnostics";
-import { Crypto } from "#general";
-import { ServerNode } from "#node/index.js";
+import { AdministratorCommissioning } from "#clusters/administrator-commissioning";
+import { BasicInformation } from "#clusters/basic-information";
+import { GeneralDiagnostics } from "#clusters/general-diagnostics";
+import { Crypto, Observable } from "#general";
+import { Specification } from "#model";
+import { InteractionServer } from "#node/server/InteractionServer.js";
+import { ServerNode } from "#node/ServerNode.js";
 import {
     BaseDataReport,
     DataReportPayload,
@@ -53,11 +58,6 @@ import {
     VendorId,
     WildcardPathFlagsBitmap,
 } from "#types";
-import { Observable } from "@matter/general";
-import { Specification } from "@matter/model";
-import { InteractionServer } from "@matter/node";
-import { BasicInformation } from "@matter/types/clusters";
-import { AdministratorCommissioning } from "@matter/types/clusters/administrator-commissioning";
 import { MockServerNode } from "../../node/mock-server-node.js";
 import { interaction } from "../../node/node-helpers.js";
 import { createDummyMessageExchange } from "./InteractionTestUtils.js";
@@ -95,6 +95,17 @@ const READ_REQUEST_WITH_FILTER: ReadRequest = {
     dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 1 }],
 
     eventFilters: [{ eventMin: 2 }],
+};
+
+const READ_REQUEST_WILDCARD_EVENTS: ReadRequest = {
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+    isFabricFiltered: true,
+    eventRequests: [{ endpointId: EndpointNumber(0), isUrgent: true }],
+};
+
+const READ_REQUEST_WILDCARD_EVENTS_WITH_FILTER: ReadRequest = {
+    ...READ_REQUEST_WILDCARD_EVENTS,
+    eventFilters: [{ eventMin: 3 }],
 };
 
 const READ_RESPONSE: DataReportPayload = {
@@ -176,42 +187,6 @@ const READ_RESPONSE: DataReportPayload = {
     eventReportsPayload: [
         {
             hasFabricSensitiveData: false,
-            eventData: {
-                path: {
-                    endpointId: EndpointNumber(0),
-                    clusterId: ClusterId(0x28),
-                    eventId: EventId(0),
-                    isUrgent: undefined,
-                },
-                schema: BasicInformation.TlvStartUpEvent,
-                payload: {
-                    softwareVersion: 1,
-                },
-                eventNumber: EventNumber(1),
-                priority: 2,
-                epochTimestamp: 0,
-            },
-        },
-        {
-            hasFabricSensitiveData: false,
-            eventData: {
-                path: {
-                    endpointId: EndpointNumber(0),
-                    clusterId: ClusterId(0x28),
-                    eventId: EventId(0),
-                    isUrgent: undefined,
-                },
-                schema: BasicInformation.TlvStartUpEvent,
-                payload: {
-                    softwareVersion: 2,
-                },
-                eventNumber: EventNumber(3),
-                priority: 2,
-                epochTimestamp: 0,
-            },
-        },
-        {
-            hasFabricSensitiveData: false,
             eventStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(254) },
                 status: { status: 199 },
@@ -229,6 +204,40 @@ const READ_RESPONSE: DataReportPayload = {
             eventStatus: {
                 path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) },
                 status: { status: 127 },
+            },
+        },
+        {
+            hasFabricSensitiveData: true,
+            eventData: {
+                path: {
+                    endpointId: EndpointNumber(0),
+                    clusterId: ClusterId(0x28),
+                    eventId: EventId(0),
+                },
+                schema: BasicInformation.TlvStartUpEvent,
+                payload: {
+                    softwareVersion: 1,
+                },
+                eventNumber: EventNumber(1),
+                priority: 2,
+                epochTimestamp: 0,
+            },
+        },
+        {
+            hasFabricSensitiveData: true,
+            eventData: {
+                path: {
+                    endpointId: EndpointNumber(0),
+                    clusterId: ClusterId(0x28),
+                    eventId: EventId(0),
+                },
+                schema: BasicInformation.TlvStartUpEvent,
+                payload: {
+                    softwareVersion: 2,
+                },
+                eventNumber: EventNumber(3),
+                priority: 2,
+                epochTimestamp: 0,
             },
         },
     ],
@@ -285,24 +294,6 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
     eventReportsPayload: [
         {
             hasFabricSensitiveData: false,
-            eventData: {
-                path: {
-                    endpointId: EndpointNumber(0),
-                    clusterId: ClusterId(0x28),
-                    eventId: EventId(0),
-                    isUrgent: undefined,
-                },
-                schema: BasicInformation.TlvStartUpEvent,
-                payload: {
-                    softwareVersion: 2,
-                },
-                eventNumber: EventNumber(3),
-                priority: 2,
-                epochTimestamp: 0,
-            },
-        },
-        {
-            hasFabricSensitiveData: false,
             eventStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(254) },
                 status: { status: 199 },
@@ -320,6 +311,91 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
             eventStatus: {
                 path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) },
                 status: { status: 127 },
+            },
+        },
+        {
+            hasFabricSensitiveData: true,
+            eventData: {
+                path: {
+                    endpointId: EndpointNumber(0),
+                    clusterId: ClusterId(0x28),
+                    eventId: EventId(0),
+                },
+                schema: BasicInformation.TlvStartUpEvent,
+                payload: {
+                    softwareVersion: 2,
+                },
+                eventNumber: EventNumber(3),
+                priority: 2,
+                epochTimestamp: 0,
+            },
+        },
+    ],
+};
+
+const READ_RESPONSE_WILDCARD_EVENTS: DataReportPayload = {
+    interactionModelRevision: 12,
+    suppressResponse: true,
+    eventReportsPayload: [
+        {
+            eventData: {
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(40), eventId: EventId(0) },
+                eventNumber: EventNumber(1),
+                priority: 2,
+                epochTimestamp: 0,
+                payload: { softwareVersion: 1 },
+                schema: BasicInformation.TlvStartUpEvent,
+            },
+            hasFabricSensitiveData: true,
+        },
+        {
+            eventData: {
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(51), eventId: EventId(3) },
+                eventNumber: EventNumber(2),
+                priority: 2,
+                epochTimestamp: 0,
+                payload: { bootReason: 0 },
+                schema: GeneralDiagnostics.TlvBootReasonEvent,
+            },
+            hasFabricSensitiveData: true,
+        },
+        {
+            eventData: {
+                path: {
+                    endpointId: EndpointNumber(0),
+                    clusterId: ClusterId(40),
+                    eventId: EventId(0),
+                },
+                eventNumber: EventNumber(3),
+                priority: 2,
+                epochTimestamp: 0,
+                payload: { softwareVersion: 2 },
+                schema: BasicInformation.TlvStartUpEvent,
+            },
+            hasFabricSensitiveData: true,
+        },
+    ],
+};
+
+const READ_RESPONSE_WILDCARD_EVENTS_WITH_FILTER: DataReportPayload = {
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+    suppressResponse: true,
+    eventReportsPayload: [
+        {
+            hasFabricSensitiveData: true,
+            eventData: {
+                path: {
+                    endpointId: EndpointNumber(0),
+                    clusterId: ClusterId(0x28),
+                    eventId: EventId(0),
+                },
+                schema: BasicInformation.TlvStartUpEvent,
+                payload: {
+                    softwareVersion: 2,
+                },
+                eventNumber: EventNumber(3),
+                priority: 2,
+                epochTimestamp: 0,
             },
         },
     ],
@@ -343,7 +419,7 @@ const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
 
 const WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     timedRequest: false,
     writeRequests: [
         {
@@ -410,7 +486,7 @@ const WRITE_RESPONSE: WriteResponse = {
 
 const WRITE_REQUEST_TIMED_REQUIRED: WriteRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     timedRequest: false,
     writeRequests: [
         {
@@ -444,7 +520,7 @@ const WRITE_RESPONSE_TIMED_REQUIRED: WriteResponse = {
 
 const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     timedRequest: false,
     writeRequests: [
         {
@@ -468,7 +544,7 @@ const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
 
 const MASS_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     timedRequest: false,
     writeRequests: [
         {
@@ -500,7 +576,7 @@ const TlvAclTestSchema = TlvObject({
 
 const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     timedRequest: false,
     writeRequests: [
         {
@@ -516,7 +592,7 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
             },
             data: TlvAclTestSchema.encodeTlv({
                 privilege: 1,
-                authMode: 1,
+                authMode: 2,
                 subjects: null,
                 targets: null,
             }),
@@ -530,7 +606,7 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
             },
             data: TlvAclTestSchema.encodeTlv({
                 privilege: 1,
-                authMode: 2,
+                authMode: 1,
                 subjects: null,
                 targets: null,
                 fabricIndex: FabricIndex.NO_FABRIC,
@@ -559,19 +635,38 @@ const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     writeResponses: [
         {
-            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
+            path: {
+                attributeId: AttributeId(0),
+                clusterId: ClusterId(31),
+                endpointId: EndpointNumber(0),
+            },
             status: { clusterStatus: undefined, status: 0 },
         },
         {
-            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
+            path: {
+                attributeId: AttributeId(0),
+                clusterId: ClusterId(31),
+                endpointId: EndpointNumber(0),
+                listIndex: null,
+            },
+            status: { clusterStatus: undefined, status: 0 },
+        },
+        {
+            path: {
+                attributeId: AttributeId(0),
+                clusterId: ClusterId(31),
+                endpointId: EndpointNumber(0),
+                listIndex: null,
+            },
             status: { clusterStatus: undefined, status: 135 },
         },
         {
-            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
-            status: { clusterStatus: undefined, status: 0 },
-        },
-        {
-            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
+            path: {
+                attributeId: AttributeId(0),
+                clusterId: ClusterId(31),
+                endpointId: EndpointNumber(0),
+                listIndex: null,
+            },
             status: { clusterStatus: undefined, status: 0 },
         },
     ],
@@ -784,6 +879,13 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
     invokeResponses: [
         {
             status: {
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) },
+                commandRef: 4,
+                status: { status: 129 },
+            },
+        },
+        {
+            status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(0), endpointId: EndpointNumber(0) },
                 commandRef: 1,
                 status: { status: 0 },
@@ -801,13 +903,6 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(2), endpointId: EndpointNumber(0) },
                 commandRef: 3,
                 status: { status: 0 },
-            },
-        },
-        {
-            status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) },
-                commandRef: 4,
-                status: { status: 129 },
             },
         },
     ],
@@ -1004,6 +1099,30 @@ describe("InteractionProtocol", () => {
             expect(await fillIterableDataReport(result)).deep.equals(READ_RESPONSE_WITH_FILTER);
         });
 
+        it("replies with events for wildcard read  returns correct order", async () => {
+            await node.act(agent => node.events.basicInformation.startUp.emit({ softwareVersion: 2 }, agent.context));
+
+            const result = await interactionProtocol.handleReadRequest(
+                await createDummyMessageExchange(node),
+                READ_REQUEST_WILDCARD_EVENTS,
+                interaction.BarelyMockedMessage,
+            );
+
+            expect(await fillIterableDataReport(result)).deep.equals(READ_RESPONSE_WILDCARD_EVENTS);
+        });
+
+        it("replies with events for wildcard read active version filter", async () => {
+            await node.act(agent => node.events.basicInformation.startUp.emit({ softwareVersion: 2 }, agent.context));
+
+            const result = await interactionProtocol.handleReadRequest(
+                await createDummyMessageExchange(node),
+                READ_REQUEST_WILDCARD_EVENTS_WITH_FILTER,
+                interaction.BarelyMockedMessage,
+            );
+
+            expect(await fillIterableDataReport(result)).deep.equals(READ_RESPONSE_WILDCARD_EVENTS_WITH_FILTER);
+        });
+
         for (const { testCase, clusterId, wildcardPathFilter, count } of wildcardTestCases) {
             it(`replies with attributes with ${testCase} wildcard Filter`, async () => {
                 node.behaviors.require(WiFiNetworkDiagnosticsServer, {
@@ -1122,7 +1241,7 @@ describe("InteractionProtocol", () => {
                     ILLEGAL_MASS_WRITE_REQUEST,
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith();
+            ).rejectedWith("(128) Wildcard path write must specify a clusterId and attributeId");
         });
 
         it("performs mass write with wildcard endpoint", async () => {
@@ -1368,7 +1487,7 @@ describe("InteractionProtocol", () => {
                     new InteractionServerMessenger(exchange),
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith("(128) Illegal wildcard path in batch invoke");
+            ).rejectedWith("(128) Wildcard path must not be used with multiple invokes");
             expect(result).equals(undefined);
         });
 
@@ -1508,7 +1627,7 @@ describe("InteractionProtocol", () => {
                     new InteractionServerMessenger(exchange),
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith("(128) Duplicate command path (0/6/1) in batch invoke");
+            ).rejectedWith("(128) Duplicate concrete command path RootNode:0x0.OnOff:0x6.on:0x1 on batch invoke");
 
             expect(result).equals(undefined);
         });
@@ -1717,7 +1836,7 @@ describe("InteractionProtocol", () => {
             expect(timedInteractionCleared).equals(false);
         });
 
-        it("invoke command with with timed interaction required by command success", async () => {
+        it("invoke command with timed interaction required by command success", async () => {
             const fabric = await node.addFabric();
 
             let timedInteractionCleared = false;

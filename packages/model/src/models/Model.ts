@@ -8,7 +8,9 @@ import { camelize, decamelize, ImplementationError } from "#general";
 import { DefinitionError, ElementTag, Metatype, Specification } from "../common/index.js";
 import { AnyElement, BaseElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
-import { Children } from "./Children.js";
+import { Children, InternalChildren } from "./Children.js";
+import type { MatterModel } from "./MatterModel.js";
+import { Resource, ResourceBundle } from "./Resource.js";
 
 const inspect = Symbol.for("nodejs.util.inspect.custom");
 
@@ -20,28 +22,17 @@ export class StructuralModelError extends ImplementationError {}
 /**
  * A "model" is a class that implements runtime functionality associated with the corresponding element type.
  *
- * @template T the element type this model implements
+ * @template E the element type this model implements
  */
-export abstract class Model<T extends BaseElement = BaseElement> {
+export abstract class Model<E extends BaseElement = BaseElement, C extends Model = Model<BaseElement, any>> {
     abstract readonly tag: ElementTag;
     type?: string;
     isSeed?: boolean;
-    description?: string;
-    details?: string;
-    xref?: Model.CrossReference;
-    errors?: DefinitionError[];
-    asOf?: Specification.Revision;
-    until?: Specification.Revision;
-    matchTo?: {
-        id?: string | number;
-        name?: string;
-    };
-    declare id?: number;
-    declare name: string;
 
-    #id?: number = undefined;
+    #id: E["id"];
     #name: string;
     #frozen?: boolean;
+    #resource?: Resource;
 
     /**
      * Indicates that an element defines a datatype.
@@ -63,8 +54,29 @@ export abstract class Model<T extends BaseElement = BaseElement> {
      */
     operationalShadow?: Model | null;
 
-    #children?: Children;
+    #children?: InternalChildren<C>;
     #parent?: Model;
+    #root?: MatterModel;
+
+    get id(): E["id"] {
+        return this.#id;
+    }
+
+    set id(value: E["id"]) {
+        const oldId = this.effectiveId;
+        this.#id = value;
+        (this.#parent?.children as InternalChildren).updateId(this, oldId);
+    }
+
+    get name() {
+        return this.#name;
+    }
+
+    set name(value: string) {
+        const oldName = this.#name;
+        this.#name = value;
+        (this.#parent?.children as InternalChildren).updateName(this, oldName);
+    }
 
     /**
      * Did validation find errors?
@@ -125,6 +137,13 @@ export abstract class Model<T extends BaseElement = BaseElement> {
         return this.#parent;
     }
 
+    /**
+     * The structural root.  This is the MatterModel that owns this model.
+     */
+    get root() {
+        return this.#root;
+    }
+
     set parent(parent: Model | undefined) {
         if (this.parent === parent) {
             return;
@@ -177,22 +196,26 @@ export abstract class Model<T extends BaseElement = BaseElement> {
     /**
      * Children of models are always models.
      */
-    get children(): Children {
+    get children(): Children<C> {
         if (!this.#children) {
             // Construct new Children instance via setter
             this.children = [];
         }
-        return this.#children as Children;
+        return this.#children as Children<C>;
+    }
+
+    get hasChildren(): boolean {
+        return !!this.#children?.length;
     }
 
     /**
      * Set the children of the model.
      */
-    set children(children: Children.InputIterable<Model<AnyElement>>) {
+    set children(children: Children.InputIterable<C>) {
         this.#children = Children(
             children,
 
-            (child: Model) => {
+            child => {
                 if (child.#parent === this) {
                     return;
                 }
@@ -202,13 +225,24 @@ export abstract class Model<T extends BaseElement = BaseElement> {
                     if (position !== -1) {
                         child.#parent.children.splice(position, 1);
                     }
-                    child.#parent = undefined;
                 }
 
                 child.#parent = this;
             },
 
-            (child: Model) => {
+            (child, sharesRoot) => {
+                const root = sharesRoot ? this.root : undefined;
+
+                if (child.#root === root) {
+                    return false;
+                }
+
+                child.#root = root;
+
+                return true;
+            },
+
+            child => {
                 if (child.#parent === this) {
                     child.#parent = undefined;
                     return true;
@@ -291,10 +325,12 @@ export abstract class Model<T extends BaseElement = BaseElement> {
 
     /**
      * Update a subset of fields.
+     *
+     * Only allows for updates to element properties.  Recurses to children.
      */
-    patch(values: Partial<T>) {
-        for (const [k, v] of Object.entries(values.valueOf())) {
-            this[k as keyof this] = v;
+    patch(values: Model.Patch<E>) {
+        for (const [name, value] of Object.entries(values.valueOf())) {
+            this[name as keyof typeof this] = value;
         }
     }
 
@@ -379,27 +415,37 @@ export abstract class Model<T extends BaseElement = BaseElement> {
      * Convert to non-class structure.
      */
     valueOf() {
-        const result = {} as { [name: string]: any };
+        return this.toElement();
+    }
 
-        // Return all iterable properties minus metadata
-        for (const key in this) {
-            switch (key) {
-                case "parent":
-                case "errors":
-                case "scope":
-                case "isType":
-                case "operationalBase":
-                case "isScope":
-                    continue;
-
-                default:
-                    if (this[key] !== undefined && (this[key] !== null || key === "default")) {
-                        result[key] = this[key];
-                    }
-            }
+    /**
+     * Convert to elemental form.
+     */
+    toElement(omitResources = false, extra?: Record<string, unknown>) {
+        if (omitResources) {
+            return {
+                tag: this.tag,
+                type: this.type,
+                isSeed: this.isSeed,
+                id: this.id,
+                name: this.name,
+                ...extra,
+            } as unknown as E;
         }
 
-        return result as T;
+        const result = {
+            tag: this.tag,
+            type: this.type,
+            isSeed: this.isSeed,
+            id: this.#id,
+            name: this.#name,
+            ...this.resource,
+            ...extra,
+        };
+
+        delete result.errors;
+
+        return result as unknown as E;
     }
 
     /**
@@ -480,8 +526,8 @@ export abstract class Model<T extends BaseElement = BaseElement> {
      */
     extend<This extends Model>(
         this: This,
-        properties?: Partial<BaseElement.Properties<T>>,
-        ...children: Model.Definition<Model>[]
+        properties?: Partial<BaseElement.Properties<E>>,
+        ...children: Model.ChildDefinition<Model>[]
     ): This {
         const constructor = this.constructor as new (properties: unknown) => This;
 
@@ -508,7 +554,7 @@ export abstract class Model<T extends BaseElement = BaseElement> {
         return extension;
     }
 
-    constructor(definition: Model<T> | BaseElement.Properties<T>, ...children: Model.Definition<Model>[]) {
+    constructor(definition: Model.Definition<Model<E>>, ...children: Model.TaggedDefinition<C>[]) {
         if (typeof definition !== "object") {
             throw new StructuralModelError(`Model definition must be an object, not ${typeof definition}`);
         }
@@ -516,29 +562,37 @@ export abstract class Model<T extends BaseElement = BaseElement> {
         const isClone = definition instanceof Model;
 
         this.#id = definition.id;
-
         this.#name = definition.name;
+        this.type = definition.type;
+        this.isSeed = definition.isSeed;
+        this.operationalBase = definition.operationalBase;
+        this.operationalShadow = definition.operationalShadow;
 
-        // Copy all definition properties.  Types will be wrong for some of them but constructors correct this.
-        // Properties for which type is correct are suffixed with "!" to indicate no further initialization is necessary
-        for (const [k, v] of Object.entries(definition)) {
-            if (k === "id" || k === "name" || k === "parent" || k === "isGlobal") {
-                continue;
+        if (isClone) {
+            if (definition.hasLocalResource) {
+                this.resource = definition.resource;
             }
-
-            if (v !== undefined) {
-                (this as any)[k] = v;
+        } else {
+            if (
+                "description" in definition ||
+                "xref" in definition ||
+                "details" in definition ||
+                "xref" in definition ||
+                "errors" in definition ||
+                "asOf" in definition ||
+                "until" in definition ||
+                "matchTo" in definition
+            ) {
+                this.resource = new Resource(definition);
             }
-        }
-
-        if (this.xref) {
-            this.xref = Model.CrossReference.get(this.xref);
         }
 
         if (isClone) {
             for (const child of definition.children) {
                 this.children.push(child.clone() as Model.ChildOf<typeof this>);
             }
+        } else if (definition.children) {
+            this.children.push(...(definition.children as Iterable<Model.ChildOf<typeof this>>));
         }
 
         if (children.length) {
@@ -563,7 +617,7 @@ export abstract class Model<T extends BaseElement = BaseElement> {
         const shadow = this.operationalShadow ?? (this.operationalShadow = this.shadow ?? null);
         this.#frozen = true;
         Object.freeze(this);
-        this.children.freeze();
+        (this.children as InternalChildren<C>).freeze();
         base?.freeze();
         shadow?.freeze();
     }
@@ -572,43 +626,80 @@ export abstract class Model<T extends BaseElement = BaseElement> {
         return `${this.tag}${this.type ? `<${this.type}>` : ""}#${this.path}`;
     }
 
-    static {
-        // Obnoxious TS constraints prevent us from defining fields with accessors then overriding the type with simple
-        // types.  So we just declare id and name then install accessors onto the prototype manually.  Should be
-        // functionally identical (at JS level) to defining directly in the class.
-        //
-        // We do this in a static block so we have access to the corresponding private fields.
-        //
-        // We can't do the same with children because the setter and getter types are different.
-        Object.defineProperties(Model.prototype, {
-            id: {
-                get(this: Model): number | undefined {
-                    return this.#id;
-                },
+    get resource() {
+        return this.#resource || (this.#root?.resources || ResourceBundle.default).get(this);
+    }
 
-                set(this: Model, value: number | undefined) {
-                    const oldId = this.effectiveId;
-                    this.#id = value;
-                    this.#parent?.children.updateId(this, oldId);
-                },
+    set resource(resource: Resource | undefined) {
+        if (resource instanceof Resource) {
+            this.#resource = resource;
+        } else {
+            this.#resource = new Resource(resource);
+        }
+    }
 
-                enumerable: true,
-            },
+    get description() {
+        return this.resource?.description;
+    }
 
-            name: {
-                get(this: Model): string {
-                    return this.#name;
-                },
+    set description(description: string | undefined) {
+        this.localResource.description = description;
+    }
 
-                set(this: Model, value: string) {
-                    const oldName = this.#name;
-                    this.#name = value;
-                    this.#parent?.children.updateName(this, oldName);
-                },
+    get details() {
+        return this.resource?.details;
+    }
 
-                enumerable: true,
-            },
-        });
+    set details(details: string | undefined) {
+        this.localResource.details = details;
+    }
+
+    get xref() {
+        return this.resource?.xref;
+    }
+
+    set xref(xref: Specification.CrossReference | undefined) {
+        this.localResource.xref = xref;
+    }
+
+    get errors() {
+        return this.resource?.errors;
+    }
+
+    set errors(errors: DefinitionError[] | undefined) {
+        this.localResource.errors = errors;
+    }
+
+    get asOf() {
+        return this.resource?.asOf;
+    }
+
+    set asOf(asOf: Specification.Revision | undefined) {
+        this.localResource.asOf = asOf;
+    }
+
+    get until() {
+        return this.resource?.until;
+    }
+
+    set until(until: Specification.Revision | undefined) {
+        this.localResource.until = until;
+    }
+
+    get matchTo() {
+        return this.resource?.matchTo;
+    }
+
+    set matchTo(matchTo: { id?: string | number; name?: string } | undefined) {
+        this.localResource.matchTo = matchTo;
+    }
+
+    get localResource() {
+        return this.resource ?? (this.resource = new Resource());
+    }
+
+    get hasLocalResource() {
+        return !!this.#resource;
     }
 
     [inspect](_depth: any, options: any, inspect: any) {
@@ -639,27 +730,58 @@ export namespace Model {
     /**
      * Obtain the element type of a model type.
      */
-    export type ElementOf<T> = T extends Model<infer E extends AnyElement> ? E : AnyElement;
+    export type ElementOf<T extends Model> = T extends Model<infer E extends BaseElement> ? E : never;
 
     /**
      * Obtain the child type of a model type.
      */
-    export type ChildOf<T> = T extends { children: Children<infer C> } ? C : never;
+    export type ChildOf<T extends Model> = T extends Model<any, infer C extends Model> ? C : never;
 
     /**
-     * Input model.  In most places elements and models are interchangeable on input.
+     * Constructor input.
+     *
+     * In most places elements and models are interchangeable on input.
      */
-    export type Definition<T extends Model> = ElementOf<T> | T;
+    export type Definition<T extends Model> =
+        | (BaseElement.Properties<ElementOf<T>> & { operationalBase?: Model; operationalShadow?: Model })
+        | T;
+
+    /**
+     * Tagged input.  Like {@link Definition} but for places where model type is not implied.
+     */
+    export type TaggedDefinition<T extends Model> =
+        | (ElementOf<T> & {
+              operationalBase?: Model;
+              operationalShadow?: Model;
+          })
+        | T;
+
+    /**
+     * Input model for children.
+     */
+    export type ChildDefinition<T extends Model> = TaggedDefinition<ChildOf<T>>;
 
     /**
      * A model constructor.
      */
-    export type Type<T extends Model = Model> = abstract new (...args: any) => T;
+    export type Type<T extends Model = Model> = abstract new (definition: any) => T;
 
     /**
      * A model constructor for a specific element type.
      */
     export type ConcreteType<T extends Model = Model> = (new (definition: any) => T) & { Tag: ElementTag };
+
+    /**
+     * A patch to a model tree.
+     */
+    export type Patch<T extends BaseElement> = Omit<Partial<T>, "children" | "tag"> & {
+        children?: (Patch<Exclude<T["children"], undefined>[number]> | undefined)[];
+    };
+
+    export type Properties<T extends BaseElement.Properties = BaseElement.Properties> = T & {
+        operationalBase?: Model;
+        operationalShadow?: Model;
+    };
 
     export type LookupPredicate<T extends Model> = Type<T> | { type: Type<T>; test: (model: Model) => boolean };
 
@@ -670,32 +792,6 @@ export namespace Model {
         nullable?: boolean;
         values?: { [name: string]: any };
     };
-
-    export class CrossReference implements Specification.CrossReference {
-        document: Specification;
-        section: string;
-        private static instances = {} as { [key: string]: CrossReference };
-
-        private constructor({ document, section }: Specification.CrossReference) {
-            this.document = document as Specification;
-            this.section = section;
-        }
-
-        toString() {
-            return `${this.document}§${this.section}`;
-        }
-
-        static get(xref: Specification.CrossReference) {
-            const key = `${xref.document}:${xref.section}`;
-            const canonical = this.instances[key];
-            if (canonical) {
-                return canonical;
-            }
-            return (this.instances[key] = new CrossReference(xref));
-        }
-
-        [inspect](_depth: any, options: any, inspect: any) {
-            return inspect(this.toString(), options);
-        }
-    }
 }
+
+Children.installModelConstructor(Model);

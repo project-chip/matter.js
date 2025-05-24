@@ -52,6 +52,8 @@ Some command line parameters, for example those used to set the level of logging
 * `--mdns-networkinterface=...` or environment variable `MATTER_MDNS_NETWORKINTERFACE` or `environment.vars.set('mdns.networkInterface', "...")` allows to limit the DNS announcements and scanning to one network interface. By default, all available interfaces are used.
   Additionally, all command line parameters now require to start with two dashes!
 
+(if using `npm run ...` to run examples then an additional "--" if needed to separate commandline parameters between the npm run and the executed script. Please see the relevant examples README too.)
+
 ## Development on basis of the examples
 
 The code of the examples is written so that you can use them as basis for your own scripts also outside of this library in your own package. If you import from `@matter/main` then matter.js loads platform extensions such as those for node.js automatically.  If you import directly from our other packages then you should add a dependency on `@matter/nodejs`. The examples use `@matter/main` imports to ease adoption.

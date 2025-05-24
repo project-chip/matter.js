@@ -42,10 +42,10 @@ export namespace LowPower {
      * The cluster server for Low Power is implemented by a device that supports a low power mode, such as a TV, Set-top
      * box, or Smart Speaker.
      *
-     * NOTE
+     * > [!NOTE]
      *
-     * We have considered a “DisableLowPowerMode” command but have not added it due to suspected issues with energy
-     * consumption regulations. This can be added in the future.
+     * > We have considered a “DisableLowPowerMode” command but have not added it due to suspected issues with energy
+     *   consumption regulations. This can be added in the future.
      *
      * @see {@link MatterSpecification.v14.Cluster} § 1.11
      */

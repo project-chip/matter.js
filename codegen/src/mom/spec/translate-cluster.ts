@@ -51,12 +51,6 @@ export function* translateCluster(definition: ClusterReference) {
     translateDatatypes(definition, children);
     translateNamespace(definition, children);
 
-    const idStr = metadata.id === undefined ? "(no ID)" : `0x${metadata.id.toString(16)}`;
-    logger.debug(
-        `${idStr} ${metadata.name}`,
-        Diagnostic.dict({ rev: metadata.revision, cls: metadata.classification }),
-    );
-
     const cluster = ClusterElement({
         id: metadata.id,
         name: metadata.name,
@@ -110,7 +104,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
 
     if (definition.ids?.name === "Cluster IDs") {
         // Section is a list of aliases
-        name = camelize(definition.name.replace(/ Clusters?$/i, ""), true);
+        name = camelize(definition.name, true);
         aliases = ids;
     } else {
         // Section is a base cluster plus aliases
@@ -118,9 +112,11 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
         aliases = [];
         for (let i = 1; i < ids.length; i++) {
             const { id, name, pics } = ids[i];
-            aliases.push({ id, name, pics });
+            aliases.push({ id, name: name.replace(/ Clusters?$/i, ""), pics });
         }
     }
+
+    name = name.replace(/Clusters?$/i, "");
 
     return {
         id,
@@ -240,12 +236,10 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             constraint: Alias(Integer, "bit", "id"),
             conformance: Optional(ConformanceCode),
             details: Optional(Alias(Str, "description", "summary")),
+            title: Optional(Alias(Identifier, "feature", "name")),
 
-            // Must define after details which uses description column
-            description: Optional(Alias(Identifier, "feature", "name")),
-
-            // Must define after description which uses name column
-            name: Alias(UpperIdentifier, "code", "feature"),
+            // Must define after title which uses the name column
+            name: Alias(UpperIdentifier, "code"),
 
             // We let Model handle translation to the proper type
             default: Optional(Alias(NoSpace, "def")),

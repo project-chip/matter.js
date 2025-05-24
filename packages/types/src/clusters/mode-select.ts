@@ -149,9 +149,7 @@ export namespace ModeSelect {
              * If this attribute is not present or is set to null, it shall NOT have an effect, otherwise the
              * CurrentMode attribute shall depend on the OnOff attribute of the On/Off cluster
              *
-             * The value of this field shall match the Mode field of one of the entries in the SupportedModes
-             *
-             * attribute.
+             * The value of this field shall match the Mode field of one of the entries in the SupportedModes attribute.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.9.6.6
              */
@@ -169,8 +167,6 @@ export namespace ModeSelect {
 
         features: {
             /**
-             * OnOff
-             *
              * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
              * endpoint. See OnMode for more information.
              *
@@ -215,9 +211,7 @@ export namespace ModeSelect {
             /**
              * This attribute represents the current mode of the server.
              *
-             * The value of this field must match the Mode field of one of the entries in the SupportedModes
-             *
-             * attribute.
+             * The value of this field must match the Mode field of one of the entries in the SupportedModes attribute.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.9.6.4
              */
@@ -234,9 +228,7 @@ export namespace ModeSelect {
              * This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentMode
              * attribute shall return to its value prior to the restart.
              *
-             * The value of this field shall match the Mode field of one of the entries in the SupportedModes
-             *
-             * attribute.
+             * The value of this field shall match the Mode field of one of the entries in the SupportedModes attribute.
              *
              * If this attribute is not implemented, or is set to the null value, it shall have no effect.
              *
@@ -274,9 +266,7 @@ export namespace ModeSelect {
      * of a laundry machine.
      *
      * The server allows the client to set a mode on the server. A mode is one of a list of options that may be
-     * presented by a client for a user choice, or understood by the client, via the semantic tags on the
-     *
-     * mode.
+     * presented by a client for a user choice, or understood by the client, via the semantic tags on the mode.
      *
      * A semantic tag is either a standard tag within a standard category namespace, or a manufacturer specific tag,
      * within the namespace of the vendor ID of the manufacturer. If there is no semantic tag, the mode is anonymous,

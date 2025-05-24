@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { camelize } from "@matter/general";
+import { camelize } from "#general";
 import { ClusterModel, FieldModel } from "../../models/index.js";
 
 export type FeatureFlags = string[];
@@ -30,7 +30,7 @@ export function translateBitmap(bitmap: FeatureBitmap, cluster: ClusterModel) {
     return Object.fromEntries(
         Object.entries(bitmap).map(([k, v]) => {
             const feature = cluster.featureMap.get(FieldModel, k);
-            return [camelize(feature?.description ?? k), v];
+            return [camelize(feature?.title ?? k), v];
         }),
     );
 }

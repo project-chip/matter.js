@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isDeepEqual } from "@matter/general";
+import { isDeepEqual } from "#general";
 import type { ValueModel } from "../models/index.js";
 
 /**
@@ -80,7 +80,7 @@ export namespace FeatureSet {
             featuresAvailable.add(feature.name);
             if (
                 supported?.has(feature.name.toLowerCase()) ||
-                (feature.description && supported?.has(feature.description.toLowerCase()))
+                (feature.title && supported?.has(feature.title.toLowerCase()))
             ) {
                 featuresSupported.add(feature.name);
             }

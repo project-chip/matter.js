@@ -116,7 +116,7 @@ export namespace NetworkCommissioning {
         NetworkNotFound = 5,
 
         /**
-         * Cannot find AP: Mismatch on band/channels/regulatory domain/ 2.4GHz vs 5GHz
+         * Cannot find AP: Mismatch on band/channels/regulato ry domain / 2.4GHz vs 5GHz
          */
         RegulatoryError = 6,
 
@@ -605,7 +605,7 @@ export namespace NetworkCommissioning {
         /**
          * See Breadcrumb for usage.
          *
-         * Effect when received
+         * ### Effect when received
          *
          * If the Networks attribute does not contain a matching entry, the command shall immediately respond with
          * NetworkConfigResponse having NetworkingStatus status field set to NetworkIdNotFound.
@@ -625,7 +625,7 @@ export namespace NetworkCommissioning {
          * Re-ordering to the same NetworkIndex as the current location shall be considered as a success and yield no
          * visible changes of the Networks attribute.
          *
-         * Examples of re-ordering
+         * ### Examples of re-ordering
          *
          * To better illustrate the re-ordering operation, consider this initial state, exemplary of a Wi-Fi device:
          *
@@ -680,7 +680,7 @@ export namespace NetworkCommissioning {
         /**
          * Credentials is the passphrase or PSK for the network (if any is needed).
          *
-         * Security type, cipher and credential format (passphrase or PSK) shall be contextually auto- selected during
+         * Security type, cipher and credential format (passphrase or PSK) shall be contextually auto-selected during
          * execution of the ConnectNetwork Command and during subsequent operational state network connections, based on
          * the most secure Wi-Fi security type available within beacons and probe responses for the set of all
          * discovered BSSIDs for the configured SSID. The type of PSK or passphrase used shall be inferred based on the
@@ -700,10 +700,8 @@ export namespace NetworkCommissioning {
          *
          *   • 8..63 bytes: WPA/WPA2/WPA3 passphrase
          *
-         *   • 64 bytes: WPA/WPA2/WPA3 raw hex PSK
-         *
-         * These lengths shall be contextually interpreted based on the security type of the BSSID where connection will
-         * occur.
+         *   • 64 bytes: WPA/WPA2/WPA3 raw hex PSK These lengths shall be contextually interpreted based on the security
+         *     type of the BSSID where connection will occur.
          *
          * When the length of Credentials and available set of BSSID admits more than one option, such as the presence
          * of both WPA2 and WPA security type within the result set, WPA2 shall be considered more secure.
@@ -732,12 +730,12 @@ export namespace NetworkCommissioning {
     export interface AddOrUpdateWiFiNetworkRequest extends TypeFromSchema<typeof TlvAddOrUpdateWiFiNetworkRequest> {}
 
     /**
-     * The ThreadCapabilitiesBitmap encodes the supported Thread features and capabilities of a Thread- enabled network
+     * The ThreadCapabilitiesBitmap encodes the supported Thread features and capabilities of a Thread-enabled network
      * interface.
      *
-     * NOTE
+     * > [!NOTE]
      *
-     * The valid combinations of capabilities are restricted and dependent on Thread version.
+     * > The valid combinations of capabilities are restricted and dependent on Thread version.
      *
      * @see {@link MatterSpecification.v14.Core} § 11.9.5.2
      */
@@ -819,14 +817,14 @@ export namespace NetworkCommissioning {
          * The semantics of the NetworkID field therefore varies between network types accordingly. It contains SSID for
          * Wi-Fi networks, Extended PAN ID (XPAN ID) for Thread networks and netif name for Ethernet networks.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * SSID in Wi-Fi is a collection of 1-32 bytes, the text encoding of which is not specified. Implementations
-         * must be careful to support reporting byte strings without requiring a particular encoding for transfer. Only
-         * the commissioner should try to potentially decode the bytes. The most common encoding is UTF-8, however this
-         * is just a convention. Some configurations may use Latin-1 or other character sets. A commissioner may decode
-         * using UTF-8, replacing encoding errors with "?" at the application level while retaining the underlying
-         * representation.
+         * > SSID in Wi-Fi is a collection of 1-32 bytes, the text encoding of which is not specified. Implementations
+         *   must be careful to support reporting byte strings without requiring a particular encoding for transfer.
+         *   Only the commissioner should try to potentially decode the bytes. The most common encoding is UTF-8,
+         *   however this is just a convention. Some configurations may use Latin-1 or other character sets. A
+         *   commissioner may decode using UTF-8, replacing encoding errors with "?" at the application level while
+         *   retaining the underlying representation.
          *
          * XPAN ID is a big-endian 64-bit unsigned number, represented on the first 8 octets of the octet string.
          *
@@ -870,10 +868,8 @@ export namespace NetworkCommissioning {
             /**
              * Indicates the maximum duration taken, in seconds, by the network interface on this cluster server
              * instance to report a successful or failed network connection indication. This maximum time shall account
-             * for all operations needed until a successful network connection is
-             *
-             * deemed to have occurred, including, for example, obtaining IP addresses, or the execution of necessary
-             * internal retries.
+             * for all operations needed until a successful network connection is deemed to have occurred, including,
+             * for example, obtaining IP addresses, or the execution of necessary internal retries.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.9.6.4
              */
@@ -933,9 +929,8 @@ export namespace NetworkCommissioning {
 
             /**
              * This command shall remove the network configuration from the Cluster if there was already a network
-             * configuration with the same NetworkID. The relative order of the entries in the Networks
-             *
-             * attribute shall remain unchanged, except for the removal of the requested network configuration.
+             * configuration with the same NetworkID. The relative order of the entries in the Networks attribute shall
+             * remain unchanged, except for the removal of the requested network configuration.
              *
              * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
              * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
@@ -1002,9 +997,8 @@ export namespace NetworkCommissioning {
              * configuration if the CommissioningComplete command (see CommissioningComplete) is not successfully
              * invoked before expiry of the Fail-Safe timer.
              *
-             * When non-concurrent commissioning is being used by a Commissioner or Administrator, the Con
-             *
-             * nectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to closing the
+             * When non-concurrent commissioning is being used by a Commissioner or Administrator, the
+             * ConnectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to closing the
              * commissioning channel, even if not yet connected to the operational network, unless the device would be
              * incapable of joining that network, in which case the usual failure path described in the prior paragraphs
              * shall be followed. Once the commissioning channel is closed, the operational channel will be started. It
@@ -1168,22 +1162,16 @@ export namespace NetworkCommissioning {
 
         features: {
             /**
-             * WiFiNetworkInterface
-             *
              * Wi-Fi related features
              */
             wiFiNetworkInterface: BitFlag(0),
 
             /**
-             * ThreadNetworkInterface
-             *
              * Thread related features
              */
             threadNetworkInterface: BitFlag(1),
 
             /**
-             * EthernetNetworkInterface
-             *
              * Ethernet related features
              */
             ethernetNetworkInterface: BitFlag(2)

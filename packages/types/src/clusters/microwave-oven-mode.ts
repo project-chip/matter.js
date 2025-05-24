@@ -168,9 +168,8 @@ export namespace MicrowaveOvenMode {
          * specification of the derived cluster defines a namespace, the set of standard mode tags also includes the
          * mode tag values from that namespace.
          *
-         * Mode tags can help clients look for options that meet certain criteria, render the user interface, use
-         *
-         * the mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall be either a
+         * Mode tags can help clients look for options that meet certain criteria, render the user interface, use the
+         * mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall be either a
          * standard tag or a manufacturer specific tag, as defined in each ModeTagStruct list entry.
          *
          * A mode option may have more than one mode tag. A mode option may be associated with a mixture of standard and
@@ -215,8 +214,6 @@ export namespace MicrowaveOvenMode {
 
         features: {
             /**
-             * OnOff
-             *
              * Dependency with the OnOff cluster
              */
             onOff: BitFlag(0)

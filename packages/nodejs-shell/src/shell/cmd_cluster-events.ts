@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic } from "@matter/general";
-import { ClusterModel, EventModel, MatterModel } from "@matter/model";
-import { ClusterId } from "@matter/types";
+import { Diagnostic } from "#general";
+import { ClusterModel, EventModel, MatterModel } from "#model";
+import { ClusterId } from "#types";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { camelize } from "../util/String";
@@ -19,15 +19,17 @@ function generateAllEventHandlersForCluster(yargs: Argv, theNode: MatterNode) {
 }
 
 function generateClusterEventHandlers(yargs: Argv, cluster: ClusterModel, theNode: MatterNode) {
-    if (cluster.id === undefined) {
+    const clusterId = cluster.id;
+    if (clusterId === undefined) {
         return yargs;
     }
+
     yargs = yargs.command(
-        [cluster.name.toLowerCase(), `0x${cluster.id.toString(16)}`],
+        [cluster.name.toLowerCase(), `0x${clusterId.toString(16)}`],
         `Read ${cluster.name} events`,
         yargs => {
             cluster.events.forEach(event => {
-                yargs = generateEventHandler(yargs, cluster.id, cluster.name, event, theNode);
+                yargs = generateEventHandler(yargs, clusterId, cluster.name, event, theNode);
             });
             return yargs;
         },

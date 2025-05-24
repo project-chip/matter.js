@@ -25,10 +25,9 @@ import {
     MatterFlowError,
     MaybePromise,
     PrivateKey,
-    SupportedStorageTypes,
 } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
-import { CaseAuthenticatedTag, Cluster, FabricId, FabricIndex, NodeId, TypeFromSchema, VendorId } from "#types";
+import { CaseAuthenticatedTag, FabricId, FabricIndex, NodeId, TypeFromSchema, VendorId } from "#types";
 import { SecureSession } from "../session/SecureSession.js";
 
 const logger = Logger.get("Fabric");
@@ -99,7 +98,6 @@ export class Fabric {
     readonly intermediateCACert: Uint8Array | undefined;
     readonly operationalCert: Uint8Array;
 
-    readonly #scopedClusterData: Fabric.ScopedClusterData;
     readonly #keyPair: Key;
 
     readonly #sessions = new Set<SecureSession>();
@@ -124,8 +122,6 @@ export class Fabric {
         this.#label = config.label;
 
         this.#keyPair = PrivateKey(config.keyPair);
-
-        this.#scopedClusterData = config.scopedClusterData ?? new Map();
     }
 
     get config(): Fabric.Config {
@@ -144,7 +140,6 @@ export class Fabric {
             intermediateCACert: this.intermediateCACert,
             operationalCert: this.operationalCert,
             label: this.#label,
-            scopedClusterData: this.#scopedClusterData,
         };
     }
 
@@ -171,17 +166,17 @@ export class Fabric {
         return Crypto.sign(this.#keyPair, data);
     }
 
-    verifyCredentials(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
+    async verifyCredentials(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
         const rootCert = TlvRootCertificate.decode(this.rootCert);
         const nocCert = TlvOperationalCertificate.decode(operationalCert);
         const icaCert =
             intermediateCACert !== undefined ? TlvIntermediateCertificate.decode(intermediateCACert) : undefined;
         if (icaCert !== undefined) {
             // Validate ICACertificate against Root Certificate
-            CertificateManager.verifyIntermediateCaCertificate(rootCert, icaCert);
+            await CertificateManager.verifyIntermediateCaCertificate(rootCert, icaCert);
         }
         // Validate NOC Certificate against ICA Certificate
-        CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
+        await CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
     }
 
     matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: Uint8Array) {
@@ -241,46 +236,6 @@ export class Fabric {
         return this.#persistCallback?.(isUpdate);
     }
 
-    getScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string): T | undefined {
-        const dataMap = this.#scopedClusterData.get(cluster.id);
-        if (dataMap === undefined) {
-            return undefined;
-        }
-        return dataMap.get(clusterDataKey) as T;
-    }
-
-    setScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string, value: T) {
-        if (!this.#scopedClusterData.has(cluster.id)) {
-            this.#scopedClusterData.set(cluster.id, new Map<string, SupportedStorageTypes>());
-        }
-        this.#scopedClusterData.get(cluster.id)!.set(clusterDataKey, value as SupportedStorageTypes);
-        return this.persist(false);
-    }
-
-    deleteScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
-        if (!this.#scopedClusterData.has(cluster.id)) {
-            return;
-        }
-        this.#scopedClusterData.get(cluster.id)!.delete(clusterDataKey);
-        return this.persist(false);
-    }
-
-    hasScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
-        return this.#scopedClusterData.has(cluster.id) && this.#scopedClusterData.get(cluster.id)!.has(clusterDataKey);
-    }
-
-    deleteScopedClusterData(cluster: Cluster<any, any, any, any, any>) {
-        this.#scopedClusterData.delete(cluster.id);
-        return this.persist(false);
-    }
-
-    getScopedClusterDataKeys(cluster: Cluster<any, any, any, any, any>): string[] {
-        if (!this.#scopedClusterData.has(cluster.id)) {
-            return [];
-        }
-        return Array.from(this.#scopedClusterData.get(cluster.id)!.keys());
-    }
-
     getGroupKeySet(groupKeySetId: number) {
         if (groupKeySetId === 0) {
             return OperationalGroupKeySet.asTlvGroupSet(this.getGroupSetForIpk());
@@ -331,7 +286,7 @@ export class Fabric {
 }
 
 export class FabricBuilder {
-    #keyPair = Crypto.createKeyPair();
+    #keyPair: PrivateKey;
     #rootVendorId?: VendorId;
     #rootCert?: Uint8Array;
     #intermediateCACert?: Uint8Array;
@@ -343,6 +298,14 @@ export class FabricBuilder {
     #identityProtectionKey?: Uint8Array;
     #fabricIndex?: FabricIndex;
     #label = "";
+
+    constructor(key: PrivateKey) {
+        this.#keyPair = key;
+    }
+
+    static async create() {
+        return new FabricBuilder(await Crypto.createKeyPair());
+    }
 
     get publicKey() {
         return this.#keyPair.publicKey;
@@ -356,9 +319,9 @@ export class FabricBuilder {
         return CertificateManager.createCertificateSigningRequest(this.#keyPair);
     }
 
-    setRootCert(rootCert: Uint8Array) {
+    async setRootCert(rootCert: Uint8Array) {
         const decodedRootCertificate = TlvRootCertificate.decode(rootCert);
-        CertificateManager.verifyRootCertificate(decodedRootCertificate);
+        await CertificateManager.verifyRootCertificate(decodedRootCertificate);
         this.#rootCert = rootCert;
         this.#rootPublicKey = decodedRootCertificate.ellipticCurvePublicKey;
         return this;
@@ -368,7 +331,7 @@ export class FabricBuilder {
         return this.#rootCert;
     }
 
-    setOperationalCert(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
+    async setOperationalCert(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
         if (intermediateCACert !== undefined && intermediateCACert.length === 0) {
             intermediateCACert = undefined;
         }
@@ -396,9 +359,9 @@ export class FabricBuilder {
         const icaCert =
             intermediateCACert !== undefined ? TlvIntermediateCertificate.decode(intermediateCACert) : undefined;
         if (icaCert !== undefined) {
-            CertificateManager.verifyIntermediateCaCertificate(rootCert, icaCert);
+            await CertificateManager.verifyIntermediateCaCertificate(rootCert, icaCert);
         }
-        CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
+        await CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
 
         this.#operationalCert = operationalCert;
         this.#intermediateCACert = intermediateCACert;
@@ -503,8 +466,6 @@ export class FabricBuilder {
 }
 
 export namespace Fabric {
-    export interface ScopedClusterData extends Map<number, Map<string, SupportedStorageTypes>> {}
-
     export type Config = {
         fabricIndex: FabricIndex;
         fabricId: FabricId;
@@ -520,6 +481,5 @@ export namespace Fabric {
         intermediateCACert: Uint8Array | undefined;
         operationalCert: Uint8Array;
         label: string;
-        scopedClusterData?: ScopedClusterData;
     };
 }

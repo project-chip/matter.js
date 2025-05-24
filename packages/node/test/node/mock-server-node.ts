@@ -23,10 +23,8 @@ import {
 } from "#general";
 import { Node } from "#node/Node.js";
 import { ServerNode } from "#node/ServerNode.js";
-import { ExchangeManager, MessageExchange, SessionManager } from "#protocol";
-import { FabricIndex, NodeId } from "#types";
-import { FabricBuilder, FabricManager } from "@matter/protocol";
-import { VendorId } from "@matter/types";
+import { ExchangeManager, FabricBuilder, FabricManager, MessageExchange, SessionManager } from "#protocol";
+import { FabricIndex, NodeId, VendorId } from "#types";
 import { MockExchange } from "./mock-exchange.js";
 
 // These are temporary until we get proper crypto.subtle support
@@ -136,7 +134,7 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
         await node.start();
 
         node.env.get(ExchangeManager).initiateExchange = address => {
-            const exchange = new MockExchange(address);
+            const exchange = new MockExchange(address, node.env.get(SessionManager).getSession(1));
 
             node.#newExchanges.push(exchange);
 
@@ -189,11 +187,11 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
     }
 
     async addFabric(index = 1) {
-        const builder = new FabricBuilder();
+        const builder = await FabricBuilder.create();
         builder.setRootVendorId(VendorId(0));
         builder.setRootNodeId(NodeId(1));
-        builder.setRootCert(ROOT_CERT);
-        builder.setOperationalCert(NEW_OP_CERT);
+        await builder.setRootCert(ROOT_CERT);
+        await builder.setOperationalCert(NEW_OP_CERT);
         builder.setIdentityProtectionKey(IPK_KEY);
         const fabric = await builder.build(FabricIndex(index));
         this.env.get(FabricManager).addFabric(fabric);

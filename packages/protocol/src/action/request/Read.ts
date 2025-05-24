@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { camelize } from "#general";
 import { FALLBACK_INTERACTIONMODEL_REVISION } from "#session/Session.js";
 import type {
     AttributePath,
@@ -14,7 +15,6 @@ import type {
     GlobalAttributes,
     ReadRequest,
 } from "#types";
-import { camelize } from "@matter/general";
 import { MalformedRequestError } from "./MalformedRequestError.js";
 import { Specifier } from "./Specifier.js";
 
@@ -207,7 +207,7 @@ export namespace Read {
         attributeRequests: Exclude<Read["attributeRequests"], undefined>;
     }
 
-    export function isAttribute(request: Read): request is Attributes {
+    export function containsAttribute(request: Read): request is Attributes {
         return !!request.attributeRequests?.length;
     }
 
@@ -215,7 +215,7 @@ export namespace Read {
         eventRequests: Exclude<Read["eventRequests"], undefined>;
     }
 
-    export function isEvent(request: Read): request is Events {
+    export function containsEvent(request: Read): request is Events {
         return !!request.eventRequests?.length;
     }
 

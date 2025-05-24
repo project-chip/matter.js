@@ -26,6 +26,8 @@ const logger = Logger.get("Datasource");
 
 const FEATURES_KEY = "__features__";
 
+const stateChanged = Symbol("stateChanged");
+
 /**
  * Datasource manages the canonical root of a state tree.  The "state" property of a Behavior is a reference to a
  * Datasource.
@@ -58,6 +60,16 @@ export interface Datasource<T extends StateType = StateType> extends Transaction
      * Path used in diagnostic messages.
      */
     location: AccessControl.Location;
+
+    /**
+     * Event that gets emitted when the state changes.
+     */
+    stateChanged: Observable<[changes: string[], version: number], MaybePromise>;
+
+    /**
+     * Events registered for this Datasource
+     */
+    events: Datasource.Events;
 }
 
 /**
@@ -87,6 +99,14 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
 
         get location() {
             return internals.location;
+        },
+
+        get stateChanged() {
+            return internals.events[stateChanged];
+        },
+
+        get events() {
+            return internals.events;
         },
 
         validate(session: ValueSupervisor.Session, values?: Val.Struct) {
@@ -124,6 +144,10 @@ export namespace Datasource {
         interactionEnd?: Observable<[], MaybePromise>;
     } & {
         [K in `${string}$Changing` | `${string}$Changed`]: Observable<Parameters<ValueObserver>, MaybePromise>;
+    };
+
+    export type InternalEvents = Events & {
+        [stateChanged]: Observable<[changes: string[], version: number], MaybePromise>;
     };
 
     /**
@@ -210,6 +234,7 @@ interface Internals extends Datasource.Options {
     sessions?: Map<ValueSupervisor.Session, SessionContext>;
     featuresKey?: string;
     interactionObserver(): MaybePromise<void>;
+    events: Datasource.InternalEvents;
 }
 
 /**
@@ -221,6 +246,7 @@ interface CommitChanges {
         event: Observable<any[], MaybePromise>;
         params: Parameters<Datasource.ValueObserver>;
     }>;
+    changeList: Set<string>;
 }
 
 function configure(options: Datasource.Options): Internals {
@@ -256,8 +282,12 @@ function configure(options: Datasource.Options): Internals {
     // Location affects security so make it immutable
     Object.freeze(options.location);
 
+    const events = (options.events ?? {}) as Datasource.InternalEvents;
+    events[stateChanged] = new Observable();
+
     return {
         ...options,
+        events,
         version: Crypto.getRandomUInt32(),
         values: values,
         featuresKey,
@@ -270,7 +300,7 @@ function configure(options: Datasource.Options): Internals {
             try {
                 const result = options.events?.interactionEnd?.emit();
                 if (MaybePromise.is(result)) {
-                    return result.then(handleObserverError);
+                    return MaybePromise.then(result, undefined, handleObserverError);
                 }
             } catch (e) {
                 handleObserverError(e);
@@ -553,8 +583,9 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
             const oldval = internals.values[name];
             if (oldval !== newval && !isDeepEqual(newval, oldval)) {
                 if (!changes) {
-                    changes = { notifications: [] };
+                    changes = { notifications: [], changeList: new Set() };
                 }
+                changes.changeList.add(name);
 
                 if (persistentFields.has(name)) {
                     if (changes.persistent === undefined) {
@@ -614,24 +645,13 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
                 context.onChange(oldValues);
             }
         }
-
-        if (session.trace && changes.persistent) {
-            let mutations = session.trace.mutations;
-            if (!mutations) {
-                mutations = session.trace.mutations = [];
-            }
-            mutations.push({
-                path: internals.location.path,
-                values: changes.persistent,
-            });
-        }
     }
 
     /**
      * Post-commit logic.  Emit "changed" events.  Observers may be synchronous or asynchronous.
      */
     function postCommit() {
-        if (!changes || !internals.events) {
+        if (!changes) {
             return;
         }
 
@@ -653,11 +673,20 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
             }
         }
 
+        const changeSetResult = internals.events[stateChanged]?.emit(
+            Array.from(changes.changeList.values()),
+            internals.version,
+        );
+
+        if (MaybePromise.is(changeSetResult)) {
+            return changeSetResult.then(emitChanged);
+        }
+
         return emitChanged();
     }
 
     /**
-     * On rollback with just replace values and version with the canonical versions.
+     * On rollback, we just replace values and version with the canonical versions.
      */
     function rollback() {
         ({ values } = internals);

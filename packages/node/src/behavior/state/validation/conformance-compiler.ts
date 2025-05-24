@@ -80,6 +80,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
     };
 
     // Compile the AST
+    const isNullable = schema.quality.nullable;
     const compiledNode = compile(ast);
 
     let validator: ValueSupervisor.Validate | undefined;
@@ -88,6 +89,11 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
     // function
     switch (compiledNode.code) {
         case Code.Conformant:
+            if (isNullable) {
+                // We map undefined to null so no validation required
+                break;
+            }
+
             // Passes validation if the field is present
             validator = requireValue;
             break;
@@ -100,7 +106,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
 
         case Code.Value:
             // Passes validation if the field is defined
-            validator = compiledNode.value === undefined ? disallowValue : requireValue;
+            validator = compiledNode.value === undefined ? disallowValue : isNullable ? undefined : requireValue;
             break;
 
         case Code.Optional:
@@ -116,7 +122,9 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
 
                 switch (staticNode.code) {
                     case Code.Conformant:
-                        requireValue(value, session, location);
+                        if (!isNullable) {
+                            requireValue(value, session, location);
+                        }
                         break;
 
                     case Code.Nonconformant:
@@ -130,7 +138,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
                     case Code.Value:
                         if (staticNode.value === undefined) {
                             disallowValue(value, session, location);
-                        } else {
+                        } else if (!isNullable) {
                             requireValue(value, session, location);
                         }
                         break;

@@ -85,13 +85,16 @@ export namespace SmokeCoAlarm {
     }
 
     /**
-     * This value shall indicate that the smoke sensor has nominal contamination levels, no customer action is required.
-     *
      * @see {@link MatterSpecification.v14.Cluster} § 2.11.5.6
      */
     export enum ContaminationState {
         /**
          * Nominal state, the sensor is not contaminated
+         *
+         * This value shall indicate that the smoke sensor has nominal contamination levels, no customer action is
+         * required.
+         *
+         * @see {@link MatterSpecification.v14.Cluster} § 2.11.5.6.1
          */
         Normal = 0,
 
@@ -232,13 +235,15 @@ export namespace SmokeCoAlarm {
     export interface InterconnectCoAlarmEvent extends TypeFromSchema<typeof TlvInterconnectCoAlarmEvent> {}
 
     /**
-     * This value shall indicate that this alarm is not alarming.
-     *
      * @see {@link MatterSpecification.v14.Cluster} § 2.11.5.3
      */
     export enum ExpressedState {
         /**
          * Nominal state, the device is not alarming
+         *
+         * This value shall indicate that this alarm is not alarming.
+         *
+         * @see {@link MatterSpecification.v14.Cluster} § 2.11.5.3.1
          */
         Normal = 0,
 
@@ -487,15 +492,11 @@ export namespace SmokeCoAlarm {
 
         features: {
             /**
-             * SmokeAlarm
-             *
              * Supports Smoke alarm
              */
             smokeAlarm: BitFlag(0),
 
             /**
-             * CoAlarm
-             *
              * Supports CO alarm
              */
             coAlarm: BitFlag(1)
@@ -537,8 +538,8 @@ export namespace SmokeCoAlarm {
             deviceMuted: OptionalAttribute(0x4, TlvEnum<MuteState>(), { persistent: true }),
 
             /**
-             * Indicates whether the device self-test is currently activated. If the device self- test is activated,
-             * this attribute shall be set to True, otherwise it shall be set to False.
+             * Indicates whether the device self-test is currently activated. If the device self-test is activated, this
+             * attribute shall be set to True, otherwise it shall be set to False.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 2.11.6.6
              */

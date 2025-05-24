@@ -6,6 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import {
+    JointFabricDatastoreServer as BaseJointFabricDatastoreServer
+} from "../behaviors/joint-fabric-datastore/JointFabricDatastoreServer.js";
 import { JointFabricPkiServer as BaseJointFabricPkiServer } from "../behaviors/joint-fabric-pki/JointFabricPkiServer.js";
 import { MutableEndpoint } from "../endpoint/type/MutableEndpoint.js";
 import { DeviceClassification } from "#model";
@@ -26,6 +29,13 @@ export interface JointFabricAdministratorEndpoint extends Identity<typeof JointF
 
 export namespace JointFabricAdministratorRequirements {
     /**
+     * The JointFabricDatastore cluster is required by the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link JointFabricDatastoreServer} for convenience.
+     */
+    export const JointFabricDatastoreServer = BaseJointFabricDatastoreServer;
+
+    /**
      * The JointFabricPki cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link JointFabricPkiServer} for convenience.
@@ -35,7 +45,9 @@ export namespace JointFabricAdministratorRequirements {
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    export const server = { mandatory: { JointFabricPki: JointFabricPkiServer } };
+    export const server = {
+        mandatory: { JointFabricDatastore: JointFabricDatastoreServer, JointFabricPki: JointFabricPkiServer }
+    };
 }
 
 export const JointFabricAdministratorEndpointDefinition = MutableEndpoint({
@@ -44,7 +56,10 @@ export const JointFabricAdministratorEndpointDefinition = MutableEndpoint({
     deviceRevision: 1,
     deviceClass: DeviceClassification.Utility,
     requirements: JointFabricAdministratorRequirements,
-    behaviors: SupportedBehaviors(JointFabricAdministratorRequirements.server.mandatory.JointFabricPki)
+    behaviors: SupportedBehaviors(
+        JointFabricAdministratorRequirements.server.mandatory.JointFabricDatastore,
+        JointFabricAdministratorRequirements.server.mandatory.JointFabricPki
+    )
 });
 
 export const JointFabricAdministratorEndpoint: JointFabricAdministratorEndpoint = JointFabricAdministratorEndpointDefinition;

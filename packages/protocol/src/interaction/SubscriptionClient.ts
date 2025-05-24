@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Environment, Environmental, Logger, MaybePromise, Time, Timer } from "#general";
 import { MessageExchange } from "#protocol/MessageExchange.js";
 import { ProtocolHandler } from "#protocol/ProtocolHandler.js";
-import { Environment, Environmental, Logger, MaybePromise, Time, Timer } from "@matter/general";
-import { INTERACTION_PROTOCOL_ID } from "@matter/types";
+import { INTERACTION_PROTOCOL_ID } from "#types";
 import { DataReport, IncomingInteractionClientMessenger } from "./InteractionMessenger.js";
 
 const logger = Logger.get("SubscriptionClient");

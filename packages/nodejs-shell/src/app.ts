@@ -5,10 +5,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Environment, LogDestination, LogFormat, Logger, LogLevel, singleton } from "@matter/main";
-import { createFileLogger } from "@matter/nodejs";
-import { NodeJsBle } from "@matter/nodejs-ble";
-import { Ble } from "@matter/protocol";
+import { Environment, LogDestination, LogFormat, Logger, LogLevel, singleton } from "#general";
+import { createFileLogger } from "#nodejs";
+import { NodeJsBle } from "#nodejs-ble";
+import { Ble } from "#protocol";
 import yargs from "yargs/yargs";
 import { MatterNode } from "./MatterNode.js";
 import { Shell } from "./shell/Shell";

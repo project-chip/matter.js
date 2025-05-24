@@ -106,10 +106,9 @@ export namespace OtaSoftwareUpdateProvider {
         hardwareVersion: TlvOptionalField(4, TlvUInt16),
 
         /**
-         * The location, if present, shall provide the same value as the Basic Information Cluster Location
-         *
-         * attribute for the OTA Requestor as configured. This may be used by the OTA Provider logic to allow per-region
-         * selection of the Software Image.
+         * The location, if present, shall provide the same value as the Basic Information Cluster Location attribute
+         * for the OTA Requestor as configured. This may be used by the OTA Provider logic to allow per-region selection
+         * of the Software Image.
          *
          * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1.6
          */
@@ -146,8 +145,6 @@ export namespace OtaSoftwareUpdateProvider {
          * update to an OTA Requestor, unless both OTA Requestor and OTA Provider have an externally agreed-upon policy
          * whereby strictly correct additional MetadataForProvider is expected to fulfill the OTA Software Update
          * process.
-         *
-         * Usage of the QueryImage Command
          *
          * OTA Requestors shall send a QueryImage command to the OTA Provider to determine the availability of a new
          * Software Image.
@@ -415,12 +412,8 @@ export namespace OtaSoftwareUpdateProvider {
          * Software Image which the OTA Requestor is ready to start applying. The OTA Provider may use this new version
          * to track or record Software Image application by OTA Requestors.
          *
-         * When Generated
-         *
          * The ApplyUpdateRequest Command shall be invoked by an OTA Requestor once it is ready to apply a previously
          * downloaded Software Image.
-         *
-         * Effect on Receipt
          *
          * Upon receipt of this command the OTA Provider shall respond with an Action field consistent with the next
          * action the OTA Requestor should take, including any possible time delay.
@@ -431,8 +424,6 @@ export namespace OtaSoftwareUpdateProvider {
          *
          * See Section 11.20.3.6, “Applying a software update” for a description of the flow in response to an OTA
          * Provider receiving an invocation of this command.
-         *
-         * Handling Error Cases
          *
          * See Section 11.20.3.6, “Applying a software update” for all error-handling information.
          *
@@ -518,8 +509,6 @@ export namespace OtaSoftwareUpdateProvider {
          * attribute in the invoking OTA Requestor’s Basic Information Cluster, and SHOULD be consistent with the value
          * representing a new version running on the Node invoking the command.
          *
-         * When Generated
-         *
          * The NotifyUpdateApplied command SHOULD be invoked in the following two circumstances:
          *
          *   1. An OTA Requestor has just successfully applied a Software Image it had obtained from a previous
@@ -535,8 +524,6 @@ export namespace OtaSoftwareUpdateProvider {
          *
          * This command shall be considered optional and shall NOT result in reduced availability of the OTA Provider
          * functionality if OTA Requestors never invoke this command.
-         *
-         * Effect on Receipt
          *
          * An OTA Provider receiving an invocation of this command may log it internally.
          *

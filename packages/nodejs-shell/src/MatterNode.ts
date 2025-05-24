@@ -5,12 +5,11 @@
  */
 
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { Environment, Logger, StorageContext, StorageService } from "@matter/general";
-import { ControllerStore } from "@matter/node";
-import { EndpointInterface } from "@matter/protocol";
-import { NodeId } from "@matter/types";
+import { Environment, Logger, StorageContext, StorageService } from "#general";
+import { ControllerStore } from "#node";
+import { NodeId } from "#types";
 import { CommissioningController } from "@project-chip/matter.js";
-import { CommissioningControllerNodeOptions, PairedNode } from "@project-chip/matter.js/device";
+import { CommissioningControllerNodeOptions, Endpoint, PairedNode } from "@project-chip/matter.js/device";
 import { join } from "node:path";
 
 const logger = Logger.get("Node");
@@ -137,7 +136,7 @@ export class MatterNode {
 
     async iterateNodeDevices(
         nodes: PairedNode[],
-        callback: (device: EndpointInterface, node: PairedNode) => Promise<void>,
+        callback: (device: Endpoint, node: PairedNode) => Promise<void>,
         endpointId?: number,
     ) {
         for (const node of nodes) {

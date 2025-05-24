@@ -9,10 +9,12 @@ import {
     Construction,
     Diagnostic,
     ImplementationError,
+    InternalError,
     isObject,
     Logger,
     MatterAggregateError,
     MaybePromise,
+    Observable,
 } from "#general";
 import {
     EventNumber,
@@ -50,14 +52,12 @@ export class OccurrenceManager {
     #storedEventCount = 0;
     #bufferConfig: OccurrenceManager.BufferConfig;
     #cull?: Promise<void>;
+    #iteratingValuesInProgress = false;
+    #added = new Observable<[occurrence: NumberedOccurrence]>();
 
     // As we don't (yet) have storage with secondary indices we currently maintain indices in memory regardless of
     // whether underlying store is volatile
-    readonly #occurrences = {
-        [EventPriority.Critical]: new Array<OccurrenceSummary>(),
-        [EventPriority.Info]: new Array<OccurrenceSummary>(),
-        [EventPriority.Debug]: new Array<OccurrenceSummary>(),
-    };
+    #occurrences = new Array<OccurrenceSummary>();
 
     #construction: Construction<OccurrenceManager>;
 
@@ -82,70 +82,105 @@ export class OccurrenceManager {
             );
         }
 
-        const totalPriorityAllowance = Object.values(bufferConfig.minPriorityEventAllowance).reduce(
-            (sum, value) => sum + value,
-            0,
-        );
-        if (totalPriorityAllowance > minEventAllowance) {
-            throw new ImplementationError(
-                `Total priority allowance ${totalPriorityAllowance} is greater than minimum allowance of ${minEventAllowance}`,
-            );
-        }
-
         this.#store = store;
         this.#bufferConfig = bufferConfig;
 
         this.#construction = Construction(this, () => {
             return MaybePromise.then(this.#store.load(), index => {
                 this.#storedEventCount = index.length;
-                for (const entry of index) {
-                    this.#occurrences[entry.priority].push(entry);
+                // To be sure, sort the entries by number
+                index.sort(
+                    // sort that way because Bigint & Number mix
+                    ({ number: numberA }, { number: numberB }) => (numberA < numberB ? -1 : numberA > numberB ? 1 : 0),
+                );
+                this.#occurrences.push(...index);
+                if (this.#occurrences.length > this.#bufferConfig.minEventAllowance) {
+                    this.#startCull();
                 }
             });
         });
+    }
+
+    get added() {
+        return this.#added;
     }
 
     async clear() {
         await this.construction;
         await this.#store.clear();
         this.#storedEventCount = 0;
-        for (const list of Object.values(this.#occurrences)) {
-            list.length = 0;
-        }
+        this.#occurrences.length = 0;
     }
 
+    /**
+     * Find the index of the first event number in the list that is greater than or equal to eventMin to optimize
+     * searching.
+     */
+    #findMinEventNumberIndex(eventMin: EventNumber) {
+        // if the list is empty or the eventMin is less than the last event number, no entry is relevant
+
+        if (this.#occurrences.length === 0 || eventMin > this.#occurrences[this.#occurrences.length - 1].number) {
+            return -1;
+        }
+        if (eventMin <= this.#occurrences[0].number) {
+            return 0; // The first event number is greater than or equal to eventMin, so all entries are relevant
+        }
+
+        let low = this.#occurrences.length - 1;
+        let high = low;
+        let step = 1;
+
+        // Because it is more likely that events we want are in the upper ranges we first fine a starting point from there
+        while (low > 0 && this.#occurrences[low].number >= eventMin) {
+            high = low;
+            low = Math.max(0, low - step);
+            step *= 2; // increase the step size to skip more entries
+        }
+
+        while (low <= high) {
+            const mid = Math.floor((low + high) / 2);
+            if (this.#occurrences[mid].number < eventMin) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        return low; // The index of the first event number that is greater than or equal to eventMin
+    }
+
+    /**
+     * Query the event store for events matching the given path and filters.
+     * @deprecated
+     */
     query(
         eventPath: TypeFromSchema<typeof TlvEventPath>,
         filters?: TypeFromSchema<typeof TlvEventFilter>[],
         filterForFabricIndex?: FabricIndex,
     ): MaybePromise<NumberedOccurrence[]> {
-        const entryFilter =
-            filters !== undefined && filters.length > 0
-                ? (event: OccurrenceSummary) =>
-                      filters.some(
-                          filter => filter.eventMin !== undefined && event.number >= EventNumber(filter.eventMin),
-                      )
-                : undefined; // TODO - filter on node ID too?
-
+        if (filters !== undefined && filters.length > 1) {
+            throw new InternalError("Multiple filters not supported");
+        }
         // Search the index and load applicable events
+        const startIndex = filters?.length ? this.#findMinEventNumberIndex(EventNumber(filters[0].eventMin)) : 0;
+        if (startIndex === -1) {
+            return []; // No entry matches the filter
+        }
+
         let isAsyncLoad = false;
-        const occurrences = new Array<MaybePromise<NumberedOccurrence>>();
         const { endpointId, clusterId, eventId } = eventPath;
-        for (const priority of [EventPriority.Critical, EventPriority.Info, EventPriority.Debug]) {
-            const entriesToCheck = this.#occurrences[priority];
-            for (const entry of entriesToCheck) {
-                if (endpointId === entry.endpointId && clusterId === entry.clusterId && eventId === entry.eventId) {
-                    if (entryFilter?.(entry) !== false) {
-                        let occurrence = this.#store.get(entry.number) as MaybePromise<NumberedOccurrence>;
-                        occurrence = MaybePromise.then(occurrence, occurrence => {
-                            occurrence.number = entry.number;
-                            return occurrence;
-                        });
-                        occurrences.push(occurrence);
-                        if (MaybePromise.is(occurrence)) {
-                            isAsyncLoad = true;
-                        }
-                    }
+        const occurrences = new Array<MaybePromise<NumberedOccurrence>>();
+        for (let i = startIndex; i < this.#occurrences.length; i++) {
+            const entry = this.#occurrences[i];
+            if (endpointId === entry.endpointId && clusterId === entry.clusterId && eventId === entry.eventId) {
+                let occurrence = this.#store.get(entry.number) as MaybePromise<NumberedOccurrence>;
+                occurrence = MaybePromise.then(occurrence, occurrence => {
+                    occurrence.number = entry.number;
+                    return occurrence;
+                });
+                occurrences.push(occurrence);
+                if (MaybePromise.is(occurrence)) {
+                    isAsyncLoad = true;
                 }
             }
         }
@@ -205,6 +240,40 @@ export class OccurrenceManager {
         return result;
     }
 
+    /**
+     * Return an iterator over all occurrences in the store that are bigger or equal to the minimum eventNumber,
+     * if provided.
+     */
+    async *get(eventMin?: EventNumber) {
+        if (this.#cull) {
+            await this.#cull;
+        }
+        const startIndex = eventMin === undefined ? 0 : this.#findMinEventNumberIndex(eventMin);
+        if (startIndex === -1) {
+            return; // No entry matches the filter
+        }
+        this.#iteratingValuesInProgress = true;
+        try {
+            for (let i = startIndex; i < this.#occurrences.length; i++) {
+                const eventNumber = this.#occurrences[i].number;
+                const occurrence = this.#store.get(eventNumber);
+                if (MaybePromise.is(occurrence)) {
+                    yield {
+                        ...(await occurrence),
+                        number: eventNumber,
+                    };
+                } else {
+                    yield {
+                        ...occurrence,
+                        number: eventNumber,
+                    };
+                }
+            }
+        } finally {
+            this.#iteratingValuesInProgress = false;
+        }
+    }
+
     close(): MaybePromise<void> {
         MaybePromise.then(this.#cull, () => this.#store.close());
     }
@@ -212,20 +281,22 @@ export class OccurrenceManager {
     add(occurrence: Occurrence): MaybePromise<NumberedOccurrence> {
         return MaybePromise.then(this.#store.add(occurrence), entry => {
             logger.debug(`Recorded event #${entry.number}: ${Diagnostic.json(occurrence)}`);
-            this.#occurrences[occurrence.priority].push(entry);
+            this.#occurrences.push(entry);
             this.#storedEventCount++;
             if (this.#storedEventCount > this.#bufferConfig.maxEventAllowance) {
                 this.#startCull();
             }
-            return {
+            const numberedOccurrence = {
                 number: entry.number,
                 ...occurrence,
             };
+            this.#added.emit(numberedOccurrence);
+            return numberedOccurrence;
         });
     }
 
     #startCull() {
-        if (this.#cull) {
+        if (this.#cull || this.#iteratingValuesInProgress) {
             return;
         }
         const cull = this.#dropOldOccurrences();
@@ -235,40 +306,83 @@ export class OccurrenceManager {
     }
 
     #dropOldOccurrences() {
-        let count = this.#storedEventCount - this.#bufferConfig.minEventAllowance;
-        if (count <= 0) {
+        let toDelete = this.#storedEventCount - this.#bufferConfig.minEventAllowance;
+        if (toDelete <= 0) {
             return;
         }
 
-        logger.debug(`Event store is full; dropping ${count} old occurrence${count === 1 ? "s" : ""}`);
+        logger.debug(`Event store is full; dropping ${toDelete} old occurrence${toDelete === 1 ? "s" : ""}`);
+
+        const prioData = {
+            [EventPriority.Info]: {
+                count: this.#bufferConfig.minPriorityEventAllowance["info"],
+                minPosition: -1,
+            },
+            [EventPriority.Debug]: {
+                count: this.#bufferConfig.minPriorityEventAllowance["debug"],
+                minPosition: -1,
+            },
+        };
 
         const asyncDrops = Array<PromiseLike<void>>();
 
-        let totalCulled = 0;
-        for (const priority of [EventPriority.Debug, EventPriority.Info, EventPriority.Critical]) {
-            const occurrences = this.#occurrences[priority];
-            const reservation = this.#bufferConfig.minPriorityEventAllowance[PriorityNames[priority]];
-            let countThisPriority = 0;
-            while (count && occurrences.length > reservation) {
-                count--;
-                countThisPriority++;
-            }
+        // Find out on which index positions we reached the minimum allowed entries for each priority.
+        // For that we count the entries for Non-Critical priorities from the end of the list to the beginning.
+        for (let i = this.#occurrences.length - 1; i >= 0; i--) {
+            const { priority } = this.#occurrences[i];
 
-            totalCulled += countThisPriority;
-            for (const entry of occurrences.splice(0, countThisPriority)) {
-                const drop = MaybePromise.catch(this.#store.delete(entry.number), error =>
-                    logger.warn(`Error dropping occurrence #${entry}: ${error}`),
-                );
-                if (MaybePromise.is(drop)) {
-                    asyncDrops.push(drop);
+            if (priority !== EventPriority.Critical) {
+                const data = prioData[priority];
+                if (data.count > 0) {
+                    data.count--;
+                    if (data.count === 0) {
+                        data.minPosition = i;
+                        if (
+                            prioData[EventPriority.Info].minPosition > -1 &&
+                            prioData[EventPriority.Debug].minPosition > -1
+                        ) {
+                            // We have found the minimum position for both priorities, we can stop
+                            break;
+                        }
+                    }
                 }
             }
+        }
 
-            if (!count) {
+        // Now we can drop the occurrences from the beginning of the list until we reach the minimum allowed entries
+        // for each priority, started with the lowest priority, until we reached the maximum number of entries we need
+        // to remove. Critical events are removed last from the beginning as many as needed to reach the maximum number
+        // of entries to remove.
+        // Deleted entries are marked as undefined in the array, so we can filter them out later in one pass.
+        const occurrences = this.#occurrences as Array<OccurrenceSummary | undefined>;
+        for (const priority of [EventPriority.Debug, EventPriority.Info, EventPriority.Critical]) {
+            const checkUpTo =
+                priority === EventPriority.Critical ? this.#storedEventCount : prioData[priority].minPosition;
+            if (checkUpTo === -1) {
+                // We have less than the minimum of this event type, so we can not remove any
+                continue;
+            }
+            for (let i = 0; i < checkUpTo && toDelete > 0; i++) {
+                if (occurrences[i] === undefined) continue;
+                const { priority: entryPriority, number } = occurrences[i]!;
+                if (entryPriority === priority) {
+                    const drop = MaybePromise.catch(this.#store.delete(number), error =>
+                        logger.warn(`Error dropping occurrence #${number}: ${error}`),
+                    );
+                    if (MaybePromise.is(drop)) {
+                        asyncDrops.push(drop);
+                    }
+                    occurrences[i] = undefined;
+                    toDelete--;
+                }
+            }
+            if (toDelete <= 0) {
                 break;
             }
         }
-        this.#storedEventCount -= totalCulled;
+        this.#occurrences = occurrences.filter(entry => entry) as OccurrenceSummary[];
+
+        this.#storedEventCount = this.#occurrences.length;
 
         if (asyncDrops.length) {
             return MatterAggregateError.allSettled(asyncDrops, "Error dropping occurrences")
@@ -277,12 +391,6 @@ export class OccurrenceManager {
         }
     }
 }
-
-const PriorityNames = {
-    [EventPriority.Critical]: "critical",
-    [EventPriority.Info]: "info",
-    [EventPriority.Debug]: "debug",
-} as const;
 
 export namespace OccurrenceManager {
     /**
@@ -303,11 +411,10 @@ export namespace OccurrenceManager {
         maxEventAllowance: number;
 
         /**
-         * Minimum allowances by priority.  This ensures a minimum number of events for each priority avoid LRU
-         * harvesting.
+         * Minimum allowances by priority.  This ensures a minimum number of non-critical events avoid LRU
+         * harvesting. Critical events take the rest of the entries up to the defined global minimum.
          */
         minPriorityEventAllowance: {
-            critical: number;
             info: number;
             debug: number;
         };
@@ -317,7 +424,6 @@ export namespace OccurrenceManager {
         minEventAllowance: 10_000,
         maxEventAllowance: 11_000,
         minPriorityEventAllowance: {
-            critical: 2_000,
             info: 2_000,
             debug: 2_000,
         },

@@ -24,7 +24,6 @@ import {
     Bytes,
     DeviceTypeId,
     Endpoint,
-    EndpointServer,
     Environment,
     LogDestination,
     LogLevel,
@@ -39,7 +38,7 @@ import { OnOffServer } from "@matter/main/behaviors";
 import { GeneralDiagnostics, NetworkCommissioning, OnOff } from "@matter/main/clusters";
 import { OnOffLightDevice, OnOffPlugInUnitDevice } from "@matter/main/devices";
 import { RootRequirements } from "@matter/main/endpoints";
-import { Ble, FabricAction, logEndpoint } from "@matter/main/protocol";
+import { Ble, FabricAction } from "@matter/main/protocol";
 import { QrCode } from "@matter/main/types";
 import { createFileLogger } from "@matter/nodejs";
 import { NodeJsBle } from "@matter/nodejs-ble";
@@ -51,6 +50,8 @@ import {
     MyFancyCommandResponse,
     MyFancyOwnFunctionalityBehavior,
 } from "./cluster/MyFancyOwnFunctionality.js";
+
+const logger = Logger.get("DeviceNodeFull");
 
 /**
  * The following code brings some convenience to the CLI script. It allows to set the log level and format via
@@ -377,7 +378,7 @@ endpoint.events.identify.stopIdentifying.on(() => {
 // Note that you may serve multiple nodes from a single process.  We only have one, however, so we can use the run()
 // method of the node.
 
-logEndpoint(EndpointServer.forEndpoint(server));
+logger.info(server);
 
 /**
  * In order to start the node and announce it into the network we start the node. This method resolves when the Matter

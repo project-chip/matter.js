@@ -5,9 +5,9 @@
  */
 
 import { ElementTag } from "#common/ElementTag.js";
-import { Specification } from "#index.js";
+import { Specification } from "#common/Specification.js";
+import { Diagnostic } from "#general";
 import { Model } from "#models/Model.js";
-import { Diagnostic } from "@matter/general";
 import { ModelVariantTraversal, VariantDetail } from "./ModelVariantTraversal.js";
 
 /**

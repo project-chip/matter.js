@@ -50,7 +50,7 @@ export namespace MediaPlaybackInterface {
         previous(): MaybePromise<MediaPlayback.PlaybackResponse>;
 
         /**
-         * Upon receipt, this shall cause the handler to be invoked for "Next". User experience is context- specific.
+         * Upon receipt, this shall cause the handler to be invoked for "Next". User experience is context-specific.
          * This will often Go forward to the next media playback item.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 6.10.7.6
@@ -132,10 +132,9 @@ export namespace MediaPlaybackInterface {
         rewind(request: MediaPlayback.RewindRequest): MaybePromise<MediaPlayback.PlaybackResponse>;
 
         /**
-         * Upon receipt, this shall start playback of the media in the forward direction in case the media is
-         *
-         * currently playing in the backward direction or is not playing. If the playback is already happening in the
-         * forward direction receipt of this command shall increase the speed of the media playback.
+         * Upon receipt, this shall start playback of the media in the forward direction in case the media is currently
+         * playing in the backward direction or is not playing. If the playback is already happening in the forward
+         * direction receipt of this command shall increase the speed of the media playback.
          *
          * Different "fast-forward" speeds may be reflected on the media playback device based upon the number of
          * sequential calls to this function and the capability of the device. This is to avoid needing to define every

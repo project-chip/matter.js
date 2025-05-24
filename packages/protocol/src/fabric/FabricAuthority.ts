@@ -110,15 +110,16 @@ export class FabricAuthority {
             logger.warn(`Using test vendor ID 0x${vendorId.toString(16)} for controller fabric`);
         }
 
-        const fabricBuilder = new FabricBuilder()
-            .setRootCert(this.#ca.rootCert)
+        const fabricBuilder = await FabricBuilder.create();
+        await fabricBuilder.setRootCert(this.#ca.rootCert);
+        fabricBuilder
             .setRootNodeId(rootNodeId)
             .setIdentityProtectionKey(ipkValue)
             .setRootVendorId(this.#config.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID)
             .setLabel(this.#config.adminFabricLabel);
 
-        fabricBuilder.setOperationalCert(
-            this.#ca.generateNoc(
+        await fabricBuilder.setOperationalCert(
+            await this.#ca.generateNoc(
                 fabricBuilder.publicKey,
                 this.#config.fabricId ?? DEFAULT_FABRIC_ID,
                 rootNodeId,

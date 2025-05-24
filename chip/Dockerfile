@@ -28,7 +28,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \
     apt-get -qq update && \
-    apt-get -qq -y install python3 python-is-python3 libavahi-client3 libglib2.0-0 netcat-openbsd
+    apt-get -qq -y install python3 python-is-python3 libavahi-client3 libglib2.0-0
 
 ################################################################################
 #
@@ -54,9 +54,20 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
 <<EOF
     set -e
     apt-get -qq update
-    apt-get -qq -y install git gcc g++ clang pkg-config libssl-dev libdbus-1-dev libglib2.0-dev libavahi-client-dev \
-        ninja-build python3-venv python3-dev unzip libgirepository1.0-dev libcairo2-dev libreadline-dev python3-pip
+
+    # Package notes:
+    #
+    #   g++ - needed by perfetto, unsure if this is just a config error
+    #   libgirepository1.0-dev - I believe required by pygobject which we skip
+    #   libcairo2-dev - also pygobject dep
+    #
+    apt-get -qq -y install --no-install-recommends \
+        git clang pkg-config libssl-dev libdbus-1-dev libavahi-client-dev clang pkg-config \
+        ninja-build python3-venv python3-dev unzip libreadline-dev python3-pip \
+        g++ libglib2.0-dev libglib2.0-dev-bin
 EOF
+    # apt-get -qq -y install git gcc g++ clang pkg-config libssl-dev libdbus-1-dev libglib2.0-dev libavahi-client-dev \
+    #     ninja-build python3-venv python3-dev unzip libgirepository1.0-dev libcairo2-dev libreadline-dev python3-pip
 
 # INI editor.  Version that comes with Ubuntu is too old
 RUN pip install --break-system-packages git+https://github.com/pixelb/crudini.git#egg=crudini
@@ -97,32 +108,12 @@ RUN sed -i 's/"-g\${symbol_level}"/""/' build/config/compiler/BUILD.gn
 
 ################################################################################
 #
-# STAGE 4 - builds CHIP and installed python packages
+# STAGE 4 - builds CHIP and python packages
 #
 # Builds chip-tool, CHIP sample apps, and python wheels
 #
 
 FROM source AS bins
-
-ARG SKIP_APPS
-
-# Build directory
-RUN mkdir -p out
-
-# Activation is unnecessary will fail because we've dropped things it expects 
-RUN sed -i '/scripts\/activate.sh/d' scripts/build_python.sh
-
-# Build python wheels
-RUN scripts/build_python.sh --chip_mdns platform
-
-
-################################################################################
-#
-# STAGE 5 - install into final destination
-#
-# Installs Python packages from build area into destination OS locations
-#
-FROM bins AS install
 
 # Build chip-tool
 RUN build-one chip-tool
@@ -133,7 +124,7 @@ RUN install-chip-python
 
 ################################################################################
 #
-# STAGE 6 - extract CHIP subset required for runtime
+# STAGE 5 - extract CHIP subset required for runtime
 #
 # For the final working image we revert to the base target then copy over
 # binaries from the bins target
@@ -156,17 +147,16 @@ LABEL org.opencontainers.image.source=https://github.com/project-chip/matter.js/
 RUN rm -rf bin.usr-is-merged boot home media mnt opt sbin.usr-is-merged srv
 
 # chip-tool
-COPY --from=install /dist/bin/* /bin
+COPY --from=bins /dist/bin/* /bin
 
 # Installed python packages
-COPY --from=install /usr/lib/python3/dist-packages /usr/lib/python3/dist-packages
-COPY --from=install /usr/local/lib /usr/local/lib
+COPY --from=bins /usr/lib/python3/dist-packages /usr/lib/python3/dist-packages
+COPY --from=bins /usr/local/lib /usr/local/lib
 
 # Other python packages CHIP has scattered randomly and adds to path in relative_importer.py
+# Note - this is shrinking as they create wheels for these packages
 WORKDIR /usr/local/lib/python3.12/dist-packages
 COPY --from=source /connectedhomeip/scripts/tests/chiptest chiptest
-COPY --from=source /connectedhomeip/scripts/py_matter_idl/matter matter
-COPY --from=source /connectedhomeip/scripts/py_matter_yamltests/matter_yamltests matter_yamltests
 COPY --from=source /connectedhomeip/examples/chip-tool/py_matter_chip_tool_adapter/matter_chip_tool_adapter matter_chip_tool_adapter
 COPY --from=source /connectedhomeip/examples/placeholder/py_matter_placeholder_adapter/matter_placeholder_adapter matter_placeholder_adapter
 COPY --from=source /connectedhomeip/src/controller/python/py_matter_yamltest_repl_adapter/matter_yamltest_repl_adapter matter_yamltest_repl_adapter
@@ -174,8 +164,6 @@ COPY --from=source /connectedhomeip/src/controller/python/py_matter_yamltest_rep
 # Link various bits to original connectedhomeip locations for discovery and/or convenience
 RUN mkdir -p /scripts/tests
 RUN ln -s "$(realpath chiptest)" /scripts/tests/chiptest
-RUN mkdir -p /scripts/py_matter_yamltests
-RUN ln -s "$(realpath matter_yamltests)" /scripts/py_matter_yamltests/matter_yamltests
 
 # YAML test logic
 WORKDIR /
@@ -220,29 +208,28 @@ RUN echo allow-interfaces
 
 ################################################################################
 #
-# STAGE 7 - build example apps
+# STAGE 6 - build example app
 #
 
 FROM install AS app-bins
 
+ARG APP_TARGET
+
 # Build binaries
-RUN build-one all-clusters
-RUN build-one lock
-RUN build-one tv-app
-RUN build-one bridge
-RUN build-one lit-icd
-RUN build-one microwave-oven
-RUN build-one rvc
-RUN build-one network-manager
+RUN build-one "$APP_TARGET"
 
 
 ################################################################################
 #
-# STAGE 8 - augment base container with example binaries
+# STAGE 7 - augment base container with app
 #
 
-FROM chip AS chip-apps
+FROM chip AS chip-app
 
-COPY --from=app-bins /dist/bin/* /bin
+ARG APP_BIN
 
-WORKDIR /
+COPY --from=app-bins "/dist/bin/$APP_BIN" /bin
+
+ENV APP_BIN="$APP_BIN"
+
+ENTRYPOINT "/bin/$APP_BIN"

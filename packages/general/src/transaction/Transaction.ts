@@ -9,10 +9,10 @@ import { Participant } from "./Participant.js";
 import { Resource } from "./Resource.js";
 import { ResourceSet } from "./ResourceSet.js";
 import { Status } from "./Status.js";
-import { ReadOnlyTransaction, act } from "./Tx.js";
+import { ReadOnlyTransaction, open } from "./Tx.js";
 
 /**
- * .
+ * Two-phase commit implementation.
  *
  * Transactions are either shared (for reads) or exclusive (for writes). Exclusive transactions do not block shared
  * transactions but state updates will not be visible until the transaction completes.
@@ -23,8 +23,7 @@ import { ReadOnlyTransaction, act } from "./Tx.js";
  * locks.
  *
  * Persistence is implemented by a list of participants.  Commits are two phase.  If an error throws in phase one all
- * participants roll back. An error in phase 2 could result in data inconsistency as we don't have any form of retry as
- * of yet.
+ * participants roll back. An error in phase 2 could result in data inconsistency.
  *
  * TODO - does prevent deadlock but we should probably add a timeout for resource locking
  */
@@ -75,8 +74,8 @@ export interface Transaction {
     /**
      * Add {@link ResourceType}s to the transaction synchronously.
      *
-     * Unlike {@link addResources}, this method will throw an error if the
-     * transaction is exclusive and the resources cannot be locked.
+     * Unlike {@link addResources}, this method will throw an error if the transaction is exclusive and the resources
+     * cannot be locked.
      */
     addResourcesSync(...resources: Resource[]): void;
 
@@ -155,7 +154,9 @@ type ParticipantType = Participant;
 
 export const Transaction = {
     /**
-     * Perform a transactional operation.  This is the only way to obtain a read/write transaction.
+     * Perform a transactional operation.
+     *
+     * This creates a read/write transaction scoped to the life of an optionally async function call.
      *
      * The transaction will commit automatically if it is exclusive (write mode) after the actor returns.
      *
@@ -163,8 +164,28 @@ export const Transaction = {
      * destroyed.
      */
     act<T>(via: string, actor: (transaction: Transaction) => MaybePromise<T>): MaybePromise<T> {
+        const tx = open(via);
+
+        let result;
+        try {
+            result = actor(tx);
+        } catch (e) {
+            return tx.reject(e);
+        }
+
+        return tx.resolve(result);
+    },
+
+    /**
+     * Create a transaction.
+     *
+     * Transactions must be closed using {@link Finalization#resolve} or {@link Finalization#reject}.
+     *
+     * When closed the transaction commits automatically if exclusive.
+     */
+    open(via: string) {
         // This function is replaced below so do not edit
-        return act(via, actor);
+        return open(via);
     },
 
     ReadOnly: ReadOnlyTransaction,
@@ -177,7 +198,7 @@ export const Transaction = {
 };
 
 // This is functionally equivalent to the definition above but removes a stack frame
-Transaction.act = act;
+Transaction.open = open;
 
 export namespace Transaction {
     export type Status = StatusType;
@@ -187,4 +208,20 @@ export namespace Transaction {
     export type ResourceSet = ResourceSetType;
 
     export type Participant = ParticipantType;
+
+    export interface Disposable extends Transaction, AsyncDisposable {
+        close(): MaybePromise<void>;
+    }
+
+    export interface Finalization {
+        /**
+         * Finish the transaction.  If {@link result} is a promise this may result on commit or rollback.
+         */
+        resolve<T>(result: T): MaybePromise<Awaited<T>>;
+
+        /**
+         * Roll back, close the transaction and throw an error.
+         */
+        reject(cause: unknown): MaybePromise<never>;
+    }
 }

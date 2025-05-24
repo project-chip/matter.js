@@ -354,8 +354,6 @@ export namespace OnOff {
 
         features: {
             /**
-             * Lighting
-             *
              * This cluster is used for a lighting application.
              *
              * On receipt of a Level Control cluster command that causes the OnOff attribute to be set to FALSE, the
@@ -369,8 +367,6 @@ export namespace OnOff {
             lighting: BitFlag(0),
 
             /**
-             * DeadFrontBehavior
-             *
              * When this feature is supported, the device exposing this server cluster exhibits "dead front" behavior
              * when the "OnOff" attribute is FALSE (Off). This "dead front" behavior includes:
              *
@@ -407,8 +403,6 @@ export namespace OnOff {
             deadFrontBehavior: BitFlag(1),
 
             /**
-             * OffOnly
-             *
              * When this feature is supported, the Off command shall be supported and the On and Toggle commands shall
              * NOT be supported.
              *

@@ -10,17 +10,48 @@ The main work (all changes without a GitHub username in brackets in the below li
 -->
 
 ## __WORK IN PROGRESS__
+-   
+- NOTE: This version is compatible with Node.js 20.x, 22.x and 24.x. Node.js 18.x is also supported with the following exceptions:
+    - The matter.js tools for building and running test and applications (matter-*) which are mainly used by the npm scripts which use the "commander" dependency.
+
+-   @matter/*
+    - Upgraded to Matter specification version 1.4.1
+
+-   @matter/general
+    - Feature: Logger allows to use a function as log value which is only executed when the log level matches
 
 -   @matter/node
-    - Enhancement: Refactors InteractionServer to cut out more legacy logic and move to Behavior logic
+    - Enhancement: Expose `endpointProtocol` property on Endpoint
+    - Enhancement: Refactors InteractionServer to cut out Reading legacy logic and move to Behavior logic
+    - Enhancement: Refactors OnlineContext and Transaction handling
     - Fix: Fixes special-case in Wildcard Filtering where not all fixed attributes were filtered out
     - Fix: Fixes ACL check logic order on attribute reads
     - Fix: Consider the potential async nature of `Transitions.applyUpdates()` correctly in all cases to prevent dangling promises 
+
+-   @matter/nodejs-ble
+    - (@spudwebb) Fix: Increase BLE connect timeout fo 120seconds to optimize pairing
   
-- @matter/protocol
+-   @matter/protocol
+    - Breaking: `logEndpoint()` was removed. The Endpoints support logging directly via Diagnostics
+    - Breaking: All legacy used *Server classes (AttributeServer, EventServer, CommandServer) are moved to the matter.js legacy package
+    - Feature: Added `getLocal()` to AttributeClient to retrieve the currently stored/cached value 
+    - Enhancement: Optimized the usage of the MDNSScanner to prevent holding data in memory that are not needed (e.g. from other fabrics or such)
+    - Adjustment: ACL writes are not sent chunked by default from now on like also in chip SDK
     - Fix: Handles messages only that are secured as required for the relevant protocol
 
+-   @matter/general
+    - Enhancement: Allows async implementation of crypto methods
+
+-   @matter/model
+    - Feature: We no longer load data model fields that are not required for operational purposes by default.  You can load `@matter/model/resources` to populate the model with these fields.  This saves a significant amount of memory for nodes
+    - Enhancement: Model elements now instantiates with a reduced number of fields and object shapes to reduce memory usage and decrease the likelihood of megamorphic function deoptimization in runtimes with a JIT
+    - Enhancement: We have optimized resolution of global datatypes in the Matter model.  This reduces startup for large nodes such as bridges with many devices
+    - Enhancement: The serialized model now stores cross references as strings and parses as necessary
+    - Enhancement: FieldModel now contains a dedicated `title` field to capture the full name of features
+
 ## 0.13.0 (2025-04-28)
+
+-   NOTE: This version is compatible with Node.js 20.x, 22.x and 24.x. Node.js 18.x might be unsupported for BLE if installed before 20.05.2025 because the BLE libraries we use (noble/bleno) were temporarily only compatible with Node.js 20+. This is fixed for bleno >= 0.11.4 and noble >= 2.3.1.
 
 -   IMPORTANT: This release upgrades Matter support from Matter 1.3 to the latest release, Matter 1.4.0. This includes BREAKING CHANGES in a number of areas due to specification changes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js or when Datatypes or elements got renamed.
     - Especially please note that `colorTempPhysicalMinMireds` and `colorTempPhysicalMaxMireds` now need to be set when using ColorControl because the former unrealistic default values were removed from the specification. Please set proper values for your device Hint: realistic color temperature Mireds values are usually roughly between 150 (6500K) and 500 (2000K).

@@ -5,8 +5,8 @@
  */
 
 import { Domain } from "#domain.js";
+import { MaybePromise } from "#general";
 import { Location } from "#location.js";
-import { MaybePromise } from "@matter/general";
 import colors from "ansi-colors";
 import { Command } from "./command.js";
 
@@ -89,7 +89,7 @@ function displayList(domain: Domain, files: DisplayLocation[], linePrefix: strin
 
         let charsAvailable = domain.terminalWidth ?? 80;
 
-        const { name: longName, tag } = location;
+        const { name: title, tag } = location;
 
         domain.out(linePrefix, name, " ", colors.dim(tag));
         charsAvailable -= length + tag.length + linePrefix.length + 1;
@@ -102,9 +102,9 @@ function displayList(domain: Domain, files: DisplayLocation[], linePrefix: strin
             charsAvailable -= id.length + 1;
         }
 
-        if (longName) {
-            domain.out(' "', colors.cyan(longName), '"');
-            charsAvailable -= longName.length + 3;
+        if (title) {
+            domain.out(' "', colors.cyan(title), '"');
+            charsAvailable -= title.length + 3;
         }
 
         if (summary !== undefined && charsAvailable > 10) {

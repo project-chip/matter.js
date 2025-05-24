@@ -26,7 +26,7 @@ name: CHIP Image - Build and Test
 
 on:
   schedule:
-    - cron: 0 3 * * * # Every day at 03:00
+    - cron: 0 4 * * * # Every day at 04:00
   workflow_dispatch: # Manually on demand
   push:
     branches: [ "main" ]
@@ -57,9 +57,6 @@ jobs:
           filters: |
             src:
               - "chip/**"
-              - ".github/workflows/build-test.chip.yml"
-              - ".github/actions/load-chip/action.yml"
-              - ".github/actions/run-chip-tests/action.yml"
 
       - name: Docker rebuild needed
         if: >-
@@ -124,7 +121,7 @@ jobs:
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
-        
+
       - uses: ./.github/actions/run-chip-tests
         with:
           image-source: ${{ needs.chip-image.outputs.source }}
@@ -136,32 +133,59 @@ jobs:
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
-        
+
       - uses: ./.github/actions/run-chip-tests
         with:
           image-source: ${{ needs.chip-image.outputs.source }}
           test-group: app-slow
 
-  test-app-cc:
+  test-app-cc-1:
     needs: chip-image
     runs-on: ubuntu-latest
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
-        
+
       - uses: ./.github/actions/run-chip-tests
         with:
           image-source: ${{ needs.chip-image.outputs.source }}
-          test-group: app-cc
+          test-group: app-cc-1
+
+  test-app-cc-2:
+    needs: chip-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/run-chip-tests
+        with:
+          image-source: ${{ needs.chip-image.outputs.source }}
+          test-group: app-cc-2
 
   # Publish if this is nightly run or triggered manually
   # TODO - create PR to commit SHA from chip-image action?
   publish-image:
     name: Publish docker image
     runs-on: ubuntu-latest
-    needs: [ chip-image, test-core, test-app-fast, test-app-slow, test-app-cc ]
-    if: needs.chip-image.outputs.source == 'artifact' && github.event_name == 'schedule'
+    needs: [
+      chip-image,
+      test-core,
+      test-app-fast,
+      test-app-slow,
+      test-app-cc-1,
+      test-app-cc-2
+    ]
+    if: >-
+      needs.chip-image.outputs.source == 'artifact' &&
+      (
+        github.event_name == 'schedule' ||
+        github.event_name == 'workflow_dispatch'
+      )
     steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
       - name: Login to GitHub Docker Registry
         uses: docker/login-action@v3
         with:
@@ -169,9 +193,39 @@ jobs:
           username: Automator77
           password: ${{ secrets.MATTERJS_DOCKER_TOKEN }}
 
+      - name: Load image from artifact
+        uses: ./.github/actions/load-chip
+
+      - name: Sync CHIP SHA with built version
+        env:
+          CHIP_SHA: ${{ needs.chip-image.outputs.chip-sha }}
+        run: |
+          cd chip
+          echo "$CHIP_SHA" > sha.txt
+
       - name: Publish docker image
         run: |
           cd chip
           ./bin/info
           ./bin/publish
-  
+
+      # TODO - right now we PR the CHIP SHA after publishing container.  Not exactly correct but it's not a big deal if
+      # the SHA somehow doesn't get committed.  To fix we will need to figure out how to load the tar artifact from this
+      # workflow in the PR workflow
+      - name: PR new CHIP SHA
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.PR_TOKEN }}
+          commit-message: "[CHIP BUILD] ${{ needs.chip-image.outputs.chip-sha }}"
+          committer: Automator77 <github-automation@fischer-ka.de>
+          author: Automator77 <github-automation@fischer-ka.de>
+          signoff: false
+          branch: chip-image
+          delete-branch: true
+          title: "[CHIP BUILD] ${{ needs.chip-image.outputs.chip-sha }}"
+          body: |
+            New CHIP SHA from CI container build
+          labels: |
+            automated-docker-release
+          assignees: Automator77
+          draft: false

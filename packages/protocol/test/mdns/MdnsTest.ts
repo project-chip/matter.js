@@ -17,7 +17,7 @@ import {
     UdpChannel,
 } from "#general";
 import { MdnsBroadcaster } from "#mdns/MdnsBroadcaster.js";
-import { MdnsScanner } from "#mdns/MdnsScanner.js";
+import { MdnsScanner, MdnsScannerTargetCriteria } from "#mdns/MdnsScanner.js";
 import { NodeId, VendorId } from "#types";
 
 const SERVER_IPv4 = "192.168.200.1";
@@ -829,7 +829,120 @@ const NODE_ID = NodeId(BigInt(1));
             });
         });
 
-        describe("integration", () => {
+        describe("Disabled discovery", () => {
+            it("the client do not know announced records if scanning is not enabled by criteria", async () => {
+                await broadcaster.setCommissionMode(PORT, 1, {
+                    name: "Test Device",
+                    deviceType: 1,
+                    vendorId: VendorId(1),
+                    productId: 0x8000,
+                    discriminator: 1234,
+                });
+                await broadcaster.setFabrics(PORT2, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+
+                await broadcaster.announce(PORT);
+                await broadcaster.announce(PORT2);
+                await MockTime.yield3();
+                await MockTime.yield3();
+
+                // Same result when we just get the records
+                expect(
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
+                        ?.addresses,
+                ).deep.equal(undefined);
+
+                // No commissionable devices because never queried
+                expect(scanner.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([]);
+
+                // And expire the announcement
+                await processRecordExpiry(PORT);
+                await processRecordExpiry(PORT2);
+
+                // And removed after expiry
+                expect(
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal(undefined);
+
+                expect(scanner.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([]);
+            });
+        });
+
+        describe("Only commissionable discovery", () => {
+            const criteria: MdnsScannerTargetCriteria = {
+                commissionable: true,
+                operationalTargets: [],
+            };
+            beforeEach(() => scanner.targetCriteriaProviders.add(criteria));
+            afterEach(() => scanner.targetCriteriaProviders.delete(criteria));
+
+            it("the client do not know announced operational records if scanning is not enabled by criteria", async () => {
+                await broadcaster.setCommissionMode(PORT, 1, {
+                    name: "Test Device",
+                    deviceType: 1,
+                    vendorId: VendorId(1),
+                    productId: 0x8000,
+                    discriminator: 1234,
+                });
+                await broadcaster.setFabrics(PORT2, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+
+                await broadcaster.announce(PORT);
+                await broadcaster.announce(PORT2);
+                await MockTime.yield3();
+                await MockTime.yield3();
+
+                // Same result when we just get the records
+                expect(
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
+                        ?.addresses,
+                ).deep.equal(undefined);
+
+                // No commissionable devices because never queried
+                expect(scanner.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([
+                    {
+                        CM: 1,
+                        D: 1234,
+                        DN: "Test Device",
+                        DT: 1,
+                        P: 32768,
+                        PH: 33,
+                        PI: "",
+                        SAI: 300,
+                        SD: 4,
+                        SII: 500,
+                        SAT: 4000,
+                        T: 0,
+                        ICD: 0,
+                        V: 1,
+                        VP: "1+32768",
+                        addresses: IPIntegrationResultsPort1,
+                        deviceIdentifier: "0000000000000000",
+                        discoveredAt: undefined,
+                        ttl: undefined,
+                        instanceId: "0000000000000000",
+                    },
+                ]);
+
+                // And expire the announcement
+                await processRecordExpiry(PORT);
+                await processRecordExpiry(PORT2);
+
+                // And removed after expiry
+                expect(
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal(undefined);
+
+                expect(scanner.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([]);
+            });
+        });
+
+        describe("Operational discovery", () => {
+            const criteria: MdnsScannerTargetCriteria = {
+                commissionable: false,
+                operationalTargets: [{ operationalId: OPERATIONAL_ID }],
+            };
+            beforeEach(() => scanner.targetCriteriaProviders.add(criteria));
+            afterEach(() => scanner.targetCriteriaProviders.delete(criteria));
+
             it("the client directly returns server record if it has been announced before and records are removed on cancel", async () => {
                 let queryReceived = false;
                 let dataWereSent = false;
@@ -1015,6 +1128,74 @@ const NODE_ID = NodeId(BigInt(1));
                 expect(
                     scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
                 ).deep.equal(undefined);
+            });
+        });
+
+        describe("Operational and commissionable discovery", () => {
+            const criteria: MdnsScannerTargetCriteria = {
+                commissionable: true,
+                operationalTargets: [{ operationalId: OPERATIONAL_ID }],
+            };
+            beforeEach(() => scanner.targetCriteriaProviders.add(criteria));
+            afterEach(() => scanner.targetCriteriaProviders.delete(criteria));
+
+            it("the client knows announced records if scanning is enabled by criteria", async () => {
+                await broadcaster.setCommissionMode(PORT, 1, {
+                    name: "Test Device",
+                    deviceType: 1,
+                    vendorId: VendorId(1),
+                    productId: 0x8000,
+                    discriminator: 1234,
+                });
+                await broadcaster.setFabrics(PORT2, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+
+                await broadcaster.announce(PORT);
+                await broadcaster.announce(PORT2);
+                await MockTime.yield3();
+                await MockTime.yield3();
+
+                // Same result when we just get the records
+                expect(
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
+                        ?.addresses,
+                ).deep.equal(IPIntegrationResultsPort2);
+
+                // No commissionable devices because never queried
+                expect(scanner.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([
+                    {
+                        CM: 1,
+                        D: 1234,
+                        DN: "Test Device",
+                        DT: 1,
+                        P: 32768,
+                        PH: 33,
+                        PI: "",
+                        SAI: 300,
+                        SD: 4,
+                        SII: 500,
+                        SAT: 4000,
+                        T: 0,
+                        ICD: 0,
+                        V: 1,
+                        VP: "1+32768",
+                        addresses: IPIntegrationResultsPort1,
+                        deviceIdentifier: "0000000000000000",
+                        discoveredAt: undefined,
+                        ttl: undefined,
+                        instanceId: "0000000000000000",
+                    },
+                ]);
+
+                // And expire the announcement
+                await processRecordExpiry(PORT);
+                await processRecordExpiry(PORT2);
+
+                // And removed after expiry
+                expect(
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal(undefined);
+
+                expect(scanner.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([]);
             });
 
             it("the client queries the server record and get correct response when announced before", async () => {

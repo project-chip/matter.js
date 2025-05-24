@@ -102,12 +102,12 @@ export namespace ApplicationLauncher {
         /**
          * This field shall specify optional app-specific data to be sent to the app.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * This format and meaning of this value is proprietary and outside the specification. It provides a transition
-         * path for device makers that use other protocols (like DIAL) which allow for proprietary data. Apps that are
-         * not yet Matter aware can be launched via Matter, while retaining the existing ability to launch with
-         * proprietary data.
+         * > This format and meaning of this value is proprietary and outside the specification. It provides a
+         *   transition path for device makers that use other protocols (like DIAL) which allow for proprietary data.
+         *   Apps that are not yet Matter aware can be launched via Matter, while retaining the existing ability to
+         *   launch with proprietary data.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 6.4.7.1.2
          */
@@ -254,8 +254,6 @@ export namespace ApplicationLauncher {
 
         features: {
             /**
-             * ApplicationPlatform
-             *
              * Support for attributes and commands required for endpoint to support launching any application within the
              * supported application catalogs
              */
@@ -323,9 +321,7 @@ export namespace ApplicationLauncher {
              * constraints if any. The Status attribute shall be updated to ActiveHidden or Stopped, depending on the
              * action taken, on the Application Basic cluster of the Endpoint corresponding to the application on which
              * the action was taken. The Status attribute shall be updated on any other application whose Status may
-             * have changed as a result of this command.
-             *
-             * This command returns a Launcher Response.
+             * have changed as a result of this command. This command returns a Launcher Response.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 6.4.7.3
              */

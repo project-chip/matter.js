@@ -11,12 +11,13 @@
  * This example is CJS conform and do not use top level await's.
  */
 
-import { Endpoint, EndpointServer, Environment, ServerNode, StorageService, Time } from "@matter/main";
+import { Endpoint, Environment, Logger, ServerNode, StorageService, Time } from "@matter/main";
 import { HumiditySensorDevice } from "@matter/main/devices/humidity-sensor";
 import { TemperatureSensorDevice } from "@matter/main/devices/temperature-sensor";
-import { logEndpoint } from "@matter/main/protocol";
 import { DeviceTypeId, VendorId } from "@matter/main/types";
 import { execSync } from "node:child_process";
+
+const logger = Logger.get("SensorDeviceNode");
 
 async function main() {
     /** Initialize configuration values */
@@ -110,7 +111,7 @@ async function main() {
     /**
      * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
      */
-    logEndpoint(EndpointServer.forEndpoint(server));
+    logger.info(server);
 
     const updateInterval = setInterval(() => {
         let setter: Promise<void>;

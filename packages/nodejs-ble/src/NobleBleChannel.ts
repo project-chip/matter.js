@@ -18,7 +18,7 @@ import {
     TransportInterface,
     asError,
     createPromise,
-} from "@matter/general";
+} from "#general";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
@@ -33,7 +33,7 @@ import {
     BtpCodec,
     BtpFlowError,
     BtpSessionHandler,
-} from "@matter/protocol";
+} from "#protocol";
 import type { Characteristic, Peripheral } from "@stoprocent/noble";
 import { BleScanner } from "./BleScanner.js";
 
@@ -153,7 +153,7 @@ export class NobleBleCentralInterface implements NetInterface {
                 // Timeout when trying to connect to the device because sometimes connect fails and noble does
                 // not emit an event. If device does not connect we do not try any longer and reject the promise
                 // because a re-discovery is the best option to get teh device into a good state again
-                connectTimeout: Time.getTimer("BLE connect timeout", 60_000, () => {
+                connectTimeout: Time.getTimer("BLE connect timeout", 120_000, () => {
                     logger.debug(`Timeout while connecting to peripheral ${peripheralAddress}`);
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     peripheral.removeListener("connect", connectHandler);

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Transaction } from "#general";
 import { Invoke } from "./request/Invoke.js";
 import { Read } from "./request/Read.js";
 import { Subscribe } from "./request/Subscribe.js";
@@ -14,10 +15,14 @@ import { SubscribeResult } from "./response/SubscribeResult.js";
 import { WriteResult } from "./response/WriteResult.js";
 import { AccessControl } from "./server/AccessControl.js";
 
+export interface InteractionSession extends AccessControl.Session {
+    transaction?: Transaction;
+}
+
 /**
  * Objects implementing this interface can participate in Matter interactions.
  */
-export interface Interactable<SessionT = AccessControl.Session> {
+export interface Interactable<SessionT = InteractionSession> {
     /**
      * Perform a Matter read interaction.
      */
@@ -36,5 +41,5 @@ export interface Interactable<SessionT = AccessControl.Session> {
     /**
      * Perform a Matter invoke interaction.
      */
-    invoke<T extends Invoke>(request: T, session?: SessionT): InvokeResult<T>;
+    invoke(request: Invoke, session?: SessionT): InvokeResult;
 }

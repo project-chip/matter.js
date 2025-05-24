@@ -12,11 +12,9 @@ import { Diagnostic, ImplementationError, InternalError, MaybePromise, Transacti
 import { AccessLevel } from "#model";
 import { Node } from "#node/Node.js";
 import type { Message, NodeProtocol, SecureSession } from "#protocol";
-import { AccessControl, assertSecureSession, MessageExchange } from "#protocol";
-import { FabricIndex, NodeId, StatusResponseError, SubjectId } from "#types";
-import { AclEndpointContext } from "@matter/protocol";
+import { AccessControl, AclEndpointContext, assertSecureSession, MessageExchange } from "#protocol";
+import { FabricIndex, NodeId, SubjectId } from "#types";
 import { ActionContext } from "../ActionContext.js";
-import { ActionTracer } from "../ActionTracer.js";
 import { Contextual } from "../Contextual.js";
 import { NodeActivity } from "../NodeActivity.js";
 import { ContextAgents } from "./ContextAgents.js";
@@ -60,56 +58,54 @@ export function OnlineContext(options: OnlineContext.Options) {
          * If the actor changes state, this may return a promise even if {@link actor} does not return a promise.
          */
         act<T>(actor: (context: ActionContext) => MaybePromise<T>): MaybePromise<T> {
-            const { close, trace } = initialize();
+            const context = this.open();
 
-            const traceError = (e: unknown): never => {
-                if (trace) {
-                    const status = (e as StatusResponseError).code;
-                    if (typeof status === "number") {
-                        trace.status = status;
-                    }
-                }
-                throw e;
-            };
-
-            let context: undefined | ActionContext;
-            const actOnline = (transaction: Transaction) => {
-                context = createContext(transaction, trace);
-                return actor(context);
-            };
-
-            let isAsync = false;
+            let result;
             try {
-                const result = Transaction.act(via, actOnline);
-                if (MaybePromise.is(result)) {
-                    isAsync = true;
-                    return Promise.resolve(result).catch(traceError).finally(close);
-                }
-                return result;
+                result = actor(context);
             } catch (e) {
-                traceError(e);
-
-                // TS should not require this because traceError returns never, but it complains without it.  This never
-                // happens
-                throw e;
-            } finally {
-                if (!isAsync && context) {
-                    close();
-                }
+                return context.reject(e);
             }
+
+            return context.resolve(result);
         },
 
         /**
-         * Begin an operation with a read-only context.  You must close the context after use to properly deregister
-         * activity.
+         * Create an online context.
+         *
+         * This context operates with a {@link Transaction} created via {@link Transaction.open} and the same rules
+         * apply for lifecycle management using {@link Transaction.Finalization}.
+         */
+        open(): ActionContext & Transaction.Finalization {
+            let close;
+            let tx;
+            try {
+                close = initialize();
+                tx = Transaction.open(via);
+                tx.onClose(close);
+            } catch (e) {
+                close?.();
+                throw e;
+            }
+
+            return createContext(tx, {
+                resolve: tx.resolve.bind(tx),
+                reject: tx.reject.bind(tx),
+            }) as ActionContext & Transaction.Finalization;
+        },
+
+        /**
+         * Begin an operation with a read-only context.
+         *
+         * A read-only context offers simpler lifecycle semantics than a r/w OnlineContext but you must still close the
+         * context after use to properly deregister activity.
          */
         beginReadOnly() {
-            const { close, trace } = initialize();
+            const close = initialize();
 
-            const context = createContext(Transaction.ReadOnly, trace) as OnlineContext.ReadOnly;
-            context[Symbol.dispose] = close;
-
-            return context;
+            return createContext(Transaction.ReadOnly, {
+                [Symbol.dispose]: close,
+            }) as OnlineContext.ReadOnly;
         },
 
         [Symbol.toStringTag]: "OnlineContext",
@@ -119,19 +115,9 @@ export function OnlineContext(options: OnlineContext.Options) {
      * Initialization stage one - initialize everything common to r/o and r/w contexts
      */
     function initialize() {
-        let trace: undefined | ActionTracer.Action;
         const activity = options.activity?.frame(via);
 
-        if (options.tracer && options.actionType) {
-            trace = {
-                type: options.actionType,
-            };
-        }
-
         const close = () => {
-            if (trace) {
-                options.tracer?.record(trace);
-            }
             if (message) {
                 Contextual.setContextOf(message, undefined);
             }
@@ -140,16 +126,13 @@ export function OnlineContext(options: OnlineContext.Options) {
             }
         };
 
-        return {
-            close,
-            trace,
-        };
+        return close;
     }
 
     /**
      * Initialization stage two - create context object after obtaining transaction
      */
-    function createContext(transaction: Transaction, trace?: ActionTracer.Action) {
+    function createContext(transaction: Transaction, methods: {}) {
         let agents: undefined | ContextAgents;
         const context: ActionContext = {
             ...options,
@@ -158,9 +141,10 @@ export function OnlineContext(options: OnlineContext.Options) {
             subject,
             fabric,
             transaction,
-            trace,
 
             interactionComplete: exchange?.closed,
+
+            ...methods,
 
             // TODO - Matter 1.4 - add support for ARLs
             authorityAt(desiredAccessLevel: AccessLevel, location?: AccessControl.Location) {
@@ -252,8 +236,6 @@ export namespace OnlineContext {
         timed?: boolean;
         fabricFiltered?: boolean;
         message?: Message;
-        tracer?: ActionTracer;
-        actionType?: ActionTracer.ActionType;
     } & (
         | { exchange: MessageExchange; fabric?: undefined; subject?: undefined }
         | { exchange?: undefined; fabric: FabricIndex; subject: SubjectId }

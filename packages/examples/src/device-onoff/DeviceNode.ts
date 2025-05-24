@@ -11,19 +11,11 @@
  * This example is CJS conform and do not use top level await's.
  */
 
-import {
-    DeviceTypeId,
-    Endpoint,
-    EndpointServer,
-    Environment,
-    ServerNode,
-    StorageService,
-    Time,
-    VendorId,
-} from "@matter/main";
+import { DeviceTypeId, Endpoint, Environment, Logger, ServerNode, StorageService, Time, VendorId } from "@matter/main";
 import { OnOffLightDevice, OnOffPlugInUnitDevice } from "@matter/main/devices";
-import { logEndpoint } from "@matter/main/protocol";
 import { execSync } from "node:child_process";
+
+const logger = Logger.get("DeviceNode");
 
 async function main() {
     /** Initialize configuration values */
@@ -112,7 +104,7 @@ async function main() {
     /**
      * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
      */
-    logEndpoint(EndpointServer.forEndpoint(server));
+    logger.info(server);
 
     /**
      * In order to start the node and announce it into the network we use the run method which resolves when the node goes

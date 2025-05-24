@@ -12,5 +12,4 @@ export * from "./errors.js";
 export * from "./FeatureSet.js";
 export * from "./FieldValue.js";
 export * from "./Metatype.js";
-export * from "./Schema.js";
 export * from "./Specification.js";

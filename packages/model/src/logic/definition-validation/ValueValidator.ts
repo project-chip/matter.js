@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ModelTraversal } from "#logic/ModelTraversal.js";
 import { Access, Aspect, Conformance, Constraint, Quality } from "../../aspects/index.js";
 import { DefinitionError, FieldValue, Metatype } from "../../common/index.js";
 import { ClusterModel, Globals, ValueModel } from "../../models/index.js";
@@ -23,7 +24,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
         this.validateProperty({ name: "quality", type: Quality });
         this.validateProperty({ name: "metatype", type: Metatype });
 
-        this.validateAspect("conformance");
+        this.#validateAspect("conformance");
         this.model.conformance.validateReferences(this, name => {
             // Features are all caps, other names are field references
             if (name.match(/^[A-Z0-9_$]+$/)) {
@@ -41,24 +42,24 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             }
         });
 
-        this.validateAspect("constraint");
-        this.validateAspect("access");
-        this.validateAspect("quality");
+        this.#validateAspect("constraint");
+        this.#validateAspect("access");
+        this.#validateAspect("quality");
 
-        this.validateType();
-        this.validateEntries();
+        this.#validateType();
+        this.#validateEntries();
 
         super.validate();
     }
 
-    private validateAspect(name: string) {
+    #validateAspect(name: string) {
         const aspect = (this.model as any)[name] as Aspect;
         if (aspect?.errors) {
             aspect.errors.forEach((e: DefinitionError) => this.model.error(e.code, `${e.source}: ${e.message}`));
         }
     }
 
-    private validateType() {
+    #validateType() {
         if (this.model.effectiveType === undefined) {
             if (this.model.metatype) {
                 // Not a derivative type
@@ -70,9 +71,13 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
                 return;
             }
 
-            // Non-global types must specify a base type
-            this.error("NO_TYPE", "No type information");
-            return;
+            // If the type is supposed to have a shadow but we didn't find it due to a case mismatch, we correct that
+            // now.  Otherwise this is an error
+            if (!this.#correctCaseFromShadow()) {
+                // Non-global types must specify a base type
+                this.error("NO_TYPE", "No type information");
+                return;
+            }
         }
 
         const base = this.model.base;
@@ -83,7 +88,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
 
         const metabase = this.model.metabase;
         if (metabase === undefined) {
-            this.error("METATYPE_UNKNOWN", `No metatype for ${this.model.type}`);
+            this.error("METATYPE_UNKNOWN", `No metatype for ${this.model.name}`);
             return;
         }
         const metatype = metabase.metatype;
@@ -99,7 +104,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             return;
         }
 
-        if (this.validateSpecialDefault(metatype, defaultValue)) {
+        if (this.#validateSpecialDefault(metatype, defaultValue)) {
             return;
         }
 
@@ -159,7 +164,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
         this.model.default = defaultValue;
     }
 
-    private validateEntries() {
+    #validateEntries() {
         // Note - these checks only apply for first-order derived types, so use direct metatype
         const metatype =
             this.model.type === undefined
@@ -186,9 +191,9 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
                 }
 
                 if (metatype == Metatype.enum) {
-                    this.validateEnumKeys();
+                    this.#validateEnumKeys();
                 } else {
-                    this.validateBitFields();
+                    this.#validateBitFields();
                 }
                 break;
 
@@ -202,7 +207,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
         }
     }
 
-    private validateEnumKeys() {
+    #validateEnumKeys() {
         const ids = new Set<number>();
         const names = new Set<string>();
         for (const c of this.model.children) {
@@ -222,7 +227,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
         }
     }
 
-    private validateBitFields() {
+    #validateBitFields() {
         const ranges = Array<{ name: string; min: number; max: number }>();
         for (const c of this.model.children) {
             let min, max;
@@ -255,7 +260,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
         }
     }
 
-    private validateSpecialDefault(metatype: Metatype, def: any) {
+    #validateSpecialDefault(metatype: Metatype, def: any) {
         // Special "reference" object referencing another field by name
         if (typeof def === "object" && FieldValue.is(def, FieldValue.reference)) {
             const reference = (def as FieldValue.Reference).name;
@@ -298,5 +303,21 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             }
             return true;
         }
+    }
+
+    #correctCaseFromShadow() {
+        const tag = this.model.tag;
+        const name = this.model.name.toLowerCase();
+        return (
+            false ===
+            new ModelTraversal().visitInheritance(this.model.parent?.base, owner => {
+                for (const child of owner.children) {
+                    if (child.tag === tag && child.name.toLowerCase() === name) {
+                        this.model.name = child.name;
+                        return false;
+                    }
+                }
+            })
+        );
     }
 }

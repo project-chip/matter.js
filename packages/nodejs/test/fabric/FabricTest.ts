@@ -54,14 +54,14 @@ describe("FabricBuilder", () => {
 
 describe("Fabric", () => {
     describe("getDestinationId", () => {
-        it("generates the correct destination ID", () => {
+        it("generates the correct destination ID", async () => {
             const fabric = new Fabric({
                 fabricIndex: TEST_FABRIC_INDEX,
                 fabricId: TEST_FABRIC_ID,
                 nodeId: TEST_NODE_ID,
                 rootNodeId: TEST_ROOT_NODE,
                 operationalId: Buffer.alloc(0),
-                keyPair: Crypto.createKeyPair(),
+                keyPair: await Crypto.createKeyPair(),
                 rootPublicKey: TEST_ROOT_PUBLIC_KEY,
                 rootVendorId: VendorId(0),
                 rootCert: Buffer.alloc(0),
@@ -72,7 +72,7 @@ describe("Fabric", () => {
                 label: "",
             });
 
-            const result = fabric.getDestinationId(TEST_NODE_ID, TEST_RANDOM);
+            const result = await fabric.getDestinationId(TEST_NODE_ID, TEST_RANDOM);
 
             assert.equal(Bytes.toHex(result), Bytes.toHex(EXPECTED_DESTINATION_ID));
         });
@@ -80,19 +80,19 @@ describe("Fabric", () => {
         it("generates the correct destination ID 2", async () => {
             const fabric = await buildFabric();
 
-            const result = fabric.getDestinationId(TEST_NODE_ID_2, TEST_RANDOM_2);
+            const result = await fabric.getDestinationId(TEST_NODE_ID_2, TEST_RANDOM_2);
 
             assert.equal(Bytes.toHex(result), Bytes.toHex(EXPECTED_DESTINATION_ID_2));
         });
 
-        it("generates the correct destination ID 3", () => {
+        it("generates the correct destination ID 3", async () => {
             const fabric = new Fabric({
                 fabricIndex: TEST_FABRIC_INDEX,
                 fabricId: TEST_FABRIC_ID_3,
                 nodeId: TEST_NODE_ID_3,
                 rootNodeId: TEST_ROOT_NODE,
                 operationalId: Buffer.alloc(0),
-                keyPair: Crypto.createKeyPair(),
+                keyPair: await Crypto.createKeyPair(),
                 rootPublicKey: TEST_ROOT_PUBLIC_KEY_3,
                 rootVendorId: VendorId(0),
                 rootCert: Buffer.alloc(0),
@@ -103,7 +103,7 @@ describe("Fabric", () => {
                 label: "",
             });
 
-            const result = fabric.getDestinationId(TEST_NODE_ID_3, TEST_RANDOM_3);
+            const result = await fabric.getDestinationId(TEST_NODE_ID_3, TEST_RANDOM_3);
 
             assert.equal(Bytes.toHex(result), Bytes.toHex(EXPECTED_DESTINATION_ID_3));
         });

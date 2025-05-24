@@ -73,7 +73,7 @@ export namespace GeneralDiagnostics {
         /**
          * This field shall indicate the number of times to repeat the Value in the PayloadTestResponse’s Payload field.
          *
-         * Effect upon receipt
+         * ### Effect upon receipt
          *
          * This command shall respond with a response status of CONSTRAINT_ERROR if either:
          *
@@ -90,10 +90,9 @@ export namespace GeneralDiagnostics {
          *   • If Value is 0x55 and the Count is zero, then the PayloadTestResponse would have the Payload field set to
          *     an empty octet string.
          *
-         *   • If Value is 0xA5 and the Count is 10, the PayloadTestResponse would have the Payload field set
-         *
-         * to a content whose hexadecimal representation would be A5A5A5A5A5A5A5A5A5A5, and base64 representation would
-         * be paWlpaWlpaWlpQ==.
+         *   • If Value is 0xA5 and the Count is 10, the PayloadTestResponse would have the Payload field set to a
+         *     content whose hexadecimal representation would be A5A5A5A5A5A5A5A5A5A5, and base64 representation would
+         *     be paWlpaWlpaWlpQ==.
          *
          * @see {@link MatterSpecification.v14.Core} § 11.12.7.4.3
          */
@@ -200,10 +199,9 @@ export namespace GeneralDiagnostics {
         offPremiseServicesReachableIPv6: TlvField(3, TlvNullable(TlvBoolean)),
 
         /**
-         * This field shall contain the current link-layer address for a 802.3 or IEEE 802.11-2020 network
-         *
-         * interface and contain the current extended MAC address for a 802.15.4 interface. The byte order of the octstr
-         * shall be in wire byte order. For addresses values less than 64 bits, the first two bytes shall be zero.
+         * This field shall contain the current link-layer address for a 802.3 or IEEE 802.11-2020 network interface and
+         * contain the current extended MAC address for a 802.15.4 interface. The byte order of the octstr shall be in
+         * wire byte order. For addresses values less than 64 bits, the first two bytes shall be zero.
          *
          * @see {@link MatterSpecification.v14.Core} § 11.12.5.6.5
          */
@@ -361,7 +359,7 @@ export namespace GeneralDiagnostics {
         CellularFault = 2,
 
         /**
-         * The Node has encountered a fault with its802.15.4 radio.
+         * The Node has encountered a fault with its 802.15.4 radio.
          */
         ThreadFault = 3,
 
@@ -440,9 +438,8 @@ export namespace GeneralDiagnostics {
          * Values of EventTrigger in the range 0xFFFF_FFFF_0000_0000 through 0xFFFF_FFFF_FFFF_FFFF are reserved for
          * testing use by manufacturers and will not appear in CSA certification test literature.
          *
-         * If the value of EventTrigger received is not supported by the receiving Node, this command shall
-         *
-         * fail with a status code of INVALID_COMMAND.
+         * If the value of EventTrigger received is not supported by the receiving Node, this command shall fail with a
+         * status code of INVALID_COMMAND.
          *
          * Otherwise, if the EnableKey value matches the configured internal value for a particular Node, and the
          * EventTrigger value matches a supported test event trigger value, the command shall succeed and execute the
@@ -657,8 +654,6 @@ export namespace GeneralDiagnostics {
 
         features: {
             /**
-             * DataModelTest
-             *
              * This feature indicates support for extended Data Model testing commands, which are required in some
              * situations.
              *
@@ -721,12 +716,10 @@ export namespace GeneralDiagnostics {
              * The ActiveHardwareFaults attribute shall indicate the set of faults currently detected by the Node. When
              * the Node detects a fault has been raised, the appropriate HardwareFaultEnum value shall be added to this
              * list. This list shall NOT contain more than one instance of a specific HardwareFaultEnum value. When the
-             * Node detects that all conditions contributing to a fault has been
-             *
-             * cleared, the corresponding HardwareFaultEnum value shall be removed from this list. An empty list shall
-             * indicate there are currently no active faults. The order of this list SHOULD have no significance.
-             * Clients interested in monitoring changes in active faults may subscribe to this attribute, or they may
-             * subscribe to HardwareFaultChange.
+             * Node detects that all conditions contributing to a fault has been cleared, the corresponding
+             * HardwareFaultEnum value shall be removed from this list. An empty list shall indicate there are currently
+             * no active faults. The order of this list SHOULD have no significance. Clients interested in monitoring
+             * changes in active faults may subscribe to this attribute, or they may subscribe to HardwareFaultChange.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.12.6.6
              */
@@ -785,10 +778,10 @@ export namespace GeneralDiagnostics {
 
         commands: {
             /**
-             * This command shall be supported to provide a means for certification tests to trigger some test-
-             * plan-specific events, necessary to assist in automation of device interactions for some certification
-             * test cases. This command shall NOT cause any changes to the state of the device that persist after the
-             * last fabric is removed.
+             * This command shall be supported to provide a means for certification tests to trigger some
+             * test-plan-specific events, necessary to assist in automation of device interactions for some
+             * certification test cases. This command shall NOT cause any changes to the state of the device that
+             * persist after the last fabric is removed.
              *
              * The fields for the TestEventTrigger command are as follows:
              *

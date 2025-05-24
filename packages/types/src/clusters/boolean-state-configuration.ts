@@ -258,10 +258,10 @@ export namespace BooleanStateConfiguration {
             alarmsActive: Attribute(0x3, TlvBitmap(TlvUInt8, AlarmMode)),
 
             /**
-             * Indicates the alarm modes that will be emitted if the sensor is triggered. If an alarm mode is not
-             * supported, the bit indicating this alarm mode shall always be 0.
+             * Indicates the alarm modes that will be emitted if the sensor is triggered.
              *
-             * A bit shall indicate whether the alarm mode is enabled or disabled:
+             * If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit shall
+             * indicate whether the alarm mode is enabled or disabled:
              *
              *   • 0 = Disabled
              *
@@ -346,22 +346,16 @@ export namespace BooleanStateConfiguration {
 
         features: {
             /**
-             * Visual
-             *
              * Supports visual alarms
              */
             visual: BitFlag(0),
 
             /**
-             * Audible
-             *
              * Supports audible alarms
              */
             audible: BitFlag(1),
 
             /**
-             * AlarmSuppress
-             *
              * This feature shall indicate that the device is able to suppress the supported alarm modes, when the user
              * acknowledges the alarm. This is intended to stop visual and/or audible alarms, when the user has become
              * aware that the sensor is triggered, but it is no longer desired to have the alarm modes active on the
@@ -385,8 +379,6 @@ export namespace BooleanStateConfiguration {
             alarmSuppress: BitFlag(2),
 
             /**
-             * SensitivityLevel
-             *
              * Supports ability to set sensor sensitivity
              */
             sensitivityLevel: BitFlag(3)

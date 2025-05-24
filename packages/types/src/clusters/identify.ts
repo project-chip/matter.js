@@ -43,7 +43,7 @@ export namespace Identify {
         Display = 4,
 
         /**
-         * Presentation will be conveyed by actuator functionality such as through a window blind operation or in- wall
+         * Presentation will be conveyed by actuator functionality such as through a window blind operation or in-wall
          * relay.
          */
         Actuator = 5

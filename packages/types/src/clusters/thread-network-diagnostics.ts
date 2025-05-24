@@ -681,11 +681,10 @@ export namespace ThreadNetworkDiagnostics {
             txAckedCount: OptionalAttribute(0x1a, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The TxNoAckRequestedCount attribute shall indicate the total number of unique MAC frame
-             *
-             * transmission requests without requested acknowledgment. The TxNoAckRequestedCount attribute shall only be
-             * incremented by 1 for each MAC transmission request that is does not request acknowledgement regardless of
-             * the amount of CCA failures, CSMA-CA attempts, or retransmissions.
+             * The TxNoAckRequestedCount attribute shall indicate the total number of unique MAC frame transmission
+             * requests without requested acknowledgment. The TxNoAckRequestedCount attribute shall only be incremented
+             * by 1 for each MAC transmission request that is does not request acknowledgement regardless of the amount
+             * of CCA failures, CSMA-CA attempts, or retransmissions.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.14.6.28
              */
@@ -751,11 +750,10 @@ export namespace ThreadNetworkDiagnostics {
             txRetryCount: OptionalAttribute(0x21, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The TxDirectMaxRetryExpiryCount attribute shall indicate the total number of unique MAC
-             *
-             * transmission packets that meet maximal retry limit for direct packets. The TxDirectMaxRetryExpiryCount
-             * attribute shall only be incremented by 1 for each unique MAC transmission packets that meets the maximal
-             * retry limit for direct packets. This value shall only be reset upon a Node reboot.
+             * The TxDirectMaxRetryExpiryCount attribute shall indicate the total number of unique MAC transmission
+             * packets that meet maximal retry limit for direct packets. The TxDirectMaxRetryExpiryCount attribute shall
+             * only be incremented by 1 for each unique MAC transmission packets that meets the maximal retry limit for
+             * direct packets. This value shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.14.6.35
              */
@@ -824,9 +822,8 @@ export namespace ThreadNetworkDiagnostics {
             rxBroadcastCount: OptionalAttribute(0x29, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The RxDataCount attribute shall indicate the total number of received unique MAC Data frames.
-             *
-             * This value shall only be reset upon a Node reboot.
+             * The RxDataCount attribute shall indicate the total number of received unique MAC Data frames. This value
+             * shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.14.6.43
              */
@@ -902,9 +899,8 @@ export namespace ThreadNetworkDiagnostics {
 
             /**
              * The RxErrUnknownNeighborCount attribute shall indicate the total number of received unique MAC frame
-             * requests that have been dropped as a result of originating from an unknown neighbor
-             *
-             * device. This value shall only be reset upon a Node reboot.
+             * requests that have been dropped as a result of originating from an unknown neighbor device. This value
+             * shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.14.6.52
              */
@@ -958,30 +954,22 @@ export namespace ThreadNetworkDiagnostics {
 
         features: {
             /**
-             * PacketCounts
-             *
              * Server supports the counts for the number of received and transmitted packets on the Thread interface.
              */
             packetCounts: BitFlag(0),
 
             /**
-             * ErrorCounts
-             *
              * Server supports the counts for the number of errors that have occurred during the reception and
              * transmission of packets on the Thread interface.
              */
             errorCounts: BitFlag(1),
 
             /**
-             * MleCounts
-             *
              * Server supports the counts for various MLE layer happenings.
              */
             mleCounts: BitFlag(2),
 
             /**
-             * MacCounts
-             *
              * Server supports the counts for various MAC layer happenings.
              */
             macCounts: BitFlag(3)
@@ -999,10 +987,9 @@ export namespace ThreadNetworkDiagnostics {
 
             /**
              * The RoutingRole attribute shall indicate the role that this Node has within the routing of messages
-             * through the Thread network, as defined by RoutingRoleEnum. The potential roles are defined
-             *
-             * in the following table. A value of null shall indicate that the Thread interface is not currently
-             * configured or operational.
+             * through the Thread network, as defined by RoutingRoleEnum. The potential roles are defined in the
+             * following table. A value of null shall indicate that the Thread interface is not currently configured or
+             * operational.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.14.6.2
              */

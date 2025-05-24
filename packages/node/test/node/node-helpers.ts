@@ -8,6 +8,7 @@ import { BasicInformationBehavior } from "#behaviors/basic-information";
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { Bytes, Crypto, Key, PrivateKey } from "#general";
 import { CommissioningServer, InteractionServer } from "#index.js";
+import { Specification } from "#model";
 import {
     ChannelManager,
     Fabric,
@@ -31,7 +32,6 @@ import {
     TypeFromSchema,
     VendorId,
 } from "#types";
-import { Specification } from "@matter/model";
 import { MockServerNode } from "./mock-server-node.js";
 
 let activeCommissioning: undefined | ReturnType<typeof CommissioningHelper>;
@@ -138,7 +138,7 @@ export function CommissioningHelper() {
                 });
 
                 await node.online(context, async agent => {
-                    agent.operationalCredentials.addTrustedRootCertificate({ rootCaCertificate: params.caCert });
+                    await agent.operationalCredentials.addTrustedRootCertificate({ rootCaCertificate: params.caCert });
                 });
 
                 await node.online(context, async agent => {
@@ -198,7 +198,7 @@ export function CommissioningHelper() {
 export namespace interaction {
     const BarelyMockedMessenger = {
         sendStatus: _code => {},
-        sendDataReport: async (_report, _forFabricFilteredRead) => {},
+        sendDataReport: async _options => {},
         send: async (_type, _message) => {},
         close: async () => {},
     } as InteractionServerMessenger;

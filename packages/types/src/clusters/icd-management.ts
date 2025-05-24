@@ -118,10 +118,9 @@ export namespace IcdManagement {
          * For example, if the MonitoredSubject is Node ID 0x1111_2222_3333_AAAA, and one of the subscribers to the
          * server on the entry’s associated fabric bears that Node ID, then the entry matches.
          *
-         * Another example is if the MonitoredSubject has the value 0xFFFF_FFFD_AA12_0002, and one of the
-         *
-         * subscribers to the server on the entry’s associated fabric bears the CASE Authenticated TAG value 0xAA12 and
-         * the version 0x0002 or higher within its NOC, then the entry matches.
+         * Another example is if the MonitoredSubject has the value 0xFFFF_FFFD_AA12_0002, and one of the subscribers to
+         * the server on the entry’s associated fabric bears the CASE Authenticated TAG value 0xAA12 and the version
+         * 0x0002 or higher within its NOC, then the entry matches.
          *
          * @see {@link MatterSpecification.v14.Core} § 9.17.5.3.2
          */
@@ -380,8 +379,6 @@ export namespace IcdManagement {
          * This field shall provide the actual duration that the ICD server can stay active from the time it receives
          * the StayActiveRequest command.
          *
-         * ### Minimum Value for PromisedActiveDuration
-         *
          * The minimum value of the PromisedActiveDuration field shall be equal to either 30000 milliseconds or
          * StayActiveDuration (from the received StayActiveRequest command), whichever is smaller.
          *
@@ -447,7 +444,7 @@ export namespace IcdManagement {
              * Indicates the maximum time in seconds between two Check-In messages when back-off is active. The
              * MaximumCheckInBackoff shall NOT be smaller than the IdleModeDuration.
              *
-             * If the MaximumCheckInBackoff is equal to the IdleModeDuration, it means the ICD does notback- off.
+             * If the MaximumCheckInBackoff is equal to the IdleModeDuration, it means the ICD does not back-off.
              *
              * @see {@link MatterSpecification.v14.Core} § 9.17.6.10
              */
@@ -518,7 +515,7 @@ export namespace IcdManagement {
     export const LongIdleTimeSupportComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the operating mode of the ICD as specified in the OperatingModeEnum.
+             * This attribute shall indicate the operating mode of the ICD as specified in the OperatingModeEnum.
              *
              *   • If the ICD is operating as a LIT ICD, OperatingMode shall be LIT.
              *
@@ -555,8 +552,6 @@ export namespace IcdManagement {
 
         features: {
             /**
-             * CheckInProtocolSupport
-             *
              * When this feature is supported, the device shall support all the associated commands and attributes to
              * properly support the Check-In Protocol.
              *
@@ -565,8 +560,6 @@ export namespace IcdManagement {
             checkInProtocolSupport: BitFlag(0),
 
             /**
-             * UserActiveModeTrigger
-             *
              * This feature is supported if and only if the device has a user active mode trigger.
              *
              * @see {@link MatterSpecification.v14.Core} § 9.17.4.2
@@ -574,8 +567,6 @@ export namespace IcdManagement {
             userActiveModeTrigger: BitFlag(1),
 
             /**
-             * LongIdleTimeSupport
-             *
              * This feature is supported if and only the device is a Long Idle Time ICD.
              *
              * @see {@link MatterSpecification.v14.Core} § 9.17.4.3
@@ -583,8 +574,6 @@ export namespace IcdManagement {
             longIdleTimeSupport: BitFlag(2),
 
             /**
-             * DynamicSitLitSupport
-             *
              * This feature is supported if and only if the device can switch between SIT and LIT operating modes even
              * if it has a valid registered client. See the dynamic SIT / LIT operating mode switching for more details.
              *
@@ -645,11 +634,7 @@ export namespace IcdManagement {
              *
              * @see {@link MatterSpecification.v14.Core} § 9.17.6.8
              */
-            userActiveModeTriggerInstruction: OptionalFixedAttribute(
-                0x7,
-                TlvString.bound({ maxLength: 128 }),
-                { default: "" }
-            )
+            userActiveModeTriggerInstruction: OptionalFixedAttribute(0x7, TlvString.bound({ maxLength: 128 }))
         },
 
         commands: {

@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterElement, ClusterModel, ClusterVariance, Conformance, MatterModel } from "#index.js";
+import { ClusterElement, ClusterModel, ClusterVariance, Conformance, FeatureMap, MatterModel } from "#index.js";
 import { InferredComponent } from "#logic/cluster-variance/InferredComponents.js";
 import { VarianceCondition } from "#logic/cluster-variance/VarianceCondition.js";
-import { FeatureMap } from "#standard/elements/FeatureMap.js";
 
 describe("ClusterVariance", () => {
     describe("invariant", () => {

@@ -276,10 +276,9 @@ export namespace RvcOperationalState {
 
             /**
              * This attribute represents the current phase of operation being performed by the server. This shall be the
-             * positional index representing the value from the set provided in the PhaseList Attribute,
-             *
-             * where the first item in that list is an index of 0. Thus, this attribute shall have a maximum value that
-             * is "length(PhaseList) - 1".
+             * positional index representing the value from the set provided in the PhaseList Attribute, where the first
+             * item in that list is an index of 0. Thus, this attribute shall have a maximum value that is
+             * "length(PhaseList) - 1".
              *
              * Null if the PhaseList attribute is null or if the PhaseList attribute is an empty list.
              *

@@ -186,6 +186,7 @@ export class MessageExchange {
     #closeTimer: Timer | undefined;
     #isClosing = false;
     #timedInteractionTimer: Timer | undefined;
+    #used: boolean;
 
     readonly #peerSessionId: number;
     readonly #nodeId: NodeId | undefined;
@@ -221,6 +222,7 @@ export class MessageExchange {
 
         // When the session is supporting MRP and the channel is not reliable, use MRP handling
         this.#useMRP = session.supportsMRP && !channel.isReliable;
+        this.#used = !isInitiator; // If we are the initiator then exchange was not used yet, so track it
 
         logger.debug(
             "New exchange",
@@ -390,6 +392,7 @@ export class MessageExchange {
         if (this.#sentMessageToAck !== undefined && messageType !== SecureMessageType.StandaloneAck)
             throw new MatterFlowError("The previous message has not been acked yet, cannot send a new message.");
 
+        this.#used = true;
         this.session.notifyActivity(false);
 
         let ackedMessageId = includeAcknowledgeMessageId;
@@ -660,6 +663,12 @@ export class MessageExchange {
             // close was already called, so let retries happen because close not forced
             return;
         }
+        if (!this.#used) {
+            // The exchange was never in use, so we can close it directly
+            // If we see that in the wild we should fix the reasons
+            logger.info(`Exchange ${this.session.name} / ${this.#exchangeId} was never used, closing directly`);
+            return this.#close();
+        }
         this.#isClosing = true;
 
         if (this.#receivedMessageToAck !== undefined) {
@@ -669,7 +678,10 @@ export class MessageExchange {
             try {
                 await this.sendStandaloneAckForMessage(messageToAck);
             } catch (error) {
-                logger.error("An error happened when closing the exchange", error);
+                logger.error(
+                    `An error happened when closing the exchange ${this.session.name} / ${this.#exchangeId}`,
+                    error,
+                );
             }
             if (force) {
                 // We have sent the Ack, so close here, no retries because close is forced

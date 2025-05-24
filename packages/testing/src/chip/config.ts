@@ -19,7 +19,7 @@ export namespace ContainerPaths {
     export const pythonCommissioner = `/src/python_testing/hello_test.py`;
     export const chipPics = "/src/app/tests/suites/certification/ci-pics-values";
     export const accessoryClient =
-        "/scripts/py_matter_yamltests/matter_yamltests/pseudo_clusters/clusters/accessory_server_bridge.py";
+        "/usr/local/lib/python3.12/dist-packages/matter/yamltests/pseudo_clusters/clusters/accessory_server_bridge.py";
 }
 
 export type ContainerPathsType = typeof ContainerPaths;

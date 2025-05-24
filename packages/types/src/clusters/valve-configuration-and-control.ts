@@ -306,8 +306,6 @@ export namespace ValveConfigurationAndControl {
 
         features: {
             /**
-             * TimeSync
-             *
              * This feature shall indicate that the valve uses Time Synchronization and UTC time to indicate duration
              * and auto close time.
              *
@@ -318,8 +316,6 @@ export namespace ValveConfigurationAndControl {
             timeSync: BitFlag(0),
 
             /**
-             * Level
-             *
              * This feature shall indicate that the valve is capable of being adjusted to a specific position, as a
              * percentage, of its full range of motion.
              *

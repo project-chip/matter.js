@@ -280,9 +280,8 @@ export namespace Groups {
         groupId: TlvField(0, TlvGroupId),
 
         /**
-         * This field may be set to a human-readable name for the group. If the client has no name for the
-         *
-         * group, the GroupName field shall be set to the empty string.
+         * This field may be set to a human-readable name for the group. If the client has no name for the group, the
+         * GroupName field shall be set to the empty string.
          *
          * Support of group names is optional and is indicated by the FeatureMap and NameSupport attribute.
          *
@@ -318,8 +317,6 @@ export namespace Groups {
 
         features: {
             /**
-             * GroupNames
-             *
              * The Group Names feature indicates the ability to store a name for a group when a group is added.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.3.4.1

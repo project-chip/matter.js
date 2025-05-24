@@ -55,6 +55,7 @@ function captureOne(fn: () => void, destination = "default") {
 
 describe("Logger", () => {
     const logger = Logger.get(LOGGER_NAME);
+    let loggerFuncCalled = false;
 
     function capture(fn: () => void, { format, levels, destination = "default" }: LogOptions) {
         const dest = Logger.destinations[destination];
@@ -70,6 +71,17 @@ describe("Logger", () => {
 
     function logTestLine(options: LogOptions = {}) {
         return capture(() => logger[options.method ?? "debug"]("test"), options);
+    }
+    function logTestLineFunc(options: LogOptions = {}) {
+        loggerFuncCalled = false;
+        return capture(
+            () =>
+                logger[options.method ?? "debug"](() => {
+                    loggerFuncCalled = true;
+                    return "test";
+                }),
+            options,
+        );
     }
 
     function logTestDict(options: LogOptions = {}) {
@@ -90,6 +102,23 @@ describe("Logger", () => {
         it("logs a message if level is debug", () => {
             const result = logTestLine();
             expect(result?.level).equal(LogLevel.DEBUG);
+            expect(result?.message).equal("xxxx-xx-xx xx:xx:xx.xxx DEBUG UnitTest test");
+        });
+
+        it("logs a func-message if level is debug", () => {
+            const result = logTestLineFunc();
+            expect(result?.level).equal(LogLevel.DEBUG);
+            expect(result?.message).equal("xxxx-xx-xx xx:xx:xx.xxx DEBUG UnitTest test");
+            expect(loggerFuncCalled).ok;
+        });
+
+        it("do not call log func-message if level is info", () => {
+            const result = captureAll(() => {
+                logTestLineFunc({ levels: { [LOGGER_NAME]: LogLevel.INFO } });
+            });
+
+            expect(result.length).equal(0);
+            expect(loggerFuncCalled).equal(false);
         });
 
         it("doesn't log a message if level is above debug", () => {

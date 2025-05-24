@@ -193,11 +193,13 @@ describe("BehaviorServer", () => {
         });
 
         // Handle updated report
-        const fabricAdded = interaction.receiveData(node, 2, 0);
+        const fabricAdded = interaction.receiveData(node, 3, 0);
 
         // Create another fabric so we can capture subscription messages
         const fabric2 = await node.addFabric(2);
         let report = await MockTime.resolve(fabricAdded);
+        expect(report.attributes.length).equals(3);
+        expect(report.events.length).equals(0);
 
         const fabricsReport = report.attributes[0]?.attributeData;
         expect(fabricsReport?.path).deep.equals(FABRICS_PATH);
@@ -206,7 +208,10 @@ describe("BehaviorServer", () => {
             OperationalCredentials.Cluster.attributes.fabrics.schema.decodeTlv(fabricsReport?.data);
         expect(decodedFabrics?.map(({ fabricIndex }) => fabricIndex)).deep.equals([1, 2]);
 
-        const commissionedFabricsReport = report.attributes[1]?.attributeData;
+        const nocsReport = report.attributes[1]?.attributeData;
+        expect(nocsReport?.path).deep.equals(NOCS_PATH);
+
+        const commissionedFabricsReport = report.attributes[2]?.attributeData;
         expect(commissionedFabricsReport?.path).deep.equals(COMMISSIONED_FABRICS_PATH);
 
         const commissionedFabricCount =
@@ -217,11 +222,13 @@ describe("BehaviorServer", () => {
         expect(commissionedFabricCount).deep.equals(2);
 
         // Remove the second fabric so we can capture the leave event notification
-        const fabricRemoved = interaction.receiveData(node, 2, 1);
+        const fabricRemoved = interaction.receiveData(node, 3, 1);
 
         await MockTime.resolve(fabric2.remove());
 
         report = await MockTime.resolve(fabricRemoved);
+        expect(report.attributes.length).equals(3);
+        expect(report.events.length).equals(1);
 
         // Confirm we received leave event for second fabric
         const leaveReport = report.events[0]?.eventData;

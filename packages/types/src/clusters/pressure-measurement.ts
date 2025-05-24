@@ -35,9 +35,7 @@ export namespace PressureMeasurement {
     export const ExtendedComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the pressure in Pascals as follows:
-             *
-             * ScaledValue = 10Scale x Pressure [Pa]
+             * Indicates the pressure in Pascals as follows: ScaledValue = 10Scale x Pressure [Pa]
              *
              * The null value indicates that the value is not available.
              *
@@ -62,9 +60,8 @@ export namespace PressureMeasurement {
             maxScaledValue: Attribute(0x12, TlvNullable(TlvInt16), { default: 0 }),
 
             /**
-             * Indicates the magnitude of the possible error that is associated with Scaled
-             *
-             * Value. The true value is located in the range
+             * Indicates the magnitude of the possible error that is associated with ScaledValue. The true value is
+             * located in the range
              *
              * (ScaledValue – ScaledTolerance) to (ScaledValue + ScaledTolerance).
              *
@@ -91,8 +88,6 @@ export namespace PressureMeasurement {
 
         features: {
             /**
-             * Extended
-             *
              * Extended range and resolution
              */
             extended: BitFlag(0)

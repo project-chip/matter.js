@@ -7,12 +7,14 @@
 import { Mei } from "../common/Mei.js";
 import { Metatype } from "../common/index.js";
 import { FieldElement } from "../elements/index.js";
+import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
 import { ValueModel } from "./ValueModel.js";
 
-export class FieldModel<T extends FieldElement = FieldElement> extends PropertyModel<T> implements FieldElement {
+export class FieldModel extends PropertyModel<FieldElement> implements FieldElement {
     override tag: FieldElement.Tag = FieldElement.Tag;
-    declare id?: Mei;
+
+    title?: string;
 
     get fabricSensitive() {
         return this.effectiveAccess.fabricSensitive;
@@ -42,6 +44,19 @@ export class FieldModel<T extends FieldElement = FieldElement> extends PropertyM
             return this.constraint.toString();
         }
         return super.key;
+    }
+
+    constructor(definition: Model.Definition<FieldModel>, ...children: Model.ChildDefinition<FieldModel>[]) {
+        super(definition, ...children);
+
+        this.title = definition.title;
+    }
+
+    override toElement(omitResources = false, extra?: Record<string, unknown>) {
+        return super.toElement(omitResources, {
+            title: this.title,
+            ...extra,
+        });
     }
 
     static Tag = FieldElement.Tag;

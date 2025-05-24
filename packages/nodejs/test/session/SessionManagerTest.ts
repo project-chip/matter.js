@@ -80,6 +80,10 @@ describe("SessionManager", () => {
         });
 
         it("verify that oldest session gets closed when no more ids are available", async () => {
+            // Reduce ID space range so this test takes a reasonable amount of time.  Otherwise it takes 4x the time of
+            // all other nodejs tests combined
+            sessionManager.compressIdRange(0xff);
+
             const first = await sessionManager.getNextAvailableSessionId();
             let firstClosed = false;
             sessionManager.sessions.deleted.on(() => {
@@ -96,7 +100,8 @@ describe("SessionManager", () => {
                 isResumption: false,
             });
             await MockTime.advance(1000);
-            for (let i = 0; i < 0xfffe; i++) {
+
+            for (let i = 0; i < 0xfe; i++) {
                 const sessionId = await sessionManager.getNextAvailableSessionId();
                 await sessionManager.createSecureSession({
                     sessionId,

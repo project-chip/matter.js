@@ -250,15 +250,15 @@ describe("ServerNode", () => {
                 type: ServerNode.RootEndpoint,
                 operationalCredentials: {
                     certification: async () => {
-                        const paa = new AttestationCertificateManager(vendorId);
-                        const { keyPair: dacKeyPair, dac } = paa.getDACert(productId);
+                        const paa = await AttestationCertificateManager.create(vendorId);
+                        const { keyPair: dacKeyPair, dac } = await paa.getDACert(productId);
                         const declaration = CertificationDeclarationManager.generate(vendorId, productId);
 
                         commissioningServer2CertificateProviderCalled = true;
                         return {
                             privateKey: dacKeyPair.privateKey,
                             certificate: dac,
-                            intermediateCertificate: paa.getPAICert(),
+                            intermediateCertificate: await paa.getPAICert(),
                             declaration,
                         };
                     },
@@ -543,13 +543,15 @@ describe("ServerNode", () => {
                     .length,
             );
 
-            expect(ep0).has.property(`${BasicInformation.id}`);
-            const bi = ep0[BasicInformation.id]!;
+            const id = BasicInformation.id as number;
+            expect(ep0).has.property(`${id}`);
+            const bi = ep0[id]!;
             expect(typeof bi).equals("object");
 
             expect(bi.version).equals(1);
             expect(bi.type.id).equals(BasicInformation.id);
-            expect([...bi.type.attributes].length).equals(28);
+            expect([...bi.type.attributes].length).equals(21);
+            expect([...bi.type.events].length).equals(3);
 
             expect(bi.type.attributes).has.property(`${FeatureMap.id}`);
             const fm = bi.type.attributes[FeatureMap.id]!;
@@ -560,9 +562,13 @@ describe("ServerNode", () => {
             expect(fm.limits.writable).equals(false);
             expect(fm.limits.readLevel).equals(AccessLevel.View);
 
-            const fmVals = bi.open(OfflineContext.ReadOnly);
-            expect((fmVals as Val.Struct).vendorName).equals("Matter.js Test Vendor");
-            expect(fmVals[BasicInformationCluster.attributes.vendorName.id]).equals("Matter.js Test Vendor");
+            const readState = bi.readState(OfflineContext.ReadOnly);
+            expect((readState as Val.Struct).vendorName).equals("Matter.js Test Vendor");
+            expect((readState as Val.Struct)[BasicInformationCluster.attributes.vendorName.id]).equals(
+                "Matter.js Test Vendor",
+            );
+
+            await expect(bi.openForWrite(OfflineContext.ReadOnly)).rejectedWith("This view is read-only");
 
             await node.close();
 

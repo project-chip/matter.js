@@ -38,12 +38,6 @@ export namespace DeviceEnergyManagement {
          * the excess power flowing into the grid. This excess power naturally fluctuates when clouds pass overhead and
          * other loads in the home are switched on and off.
          *
-         * EVSE Example: An EMS may therefore be able to turn on the EVSE (if the vehicle is plugged in) and can start
-         * charging the vehicle, and periodically modify the charging power depending on PV generation and other home
-         * loads, so as to minimize import and export to the grid. An EMS may also use this feature to control the
-         * discharging (and re-charging) of the vehicle if the EVSE and vehicle support the V2X feature of the EVSE
-         * cluster of the associated EVSE device.
-         *
          * @see {@link MatterSpecification.v14.Cluster} § 9.2.4.1
          */
         PowerAdjustment = "PowerAdjustment",
@@ -59,10 +53,6 @@ export namespace DeviceEnergyManagement {
          * Forecasts are defined from a current time, using a slot format, where the slot is akin to a relatively
          * constant operating mode.
          *
-         * Washing machine example: a washing machine may have stages of a washing cycle: heating, tumbling, rinse and
-         * spin stages. At each stage, the approximate minimum and maximum power consumption may be known, as well as
-         * the duration of that stage.
-         *
          * In some circumstances the ESA may allow the stage to be delayed or paused (subject to safety and
          * manufacturer’s discretion and user preferences).
          *
@@ -76,8 +66,6 @@ export namespace DeviceEnergyManagement {
          * that they are not flexible in the forecast slot format.
          *
          * The PowerForecastReporting and the adjustment features aim to align to the [SAREF4ENER] ontology.
-         *
-         * Inverter driven ESAs: some inverter driven ESAs can consume or generate a variable amount of power.
          *
          * For example, a single phase EVSE can be adjusted in the range of 6-32Amps in 0.6 Amp steps in EU or on a
          * hardwired 120V supply in the range of 6-15 Amps in US.
@@ -118,9 +106,6 @@ export namespace DeviceEnergyManagement {
          * ESAs which support the Start Time Adjustment feature, allow an EMS to recommend a change to the start time of
          * the energy transfer that the ESA has previously suggested it would use.
          *
-         * Washing machine example: A Washing Machine may have been set to start a wash cycle at 9pm when the variable
-         * tariff normally reduces.
-         *
          * However, the EMS is aware that a grid event has occurred, making it cheaper to run the cycle at a later time,
          * but the washing machine is not aware of this.
          *
@@ -140,11 +125,8 @@ export namespace DeviceEnergyManagement {
         /**
          * Pausable (PAU)
          *
-         * ESAs which support the Pausable feature, allow an EMS to recommend a pause in the middle of a
-         *
-         * forecast power profile that the ESA is currently using.
-         *
-         * Washing machine example: A Washing Machine is in operation, and starting its water heating step.
+         * ESAs which support the Pausable feature, allow an EMS to recommend a pause in the middle of a forecast power
+         * profile that the ESA is currently using.
          *
          * However, the EMS becomes aware from the smart meter that the total home load on the grid is close to
          * exceeding its allowed total grid load.
@@ -170,10 +152,6 @@ export namespace DeviceEnergyManagement {
          * and/or power level limits of the steps of the power profile that the ESA has previously suggested it would
          * use.
          *
-         * Heat pump and Solar PV example: A heat pump may have the ability to heat hot water as well as heating the
-         * home. The heat pump scheduling system may have determined that the home will be unoccupied during the day, or
-         * that the indoor temperature is above the set-point and so it knows that it will not need to heat the home.
-         *
          * However, the hot water tank is likely to need to be reheated before the homeowner comes home in the evening.
          * The heat pump is not aware that the property also has a solar PV inverter which is also an ESA that is
          * communicating with the EMS.
@@ -198,12 +176,8 @@ export namespace DeviceEnergyManagement {
          *
          * ESAs which support the Constraint-Based Adjustment feature allow an EMS to inform the ESA of periods during
          * which power usage should be modified (for example when the EMS has been made aware that the grid supplier has
-         * requested reduced energy usage due to overall peak grid demand)
-         *
-         * and may cause the ESA to modify the intended power profile has previously suggested it would use.
-         *
-         * EVSE example: An EVSE scheduling system may have determined that the vehicle would be charged starting at a
-         * moderate rate at 1am, so that it has enough charge by the time it is needed later that morning.
+         * requested reduced energy usage due to overall peak grid demand) and may cause the ESA to modify the intended
+         * power profile has previously suggested it would use.
          *
          * However, the DSR service provider has informed the EMS that due to high forecast winds it is now forecast
          * that there will be very cheap energy available from wind generation between 2am and 3am.
@@ -230,8 +204,9 @@ export namespace DeviceEnergyManagement {
         /**
          * This field shall indicate the minimum power that the ESA can have its power adjusted to.
          *
-         * Note that this is a signed value. Negative values indicate power flows out of the node (e.g. discharging a
-         * battery).
+         * Note that this is a signed value. Negative values indicate power flows out of the node
+         *
+         * discharging a battery).
          *
          * @see {@link MatterSpecification.v14.Cluster} § 9.2.7.10.1
          */
@@ -651,8 +626,6 @@ export namespace DeviceEnergyManagement {
          * choose to use values between 0-100 as a percentage of compressor modulation, or could use these values as
          * Enum states meaning heating with fan, heating without fan etc.
          *
-         * NOTE An ESA shall always use the same value to represent the same operating state.
-         *
          * By providing this information a smart EMS may be able to learn the observed power draw when the ESA is put
          * into a specific state. It can potentially then use the ManufacturerESAState field in the Forecast attribute
          * along with observed power drawn to predict the power draw from the appliance and potentially ask it to modify
@@ -805,9 +778,8 @@ export namespace DeviceEnergyManagement {
      * different power and energy demands per slot. For example, slots might be used to describe the distinct stages of
      * a washing machine cycle.
      *
-     * Where an ESA does not know the actual power and energy use of the system, it may support the SFR
-     *
-     * feature and instead report its internal state.
+     * Where an ESA does not know the actual power and energy use of the system, it may support the SFR feature and
+     * instead report its internal state.
      *
      * @see {@link MatterSpecification.v14.Cluster} § 9.2.7.13
      */
@@ -897,9 +869,8 @@ export namespace DeviceEnergyManagement {
      * different power and energy demands per slot. For example, slots might be used to describe the distinct stages of
      * a washing machine cycle.
      *
-     * Where an ESA does not know the actual power and energy use of the system, it may support the SFR
-     *
-     * feature and instead report its internal state.
+     * Where an ESA does not know the actual power and energy use of the system, it may support the SFR feature and
+     * instead report its internal state.
      *
      * @see {@link MatterSpecification.v14.Cluster} § 9.2.7.13
      */
@@ -1179,9 +1150,8 @@ export namespace DeviceEnergyManagement {
          * If this ESA supports PFR this would have 2 entries in the list as follows:
          *
          * If this ESA supports SFR where it does not know the actual power, but has an understanding of the functions
-         * that use more energy, it could be requested to use more or less energy using the LoadCon
-         *
-         * trol field as follows:
+         * that use more energy, it could be requested to use more or less energy using the LoadControl field as
+         * follows:
          *
          * @see {@link MatterSpecification.v14.Cluster} § 9.2.9.7.1
          */
@@ -1287,7 +1257,7 @@ export namespace DeviceEnergyManagement {
      */
     export enum EsaState {
         /**
-         * The ESA is not available to the EMS (e.g. start- up, maintenance mode)
+         * The ESA is not available to the EMS (e.g. start-up, maintenance mode)
          */
         Offline = 0,
 
@@ -1422,10 +1392,9 @@ export namespace DeviceEnergyManagement {
              *
              * If the user changes the Opt-Out state of the ESA which is currently operating with a Forecast that is due
              * to a previous StartTimeAdjustRequest, ModifyForecastRequest or RequestConstraintBasedForecast command
-             * that would now not be permitted due to the new Opt-out state
-             *
-             * attribute ForecastUpdateReason field currently contains a reason which is now opted out), the ESA shall
-             * behave as if it had received a CancelRequest command.
+             * that would now not be permitted due to the new Opt-out state (i.e. the Forecast attribute
+             * ForecastUpdateReason field currently contains a reason which is now opted out), the ESA shall behave as
+             * if it had received a CancelRequest command.
              *
              * If the user changes the Opt-Out state of the ESA which currently has the ESAStateEnum with value Paused
              * due to a previous PauseRequest command that would now not be permitted due to the new Opt-out state, and
@@ -1553,8 +1522,6 @@ export namespace DeviceEnergyManagement {
 
         features: {
             /**
-             * PowerAdjustment
-             *
              * For Energy Smart Appliances (ESA) the definition of being 'smart' mandates that they can report their
              * current power adjustment capability and have an EMS request a temporary adjustment. This may typically be
              * to curtail power requirements during peak periods, but can also be used to turn on an ESA if there is
@@ -1564,19 +1531,11 @@ export namespace DeviceEnergyManagement {
              * in the excess power flowing into the grid. This excess power naturally fluctuates when clouds pass
              * overhead and other loads in the home are switched on and off.
              *
-             * EVSE Example: An EMS may therefore be able to turn on the EVSE (if the vehicle is plugged in) and can
-             * start charging the vehicle, and periodically modify the charging power depending on PV generation and
-             * other home loads, so as to minimize import and export to the grid. An EMS may also use this feature to
-             * control the discharging (and re-charging) of the vehicle if the EVSE and vehicle support the V2X feature
-             * of the EVSE cluster of the associated EVSE device.
-             *
              * @see {@link MatterSpecification.v14.Cluster} § 9.2.4.1
              */
             powerAdjustment: BitFlag(0),
 
             /**
-             * PowerForecastReporting
-             *
              * For Energy Smart Appliances (ESA) the definition of being 'smart' implies that they can report their
              * indicative forecast power demands or generation, to a greater or lesser extent. For some ESAs this is
              * highly predictable (in terms of both power and time), in other appliances this is more challenging and
@@ -1584,10 +1543,6 @@ export namespace DeviceEnergyManagement {
              *
              * Forecasts are defined from a current time, using a slot format, where the slot is akin to a relatively
              * constant operating mode.
-             *
-             * Washing machine example: a washing machine may have stages of a washing cycle: heating, tumbling, rinse
-             * and spin stages. At each stage, the approximate minimum and maximum power consumption may be known, as
-             * well as the duration of that stage.
              *
              * In some circumstances the ESA may allow the stage to be delayed or paused (subject to safety and
              * manufacturer’s discretion and user preferences).
@@ -1602,8 +1557,6 @@ export namespace DeviceEnergyManagement {
              * indicate that they are not flexible in the forecast slot format.
              *
              * The PowerForecastReporting and the adjustment features aim to align to the [SAREF4ENER] ontology.
-             *
-             * Inverter driven ESAs: some inverter driven ESAs can consume or generate a variable amount of power.
              *
              * For example, a single phase EVSE can be adjusted in the range of 6-32Amps in 0.6 Amp steps in EU or on a
              * hardwired 120V supply in the range of 6-15 Amps in US.
@@ -1620,8 +1573,6 @@ export namespace DeviceEnergyManagement {
             powerForecastReporting: BitFlag(1),
 
             /**
-             * StateForecastReporting
-             *
              * Some ESAs do not know their actual power consumption, but do know the state of operation. Like the
              * PowerForecastingReporting feature, this uses the same slot structure mechanism to indicate a change in
              * state vs time.
@@ -1640,13 +1591,8 @@ export namespace DeviceEnergyManagement {
             stateForecastReporting: BitFlag(2),
 
             /**
-             * StartTimeAdjustment
-             *
              * ESAs which support the Start Time Adjustment feature, allow an EMS to recommend a change to the start
              * time of the energy transfer that the ESA has previously suggested it would use.
-             *
-             * Washing machine example: A Washing Machine may have been set to start a wash cycle at 9pm when the
-             * variable tariff normally reduces.
              *
              * However, the EMS is aware that a grid event has occurred, making it cheaper to run the cycle at a later
              * time, but the washing machine is not aware of this.
@@ -1666,13 +1612,8 @@ export namespace DeviceEnergyManagement {
             startTimeAdjustment: BitFlag(3),
 
             /**
-             * Pausable
-             *
-             * ESAs which support the Pausable feature, allow an EMS to recommend a pause in the middle of a
-             *
-             * forecast power profile that the ESA is currently using.
-             *
-             * Washing machine example: A Washing Machine is in operation, and starting its water heating step.
+             * ESAs which support the Pausable feature, allow an EMS to recommend a pause in the middle of a forecast
+             * power profile that the ESA is currently using.
              *
              * However, the EMS becomes aware from the smart meter that the total home load on the grid is close to
              * exceeding its allowed total grid load.
@@ -1692,16 +1633,9 @@ export namespace DeviceEnergyManagement {
             pausable: BitFlag(4),
 
             /**
-             * ForecastAdjustment
-             *
              * ESAs which support the Forecast adjustment feature, allow an EMS to recommend a change to the start,
              * duration and/or power level limits of the steps of the power profile that the ESA has previously
              * suggested it would use.
-             *
-             * Heat pump and Solar PV example: A heat pump may have the ability to heat hot water as well as heating the
-             * home. The heat pump scheduling system may have determined that the home will be unoccupied during the
-             * day, or that the indoor temperature is above the set-point and so it knows that it will not need to heat
-             * the home.
              *
              * However, the hot water tank is likely to need to be reheated before the homeowner comes home in the
              * evening. The heat pump is not aware that the property also has a solar PV inverter which is also an ESA
@@ -1724,16 +1658,10 @@ export namespace DeviceEnergyManagement {
             forecastAdjustment: BitFlag(5),
 
             /**
-             * ConstraintBasedAdjustment
-             *
              * ESAs which support the Constraint-Based Adjustment feature allow an EMS to inform the ESA of periods
              * during which power usage should be modified (for example when the EMS has been made aware that the grid
-             * supplier has requested reduced energy usage due to overall peak grid demand)
-             *
-             * and may cause the ESA to modify the intended power profile has previously suggested it would use.
-             *
-             * EVSE example: An EVSE scheduling system may have determined that the vehicle would be charged starting at
-             * a moderate rate at 1am, so that it has enough charge by the time it is needed later that morning.
+             * supplier has requested reduced energy usage due to overall peak grid demand) and may cause the ESA to
+             * modify the intended power profile has previously suggested it would use.
              *
              * However, the DSR service provider has informed the EMS that due to high forecast winds it is now forecast
              * that there will be very cheap energy available from wind generation between 2am and 3am.
@@ -1814,11 +1742,11 @@ export namespace DeviceEnergyManagement {
              * Indicates the minimum electrical power that the ESA can consume when switched on. This does not include
              * when in power save or standby modes.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * For Generator ESAs that can discharge an internal battery (such as a battery storage inverter) to loads
-             * in the home, the AbsMinPower will be a negative number representing the maximum power that the ESA can
-             * discharge its internal battery.
+             * > For Generator ESAs that can discharge an internal battery (such as a battery storage inverter) to loads
+             *   in the home, the AbsMinPower will be a negative number representing the maximum power that the ESA can
+             *   discharge its internal battery.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 9.2.8.4
              */
@@ -1901,14 +1829,11 @@ export namespace DeviceEnergyManagement {
     export const ClusterInstance = MutableCluster.ExtensibleOnly(Base);
 
     /**
-     * This cluster allows a client to manage the power draw of a device. An example of such a client could
-     *
-     * be an Energy Management System (EMS) which controls an Energy Smart Appliance (ESA).
+     * This cluster allows a client to manage the power draw of a device. An example of such a client could be an Energy
+     * Management System (EMS) which controls an Energy Smart Appliance (ESA).
      *
      * In most deployments the EMS will be the client, and the ESA will host the Device Energy Management Cluster
      * server.
-     *
-     * Figure 17. Example of the how an EMS is a client of multiple ESAs Device Energy Management clusters.
      *
      * This cluster is intended to be generic in nature and could apply to any electrical load or generator (e.g. a
      * Battery Electric Storage System - BESS, solar PV inverter, EVSE, HVAC, heat pump, hot water heater, white goods
@@ -1936,17 +1861,15 @@ export namespace DeviceEnergyManagement {
      * intensity', 'time of use' or 'type of use' tariffs to schedule its operation to run at the cheapest and greenest
      * times.
      *
-     * Figure 18. Example of the how an HVAC may use multiple clusters
+     * > [!NOTE]
      *
-     * NOTE
+     * > Grid Services are market dependent and will use other protocols ([OpenADR] / [IEEE2030.5]) to communicate grid
+     *   events to the EMS. These are outside the scope of Matter.
      *
-     * Grid Services are market dependent and will use other protocols ([OpenADR] / [IEEE2030.5]) to communicate grid
-     * events to the EMS. These are outside the scope of Matter.
+     * > [!NOTE]
      *
-     * NOTE
-     *
-     * Different markets may follow different approaches, but the UK [PAS1878] and [EUCodeOfConduct] give examples of
-     * how ESAs may be mandated to support these features in the future.
+     * > Different markets may follow different approaches, but the UK [PAS1878] and [EUCodeOfConduct] give examples of
+     *   how ESAs may be mandated to support these features in the future.
      *
      * Per the Matter specification you cannot use {@link DeviceEnergyManagementCluster} without enabling certain
      * feature combinations. You must use the {@link with} factory method to obtain a working cluster.

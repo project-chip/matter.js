@@ -220,7 +220,7 @@ export namespace WaterHeaterManagement {
              * For example, if the target temperature was 60°C, the current temperature was 20°C and the tank volume was
              * 100L:
              *
-             * Mass of water = 1kg per Litre
+             * ### Mass of water = 1kg per Litre
              *
              * Total Mass = 100 x 1kg = 100kg
              *
@@ -228,24 +228,28 @@ export namespace WaterHeaterManagement {
              *
              * = (60°C - 20°C) = 40°C
              *
-             * Energy required to
+             * ### Energy required to
              *
              * heat the water to 60°C = 4182 x 40 x 100 = 16,728,000 J
              *
              * Converting Joules in to Wh of heat (divide by 3600):
              *
+             * = 16,728,000 J / 3600
+             *
+             * = 4647 Wh (4.65kWh)
+             *
              * If the TankPercent feature is supported, then this estimate shall also take into account the percentage
              * of the water in the tank which is already hot.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * The electrical energy required to heat the water depends on the heating system used to heat the water.
-             * For example, a direct electric immersion heating element can be close to 100% efficient, so the
-             * electrical energy needed to heat the hot water is nearly the same as the EstimatedHeatEnergyRequired.
-             * However some forms of heating, such as an air-source heat pump which extracts heat from ambient air,
-             * requires much less electrical energy to heat hot water. Heat pumps can be produce 3kWh of heat output for
-             * 1kWh of electrical energy input. The conversion between heat energy and electrical energy is outside the
-             * scope of this cluster.
+             * > The electrical energy required to heat the water depends on the heating system used to heat the water.
+             *   For example, a direct electric immersion heating element can be close to 100% efficient, so the
+             *   electrical energy needed to heat the hot water is nearly the same as the EstimatedHeatEnergyRequired.
+             *   However some forms of heating, such as an air-source heat pump which extracts heat from ambient air,
+             *   requires much less electrical energy to heat hot water. Heat pumps can be produce 3kWh of heat output
+             *   for 1kWh of electrical energy input. The conversion between heat energy and electrical energy is
+             *   outside the scope of this cluster.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 9.5.7.4
              */
@@ -283,7 +287,7 @@ export namespace WaterHeaterManagement {
              *
              * TankPercentage = min( max(TankPercentage,0), 100)
              *
-             * TankPercentage = 50%
+             * ### TankPercentage = 50%
              *
              * @see {@link MatterSpecification.v14.Cluster} § 9.5.7.5
              */
@@ -301,15 +305,11 @@ export namespace WaterHeaterManagement {
 
         features: {
             /**
-             * EnergyManagement
-             *
              * Allows energy management control of the tank
              */
             energyManagement: BitFlag(0),
 
             /**
-             * TankPercent
-             *
              * Supports monitoring the percentage of hot water in the tank
              */
             tankPercent: BitFlag(1)
@@ -333,9 +333,7 @@ export namespace WaterHeaterManagement {
             heatDemand: Attribute(0x1, TlvBitmap(TlvUInt8, WaterHeaterHeatSource)),
 
             /**
-             * Indicates whether the Boost, as triggered by a Boost command, is currently
-             *
-             * Active or Inactive.
+             * Indicates whether the Boost, as triggered by a Boost command, is currently Active or Inactive.
              *
              * See Boost and CancelBoost commands for more details.
              *

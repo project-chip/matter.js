@@ -271,9 +271,8 @@ export namespace EnergyEvse {
          *   • the AddedEnergy field shall take precedence over the TargetSoC field, and if the EVSE does not support
          *     the SOC feature then the TargetSoC field may only take the values null or 100%.
          *
-         *   • if the AddedEnergy field has not been provided, the EVSE SHOULD assume the vehicle is empty
-         *
-         * and charge until the vehicle stops demanding a charge.
+         *   • if the AddedEnergy field has not been provided, the EVSE SHOULD assume the vehicle is empty and charge
+         *     until the vehicle stops demanding a charge.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 9.3.7.6.2
          */
@@ -293,11 +292,11 @@ export namespace EnergyEvse {
          * battery size of the vehicles on the market (e.g. 70000Wh), however this is up to the client to carefully
          * choose a value.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * If the EVSE can obtain the Battery Capacity of the vehicle, it SHOULD NOT limit this AddedEnergy value to the
-         * Battery Capacity of the vehicle, since the EV may also require energy for heating and cooling of the battery
-         * during charging, or for heating or cooling the cabin.
+         * > If the EVSE can obtain the Battery Capacity of the vehicle, it SHOULD NOT limit this AddedEnergy value to
+         *   the Battery Capacity of the vehicle, since the EV may also require energy for heating and cooling of the
+         *   battery during charging, or for heating or cooling the cabin.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 9.3.7.6.3
          */
@@ -447,7 +446,7 @@ export namespace EnergyEvse {
         PluggedInDischarging = 4,
 
         /**
-         * The EVSE is transitioning from any plugged- in state to NotPluggedIn
+         * The EVSE is transitioning from any plugged-in state to NotPluggedIn
          */
         SessionEnding = 5,
 
@@ -483,7 +482,7 @@ export namespace EnergyEvse {
         DisabledError = 3,
 
         /**
-         * The EV is not currently allowed to charge or discharge due to self- diagnostics mode.
+         * The EV is not currently allowed to charge or discharge due to self-diagnostics mode.
          */
         DisabledDiagnostics = 4,
 
@@ -972,8 +971,7 @@ export namespace EnergyEvse {
             /**
              * Indicates the target SoC the EVSE is going to attempt to reach when the vehicle is next charged.
              *
-             * A null value indicates that there is no scheduled charging
-             *
+             * A null value indicates that there is no scheduled charging (for example, the EVSE Mode is set to use
              * Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that charging is
              * enabled, or that the next ChargingTargetStruct is using the AddedEnergy value to charge the vehicle.
              *
@@ -1003,7 +1001,7 @@ export namespace EnergyEvse {
              *
              * ApproxEVEfficiency (km/kWh x 1000): 4800 (i.e. 4.8km/kWh x 1000)
              *
-             * AddedEnergy (Wh): 10,000
+             * ### AddedEnergy (Wh): 10,000
              *
              * AddedRange (km) = 10,000 x 4800 / 1,000,000 = 48 km
              *
@@ -1113,8 +1111,6 @@ export namespace EnergyEvse {
 
         features: {
             /**
-             * ChargingPreferences
-             *
              * Since some EVSEs cannot obtain the SoC from the vehicle, some EV charging solutions allow the consumer to
              * specify a daily charging target (for adding energy to the EV’s battery). This feature allows the consumer
              * to specify how many miles or km of additional range they need for their typical daily commute. This range
@@ -1141,8 +1137,6 @@ export namespace EnergyEvse {
             chargingPreferences: BitFlag(0),
 
             /**
-             * SoCReporting
-             *
              * Vehicles and EVSEs which support ISO 15118 may allow the vehicle to report its battery size and state of
              * charge. If the EVSE supports PLC it may have a vehicle connected which optionally supports reporting of
              * its battery size and current State of Charge (SoC).
@@ -1158,8 +1152,6 @@ export namespace EnergyEvse {
             soCReporting: BitFlag(1),
 
             /**
-             * PlugAndCharge
-             *
              * If the EVSE supports PLC, it may be able to support the Plug and Charge feature. e.g. this may allow the
              * vehicle ID to be obtained which may allow an energy management system to track energy usage per vehicle
              * (e.g. to give the owner an indicative cost of charging, or for work place charging).
@@ -1171,8 +1163,6 @@ export namespace EnergyEvse {
             plugAndCharge: BitFlag(2),
 
             /**
-             * Rfid
-             *
              * If the EVSE is fitted with an RFID reader, it may be possible to obtain the User or Vehicle ID from an
              * RFID card. This may be used to record a charging session against a specific charging account, and may
              * optionally be used to authorize a charging session.
@@ -1186,8 +1176,6 @@ export namespace EnergyEvse {
             rfid: BitFlag(3),
 
             /**
-             * V2X
-             *
              * If the EVSE can support bi-directional charging, it may be possible to request that the vehicle can
              * discharge to the home or grid.
              *
@@ -1210,14 +1198,13 @@ export namespace EnergyEvse {
              * The State attribute shall change when the EVSE detects change of condition of the EV (plugged in or
              * unplugged, whether the vehicle is asking for demand or not, and if it is charging or discharging).
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * SessionEnding is not really a state but a transition. However, the transition period may take a few
-             * seconds and is useful for some clean up purposes.
+             * > SessionEnding is not really a state but a transition. However, the transition period may take a few
+             *   seconds and is useful for some clean up purposes.
              *
-             * The Fault state is used to indicate that the FaultState attribute is not NoError.
-             *
-             * A null value shall indicate that the state cannot be determined.
+             * The Fault state is used to indicate that the FaultState attribute is not NoError. A null value shall
+             * indicate that the state cannot be determined.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 9.3.8.1
              */
@@ -1266,9 +1253,8 @@ export namespace EnergyEvse {
             circuitCapacity: Attribute(0x5, TlvInt64.bound({ min: 0 }), { persistent: true, default: 0 }),
 
             /**
-             * Indicates the minimum current that can be delivered by the EVSE to the EV.
-             *
-             * The attribute can be set using the EnableCharging command.
+             * Indicates the minimum current that can be delivered by the EVSE to the EV. The attribute can be set using
+             * the EnableCharging command.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 9.3.8.7
              */
@@ -1306,10 +1292,8 @@ export namespace EnergyEvse {
              *
              * This attribute value shall be limited by the EVSE to be in the range of:
              *
-             * MinimumChargeCurrent <= UserMaximumChargeCurrent <= MaximumChargeCurrent
-             *
-             * where MinimumChargeCurrent and MaximumChargeCurrent are the values received in the EnableCharging
-             * command.
+             * MinimumChargeCurrent <= UserMaximumChargeCurrent <= MaximumChargeCurrent where MinimumChargeCurrent and
+             * MaximumChargeCurrent are the values received in the EnableCharging command.
              *
              * Its default value SHOULD be initialized to the same as the CircuitCapacity attribute. This value shall be
              * persisted across reboots to ensure it does not cause charging issues during temporary power failures.
@@ -1465,9 +1449,8 @@ export namespace EnergyEvse {
      * IEC61841 define Pilot signal as a modulated DC voltage on a single wire.
      *
      * Power Line Communication (PLC) is supported by some EVSEs (e.g. for support of ISO 15118 in Europe and SAE
-     * J2931/4 in NA) and may enable features such as Vehicle to Grid (V2G) or Vehicle to
-     *
-     * Home (V2H) that allows for bi-directional charging/discharging of electric vehicles.
+     * J2931/4 in NA) and may enable features such as Vehicle to Grid (V2G) or Vehicle to Home (V2H) that allows for
+     * bi-directional charging/discharging of electric vehicles.
      *
      * More modern EVSE devices may optionally support ISO 15118-20 in Europe and SAE J2836/3 for NA to support
      * bi-directional charging (Vehicle to Grid - V2G) and Plug and Charge capabilities.
@@ -1476,15 +1459,15 @@ export namespace EnergyEvse {
      * cluster.
      *
      * This cluster supports a safety mechanism that may lockout remote operation until the initial latching conditions
-     * have been met. Some of the fault conditions defined in SAE J1772, such as Ground- Fault Circuit Interrupter
-     * (GFCI) or Charging Circuit Interrupting Device (CCID), may require clearing by an operator by, for example,
-     * pressing a button on the equipment or breaker panel.
+     * have been met. Some of the fault conditions defined in SAE J1772, such as Ground-Fault Circuit Interrupter (GFCI)
+     * or Charging Circuit Interrupting Device (CCID), may require clearing by an operator by, for example, pressing a
+     * button on the equipment or breaker panel.
      *
      * This EVSE cluster is written around support of a single EVSE. Having multiple EVSEs at home or a business is
      * managed by backend system and outside scope of this cluster.
      *
      * Note that in many deployments the EVSE may be outside the home and may suffer from intermittent network
-     * connections (e.g. a weak WiFi signal). It also allows for a charging profile to be pre- configured, in case there
+     * connections (e.g. a weak WiFi signal). It also allows for a charging profile to be pre-configured, in case there
      * is a temporary communications loss during a charging session.
      *
      * EnergyEvseCluster supports optional features that you can enable with the EnergyEvseCluster.with() factory

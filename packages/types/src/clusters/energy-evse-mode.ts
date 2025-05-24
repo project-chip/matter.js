@@ -104,7 +104,6 @@ export namespace EnergyEvseMode {
 
         /**
          * While in modes with this tag, and once enabled with the EnableCharging, the EVSE will attempt to
-         *
          * automatically start charging based on available excess solar PV generation, limiting the charging power to
          * avoid importing energy from the grid.
          *
@@ -117,10 +116,11 @@ export namespace EnergyEvseMode {
          * discharging based on the current charge state of the EV, and its control from an associated Device Energy
          * Management cluster.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * being in a mode with this tag set or not does not affect the handling of the EnableDischarging command by the
-         * Energy EVSE cluster, but once enabled, only modes with this tag enable the discharging to actually occur.
+         * > being in a mode with this tag set or not does not affect the handling of the EnableDischarging command by
+         *   the Energy EVSE cluster, but once enabled, only modes with this tag enable the discharging to actually
+         *   occur.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 9.4.7.1.4
          */
@@ -196,9 +196,8 @@ export namespace EnergyEvseMode {
          * specification of the derived cluster defines a namespace, the set of standard mode tags also includes the
          * mode tag values from that namespace.
          *
-         * Mode tags can help clients look for options that meet certain criteria, render the user interface, use
-         *
-         * the mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall be either a
+         * Mode tags can help clients look for options that meet certain criteria, render the user interface, use the
+         * mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall be either a
          * standard tag or a manufacturer specific tag, as defined in each ModeTagStruct list entry.
          *
          * A mode option may have more than one mode tag. A mode option may be associated with a mixture of standard and
@@ -244,8 +243,6 @@ export namespace EnergyEvseMode {
 
         features: {
             /**
-             * OnOff
-             *
              * Dependency with the OnOff cluster
              */
             onOff: BitFlag(0)
@@ -256,10 +253,9 @@ export namespace EnergyEvseMode {
              * At least one entry in the SupportedModes attribute shall include the Manual mode tag in the ModeTags
              * field list.
              *
-             * Modes with entries in the SupportedModes attribute which contain multiple mode tags permitting
-             *
-             * charging or discharging under different conditions shall permit the charging or discharging to occur if
-             * any of the conditions are satisfied.
+             * Modes with entries in the SupportedModes attribute which contain multiple mode tags permitting charging
+             * or discharging under different conditions shall permit the charging or discharging to occur if any of the
+             * conditions are satisfied.
              *
              * Modes shall NOT have both the Manual tag and the TimeOfUse or SolarCharging tags defined in the
              * SupportedModes attribute.

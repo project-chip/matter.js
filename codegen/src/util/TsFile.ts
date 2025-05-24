@@ -619,7 +619,7 @@ export class TsFile extends Block {
         public name: string,
         private editable = false,
     ) {
-        if (name.match(/\.[a-z]+$/)) {
+        if (name.match(/\.(?:js|ts)$/)) {
             throw new InternalError(`Filename ${name} should not have an extension`);
         }
 
@@ -743,7 +743,8 @@ export class TsFile extends Block {
             throw new InternalError(`Absolute import of ${filename} must start with "@matter"`);
         }
 
-        if (filename.match(/\.[a-z]+\.[a-z]+$/)) {
+        const suffices = filename.match(/\.([a-z]+)\.[a-z]+$/);
+        if (suffices && !["element", "resource"].includes(suffices[1])) {
             throw new InternalError(`Import of ${filename} has multiple suffices`);
         }
 

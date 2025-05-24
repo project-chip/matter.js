@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { camelize } from "#general";
 import { Lexer } from "#parser/Lexer.js";
 import { BasicToken } from "#parser/Token.js";
 import { TokenStream } from "#parser/TokenStream.js";
-import { camelize } from "@matter/general";
 import { FieldValue } from "../common/index.js";
 import { Aspect } from "./Aspect.js";
 
@@ -17,14 +17,14 @@ import { Aspect } from "./Aspect.js";
  * A "constraint" limits possible data values.
  */
 export class Constraint extends Aspect<Constraint.Definition> implements Constraint.Ast {
-    declare desc?: boolean;
-    declare value?: Constraint.Expression;
-    declare min?: Constraint.Expression;
-    declare max?: Constraint.Expression;
-    declare in?: FieldValue;
-    declare entry?: Constraint;
-    declare cpMax?: number;
-    declare parts?: Constraint[];
+    desc?: boolean;
+    value?: Constraint.Expression;
+    min?: Constraint.Expression;
+    max?: Constraint.Expression;
+    in?: FieldValue;
+    entry?: Constraint;
+    cpMax?: number;
+    parts?: Constraint[];
 
     /**
      * Initialize from a Constraint.Definition or the constraint DSL defined by the Matter Specification.
@@ -62,35 +62,51 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
         }
 
         if (!ast) {
+            this.isEmpty = true;
             return;
         }
 
-        if (ast.desc !== undefined) {
-            this.desc = ast.desc;
-        }
-        if (ast.value !== undefined) {
-            this.value = ast.value;
-        }
-        if (ast.min !== undefined) {
-            this.min = ast.min;
-        }
-        if (ast.max !== undefined) {
-            this.max = ast.max;
-        }
-        if (ast.in !== undefined) {
-            this.in = ast.in;
-        }
-        if (ast.entry !== undefined) {
-            this.entry = new Constraint(ast.entry);
-        }
-        if (ast.cpMax !== undefined) {
-            this.cpMax = ast.cpMax;
-        }
-        if (ast.parts !== undefined) {
-            this.parts = ast.parts.map(p => new Constraint(p));
-        }
+        this.desc = ast.desc;
+        this.value = ast.value;
+        this.min = ast.min;
+        this.max = ast.max;
+        this.in = ast.in;
+        this.entry = ast.entry === undefined ? undefined : new Constraint(ast.entry);
+        this.cpMax = ast.cpMax;
+        this.parts = ast.parts?.length ? ast.parts.map(p => new Constraint(p)) : undefined;
+
+        this.isEmpty =
+            this.desc === undefined &&
+            this.value === undefined &&
+            this.min === undefined &&
+            this.max === undefined &&
+            this.in === undefined &&
+            this.entry === undefined &&
+            this.cpMax === undefined &&
+            this.parts === undefined;
 
         this.freeze();
+    }
+
+    override extend(other: Constraint) {
+        if (other.isEmpty) {
+            return this;
+        }
+
+        if (this.isEmpty) {
+            return other;
+        }
+
+        return new Constraint({
+            desc: other.desc ?? this.desc,
+            value: other.value ?? this.value,
+            min: other.min ?? this.min,
+            max: other.max ?? this.max,
+            in: other.in ?? this.in,
+            entry: other.entry ?? this.entry,
+            cpMax: other.cpMax ?? this.cpMax,
+            parts: other.parts ?? this.parts,
+        });
     }
 
     /**
@@ -197,6 +213,10 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
 
 export namespace Constraint {
     export type NumberOrIdentifier = number | string;
+
+    export const KEYWORDS = ["in", "min", "max", "to", "all", "desc", "true", "false"] as const;
+
+    export const keywords = new Set<string>(KEYWORDS);
 
     /**
      * Parsed constraint.
@@ -329,7 +349,7 @@ namespace Serializer {
 }
 
 namespace Parser {
-    const lexer = new Lexer(["in", "min", "max", "to", "all", "desc", "true", "false"]);
+    const lexer = new Lexer(Constraint.KEYWORDS);
 
     export function parse(constraint: Constraint, definition: string): Constraint.Ast {
         const tokens = TokenStream(lexer.lex(definition, (code, message) => constraint.error(code, message)));

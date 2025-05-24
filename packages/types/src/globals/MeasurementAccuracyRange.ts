@@ -28,9 +28,7 @@ import { TypeFromSchema } from "../tlv/TlvSchema.js";
  *     ◦ the reported value shall be less than or equal to the sum of the true value and PercentMax percent of the true
  *       value.
  *
- *     ◦ the reported value shall be greater than or equal to the true value minus PercentMax per
- *
- * cent of the true value.
+ *     ◦ the reported value shall be greater than or equal to the true value minus PercentMax percent of the true value.
  *
  *   • If only FixedMax is indicated, then for a given true value in the range between RangeMin and RangeMax,
  *
@@ -132,9 +130,7 @@ export const TlvMeasurementAccuracyRange = TlvObject({
  *     ◦ the reported value shall be less than or equal to the sum of the true value and PercentMax percent of the true
  *       value.
  *
- *     ◦ the reported value shall be greater than or equal to the true value minus PercentMax per
- *
- * cent of the true value.
+ *     ◦ the reported value shall be greater than or equal to the true value minus PercentMax percent of the true value.
  *
  *   • If only FixedMax is indicated, then for a given true value in the range between RangeMin and RangeMax,
  *
