@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<!--
+* @license
+* Copyright 2022-2025 Matter.js Authors
+* SPDX-License-Identifier: Apache-2.0
+
+-->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matter Web Shell</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+
+        .container>div {
+            background-color: #afa8a879;
+            border-radius: 8px;
+            padding: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        .node-container {
+            background-color: #aba8af79;
+            border-radius: 8px;
+            padding: 2px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .tile {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: default;
+            transition: transform 0.2s;
+        }
+
+        .input-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .console {
+            background-color: #4e4e4e;
+            color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden !important;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .console div {
+            overflow-wrap: break-word !important;
+            white-space: normal !important;
+            word-break: break-all;
+            max-width: 100%;
+        }
+
+        .console .sent {
+            color: #0f0;
+        }
+
+        .console .received {
+            color: #fff;
+        }
+
+        .console .status {
+            color: #ff0;
+        }
+
+        .console .error {
+            color: #f00;
+        }
+
+        .connecting-node-status {
+            color: rgb(245, 54, 54);
+        }
+
+        .connected-node-status {
+            color: rgb(31, 218, 62);
+        }
+
+        .on {
+            background-color: lightgoldenrodyellow;
+        }
+
+        .off {
+            background-color: darkgrey;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: calc(100% - 10px);
+            margin-left: 5px;
+        }
+
+        h2 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+
+        button {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #ffffff;
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.02);
+        }
+
+        button:active {
+            background-color: #d0d0d0;
+            transform: scale(0.98);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="input-section">
+                <h2>Execute Shell Command</h2>
+                <input type="text" id="matterCommand" placeholder="Enter matter.js command">
+            </div>
+            <div class="input-section">
+                <h2>Pair Device</h2>
+                <input type="text" id="pairingCode" placeholder="Enter pairing code">
+            </div>
+            <div class="input-section">
+                <h2>Console</h2>
+                <div class="button-container">
+                    <input type="button" id="toggleconsole" value="Toggle"
+                        onclick="document.getElementById('console').style.display = document.getElementById('console').style.display === 'none' ? 'block' : 'none';">
+                    <input type="button" id="clearconsole" value="Clear" onclick="initConsole(true);">
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>matter.js Web Shell Example</h2>
+            <div class="tiles" id="tiles"></div>
+            <br>
+            <div class="console" id="console"></div>
+        </div>
+    </div>
+
+    <script>
+        const DEFAULT_PORT = 3000; // Default port for WebSocket connection
+        const tiles = document.getElementById('tiles');
+        const consoleDiv = document.getElementById('console');
+        const matterCommand = document.getElementById('matterCommand');
+        const pairingCode = document.getElementById('pairingCode');
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const host = window.location.hostname || 'localhost';
+        const defaultPort = window.location.port || DEFAULT_PORT;
+        const wsUrl = `${protocol}//${host}:${defaultPort}`;
+
+        let ws = null;
+        let reconnectAttempts = 0;
+
+        const ON_OFF = 6;
+        const ILLUMINANCE = 1024;
+        const TEMPERATURE = 1026;
+        const PRESSURE = 1027;
+        const HUMIDITY = 1029;
+        const VOLTAGE = 144; // etc.
+
+        const valueFormat = {
+            [VOLTAGE]: (value, units = 'v') => { return (value / 1000).toFixed(1) + units; },
+            [ILLUMINANCE]: (value, units = 'lux') => { return (value / 100).toFixed(1) + units; },
+            [TEMPERATURE]: (value, units = 'F') => { return (units === "F" ? (value / 100 * 9 / 5 + 32) : (value / 100)).toFixed(1) + '°' + units; },
+            [PRESSURE]: (value, units = 'mb') => { return (value / 10000).toFixed(1) + units; },
+            [HUMIDITY]: (value, units = '%') => { return (value / 100).toFixed(1) + units; },
+        }
+        function initConsole(clear) {
+            if (clear) consoleDiv.innerHTML = ''; // Clear the console
+            const dummy = document.createElement('div'); // Inject invisible wide line to reserve width
+            dummy.style.visibility = 'hidden';
+            dummy.style.height = '0';
+            dummy.textContent = 'X'.repeat(120);
+            consoleDiv.appendChild(dummy);
+        }
+        function logMessage(message, type) {
+            const MAX_MESSAGES = 1000; // Maximum number of messages to keep in the console
+            const fragment = document.createDocumentFragment();
+            const lines = message.split('\n');
+
+            lines.forEach(line => {
+                const msg = document.createElement('div');
+                msg.textContent = line;
+                msg.className = type;
+                fragment.appendChild(msg);
+            });
+
+            consoleDiv.appendChild(fragment);
+
+            while (consoleDiv.children.length > MAX_MESSAGES) consoleDiv.removeChild(consoleDiv.firstChild);
+
+            // Only scroll if the user was already at the bottom
+            const shouldScroll = consoleDiv.scrollTop + consoleDiv.clientHeight >= consoleDiv.scrollHeight - consoleDiv.lastChild.offsetHeight - 5; // Adjusted for new content
+            if (shouldScroll) consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+        function setupWebSocket() {
+            ws = new WebSocket(wsUrl);
+            initConsole(false);
+
+            ws.onopen = () => {
+                sendCommand('config loglevel set info'); // info level required for some msgs to be passed
+                sendCommand('nodes connect');
+                reconnectAttempts = 0;
+            }
+            ws.onclose = () => {
+                logMessage('WebSocket connection closed. Attempting to reconnect...', 'error');
+                scheduleReconnect();
+            };
+            ws.onerror = () => {
+                logMessage('WebSocket error...', 'error');
+            };
+            ws.onmessage = (event) => {
+                if (typeof event.data === 'string') {
+                    const message = event.data;
+                    let trimmed = message.slice(0, 5000); // don't let message to log get too long
+                    if (trimmed.length != message.length) trimmed += ' ...';
+                    logMessage(`Received: "${trimmed}"`, trimmed.toLowerCase().includes('error') ? 'error' : 'received');
+
+                    // result of nodes log command
+                    let matches = message.match(/INFO\s+PairedNode [^0-9]*(\d+)\D*/);
+                    if (matches) { // could save this message of extensive node data for later use
+                        let currentNode = matches[1];
+                        let currentEndpoint = null;
+                        let currentEndpointType = "";
+                        const lines = message.split('\n');
+                        lines.forEach(line => {
+                            let matches = line.match(/ MA-[\w*]+ endpoint#: (\d+) type: MA-([\w*]+) \(([^)]+)\)/);
+                            if (matches) { // could start collecting upcoming messages that define this endpoint
+                                currentEndpoint = matches[1];
+                                currentEndpointType = matches[2];
+                            }
+
+                            // device type list for the this node and endpoint
+                            matches = line.match(/deviceTypeList id: 0x0 val: ((\{.*?\})(?:\s*\{.*?\})*)/);
+                            if (matches) logMessage(`Device Type List: ${currentNode}/${currentEndpoint} ${matches[1]}`, 'status');
+
+                            // could also check and handle others, "moveToLevel", "movetohueandsaturation", etc.
+                            matches = line.match(/ (toggle$|on$|off$|measuredValue |voltage )/);
+                            if (matches) {
+                                if (!document.getElementById(`attr-${currentNode}/${currentEndpoint}/${matches[1]}`)) {
+                                    let element;
+                                    if (["on", "off", "toggle"].includes(matches[1])) {
+                                        element = document.createElement('button');
+                                        element.textContent = matches[1];
+                                        const cmd = `commands onoff ${matches[1]} ${currentNode} ${currentEndpoint}`;
+                                        element.onclick = () => sendCommand(cmd);
+                                        if (matches[1] === "on") sendCommand(`attributes onoff read onoff ${currentNode} ${currentEndpoint}`); // get initial state
+                                    } else element = document.createElement('span');
+
+                                    element.id = `attr-${currentNode}/${currentEndpoint}/${matches[1].trim()}`;
+                                    if (!document.getElementById(`${currentEndpoint}-container-${currentNode}`)) {
+                                        let endpointContainer = document.createElement('div');
+                                        endpointContainer.id = `${currentEndpoint}-container-${currentNode}`;
+                                        endpointContainer.className = 'node-container';
+                                        const small = document.createElement('small');
+                                        small.textContent = currentEndpointType.replace('MA-', '');
+                                        const br = document.createElement('br');
+                                        endpointContainer.innerHTML = '';
+                                        endpointContainer.appendChild(small);
+                                        endpointContainer.appendChild(br);
+                                        document.getElementById(`container-${currentNode}`).appendChild(endpointContainer);
+                                    }
+                                    document.getElementById(`container-${currentNode}`)?.appendChild(element);
+                                }
+                            }
+                        });
+                    }
+
+                    matches = message.match(/stateInformationCallback Node (\d+) (\S+)/);
+                    if (matches) {
+                        updateTile(matches[1], matches[2]);
+                        if (matches[2] === "connected") {
+                            sendCommand(`subscribe ${matches[1]}`);
+                            sendCommand(`nodes log ${matches[1]}`);
+                        }
+                    }
+
+                    matches = message.match(/(\d+): Attribute (\w+|\d+)\/(\d+)\/(\d+)\/(\w+) changed to (.+)/); // attribute changed
+                    if (matches) {
+                        if (matches[4] == ON_OFF) styleContainer(matches[1], matches[3], matches[6]);
+                        else if ([ILLUMINANCE, TEMPERATURE, PRESSURE, HUMIDITY, VOLTAGE].includes(Number(matches[4]))) {
+                            const formatter = valueFormat[matches[4]];
+                            const value = typeof formatter === 'function' ? formatter(matches[6]) : matches[6];
+                            const element = document.getElementById(`attr-${matches[1]}/${matches[3]}/${matches[5]}`);
+                            if (element) {
+                                const small = document.createElement("small");
+                                small.textContent = value;
+                                element.innerHTML = "";
+                                element.appendChild(small);
+                            }
+                        }
+                    }
+
+                    matches = message.match(/Attribute value for (\w+) (\d+)\/(\d+)\/(\d+)\/(\w+): (.+)/); // from "read attribute"
+                    if (matches)
+                        if (matches[1] === "onOff") styleContainer(matches[2], matches[3], matches[6]);
+                    // else if (matches[1] === etc. process as needed
+                }
+            }
+        }
+        function styleContainer(nodeId, endpoint, state) {
+            const element = document.getElementById(`${endpoint}-container-${nodeId}`);
+            element.classList.remove("on", "off");
+            element.classList.add(state === "true" ? "on" : "off");
+        }
+        function updateTile(nodeId, status) {
+            let tile = document.getElementById(`tile-${nodeId}`);
+            if (!tile) {
+                let container = document.createElement('div');
+                container.id = `container-${nodeId}`;
+                container.className = 'node-container';
+                tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.id = `tile-${nodeId}`;
+                container.appendChild(tile);
+                tiles.appendChild(container);
+            }
+            const small = document.createElement("small");
+            small.appendChild(document.createTextNode("Node " + nodeId));
+            small.appendChild(document.createElement("br"));
+            const span = document.createElement("span");
+            span.className = status === "connected" ? "connected-node-status" : "connecting-node-status";
+            span.textContent = status;
+            small.appendChild(span);
+            tile.innerHTML = "";
+            tile.appendChild(small);
+        }
+        matterCommand.onkeypress = (e) => {
+            if (e.key === 'Enter') {
+                if (matterCommand.value === 'clear') initConsole(true);
+                else sendCommand(matterCommand.value ? matterCommand.value : "help");
+                matterCommand.value = '';
+            }
+        };
+        pairingCode.onkeypress = (e) => {
+            if (e.key === 'Enter') {
+                sendCommand(pairingCode.value ? `commission pair --pairing-code ${pairingCode.value}` : "help");
+                pairingCode.value = '';
+            }
+        };
+        function scheduleReconnect() {
+            const RECONNECT_DELAY = 1000; // Initial delay in ms
+            const MAX_RECONNECT_DELAY = 30000; // Max delay in ms
+            if (ws && ws.readyState !== WebSocket.CLOSED) return;
+            const delay = Math.min(RECONNECT_DELAY * Math.pow(2, reconnectAttempts), MAX_RECONNECT_DELAY);
+            logMessage(`Attempting to reconnect in ${delay / 1000} seconds...\n`, 'error');
+            setTimeout(() => {
+                reconnectAttempts++;
+                setupWebSocket();
+            }, delay);
+        }
+        function sendCommand(cmd, outputType = 'sent') {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(cmd + '\n');
+                logMessage(`Sent: ${cmd}`, 'sent');
+            } else logMessage(`WebSocket not connected. Command "${cmd}" skipped.\n`, 'error');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { setupWebSocket(); });
+    </script>
+</body>
+
+</html>

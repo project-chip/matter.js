@@ -7,6 +7,7 @@
 import { MatterError } from "#general";
 import { createWriteStream, readFileSync } from "node:fs";
 import readline from "node:readline";
+import { Readable, Writable } from "node:stream";
 import yargs from "yargs/yargs";
 import { MatterNode } from "../MatterNode.js";
 import { exit } from "../app";
@@ -51,6 +52,8 @@ export class Shell {
         public theNode: MatterNode,
         public nodeNum: number,
         public prompt: string,
+        public input: Readable,
+        public output: Writable,
     ) {}
 
     start(storageBase?: string) {
@@ -80,9 +83,9 @@ export class Shell {
             }
         }
         this.readline = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-            terminal: true,
+            input: this.input,
+            output: this.output,
+            terminal: this.input === process.stdin && this.output === process.stdout,
             prompt: this.prompt,
             history: history.reverse(),
             historySize: MAX_HISTORY_SIZE,
@@ -103,12 +106,15 @@ export class Shell {
                 } catch (e) {
                     process.stderr.write(`Error happened during history file write: ${e}\n`);
                 }
-                exit()
-                    .then(() => process.exit(0))
-                    .catch(e => {
-                        process.stderr.write(`Close error: ${e}\n`);
-                        process.exit(1);
-                    });
+                // only exit if we are running in a terminal
+                if (this.input === process.stdin && this.output === process.stdout) {
+                    exit()
+                        .then(() => process.exit(0))
+                        .catch(e => {
+                            process.stderr.write(`Close error: ${e}\n`);
+                            process.exit(1);
+                        });
+                }
             });
 
         this.readline.prompt();

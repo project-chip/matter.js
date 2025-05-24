@@ -203,7 +203,13 @@ $ ls .matter-shell-1
 $ more .matter-shell-1/Node.ip
 "fe80::148d:9bd8:5006:243%en0"
 ```
+# Running over websockets
 
+If the matter shell is started with the parameter --webSocketInterface all interaction with the shell will be done over a websocket instead of the local terminal. The parameter --webSocketPort NNNN can be used to change from the default port of 3000 to a user-specified port. If the parameter --webServer is added, the matter shell will also start an http server that will serve files from the same directory as the application itself utilizying the same port as the websocket. The functionality of the shell will be identical to the above description with the exception that the "exit" command will only close the websocket and not exit the matter shell application.
+
+An example application that shows interaction from a web browser is included. The example shows how commands can be sent from html and javascript in the browser to the shell and how the results of the commands can be parsed to create a user interface. 
+
+![Web Interface](src/shell/webassets/WebShell.png "Example Application")
 ```
           █
           █
