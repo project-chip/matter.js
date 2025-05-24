@@ -10,7 +10,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -->
 
 ## __WORK IN PROGRESS__
--   
+
 - NOTE: This version is compatible with Node.js 20.x, 22.x and 24.x. Node.js 18.x is also supported with the following exceptions:
     - The matter.js tools for building and running test and applications (matter-*) which are mainly used by the npm scripts which use the "commander" dependency.
 
@@ -30,6 +30,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/nodejs-ble
     - (@spudwebb) Fix: Increase BLE connect timeout fo 120seconds to optimize pairing
+  
+-   @matter/nodejs-shell
+    - (@JimBuzbee) Feature: Adds a websocket mode inlcuding an example webpage to control the shell
   
 -   @matter/protocol
     - Breaking: `logEndpoint()` was removed. The Endpoints support logging directly via Diagnostics
