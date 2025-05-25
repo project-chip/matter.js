@@ -13,9 +13,11 @@ import {
     CRYPTO_HASH_ALGORITHM,
     CRYPTO_SYMMETRIC_KEY_LENGTH,
     Crypto,
+    CryptoDecryptError,
     CryptoDsaEncoding,
     CryptoVerifyError,
     PrivateKey,
+    asError,
 } from "#general";
 import * as crypto from "node:crypto";
 
@@ -42,7 +44,11 @@ export class NodeJsCrypto extends Crypto {
         }
         cipher.setAuthTag(data.slice(plaintextLength));
         const result = cipher.update(data.slice(0, plaintextLength));
-        cipher.final();
+        try {
+            cipher.final();
+        } catch (e) {
+            throw new CryptoDecryptError(`${CRYPTO_ENCRYPT_ALGORITHM} decription failed: ${asError(e).message}`);
+        }
         return new Uint8Array(result);
     }
 

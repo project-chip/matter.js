@@ -10,7 +10,6 @@ import {
     Environment,
     Environmental,
     ImplementationError,
-    InternalError,
     Key,
     MatterError,
     MatterFlowError,
@@ -219,7 +218,7 @@ export class FabricManager {
             return fabric;
         }
 
-        throw new InternalError("Fabric cannot be found from destinationId");
+        throw new FabricNotFoundError();
     }
 
     findByKeypair(keypair: Key) {

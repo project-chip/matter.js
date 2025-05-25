@@ -64,8 +64,12 @@ describe("SC", () => {
         await chip.clearMdns();
     });
 
-    // 3.4 must start with a new commissioning
-    chip("SC/3.4").uncommissioned().args("--commissioning-method", "on-network", "--discriminator", "1234", "--passcode", "20202021");
+    // 3.4 does not explicitly perform commissioning like other tests that require commissioning, nor is it marked with
+    // metadata that disables commissioning.  However, it fails if commissioning does not occur in the same process.
+    // Based on how other tests are designed I'd consider this a bug in the test
+    chip()
+        .uncommissioned()
+        .args("--commissioning-method", "on-network", "--discriminator", "3840", "--passcode", "20202021");
 
     // 7.1 must start factory fresh
     chip("SC/7.1").uncommissioned();

@@ -27,7 +27,7 @@ import { State } from "./state.js";
  *
  * We execute test logic within a Docker container available at {@link https://github.com/matter-js/matter.js-chip}.
  */
-export interface Chip extends chip.Builder {
+export interface Chip {
     (subject: Subject): chip.Builder;
     (...include: string[]): chip.Builder;
 
@@ -123,10 +123,12 @@ function createBuilder(initial: {
     defaultSubject?: Subject.Factory;
     beforeStart?: chip.BeforeHook;
     beforeTest?: chip.BeforeHook;
+    only?: boolean;
 }): chip.Builder {
     const implementations = new Map<TestDescriptor, Mocha.Test>();
     let subject: undefined | Subject.Factory;
     let startCommissioned = true;
+    let only = false;
     const beforeStartHooks = Array<chip.BeforeHook>();
     const beforeTestHooks = Array<chip.BeforeHook>();
     const args = Array<string>();
@@ -214,6 +216,11 @@ function createBuilder(initial: {
             startCommissioned = false;
             return this;
         },
+
+        only() {
+            only = true;
+            return this;
+        },
     };
 
     for (const key in initial) {
@@ -282,7 +289,9 @@ function createBuilder(initial: {
     function defineTest(descriptor: TestDescriptor) {
         State.install();
         const test = chip.testFor(descriptor);
-        const mochaTest = it(descriptor.name, function () {
+
+        const myIt = only ? it.only : it;
+        const mochaTest = myIt(descriptor.name, function () {
             this.timeout(descriptor.timeoutMs ?? chip.defaultTimeoutMs);
             return State.run(test, args, (subject, test) => runBeforeHooks(beforeTestHooks, subject, test));
         });
@@ -304,7 +313,9 @@ function createBuilder(initial: {
 
 function chipFn(subjectOrFirstInclusion: Subject.Factory | string | undefined, ...include: string[]): chip.Builder {
     if (typeof subjectOrFirstInclusion === "function") {
-        return chip.subject(subjectOrFirstInclusion).include(...include);
+        return chip()
+            .subject(subjectOrFirstInclusion)
+            .include(...include);
     }
 
     if (typeof subjectOrFirstInclusion === "string") {
@@ -443,5 +454,10 @@ export namespace chip {
          * Start subject as new-from-factory rather than commissioned.
          */
         uncommissioned(): Builder;
+
+        /**
+         * Run following tests defined by this builder only.
+         */
+        only(): Builder;
     }
 }
