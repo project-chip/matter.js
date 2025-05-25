@@ -49,14 +49,12 @@ describe("SC", () => {
     }).timeout(10000);
 
     chip("SC/*").exclude(
-        // TODO - requires investigation, new test implementation is suspect
-        "SC/3.4",
-
         // Our GroupKeyManagment is too limited for these
         "SC/5.1",
         "SC/5.2",
 
         // These require additional configuration below
+        "SC/3.4",
         "SC/4.1",
         "SC/7.1",
     );
@@ -65,6 +63,9 @@ describe("SC", () => {
     chip("SC/4.1").beforeStart(async () => {
         await chip.clearMdns();
     });
+
+    // 3.4 must start factory fresh
+    chip("SC/3.4").uncommissioned();
 
     // 7.1 must start factory fresh
     chip("SC/7.1").uncommissioned();
