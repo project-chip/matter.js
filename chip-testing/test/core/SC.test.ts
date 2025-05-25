@@ -65,7 +65,7 @@ describe("SC", () => {
     });
 
     // 3.4 must start with a new commissioning
-    chip("SC/3.4").uncommissioned().args("-commissioning-method", "on-network", "--discriminator", "1234", "--passcode", "20202021");
+    chip("SC/3.4").uncommissioned().args("--commissioning-method", "on-network", "--discriminator", "1234", "--passcode", "20202021");
 
     // 7.1 must start factory fresh
     chip("SC/7.1").uncommissioned();
