@@ -22,7 +22,8 @@ import inspect
 import importlib
 import re
 import shutil
-from chip.testing.matter_testing import MatterBaseTest, MatterTestConfig, generate_mobly_test_config
+from chip.testing.matter_testing import MatterBaseTest, MatterTestConfig
+from chip.testing.runner import generate_mobly_test_config
 
 YAML_DIR = "/src/app/tests/suites"
 PYTHON_DIR = "/src/python_testing"
@@ -174,7 +175,13 @@ def load_python():
     for path in glob.glob(f"{PYTHON_DIR}/*.py"):
         basename = os.path.basename(path)
         name = os.path.splitext(basename)[0]
-        importlib.import_module(name)
+        try:
+            importlib.import_module(name)
+        except:
+            # Files in this path are sometimes broken so ignore errors.  We could limit to known test case patterns but
+            # there does not appear to be a rigorous naming convention
+            # Example: f78b9cc3de broke test_plan_table_generator.py
+            pass
 
     for test_class in MatterBaseTest.__subclasses__():
         # Read file and extract YAML header
