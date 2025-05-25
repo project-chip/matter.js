@@ -238,6 +238,12 @@ export class TextWriter implements Consumer {
 
     write(...text: Producer.Sequence) {
         for (const token of Producer.of(text)) {
+            if (token.kind === "ansi" && (token.sequence.startsWith("\x1b[<") || token.sequence.startsWith("\x1b[>"))) {
+                // We reserve these prefices for internal use and some terminals (ahem github) don't properly hide the
+                // entire sequence
+                continue;
+            }
+
             this.#addToken(token);
         }
     }
