@@ -19,7 +19,7 @@ Further [packages with Node.js based native dependencies](./packages/nodejs) uti
 
 To use matter.js in your own non-Node.js based projects you need to implement the platform specific parts. See [Using matter.js in unsupported JavaScript environments](#using-matterjs-in-unsupported-javascript-environments) for more details. If you do this, please contact us to add your platform to the list of supported platforms.
 
-matter.js employs [code generation](./codegen) to ensure a comprehensive model of all Matter Clusters and (soon) device types. This includes typing and documentation, readily available within developers' IDEs, facilitating easy accessibility and adherence to conformance information during coding. This approach allows for easy addition of new clusters and device types, ensuring synchronization with the Matter standard.
+matter.js employs [code generation](./support/codegen) to ensure a comprehensive model of all Matter Clusters and (soon) device types. This includes typing and documentation, readily available within developers' IDEs, facilitating easy accessibility and adherence to conformance information during coding. This approach allows for easy addition of new clusters and device types, ensuring synchronization with the Matter standard.
 
 ## How is matter.js used?
 
@@ -147,9 +147,9 @@ Please see the respective README files in the package directories for more infor
 For each package the [API Documentation](./docs/README.md) is updated on each official release, but can also be built locally using `npm run build-doc`.
 
 Besides these packages that are published to npm there are also some packages that are not published to npm and exist as folders in the root directory:
-- **[chip-testing](./chip-testing)**: A set of scripts to allow to run the Chip-Tool-Certification tests against a matter-node.js based devices. These tests are executed on GitHub CI automatically.
-- **[codegen](./codegen)**: A set of scripts to generate code for the Matter code model, clusters and device types.
-- **[model](./models)**: Contains all pre-parsed information for the Matter models used to generate code for the code model, clusters and device types. It also allows to define [local overrides](./models/src/local) to adjust incomplete or wrong information in the Matter models.
+- **[chip-testing](./support/chip-testing)**: A set of scripts to allow to run the Chip-Tool-Certification tests against a matter-node.js based devices. These tests are executed on GitHub CI automatically.
+- **[codegen](./support/codegen)**: A set of scripts to generate code for the Matter code model, clusters and device types.
+- **[model](./support/models)**: Contains all pre-parsed information for the Matter models used to generate code for the code model, clusters and device types. It also allows to define [local overrides](./support/models/src/local) to adjust incomplete or wrong information in the Matter models.
 
 This repository uses the workspaces feature from npm to manage the dependencies between the packages. Because of this please only use `npm install` on the root of the repository. This will install all the dependencies for all the packages and also take care to create relevant symlinks between the packages.
 

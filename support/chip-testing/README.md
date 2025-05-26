@@ -17,7 +17,7 @@ Please follow these steps to setup all this locally:
 -   [Prepare for building](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#prepare-for-building)
 -   Build chip-tool in an activated environment `./scripts/build/build_examples.py --target=linux-x64-chip-tool build` (replace linux by darwin if you run on macOs.)
 -   Build Python Environment in an activated environment `./scripts/build_python.sh --install_virtual_env out/venv`
--   Copy the patched yaml files from chip-testing/patched-test-files to src/app/tests/suites/ (in connectedhomeip directory)
+-   Copy the patched yaml files from support/chip-testing/patched-test-files to src/app/tests/suites/ (in connectedhomeip directory)
 -   build matter.js so that the test binaries are also built
 
 ## Execution
@@ -26,7 +26,7 @@ Please follow these steps to setup all this locally:
 
 You can execute tests starting from the connectedhomeip directory (without activating the sdk environment) by using:
 
-`scripts/run_in_build_env.sh 'scripts/tests/run_test_suite.py --runner chip_tool_python --log-level info --target-glob "{...tests...}" run --all-clusters-app <path-to-matter.js>/chip-testing/dist/esm/AllClustersTestApp.js --bridge-app <path-to-matter.js>/chip-testing/dist/esm/BridgeTestApp.js'`
+`scripts/run_in_build_env.sh 'scripts/tests/run_test_suite.py --runner chip_tool_python --log-level info --target-glob "{...tests...}" run --all-clusters-app <path-to-matter.js>/support/chip-testing/dist/esm/AllClustersTestApp.js --bridge-app <path-to-matter.js>/support/chip-testing/dist/esm/BridgeTestApp.js'`
 
 Replace the "<path-to-matter.js>" placeholder with the local path to your matter.js repository.
 
@@ -43,7 +43,7 @@ The tests Test_TC_CADMIN_1_21 and Test_TC_CADMIN_1_22 cannot be executed because
 
 The python tests are located inside the connectedhomeip repository as single python scripts. there is no runner or such. They are executed as needed by e.g. (for test CGEN_2_4)
 
-`scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app <path-to-matter.js>/chip-testing/dist/esm/TestDeviceNode.js --factoryreset --app-args "--discriminator 1234 --KVS /tmp/kvs" --script "src/python_testing/TC_CGEN_2_4.py" --script-args "--storage-path admin_storage.json --manual-code 10054912339 --PICS src/app/tests/suites/certification/ci-pics-values --commissioning-method on-network"'`
+`scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app <path-to-matter.js>/support/chip-testing/dist/esm/TestDeviceNode.js --factoryreset --app-args "--discriminator 1234 --KVS /tmp/kvs" --script "src/python_testing/TC_CGEN_2_4.py" --script-args "--storage-path admin_storage.json --manual-code 10054912339 --PICS src/app/tests/suites/certification/ci-pics-values --commissioning-method on-network"'`
 
 The list of available test and their relevant parameters can be seen in the project-chip repository github test, e.g. https://github.com/project-chip/connectedhomeip/blob/160ed14cae009de51e5117dbf4abc2c6af6a6f53/.github/workflows/tests.yaml#L452 (this is a static link, make sure to check the latest master version!)
 

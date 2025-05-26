@@ -1,8 +1,8 @@
 **/dist/**
 **/build/**
 **/forwards/**
-models/src/chip.ts
-models/src/spec.ts
+support/models/src/chip.ts
+support/models/src/spec.ts
 packages/model/src/standard/elements/*
 packages/model/src/standard/resources/*
 packages/types/src/clusters/*

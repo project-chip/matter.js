@@ -4,7 +4,7 @@ Each cluster that has commands also needs to have them implemented based on the 
 
 Matter.js provides a specification-compliant implementation of all Matter 1.4 clusters. For many clusters our implementations perform high-level business logic. For other clusters you provide the needed business logic by extending the matter.js implementation. In all cases matter.js takes care of details like the Matter protocol, input and output validation and persistence. The developer can then decide if own functionality needs to be implemented and can overwrite and extend these implementations or just use them.
 
-For examples for nearly all clusters check the [All Clusters Test App](../chip-testing/src/AllClustersTestApp.ts).
+For examples for nearly all clusters check the [All Clusters Test App](../support/chip-testing/src/AllClustersTestApp.ts).
 
 Matter.js allows the following clusters to be used directly with a default implementation for all relevant commands - or the clusters do not need any commands and so the standard feature set of Matter.js for attributes is sufficient.
 All clusters contained in this list are also verified using the CI YAML project-chip certification tests.

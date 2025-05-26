@@ -56,7 +56,7 @@ jobs:
           base: main
           filters: |
             src:
-              - "chip/**"
+              - "support/chip/**"
 
       - name: Docker rebuild needed
         if: >-
@@ -86,14 +86,14 @@ jobs:
         id: increment-sha
         if: github.event_name == 'schedule'
         run: |
-          cd chip
+          cd support/chip
           ./bin/update-version
           echo chip-sha=$(cat sha.txt) >> $GITHUB_OUTPUT
 
       - name: Build chip image
         if: needs.workflow-conditions.outputs.build-needed == 'true'
         run: |
-          cd chip
+          cd support/chip
           ./bin/build chip-artifact
 
       - name: Upload chip artifact
@@ -200,12 +200,12 @@ jobs:
         env:
           CHIP_SHA: ${{ needs.chip-image.outputs.chip-sha }}
         run: |
-          cd chip
+          cd support/chip
           echo "$CHIP_SHA" > sha.txt
 
       - name: Publish docker image
         run: |
-          cd chip
+          cd support/chip
           ./bin/info
           ./bin/publish
 

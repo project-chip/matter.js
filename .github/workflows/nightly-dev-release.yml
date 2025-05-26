@@ -85,9 +85,9 @@ jobs:
               --target-skip-glob "{Test_TC_ACE_1_6,Test_TC_LVL_9_1,Test_TC_OO_2_7,Test_TC_LVL_9_1}" \
             run \
             --iterations 1 \
-            --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
-            --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
-            --tv-app ../chip-testing/dist/esm/TvTestApp.js \
+            --all-clusters-app ../support/chip-testing/dist/esm/AllClustersTestApp.js \
+            --bridge-app ../support/chip-testing/dist/esm/BridgeTestApp.js \
+            --tv-app ../support/chip-testing/dist/esm/TvTestApp.js \
           '
 
     - name: Cleanup chip tests

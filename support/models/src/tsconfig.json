@@ -1,0 +1,19 @@
+{
+    "extends": "../../../packages/tools/tsc/tsconfig.lib.json",
+    "compilerOptions": {
+        "types": [
+            "node"
+        ]
+    },
+    "references": [
+        {
+            "path": "../../../packages/model/src"
+        },
+        {
+            "path": "../../../packages/testing/src"
+        },
+        {
+            "path": "../../../packages/tools/src"
+        }
+    ]
+}

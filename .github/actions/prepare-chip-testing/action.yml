@@ -136,7 +136,7 @@ runs:
       name: Patch test definitions
       shell: bash
       run: |
-        cp -r chip-testing/patched-test-files/* connectedhomeip/src/app/tests/suites/
+        cp -r support/chip-testing/patched-test-files/* connectedhomeip/src/app/tests/suites/
       # needed as long as we are still on Matter 1.1 but use tests from master branch from SDK
 
     - name: Tweak security settings to prevent errors on Ubuntu containers

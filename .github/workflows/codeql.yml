@@ -39,7 +39,7 @@ jobs:
             paths-ignore:
               - packages/node/src/node/ServerNode.ts
               - packages/examples/**
-              - chip-testing/**
+              - support/chip-testing/**
               - '**/test/**/*Test.ts'
 
       # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).

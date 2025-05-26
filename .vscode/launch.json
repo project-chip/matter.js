@@ -94,7 +94,7 @@
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
             "name": "Run shell",
-            "cwd": "${workspaceFolder}/codegen/packages/nodejs-shell",
+            "cwd": "${workspaceFolder}/support/codegen/packages/nodejs-shell",
             "args": [
                 "--clear",
                 "dist/cjs/app.js"
@@ -121,7 +121,7 @@
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
             "name": "Run CLI tool",
-            "cwd": "${workspaceFolder}/codegen/packages/cli-tool",
+            "cwd": "${workspaceFolder}/support/codegen/packages/cli-tool",
             "args": [
                 "--clear",
                 "bin/matter.js"
@@ -330,7 +330,7 @@
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
             "name": "Test @matter/chip-testing",
-            "cwd": "${workspaceFolder}/chip-testing",
+            "cwd": "${workspaceFolder}/support/chip-testing",
             "group": "test",
             "args": [
                 "--clear"
@@ -356,7 +356,7 @@
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
             "name": "Test chip:app-cc",
-            "cwd": "${workspaceFolder}/chip-testing",
+            "cwd": "${workspaceFolder}/support/chip-testing",
             "args": [
                 "--clear",
                 "--spec",
@@ -386,7 +386,7 @@
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
             "name": "Test chip:app-fast",
-            "cwd": "${workspaceFolder}/chip-testing",
+            "cwd": "${workspaceFolder}/support/chip-testing",
             "args": [
                 "--clear",
                 "--spec",
@@ -416,7 +416,7 @@
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
             "name": "Test chip:app-slow",
-            "cwd": "${workspaceFolder}/chip-testing",
+            "cwd": "${workspaceFolder}/support/chip-testing",
             "args": [
                 "--clear",
                 "--spec",
@@ -446,7 +446,7 @@
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
             "name": "Test chip:core",
-            "cwd": "${workspaceFolder}/chip-testing",
+            "cwd": "${workspaceFolder}/support/chip-testing",
             "args": [
                 "--clear",
                 "--spec",
@@ -842,7 +842,7 @@
             "name": "Generate chip",
             "args": [
                 "--clear",
-                "codegen/src/generate-chip.ts"
+                "support/codegen/src/generate-chip.ts"
             ],
             "group": "codegen",
             "program": "${workspaceFolder}/node_modules/.bin/matter-run",
@@ -868,7 +868,7 @@
             "name": "Generate clusters",
             "args": [
                 "--clear",
-                "codegen/src/generate-clusters.ts"
+                "support/codegen/src/generate-clusters.ts"
             ],
             "group": "codegen",
             "program": "${workspaceFolder}/node_modules/.bin/matter-run",
@@ -894,7 +894,7 @@
             "name": "Generate endpoints",
             "args": [
                 "--clear",
-                "codegen/src/generate-endpoints.ts"
+                "support/codegen/src/generate-endpoints.ts"
             ],
             "group": "codegen",
             "program": "${workspaceFolder}/node_modules/.bin/matter-run",
@@ -920,7 +920,7 @@
             "name": "Generate forwards",
             "args": [
                 "--clear",
-                "codegen/src/generate-forwards.ts"
+                "support/codegen/src/generate-forwards.ts"
             ],
             "group": "codegen",
             "program": "${workspaceFolder}/node_modules/.bin/matter-run",
@@ -946,7 +946,7 @@
             "name": "Generate model",
             "args": [
                 "--clear",
-                "codegen/src/generate-model.ts"
+                "support/codegen/src/generate-model.ts"
             ],
             "group": "codegen",
             "program": "${workspaceFolder}/node_modules/.bin/matter-run",
@@ -972,7 +972,7 @@
             "name": "Generate spec",
             "args": [
                 "--clear",
-                "codegen/src/generate-spec.ts"
+                "support/codegen/src/generate-spec.ts"
             ],
             "group": "codegen",
             "env": {
@@ -1001,7 +1001,7 @@
             "name": "Generate vscode",
             "args": [
                 "--clear",
-                "codegen/src/generate-vscode.ts"
+                "support/codegen/src/generate-vscode.ts"
             ],
             "group": "codegen",
             "program": "${workspaceFolder}/node_modules/.bin/matter-run",
