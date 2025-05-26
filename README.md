@@ -228,10 +228,11 @@ The following projects are available on any platform with access to Node.js 18+:
 
 - [@matter/nodejs](packages/nodejs/README.md): a Matter client / server running on node.js compatible with HA (Android / iOs support in progress)
 - [@matter/nodejs-shell](packages/nodejs-shell/README.md): a Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
+- [ioBroker Matter Adapter](https://github.com/ioBroker/ioBroker.matter): An open.source smart home system offering Matter Devices, Bridges and Controller
 - [node-red-matter-bridge](https://github.com/sammachin/node-red-matter-bridge): a Node-Red node to expose a bridge
 - [node-red-matter](https://github.com/FezVrasta/node-red-matter): a Node-Red node for devices and controllers (outdated)
 - [zigbee-matter-bridge](https://github.com/antonio-gabriele/zigbee-matter-bridge): a Zigbee to Matter Bridge
-- [Gladys Assistant](https://github.com/GladysAssistant/Gladys): An open-source smart home assistant integrating `matter.js` as a Matter controller to connect and manage Matter devices.
+- [Gladys Assistant](https://github.com/GladysAssistant/Gladys): An open-source smart home assistant integrating `matter.js` as a Matter controller to connect and manage Matter devices
 - [matterbridge](https://github.com/Luligu/matterbridge): a matter.js plugin manager with 7 example plugins
   - [matterbridge-zigbee2mqtt](https://github.com/Luligu/matterbridge-zigbee2mqtt): matterbridge production-level plugin that expose all zigbee2mqtt devices and groups to Matter
   - [matterbridge-somfy-tahoma](https://github.com/Luligu/matterbridge-somfy-tahoma): matterbridge production-level plugin that expose all somfy tahoma screens to Matter
