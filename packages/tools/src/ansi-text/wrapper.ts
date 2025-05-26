@@ -96,7 +96,8 @@ export class Wrapper implements Consumer {
                         break;
 
                     default:
-                        // Note that we don't enqueue above codes as GH CI doesn't format correctly
+                        // Note that we don't enqueue above codes as they are private and intended only for internal
+                        // use.
                         this.#enqueue(token);
                         break;
                 }

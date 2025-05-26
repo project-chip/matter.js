@@ -30,6 +30,7 @@ export const CRYPTO_SYMMETRIC_KEY_LENGTH = 16;
 export type CryptoDsaEncoding = "ieee-p1363" | "der";
 
 export class CryptoVerifyError extends MatterError {}
+export class CryptoDecryptError extends MatterError {}
 
 export abstract class Crypto {
     static get: () => Crypto;
