@@ -68,7 +68,7 @@ export class CaseClient {
             const initiatorResumeMic = Crypto.encrypt(resumeKey, new Uint8Array(0), RESUME1_MIC_NONCE);
             sigma1Bytes = await messenger.sendSigma1({
                 initiatorSessionId,
-                destinationId: await fabric.currentDestinationIdFor(peerNodeId, initiatorRandom),
+                destinationId: await fabric.getDestinationId(peerNodeId, initiatorRandom),
                 initiatorEcdhPublicKey,
                 initiatorRandom,
                 resumptionId,
@@ -78,7 +78,7 @@ export class CaseClient {
         } else {
             sigma1Bytes = await messenger.sendSigma1({
                 initiatorSessionId,
-                destinationId: await fabric.currentDestinationIdFor(peerNodeId, initiatorRandom),
+                destinationId: await fabric.getDestinationId(peerNodeId, initiatorRandom),
                 initiatorEcdhPublicKey,
                 initiatorRandom,
                 initiatorSessionParams: this.#sessions.sessionParameters,
