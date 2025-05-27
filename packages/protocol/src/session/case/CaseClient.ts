@@ -5,8 +5,9 @@
  */
 
 import { Bytes, Crypto, Logger, PublicKey, UnexpectedDataError } from "#general";
+import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { SessionManager } from "#session/SessionManager.js";
-import { NodeId } from "#types";
+import { NodeId, ProtocolStatusCode } from "#types";
 import { TlvIntermediateCertificate, TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
@@ -36,7 +37,17 @@ export class CaseClient {
 
     async pair(exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId, expectedProcessingTimeMs?: number) {
         const messenger = new CaseClientMessenger(exchange, expectedProcessingTimeMs);
+        try {
+            return await this.#doPair(messenger, exchange, fabric, peerNodeId);
+        } catch (error) {
+            if (!(error instanceof ChannelStatusResponseError)) {
+                await messenger.sendError(ProtocolStatusCode.InvalidParam);
+            }
+            throw error;
+        }
+    }
 
+    async #doPair(messenger: CaseClientMessenger, exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId) {
         // Generate pairing info
         const initiatorRandom = Crypto.getRandom();
         const initiatorSessionId = await this.#sessions.getNextAvailableSessionId(); // Initiator Session Id
