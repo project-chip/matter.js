@@ -14,7 +14,7 @@ import { edit } from "../docker/edit.js";
 import { Image } from "../docker/image.js";
 import { Volume } from "../docker/volume.js";
 import { afterRun, beforeRun } from "../mocha.js";
-import type { TestRunner } from "../runner.js";
+import { TestRunner } from "../runner.js";
 import { RootTestDescriptor, TestDescriptor, TestFileDescriptor } from "../test-descriptor.js";
 import { AccessoryServer } from "./accessory-server.js";
 import type { chip } from "./chip.js";
@@ -30,8 +30,6 @@ import { YamlTest } from "./yaml-test.js";
  */
 const Values = {
     isInitialized: false,
-    runner: undefined as TestRunner | undefined,
-    mocha: undefined as Mocha | undefined,
     subject: undefined as Subject.Factory | undefined,
     test: undefined as Test | undefined,
     mainContainer: undefined as Container | undefined,
@@ -63,34 +61,6 @@ export const State = {
         }
 
         return container;
-    },
-
-    set runner(runner: TestRunner) {
-        Values.runner = runner;
-    },
-
-    get runner() {
-        const runner = Values.runner;
-
-        if (runner === undefined) {
-            throw new Error("No test runner configured");
-        }
-
-        return runner;
-    },
-
-    set mocha(mocha: Mocha) {
-        Values.mocha = mocha;
-    },
-
-    get mocha() {
-        const mocha = Values.mocha;
-
-        if (mocha === undefined) {
-            throw new Error("No mocha instance configured");
-        }
-
-        return mocha;
     },
 
     set subject(subject: Subject.Factory) {
@@ -158,7 +128,7 @@ export const State = {
             return;
         }
 
-        const { progress } = State.runner;
+        const { progress } = TestRunner.current;
 
         progress.update("Initializing containers");
         try {
@@ -220,7 +190,7 @@ export const State = {
      * Run a CHIP test.
      */
     async run(test: Test, args: string[], beforeTest: (subject: Subject, test: Test) => void | Promise<void>) {
-        const { reporter } = State.runner;
+        const { reporter } = TestRunner.current;
 
         const subject = Values.activeSubject!;
 
@@ -306,7 +276,7 @@ export const State = {
             return;
         }
 
-        const { progress } = State.runner;
+        const { progress } = TestRunner.current;
 
         await progress.subtask("activating subject", async () => {
             // Avahi restarts too slowly currently to do this for every test

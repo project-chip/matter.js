@@ -20,7 +20,8 @@
     "packages/cli-tool",
     "support/models",
     "support/codegen",
-    "support/chip-testing"
+    "support/chip-testing",
+    "support/tests"
   ],
   "scripts": {
     "prepare": "npm run build-clean",
@@ -61,5 +62,8 @@
   },
   "overrides": {
     "brorand": "npm:@matter.js/brorand@1.1.0"
+  },
+  "dependencies": {
+    "memlab": "^1.1.58"
   }
 }

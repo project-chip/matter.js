@@ -8,5 +8,7 @@ import "./global-declarations.js";
 export * from "./chip/index.js";
 export * from "./device/index.js";
 export * from "./docker/index.js";
+export { afterRun } from "./mocha.js";
 export * from "./mocharc.cjs";
+export * from "./util/heap.js";
 export * from "./util/wtf.js";

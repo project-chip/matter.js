@@ -57,6 +57,9 @@
         },
         {
             "path": "support/chip-testing"
+        },
+        {
+            "path": "support/tests"
         }
     ]
 }

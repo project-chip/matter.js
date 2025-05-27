@@ -31,6 +31,7 @@ function packageIdentity(pkg: Package) {
 const writeStatus = (() => {
     let lastStatus: undefined | string;
     let needNewline = false;
+    let needsClear = false;
 
     function intercept(stream: NodeJS.WriteStream) {
         const actualWrite = stream.write;
@@ -60,6 +61,11 @@ const writeStatus = (() => {
                     break;
             }
 
+            if (needsClear) {
+                actualWrite.call(stream, screen.erase.toEol);
+                needsClear = false;
+            }
+
             return actualWrite.call(stream, payload, ...params);
         };
     }
@@ -84,6 +90,7 @@ const writeStatus = (() => {
         });
 
         lastStatus = text;
+        needsClear = willOverwrite;
     };
 })();
 
@@ -191,6 +198,7 @@ export class Progress {
 
     async subtask(text: string, fn: () => Promise<void>) {
         this.#subtasks.push(text);
+        this.#writeOngoing();
 
         try {
             await fn();

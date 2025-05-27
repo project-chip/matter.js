@@ -18,7 +18,7 @@ import { defaultDescriptor, printReport } from "./print-report.js";
 import { TestRunner } from "./runner.js";
 import { TestDescriptor } from "./test-descriptor.js";
 
-const SHUTDOWN_TIMEOUT_MS = 5000;
+const SHUTDOWN_TIMEOUT_MS = 5_000;
 
 enum TestType {
     esm = "esm",

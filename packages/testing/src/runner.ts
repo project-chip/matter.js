@@ -8,7 +8,6 @@ import { ansi, Package, Progress, std } from "#tools";
 import debug from "debug";
 import { readFile } from "node:fs/promises";
 import { dirname, relative, resolve } from "node:path";
-import { chip } from "./chip/chip.js";
 import { FailureDetail } from "./failure-detail.js";
 import { FailureReporter } from "./failure-reporter.js";
 import { NodejsReporter } from "./nodejs-reporter.js";
@@ -19,6 +18,16 @@ import { listSupportFiles } from "./util/files.js";
 import { testWeb } from "./web.js";
 
 export class TestRunner {
+    static #current?: TestRunner;
+
+    static get current() {
+        if (this.#current === undefined) {
+            throw new Error("No test active test runner");
+        }
+
+        return this.#current;
+    }
+
     readonly reporter: Reporter;
     private spec = Array<string>();
 
@@ -27,7 +36,7 @@ export class TestRunner {
         readonly progress: Progress,
         readonly options: TestOptions,
     ) {
-        chip.runner = this;
+        TestRunner.#current = this;
 
         this.reporter = new (class extends NodejsReporter {
             constructor() {

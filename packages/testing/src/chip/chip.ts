@@ -5,12 +5,11 @@
  */
 
 import { globSync } from "#tools";
-import Mocha from "mocha";
 import { Subject } from "../device/subject.js";
 import { Test } from "../device/test.js";
 import type { Container } from "../docker/container.js";
 import { afterOne, beforeOne } from "../mocha.js";
-import type { TestRunner } from "../runner.js";
+import { getCurrentNodejsMocha } from "../nodejs.js";
 import { TestDescriptor } from "../test-descriptor.js";
 import { PicsFile } from "./pics/file.js";
 import { State } from "./state.js";
@@ -30,11 +29,6 @@ import { State } from "./state.js";
 export interface Chip {
     (subject: Subject): chip.Builder;
     (...include: string[]): chip.Builder;
-
-    /**
-     * Testing controller.  Must be set prior to use of other methods.
-     */
-    runner: undefined | TestRunner;
 
     /**
      * Mocha instance.  Must be set prior to use of other methods.
@@ -250,7 +244,7 @@ function createBuilder(initial: {
     }
 
     function defineSuite(descriptor: TestDescriptor) {
-        const mocha = State.mocha;
+        const mocha = getCurrentNodejsMocha();
 
         const { name, members } = descriptor;
         if (!members?.length) {
@@ -326,18 +320,6 @@ function chipFn(subjectOrFirstInclusion: Subject.Factory | string | undefined, .
 }
 
 Object.defineProperties(chipFn, {
-    runner: {
-        set(runner: TestRunner) {
-            State.runner = runner;
-        },
-    },
-
-    mocha: {
-        set(mocha: Mocha) {
-            State.mocha = mocha;
-        },
-    },
-
     defaultSubject: {
         set(subject: Subject.Factory) {
             State.subject = subject;
