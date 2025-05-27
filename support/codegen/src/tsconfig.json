@@ -1,0 +1,23 @@
+{
+    "extends": "../../../packages/tools/tsc/tsconfig.lib.json",
+    "compilerOptions": {
+        "allowJs": true,
+        "types": [
+            "node"
+        ]
+    },
+    "references": [
+        {
+            "path": "../../../packages/general/src"
+        },
+        {
+            "path": "../../../packages/model/src"
+        },
+        {
+            "path": "../../../packages/tools/src"
+        },
+        {
+            "path": "../../models/src"
+        }
+    ]
+}

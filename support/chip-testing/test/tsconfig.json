@@ -1,5 +1,5 @@
 {
-    "extends": "../../packages/tools/tsc/tsconfig.test.json",
+    "extends": "../../../packages/tools/tsc/tsconfig.test.json",
     "compilerOptions": {
         "types": [
             "mocha",
@@ -9,16 +9,16 @@
     },
     "references": [
         {
-            "path": "../../packages/main/src"
+            "path": "../../../packages/main/src"
         },
         {
-            "path": "../../packages/matter.js/src"
+            "path": "../../../packages/matter.js/src"
         },
         {
-            "path": "../../packages/testing/src"
+            "path": "../../../packages/testing/src"
         },
         {
-            "path": "../../packages/tools/src"
+            "path": "../../../packages/tools/src"
         },
         {
             "path": "../src"

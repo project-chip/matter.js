@@ -50,13 +50,13 @@
             "path": "packages/cli-tool"
         },
         {
-            "path": "models"
+            "path": "support/models"
         },
         {
-            "path": "codegen"
+            "path": "support/codegen"
         },
         {
-            "path": "chip-testing"
+            "path": "support/chip-testing"
         }
     ]
 }

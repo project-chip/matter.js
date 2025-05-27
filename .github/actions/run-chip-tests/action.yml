@@ -42,5 +42,5 @@ runs:
     - name: Run tests
       shell: bash
       run: |
-        cd chip-testing
+        cd support/chip-testing
         npm run test-${{inputs.test-group}} -- --no-pull --report

@@ -95,7 +95,7 @@ for (const node of graph.nodes) {
 }
 
 // Generate launches for each CHIP test set
-for (const path of await Package.workspace.glob("chip-testing/test/*")) {
+for (const path of await Package.workspace.glob("support/chip-testing/test/*")) {
     if (!isDirectory(path)) {
         continue;
     }
@@ -104,7 +104,7 @@ for (const path of await Package.workspace.glob("chip-testing/test/*")) {
 
     addTest({
         name: `Test chip:${setName}`,
-        cwd: "chip-testing",
+        cwd: "support/chip-testing",
         args: ["--spec", `test/${setName}/**/*.test.ts`, "--all-logs", "esm"],
         group: "chip",
     });
@@ -124,7 +124,7 @@ for (const example of await Package.workspace.glob("packages/examples/src/*/*.ts
 }
 
 // Generate launches for each code generator
-for (const generator of await Package.workspace.glob("codegen/src/generate-*.ts")) {
+for (const generator of await Package.workspace.glob("support/codegen/src/generate-*.ts")) {
     const config = {
         name: `Generate ${basename(generator, ".ts").replace(/^generate-/, "")}`,
         args: [Package.workspace.relative(generator)],

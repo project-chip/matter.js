@@ -18,9 +18,9 @@
     "packages/create",
     "packages/react-native",
     "packages/cli-tool",
-    "models",
-    "codegen",
-    "chip-testing"
+    "support/models",
+    "support/codegen",
+    "support/chip-testing"
   ],
   "scripts": {
     "prepare": "npm run build-clean",
@@ -32,8 +32,8 @@
     "test": "matter-test -w",
     "lint": "eslint",
     "lint-fix": "eslint --fix",
-    "format": "prettier --write \"packages/**/*.ts\" \"codegen/**/*.ts\" \"chip-testing/**/*.ts\"",
-    "format-verify": "prettier --check \"packages/**/*.ts\" \"codegen/**/*.ts\" \"chip-testing/**/*.ts\"",
+    "format": "prettier --write \"packages/**/*.ts\" \"support/codegen/**/*.ts\" \"support/chip-testing/**/*.ts\"",
+    "format-verify": "prettier --check \"packages/**/*.ts\" \"support/codegen/**/*.ts\" \"support/chip-testing/**/*.ts\"",
     "matter-device": "matter-run packages/examples/src/device-onoff/DeviceNode.ts",
     "matter-bridge": "matter-run packages/examples/src/device-bridge-onoff/BridgedDevicesNode.ts",
     "matter-composeddevice": "matter-run packages/examples/src/device-composed-onoff/ComposedDeviceNode.ts",
