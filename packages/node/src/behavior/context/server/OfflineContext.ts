@@ -81,7 +81,7 @@ export const OfflineContext = {
      *
      * Write operations will throw an error with this context.
      */
-    ReadOnly: createOfflineContext(Transaction.ReadOnly),
+    ReadOnly: createOfflineContext(Transaction.open("read-only", "ro")),
 
     [Symbol.toStringTag]: "OfflineContext",
 };

@@ -28,6 +28,8 @@ const FEATURES_KEY = "__features__";
 
 const stateChanged = Symbol("stateChanged");
 
+const viewTx = Transaction.open("offline-view", "ro");
+
 /**
  * Datasource manages the canonical root of a state tree.  The "state" property of a Behavior is a reference to a
  * Datasource.
@@ -126,7 +128,7 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
                             ? AccessControl.Authority.Granted
                             : AccessControl.Authority.Unauthorized;
                     },
-                    transaction: Transaction.ReadOnly,
+                    transaction: viewTx,
                 };
                 readOnlyView = createReference(this, internals, session).managed as InstanceType<T>;
             }
@@ -432,10 +434,13 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
             }
         },
     };
-    if (!internals.sessions) {
-        internals.sessions = new Map();
+
+    if (session.transaction.isolation !== "snapshot") {
+        if (!internals.sessions) {
+            internals.sessions = new Map();
+        }
+        internals.sessions.set(session, context);
     }
-    internals.sessions.set(session, context);
 
     // When the transaction is destroyed, decouple from the datasource and expire
     void transaction.onClose(() => {

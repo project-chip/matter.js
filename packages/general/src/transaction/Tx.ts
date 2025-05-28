@@ -30,14 +30,18 @@ const MAX_CHAINED_COMMITS = 5;
 /**
  * This is the only public interface to this file.
  */
-export function open(via: string): Transaction & Transaction.Finalization {
-    return new Tx(via);
+export function open(
+    via: string,
+    isolation: Transaction.IsolationLevel = "rw",
+): Transaction & Transaction.Finalization {
+    return new Tx(via, isolation);
 }
 
 /**
  * The concrete implementation of the Transaction interface.
  */
 class Tx implements Transaction, Transaction.Finalization {
+    #isolation: Transaction.IsolationLevel;
     #participants = new Set<Participant>();
     #roles = new Map<{}, Participant>();
     #resources = new Set<Resource>();
@@ -49,12 +53,13 @@ class Tx implements Transaction, Transaction.Finalization {
     #isAsync = false;
     #reportingLocks = false;
 
-    constructor(via: string, readonly = false) {
+    constructor(via: string, isolation: Transaction.IsolationLevel) {
         this.#via = Diagnostic.via(via);
-        if (readonly) {
-            this.#status = Status.ReadOnly;
-        } else {
+        this.#isolation = isolation;
+        if (isolation === "rw") {
             this.#status = Status.Shared;
+        } else {
+            this.#status = Status.ReadOnly;
         }
     }
 
@@ -66,6 +71,10 @@ class Tx implements Transaction, Transaction.Finalization {
 
     get via() {
         return this.#via;
+    }
+
+    get isolation() {
+        return this.#isolation;
     }
 
     get status() {
@@ -778,11 +787,6 @@ class Tx implements Transaction, Transaction.Finalization {
         }
     }
 }
-
-/**
- * A read-only offline transaction you may use without context.
- */
-export const ReadOnlyTransaction = new Tx("readonly", true);
 
 function throwIfErrored(errored: undefined | Array<Participant>, when: string) {
     if (!errored?.length) {

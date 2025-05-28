@@ -103,7 +103,7 @@ export function OnlineContext(options: OnlineContext.Options) {
         beginReadOnly() {
             const close = initialize();
 
-            return createContext(Transaction.ReadOnly, {
+            return createContext(Transaction.open(via, "snapshot"), {
                 [Symbol.dispose]: close,
             }) as OnlineContext.ReadOnly;
         },

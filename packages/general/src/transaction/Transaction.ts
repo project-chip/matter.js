@@ -9,7 +9,7 @@ import { Participant } from "./Participant.js";
 import { Resource } from "./Resource.js";
 import { ResourceSet } from "./ResourceSet.js";
 import { Status } from "./Status.js";
-import { ReadOnlyTransaction, open } from "./Tx.js";
+import { open } from "./Tx.js";
 
 /**
  * Two-phase commit implementation.
@@ -32,6 +32,11 @@ export interface Transaction {
      * Diagnostic description of the transaction's source.
      */
     readonly via: string;
+
+    /**
+     * The {@link Transaction.IsolationLevel} of this transaction.
+     */
+    readonly isolation: Transaction.IsolationLevel;
 
     /**
      * The status of the transaction.
@@ -183,12 +188,10 @@ export const Transaction = {
      *
      * When closed the transaction commits automatically if exclusive.
      */
-    open(via: string) {
+    open(via: string, isolation: Transaction.IsolationLevel = "rw") {
         // This function is replaced below so do not edit
-        return open(via);
+        return open(via, isolation);
     },
-
-    ReadOnly: ReadOnlyTransaction,
 
     Status,
 
@@ -224,4 +227,20 @@ export namespace Transaction {
          */
         reject(cause: unknown): MaybePromise<never>;
     }
+
+    export type IsolationLevel =
+        /**
+         * Transaction reads only committed and may enter exclusive (write) mode.
+         */
+        | "rw"
+
+        /**
+         * Transaction is read-only but updates are visible after commit.
+         */
+        | "ro"
+
+        /**
+         * Transaction is read-only and data remains at version of first access.
+         */
+        | "snapshot";
 }
