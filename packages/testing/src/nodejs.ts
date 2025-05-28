@@ -13,7 +13,6 @@ import { TestOptions } from "./options.js";
 import type { TestRunner } from "./runner.js";
 
 // Load globals so settings get applied
-import { chip } from "./chip/chip.js";
 import { FailureDetail } from "./failure-detail.js";
 import "./global-definitions.js";
 import { TestDescriptor } from "./test-descriptor.js";
@@ -70,6 +69,8 @@ export async function testNodejs(runner: TestRunner, format: "cjs" | "esm") {
     }
 }
 
+let currentMocha: Mocha | undefined;
+
 export async function createNodejsMocha(runner: TestRunner, format: "esm" | "cjs") {
     const updateStats = runner.pkg.supportsEsm ? format === "esm" : true;
 
@@ -78,7 +79,7 @@ export async function createNodejsMocha(runner: TestRunner, format: "esm" | "cjs
         reporter: adaptReporter(Mocha, format.toUpperCase(), runner.reporter, updateStats),
     });
 
-    chip.mocha = mocha;
+    currentMocha = mocha;
 
     generalSetup(mocha);
 
@@ -96,6 +97,13 @@ export async function createNodejsMocha(runner: TestRunner, format: "esm" | "cjs
     await mocha.loadFilesAsync();
 
     return mocha;
+}
+
+export function getCurrentNodejsMocha() {
+    if (currentMocha === undefined) {
+        throw new Error("No mocha instance active");
+    }
+    return currentMocha;
 }
 
 class Profiler {

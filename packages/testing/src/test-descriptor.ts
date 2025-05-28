@@ -190,7 +190,7 @@ export namespace TestDescriptor {
                 throw new Error(`Invalid test descriptor "${path}"`);
             }
         } catch (e) {
-            if ((e as undefined | { code?: string })?.code !== "ENOENT") {
+            if (!(e instanceof SyntaxError) && (e as undefined | { code?: string })?.code !== "ENOENT") {
                 throw e;
             }
         }

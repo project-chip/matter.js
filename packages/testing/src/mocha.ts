@@ -184,6 +184,8 @@ export async function runMocha(mocha: Mocha) {
             await hook();
         }
     });
+
+    wtf.dump();
 }
 
 // Reset mocks before each file.  Suites could conceivably have callbacks that occur across tests.  If individual tests
@@ -255,7 +257,6 @@ export function adaptReporter(
                 }
                 MatterHooks.loggerSink = undefined;
                 reporter.endRun(this.translatedStats);
-                wtf.dump();
             });
         }
 
