@@ -10,7 +10,8 @@ import { TemperatureSensorDevice } from "@matter/node/devices/temperature-sensor
 import { HeapDumpSet } from "@matter/testing";
 
 /**
- * This test currently does not actually
+ * We will need further filtering for heap analysis to function as a proper test.  Currently this just dumps leak report
+ * to logs and should pass.
  */
 describe("subscriptions", () => {
     it("do not leak", async () => {

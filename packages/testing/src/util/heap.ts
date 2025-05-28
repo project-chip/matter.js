@@ -24,9 +24,12 @@ config.externalLeakFilter = {
         switch (edge.name_or_index) {
             case "MatterHooks":
             case "MockLogger":
+            case "MockTime":
             case "MochaReporter":
+            case "mocha":
             case "#wrapPrefix":
             case "#dumps":
+            case "_playwrightInstance":
                 // Skip stashed log messages, etc. from testing infrastructure
                 return false;
         }

@@ -622,7 +622,7 @@ describe("Transaction", () => {
     describe("read-only", () => {
         function readonlySync(description: string, fn: () => MaybePromise<void>) {
             it(description, () => {
-                transaction = Transaction.ReadOnly;
+                transaction = Transaction.open("test", "ro");
 
                 expect(() => {
                     const result = fn();
@@ -633,7 +633,7 @@ describe("Transaction", () => {
 
         function readonlyAsync(description: string, fn: () => Promise<void>) {
             it(description, async () => {
-                transaction = Transaction.ReadOnly;
+                transaction = Transaction.open("test", "ro");
 
                 await expect(fn()).rejectedWith("This view is read-only");
             });
