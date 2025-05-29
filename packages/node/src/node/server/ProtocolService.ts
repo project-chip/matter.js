@@ -521,7 +521,10 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
                 break;
             }
             case "command": {
-                if (!member.effectiveConformance.isMandatory && !supportedElements.commands.has(name)) {
+                if (
+                    (!member.effectiveConformance.isMandatory && !supportedElements.commands.has(name)) ||
+                    !member.isRequest
+                ) {
                     continue;
                 }
 
