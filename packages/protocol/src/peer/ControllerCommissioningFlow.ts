@@ -458,7 +458,7 @@ export class ControllerCommissioningFlow {
             // Let's return a bit more convenient error in this case
             if (statusCode === OperationalCredentials.NodeOperationalCertStatus.FabricConflict) {
                 throw new CommissioningError(
-                    `Commission error: This device is already commissioned into this fabric. You can not commission it again.`,
+                    `Commission error: This device is already commissioned into this fabric. You cannot commission it again.`,
                 );
             } else if (statusCode === OperationalCredentials.NodeOperationalCertStatus.TableFull) {
                 throw new CommissioningError(
