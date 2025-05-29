@@ -448,20 +448,30 @@ export class ControllerCommissioningFlow {
         { statusCode, debugText, fabricIndex }: TypeFromSchema<typeof OperationalCredentials.TlvNocResponse>,
     ) {
         logger.debug(
-            `Commissioning step ${context} returned ${statusCode}, ${debugText}${
+            `Commissioning step ${context} returned ${OperationalCredentials.NodeOperationalCertStatus[statusCode]} (${statusCode}), ${debugText}${
                 fabricIndex !== undefined ? `, fabricIndex: ${fabricIndex}` : ""
             }`,
         );
 
         if (statusCode === OperationalCredentials.NodeOperationalCertStatus.Ok) return;
-        if (context === "addNoc" && statusCode === OperationalCredentials.NodeOperationalCertStatus.FabricConflict) {
+        if (context === "addNoc") {
             // Let's return a bit more convenient error in this case
-            throw new CommissioningError(
-                `Commission error: This device is already commissioned into this fabric. You can not commission it again.`,
-            );
+            if (statusCode === OperationalCredentials.NodeOperationalCertStatus.FabricConflict) {
+                throw new CommissioningError(
+                    `Commission error: This device is already commissioned into this fabric. You cannot commission it again.`,
+                );
+            } else if (statusCode === OperationalCredentials.NodeOperationalCertStatus.TableFull) {
+                throw new CommissioningError(
+                    `Commission error: This device reached the maximum number of fabrics it can be part of. Please remove a fabric before trying to add another one.`,
+                );
+            } else if (statusCode === OperationalCredentials.NodeOperationalCertStatus.LabelConflict) {
+                throw new CommissioningError(
+                    `Commission error: This device is already commissioned with a fabric with the same label. Please choose a different label.`,
+                );
+            }
         }
         throw new CommissioningError(
-            `Commission error for "${context}": ${statusCode}, ${debugText}${
+            `Commission error for "${context}": ${OperationalCredentials.NodeOperationalCertStatus[statusCode]} (${statusCode}), ${debugText}${
                 fabricIndex !== undefined ? `, fabricIndex: ${fabricIndex}` : ""
             }`,
         );
