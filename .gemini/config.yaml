@@ -1,0 +1,10 @@
+have_fun: false
+code_review:
+  pull_request_opened:
+    help: false
+    summary: false
+    code_review: true
+ignore_patterns:
+  - version.txt
+  - support/chip/sha.txt
+  - package-lock.json
