@@ -693,8 +693,13 @@ function computeApplicability(features: Set<string>, supportedFeatures: Set<stri
 
             case Conformance.Special.Group: {
                 let result = None;
-                for (const child of ast.param) {
-                    switch (processNode(child)) {
+                const { param } = ast;
+                let count = param.length;
+                if (param[count - 1]?.type === Conformance.Flag.Deprecated) {
+                    count--;
+                }
+                for (let i = 0; i < count; i++) {
+                    switch (processNode(param[i])) {
                         case Unconditional:
                             return Unconditional;
 

@@ -6,9 +6,23 @@
 
 import { OccupancySensing } from "#clusters/occupancy-sensing";
 import { Logger, MaybePromise } from "#general";
+import { Val } from "#protocol";
 import { OccupancySensingBehavior } from "./OccupancySensingBehavior.js";
 
 const logger = Logger.get("OccupancySensingServer");
+
+const holdTimeDependencies = [
+    "holdTimeLimits",
+    "pirOccupiedToUnoccupiedDelay",
+    "pirUnoccupiedToOccupiedDelay",
+    "pirUnoccupiedToOccupiedThreshold",
+    "ultrasonicOccupiedToUnoccupiedDelay",
+    "ultrasonicUnoccupiedToOccupiedDelay",
+    "ultrasonicUnoccupiedToOccupiedThreshold",
+    "physicalContactOccupiedToUnoccupiedDelay",
+    "physicalContactUnoccupiedToOccupiedDelay",
+    "physicalContactUnoccupiedToOccupiedThreshold",
+];
 
 /**
  * This is the default server implementation of {@link OccupancySensingBehavior}.
@@ -59,6 +73,16 @@ export class OccupancySensingServer extends OccupancySensingBehavior {
                     "from features",
                     this.features,
                 );
+            }
+        }
+
+        // Clear attributes that are dependent on HoldTime if HoldTime is not set
+        // TODO - if we instead avoid defaults for attributes with field-conditional conformance, remove this
+        if (this.state.holdTime === undefined) {
+            for (const dep of holdTimeDependencies) {
+                if ((this.state as Val.Struct)[dep] !== undefined) {
+                    (this.state as Val.Struct)[dep] = undefined;
+                }
             }
         }
     }
