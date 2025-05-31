@@ -78,7 +78,7 @@ interface ListConfig {
 }
 
 function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, session: ValueSupervisor.Session) {
-    const { manageEntry, validateEntry, authorizeRead, authorizeWrite } = config;
+    const { manageEntries, manageEntry, validateEntry, authorizeRead, authorizeWrite } = config;
 
     // On read we treat nullish as an empty array.  This prevents errors on expired references
     const readVal = () => reference.value ?? [];
@@ -119,7 +119,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
         path: reference.location.path.at(-1),
     };
 
-    if (config.manageEntries) {
+    if (manageEntries) {
         // Base reader produces managed containers
         readEntry = index => {
             authorizeRead(session, reference.location);
@@ -161,7 +161,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
         readEntry = (index, location) => {
             authorizeRead(session, location);
             if (index < 0 || index > readVal().length) {
-                throw new WriteError(location, `Index ${index} is out of bounds`);
+                throw new ReadError(location, `Index ${index} is out of bounds`);
             }
 
             return readVal()[index];
@@ -188,8 +188,8 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
         reference.change(() => (writeVal()[index] = value));
     };
 
-    // If the list is fabric-scoped, wrap read and write to map indices
-    if (config.fabricScoped) {
+    // If the list is fabric-scoped, wrap read and write to map indices if it is a managed structure
+    if (manageEntries && config.fabricScoped) {
         function mapScopedToActual(index: number, reading: boolean) {
             if (index < 0) {
                 throw new (reading ? ReadError : WriteError)(reference.location, `Negative index ${index} unsupported`);
@@ -199,7 +199,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
             for (let i = 0; i < readVal().length; i++) {
                 // Skip invalid data
                 const entry = readVal()[i] as undefined | { fabricIndex?: number };
-                if (typeof entry !== "object") {
+                if (!isObject(entry)) {
                     continue;
                 }
 
@@ -248,7 +248,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
                     const valueIndex = mapScopedToActual(index, false);
                     writeVal().splice(valueIndex, 1);
                 } else {
-                    if (typeof value !== "object") {
+                    if (!isObject(value)) {
                         throw new WriteError(location, `Fabric scoped list value is not an object`, StatusCode.Failure);
                     }
                     (value as { fabricIndex?: number }).fabricIndex ??= session.fabric;
@@ -277,7 +277,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
                     for (let i = formerLength - 1; i >= length; i--) {
                         const entry = writeVal()[mapScopedToActual(i, true)] as undefined | { fabricIndex?: number };
                         if (
-                            typeof entry === "object" &&
+                            isObject(entry) &&
                             (session.offline || !entry.fabricIndex || entry.fabricIndex === session.fabric)
                         ) {
                             writeVal().splice(mapScopedToActual(i, false), 1);

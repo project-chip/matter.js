@@ -10,12 +10,15 @@ import { FabricIndex, NodeId } from "#types";
 import { TestStruct, aclEndpoint, listOf, structOf } from "./value-utils.js";
 
 export type ValueList = { value: number }[];
+export type ValueSubList = { value: number[] }[];
 
 export interface TwoLists {
     cx1: ActionContext;
     cx2: ActionContext;
     list1: ValueList;
     list2: ValueList;
+    subList1: ValueSubList;
+    subList2: ValueSubList;
 }
 
 export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLists) => MaybePromise) {
@@ -28,9 +31,17 @@ export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLis
                 }),
                 { access: "F" },
             ),
+            subList: listOf(
+                structOf({
+                    fabricIndex: "fabric-idx",
+                    value: listOf("uint8"),
+                }),
+                { access: "F" },
+            ),
         },
         {
             list: [],
+            subList: [],
         },
     );
 
@@ -61,7 +72,14 @@ export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLis
         list2[1] = { value: 4 };
         await cx2.transaction.commit();
 
-        await actor(struct, { cx1, cx2, list1, list2 });
+        const subList1 = ref1.subList as ValueSubList;
+        const subList2 = ref2.subList as ValueSubList;
+        subList1[0] = { value: [11, 12] };
+        await cx1.transaction.commit();
+        subList2[0] = { value: [13, 14] };
+        await cx2.transaction.commit();
+
+        await actor(struct, { cx1, cx2, list1, list2, subList1, subList2 });
     });
 }
 
@@ -135,13 +153,17 @@ describe("ListManager", () => {
     });
 
     it("fabric-scoped get/set", async () => {
-        await testFabricScoped(async (struct, { cx1, cx2, list1, list2 }) => {
+        await testFabricScoped(async (struct, { cx1, cx2, list1, list2, subList1, subList2 }) => {
             struct.expect({
                 list: [
                     { fabricIndex: 1, value: 1 },
                     { fabricIndex: 2, value: 2 },
                     { fabricIndex: 1, value: 3 },
                     { fabricIndex: 2, value: 4 },
+                ],
+                subList: [
+                    { fabricIndex: 1, value: [11, 12] },
+                    { fabricIndex: 2, value: [13, 14] },
                 ],
             });
 
@@ -150,13 +172,20 @@ describe("ListManager", () => {
             expect(list1[1]).deep.equals({ fabricIndex: 1, value: 3 });
             expect(list2[1]).deep.equals({ fabricIndex: 2, value: 4 });
 
+            expect(subList1[0]).deep.equals({ fabricIndex: 1, value: [11, 12] });
+            expect(subList2[0]).deep.equals({ fabricIndex: 2, value: [13, 14] });
+
             list1[0] = { value: 5 };
+            subList1[0] = { value: [15, 16] };
             await cx1.transaction.commit();
             list2[1] = { value: 6 };
+            subList2[1] = { value: [17, 18] };
             await cx2.transaction.commit();
 
             expect(list1[0]).deep.equals({ fabricIndex: 1, value: 5 });
+            expect(subList1[0]).deep.equals({ fabricIndex: 1, value: [15, 16] });
             expect(list2[1]).deep.equals({ fabricIndex: 2, value: 6 });
+            expect(subList2[1]).deep.equals({ fabricIndex: 2, value: [17, 18] });
 
             struct.expect({
                 list: [
@@ -165,10 +194,17 @@ describe("ListManager", () => {
                     { fabricIndex: 1, value: 3 },
                     { fabricIndex: 2, value: 6 },
                 ],
+                subList: [
+                    { fabricIndex: 1, value: [15, 16] },
+                    { fabricIndex: 2, value: [13, 14] },
+                    { fabricIndex: 2, value: [17, 18] },
+                ],
             });
 
             list1[1].value = 7;
             await cx1.transaction.commit();
+            subList2[0].value = [19];
+            await cx2.transaction.commit();
 
             struct.expect({
                 list: [
@@ -177,10 +213,17 @@ describe("ListManager", () => {
                     { fabricIndex: 1, value: 7 },
                     { fabricIndex: 2, value: 6 },
                 ],
+                subList: [
+                    { fabricIndex: 1, value: [15, 16] },
+                    { fabricIndex: 2, value: [19] },
+                    { fabricIndex: 2, value: [17, 18] },
+                ],
             });
 
             expect(list1.length).equals(2);
             expect(list2.length).equals(2);
+            expect(subList1.length).equals(1);
+            expect(subList2.length).equals(2);
         });
     });
 
@@ -200,6 +243,10 @@ describe("ListManager", () => {
                     { fabricIndex: 1, value: 5 },
                     { fabricIndex: 2, value: 6 },
                 ],
+                subList: [
+                    { fabricIndex: 1, value: [11, 12] },
+                    { fabricIndex: 2, value: [13, 14] },
+                ],
             });
 
             list1.splice(1, 1); // removes element value 3
@@ -214,6 +261,10 @@ describe("ListManager", () => {
                     { fabricIndex: 1, value: 5 },
                     { fabricIndex: 2, value: 6 },
                 ],
+                subList: [
+                    { fabricIndex: 1, value: [11, 12] },
+                    { fabricIndex: 2, value: [13, 14] },
+                ],
             });
 
             list1.pop(); // removes element value 5
@@ -225,6 +276,10 @@ describe("ListManager", () => {
                 list: [
                     { fabricIndex: 1, value: 1 },
                     { fabricIndex: 2, value: 6 },
+                ],
+                subList: [
+                    { fabricIndex: 1, value: [11, 12] },
+                    { fabricIndex: 2, value: [13, 14] },
                 ],
             });
 
@@ -240,10 +295,14 @@ describe("ListManager", () => {
                     { fabricIndex: 1, value: 1 },
                     { fabricIndex: 2, value: 8 },
                 ],
+                subList: [
+                    { fabricIndex: 1, value: [11, 12] },
+                    { fabricIndex: 2, value: [13, 14] },
+                ],
             });
 
             /* TODO these two cases are buggy!! In fact when values are swapped around it seems that the value is set
-                but the "managed reference" is the same so as soon as the first value is set on the entry of the secoond
+                but the "managed reference" is the same so as soon as the first value is set on the entry of the second
                 (even after reading that before) it breaks
             list1.reverse();
             await cx1.transaction.commit();
@@ -281,6 +340,10 @@ describe("ListManager", () => {
                     { fabricIndex: 2, value: 6 },
                     { fabricIndex: 2, value: 8 },
                 ],
+                subList: [
+                    { fabricIndex: 1, value: [11, 12] },
+                    { fabricIndex: 2, value: [13, 14] },
+                ],
             });
 
             list2.length = 0;
@@ -288,6 +351,10 @@ describe("ListManager", () => {
 
             struct.expect({
                 list: [],
+                subList: [
+                    { fabricIndex: 1, value: [11, 12] },
+                    { fabricIndex: 2, value: [13, 14] },
+                ],
             });
         });
     });
