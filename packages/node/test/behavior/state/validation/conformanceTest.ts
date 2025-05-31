@@ -552,8 +552,21 @@ const AllTests = Tests({
                 },
             ),
             {
-                "OccupancySensing.PirUnoccupiedToOccupiedDelay": {
+                "disallows PirUnoccupiedToOccupiedDelay without HoldTime": {
                     record: { pirUnoccupiedToOccupiedDelay: 4 },
+                    error: {
+                        type: ConformanceError,
+                        message:
+                            'Validating Test.pirUnoccupiedToOccupiedDelay: Conformance "HoldTime & (PIR | !PIR & !US & !PHY) & PirUnoccupiedToOccupiedThreshold, [HoldTime & (PIR | !PIR & !US & !PHY)], D": Matter does not allow you to set this attribute',
+                    },
+                },
+
+                "allows PirUnoccupiedToOccupiedDelay without HoldTime": {
+                    record: { holdTime: 4, pirUnoccupiedToOccupiedDelay: 4 },
+                },
+
+                "allows neither PirUnoccupiedToOccupiedDelay nor HoldTime": {
+                    record: {},
                 },
             },
         ),

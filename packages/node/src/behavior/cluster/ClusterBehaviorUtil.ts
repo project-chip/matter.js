@@ -8,7 +8,6 @@ import { Events, OfflineEvent, OnlineEvent, QuietEvent } from "#behavior/Events.
 import { AsyncObservable, camelize, EventEmitter, GeneratedClass, ImplementationError, Observable } from "#general";
 import {
     ClusterModel,
-    Conformance,
     DefaultValue,
     ElementTag,
     FeatureMap,
@@ -178,7 +177,6 @@ function createDerivedState(
         // value from previous configurations as otherwise conformance may not pass
         const attrs = props[name];
         let propSchema: ValueModel | undefined;
-        let isConditional = false;
 
         // Determine whether the attribute applies
         for (const attr of attrs) {
@@ -189,23 +187,13 @@ function createDerivedState(
                 continue;
             }
 
-            // Conditionally applicable; do not add default, do not remove default
-            if (applicability === Conformance.Applicability.Conditional) {
-                isConditional = true;
-            }
-
-            // Unconditionally applicable; add new default
+            // Applicable; add new default.  If conditional then cluster logic must modify
             propSchema = attr;
             break;
         }
 
         // If the attribute doesn't apply, erase any previous default unless conditionally applicable
         if (propSchema === undefined) {
-            // If conditional, retain incoming default
-            if (isConditional) {
-                return;
-            }
-
             // Inapplicable; ensure no default is present
             if (oldDefaults[name] !== undefined) {
                 // Save the default value so we can recreate it if a future derivative re-enables this element
