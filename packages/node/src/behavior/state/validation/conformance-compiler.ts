@@ -287,6 +287,9 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
 
         // A "group" is a list of conformances; any success passes the entire group and subsequent tests are not
         // evaluated
+        if (param[param.length - 1]?.type === Conformance.Flag.Deprecated) {
+            param = param.slice(0, param.length - 1);
+        }
         const members = param.map(test => compile(test));
 
         // Reduce tests that must be evaluated at runtime vs. compile time
