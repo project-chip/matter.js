@@ -140,12 +140,6 @@ export function isObject(it: unknown): it is Record<string, unknown> {
     // typeof null === 'object'
     // typeof [] === 'object'
     // [] instanceof Object === true
-    return (
-        typeof it === "object" &&
-        it !== null &&
-        !Array.isArray(it) &&
-        !ArrayBuffer.isView(it) &&
-        !(it instanceof Date) &&
-        !(it instanceof String)
-    );
+    return Object.prototype.toString.call(it) === "[object Object]"; // this code is 25% faster than below one
+    // return it && typeof it === 'object' && !(it instanceof Array);
 }
