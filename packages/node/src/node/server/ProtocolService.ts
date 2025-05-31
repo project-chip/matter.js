@@ -595,7 +595,12 @@ function invokeCommand(
     const { path, endpoint } = backing;
     const context = session as ActionContext;
 
-    logger.info("Invoke", Diagnostic.strong(path.toString()), session.transaction.via, requestDiagnostic);
+    logger.info(
+        "Invoke",
+        Diagnostic.strong(`${path.toString()}.${command.name}`),
+        session.transaction.via,
+        requestDiagnostic,
+    );
 
     const agent = context.agentFor(endpoint);
     const behavior = agent.get(backing.type);
@@ -639,7 +644,7 @@ function invokeCommand(
                     if (isObject(result)) {
                         logger.debug(
                             "Invoke result",
-                            Diagnostic.strong(path.toString()),
+                            Diagnostic.strong(`${path.toString()}.${command.name}`),
                             session.transaction!.via,
                             Diagnostic.dict(result),
                         );
@@ -651,7 +656,7 @@ function invokeCommand(
             if (isObject(result)) {
                 logger.debug(
                     "Invoke result",
-                    Diagnostic.strong(path.toString()),
+                    Diagnostic.strong(`${path.toString()}.${command.name}`),
                     session.transaction.via,
                     Diagnostic.dict(result),
                 );
