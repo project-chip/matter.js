@@ -37,13 +37,28 @@ export class CaseClient {
 
     async pair(exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId, expectedProcessingTimeMs?: number) {
         const messenger = new CaseClientMessenger(exchange, expectedProcessingTimeMs);
-        try {
-            return await this.#doPair(messenger, exchange, fabric, peerNodeId);
-        } catch (error) {
-            if (!(error instanceof ChannelStatusResponseError)) {
-                await messenger.sendError(ProtocolStatusCode.InvalidParam);
+        let retryAllowed = true;
+        while (retryAllowed) {
+            retryAllowed = false; // by default, do not try again
+            try {
+                return await this.#doPair(messenger, exchange, fabric, peerNodeId);
+            } catch (error) {
+                if (error instanceof ChannelStatusResponseError) {
+                    if (error.protocolStatusCode === ProtocolStatusCode.NoSharedTrustRoots) {
+                        // Seems the stored resumption record is outdated, we need to retry pairing without resumption
+                        if (await this.#sessions.deleteResumptionRecord(fabric.addressOf(peerNodeId))) {
+                            logger.info(
+                                `Case client: Resumption record seems outdated for Fabric ${NodeId.toHexString(fabric.nodeId)} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}. Retrying pairing without resumption...`,
+                            );
+                            retryAllowed = true; // try again without resumption
+                            continue;
+                        }
+                    }
+                } else {
+                    await messenger.sendError(ProtocolStatusCode.InvalidParam);
+                }
+                throw error;
             }
-            throw error;
         }
     }
 
