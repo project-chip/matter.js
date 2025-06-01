@@ -57,7 +57,7 @@ export function repackErrorAs<E extends ClassExtends<Error>, I extends InstanceT
 
     if (considerAsError(error)) {
         const repackedError = new repackAsErrorClass(error.message);
-        repackedError.stack = error.stack;
+        repackedError.cause = error;
         return repackedError as I;
     }
 

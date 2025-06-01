@@ -1320,8 +1320,11 @@ export class ControllerCommissioningFlow {
                 isConcurrentFlow,
             );
         } catch (error) {
-            const commError = repackErrorAs(error, CommissioningError);
-            commError.code = CommissioningErrorCode.OperativeConnectionFailed;
+            const commError = new CommissioningError(
+                "Operative reconnection with device failed",
+                CommissioningErrorCode.OperativeConnectionFailed,
+            );
+            commError.cause = error;
             throw commError;
         }
 
