@@ -6,7 +6,6 @@
 
 import { Bytes, Crypto, Logger, PublicKey, UnexpectedDataError } from "#general";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
-import { SecureSession } from "#session/SecureSession.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId, ProtocolStatusCode } from "#types";
 import { TlvIntermediateCertificate, TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
@@ -36,29 +35,13 @@ export class CaseClient {
         this.#sessions = sessions;
     }
 
-    async pair(
-        exchange: MessageExchange,
-        fabric: Fabric,
-        peerNodeId: NodeId,
-        expectedProcessingTimeMs?: number,
-    ): Promise<{ session: SecureSession; resumed: boolean }> {
+    async pair(exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId, expectedProcessingTimeMs?: number) {
         const messenger = new CaseClientMessenger(exchange, expectedProcessingTimeMs);
 
         try {
             return await this.#doPair(messenger, exchange, fabric, peerNodeId);
         } catch (error) {
-            if (error instanceof ChannelStatusResponseError) {
-                if (error.protocolStatusCode === ProtocolStatusCode.NoSharedTrustRoots) {
-                    // Seems the stored resumption record is outdated, we need to retry pairing without resumption
-                    if (await this.#sessions.deleteResumptionRecord(fabric.addressOf(peerNodeId))) {
-                        logger.info(
-                            `Case client: Resumption record seems outdated for Fabric ${NodeId.toHexString(fabric.nodeId)} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}. Retrying pairing without resumption...`,
-                        );
-                        // An endless loop should not happen here, as the resumption record is deleted in the next step
-                        return await this.pair(exchange, fabric, peerNodeId, expectedProcessingTimeMs);
-                    }
-                }
-            } else {
+            if (!(error instanceof ChannelStatusResponseError)) {
                 await messenger.sendError(ProtocolStatusCode.InvalidParam);
             }
             throw error;
