@@ -50,13 +50,14 @@ export function errorOf(cause: unknown): Error {
 export function repackErrorAs<E extends ClassExtends<Error>, I extends InstanceType<E>>(
     error: unknown,
     repackAsErrorClass: E,
+    message?: string,
 ): I {
     if (error instanceof repackAsErrorClass) {
         return error as I;
     }
 
     if (considerAsError(error)) {
-        const repackedError = new repackAsErrorClass(error.message);
+        const repackedError = new repackAsErrorClass(message ?? error.message);
         repackedError.cause = error;
         return repackedError as I;
     }
