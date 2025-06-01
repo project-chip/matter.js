@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto, Logger, PublicKey, UnexpectedDataError } from "#general";
+import { Bytes, Crypto, InternalError, Logger, PublicKey, UnexpectedDataError } from "#general";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId, ProtocolStatusCode } from "#types";
@@ -37,6 +37,8 @@ export class CaseClient {
 
     async pair(exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId, expectedProcessingTimeMs?: number) {
         const messenger = new CaseClientMessenger(exchange, expectedProcessingTimeMs);
+
+        // The following while loop just allows an easy retry way in case the pairing fails due to an outdated resumption record.
         let retryAllowed = true;
         while (retryAllowed) {
             retryAllowed = false; // by default, do not try again
@@ -60,6 +62,7 @@ export class CaseClient {
                 throw error;
             }
         }
+        throw new InternalError("Unexpected code flow reached"); // This should never happen, needed for response typing
     }
 
     async #doPair(messenger: CaseClientMessenger, exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId) {

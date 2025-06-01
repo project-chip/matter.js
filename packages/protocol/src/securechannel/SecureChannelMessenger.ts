@@ -24,7 +24,7 @@ export class ChannelStatusResponseError extends MatterError {
         public readonly protocolStatusCode: ProtocolStatusCode,
     ) {
         super(
-            `(${GeneralStatusCode[generalStatusCode]} (${generalStatusCode}) / ${ProtocolStatusCode[protocolStatusCode]}(${protocolStatusCode})) ${message}`,
+            `(${GeneralStatusCode[generalStatusCode]} (${generalStatusCode}) / ${ProtocolStatusCode[protocolStatusCode]} (${protocolStatusCode})) ${message}`,
         );
     }
 }
