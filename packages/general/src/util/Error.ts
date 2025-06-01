@@ -47,15 +47,19 @@ export function errorOf(cause: unknown): Error {
  * Repacks an error object as a different error class.
  * The error stack is copied over from the original error instance
  */
-export function repackErrorAs(error: unknown, repackAsErrorClass: ClassExtends<Error>) {
+export function repackErrorAs<E extends ClassExtends<Error>, I extends InstanceType<E>>(
+    error: unknown,
+    repackAsErrorClass: E,
+    message?: string,
+): I {
     if (error instanceof repackAsErrorClass) {
-        return error;
+        return error as I;
     }
 
     if (considerAsError(error)) {
-        const repackedError = new repackAsErrorClass(error.message);
-        repackedError.stack = error.stack;
-        return repackedError;
+        const repackedError = new repackAsErrorClass(message ?? error.message);
+        repackedError.cause = error;
+        return repackedError as I;
     }
 
     throw new TypeError("Cannot repackage non-Error object");

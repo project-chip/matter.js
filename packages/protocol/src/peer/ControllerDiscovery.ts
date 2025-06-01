@@ -5,6 +5,7 @@
  */
 
 import { anyPromise, ClassExtends, Diagnostic, Logger, NoResponseTimeoutError, serverAddressToString } from "#general";
+import { CommissionableDeviceDiscoveryFailedError } from "#peer/ControllerCommissioningFlow.js";
 import { NodeId } from "#types";
 import {
     AddressTypeFromDevice,
@@ -17,7 +18,6 @@ import {
 import { Fabric } from "../fabric/Fabric.js";
 import { MdnsScanner } from "../mdns/MdnsScanner.js";
 import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
-import { CommissioningError } from "./ControllerCommissioningFlow.js";
 
 const logger = Logger.get("ControllerDiscovery");
 
@@ -50,7 +50,7 @@ export class ControllerDiscovery {
             );
             logger.info(`Found ${foundDevices.length} devices using identifier ${Diagnostic.json(identifier)}`);
             if (foundDevices.length === 0) {
-                throw new CommissioningError(
+                throw new CommissionableDeviceDiscoveryFailedError(
                     `No device discovered using identifier ${Diagnostic.json(
                         identifier,
                     )}! Please check that the relevant device is online.`,
@@ -59,7 +59,7 @@ export class ControllerDiscovery {
 
             const devices = foundDevices.filter(device => device.addresses.length > 0);
             if (devices.length === 0) {
-                throw new CommissioningError(
+                throw new CommissionableDeviceDiscoveryFailedError(
                     `Device discovered using identifier ${Diagnostic.json(
                         identifier,
                     )}, but no Network addresses discovered.`,

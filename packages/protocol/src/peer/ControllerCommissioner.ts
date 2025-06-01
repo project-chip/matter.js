@@ -27,6 +27,7 @@ import {
     CommissioningError,
     ControllerCommissioningFlow,
     ControllerCommissioningFlowOptions,
+    NodeIdConflictError,
 } from "#peer/ControllerCommissioningFlow.js";
 import { ControllerDiscovery, PairRetransmissionLimitReachedError } from "#peer/ControllerDiscovery.js";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
@@ -370,10 +371,10 @@ export class ControllerCommissioner {
         return new MessageChannel(paseChannel, paseSecureSession);
     }
 
-    /** Validate if a Peert Address is already known and commissioned */
+    /** Validate if a Peer Address is already known and commissioned */
     #assertPeerAddress(address: PeerAddress) {
         if (this.#context.peers.has(address)) {
-            throw new CommissioningError(`Node ID ${address.nodeId} is already commissioned and can not be reused.`);
+            throw new NodeIdConflictError(`Node ID ${address.nodeId} is already commissioned and can not be reused.`);
         }
     }
 

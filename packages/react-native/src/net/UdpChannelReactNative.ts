@@ -182,7 +182,7 @@ export class UdpChannelReactNative implements UdpChannel {
         return new Promise<void>((resolve, reject) => {
             this.socket.send(data, port, host, error => {
                 if (error !== null) {
-                    reject(repackErrorAs(error, NetworkError));
+                    reject(repackErrorAs(error, NetworkError) as Error);
                     return;
                 }
                 resolve();
