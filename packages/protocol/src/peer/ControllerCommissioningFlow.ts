@@ -140,51 +140,41 @@ type CollectedCommissioningData = {
     fabricIndex?: FabricIndex;
 };
 
-export enum CommissioningErrorCode {
-    /** An unspecified error occurred during commissioning. Please check the error message for details. */
-    UnspecifiedError = 1,
+/**
+ * Error that throws when Commissioning fails and a process cannot be continued, and no more specific error
+ * information is available.
+ */
+export class CommissioningError extends MatterError {}
 
-    /** The number of fabrics that can be commissioned is already reached. */
-    MaximumCommissionedFabricsReached = 2,
+/** The number of fabrics that can be commissioned is already reached. */
+export class MaximumCommissionedFabricsReachedError extends CommissioningError {}
 
-    /** The commissioning process could not be finished within the maximum allowed commissioning timeframe. */
-    CommissioningTimeout = 3,
+/** The commissioning process could not be finished within the maximum allowed commissioning timeframe. */
+export class CommissioningTimeoutError extends CommissioningError {}
 
-    /** The device is already commissioned into the fabric. */
-    DeviceAlreadyCommissionedToThisFabric = 4,
+/** Error that throws when the device is already commissioned to this fabric. */
+export class DeviceAlreadyCommissionedToThisFabricError extends CommissioningError {}
 
-    /** The device is already commissioned to another fabric with the same label. */
-    FabricLabelConflict = 5,
+/** Error that throws when the device is already commissioned to another fabric with the same label. */
+export class FabricLabelConflictError extends CommissioningError {}
 
-    /** The device has no connected network and no credentials for Wifi or Thread network were configured for controller. */
-    WifiOrThreadNetworkCredentialsNotConfigured = 6,
+/** Error that throws when the device has no connected network and no credentials for Wifi or Thread network were configured. */
+export class WifiOrThreadNetworkCredentialsNotConfiguredError extends CommissioningError {}
 
-    /** The setup for the provided Wifi network failed. See error message for details. */
-    WifiNetworkSetupFailed = 7,
+/** Error that throws when the setup for the provided Wifi network failed. */
+export class WifiNetworkSetupFailedError extends CommissioningError {}
 
-    /** The setup for the provided Thread network failed. See error message for details */
-    ThreadNetworkSetupFailed = 8,
+/** Error that throws when the setup for the provided Thread network failed. */
+export class ThreadNetworkSetupFailedError extends CommissioningError {}
 
-    /** The NodeId is already used in the fabric. Please provide another one. */
-    NodeIdConflict = 9,
+/** Error that throws when the NodeId is already used in the fabric. */
+export class NodeIdConflictError extends CommissioningError {}
 
-    /** The device could not be discovered using the provided details. */
-    CommissionableDeviceDiscoveryFailed = 10,
+/** Error that throws when the device could not be discovered using the provided details. */
+export class CommissionableDeviceDiscoveryFailedError extends CommissioningError {}
 
-    /** The device could not be connected using the operational discovery and no session could be created. */
-    OperativeConnectionFailed = 11,
-}
-
-/** Error that throws when Commissioning fails and a process cannot be continued. */
-export class CommissioningError extends MatterError {
-    public constructor(
-        message: string,
-        public code = CommissioningErrorCode.UnspecifiedError,
-    ) {
-        super();
-        this.message = `(${CommissioningErrorCode[code]}) ${message}`;
-    }
-}
+/** Error that throws when the device could not be connected using the operational discovery and no session could be created. */
+export class OperativeConnectionFailedError extends CommissioningError {}
 
 /** Error that throws when Commissioning fails but a process can be continued. */
 class RecoverableCommissioningError extends CommissioningError {}
@@ -270,9 +260,8 @@ export class ControllerCommissioningFlow {
                         );
                         const maxTimeS =
                             this.collectedCommissioningData.basicCommissioningInfo?.maxCumulativeFailsafeSeconds;
-                        throw new CommissioningError(
+                        throw new CommissioningTimeoutError(
                             `Commissioning time exceeds the maximum timeframe${maxTimeS ? ` of ${maxTimeS}s` : ""}`,
-                            CommissioningErrorCode.CommissioningTimeout,
                         );
                     }
                     /**
@@ -505,19 +494,16 @@ export class ControllerCommissioningFlow {
         if (context === "addNoc") {
             // Let's return a bit more convenient error in this case
             if (statusCode === OperationalCredentials.NodeOperationalCertStatus.FabricConflict) {
-                throw new CommissioningError(
+                throw new DeviceAlreadyCommissionedToThisFabricError(
                     `Commission error: This device is already commissioned into this fabric. You cannot commission it again.`,
-                    CommissioningErrorCode.DeviceAlreadyCommissionedToThisFabric,
                 );
             } else if (statusCode === OperationalCredentials.NodeOperationalCertStatus.TableFull) {
-                throw new CommissioningError(
+                throw new MaximumCommissionedFabricsReachedError(
                     `Commission error: This device reached the maximum number of fabrics it can be part of. Please remove a fabric before trying to add another one.`,
-                    CommissioningErrorCode.MaximumCommissionedFabricsReached,
                 );
             } else if (statusCode === OperationalCredentials.NodeOperationalCertStatus.LabelConflict) {
-                throw new CommissioningError(
+                throw new FabricLabelConflictError(
                     `Commission error: This device is already commissioned with a fabric with the same label. Please choose a different label.`,
-                    CommissioningErrorCode.FabricLabelConflict,
                 );
             }
         }
@@ -546,9 +532,8 @@ export class ControllerCommissioningFlow {
         const supportedFabrics = await operationalCredentialsClient.getSupportedFabricsAttribute();
         const commissionedFabrics = await operationalCredentialsClient.getCommissionedFabricsAttribute();
         if (commissionedFabrics >= supportedFabrics) {
-            throw new CommissioningError(
+            throw new MaximumCommissionedFabricsReachedError(
                 `Commissioned fabrics (${commissionedFabrics}) exceed supported fabrics (${supportedFabrics}). Please remove some fabrics before commissioning.`,
-                CommissioningErrorCode.MaximumCommissionedFabricsReached,
             );
         }
 
@@ -955,9 +940,8 @@ export class ControllerCommissioningFlow {
                     value.some(({ connected }) => connected),
                 );
             if (!anyEthernetInterface && !anyInterfaceConnected) {
-                throw new CommissioningError(
+                throw new WifiOrThreadNetworkCredentialsNotConfiguredError(
                     "No Wi-Fi/Thread network credentials are configured for commissioning and no Ethernet interface is available on the device and no interface already connected.",
-                    CommissioningErrorCode.WifiOrThreadNetworkCredentialsNotConfigured,
                 );
             }
         }
@@ -1025,15 +1009,11 @@ export class ControllerCommissioningFlow {
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
         if (networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
-            throw new CommissioningError(
-                `Commissionee failed to scan for WiFi networks: ${debugText}`,
-                CommissioningErrorCode.WifiNetworkSetupFailed,
-            );
+            throw new WifiNetworkSetupFailedError(`Commissionee failed to scan for WiFi networks: ${debugText}`);
         }
         if (wiFiScanResults === undefined || wiFiScanResults.length === 0) {
-            throw new CommissioningError(
+            throw new WifiNetworkSetupFailedError(
                 `Commissionee did not return any WiFi networks for the requested SSID ${this.commissioningOptions.wifiNetwork.wifiSsid}`,
-                CommissioningErrorCode.WifiNetworkSetupFailed,
             );
         }
 
@@ -1050,16 +1030,10 @@ export class ControllerCommissioningFlow {
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
         if (addNetworkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
-            throw new CommissioningError(
-                `Commissionee failed to add WiFi network: ${addDebugText}`,
-                CommissioningErrorCode.WifiNetworkSetupFailed,
-            );
+            throw new WifiNetworkSetupFailedError(`Commissionee failed to add WiFi network: ${addDebugText}`);
         }
         if (networkIndex === undefined) {
-            throw new CommissioningError(
-                `Commissionee did not return network index`,
-                CommissioningErrorCode.WifiNetworkSetupFailed,
-            );
+            throw new WifiNetworkSetupFailedError(`Commissionee did not return network index`);
         }
         logger.debug(
             `Commissionee added WiFi network ${this.commissioningOptions.wifiNetwork.wifiSsid} with network index ${networkIndex}`,
@@ -1067,10 +1041,7 @@ export class ControllerCommissioningFlow {
 
         const updatedNetworks = await networkCommissioningClusterClient.getNetworksAttribute();
         if (updatedNetworks[networkIndex] === undefined) {
-            throw new CommissioningError(
-                `Commissionee did not return network with index ${networkIndex}`,
-                CommissioningErrorCode.WifiNetworkSetupFailed,
-            );
+            throw new WifiNetworkSetupFailedError(`Commissionee did not return network with index ${networkIndex}`);
         }
         const { networkId, connected } = updatedNetworks[networkIndex];
         if (connected) {
@@ -1095,9 +1066,8 @@ export class ControllerCommissioningFlow {
         );
 
         if (connectResult.networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
-            throw new CommissioningError(
+            throw new WifiNetworkSetupFailedError(
                 `Commissionee failed to connect to WiFi network: ${connectResult.debugText}`,
-                CommissioningErrorCode.WifiNetworkSetupFailed,
             );
         }
         this.collectedCommissioningData.successfullyConnectedToNetwork = true;
@@ -1171,26 +1141,21 @@ export class ControllerCommissioningFlow {
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
         if (networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
-            throw new CommissioningError(
-                `Commissionee failed to scan for Thread networks: ${debugText}`,
-                CommissioningErrorCode.ThreadNetworkSetupFailed,
-            );
+            throw new ThreadNetworkSetupFailedError(`Commissionee failed to scan for Thread networks: ${debugText}`);
         }
         if (threadScanResults === undefined || threadScanResults.length === 0) {
-            throw new CommissioningError(
+            throw new ThreadNetworkSetupFailedError(
                 `Commissionee did not return any Thread networks for the requested Network ${this.commissioningOptions.threadNetwork.networkName}`,
-                CommissioningErrorCode.ThreadNetworkSetupFailed,
             );
         }
         const wantedNetworkFound = threadScanResults.find(
             ({ networkName }) => networkName === this.commissioningOptions.threadNetwork?.networkName,
         );
         if (wantedNetworkFound === undefined) {
-            throw new CommissioningError(
+            throw new ThreadNetworkSetupFailedError(
                 `Commissionee did not return the requested Network ${
                     this.commissioningOptions.threadNetwork.networkName
                 }: ${Diagnostic.json(threadScanResults)}`,
-                CommissioningErrorCode.ThreadNetworkSetupFailed,
             );
         }
         logger.debug(
@@ -1211,16 +1176,10 @@ export class ControllerCommissioningFlow {
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
         if (addNetworkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
-            throw new CommissioningError(
-                `Commissionee failed to add Thread network: ${addDebugText}`,
-                CommissioningErrorCode.ThreadNetworkSetupFailed,
-            );
+            throw new ThreadNetworkSetupFailedError(`Commissionee failed to add Thread network: ${addDebugText}`);
         }
         if (networkIndex === undefined) {
-            throw new CommissioningError(
-                `Commissionee did not return network index`,
-                CommissioningErrorCode.ThreadNetworkSetupFailed,
-            );
+            throw new ThreadNetworkSetupFailedError(`Commissionee did not return network index`);
         }
         logger.debug(
             `Commissionee added Thread network ${this.commissioningOptions.threadNetwork.networkName} with network index ${networkIndex}`,
@@ -1228,10 +1187,7 @@ export class ControllerCommissioningFlow {
 
         const updatedNetworks = await networkCommissioningClusterClient.getNetworksAttribute();
         if (updatedNetworks[networkIndex] === undefined) {
-            throw new CommissioningError(
-                `Commissionee did not return network with index ${networkIndex}`,
-                CommissioningErrorCode.ThreadNetworkSetupFailed,
-            );
+            throw new ThreadNetworkSetupFailedError(`Commissionee did not return network with index ${networkIndex}`);
         }
         const { networkId, connected } = updatedNetworks[networkIndex];
         if (connected) {
@@ -1255,9 +1211,8 @@ export class ControllerCommissioningFlow {
         );
 
         if (connectResult.networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
-            throw new CommissioningError(
+            throw new ThreadNetworkSetupFailedError(
                 `Commissionee failed to connect to Thread network: ${connectResult.debugText}`,
-                CommissioningErrorCode.ThreadNetworkSetupFailed,
             );
         }
         logger.debug(
@@ -1320,10 +1275,7 @@ export class ControllerCommissioningFlow {
                 isConcurrentFlow,
             );
         } catch (error) {
-            const commError = new CommissioningError(
-                "Operative reconnection with device failed",
-                CommissioningErrorCode.OperativeConnectionFailed,
-            );
+            const commError = new OperativeConnectionFailedError("Operative reconnection with device failed");
             commError.cause = error;
             throw commError;
         }

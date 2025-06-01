@@ -25,9 +25,9 @@ import {
 import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import {
     CommissioningError,
-    CommissioningErrorCode,
     ControllerCommissioningFlow,
     ControllerCommissioningFlowOptions,
+    NodeIdConflictError,
 } from "#peer/ControllerCommissioningFlow.js";
 import { ControllerDiscovery, PairRetransmissionLimitReachedError } from "#peer/ControllerDiscovery.js";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
@@ -374,10 +374,7 @@ export class ControllerCommissioner {
     /** Validate if a Peer Address is already known and commissioned */
     #assertPeerAddress(address: PeerAddress) {
         if (this.#context.peers.has(address)) {
-            throw new CommissioningError(
-                `Node ID ${address.nodeId} is already commissioned and can not be reused.`,
-                CommissioningErrorCode.NodeIdConflict,
-            );
+            throw new NodeIdConflictError(`Node ID ${address.nodeId} is already commissioned and can not be reused.`);
         }
     }
 
