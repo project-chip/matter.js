@@ -6,6 +6,7 @@
 
 import { Bytes, Crypto, Logger, PublicKey, UnexpectedDataError } from "#general";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
+import { SecureSession } from "#session/SecureSession.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId, ProtocolStatusCode } from "#types";
 import { TlvIntermediateCertificate, TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
