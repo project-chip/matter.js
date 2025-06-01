@@ -39,6 +39,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: All legacy used *Server classes (AttributeServer, EventServer, CommandServer) are moved to the matter.js legacy package
     - Feature: Added `getLocal()` to AttributeClient to retrieve the currently stored/cached value 
     - Enhancement: Optimized the usage of the MDNSScanner to prevent holding data in memory that are not needed (e.g. from other fabrics or such)
+    - Enhancement: Retries to re-establish a CASE session when connection fails because of invalid resumption data
     - Adjustment: ACL writes are not sent chunked by default from now on like also in chip SDK
     - Fix: Handles messages only that are secured as required for the relevant protocol
 

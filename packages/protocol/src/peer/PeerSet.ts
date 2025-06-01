@@ -31,13 +31,14 @@ import {
 import { SubscriptionClient } from "#interaction/SubscriptionClient.js";
 import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
+import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { CaseClient, SecureSession, Session } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
-import { SECURE_CHANNEL_PROTOCOL_ID } from "#types";
+import { NodeId, ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "#types";
 import { ChannelManager } from "../protocol/ChannelManager.js";
 import { ChannelNotConnectedError, ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
 import { DedicatedChannelExchangeProvider, ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
-import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
+import { MessageExchange, RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
 import { ControllerDiscovery, DiscoveryError, PairRetransmissionLimitReachedError } from "./ControllerDiscovery.js";
 import { InteractionQueue } from "./InteractionQueue.js";
 import { OperationalPeer } from "./OperationalPeer.js";
@@ -654,42 +655,67 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             },
             isInitiator: true,
         });
-        const operationalUnsecureMessageExchange = new MessageChannel(operationalChannel, unsecureSession);
-        let operationalSecureSession;
+
         try {
-            const exchange = this.#exchanges.initiateExchangeWithChannel(
-                operationalUnsecureMessageExchange,
-                SECURE_CHANNEL_PROTOCOL_ID,
+            const operationalSecureSession = await this.#doCasePair(
+                new MessageChannel(operationalChannel, unsecureSession),
+                address,
+                expectedProcessingTimeMs,
             );
 
-            try {
-                const { session, resumed } = await this.#caseClient.pair(
-                    exchange,
-                    this.#sessions.fabricFor(address),
-                    address.nodeId,
-                    expectedProcessingTimeMs,
-                );
-                operationalSecureSession = session;
-
-                if (!resumed) {
-                    // When the session was not resumed then most likely the device firmware got updated, so we clear the cache
-                    this.#nodeCachedData.delete(address);
-                }
-            } catch (e) {
-                await exchange.close();
-                throw e;
-            }
-        } catch (e) {
-            NoResponseTimeoutError.accept(e);
+            const channel = new MessageChannel(operationalChannel, operationalSecureSession);
+            await this.#channels.setChannel(address, channel);
+            return channel;
+        } catch (error) {
+            NoResponseTimeoutError.accept(error);
 
             // Convert error
-            throw new PairRetransmissionLimitReachedError(e.message);
+            throw new PairRetransmissionLimitReachedError(error.message);
         } finally {
             await unsecureSession.destroy();
         }
-        const channel = new MessageChannel(operationalChannel, operationalSecureSession);
-        await this.#channels.setChannel(address, channel);
-        return channel;
+    }
+
+    async #doCasePair(
+        unsecureMessageChannel: MessageChannel,
+        address: PeerAddress,
+        expectedProcessingTimeMs?: number,
+    ): Promise<SecureSession> {
+        const fabric = this.#sessions.fabricFor(address);
+        let exchange: MessageExchange | undefined;
+        try {
+            exchange = this.#exchanges.initiateExchangeWithChannel(unsecureMessageChannel, SECURE_CHANNEL_PROTOCOL_ID);
+
+            const { session, resumed } = await this.#caseClient.pair(
+                exchange,
+                fabric,
+                address.nodeId,
+                expectedProcessingTimeMs,
+            );
+
+            if (!resumed) {
+                // When the session was not resumed then most likely the device firmware got updated, so we clear the cache
+                this.#nodeCachedData.delete(address);
+            }
+            return session;
+        } catch (error) {
+            await exchange?.close();
+
+            if (
+                error instanceof ChannelStatusResponseError &&
+                error.protocolStatusCode === ProtocolStatusCode.NoSharedTrustRoots
+            ) {
+                // It seems the stored resumption record is outdated; we need to retry pairing without resumption
+                if (await this.#sessions.deleteResumptionRecord(fabric.addressOf(address.nodeId))) {
+                    logger.info(
+                        `Case client: Resumption record seems outdated for Fabric ${NodeId.toHexString(fabric.nodeId)} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(address.nodeId)}. Retrying pairing without resumption...`,
+                    );
+                    // An endless loop should not happen here, as the resumption record is deleted in the next step
+                    return await this.#doCasePair(unsecureMessageChannel, address, expectedProcessingTimeMs);
+                }
+            }
+            throw error;
+        }
     }
 
     /**

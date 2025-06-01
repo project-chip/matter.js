@@ -37,6 +37,7 @@ export class CaseClient {
 
     async pair(exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId, expectedProcessingTimeMs?: number) {
         const messenger = new CaseClientMessenger(exchange, expectedProcessingTimeMs);
+
         try {
             return await this.#doPair(messenger, exchange, fabric, peerNodeId);
         } catch (error) {

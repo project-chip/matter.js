@@ -46,7 +46,7 @@ export class CaseClientMessenger extends SecureChannelMessenger {
                 return { sigma2Resume: TlvCaseSigma2Resume.decode(payload) };
             default:
                 throw new MatterFlowError(
-                    `Received unexpected message type while expecting CASE Sigma2: ${messageType}, expected: ${SecureMessageType.Sigma2} or ${SecureMessageType.Sigma2Resume}`,
+                    `Received unexpected message type while expecting CASE Sigma2(Resume): ${messageType}, expected: ${SecureMessageType.Sigma2} or ${SecureMessageType.Sigma2Resume}`,
                 );
         }
     }

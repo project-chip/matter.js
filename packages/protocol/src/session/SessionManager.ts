@@ -135,9 +135,9 @@ export class SessionManager {
         this.#sessionParameters = { ...DEFAULT_SESSION_PARAMETERS, ...context.parameters };
 
         // When fabric is removed, also remove the resumption record
-        this.#observers.on(context.fabrics.events.deleted, async fabric =>
-            this.deleteResumptionRecordsForFabric(fabric),
-        );
+        this.#observers.on(context.fabrics.events.deleted, async fabric => {
+            await this.deleteResumptionRecordsForFabric(fabric);
+        });
 
         this.#construction = Construction(this, () => this.#initialize());
     }
@@ -308,23 +308,40 @@ export class SessionManager {
         return session;
     }
 
+    /**
+     * Deletes a resumption record for a given address.  Returns true if the record was deleted, false if it did not
+     * exist.
+     */
     async deleteResumptionRecord(address: PeerAddress) {
         await this.#construction;
 
-        this.#resumptionRecords.delete(address);
-        await this.#storeResumptionRecords();
+        const result = this.#resumptionRecords.delete(address);
+        if (result) {
+            await this.#storeResumptionRecords();
+        }
+        return result;
     }
 
+    /**
+     * Deletes all resumption records for a given fabric.  Returns true if any records were deleted, false if none
+     * existed.
+     */
     async deleteResumptionRecordsForFabric(fabric: Fabric) {
         await this.#construction;
 
+        let deletedCount = 0;
         for (const address of this.#resumptionRecords.keys()) {
             if (address.fabricIndex === fabric.fabricIndex) {
-                this.#resumptionRecords.delete(address);
+                if (this.#resumptionRecords.delete(address)) {
+                    deletedCount++;
+                }
             }
         }
 
-        await this.#storeResumptionRecords();
+        if (deletedCount > 0) {
+            await this.#storeResumptionRecords();
+        }
+        return deletedCount > 0;
     }
 
     findOldestInactiveSession() {
