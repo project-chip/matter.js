@@ -51,6 +51,7 @@ The main work (all changes without a GitHub username in brackets in the below li
         - CommissionableDeviceDiscoveryFailedError
         - OperativeConnectionFailedError
     - Enhancement: The default CommissioningFlow now validates if there is still a fabric entry left on the device to commission a node to.
+    - Enhancement: Retries to re-establish a CASE session when connection fails because of invalid resumption data
     - Adjustment: ACL writes are not sent chunked by default from now on like also in chip SDK
     - Fix: Handles messages only that are secured as required for the relevant protocol
 
