@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { decamelize } from "#util/String.js";
 import { errorOf } from "./util/Error.js";
 
 const inspect = Symbol.for("nodejs.util.inspect.custom");
+
+const codes = new WeakMap<{}, string>();
 
 /**
  * Error base class for all errors thrown by this library.
@@ -35,6 +38,47 @@ export class MatterError extends Error {
         }
 
         return result as string;
+    }
+
+    /**
+     * A unique textual identifier for the error.
+     */
+    get id() {
+        return MatterError.idFor(this.constructor);
+    }
+
+    /**
+     * A unique textual identifier for the error.
+     */
+    static get id() {
+        return MatterError.idFor(this);
+    }
+
+    /**
+     * Obtain matter.js-style error ID for given error constructor.
+     */
+    static idFor(type: { name: string }) {
+        let id = codes.get(type);
+
+        if (id === undefined) {
+            let name = type.name;
+            if (name.endsWith("Error")) {
+                name = name.substring(0, name.length - 5);
+            }
+
+            if (name.startsWith("Matter")) {
+                name = name.substring(6);
+            }
+
+            id = decamelize(name);
+            if (id === "") {
+                id = "general";
+            }
+
+            codes.set(type, id);
+        }
+
+        return id;
     }
 
     /**
@@ -145,6 +189,20 @@ export class MatterAggregateError extends AggregateError {
 
         Object.defineProperty(MatterAggregateError.prototype, inspect, { enumerable: false });
         Object.defineProperty(MatterAggregateError.prototype, "format", { enumerable: false });
+    }
+
+    /**
+     * A unique textual identifier for the error.
+     */
+    get id() {
+        return MatterError.idFor(this.constructor);
+    }
+
+    /**
+     * A unique textual identifier for the error.
+     */
+    static get id() {
+        return MatterError.idFor(this);
     }
 
     // TODO - see comment on MatterError.  If that one is correct this is incorrect

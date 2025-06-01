@@ -12,6 +12,8 @@ import { Command } from "../cluster/Cluster.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvEnum } from "../tlv/TlvNumber.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status as GlobalStatus } from "../globals/Status.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -174,6 +176,36 @@ export namespace KeypadInput {
          * Requested key code is invalid in the context of the responder’s current state.
          */
         InvalidKeyInCurrentState = 2
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.UnsupportedKey}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.8.5.1
+     */
+    export class UnsupportedKeyError extends StatusResponseError {
+        constructor(
+            message = "Key code is not supported",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.UnsupportedKey
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.InvalidKeyInCurrentState}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.8.5.1
+     */
+    export class InvalidKeyInCurrentStateError extends StatusResponseError {
+        constructor(
+            message = "Requested key code is invalid in the context of the responder’s current state",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.InvalidKeyInCurrentState
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

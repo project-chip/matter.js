@@ -131,7 +131,7 @@ describe("SwitchServer", () => {
         it("Reject invalid rawPosition", async () => {
             const device = await createLatchingSwitch();
             await expect(device.set({ switch: { rawPosition: 2 } })).to.be.rejectedWith(
-                "Error in reactor<node0.part0.switch.#assertPositionInRange>: (135) Position 2 invalid",
+                "Error in reactor<node0.part0.switch.#assertPositionInRange>: Position 2 invalid",
             );
         });
     });

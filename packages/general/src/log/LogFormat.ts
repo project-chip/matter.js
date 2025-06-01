@@ -140,7 +140,7 @@ LogFormat.formats.plain = function plain(diagnostic: unknown, indents = 0) {
         key: text => creator.text(`${text}: `),
         keylike: text => creator.text(`${text}`),
         value: producer => creator.text(producer()),
-        strong: producer => creator.text(`*${producer()}*`),
+        strong: producer => creator.text(producer()),
         weak: producer => creator.text(producer()),
         error: producer => creator.text(producer()),
         status: (status, producer) => `${creator.text(statusIcon(status))}${producer()}`,
@@ -562,7 +562,7 @@ function valueFor(value: unknown) {
         if (proxied === value) {
             throw new InternalError("Diagnostic value proxies to itself");
         }
-        return valueFor(proxied);
+        return proxied;
     }
     return value;
 }

@@ -13,6 +13,8 @@ import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../tlv/TlvNumber.js";
 import { TlvString, TlvByteString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status as GlobalStatus } from "../globals/Status.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -92,6 +94,36 @@ export namespace TargetNavigator {
          * Target request is not allowed in current state.
          */
         NotAllowed = 2
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.TargetNotFound}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.11.4.1
+     */
+    export class TargetNotFoundError extends StatusResponseError {
+        constructor(
+            message = "Requested target was not found in the TargetList",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.TargetNotFound
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.NotAllowed}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.11.4.1
+     */
+    export class NotAllowedError extends StatusResponseError {
+        constructor(
+            message = "Target request is not allowed in current state",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.NotAllowed
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

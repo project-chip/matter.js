@@ -15,6 +15,8 @@ import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvString, TlvByteString } from "../tlv/TlvString.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status as GlobalStatus } from "../globals/Status.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -189,6 +191,66 @@ export namespace OtaSoftwareUpdateProvider {
          * Indicates that the requested download protocol is not supported by the OTA Provider.
          */
         DownloadProtocolNotSupported = 3
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.UpdateAvailable}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.4.1
+     */
+    export class UpdateAvailableError extends StatusResponseError {
+        constructor(
+            message = "Indicates that the OTA Provider has an update available",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.UpdateAvailable
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.Busy}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.4.1
+     */
+    export class BusyError extends StatusResponseError {
+        constructor(
+            message = "Indicates OTA Provider may have an update, but it is not ready yet",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.Busy
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.NotAvailable}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.4.1
+     */
+    export class NotAvailableError extends StatusResponseError {
+        constructor(
+            message = "Indicates that there is definitely no update currently available from the OTA Provider",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.NotAvailable
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.DownloadProtocolNotSupported}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.4.1
+     */
+    export class DownloadProtocolNotSupportedError extends StatusResponseError {
+        constructor(
+            message = "Indicates that the requested download protocol is not supported by the OTA Provider",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.DownloadProtocolNotSupported
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

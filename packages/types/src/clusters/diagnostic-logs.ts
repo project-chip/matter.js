@@ -12,6 +12,8 @@ import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvEnum, TlvEpochUs, TlvSysTimeUs } from "../tlv/TlvNumber.js";
 import { TlvString, TlvByteString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status as GlobalStatus } from "../globals/Status.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -194,6 +196,66 @@ export namespace DiagnosticLogs {
          * @see {@link MatterSpecification.v14.Core} § 11.11.4.2.5
          */
         Denied = 4
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.Exhausted}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.11.4.2.2
+     */
+    export class ExhaustedError extends StatusResponseError {
+        constructor(
+            message = "All logs has been transferred",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.Exhausted
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.NoLogs}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.11.4.2.3
+     */
+    export class NoLogsError extends StatusResponseError {
+        constructor(
+            message = "No logs of the requested type available",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.NoLogs
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.Busy}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.11.4.2.4
+     */
+    export class BusyError extends StatusResponseError {
+        constructor(
+            message = "Unable to handle request, retry later",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.Busy
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.Denied}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.11.4.2.5
+     */
+    export class DeniedError extends StatusResponseError {
+        constructor(
+            message = "The request is denied, no logs being transferred",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.Denied
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

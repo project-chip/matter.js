@@ -11,6 +11,8 @@ import { Command } from "../cluster/Cluster.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status as GlobalStatus } from "../globals/Status.js";
 import { TlvEnum } from "../tlv/TlvNumber.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
@@ -57,6 +59,21 @@ export namespace ContentAppObserver {
          * Data field in command was not understood by the Observer
          */
         UnexpectedData = 1
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.UnexpectedData}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.12.4.1
+     */
+    export class UnexpectedDataError extends StatusResponseError {
+        constructor(
+            message = "Data field in command was not understood by the Observer",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.UnexpectedData
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**
