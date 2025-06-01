@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto, InternalError, Logger, PublicKey, UnexpectedDataError } from "#general";
+import { Bytes, Crypto, Logger, PublicKey, UnexpectedDataError } from "#general";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId, ProtocolStatusCode } from "#types";
@@ -35,34 +35,33 @@ export class CaseClient {
         this.#sessions = sessions;
     }
 
-    async pair(exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId, expectedProcessingTimeMs?: number) {
+    async pair(
+        exchange: MessageExchange,
+        fabric: Fabric,
+        peerNodeId: NodeId,
+        expectedProcessingTimeMs?: number,
+    ): Promise<{ session: SecureSession; resumed: boolean }> {
         const messenger = new CaseClientMessenger(exchange, expectedProcessingTimeMs);
 
-        // The following while loop just allows an easy retry way in case the pairing fails due to an outdated resumption record.
-        let retryAllowed = true;
-        while (retryAllowed) {
-            retryAllowed = false; // by default, do not try again
-            try {
-                return await this.#doPair(messenger, exchange, fabric, peerNodeId);
-            } catch (error) {
-                if (error instanceof ChannelStatusResponseError) {
-                    if (error.protocolStatusCode === ProtocolStatusCode.NoSharedTrustRoots) {
-                        // Seems the stored resumption record is outdated, we need to retry pairing without resumption
-                        if (await this.#sessions.deleteResumptionRecord(fabric.addressOf(peerNodeId))) {
-                            logger.info(
-                                `Case client: Resumption record seems outdated for Fabric ${NodeId.toHexString(fabric.nodeId)} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}. Retrying pairing without resumption...`,
-                            );
-                            retryAllowed = true; // try again without resumption
-                            continue;
-                        }
+        try {
+            return await this.#doPair(messenger, exchange, fabric, peerNodeId);
+        } catch (error) {
+            if (error instanceof ChannelStatusResponseError) {
+                if (error.protocolStatusCode === ProtocolStatusCode.NoSharedTrustRoots) {
+                    // Seems the stored resumption record is outdated, we need to retry pairing without resumption
+                    if (await this.#sessions.deleteResumptionRecord(fabric.addressOf(peerNodeId))) {
+                        logger.info(
+                            `Case client: Resumption record seems outdated for Fabric ${NodeId.toHexString(fabric.nodeId)} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}. Retrying pairing without resumption...`,
+                        );
+                        // An endless loop should not happen here, as the resumption record is deleted in the next step
+                        return await this.pair(exchange, fabric, peerNodeId, expectedProcessingTimeMs);
                     }
-                } else {
-                    await messenger.sendError(ProtocolStatusCode.InvalidParam);
                 }
-                throw error;
+            } else {
+                await messenger.sendError(ProtocolStatusCode.InvalidParam);
             }
+            throw error;
         }
-        throw new InternalError("Unexpected code flow reached"); // This should never happen, needed for response typing
     }
 
     async #doPair(messenger: CaseClientMessenger, exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId) {
