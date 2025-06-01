@@ -12,6 +12,8 @@ import { Time } from "#general";
 import { MockServerNode } from "../../node/mock-server-node.js";
 
 describe("LevelControlServer", () => {
+    before(MockTime.enable);
+
     // TODO - this test is not deterministic.  We need to wait between steps before incrementing time.  Otherwise it
     // takes several VM cycles for promises to resolve and things like the spinner can cause slight variance.  Disabling
     // for now until we can rewrite as there's plenty of coverage in CHIP tests.

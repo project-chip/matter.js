@@ -72,15 +72,6 @@ export function generalSetup(mocha: Mocha) {
     filterLogs("beforeEach");
     filterLogs("afterEach");
 
-    for (const suite of mocha.suite.suites) {
-        suite.beforeAll(beforeEachFile);
-
-        // Move our beforeAll hook so it runs before the suite's beforeAll hooks
-        const hooks = (suite as any)._beforeAll as unknown[];
-        const myHook = hooks.pop();
-        hooks.unshift(myHook);
-    }
-
     mocha.suite.beforeEach(function (done) {
         this.timeout(TEST_HOOK_TIMEOUT);
         return (this.currentTest as HookableTest)[beforeOneHook]?.call(this, done);
@@ -168,7 +159,20 @@ export function extendApi(Mocha: typeof MochaType) {
     });
 }
 
+function instrumentSuites(mocha: Mocha) {
+    for (const suite of mocha.suite.suites) {
+        suite.beforeAll(beforeEachFile);
+
+        // Move our beforeAll hook so it runs before the suite's beforeAll hooks
+        const hooks = (suite as any)._beforeAll as unknown[];
+        const myHook = hooks.pop();
+        hooks.unshift(myHook);
+    }
+}
+
 export async function runMocha(mocha: Mocha) {
+    instrumentSuites(mocha);
+
     await onlyLogFailure(async () => {
         for (const hook of beforeRunHooks) {
             await hook();
@@ -278,6 +282,7 @@ export function browserSetup(mocha: BrowserMocha) {
     (globalThis as any).MatterTest = {
         // Starts Mocha (called by clicking link)
         start: () => {
+            instrumentSuites(mocha);
             const root = document.querySelector("#mocha");
             if (root) {
                 root.innerHTML = "";

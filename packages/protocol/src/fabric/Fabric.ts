@@ -15,6 +15,7 @@ import {
     Bytes,
     Crypto,
     DataWriter,
+    Diagnostic,
     Endian,
     ImplementationError,
     InternalError,
@@ -144,7 +145,7 @@ export class Fabric {
     }
 
     sign(data: Uint8Array) {
-        return Crypto.sign(this.#keyPair, data);
+        return Crypto.signEcdsa(this.#keyPair, data);
     }
 
     async verifyCredentials(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
@@ -181,21 +182,21 @@ export class Fabric {
     }
 
     /**
-     * Returns the destination IDs for a given nodeId, random value and optional groupId.
-     * When groupId is provided, it returns the time-wise valid operational keys for that groupId.
+     * Returns the destination IDs for a given nodeId, random value and optional groupId. When groupId is provided, it
+     * returns the time-wise valid operational keys for that groupId.
      */
     async currentDestinationIdFor(nodeId: NodeId, random: Uint8Array) {
-        return await Crypto.hmac(this.groups.keySets.currentKeyForId(0).key, this.#generateSalt(nodeId, random));
+        return await Crypto.signHmac(this.groups.keySets.currentKeyForId(0).key, this.#generateSalt(nodeId, random));
     }
 
     /**
-     * Returns the destination IDs for a given nodeId, random value and optional groupId.
-     * When groupId is provided, it returns all operational keys for that groupId.
+     * Returns the destination IDs for a given nodeId, random value and optional groupId. When groupId is provided, it
+     * returns all operational keys for that groupId.
      */
     async destinationIdsFor(nodeId: NodeId, random: Uint8Array) {
         const salt = this.#generateSalt(nodeId, random);
         // Check all keys of keyset 0 - typically it is only the IPK
-        const destinationIds = this.groups.keySets.allKeysForId(0).map(({ key }) => Crypto.hmac(key, salt));
+        const destinationIds = this.groups.keySets.allKeysForId(0).map(({ key }) => Crypto.signHmac(key, salt));
         return await Promise.all(destinationIds);
     }
 
@@ -313,18 +314,19 @@ export class FabricBuilder {
             ellipticCurvePublicKey,
         } = TlvOperationalCertificate.decode(operationalCert);
         logger.debug(
-            `FabricBuilder setOperationalCert: nodeId=${nodeId}, fabricId=${fabricId}, caseAuthenticatedTags=${caseAuthenticatedTags}`,
+            "Installing operational certificate",
+            Diagnostic.dict({ nodeId, fabricId, caseAuthenticatedTags }),
         );
         if (caseAuthenticatedTags !== undefined) {
             CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
         }
 
         if (!Bytes.areEqual(ellipticCurvePublicKey, this.#keyPair.publicKey)) {
-            throw new PublicKeyError("Operational Certificate does not match public key.");
+            throw new PublicKeyError("Operational certificate does not match public key");
         }
 
         if (this.#rootCert === undefined) {
-            throw new MatterFlowError("Root Certificate needs to be set first.");
+            throw new MatterFlowError("Root certificate needs to be set first");
         }
 
         const rootCert = TlvRootCertificate.decode(this.#rootCert);
@@ -408,7 +410,7 @@ export class FabricBuilder {
         this.#fabricIndex = fabricIndex;
         const saltWriter = new DataWriter();
         saltWriter.writeUInt64(this.#fabricId);
-        const operationalId = await Crypto.hkdf(
+        const operationalId = await Crypto.createHkdfKey(
             this.#rootPublicKey.slice(1),
             saltWriter.toByteArray(),
             COMPRESSED_FABRIC_ID_INFO,
@@ -426,7 +428,7 @@ export class FabricBuilder {
             rootVendorId: this.#rootVendorId,
             rootCert: this.#rootCert,
             identityProtectionKey: this.#identityProtectionKey, // Epoch Key
-            operationalIdentityProtectionKey: await Crypto.hkdf(
+            operationalIdentityProtectionKey: await Crypto.createHkdfKey(
                 this.#identityProtectionKey,
                 operationalId,
                 GROUP_SECURITY_INFO,

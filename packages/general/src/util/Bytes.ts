@@ -12,6 +12,23 @@ export enum Endian {
 }
 
 /**
+ * String tag for hex literals.
+ */
+export function b$(strings: TemplateStringsArray, ...values: unknown[]) {
+    if (strings.length === 1 && values.length === 0) {
+        return Bytes.fromHex(strings[0]);
+    }
+    const parts = Array<string>();
+    for (let i = 0; i < strings.length; i++) {
+        parts.push(strings[i]);
+        if (i < values.length) {
+            parts.push(`${values[i]}`);
+        }
+    }
+    return Bytes.fromHex(parts.join(""));
+}
+
+/**
  * Utility functions for manipulating Uint8Array.
  */
 export namespace Bytes {

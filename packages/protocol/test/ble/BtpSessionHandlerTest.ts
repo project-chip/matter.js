@@ -9,6 +9,8 @@ import { BtpCodec } from "#codec/BtpCodec.js";
 import { Bytes, createPromise } from "#general";
 
 describe("BtpSessionHandler", () => {
+    before(MockTime.enable);
+
     describe("Test Handshake", () => {
         it("handles a correct Handshake", async () => {
             const handshakeRequest = Bytes.fromHex("656c04000000b90006");

@@ -5,7 +5,7 @@
  */
 
 import { Endian } from "./Bytes.js";
-import { toBigInt, toNumber } from "./Number.js";
+import { toNumber } from "./Number.js";
 
 /** Writer that auto-increments its offset after each write. */
 // TODO: some research should be done to make sure this is most performant implementation.
@@ -39,7 +39,7 @@ export class DataWriter<E extends Endian = Endian.Big> {
 
     writeUInt64(value: number | bigint) {
         const chunk = new Uint8Array(8);
-        new DataView(chunk.buffer, 0, 8).setBigUint64(0, toBigInt(value), this.littleEndian);
+        new DataView(chunk.buffer, 0, 8).setBigUint64(0, BigInt(value), this.littleEndian);
         this.chunks.push(chunk);
         this.length += 8;
     }
@@ -67,7 +67,7 @@ export class DataWriter<E extends Endian = Endian.Big> {
 
     writeInt64(value: number | bigint) {
         const chunk = new Uint8Array(8);
-        new DataView(chunk.buffer, 0, 8).setBigInt64(0, toBigInt(value), this.littleEndian);
+        new DataView(chunk.buffer, 0, 8).setBigInt64(0, BigInt(value), this.littleEndian);
         this.chunks.push(chunk);
         this.length += 8;
     }

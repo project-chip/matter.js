@@ -97,16 +97,14 @@ async function readNocs(node: MockServerNode, fabric: Fabric, isFabricFiltered: 
     return await interaction.read(node, fabric, isFabricFiltered, NOCS_PATH);
 }
 
-describe("BehaviorServer", () => {
-    beforeEach(() => {
-        MockTime.reset(676698400000);
-    });
-
+// Note - this used to be BehaviorServerTest...  It's not a 1:1 mapping but I believe the closest equivalent to
+// BehaviorServer is ProtocolService
+describe("ProtocolServiceTest", () => {
     it("properly fabric filters reads and writes", async () => {
         const node = await MockServerNode.createOnline();
 
-        const fabric1 = await node.addFabric(1);
-        const fabric2 = await node.addFabric(2);
+        const fabric1 = await node.addFabric();
+        const fabric2 = await node.addFabric();
 
         await writeAcl(node, fabric1, {
             privilege: AccessControl.AccessControlEntryPrivilege.Administer,
@@ -156,8 +154,8 @@ describe("BehaviorServer", () => {
     it("properly sanitize fabric sensitive reads", async () => {
         const node = await MockServerNode.createOnline();
 
-        const fabric1 = await node.addFabric(1);
-        const fabric2 = await node.addFabric(2);
+        const fabric1 = await node.addFabric();
+        const fabric2 = await node.addFabric();
 
         const fabric1Nocs = await readNocs(node, fabric1, false);
         expect(fabric1Nocs.length).equals(2);
@@ -179,7 +177,7 @@ describe("BehaviorServer", () => {
     it("properly handles subscribe and notify of attributes and events", async () => {
         const node = await MockServerNode.createOnline();
 
-        const fabric1 = await node.addFabric(1);
+        const fabric1 = await node.addFabric();
 
         // Create a subscription to a couple of attributes and an event
         await interaction.subscribe(node, fabric1, {
@@ -196,7 +194,7 @@ describe("BehaviorServer", () => {
         const fabricAdded = interaction.receiveData(node, 3, 0);
 
         // Create another fabric so we can capture subscription messages
-        const fabric2 = await node.addFabric(2);
+        const fabric2 = await node.addFabric();
         let report = await MockTime.resolve(fabricAdded);
         expect(report.attributes.length).equals(3);
         expect(report.events.length).equals(0);
@@ -255,7 +253,7 @@ describe("BehaviorServer", () => {
 
         const node = await MockServerNode.createOnline({ device: MyDevice });
 
-        const fabric = await node.addFabric(1);
+        const fabric = await node.addFabric();
 
         const commands = await interaction.read(node, fabric, false, {
             endpointId: EndpointNumber(1),
@@ -285,7 +283,7 @@ describe("BehaviorServer", () => {
 
         const node = await MockServerNode.createOnline({ device: MyDevice });
 
-        const featureMap = await interaction.read(node, await node.addFabric(1), false, {
+        const featureMap = await interaction.read(node, await node.addFabric(), false, {
             endpointId: EndpointNumber(1),
             clusterId: ClusterId(OnOff.Cluster.id),
             attributeId: AttributeId(FeatureMap.id),
@@ -318,7 +316,7 @@ describe("BehaviorServer", () => {
 
         await interaction.invoke(
             node,
-            await node.addFabric(1),
+            await node.addFabric(),
             {
                 commandPath: {
                     endpointId: EndpointNumber(1),

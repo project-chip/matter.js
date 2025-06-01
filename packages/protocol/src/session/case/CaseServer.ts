@@ -100,7 +100,7 @@ export class CaseServer implements ProtocolHandler {
         }
 
         const { sharedSecret, fabric, peerNodeId, caseAuthenticatedTags } = cx.resumptionRecord;
-        const peerResumeKey = await Crypto.hkdf(
+        const peerResumeKey = await Crypto.createHkdfKey(
             sharedSecret,
             Bytes.concat(cx.peerRandom, cx.peerResumptionId),
             KDFSR1_KEY_INFO,
@@ -135,7 +135,7 @@ export class CaseServer implements ProtocolHandler {
 
         // Generate sigma 2 resume
         const resumeSalt = Bytes.concat(cx.peerRandom, cx.localResumptionId);
-        const resumeKey = await Crypto.hkdf(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
+        const resumeKey = await Crypto.createHkdfKey(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
         const resumeMic = Crypto.encrypt(resumeKey, new Uint8Array(0), RESUME2_MIC_NONCE);
         try {
             await cx.messenger.sendSigma2Resume({
@@ -184,26 +184,27 @@ export class CaseServer implements ProtocolHandler {
         // TODO: Pass through a group id?
         const fabric = await this.#fabrics.findFabricFromDestinationId(cx.destinationId, cx.peerRandom);
         const { operationalCert: nodeOpCert, intermediateCACert, operationalIdentityProtectionKey } = fabric;
-        const { publicKey: responderEcdhPublicKey, sharedSecret } = await Crypto.ecdhGeneratePublicKeyAndSecret(
-            cx.peerEcdhPublicKey,
-        );
+        const key = await Crypto.createKeyPair();
+        const responderEcdhPublicKey = key.publicBits;
+        const sharedSecret = await Crypto.generateDhSecret(key, PublicKey(cx.peerEcdhPublicKey));
+
         const sigma2Salt = Bytes.concat(
             operationalIdentityProtectionKey,
             responderRandom,
             responderEcdhPublicKey,
-            await Crypto.hash(cx.bytes),
+            await Crypto.computeSha256(cx.bytes),
         );
-        const sigma2Key = await Crypto.hkdf(sharedSecret, sigma2Salt, KDFSR2_INFO);
+        const sigma2Key = await Crypto.createHkdfKey(sharedSecret, sigma2Salt, KDFSR2_INFO);
         const signatureData = TlvSignedData.encode({
-            nodeOpCert,
-            intermediateCACert,
-            ecdhPublicKey: responderEcdhPublicKey,
-            peerEcdhPublicKey: cx.peerEcdhPublicKey,
+            responderNoc: nodeOpCert,
+            responderIcac: intermediateCACert,
+            responderPublicKey: responderEcdhPublicKey,
+            initiatorPublicKey: cx.peerEcdhPublicKey,
         });
         const signature = await fabric.sign(signatureData);
         const encryptedData = TlvEncryptedDataSigma2.encode({
-            nodeOpCert,
-            intermediateCACert,
+            responderNoc: nodeOpCert,
+            responderIcac: intermediateCACert,
             signature,
             resumptionId: cx.localResumptionId,
         });
@@ -222,22 +223,25 @@ export class CaseServer implements ProtocolHandler {
             sigma3Bytes,
             sigma3: { encrypted: peerEncrypted },
         } = await cx.messenger.readSigma3();
-        const sigma3Salt = Bytes.concat(operationalIdentityProtectionKey, await Crypto.hash([cx.bytes, sigma2Bytes]));
-        const sigma3Key = await Crypto.hkdf(sharedSecret, sigma3Salt, KDFSR3_INFO);
+        const sigma3Salt = Bytes.concat(
+            operationalIdentityProtectionKey,
+            await Crypto.computeSha256([cx.bytes, sigma2Bytes]),
+        );
+        const sigma3Key = await Crypto.createHkdfKey(sharedSecret, sigma3Salt, KDFSR3_INFO);
         const peerDecryptedData = Crypto.decrypt(sigma3Key, peerEncrypted, TBE_DATA3_NONCE);
         const {
-            nodeOpCert: peerNewOpCert,
-            intermediateCACert: peerIntermediateCACert,
+            responderNoc: peerNewOpCert,
+            responderIcac: peerIntermediateCACert,
             signature: peerSignature,
         } = TlvEncryptedDataSigma3.decode(peerDecryptedData);
 
         await fabric.verifyCredentials(peerNewOpCert, peerIntermediateCACert);
 
         const peerSignatureData = TlvSignedData.encode({
-            nodeOpCert: peerNewOpCert,
-            intermediateCACert: peerIntermediateCACert,
-            ecdhPublicKey: cx.peerEcdhPublicKey,
-            peerEcdhPublicKey: responderEcdhPublicKey,
+            responderNoc: peerNewOpCert,
+            responderIcac: peerIntermediateCACert,
+            responderPublicKey: cx.peerEcdhPublicKey,
+            initiatorPublicKey: responderEcdhPublicKey,
         });
         const {
             ellipticCurvePublicKey: peerPublicKey,
@@ -248,12 +252,12 @@ export class CaseServer implements ProtocolHandler {
             throw new UnexpectedDataError(`Fabric ID mismatch: ${fabric.fabricId} !== ${peerFabricId}`);
         }
 
-        await Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
+        await Crypto.verifyEcdsa(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
         // All good! Create secure session
         const secureSessionSalt = Bytes.concat(
             operationalIdentityProtectionKey,
-            await Crypto.hash([cx.bytes, sigma2Bytes, sigma3Bytes]),
+            await Crypto.computeSha256([cx.bytes, sigma2Bytes, sigma3Bytes]),
         );
         const secureSession = await this.#sessions.createSecureSession({
             sessionId: responderSessionId,

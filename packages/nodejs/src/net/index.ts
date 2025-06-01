@@ -4,6 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import "./register.js";
 export * from "./NodeJsNetwork.js";
 export * from "./NodeJsUdpChannel.js";

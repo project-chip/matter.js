@@ -49,17 +49,17 @@ export class CertificateAuthority {
         return this.#construction;
     }
 
-    static async create(options: StorageContext | CertificateAuthority.Configuration) {
+    static async create(options?: StorageContext | CertificateAuthority.Configuration) {
         return asyncNew(CertificateAuthority, options);
     }
 
-    constructor(options: StorageContext | CertificateAuthority.Configuration) {
+    constructor(options?: StorageContext | CertificateAuthority.Configuration) {
         this.#construction = Construction(this, async () => {
             // Use provided CA config or read from storage, otherwise initialize and store
-            const certValues = options instanceof StorageContext ? await options.values() : options;
+            const certValues = options instanceof StorageContext ? await options.values() : (options ?? {});
 
             this.#rootKeyPair = await Crypto.createKeyPair();
-            this.#rootKeyIdentifier = (await Crypto.hash(this.#rootKeyPair.publicKey)).slice(0, 20);
+            this.#rootKeyIdentifier = (await Crypto.computeSha256(this.#rootKeyPair.publicKey)).slice(0, 20);
             this.#rootCertBytes = await this.#generateRootCert();
 
             if (
@@ -135,7 +135,7 @@ export class CertificateAuthority {
                 authorityKeyIdentifier: this.#initializedRootKeyIdentifier,
             },
         };
-        const signature = await Crypto.sign(
+        const signature = await Crypto.signEcdsa(
             this.#initializedRootKeyPair,
             CertificateManager.rootCertToAsn1(unsignedCertificate),
         );
@@ -166,12 +166,12 @@ export class CertificateAuthority {
                     digitalSignature: true,
                 },
                 extendedKeyUsage: [2, 1],
-                subjectKeyIdentifier: (await Crypto.hash(publicKey)).slice(0, 20),
+                subjectKeyIdentifier: (await Crypto.computeSha256(publicKey)).slice(0, 20),
                 authorityKeyIdentifier: this.#initializedRootKeyIdentifier,
             },
         };
 
-        const signature = await Crypto.sign(
+        const signature = await Crypto.signEcdsa(
             this.#initializedRootKeyPair,
             CertificateManager.nodeOperationalCertToAsn1(unsignedCertificate),
         );

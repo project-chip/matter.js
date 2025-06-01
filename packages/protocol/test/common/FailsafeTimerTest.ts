@@ -4,12 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { FailsafeTimer } from "#common/FailsafeTimer.js";
 import { createPromise } from "#general";
-import { FailsafeTimer } from "#protocol";
-import * as assert from "node:assert";
 
 // TODO identify more cases that are not handled by chip tool tests
 describe("FailSafeTimer Test", () => {
+    before(() => {
+        MockTime.enable();
+    });
+
     describe("Verify Expiry handling", () => {
         it("Expiry callback is called when failsafe expires", async () => {
             const { promise, resolver } = createPromise<void>();
@@ -27,15 +30,15 @@ describe("FailSafeTimer Test", () => {
             });
 
             await MockTime.advance(1500);
-            assert.equal(expired, false);
+            expect(expired).to.be.false;
             await failSafe.reArm(undefined, 3);
-            assert.equal(expired, false);
+            expect(expired).to.be.false;
             await MockTime.advance(1500);
-            assert.equal(expired, false);
+            expect(expired).to.be.false;
             await MockTime.advance(1499);
-            assert.equal(expired, false);
+            expect(expired).to.be.false;
             await MockTime.advance(1);
-            assert.equal(expired, true);
+            expect(expired).to.be.true;
         });
 
         it("Expiry callback is called directly when failsafe expires after being rearmed (with 0)", async () => {
@@ -45,9 +48,9 @@ describe("FailSafeTimer Test", () => {
             });
 
             await MockTime.advance(1500);
-            assert.equal(expired, false);
+            expect(expired).to.be.false;
             await failSafe.reArm(undefined, 0);
-            assert.equal(expired, true);
+            expect(expired).to.be.true;
         });
 
         it("Expiry callback is called when max cumulative failsafe expires", async () => {
@@ -57,11 +60,11 @@ describe("FailSafeTimer Test", () => {
             });
 
             await MockTime.advance(1500);
-            assert.equal(expired, false);
+            expect(expired).to.be.false;
             await failSafe.reArm(undefined, 1);
-            assert.equal(expired, false);
+            expect(expired).to.be.false;
             await MockTime.advance(500);
-            assert.equal(expired, true);
+            expect(expired).to.be.true;
         });
 
         it("Expiry callback is not called when failsafe was completed", async () => {
@@ -71,11 +74,11 @@ describe("FailSafeTimer Test", () => {
             });
 
             await MockTime.advance(1500);
-            assert.equal(expired, false);
+            expect(expired).to.be.false;
             failSafe.complete();
-            assert.equal(expired, false);
+            expect(expired).to.be.false;
             await MockTime.advance(1500);
-            assert.equal(expired, false);
+            expect(expired).to.be.false;
         });
     });
 });

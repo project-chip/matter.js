@@ -5,13 +5,17 @@
  */
 
 import { config } from "#config.js";
+import { NodeJsCrypto } from "#crypto/NodeJsCrypto.js";
 import {
     asError,
+    Boot,
+    Crypto,
     Environment,
     ImplementationError,
     LogFormat,
     Logger,
     Network,
+    singleton,
     StorageService,
     VariableService,
 } from "#general";
@@ -63,6 +67,7 @@ export function NodeJsEnvironment() {
     const env = new Environment("default");
 
     loadVariables(env);
+    configureCrypto(env);
     configureRuntime(env);
     configureStorage(env);
     configureNetwork(env);
@@ -117,13 +122,33 @@ function loadVariables(env: Environment) {
     };
 }
 
+function configureCrypto(env: Environment) {
+    if (!config.installCrypto || !(env.vars.boolean("nodejs.crypto") ?? true)) {
+        return;
+    }
+
+    Boot.init(() => {
+        Crypto.get = singleton(() => new NodeJsCrypto());
+    });
+}
+
+function configureNetwork(env: Environment) {
+    if (!config.installNetwork || !(env.vars.boolean("nodejs.network") ?? true)) {
+        return;
+    }
+
+    Boot.init(() => {
+        env.set(Network, new NodeJsNetwork());
+    });
+}
+
 function configureRuntime(env: Environment) {
     const processManager = new ProcessManager(env);
     env.set(ProcessManager, processManager);
 }
 
 function configureStorage(env: Environment) {
-    if (!config.initializeStorage) {
+    if (!config.initializeStorage || !(env.vars.boolean("nodejs.storage") ?? true)) {
         return;
     }
 
@@ -135,10 +160,6 @@ function configureStorage(env: Environment) {
 
     service.factory = namespace =>
         new StorageBackendDisk(resolve(service.location ?? ".", namespace), env.vars.get("storage.clear", false));
-}
-
-function configureNetwork(env: Environment) {
-    env.set(Network, new NodeJsNetwork());
 }
 
 export function loadConfigFile(vars: VariableService) {

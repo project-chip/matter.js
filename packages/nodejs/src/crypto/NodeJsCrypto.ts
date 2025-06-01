@@ -17,11 +17,12 @@ import {
     CryptoDsaEncoding,
     CryptoVerifyError,
     PrivateKey,
+    PublicKey,
     asError,
 } from "#general";
 import * as crypto from "node:crypto";
 
-export class NodeJsCrypto extends Crypto {
+export class NodeJsCrypto implements Crypto {
     encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array {
         const cipher = crypto.createCipheriv(CRYPTO_ENCRYPT_ALGORITHM, key, nonce, {
             authTagLength: CRYPTO_AUTH_TAG_LENGTH,
@@ -71,11 +72,7 @@ export class NodeJsCrypto extends Crypto {
         };
     }
 
-    ecdhGenerateSecret(peerPublicKey: Uint8Array, ecdh: crypto.ECDH): Uint8Array {
-        return new Uint8Array(ecdh.computeSecret(peerPublicKey));
-    }
-
-    hash(data: Uint8Array | Uint8Array[]): Uint8Array {
+    computeSha256(data: Uint8Array | Uint8Array[]): Uint8Array {
         const hasher = crypto.createHash(CRYPTO_HASH_ALGORITHM);
         if (Array.isArray(data)) {
             data.forEach(chunk => hasher.update(chunk));
@@ -85,7 +82,7 @@ export class NodeJsCrypto extends Crypto {
         return new Uint8Array(hasher.digest());
     }
 
-    pbkdf2(secret: Uint8Array, salt: Uint8Array, iteration: number, keyLength: number): Promise<Uint8Array> {
+    createPbkdf2Key(secret: Uint8Array, salt: Uint8Array, iteration: number, keyLength: number): Promise<Uint8Array> {
         return new Promise<Uint8Array>((resolver, rejecter) => {
             crypto.pbkdf2(secret, salt, iteration, keyLength, CRYPTO_HASH_ALGORITHM, (error, key) => {
                 if (error !== null) rejecter(error);
@@ -94,7 +91,7 @@ export class NodeJsCrypto extends Crypto {
         });
     }
 
-    hkdf(
+    createHkdfKey(
         secret: Uint8Array,
         salt: Uint8Array,
         info: Uint8Array,
@@ -108,13 +105,13 @@ export class NodeJsCrypto extends Crypto {
         });
     }
 
-    hmac(key: Uint8Array, data: Uint8Array): Uint8Array {
+    signHmac(key: Uint8Array, data: Uint8Array): Uint8Array {
         const hmac = crypto.createHmac(CRYPTO_HASH_ALGORITHM, key);
         hmac.update(data);
         return new Uint8Array(hmac.digest());
     }
 
-    sign(
+    signEcdsa(
         privateKey: JsonWebKey,
         data: Uint8Array | Uint8Array[],
         dsaEncoding: CryptoDsaEncoding = "ieee-p1363",
@@ -135,7 +132,7 @@ export class NodeJsCrypto extends Crypto {
         );
     }
 
-    verify(
+    verifyEcdsa(
         publicKey: JsonWebKey,
         data: Uint8Array,
         signature: Uint8Array,
@@ -156,6 +153,7 @@ export class NodeJsCrypto extends Crypto {
     }
 
     createKeyPair() {
+        // Note that we this key may be used for DH or DSA but we use an ECDH to generate
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
 
@@ -166,5 +164,12 @@ export class NodeJsCrypto extends Crypto {
         privateKey.set(nodePrivateKey, CRYPTO_EC_KEY_BYTES - nodePrivateKey.length);
 
         return PrivateKey(privateKey, { publicKey: ecdh.getPublicKey() });
+    }
+
+    generateDhSecret(key: PrivateKey, peerKey: PublicKey) {
+        const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
+        ecdh.setPrivateKey(key.privateBits);
+
+        return ecdh.computeSecret(peerKey.publicBits);
     }
 }

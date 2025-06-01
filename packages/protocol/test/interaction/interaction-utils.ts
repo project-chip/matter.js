@@ -3,17 +3,12 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { Message, SessionType } from "#codec/MessageCodec.js";
+import { Fabric } from "#fabric/Fabric.js";
 import { Bytes, DataReadQueue, MAX_UDP_MESSAGE_SIZE, PrivateKey } from "#general";
-import {
-    ExchangeSendOptions,
-    Fabric,
-    MATTER_MESSAGE_OVERHEAD,
-    Message,
-    MessageExchange,
-    NodeSession,
-    SecureSession,
-    SessionType,
-} from "#protocol";
+import { ExchangeSendOptions, MATTER_MESSAGE_OVERHEAD, MessageExchange } from "#protocol/MessageExchange.js";
+import { NodeSession } from "#session/NodeSession.js";
+import { SecureSession } from "#session/SecureSession.js";
 import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
 
 const PRIVATE_KEY = new Uint8Array(32);

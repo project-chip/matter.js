@@ -52,8 +52,8 @@ export class CaseClient {
         // Generate pairing info
         const initiatorRandom = Crypto.getRandom();
         const initiatorSessionId = await this.#sessions.getNextAvailableSessionId(); // Initiator Session Id
-        const { operationalIdentityProtectionKey, operationalCert: nodeOpCert, intermediateCACert } = fabric;
-        const { publicKey: initiatorEcdhPublicKey, ecdh } = await Crypto.ecdhGeneratePublicKey();
+        const { operationalIdentityProtectionKey, operationalCert: localNoc, intermediateCACert: localIcac } = fabric;
+        const localKey = await Crypto.createKeyPair();
 
         // Send sigma1
         let sigma1Bytes;
@@ -61,7 +61,7 @@ export class CaseClient {
         let resumptionRecord = this.#sessions.findResumptionRecordByAddress(fabric.addressOf(peerNodeId));
         if (resumptionRecord !== undefined) {
             const { sharedSecret, resumptionId } = resumptionRecord;
-            const resumeKey = await Crypto.hkdf(
+            const resumeKey = await Crypto.createHkdfKey(
                 sharedSecret,
                 Bytes.concat(initiatorRandom, resumptionId),
                 KDFSR1_KEY_INFO,
@@ -70,7 +70,7 @@ export class CaseClient {
             sigma1Bytes = await messenger.sendSigma1({
                 initiatorSessionId,
                 destinationId: await fabric.currentDestinationIdFor(peerNodeId, initiatorRandom),
-                initiatorEcdhPublicKey,
+                initiatorEcdhPublicKey: localKey.publicBits,
                 initiatorRandom,
                 resumptionId,
                 initiatorResumeMic,
@@ -80,7 +80,7 @@ export class CaseClient {
             sigma1Bytes = await messenger.sendSigma1({
                 initiatorSessionId,
                 destinationId: await fabric.currentDestinationIdFor(peerNodeId, initiatorRandom),
-                initiatorEcdhPublicKey,
+                initiatorEcdhPublicKey: localKey.publicBits,
                 initiatorRandom,
                 initiatorSessionParams: this.#sessions.sessionParameters,
             });
@@ -106,7 +106,7 @@ export class CaseClient {
             };
 
             const resumeSalt = Bytes.concat(initiatorRandom, resumptionId);
-            const resumeKey = await Crypto.hkdf(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
+            const resumeKey = await Crypto.createHkdfKey(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
             Crypto.decrypt(resumeKey, resumeMic, RESUME2_MIC_NONCE);
 
             const secureSessionSalt = Bytes.concat(initiatorRandom, resumptionRecord.resumptionId);
@@ -134,7 +134,7 @@ export class CaseClient {
         } else {
             // Process sigma2
             const {
-                responderEcdhPublicKey: peerEcdhPublicKey,
+                responderEcdhPublicKey: peerKey,
                 encrypted: peerEncrypted,
                 responderRandom,
                 responderSessionId: peerSessionId,
@@ -145,33 +145,33 @@ export class CaseClient {
                 ...exchange.session.parameters,
                 ...(responderSessionParams ?? {}),
             };
-            const sharedSecret = await Crypto.ecdhGenerateSecret(peerEcdhPublicKey, ecdh);
+            const sharedSecret = await Crypto.generateDhSecret(localKey, PublicKey(peerKey));
             const sigma2Salt = Bytes.concat(
                 operationalIdentityProtectionKey,
                 responderRandom,
-                peerEcdhPublicKey,
-                await Crypto.hash(sigma1Bytes),
+                peerKey,
+                await Crypto.computeSha256(sigma1Bytes),
             );
-            const sigma2Key = await Crypto.hkdf(sharedSecret, sigma2Salt, KDFSR2_INFO);
+            const sigma2Key = await Crypto.createHkdfKey(sharedSecret, sigma2Salt, KDFSR2_INFO);
             const peerEncryptedData = Crypto.decrypt(sigma2Key, peerEncrypted, TBE_DATA2_NONCE);
             const {
-                nodeOpCert: peerNewOpCert,
-                intermediateCACert: peerIntermediateCACert,
+                responderNoc: peerNoc,
+                responderIcac: peerIcac,
                 signature: peerSignature,
                 resumptionId: peerResumptionId,
             } = TlvEncryptedDataSigma2.decode(peerEncryptedData);
             const peerSignatureData = TlvSignedData.encode({
-                nodeOpCert: peerNewOpCert,
-                intermediateCACert: peerIntermediateCACert,
-                ecdhPublicKey: peerEcdhPublicKey,
-                peerEcdhPublicKey: initiatorEcdhPublicKey,
+                responderNoc: peerNoc,
+                responderIcac: peerIcac,
+                responderPublicKey: peerKey,
+                initiatorPublicKey: localKey.publicBits,
             });
             const {
                 ellipticCurvePublicKey: peerPublicKey,
                 subject: { fabricId: peerFabricIdNOCert, nodeId: peerNodeIdNOCert },
-            } = TlvOperationalCertificate.decode(peerNewOpCert);
+            } = TlvOperationalCertificate.decode(peerNoc);
 
-            await Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
+            await Crypto.verifyEcdsa(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
             if (peerNodeIdNOCert !== peerNodeId) {
                 throw new UnexpectedDataError(
@@ -183,10 +183,10 @@ export class CaseClient {
                     `The fabric ID in the peer certificate ${peerFabricIdNOCert} doesn't match the expected fabric ID ${fabric.fabricId}`,
                 );
             }
-            if (peerIntermediateCACert !== undefined) {
+            if (peerIcac !== undefined) {
                 const {
                     subject: { fabricId: peerFabricIdIcaCert },
-                } = TlvIntermediateCertificate.decode(peerIntermediateCACert);
+                } = TlvIntermediateCertificate.decode(peerIcac);
 
                 if (peerFabricIdIcaCert !== undefined && peerFabricIdIcaCert !== fabric.fabricId) {
                     throw new UnexpectedDataError(
@@ -194,22 +194,26 @@ export class CaseClient {
                     );
                 }
             }
-            await fabric.verifyCredentials(peerNewOpCert, peerIntermediateCACert);
+            await fabric.verifyCredentials(peerNoc, peerIcac);
 
             // Generate and send sigma3
             const sigma3Salt = Bytes.concat(
                 operationalIdentityProtectionKey,
-                await Crypto.hash([sigma1Bytes, sigma2Bytes]),
+                await Crypto.computeSha256([sigma1Bytes, sigma2Bytes]),
             );
-            const sigma3Key = await Crypto.hkdf(sharedSecret, sigma3Salt, KDFSR3_INFO);
+            const sigma3Key = await Crypto.createHkdfKey(sharedSecret, sigma3Salt, KDFSR3_INFO);
             const signatureData = TlvSignedData.encode({
-                nodeOpCert,
-                intermediateCACert,
-                ecdhPublicKey: initiatorEcdhPublicKey,
-                peerEcdhPublicKey,
+                responderNoc: localNoc,
+                responderIcac: localIcac,
+                responderPublicKey: localKey.publicBits,
+                initiatorPublicKey: peerKey,
             });
             const signature = await fabric.sign(signatureData);
-            const encryptedData = TlvEncryptedDataSigma3.encode({ nodeOpCert, intermediateCACert, signature });
+            const encryptedData = TlvEncryptedDataSigma3.encode({
+                responderNoc: localNoc,
+                responderIcac: localIcac,
+                signature,
+            });
             const encrypted = Crypto.encrypt(sigma3Key, encryptedData, TBE_DATA3_NONCE);
             const sigma3Bytes = await messenger.sendSigma3({ encrypted });
             await messenger.waitForSuccess("Sigma3-Success");
@@ -218,7 +222,7 @@ export class CaseClient {
             const { caseAuthenticatedTags } = resumptionRecord ?? {}; // Even if resumption does not work try to reuse the caseAuthenticatedTags
             const secureSessionSalt = Bytes.concat(
                 operationalIdentityProtectionKey,
-                await Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
+                await Crypto.computeSha256([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
             secureSession = await this.#sessions.createSecureSession({
                 sessionId: initiatorSessionId,

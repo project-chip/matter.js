@@ -12,7 +12,7 @@ import { WiFiNetworkDiagnosticsServer } from "#behaviors/wi-fi-network-diagnosti
 import { AdministratorCommissioning } from "#clusters/administrator-commissioning";
 import { BasicInformation } from "#clusters/basic-information";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
-import { Crypto, Observable } from "#general";
+import { Observable } from "#general";
 import { Specification } from "#model";
 import { InteractionServer } from "#node/server/InteractionServer.js";
 import { ServerNode } from "#node/ServerNode.js";
@@ -92,7 +92,9 @@ const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
 
 const READ_REQUEST_WITH_FILTER: ReadRequest = {
     ...READ_REQUEST,
-    dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 1 }],
+    dataVersionFilters: [
+        { path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 0x80808081 },
+    ],
 
     eventFilters: [{ eventMin: 2 }],
 };
@@ -139,7 +141,7 @@ const READ_RESPONSE: DataReportPayload = {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
                 schema: TlvVendorId,
                 payload: 1,
-                dataVersion: 1,
+                dataVersion: 0x80808081,
             },
         },
         {
@@ -148,7 +150,7 @@ const READ_RESPONSE: DataReportPayload = {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
                 schema: TlvUInt16,
                 payload: 2,
-                dataVersion: 1,
+                dataVersion: 0x80808081,
             },
         },
 
@@ -158,7 +160,7 @@ const READ_RESPONSE: DataReportPayload = {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
                 schema: TlvString.bound({ maxLength: 32 }),
                 payload: "product",
-                dataVersion: 1,
+                dataVersion: 0x80808081,
             },
         },
         {
@@ -180,7 +182,7 @@ const READ_RESPONSE: DataReportPayload = {
                     ClusterId(51),
                     ClusterId(29),
                 ],
-                dataVersion: 1,
+                dataVersion: 0x80808081,
             },
         },
     ],
@@ -220,7 +222,7 @@ const READ_RESPONSE: DataReportPayload = {
                 },
                 eventNumber: EventNumber(1),
                 priority: 2,
-                epochTimestamp: 0,
+                epochTimestamp: MockTime.epoch.getTime(),
             },
         },
         {
@@ -237,7 +239,7 @@ const READ_RESPONSE: DataReportPayload = {
                 },
                 eventNumber: EventNumber(3),
                 priority: 2,
-                epochTimestamp: 0,
+                epochTimestamp: MockTime.epoch.getTime(),
             },
         },
     ],
@@ -287,7 +289,7 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
                     ClusterId(51),
                     ClusterId(29),
                 ],
-                dataVersion: 1,
+                dataVersion: 0x80808081,
             },
         },
     ],
@@ -327,7 +329,7 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
                 },
                 eventNumber: EventNumber(3),
                 priority: 2,
-                epochTimestamp: 0,
+                epochTimestamp: MockTime.epoch.getTime(),
             },
         },
     ],
@@ -342,7 +344,7 @@ const READ_RESPONSE_WILDCARD_EVENTS: DataReportPayload = {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(40), eventId: EventId(0) },
                 eventNumber: EventNumber(1),
                 priority: 2,
-                epochTimestamp: 0,
+                epochTimestamp: MockTime.epoch.getTime(),
                 payload: { softwareVersion: 1 },
                 schema: BasicInformation.TlvStartUpEvent,
             },
@@ -353,7 +355,7 @@ const READ_RESPONSE_WILDCARD_EVENTS: DataReportPayload = {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(51), eventId: EventId(3) },
                 eventNumber: EventNumber(2),
                 priority: 2,
-                epochTimestamp: 0,
+                epochTimestamp: MockTime.epoch.getTime(),
                 payload: { bootReason: 0 },
                 schema: GeneralDiagnostics.TlvBootReasonEvent,
             },
@@ -368,7 +370,7 @@ const READ_RESPONSE_WILDCARD_EVENTS: DataReportPayload = {
                 },
                 eventNumber: EventNumber(3),
                 priority: 2,
-                epochTimestamp: 0,
+                epochTimestamp: MockTime.epoch.getTime(),
                 payload: { softwareVersion: 2 },
                 schema: BasicInformation.TlvStartUpEvent,
             },
@@ -395,7 +397,7 @@ const READ_RESPONSE_WILDCARD_EVENTS_WITH_FILTER: DataReportPayload = {
                 },
                 eventNumber: EventNumber(3),
                 priority: 2,
-                epochTimestamp: 0,
+                epochTimestamp: MockTime.epoch.getTime(),
             },
         },
     ],
@@ -433,22 +435,22 @@ const WRITE_REQUEST: WriteRequest = {
         {
             path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
             data: TlvUInt8.encodeTlv(3),
-            dataVersion: 1,
+            dataVersion: 0x80808081,
         },
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(5) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 1,
+            dataVersion: 0x80808081,
         },
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(6) },
             data: TlvString.encodeTlv("AB"),
-            dataVersion: 10,
+            dataVersion: 0x80808090,
         },
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 1,
+            dataVersion: 0x80808081,
         },
     ],
     moreChunkedMessages: false,
@@ -492,7 +494,7 @@ const WRITE_REQUEST_TIMED_REQUIRED: WriteRequest = {
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(5) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 1,
+            dataVersion: 0x80808081,
         },
     ],
     moreChunkedMessages: false,
@@ -526,17 +528,17 @@ const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(0x5) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 1,
+            dataVersion: 0x80808081,
         },
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 1,
+            dataVersion: 0x80808081,
         },
         {
             path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(0x5) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 1,
+            dataVersion: 0x80808081,
         },
     ],
     moreChunkedMessages: false,
@@ -550,7 +552,7 @@ const MASS_WRITE_REQUEST: WriteRequest = {
         {
             path: { clusterId: ClusterId(0x28), attributeId: AttributeId(0x5) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 1,
+            dataVersion: 0x80808081,
         },
     ],
     moreChunkedMessages: false,
@@ -1009,20 +1011,6 @@ namespace EventedOnOffServer {
 }
 
 describe("InteractionProtocol", () => {
-    let realGetRandomData = Crypto.get().getRandomData;
-
-    before(() => {
-        realGetRandomData = Crypto.get().getRandomData;
-        Crypto.get().getRandomData = (length: number) => {
-            return new Uint8Array(length);
-        };
-        MockTime.reset();
-    });
-
-    after(() => {
-        Crypto.get().getRandomData = realGetRandomData;
-    });
-
     let interactionProtocol: InteractionServer;
     let node: MockServerNode;
 

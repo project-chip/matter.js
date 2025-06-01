@@ -83,30 +83,74 @@ function isAsync(fn: (...args: any) => any): fn is (...args: any) => Promise<any
 let callbacks = new Array<{ atMs: number; callback: TimerCallback }>();
 let nowMs = 0;
 let real = undefined as unknown;
-let enabled = true;
+let enabled = false;
 
-// Must match matter.js Time interface
+/**
+ * An arbitrary start for our mock timeline.  Starting at zero causes problems with Matter dates that cannot encode back
+ * to the UNIX epoch
+ */
+const epoch = new Date("2025-01-01 12:34:56Z");
+
+// Must match matter.js Time interface (with extensions)
 export const MockTime = {
+    epoch,
+
     get activeImplementation(): unknown {
         return enabled ? this : (real ?? this);
     },
 
+    /**
+     * Revert to standard time implementation.
+     */
     disable() {
         enabled = false;
-        reinstallTime?.();
+        installActiveImplementation?.();
     },
 
+    /**
+     * Enable time mocking.  Reverts to disabled for each test file.
+     */
     enable() {
         enabled = true;
-        reinstallTime?.();
+        installActiveImplementation?.();
     },
 
-    reset(time = 0) {
+    /**
+     * Sets mock time to specific time and enable the mock.
+     */
+    reset(time: ConstructorParameters<typeof Date>[0] = epoch) {
         callbacks = [];
-        nowMs = time;
+        nowMs = new Date(time).getTime();
+        MockTime.enable();
+    },
 
-        // Ensure time reverts to correct implementation across suites
-        this.enable();
+    /**
+     * Enable and reset if not already enabled.
+     */
+    init() {
+        if (!enabled) {
+            MockTime.enable();
+        }
+    },
+
+    atTime<T>(time: number | Date, actor: () => T): T {
+        const revertTo = nowMs;
+        let isAsync = false;
+        try {
+            nowMs = typeof time === "number" ? time : time.getTime();
+            const result = actor();
+            if (typeof (result as any)?.then === "function") {
+                isAsync = true;
+                return Promise.resolve(result).finally(() => {
+                    nowMs = revertTo;
+                }) as T;
+            }
+            return result;
+        } finally {
+            if (!isAsync) {
+                nowMs = revertTo;
+            }
+        }
     },
 
     now(): Date {
@@ -305,7 +349,7 @@ export const MockTime = {
     },
 };
 
-let reinstallTime: undefined | (() => void);
+let installActiveImplementation: undefined | (() => void);
 
 export function timeSetup(Time: {
     startup: { systemMs: number; processMs: number };
@@ -320,12 +364,13 @@ export function timeSetup(Time: {
     Time.startup.systemMs = Time.startup.processMs = 0;
     real = Time.get();
     (MockTime as any).sleep = (real as any).sleep;
-    reinstallTime = () => (Time.get = () => MockTime.activeImplementation);
-    reinstallTime();
+    installActiveImplementation = () => (Time.get = () => MockTime.activeImplementation);
+    installActiveImplementation();
 }
 
 Object.assign(globalThis, { MockTime });
 
 Boot.init(() => {
     MockTime.reset();
+    MockTime.disable();
 });

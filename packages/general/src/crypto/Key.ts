@@ -9,13 +9,12 @@ import { DerCodec, DerNode, DerType } from "../codec/DerCodec.js";
 import { MatterError, NotImplementedError } from "../MatterError.js";
 import { Bytes } from "../util/Bytes.js";
 import { ec } from "./Crypto.js";
+import { KeyInputError } from "./CryptoError.js";
 
 const {
     numberToBytesBE,
     p256: { ProjectivePoint },
 } = ec;
-
-class KeyError extends MatterError {}
 
 const JWK_KEYS = [
     "crv",
@@ -228,7 +227,7 @@ function checkDerVersion(type: string, node: DerNode | undefined, version: numbe
         node && node._tag === DerType.Integer && node._bytes && node._bytes.length === 1 && node._bytes[0];
 
     if (derVersion !== version) {
-        throw new KeyError(`${type} key version mismatch`);
+        throw new KeyInputError(`${type} key version mismatch`);
     }
 }
 
@@ -237,14 +236,14 @@ function getDerObjectID(type: string, node?: DerNode) {
 
     if (id) return id;
 
-    throw new KeyError(`Missing object in ${type} key`);
+    throw new KeyInputError(`Missing object in ${type} key`);
 }
 
 function getDerCurve(type: string, node?: DerNode) {
     const oid = getDerObjectID(type, node);
     const curve = (<any>CurveLookup)[Bytes.toHex(oid)];
     if (curve) return curve;
-    throw new KeyError(`Unsupported ${type} EC curve`);
+    throw new KeyInputError(`Unsupported ${type} EC curve`);
 }
 
 function getDerKey(type: string, node?: DerNode, derType: DerType = DerType.OctetString) {
@@ -297,7 +296,7 @@ namespace Translators {
             const algorithmElements = outer?._elements?.[1]?._elements;
             const algorithm = getDerObjectID("PKCS #8", algorithmElements?.[0]);
             if (Bytes.toHex(algorithm) !== Asn1ObjectID.ecPublicKey) {
-                throw new KeyError("Unsupported PKCS #8 decryption algorithm");
+                throw new KeyInputError("Unsupported PKCS #8 decryption algorithm");
             }
 
             // Curve
@@ -306,7 +305,7 @@ namespace Translators {
             // Private key
             const innerBytes = outer?._elements?.[2]._bytes;
             if (innerBytes === undefined || innerBytes === null) {
-                throw new KeyError("Invalid PKCS #8 key");
+                throw new KeyInputError("Invalid PKCS #8 key");
             }
             const inner = DerCodec.decode(innerBytes);
             const key = getDerKey("PKCS #8", inner?._elements?.[1]);
@@ -331,7 +330,7 @@ namespace Translators {
             // Algorithm
             const algorithm = getDerObjectID("SPKI", algorithmElements?.[0]);
             if (Bytes.toHex(algorithm) !== Asn1ObjectID.ecPublicKey) {
-                throw new KeyError("Unsupported SPKI decryption algorithm");
+                throw new KeyInputError("Unsupported SPKI decryption algorithm");
             }
 
             // Curve
@@ -354,19 +353,19 @@ namespace Translators {
     export const publicBits = {
         set: function (this: Key, input: Uint8Array) {
             if (!(input.length % 2)) {
-                throw new KeyError("Invalid public key encoding");
+                throw new KeyInputError("Invalid public key encoding");
             }
 
             switch (input[0]) {
                 case 2:
                 case 3:
-                    throw new KeyError("Unsupported public key compression");
+                    throw new KeyInputError("Unsupported public key compression");
 
                 case 4:
                     break;
 
                 case 5:
-                    throw new KeyError("Illegal public key format specifier");
+                    throw new KeyInputError("Illegal public key format specifier");
             }
 
             const coordinateLength = (input.length - 1) / 2;
@@ -446,7 +445,7 @@ function inferCurve(key: Key, bytes: number) {
                 break;
 
             default:
-                throw new KeyError(`Cannot infer named curve from key length ${bytes}`);
+                throw new KeyInputError(`Cannot infer named curve from key length ${bytes}`);
         }
     }
 }
@@ -502,7 +501,7 @@ export function Key(properties: Partial<Key>) {
             get: () => {
                 const result = that[target];
                 if (result === undefined) {
-                    throw new KeyError(`Key field ${target} is not defined`);
+                    throw new KeyInputError(`Key field ${target} is not defined`);
                 }
                 return result;
             },
@@ -517,8 +516,8 @@ export function Key(properties: Partial<Key>) {
 
     /** Compute public point from private EC key */
     function derivePublicFromPrivate() {
-        if (that.type !== KeyType.EC) throw new KeyError("EC key type required to compute public point");
-        if (!that.private) throw new KeyError("EC private key required to compute public point");
+        if (that.type !== KeyType.EC) throw new KeyInputError("EC key type required to compute public point");
+        if (!that.private) throw new KeyInputError("EC private key required to compute public point");
 
         const crv = that.crv;
         let keyLength: number;
@@ -532,7 +531,7 @@ export function Key(properties: Partial<Key>) {
                 break;
 
             default:
-                throw new KeyError(`Unsupported elliptic curve ${crv}`);
+                throw new KeyInputError(`Unsupported elliptic curve ${crv}`);
         }
 
         // Compute
@@ -559,7 +558,7 @@ export function Key(properties: Partial<Key>) {
 }
 
 /**
- * Private key factory.
+ * EC private key factory.
  */
 export function PrivateKey(privateKey: Uint8Array | BinaryKeyPair, options?: Partial<Key>) {
     let priv, pub;
@@ -578,7 +577,7 @@ export function PrivateKey(privateKey: Uint8Array | BinaryKeyPair, options?: Par
 }
 
 /**
- * Public key factory.
+ * EC public key factory.
  */
 export function PublicKey(publicKey: Uint8Array, options?: Partial<Key>) {
     return Key({

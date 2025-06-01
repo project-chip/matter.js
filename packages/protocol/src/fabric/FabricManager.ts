@@ -160,6 +160,9 @@ export class FabricManager {
         this.#fabrics.set(fabricIndex, fabric);
         fabric.addRemoveCallback(async () => this.removeFabric(fabricIndex));
         fabric.persistCallback = (isUpdate = true) => {
+            if (!this.#storage) {
+                return;
+            }
             const persistResult = this.persistFabrics();
             return MaybePromise.then(persistResult, () => {
                 if (isUpdate) {
@@ -184,7 +187,9 @@ export class FabricManager {
                 `Fabric with index ${fabricIndex} cannot be removed because it does not exist.`,
             );
         this.#fabrics.delete(fabricIndex);
-        await this.persistFabrics();
+        if (this.#storage) {
+            await this.persistFabrics();
+        }
         await fabric.storage?.clearAll();
         this.#events.deleted.emit(fabric);
     }
@@ -253,7 +258,9 @@ export class FabricManager {
             );
         }
         this.#fabrics.set(fabricIndex, fabric);
-        await this.persistFabrics();
+        if (this.#fabrics) {
+            await this.persistFabrics();
+        }
         this.#events.updated.emit(fabric);
     }
 

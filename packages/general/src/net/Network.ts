@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError, NoProviderError } from "../MatterError.js";
+import { MatterError } from "../MatterError.js";
 import { MaybePromise } from "../util/Promises.js";
 import { UdpChannel, UdpChannelOptions } from "./UdpChannel.js";
 
@@ -57,13 +57,7 @@ export type NetworkInterfaceDetails = {
 };
 
 export type NetworkInterfaceDetailed = NetworkInterface & NetworkInterfaceDetails;
-
 export abstract class Network {
-    // TODO - remove this singleton
-    static get: () => Network = () => {
-        throw new NoProviderError("No provider configured");
-    };
-
     abstract getNetInterfaces(configuration?: NetworkInterface[]): MaybePromise<NetworkInterface[]>;
     abstract getIpMac(netInterface: string): MaybePromise<NetworkInterfaceDetails | undefined>;
     abstract createUdpChannel(options: UdpChannelOptions): Promise<UdpChannel>;

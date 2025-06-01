@@ -63,7 +63,7 @@ crypto.hkdf = (
 };
 
 export class CryptoReactNative extends NodeJsCrypto {
-    override sign(
+    override signEcdsa(
         privateKey: JsonWebKey,
         data: Uint8Array | Uint8Array[],
         dsaEncoding: CryptoDsaEncoding = "ieee-p1363",
@@ -85,7 +85,7 @@ export class CryptoReactNative extends NodeJsCrypto {
         );
     }
 
-    override verify(
+    override verifyEcdsa(
         publicKey: JsonWebKey,
         data: Uint8Array,
         signature: Uint8Array,

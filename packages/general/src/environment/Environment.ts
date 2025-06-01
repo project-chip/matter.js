@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Boot } from "#util/Boot.js";
 import { MaybePromise } from "#util/Promises.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
@@ -242,8 +241,4 @@ export class Environment {
     }
 }
 
-let global: Environment;
-
-Boot.init(() => {
-    global = new Environment("default");
-});
+let global = new Environment("default");

@@ -122,11 +122,11 @@ export class FabricGroups {
 
         // Lets pre-calculate the operational keys
         const operationalId = this.#fabric.operationalId;
-        const operationalEpochKey0 = await Crypto.hkdf(epochKey0, operationalId, GROUP_SECURITY_INFO);
+        const operationalEpochKey0 = await Crypto.createHkdfKey(epochKey0, operationalId, GROUP_SECURITY_INFO);
         const operationalEpochKey1 =
-            epochKey1 !== null ? await Crypto.hkdf(epochKey1, operationalId, GROUP_SECURITY_INFO) : null;
+            epochKey1 !== null ? await Crypto.createHkdfKey(epochKey1, operationalId, GROUP_SECURITY_INFO) : null;
         const operationalEpochKey2 =
-            epochKey2 !== null ? await Crypto.hkdf(epochKey2, operationalId, GROUP_SECURITY_INFO) : null;
+            epochKey2 !== null ? await Crypto.createHkdfKey(epochKey2, operationalId, GROUP_SECURITY_INFO) : null;
         this.#keySets.add({
             ...groupKeySet,
             operationalEpochKey0,

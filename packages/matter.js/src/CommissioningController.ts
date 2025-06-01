@@ -245,6 +245,7 @@ export class CommissioningController {
             : new LegacyControllerStore(storage!);
 
         const { netInterfaces, scanners, port } = await configureNetwork({
+            network: environment?.has(Network) ? environment.get(Network) : Environment.default.get(Network),
             ipv4Disabled: this.#ipv4Disabled,
             mdnsScanner,
             localPort,
@@ -782,20 +783,21 @@ export class CommissioningController {
 }
 
 export async function configureNetwork(options: {
+    network: Network;
     ipv4Disabled?: boolean;
     mdnsScanner?: MdnsScanner;
     localPort?: number;
     listeningAddressIpv6?: string;
     listeningAddressIpv4?: string;
 }) {
-    const { ipv4Disabled, mdnsScanner, localPort, listeningAddressIpv6, listeningAddressIpv4 } = options;
+    const { network, ipv4Disabled, mdnsScanner, localPort, listeningAddressIpv6, listeningAddressIpv4 } = options;
 
     const netInterfaces = new NetInterfaceSet();
     const scanners = new ScannerSet();
 
     let udpInterface: UdpInterface;
     try {
-        udpInterface = await UdpInterface.create(Network.get(), "udp6", localPort, listeningAddressIpv6);
+        udpInterface = await UdpInterface.create(network, "udp6", localPort, listeningAddressIpv6);
         netInterfaces.add(udpInterface);
     } catch (error) {
         NoAddressAvailableError.accept(error);
@@ -806,9 +808,7 @@ export async function configureNetwork(options: {
     if (!ipv4Disabled) {
         // TODO: Add option to transport different ports to broadcaster
         try {
-            netInterfaces.add(
-                await UdpInterface.create(Network.get(), "udp4", udpInterface.port, listeningAddressIpv4),
-            );
+            netInterfaces.add(await UdpInterface.create(network, "udp4", udpInterface.port, listeningAddressIpv4));
         } catch (error) {
             NoAddressAvailableError.accept(error);
             logger.info(`IPv4 UDP interface not created because IPv4 is not available`);

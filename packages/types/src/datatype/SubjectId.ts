@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { toBigInt } from "#general";
 import { GroupId } from "./GroupId.js";
 import { NodeId, TlvNodeId } from "./NodeId.js";
 
@@ -17,7 +16,7 @@ import { NodeId, TlvNodeId } from "./NodeId.js";
 export type SubjectId = NodeId | GroupId;
 
 export function SubjectId(v: bigint | number): SubjectId {
-    return toBigInt(v) as SubjectId;
+    return BigInt(v) as SubjectId;
 }
 
 /** Tlv schema for a Subject Id */

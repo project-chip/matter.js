@@ -11,9 +11,6 @@ import { log } from "../src/GenericTestApp.js";
 log.directive = () => {};
 log.error = (...args: any[]) => console.error(...args);
 
-// We require real time
-MockTime.disable();
-
 // Expose Chip testing API as a global
 declare global {
     const chip: Chip;

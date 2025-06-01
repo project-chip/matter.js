@@ -8,11 +8,11 @@ import { Fabric } from "#fabric/Fabric.js";
 import {
     Bytes,
     createPromise,
+    Crypto,
     DnsCodec,
     DnsMessageType,
     MockNetwork,
     MockUdpChannel,
-    Network,
     NetworkSimulator,
     UdpChannel,
 } from "#general";
@@ -75,14 +75,16 @@ const NODE_ID = NodeId(BigInt(1));
     describe(`MDNS Scanner and Broadcaster ${testIpv4Enabled ? "with" : "without"} IPv4 (and Ipv4 ${
         serverHasIpv4Addresses ? "" : "not "
     }provided)`, () => {
+        before(MockCrypto.enable);
+        before(MockTime.enable);
+
         let broadcaster: MdnsBroadcaster;
         let scanner: MdnsScanner;
         let scannerChannel: UdpChannel;
         let broadcasterChannel: UdpChannel;
 
         beforeEach(async () => {
-            Network.get = () => clientNetwork;
-            scanner = await MdnsScanner.create(Network.get(), {
+            scanner = await MdnsScanner.create(clientNetwork, {
                 enableIpv4: testIpv4Enabled,
                 netInterface: "fake0",
             });
@@ -92,8 +94,7 @@ const NODE_ID = NodeId(BigInt(1));
                 type: testIpv4Enabled ? "udp4" : "udp6",
             });
 
-            Network.get = () => serverNetwork;
-            broadcaster = await MdnsBroadcaster.create(Network.get(), {
+            broadcaster = await MdnsBroadcaster.create(serverNetwork, {
                 enableIpv4: testIpv4Enabled,
                 multicastInterface: "fake0",
             });
@@ -102,10 +103,6 @@ const NODE_ID = NodeId(BigInt(1));
                 listeningAddress: testIpv4Enabled ? "224.0.0.251" : "ff02::fb",
                 type: testIpv4Enabled ? "udp4" : "udp6",
             });
-
-            Network.get = () => {
-                throw new Error("Network should not be requested post creation");
-            };
         });
 
         afterEach(async () => {
@@ -131,6 +128,11 @@ const NODE_ID = NodeId(BigInt(1));
         };
 
         describe("broadcaster", () => {
+            it("has correct crypto installed", async () => {
+                // This is the first place we encounter this in a full test run so be a little explicit about it
+                expect(Crypto.getRandomData(1)[0]).equals(0x80, "Crypto mocking is broken, tests will fail");
+            });
+
             it("it broadcasts the device fabric on one port and expires", async () => {
                 const { promise, resolver } = createPromise<Uint8Array>();
                 const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
@@ -300,7 +302,7 @@ const NODE_ID = NodeId(BigInt(1));
                     additionalRecords: [
                         {
                             flushCache: false,
-                            name: "0000000000000000._matterc._udp.local",
+                            name: "8080808080808080._matterc._udp.local",
                             recordClass: 1,
                             recordType: 33,
                             ttl: 120,
@@ -308,7 +310,7 @@ const NODE_ID = NodeId(BigInt(1));
                         },
                         {
                             flushCache: false,
-                            name: "0000000000000000._matterc._udp.local",
+                            name: "8080808080808080._matterc._udp.local",
                             recordClass: 1,
                             recordType: 16,
                             ttl: 120,
@@ -382,7 +384,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                         {
                             flushCache: false,
@@ -390,7 +392,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                         {
                             flushCache: false,
@@ -398,7 +400,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                         {
                             flushCache: false,
@@ -406,7 +408,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                         {
                             flushCache: false,
@@ -414,7 +416,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                         {
                             flushCache: false,
@@ -422,7 +424,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                     ],
                     authorities: [],
@@ -457,7 +459,7 @@ const NODE_ID = NodeId(BigInt(1));
                     additionalRecords: [
                         {
                             flushCache: false,
-                            name: "0000000000000000._matterd._udp.local",
+                            name: "8080808080808080._matterd._udp.local",
                             recordClass: 1,
                             recordType: 33,
                             ttl: 120,
@@ -465,7 +467,7 @@ const NODE_ID = NodeId(BigInt(1));
                         },
                         {
                             flushCache: false,
-                            name: "0000000000000000._matterd._udp.local",
+                            name: "8080808080808080._matterd._udp.local",
                             recordClass: 1,
                             recordType: 16,
                             ttl: 120,
@@ -496,7 +498,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterd._udp.local",
+                            value: "8080808080808080._matterd._udp.local",
                         },
                         {
                             flushCache: false,
@@ -512,7 +514,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterd._udp.local",
+                            value: "8080808080808080._matterd._udp.local",
                         },
                     ],
                     authorities: [],
@@ -621,7 +623,7 @@ const NODE_ID = NodeId(BigInt(1));
                     additionalRecords: [
                         {
                             flushCache: false,
-                            name: "0000000000000000._matterc._udp.local",
+                            name: "8080808080808080._matterc._udp.local",
                             recordClass: 1,
                             recordType: 33,
                             ttl: 120,
@@ -629,7 +631,7 @@ const NODE_ID = NodeId(BigInt(1));
                         },
                         {
                             flushCache: false,
-                            name: "0000000000000000._matterc._udp.local",
+                            name: "8080808080808080._matterc._udp.local",
                             recordClass: 1,
                             recordType: 16,
                             ttl: 120,
@@ -703,7 +705,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                         {
                             flushCache: false,
@@ -711,7 +713,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                         {
                             flushCache: false,
@@ -719,7 +721,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                         {
                             flushCache: false,
@@ -727,7 +729,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                         {
                             flushCache: false,
@@ -735,7 +737,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                         {
                             flushCache: false,
@@ -743,7 +745,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterc._udp.local",
+                            value: "8080808080808080._matterc._udp.local",
                         },
                     ],
                     authorities: [],
@@ -757,7 +759,7 @@ const NODE_ID = NodeId(BigInt(1));
                     additionalRecords: [
                         {
                             flushCache: false,
-                            name: "0000000000000000._matterd._udp.local",
+                            name: "8080808080808080._matterd._udp.local",
                             recordClass: 1,
                             recordType: 33,
                             ttl: 120,
@@ -765,7 +767,7 @@ const NODE_ID = NodeId(BigInt(1));
                         },
                         {
                             flushCache: false,
-                            name: "0000000000000000._matterd._udp.local",
+                            name: "8080808080808080._matterd._udp.local",
                             recordClass: 1,
                             recordType: 16,
                             ttl: 120,
@@ -796,7 +798,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterd._udp.local",
+                            value: "8080808080808080._matterd._udp.local",
                         },
                         {
                             flushCache: false,
@@ -812,7 +814,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 12,
                             ttl: 120,
-                            value: "0000000000000000._matterd._udp.local",
+                            value: "8080808080808080._matterd._udp.local",
                         },
                     ],
                     authorities: [],
@@ -915,10 +917,10 @@ const NODE_ID = NodeId(BigInt(1));
                         V: 1,
                         VP: "1+32768",
                         addresses: IPIntegrationResultsPort1,
-                        deviceIdentifier: "0000000000000000",
+                        deviceIdentifier: "8080808080808080",
                         discoveredAt: undefined,
                         ttl: undefined,
-                        instanceId: "0000000000000000",
+                        instanceId: "8080808080808080",
                     },
                 ]);
 
@@ -1179,10 +1181,10 @@ const NODE_ID = NodeId(BigInt(1));
                         V: 1,
                         VP: "1+32768",
                         addresses: IPIntegrationResultsPort1,
-                        deviceIdentifier: "0000000000000000",
+                        deviceIdentifier: "8080808080808080",
                         discoveredAt: undefined,
                         ttl: undefined,
-                        instanceId: "0000000000000000",
+                        instanceId: "8080808080808080",
                     },
                 ]);
 
@@ -1260,10 +1262,10 @@ const NODE_ID = NodeId(BigInt(1));
                         V: 1,
                         VP: "1+32768",
                         addresses: IPIntegrationResultsPort1,
-                        deviceIdentifier: "0000000000000000",
+                        deviceIdentifier: "8080808080808080",
                         discoveredAt: undefined,
                         ttl: undefined,
-                        instanceId: "0000000000000000",
+                        instanceId: "8080808080808080",
                     },
                 ]);
 

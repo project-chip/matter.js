@@ -263,7 +263,7 @@ async function writeAttrRawAsAdmin(node: MockServerNode, data: Partial<WriteRequ
         ...data,
     } as Write;
 
-    const fabric = await node.addFabric(1);
+    const fabric = await node.addFabric();
     const exchange = await node.createExchange({ fabric });
     return node.online({ command: true, exchange }, async ({ context }) => {
         const response = new AttributeWriteResponse(node.protocol, context);

@@ -4,67 +4,113 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const subtle = globalThis.crypto.subtle;
+import { Boot } from "./boot.js";
 
 /**
- * An extremely minimal Crypto mock.
- *
- * Only supports those subsets of crypto required to complete matter.js tests.
+ * An arbitrary fill byte for mock random data.  At some point a pseudo-random function may make sense but for now this
+ * suffices.  Do not choose 0 or 0xff because that will interfere with logic that disallows 0 or -1.
  */
-const TheCrypto = {
-    getRandomData: (length: number) => {
-        // Make random data deterministic
-        const bytes = new Uint8Array(length);
+const FILL_BYTE = 0x80;
 
-        return bytes;
+interface CryptoInstance {
+    getRandomData(length: number): Uint8Array;
+}
+
+interface CryptoNamespace {
+    get(): CryptoInstance;
+}
+
+let RealCrypto: undefined | CryptoNamespace;
+
+let restoreRandomness: undefined | (() => void);
+
+export const MockCrypto: MockCrypto = {
+    set random(value: boolean) {
+        if (RealCrypto === undefined) {
+            return;
+        }
+
+        if (value === this.random) {
+            return;
+        }
+
+        restoreRandomness?.();
+        if (!value) {
+            const instance = RealCrypto.get();
+
+            const realGetRandomData = instance.getRandomData;
+            instance.getRandomData = length => {
+                const result = new Uint8Array(length);
+                result.fill(FILL_BYTE);
+                return result;
+            };
+
+            restoreRandomness = () => {
+                instance.getRandomData = realGetRandomData;
+                restoreRandomness = undefined;
+            };
+        }
     },
 
-    async pbkdf2(secret: Uint8Array, salt: Uint8Array, iteration: number, keyLength: number) {
-        const key = await subtle.importKey("raw", secret, "PBKDF2", false, ["deriveBits"]);
-        const bits = await subtle.deriveBits(
-            {
-                name: "PBKDF2",
-                hash: "SHA-256",
-                salt: salt,
-                iterations: iteration,
-            },
-            key,
-            keyLength * 8,
-        );
-        return new Uint8Array(bits);
+    get random() {
+        return !restoreRandomness;
     },
 
-    async hkdf(secret: Uint8Array, salt: Uint8Array, info: Uint8Array, length: number = 16) {
-        const key = await subtle.importKey("raw", secret, "HKDF", false, ["deriveBits"]);
-        return new Uint8Array(
-            await subtle.deriveBits(
-                {
-                    name: "HKDF",
-                    hash: "SHA-256",
-                    salt: salt,
-                    info: info,
-                },
-                key,
-                length,
-            ),
-        );
+    withRandom<T>(value: boolean, actor: () => T): T {
+        const revertTo = !!restoreRandomness;
+        let isAsync = false;
+        try {
+            MockCrypto.random = value;
+            const result = actor();
+            if (typeof (result as any)?.then === "function") {
+                isAsync = true;
+                return Promise.resolve(result).finally(() => {
+                    MockCrypto.random = revertTo;
+                }) as T;
+            }
+            return result;
+        } finally {
+            if (!isAsync) {
+                MockCrypto.random = revertTo;
+            }
+        }
     },
 
-    verify() {
-        // We do not really verify anything
-        return;
+    enable() {
+        MockCrypto.random = false;
     },
 
-    mock: true,
+    init() {
+        if (MockCrypto.random) {
+            MockCrypto.enable();
+        }
+    },
 };
 
-export function cryptoSetup(Crypto: any) {
-    try {
-        Crypto.get();
-    } catch (e) {
-        if ((e as Error).constructor.name !== "NoProviderError") {
-            throw e;
-        }
-        Crypto.get = () => TheCrypto;
-    }
+export function cryptoSetup(Crypto: CryptoNamespace) {
+    RealCrypto = Crypto;
+}
+
+Boot.init(() => (MockCrypto.random = true));
+
+export interface MockCrypto {
+    /**
+     * If false, crypto functions return all zeros instead of random data.  Resets to true for each test file.
+     */
+    random: boolean;
+
+    /**
+     * Set {@link random} to false.
+     */
+    enable(): void;
+
+    /**
+     * Enabled if not already enabled.
+     */
+    init(): void;
+
+    /**
+     * Perform an operation with altered {@link random} then revert.
+     */
+    withRandom<T>(value: boolean, actor: () => T): T;
 }

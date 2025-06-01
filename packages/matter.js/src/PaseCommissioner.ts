@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Environment, ImplementationError, Logger } from "#general";
+import { Environment, ImplementationError, Logger, Network } from "#general";
 import {
     CertificateAuthority,
     CommissionableDevice,
@@ -92,6 +92,7 @@ export class PaseCommissioner {
         }
 
         const { scanners, netInterfaces } = await configureControllerNetwork({
+            network: this.environment.get(Network),
             mdnsScanner,
             ipv4Disabled,
             ...this.options,

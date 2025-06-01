@@ -26,10 +26,6 @@ export function toNumber(value: bigint | number): number {
     return typeof value === "bigint" ? Number(value) : value;
 }
 
-export function toBigInt(value: bigint | number): bigint {
-    return typeof value === "number" ? BigInt(value) : value;
-}
-
 export function minValue<T extends bigint | number>(a: T | undefined, b: T | undefined) {
     if (a === undefined) return b;
     if (b === undefined) return a;

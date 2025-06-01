@@ -136,7 +136,7 @@ async function invokeCmdRaw(node: MockServerNode, data: Partial<InvokeRequest>) 
         ...data,
     } as Invoke;
 
-    const fabric = await node.addFabric(1);
+    const fabric = await node.addFabric();
     const exchange = await node.createExchange({ fabric });
     return node.online({ command: true, exchange }, async ({ context }) => {
         const response = new CommandInvokeResponse(node.protocol, context);

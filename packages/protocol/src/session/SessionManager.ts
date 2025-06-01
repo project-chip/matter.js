@@ -699,6 +699,7 @@ export class SessionManager {
     compressIdRange(upperBound: number) {
         this.#idUpperBound = upperBound;
         this.#nextSessionId = Crypto.getRandomUInt32() % upperBound;
+        if (this.#nextSessionId === 0) this.#nextSessionId++;
     }
 }
 

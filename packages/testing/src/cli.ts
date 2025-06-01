@@ -9,7 +9,7 @@ import "./util/node-shims.js";
 
 import "./global-definitions.js";
 
-import { Graph, JsonNotFoundError, Package, Project, ProjectBuilder } from "#tools";
+import { ansi, Graph, JsonNotFoundError, Package, Project, ProjectBuilder } from "#tools";
 import { clear } from "node:console";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
@@ -34,6 +34,9 @@ interface Config {
 }
 
 export async function main(argv = process.argv) {
+    process.on("SIGINT", interrupt);
+    process.on("SIGTERM", interrupt);
+
     const testTypes = new Set<TestType>();
 
     let ls = false;
@@ -216,4 +219,13 @@ function supportsWebTests(pkg: Package) {
         return false;
     }
     return testScript.split(" ").includes("-w");
+}
+
+function interrupt() {
+    process.stderr.write(`💥 ${ansi.red("Aborted")}\n`);
+    process.exit(1);
+}
+
+if (typeof MatterHooks !== "undefined") {
+    MatterHooks.interrupt = interrupt;
 }
