@@ -17,7 +17,7 @@ import {
 import { Fabric } from "../fabric/Fabric.js";
 import { MdnsScanner } from "../mdns/MdnsScanner.js";
 import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
-import { CommissioningError } from "./ControllerCommissioningFlow.js";
+import { CommissioningError, CommissioningErrorCode } from "./ControllerCommissioningFlow.js";
 
 const logger = Logger.get("ControllerDiscovery");
 
@@ -54,6 +54,7 @@ export class ControllerDiscovery {
                     `No device discovered using identifier ${Diagnostic.json(
                         identifier,
                     )}! Please check that the relevant device is online.`,
+                    CommissioningErrorCode.CommissionableDeviceDiscoveryFailed,
                 );
             }
 
@@ -63,6 +64,7 @@ export class ControllerDiscovery {
                     `Device discovered using identifier ${Diagnostic.json(
                         identifier,
                     )}, but no Network addresses discovered.`,
+                    CommissioningErrorCode.CommissionableDeviceDiscoveryFailed,
                 );
             }
             return devices;
