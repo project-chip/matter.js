@@ -73,6 +73,7 @@ export class Fabric {
     #label: string;
     #removeCallbacks = new Array<() => MaybePromise<void>>();
     #persistCallback: ((isUpdate?: boolean) => MaybePromise<void>) | undefined;
+    #storage?: StorageContext;
 
     constructor(config: Fabric.Config) {
         this.fabricIndex = config.fabricIndex;
@@ -127,7 +128,12 @@ export class Fabric {
     }
 
     set storage(storage: StorageContext) {
+        this.#storage = storage;
         this.#groupManager.storage = storage;
+    }
+
+    get storage(): StorageContext | undefined {
+        return this.#storage;
     }
 
     get groups() {

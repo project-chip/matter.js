@@ -185,7 +185,7 @@ export class FabricManager {
             );
         this.#fabrics.delete(fabricIndex);
         await this.persistFabrics();
-        await fabric.storage.clearAll();
+        await fabric.storage?.clearAll();
         this.#events.deleted.emit(fabric);
     }
 
