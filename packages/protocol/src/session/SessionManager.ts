@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { DecodedPacket } from "#codec/index.js";
 import { FabricManager } from "#fabric/FabricManager.js";
 import {
     BasicSet,
@@ -25,12 +26,15 @@ import {
 import { Subscription } from "#interaction/Subscription.js";
 import { Specification } from "#model";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
-import { CaseAuthenticatedTag, DEFAULT_MAX_PATHS_PER_INVOKE, FabricId, FabricIndex, NodeId } from "#types";
+import { SecureGroupSession } from "#session/SecureGroupSession.js";
+import { CaseAuthenticatedTag, DEFAULT_MAX_PATHS_PER_INVOKE, FabricId, FabricIndex, GroupId, NodeId } from "#types";
+import { UnexpectedDataError } from "@matter/general";
+import { assertOperationalGroupId } from "@matter/types";
 import { SupportedTransportsSchema } from "../common/Scanner.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { InsecureSession } from "./InsecureSession.js";
-import { SecureSession } from "./SecureSession.js";
+import { isSecureUnicastSession, SecureSession, SecureUnicastSession } from "./SecureSession.js";
 import {
     FALLBACK_DATAMODEL_REVISION,
     FALLBACK_INTERACTIONMODEL_REVISION,
@@ -118,11 +122,12 @@ const ID_SPACE_UPPER_BOUND = 0xffff;
 export class SessionManager {
     readonly #context: SessionManagerContext;
     readonly #insecureSessions = new Map<NodeId, InsecureSession>();
-    readonly #sessions = new BasicSet<SecureSession>();
+    readonly #sessions = new BasicSet<SecureUnicastSession>();
+    readonly #groupSessions = new Map<NodeId, BasicSet<SecureGroupSession>>();
     #nextSessionId = Crypto.getRandomUInt16();
     #resumptionRecords = new PeerAddressMap<ResumptionRecord>();
     readonly #globalUnencryptedMessageCounter = new MessageCounter();
-    readonly #subscriptionsChanged = Observable<[session: SecureSession, subscription: Subscription]>();
+    readonly #subscriptionsChanged = Observable<[session: SecureUnicastSession, subscription: Subscription]>();
     #sessionParameters: SessionParameters;
     readonly #resubmissionStarted = Observable<[session: Session]>();
     readonly #construction: Construction<SessionManager>;
@@ -278,7 +283,7 @@ export class SessionManager {
             peerSessionParameters,
             caseAuthenticatedTags,
         } = args;
-        const session = await SecureSession.create({
+        const session = await SecureUnicastSession.create({
             manager: this,
             id: sessionId,
             fabric,
@@ -347,7 +352,7 @@ export class SessionManager {
     findOldestInactiveSession() {
         this.#construction.assert();
 
-        let oldestSession: SecureSession | undefined = undefined;
+        let oldestSession: SecureUnicastSession | undefined = undefined;
         for (const session of this.#sessions) {
             if (!oldestSession || session.activeTimestamp < oldestSession.activeTimestamp) {
                 oldestSession = session;
@@ -389,8 +394,8 @@ export class SessionManager {
         this.#construction.assert();
 
         return [...this.#sessions].find(
-            session => session.isSecure && session.isPase && !session.closingAfterExchangeFinished,
-        ) as SecureSession;
+            session => isSecureUnicastSession(session) && session.isPase && !session.closingAfterExchangeFinished,
+        ) as SecureUnicastSession;
     }
 
     getSessionForNode(address: PeerAddress) {
@@ -427,15 +432,85 @@ export class SessionManager {
         return this.#insecureSessions.get(sourceNodeId);
     }
 
-    findGroupSession(groupId: number, groupSessionId: number) {
-        this.#construction.assert();
+    /**
+     * Creates or Returns a Group Session for a Group Peer Address.
+     * This is used for sending group messages because it returns the session for the current
+     * Group Epoch key. The Source Node Id is the own Node.
+     */
+    groupSessionForAddress(address: PeerAddress) {
+        const groupId = GroupId.fromNodeId(address.nodeId);
+        assertOperationalGroupId(groupId);
 
-        // Use groupsession id to find the key ??!!
-        // The Group Session ID MAY help receiving nodes efficiently locate the Operational Group Key used to encrypt an incoming groupcast message. It SHALL NOT be used as the sole means to locate the asso­ ciated Operational Group Key, since it MAY collide within the fabric. Instead, the Group Session ID provides receiving nodes a means to identify Operational Group Key candidates without the need to first attempt to decrypt groupcast messages using all available keys.
-        // On receipt of a message of Group Session Type, all valid, installed, operational group key candidates referenced by the given Group Session ID SHALL be attempted until authentication is passed or there are no more operational group keys to try. This is done because the same Group Session ID might arise from different keys. The chance of a Group Session ID collision is 2-16 but the chance of both a Group Session ID collision and the message MIC matching two different operational group keys is 2-80.
+        const fabric = this.fabricFor(address);
+        const { key, keySetId, sessionId } = fabric.groups.currentKeyForGroup(groupId);
+        if (sessionId === undefined || key === undefined) {
+            throw new UnexpectedDataError(
+                `No group session data found for group ${groupId} in fabric ${fabric.fabricId}.`,
+            );
+        }
 
-        // TODO
-        throw new Error(`Not implemented ${groupId} ${groupSessionId}`);
+        let session = this.#groupSessions.get(fabric.nodeId)?.get("id", sessionId);
+        if (session === undefined) {
+            session = new SecureGroupSession({
+                manager: this,
+                id: sessionId,
+                fabric,
+                keySetId,
+                operationalGroupKey: key,
+                sourceNodeId: fabric.nodeId, // We are sender, so the source node ID is the fabric's node ID
+            });
+        }
+        return session;
+    }
+
+    /**
+     * Creates or Returns the Group session based on an incoming packet.
+     * The Session ID is determined by trying to decrypt te packet with possible keys.
+     */
+    groupSessionFromPacket(packet: DecodedPacket, aad: Uint8Array) {
+        const groupId = packet.header.destGroupId;
+        if (groupId === undefined) {
+            throw new UnexpectedDataError("Group ID is required for SecureGroupSession fromPacket.");
+        }
+        assertOperationalGroupId(GroupId(groupId));
+
+        const { message, key, sessionId, sourceNodeId, keySetId, fabric } = SecureGroupSession.decode(
+            this.#context.fabrics,
+            packet,
+            aad,
+        );
+
+        let session = this.#groupSessions.get(sourceNodeId)?.get("id", sessionId);
+        if (session === undefined) {
+            session = new SecureGroupSession({
+                manager: this,
+                id: sessionId,
+                fabric,
+                keySetId,
+                operationalGroupKey: key,
+                sourceNodeId,
+            });
+        }
+
+        return { session, message, key };
+    }
+
+    registerGroupSession(session: SecureGroupSession) {
+        const sourceNodeId = session.peerNodeId;
+        const peerSessions = this.#groupSessions.get(sourceNodeId) ?? new BasicSet();
+        peerSessions.add(session);
+        this.#groupSessions.set(sourceNodeId, peerSessions);
+    }
+
+    removeGroupSession(session: SecureGroupSession) {
+        const sourceNodeId = session.peerNodeId;
+        const peerSessions = this.#groupSessions.get(sourceNodeId);
+        if (peerSessions) {
+            peerSessions.delete(session);
+            if (peerSessions.size === 0) {
+                this.#groupSessions.delete(sourceNodeId);
+            }
+        }
     }
 
     findResumptionRecordById(resumptionId: Uint8Array) {
@@ -580,6 +655,11 @@ export class SessionManager {
         });
         for (const session of this.#insecureSessions.values()) {
             closePromises.push(session?.end());
+        }
+        for (const sessions of this.#groupSessions.values()) {
+            for (const session of sessions) {
+                closePromises.push(session?.end());
+            }
         }
         await MatterAggregateError.allSettled(closePromises, "Error closing sessions").catch(error =>
             logger.error(error),
