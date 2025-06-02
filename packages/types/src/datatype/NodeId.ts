@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { GroupId } from "#datatype/GroupId.js";
 import { Branded, Bytes, Crypto, DataWriter, Endian, toBigInt, UnexpectedDataError } from "#general";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
@@ -59,11 +60,14 @@ export namespace NodeId {
     };
 
     /** A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the lower half of the Node ID. */
-    export const fromGroupNodeId = (groupId: number): NodeId => {
-        if (groupId < 0 || groupId > 0xffff) {
-            throw new UnexpectedDataError(`Invalid group ID: ${groupId}`);
-        }
-        return NodeId(BigInt("0xFFFFFFFFFFFF" + groupId.toString(16).padStart(4, "0")));
+    export const isGroupNodeId = (nodeId: NodeId): boolean => {
+        const nodeIdHex = nodeId.toString(16);
+        return nodeIdHex.startsWith("ffffffffffff") && nodeIdHex.length === 16;
+    };
+
+    /** A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the lower half of the Node ID. */
+    export const fromGroupId = (groupId: number): NodeId => {
+        return NodeId(BigInt("0xFFFFFFFFFFFF" + GroupId(groupId).toString(16).padStart(4, "0")));
     };
 
     /**

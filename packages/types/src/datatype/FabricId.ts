@@ -20,6 +20,10 @@ export function FabricId(value: bigint | number): FabricId {
     return toBigInt(value) as FabricId;
 }
 
+export namespace FabricId {
+    export const NO_FABRIC = FabricId(0);
+}
+
 /** Tlv schema for a Node Identifier. */
 export const TlvFabricId = new TlvWrapper<FabricId, number | bigint>(
     TlvUInt64,
