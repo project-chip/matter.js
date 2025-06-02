@@ -227,7 +227,7 @@ describe("AttributeWriteRequest", () => {
                     },
                 ],
             }),
-        ).rejectedWith("(128) Wildcard path write must specify a clusterId and attributeId");
+        ).rejectedWith("Wildcard path write must specify a clusterId and attributeId");
     });
 
     // TODO - more tests and Migrate some from InteractionProtocolTest

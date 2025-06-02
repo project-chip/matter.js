@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StatusCode, StatusResponseError } from "./StatusCode.js";
+import { StatusCode } from "./StatusCode.js";
+import { StatusResponseError } from "./StatusResponseError.js";
 
 /**
  * Base class for validation errors and used when Data validation fails. Please check the provided data.

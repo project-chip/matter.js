@@ -329,7 +329,7 @@ describe("Logger", () => {
             const result = captureOne(() => {
                 logger.error("THIS IS", Diagnostic.strong("VERY"), "IMPORTANT");
             });
-            expect(result?.message).equals("xxxx-xx-xx xx:xx:xx.xxx ERROR UnitTest THIS IS *VERY* IMPORTANT");
+            expect(result?.message).equals("xxxx-xx-xx xx:xx:xx.xxx ERROR UnitTest THIS IS VERY IMPORTANT");
         });
     });
 

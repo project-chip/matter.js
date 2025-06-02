@@ -75,25 +75,13 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     }: AdministratorCommissioning.OpenCommissioningWindowRequest) {
         // We monkey patched the Tlv definition above, so take care about correct error handling
         if (pakePasscodeVerifier.length !== PAKE_PASSCODE_VERIFIER_LENGTH) {
-            throw new StatusResponseError(
-                "PAKE Passcode verifier length is invalid.",
-                StatusCode.Failure,
-                AdministratorCommissioning.StatusCode.PakeParameterError,
-            );
+            throw new AdministratorCommissioning.PakeParameterError("PAKE passcode verifier length is invalid");
         }
         if (iterations < 1000 || iterations > 100_000) {
-            throw new StatusResponseError(
-                "PAKE iterations invalid.",
-                StatusCode.Failure,
-                AdministratorCommissioning.StatusCode.PakeParameterError,
-            );
+            throw new AdministratorCommissioning.PakeParameterError("PAKE iterations invalid");
         }
         if (salt.length < 16 || salt.length > 32) {
-            throw new StatusResponseError(
-                "PAKE salt has invalid length.",
-                StatusCode.Failure,
-                AdministratorCommissioning.StatusCode.PakeParameterError,
-            );
+            throw new AdministratorCommissioning.PakeParameterError("PAKE salt has invalid length.");
         }
 
         const commissioner = this.env.get(DeviceCommissioner);
@@ -134,10 +122,8 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     /** This method is used to revoke a commissioning window. */
     override async revokeCommissioning() {
         if (this.internal.commissioningWindowTimeout === undefined) {
-            throw new StatusResponseError(
+            throw new AdministratorCommissioning.WindowNotOpenError(
                 "No commissioning window is opened that could be revoked.",
-                StatusCode.Failure,
-                AdministratorCommissioning.StatusCode.WindowNotOpen,
             );
         }
 
@@ -194,11 +180,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      */
     #assertCommissioningWindowRequirements(commissioningTimeout: number, commissioner: DeviceCommissioner) {
         if (this.internal.commissioningWindowTimeout !== undefined) {
-            throw new StatusResponseError(
-                "A commissioning window is already opened.",
-                StatusCode.Failure,
-                AdministratorCommissioning.StatusCode.Busy,
-            );
+            throw new AdministratorCommissioning.BusyError("A commissioning window is already opened");
         }
 
         if (commissioningTimeout > this.internal.maximumCommissioningTimeoutS) {
@@ -216,11 +198,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         }
 
         if (commissioner.isFailsafeArmed) {
-            throw new StatusResponseError(
-                "Failsafe timer armed, assume commissioning in progress.",
-                StatusCode.Failure,
-                AdministratorCommissioning.StatusCode.Busy,
-            );
+            throw new AdministratorCommissioning.BusyError("Failsafe timer armed, assume commissioning in progress.");
         }
     }
 

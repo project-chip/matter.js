@@ -663,7 +663,11 @@ export function Construction<const T extends Constructable>(
 
     function createErrorHandler(name: string) {
         return (e: any) => {
-            unhandledError(`Unhandled error in ${subject} ${name}:`, e);
+            let what = subject.toString();
+            if (what === "[object Object]") {
+                what = subject.constructor.name;
+            }
+            unhandledError(`Unhandled error in ${what} ${name}:`, e);
         };
     }
 }

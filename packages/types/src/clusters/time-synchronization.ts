@@ -29,6 +29,8 @@ import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvInt32, TlvEpochUs, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status } from "../globals/Status.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -549,6 +551,21 @@ export namespace TimeSynchronization {
          * Node rejected the attempt to set the UTC time
          */
         TimeNotAccepted = 2
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.TimeNotAccepted}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.17.7.1
+     */
+    export class TimeNotAcceptedError extends StatusResponseError {
+        constructor(
+            message = "Node rejected the attempt to set the UTC time",
+            code = Status.Failure,
+            clusterCode = StatusCode.TimeNotAccepted
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**
