@@ -20,7 +20,7 @@ import { Identity } from "#general";
 /**
  * This defines conformance for the Robotic Vacuum Cleaner device type.
  *
- * @see {@link MatterSpecification.v14.Device} § 12.1
+ * @see {@link MatterSpecification.v141.Device} § 12.1
  */
 export interface RoboticVacuumCleanerDevice extends Identity<typeof RoboticVacuumCleanerDeviceDefinition> {}
 

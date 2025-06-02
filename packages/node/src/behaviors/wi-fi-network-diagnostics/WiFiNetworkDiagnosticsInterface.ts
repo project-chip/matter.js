@@ -27,7 +27,7 @@ export namespace WiFiNetworkDiagnosticsInterface {
          *
          * This command has no associated data.
          *
-         * @see {@link MatterSpecification.v14.Core} § 11.15.7.1
+         * @see {@link MatterSpecification.v141.Core} § 11.15.7.1
          */
         resetCounts(): MaybePromise;
     }

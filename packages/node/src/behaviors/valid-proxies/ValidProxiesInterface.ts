@@ -15,7 +15,7 @@ export namespace ValidProxiesInterface {
          * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery & Assignment
          * Flow”.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.15.14.6.1
+         * @see {@link MatterSpecification.v141.Core} § 9.15.14.6.1
          */
         getValidProxiesRequest(): MaybePromise<ValidProxies.GetValidProxiesResponse>;
     }

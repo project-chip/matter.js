@@ -24,7 +24,7 @@ import { Identity } from "#general";
  * A Mounted On/Off Control is a fixed device that provides power to another device that is plugged into it, and is
  * capable of switching that provided power on or off.
  *
- * @see {@link MatterSpecification.v14.Device} § 5.3
+ * @see {@link MatterSpecification.v141.Device} § 5.3
  */
 export interface MountedOnOffControlDevice extends Identity<typeof MountedOnOffControlDeviceDefinition> {}
 

@@ -25,7 +25,7 @@ import { Identity } from "#general";
  * is capable of being switched on or off and have its level adjusted. The Mounted Dimmable Load Control is typically
  * used to control a conventional non-communicating light through its mains connection using phase cutting.
  *
- * @see {@link MatterSpecification.v14.Device} § 5.4
+ * @see {@link MatterSpecification.v141.Device} § 5.4
  */
 export interface MountedDimmableLoadControlDevice extends Identity<typeof MountedDimmableLoadControlDeviceDefinition> {}
 

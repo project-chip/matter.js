@@ -54,7 +54,7 @@ declare namespace MatterSpecification {
     }
 
     /**
-     * Matter v1.3
+     * Matter v1.3 and 1.3.0.1
      */
     export namespace v13 {
         /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Core Specification 1.3} */
@@ -84,6 +84,23 @@ declare namespace MatterSpecification {
         export interface Device {}
 
         /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Standard namespace Specification 1.4} */
+        export interface Namespace {}
+    }
+
+    /**
+     * Matter v1.4.1
+     */
+    export namespace v141 {
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Core Specification 1.4.1} */
+        export interface Core {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Application Cluster Specification 1.4.1} */
+        export interface Cluster {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Device Library Specification 1.4.1} */
+        export interface Device {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Standard namespace Specification 1.4.1} */
         export interface Namespace {}
     }
 }

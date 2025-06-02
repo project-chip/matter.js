@@ -28,7 +28,7 @@ export namespace TimeSynchronizationInterface {
          * opts to not update its time, it shall fail the command with a cluster specific Status Code of
          * TimeNotAccepted.
          *
-         * @see {@link MatterSpecification.v14.Core} § 11.17.9.1
+         * @see {@link MatterSpecification.v141.Core} § 11.17.9.1
          */
         setUtcTime(request: TimeSynchronization.SetUtcTimeRequest): MaybePromise;
     }
@@ -44,7 +44,7 @@ export namespace TimeSynchronizationInterface {
          *     fields matching those in the TrustedTimeSource field and has its FabricIndex field set to the command’s
          *     accessing fabric index.
          *
-         * @see {@link MatterSpecification.v14.Core} § 11.17.9.2
+         * @see {@link MatterSpecification.v141.Core} § 11.17.9.2
          */
         setTrustedTimeSource(request: TimeSynchronization.SetTrustedTimeSourceRequest): MaybePromise;
     }
@@ -57,7 +57,7 @@ export namespace TimeSynchronizationInterface {
          * provided Address is a domain name, the command shall fail with a status code of INVALID_COMMAND. Otherwise,
          * the node shall set the DefaultNTP attribute to match the DefaultNTP provided in this command.
          *
-         * @see {@link MatterSpecification.v14.Core} § 11.17.9.6
+         * @see {@link MatterSpecification.v141.Core} § 11.17.9.6
          */
         setDefaultNtp(request: TimeSynchronization.SetDefaultNtpRequest): MaybePromise;
     }
@@ -80,7 +80,7 @@ export namespace TimeSynchronizationInterface {
          * A DSTTableEmpty event shall be generated if the DSTOffset attribute is empty. A DSTStatus event shall be
          * generated if the node was previously applying a DST offset.
          *
-         * @see {@link MatterSpecification.v14.Core} § 11.17.9.3
+         * @see {@link MatterSpecification.v141.Core} § 11.17.9.3
          */
         setTimeZone(request: TimeSynchronization.SetTimeZoneRequest): MaybePromise<TimeSynchronization.SetTimeZoneResponse>;
 
@@ -98,7 +98,7 @@ export namespace TimeSynchronizationInterface {
          * If the DSTOffset attribute change causes a corresponding change to the DST state, a DSTStatus event shall be
          * generated. If the list is empty, the node shall generate a DSTTableEmpty event.
          *
-         * @see {@link MatterSpecification.v14.Core} § 11.17.9.5
+         * @see {@link MatterSpecification.v141.Core} § 11.17.9.5
          */
         setDstOffset(request: TimeSynchronization.SetDstOffsetRequest): MaybePromise;
     }

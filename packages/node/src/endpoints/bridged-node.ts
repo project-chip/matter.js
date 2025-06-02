@@ -22,7 +22,6 @@ import {
     AdministratorCommissioningServer as BaseAdministratorCommissioningServer
 } from "../behaviors/administrator-commissioning/AdministratorCommissioningServer.js";
 import { MutableEndpoint } from "../endpoint/type/MutableEndpoint.js";
-import { DeviceClassification } from "#model";
 import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js";
 import { Identity } from "#general";
 
@@ -31,7 +30,7 @@ import { Identity } from "#general";
  * describes itself and any other endpoints that make up the Bridged Node. A Bridged Node endpoint represents a device
  * on a foreign network, but is not the root endpoint of the bridge itself.
  *
- * @see {@link MatterSpecification.v14.Device} § 2.5
+ * @see {@link MatterSpecification.v141.Device} § 2.5
  */
 export interface BridgedNodeEndpoint extends Identity<typeof BridgedNodeEndpointDefinition> {}
 
@@ -94,7 +93,6 @@ export const BridgedNodeEndpointDefinition = MutableEndpoint({
     name: "BridgedNode",
     deviceType: 0x13,
     deviceRevision: 3,
-    deviceClass: DeviceClassification.Utility,
     requirements: BridgedNodeRequirements,
     behaviors: SupportedBehaviors(
         BridgedNodeRequirements.server.mandatory.Parts,
