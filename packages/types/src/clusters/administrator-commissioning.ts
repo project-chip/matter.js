@@ -18,6 +18,8 @@ import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
 import { TlvByteString } from "../tlv/TlvString.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status } from "../globals/Status.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -183,6 +185,51 @@ export namespace AdministratorCommissioning {
          * No commissioning window was currently open
          */
         WindowNotOpen = 4
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.Busy}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.19.6.1
+     */
+    export class BusyError extends StatusResponseError {
+        constructor(
+            message = "Could not be completed because another commissioning is in progress",
+            code = Status.Failure,
+            clusterCode = StatusCode.Busy
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.PakeParameterError}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.19.6.1
+     */
+    export class PakeParameterError extends StatusResponseError {
+        constructor(
+            message = "Provided PAKE parameters were incorrectly formatted or otherwise invalid",
+            code = Status.Failure,
+            clusterCode = StatusCode.PakeParameterError
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.WindowNotOpen}.
+     *
+     * @see {@link MatterSpecification.v14.Core} § 11.19.6.1
+     */
+    export class WindowNotOpenError extends StatusResponseError {
+        constructor(
+            message = "No commissioning window was currently open",
+            code = Status.Failure,
+            clusterCode = StatusCode.WindowNotOpen
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

@@ -16,6 +16,8 @@ import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { MediaPlayback } from "./media-playback.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status as GlobalStatus } from "../globals/Status.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
@@ -418,6 +420,66 @@ export namespace ContentLauncher {
          * Requested Audio Track (in PlaybackPreferences) not available
          */
         AudioTrackNotAvailable = 4
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.UrlNotAvailable}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.7.5.2
+     */
+    export class UrlNotAvailableError extends StatusResponseError {
+        constructor(
+            message = "Requested URL could not be reached by device",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.UrlNotAvailable
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.AuthFailed}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.7.5.2
+     */
+    export class AuthFailedError extends StatusResponseError {
+        constructor(
+            message = "Requested URL returned 401 error code",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.AuthFailed
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.TextTrackNotAvailable}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.7.5.2
+     */
+    export class TextTrackNotAvailableError extends StatusResponseError {
+        constructor(
+            message = "Requested Text Track (in PlaybackPreferences) not available",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.TextTrackNotAvailable
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.AudioTrackNotAvailable}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.7.5.2
+     */
+    export class AudioTrackNotAvailableError extends StatusResponseError {
+        constructor(
+            message = "Requested Audio Track (in PlaybackPreferences) not available",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.AudioTrackNotAvailable
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

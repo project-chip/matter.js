@@ -16,6 +16,8 @@ import { TlvString, TlvByteString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status as GlobalStatus } from "../globals/Status.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -154,6 +156,81 @@ export namespace ApplicationLauncher {
          * Installing the requested app
          */
         Installing = 5
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.AppNotAvailable}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.4.5.1
+     */
+    export class AppNotAvailableError extends StatusResponseError {
+        constructor(
+            message = "Requested app is not available",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.AppNotAvailable
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.SystemBusy}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.4.5.1
+     */
+    export class SystemBusyError extends StatusResponseError {
+        constructor(
+            message = "Video platform unable to honor command",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.SystemBusy
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.PendingUserApproval}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.4.5.1
+     */
+    export class PendingUserApprovalError extends StatusResponseError {
+        constructor(
+            message = "User approval for app download is pending",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.PendingUserApproval
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.Downloading}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.4.5.1
+     */
+    export class DownloadingError extends StatusResponseError {
+        constructor(
+            message = "Downloading the requested app",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.Downloading
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.Installing}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.4.5.1
+     */
+    export class InstallingError extends StatusResponseError {
+        constructor(
+            message = "Installing the requested app",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.Installing
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

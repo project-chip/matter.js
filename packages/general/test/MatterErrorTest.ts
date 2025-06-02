@@ -7,13 +7,16 @@
 import { MatterAggregateError, MatterError } from "#MatterError.js";
 import "../src/log/LogFormat.js";
 
+class SpecialError extends MatterError {}
+class AnotherProblemError extends MatterError {}
+
 function errorFrame0() {
     const error = new MatterError("oopsy!");
     error.cause = new MatterAggregateError(
-        [new Error("a problem"), new MatterError("another problem")],
+        [new Error("a problem"), new AnotherProblemError("another problem")],
         "some details",
     );
-    (error.cause as AggregateError).errors[0].cause = new Error("your mom");
+    (error.cause as AggregateError).errors[0].cause = new SpecialError("your mom");
     throw error;
 }
 
@@ -39,7 +42,10 @@ function errorFrame1() {
 // frames in all environments
 const error = errorFrame1();
 
-function assertExpectedText(text: string, { truncatedStack, ansi }: { truncatedStack?: boolean; ansi?: boolean } = {}) {
+function assertExpectedText(
+    text: string,
+    { truncatedStack, ansi, fallback }: { truncatedStack?: boolean; ansi?: boolean; fallback?: boolean } = {},
+) {
     try {
         const iterator = text.split("\n")[Symbol.iterator]();
 
@@ -80,22 +86,32 @@ function assertExpectedText(text: string, { truncatedStack, ansi }: { truncatedS
             }
         }
 
-        expectMessage("oopsy!");
+        expectMessage(`${errorId("general")}oopsy!`);
         expectStack();
         stackShouldTruncate = truncatedStack !== false;
-        expectMessage("Caused by: some details");
+        expectMessage(`Caused by: ${errorId("aggregate")}some details`);
         expectStack();
         expectMessage("Cause #0: a problem", 1);
         expectStack(1);
-        expectMessage("Caused by: your mom", 1);
+        expectMessage(`Caused by: ${errorId("special")}your mom`, 1);
         expectStack(1);
-        expectMessage("Cause #1: another problem", 1);
+        expectMessage(`Cause #1: ${errorId("another-problem")}another problem`, 1);
         expectStack(1, true);
         expect(current).undefined;
     } catch (e) {
         console.log("Failing formatted error follows");
         console.log(text);
         throw e;
+    }
+
+    function errorId(text: string) {
+        if (fallback) {
+            return "";
+        }
+        if (ansi) {
+            return `\\[\u001b\\[1m${text}\u001b\\[0;31m\\] `;
+        }
+        return `\\[${text}\\] `;
     }
 }
 
@@ -112,7 +128,7 @@ describe("MatterError", () => {
         const originalFormatter = MatterError.formatterFor;
         try {
             (MatterError as any).formatterFor = undefined;
-            assertExpectedText(error.format(), { truncatedStack: false });
+            assertExpectedText(error.format(), { fallback: true, truncatedStack: false });
         } finally {
             MatterError.formatterFor = originalFormatter;
         }

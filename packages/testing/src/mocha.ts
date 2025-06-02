@@ -247,7 +247,7 @@ export function adaptReporter(
                     test.descriptor.passed = false;
                 }
                 const logs = (test as any).logs as string[];
-                reporter.failTest(test.title, FailureDetail(error, logs));
+                reporter.failTest(test.title, FailureDetail(error, undefined, logs));
                 wtf.dump();
             });
 

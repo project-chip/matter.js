@@ -19,6 +19,8 @@ import { TlvEpochUs, TlvUInt64, TlvFloat, TlvEnum, TlvUInt8 } from "../tlv/TlvNu
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status as GlobalStatus } from "../globals/Status.js";
 import { TlvString, TlvByteString } from "../tlv/TlvString.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
@@ -181,6 +183,81 @@ export namespace MediaPlayback {
          * The Seek Command was issued with a value of position outside of the allowed seek range of the media.
          */
         SeekOutOfRange = 5
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.InvalidStateForCommand}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.10.5.2
+     */
+    export class InvalidStateForCommandError extends StatusResponseError {
+        constructor(
+            message = "Requested playback command is invalid in the current playback state",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.InvalidStateForCommand
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.NotAllowed}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.10.5.2
+     */
+    export class NotAllowedError extends StatusResponseError {
+        constructor(
+            message = "Requested playback command is not allowed in the current playback state. For example, attempting to fast-forward during a commercial might return NotAllowed",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.NotAllowed
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.NotActive}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.10.5.2
+     */
+    export class NotActiveError extends StatusResponseError {
+        constructor(
+            message = "This endpoint is not active for playback",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.NotActive
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.SpeedOutOfRange}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.10.5.2
+     */
+    export class SpeedOutOfRangeError extends StatusResponseError {
+        constructor(
+            message = "The FastForward or Rewind Command was issued but the media is already playing back at the fastest speed supported by the server in the respective direction",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.SpeedOutOfRange
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.SeekOutOfRange}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.10.5.2
+     */
+    export class SeekOutOfRangeError extends StatusResponseError {
+        constructor(
+            message = "The Seek Command was issued with a value of position outside of the allowed seek range of the media",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.SeekOutOfRange
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

@@ -51,7 +51,8 @@ function mapSpec(xref?: Specification.CrossReference) {
 export abstract class Entry {
     private documentation?: Documentation;
     private docText?: string;
-    public shouldGroup = false;
+    shouldGroup = false;
+    shouldDelimit?: boolean;
 
     constructor(protected parentBlock: Block | undefined) {}
 
@@ -422,7 +423,7 @@ export class Block extends Entry {
     }
 
     protected isDelimited(entry: Entry) {
-        return entry instanceof Atom || entry instanceof NestedBlock;
+        return (entry instanceof Atom || entry instanceof NestedBlock) && entry.shouldDelimit !== false;
     }
 }
 

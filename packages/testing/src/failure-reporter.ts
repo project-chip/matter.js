@@ -32,8 +32,8 @@ function dumpCause(out: Printer, failure: FailureDetail) {
     });
 }
 
-function dumpDetails(out: Printer, { message, actual, expected, stack, cause, errors, logs }: FailureDetail) {
-    out("\n", ansi.bright.red(message), "\n");
+function dumpDetails(out: Printer, { message, id, actual, expected, stack, cause, errors, logs }: FailureDetail) {
+    out("\n", ansi.bright.red(id ? `[${ansi.bold(id)}] ${message}` : message), "\n");
 
     if (actual !== undefined && expected !== undefined) {
         out("\n");

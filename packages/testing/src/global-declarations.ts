@@ -59,7 +59,7 @@ declare global {
               messageAndStackFor?: (
                   error: unknown,
                   parentStack?: string[],
-              ) => { message: string; stack?: string; stackLines?: string[] };
+              ) => { message: string; id?: string; stack?: string; stackLines?: string[] };
           };
 
     namespace Mocha {
