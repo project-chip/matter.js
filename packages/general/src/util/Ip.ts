@@ -51,13 +51,13 @@ export function ipv6BytesToString(bytes: Uint8Array): string {
         throw new Error("IPv6 address must be 16 bytes");
     }
 
-    // In 8 Blöcke zu je 2 Bytes (16 Bit) aufteilen
+    // Divide into 8 blocks of 2 bytes (16 bits) each
     const blocks = [];
     for (let i = 0; i < 16; i += 2) {
         blocks.push(((bytes[i] << 8) | bytes[i + 1]).toString(16));
     }
 
-    // Komprimierung der längsten Null-Sequenz (RFC 5952)
+    // Compression of the longest zero sequence (RFC 5952)
     let bestStart = -1;
     let bestLen = 0;
     let currStart = -1;
