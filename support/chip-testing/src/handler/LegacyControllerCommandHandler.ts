@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter/general";
+import { Bytes, Logger } from "@matter/general";
 import { NodeId, Observable, ServerAddressIp } from "@matter/main";
-import { GeneralCommissioning } from "@matter/main/clusters";
+import { GeneralCommissioning, GroupKeyManagement } from "@matter/main/clusters";
 import { InteractionClient, MessageChannel } from "@matter/main/protocol";
 import { ManualPairingCodeCodec, QrPairingCodeCodec, VendorId } from "@matter/main/types";
 import {
@@ -20,6 +20,7 @@ import {
     Attribute,
     Command,
     getClusterById,
+    GroupId,
     TlvAny,
     TlvBoolean,
     TlvByteString,
@@ -81,6 +82,49 @@ export class LegacyControllerCommandHandler extends CommandHandler {
         try {
             await this.#controllerInstance.start();
             logger.info(`-----> Controller ${this.#identity} started`);
+
+            // Add Default Group configuration as also used in Chip:
+            // https://github.com/project-chip/connectedhomeip/blob/master/src/lib/support/TestGroupData.h
+            // Start times here are formally epoch since 2020-01-01. We use 1970 base, but the used values are that
+            // small that they are all irrelevant anyway
+            this.#controllerInstance.groups.setGroupKeySet({
+                groupKeySetId: 0x01a1,
+                epochKey0: Bytes.fromHex("a0a1a2a3a4a5a6a7a8a9aaabacadaeaf"),
+                epochStartTime0: 1110000,
+                epochKey1: Bytes.fromHex("b0b1b2b3b4b5b6b7b8b9babbbcbdbebf"),
+                epochStartTime1: 1110001,
+                epochKey2: Bytes.fromHex("c0c1c2c3c4c5c6c7c8c9cacbcccdcecf"),
+                epochStartTime2: 1110002,
+                groupKeySecurityPolicy: GroupKeyManagement.GroupKeySecurityPolicy.CacheAndSync,
+                groupKeyMulticastPolicy: GroupKeyManagement.GroupKeyMulticastPolicy.PerGroupId,
+            });
+            this.#controllerInstance.groups.setGroupKeySet({
+                groupKeySetId: 0x01a2,
+                epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+                epochStartTime0: 2220000,
+                epochKey1: Bytes.fromHex("e0e1e2e3e4e5e6e7e8e9eaebecedeeef"),
+                epochStartTime1: 2220001,
+                epochKey2: Bytes.fromHex("f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff"),
+                epochStartTime2: 2220002,
+                groupKeySecurityPolicy: GroupKeyManagement.GroupKeySecurityPolicy.CacheAndSync,
+                groupKeyMulticastPolicy: GroupKeyManagement.GroupKeyMulticastPolicy.PerGroupId,
+            });
+            this.#controllerInstance.groups.setGroupKeySet({
+                groupKeySetId: 0x01a3,
+                epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+                epochStartTime0: 2220000,
+                epochKey1: Bytes.fromHex("d1d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+                epochStartTime1: 2220001,
+                epochKey2: Bytes.fromHex("d2d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+                epochStartTime2: 2220002,
+                groupKeySecurityPolicy: GroupKeyManagement.GroupKeySecurityPolicy.CacheAndSync,
+                groupKeyMulticastPolicy: GroupKeyManagement.GroupKeyMulticastPolicy.PerGroupId,
+            });
+            this.#controllerInstance.groups.groupKeyIdMap = new Map<GroupId, number>([
+                [GroupId(0x0101), 0x1a1], // "Group #1"
+                [GroupId(0x0102), 0x1a2], // "Group #2"
+                [GroupId(0x0103), 0x1a3], // "Group #3"
+            ]);
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
             logger.error(error);

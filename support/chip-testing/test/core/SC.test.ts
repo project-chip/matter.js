@@ -49,10 +49,6 @@ describe("SC", () => {
     }).timeout(10000);
 
     chip("SC/*").exclude(
-        // Our GroupKeyManagment is too limited for these
-        "SC/5.1",
-        "SC/5.2",
-
         // These require additional configuration below
         "SC/4.1",
         "SC/7.1",

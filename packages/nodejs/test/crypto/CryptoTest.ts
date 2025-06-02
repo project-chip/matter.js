@@ -5,7 +5,7 @@
  */
 
 import { NodeJsCrypto } from "#crypto/NodeJsCrypto.js";
-import { Bytes, Key, PrivateKey, PublicKey } from "#general";
+import { Bytes, DataReader, Endian, Key, PrivateKey, PublicKey } from "#general";
 import * as assert from "node:assert";
 import * as crypto from "node:crypto";
 
@@ -97,5 +97,28 @@ describe("Crypto", () => {
         //         cryptoNode.verify(key, ENCRYPTED_DATA, signature);
         //     }
         // });
+    });
+
+    describe("hkdf", () => {
+        it("validate group key derivation", async () => {
+            const result = await cryptoNode.hkdf(
+                Bytes.fromHex("235bf7e62823d358dca4ba50b1535f4b"),
+                Bytes.fromHex("87e1b004e235a130"),
+                Bytes.fromString("GroupKey v1.0"),
+            );
+
+            assert.equal(Bytes.toHex(result), "a6f5306baf6d050af23ba4bd6b9dd960");
+        });
+
+        it("validate group session id derivation", async () => {
+            const result = await cryptoNode.hkdf(
+                Bytes.fromHex("a6f5306baf6d050af23ba4bd6b9dd960"),
+                Bytes.fromHex(""),
+                Bytes.fromString("GroupKeyHash"),
+                2,
+            );
+
+            assert.equal(new DataReader(result, Endian.Big).readUInt16(), 0xb9f7);
+        });
     });
 });

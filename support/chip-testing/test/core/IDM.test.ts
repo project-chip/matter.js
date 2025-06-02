@@ -6,8 +6,7 @@
 
 describe("IDM", () => {
     chip("IDM/*").exclude(
-        // We fail conformance tests, mainly for groups though there are DoorLock and OccupancySensor issues too
-        // TODO - revisit once we have groups
+        // Spec issues for DoorLock, see https://github.com/CHIP-Specifications/connectedhomeip-spec/issues/11712
         "IDM/10.2",
 
         // IDM 10.4 in TC_pics_checker.py appears to fail because it needs an endpoint ID specified

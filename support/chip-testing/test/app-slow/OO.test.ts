@@ -19,7 +19,7 @@ describe("OO", () => {
         // TODO - we need proper OffWithEffect support for this test to succeed
         "OO/2.3",
 
-        // TODO - requires group management features we do not yet offer
+        // TODO - requires scenes management features we do not yet offer
         "OO/2.7",
     );
 });
