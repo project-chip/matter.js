@@ -4,6 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE IS GENERATED, DO NOT EDIT ***/
-
-export * from "#devices/solar-power";
+export * from "./FabricGroupsManager.js";
+export * from "./OperationalGroupKeySet.js";
