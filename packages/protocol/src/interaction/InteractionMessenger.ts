@@ -262,6 +262,12 @@ export class InteractionServerMessenger extends InteractionMessenger {
                         break;
                     }
                     case MessageType.SubscribeRequest: {
+                        if (isGroupSession) {
+                            throw new StatusResponseError(
+                                `SubscribeRequest is not supported in group sessions`,
+                                Status.InvalidAction,
+                            );
+                        }
                         const subscribeRequest = TlvSubscribeRequest.decode(message.payload);
                         await recipient.handleSubscribeRequest(this.exchange, subscribeRequest, this, message);
                         // response is sent by handler
@@ -274,6 +280,12 @@ export class InteractionServerMessenger extends InteractionMessenger {
                         break;
                     }
                     case MessageType.TimedRequest: {
+                        if (isGroupSession) {
+                            throw new StatusResponseError(
+                                `TimedRequest is not supported in group sessions`,
+                                Status.InvalidAction,
+                            );
+                        }
                         const timedRequest = TlvTimedRequest.decode(message.payload);
                         recipient.handleTimedRequest(this.exchange, timedRequest, message);
                         await this.sendStatus(StatusCode.Success, {
@@ -287,6 +299,9 @@ export class InteractionServerMessenger extends InteractionMessenger {
                             `Unsupported message type ${message.payloadHeader.messageType}`,
                             Status.InvalidAction,
                         );
+                }
+                if (isGroupSession) {
+                    break; // We do not support multiple messages in group sessions
                 }
             }
         } catch (error: any) {

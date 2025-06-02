@@ -13,6 +13,7 @@ import { Diagnostic, InternalError, Logger } from "#general";
 import { CommandModel, DataModelPath, ElementTag, FabricIndex as FabricIndexField } from "#model";
 import {
     CommandPath,
+    EndpointNumber,
     FabricIndex,
     Status,
     StatusCode,
@@ -74,6 +75,10 @@ export class CommandInvokeResponse<
                 }
                 this.#processWildcard(path, commandRef, commandFields);
             } else {
+                if (this.session.isGroupSubject) {
+                    // Group command cannot be concrete paths
+                    throw new StatusResponseError("Group commands connot be concrete paths", StatusCode.InvalidAction);
+                }
                 if (multipleInvokes && commandRef === undefined) {
                     throw new StatusResponseError(
                         "The CommandRef field must be specified for all commands in a batch invoke",
@@ -113,16 +118,17 @@ export class CommandInvokeResponse<
      * Process a wildcard path and invoke commands on all endpoints that match the path.
      */
     #processWildcard(path: CommandPath, commandRef: number | undefined, commandFields: TlvStream | undefined) {
-        const { clusterId, commandId } = path;
+        const { clusterId, endpointId, commandId } = path;
 
         // Formally, according to spec, we should check for node mismatch here but commandPath do not have a nodeId
 
-        // TODO: Add Group handling and validation
-        /*
-        if (isGroupSession && endpointId !== undefined) {
-            throw new StatusResponseError("Illegal write request with group ID and endpoint ID", StatusCode.InvalidAction);
+        const isGroupPath = this.session.isGroupSubject;
+        if (isGroupPath && endpointId !== undefined) {
+            throw new StatusResponseError(
+                "Illegal command invoke with group ID and endpoint ID",
+                StatusCode.InvalidAction,
+            );
         }
-        */
 
         if (clusterId === undefined || commandId === undefined) {
             throw new StatusResponseError(
@@ -131,9 +137,24 @@ export class CommandInvokeResponse<
             );
         }
 
+        let groupEndpoints: EndpointNumber[] | undefined;
+        if (isGroupPath) {
+            if (this.session.groupEndpoints?.length) {
+                groupEndpoints = this.session.groupEndpoints;
+            } else {
+                // No endpoints mapped to this group, so we cannot invoke anything
+                logger.debug(`No endpoints mapped to group ${this.session.subjects?.[0]}, skipping wildcard invoke`);
+                return;
+            }
+        }
+
         // If we are here, then endpointId must be wildcard aka undefined
         this.#addInvoker(async function* invokeWildcardEndpoints(this: CommandInvokeResponse) {
             for (const endpoint of this.node) {
+                if (groupEndpoints !== undefined && !groupEndpoints.includes(endpoint.id)) {
+                    // This endpoint is not part of the group, skip it
+                    continue;
+                }
                 yield* this.#processEndpointForWildcard(endpoint, path, commandRef, commandFields);
             }
         });
