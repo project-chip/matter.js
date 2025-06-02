@@ -699,7 +699,7 @@ export abstract class Model<E extends BaseElement = BaseElement, C extends Model
     }
 
     get hasLocalResource() {
-        return !!this.#resource;
+        return !!(this.#resource || (this.#root?.resources || ResourceBundle.default).get(this));
     }
 
     [inspect](_depth: any, options: any, inspect: any) {

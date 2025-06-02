@@ -22,6 +22,7 @@ import {
     AdministratorCommissioningServer as BaseAdministratorCommissioningServer
 } from "../behaviors/administrator-commissioning/AdministratorCommissioningServer.js";
 import { MutableEndpoint } from "../endpoint/type/MutableEndpoint.js";
+import { DeviceClassification } from "#model";
 import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js";
 import { Identity } from "#general";
 
@@ -93,6 +94,7 @@ export const BridgedNodeEndpointDefinition = MutableEndpoint({
     name: "BridgedNode",
     deviceType: 0x13,
     deviceRevision: 3,
+    deviceClass: DeviceClassification.Utility,
     requirements: BridgedNodeRequirements,
     behaviors: SupportedBehaviors(
         BridgedNodeRequirements.server.mandatory.Parts,
