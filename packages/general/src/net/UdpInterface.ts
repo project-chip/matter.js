@@ -55,11 +55,11 @@ export class UdpInterface implements NetInterface {
     }
 
     addMembership(address: string) {
-        this.#server.addMembership(address);
+        return this.#server.addMembership(address);
     }
 
     dropMembership(address: string) {
-        this.#server.dropMembership(address);
+        return this.#server.dropMembership(address);
     }
 }
 

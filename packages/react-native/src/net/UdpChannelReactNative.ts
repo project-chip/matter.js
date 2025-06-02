@@ -19,7 +19,6 @@ import {
     UdpChannelOptions,
     UdpSocketType,
 } from "#general";
-import { NodeJsNetwork } from "@matter/nodejs";
 import { NetworkReactNative } from "./NetworkReactNative.js";
 
 const logger = Logger.get("UdpChannelNode");
@@ -143,8 +142,8 @@ export class UdpChannelReactNative implements UdpChannel {
         this.#netInterface = netInterface;
     }
 
-    addMembership(membershipAddress: string) {
-        const multicastInterfaces = NodeJsNetwork.getMembershipMulticastInterfaces(
+    async addMembership(membershipAddress: string) {
+        const multicastInterfaces = await NetworkReactNative.getMembershipMulticastInterfaces(
             this.#netInterface,
             this.#type === "udp4",
         );
@@ -161,8 +160,8 @@ export class UdpChannelReactNative implements UdpChannel {
         }
     }
 
-    dropMembership(membershipAddress: string) {
-        const multicastInterfaces = NodeJsNetwork.getMembershipMulticastInterfaces(
+    async dropMembership(membershipAddress: string) {
+        const multicastInterfaces = await NetworkReactNative.getMembershipMulticastInterfaces(
             this.#netInterface,
             this.#type === "udp4",
         );

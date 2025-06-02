@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MaybePromise } from "#util/index.js";
 import { ChannelType } from "./Channel.js";
 import { TransportInterface } from "./TransportInterface.js";
 
@@ -21,8 +22,8 @@ export interface UdpChannelOptions {
 
 export interface UdpChannel {
     maxPayloadSize: number;
-    addMembership(address: string): void;
-    dropMembership(address: string): void;
+    addMembership(address: string): MaybePromise<void>;
+    dropMembership(address: string): MaybePromise<void>;
     onData(
         listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Uint8Array) => void,
     ): TransportInterface.Listener;

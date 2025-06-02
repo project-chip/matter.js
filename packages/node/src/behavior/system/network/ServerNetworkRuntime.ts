@@ -426,7 +426,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             logger.debug(
                 `Adding membership for group ${groupId} on fabric ${fabric.fabricId} (index ${fabricIndex}) with address ${address}`,
             );
-            this.#ipv6UdpInterface?.addMembership(address);
+            await this.#ipv6UdpInterface?.addMembership(address);
             memberships.set(groupId, address);
 
             this.#activeGroupMemberships.set(fabricIndex, memberships);
@@ -465,7 +465,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
                 logger.debug(
                     `Adding membership for group ${groupId} on fabric ${fabric.fabricId} (index ${fabricIndex}) with address ${address}`,
                 );
-                this.#ipv6UdpInterface?.addMembership(address);
+                await this.#ipv6UdpInterface?.addMembership(address);
                 memberships.set(groupId, address);
             }
             if (memberships.size) {
@@ -516,7 +516,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
                     logger.debug(
                         `Adding membership for group ${groupId} on fabric ${fabric.fabricId} (index ${fabricIndex}) with address ${address}`,
                     );
-                    this.#ipv6UdpInterface?.addMembership(address);
+                    await this.#ipv6UdpInterface?.addMembership(address);
                     memberships.set(groupId, address);
                 }
             }
