@@ -19,24 +19,28 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/general
     - Feature: Logger allows to use a function as log value which is only executed when the log level matches
+    - Enhancement: Enhanced error classes and handling
 
 -   @matter/node
-    - Enhancement: Expose `endpointProtocol` property on Endpoint
-    - Enhancement: Refactors InteractionServer to cut out Reading legacy logic and move to Behavior logic
+    - Enhancement: Exposes `endpointProtocol` property on Endpoint
+    - Enhancement: Refactors InteractionServer to cut out legacy interaction logic and move to Behavior logic
     - Enhancement: Refactors OnlineContext and Transaction handling
     - Fix: Fixes special-case in Wildcard Filtering where not all fixed attributes were filtered out
     - Fix: Fixes ACL check logic order on attribute reads
     - Fix: Consider the potential async nature of `Transitions.applyUpdates()` correctly in all cases to prevent dangling promises 
+    - Fix: Correctly handles `undefined` for optional nullable attributes
+    - Fix: Prevents primitive lists in a fabric scoped struct to be handled as fabric scoped when reading or writing
 
 -   @matter/nodejs-ble
     - (@spudwebb) Fix: Increase BLE connect timeout fo 120seconds to optimize pairing
   
 -   @matter/nodejs-shell
-    - (@JimBuzbee) Feature: Adds a websocket mode inlcuding an example webpage to control the shell
+    - (@JimBuzbee) Feature: Adds a websocket mode including an example webpage to control the shell
   
 -   @matter/protocol
-    - Breaking: `logEndpoint()` was removed. The Endpoints support logging directly via Diagnostics
-    - Breaking: All legacy used *Server classes (AttributeServer, EventServer, CommandServer) are moved to the matter.js legacy package
+    - Breaking: `logEndpoint()` and also `EndpointServer` class was removed. The Endpoints support logging directly via Diagnostics
+    - Breaking: The legacy used classes AttributeServer, EventServer, CommandServer were moved to the matter.js legacy package
+    - Breaking: Removed many internally used legacy classes and datastructures
     - Feature: Added `getLocal()` to AttributeClient to retrieve the currently stored/cached value 
     - Enhancement: Optimized the usage of the MDNSScanner to prevent holding data in memory that are not needed (e.g. from other fabrics or such)
     - Enhancement: Introduced multiple subclasses for `CommissioningError` to allow distinguishing between different error cases more easily:
@@ -54,6 +58,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Retries to re-establish a CASE session when connection fails because of invalid resumption data
     - Adjustment: ACL writes are not sent chunked by default from now on like also in chip SDK
     - Fix: Handles messages only that are secured as required for the relevant protocol
+    - Fix: Correctly responds with a CASE Status response in f´case of commissioning errors for client CASE establishment
 
 -   @matter/general
     - Enhancement: Allows async implementation of crypto methods
@@ -64,6 +69,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: We have optimized resolution of global datatypes in the Matter model.  This reduces startup for large nodes such as bridges with many devices
     - Enhancement: The serialized model now stores cross references as strings and parses as necessary
     - Enhancement: FieldModel now contains a dedicated `title` field to capture the full name of features
+
+-   @project-chip/matter.js
+    - Breaking: Added logging for `PairedNode` and legacy `Endpoint` classes via `Diagnostics` instead of the removed `logEndpoint` method
 
 ## 0.13.0 (2025-04-28)
 

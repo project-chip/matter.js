@@ -18,7 +18,7 @@ export namespace UnitLocalization {
     /**
      * These are optional features supported by UnitLocalizationCluster.
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.5.4
+     * @see {@link MatterSpecification.v141.Core} § 11.5.4
      */
     export enum Feature {
         /**
@@ -30,7 +30,7 @@ export namespace UnitLocalization {
     }
 
     /**
-     * @see {@link MatterSpecification.v14.Core} § 11.5.5.1
+     * @see {@link MatterSpecification.v141.Core} § 11.5.5.1
      */
     export enum TempUnit {
         /**
@@ -59,7 +59,7 @@ export namespace UnitLocalization {
              * in communication to the user. If provided, this value shall take priority over any unit implied through
              * the ActiveLocale Attribute.
              *
-             * @see {@link MatterSpecification.v14.Core} § 11.5.6.1
+             * @see {@link MatterSpecification.v141.Core} § 11.5.6.1
              */
             temperatureUnit: WritableAttribute(
                 0x0,
@@ -108,7 +108,7 @@ export namespace UnitLocalization {
      * UnitLocalizationCluster supports optional features that you can enable with the UnitLocalizationCluster.with()
      * factory method.
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.5
+     * @see {@link MatterSpecification.v141.Core} § 11.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

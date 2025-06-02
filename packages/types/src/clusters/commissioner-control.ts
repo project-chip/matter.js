@@ -23,7 +23,7 @@ import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
 export namespace CommissionerControl {
     /**
-     * @see {@link MatterSpecification.v14.Core} § 11.26.4.1
+     * @see {@link MatterSpecification.v141.Core} § 11.26.4.1
      */
     export const SupportedDeviceCategory = {
         /**
@@ -32,7 +32,7 @@ export namespace CommissionerControl {
          * The FabricSynchronization bit shall be set to 1 if and only if the server supports commissioning nodes that
          * support Fabric Synchronization.
          *
-         * @see {@link MatterSpecification.v14.Core} § 11.26.4.1.1
+         * @see {@link MatterSpecification.v141.Core} § 11.26.4.1.1
          */
         fabricSynchronization: BitFlag(0)
     };
@@ -40,7 +40,7 @@ export namespace CommissionerControl {
     /**
      * Input to the CommissionerControl requestCommissioningApproval command
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.26.6.1
+     * @see {@link MatterSpecification.v141.Core} § 11.26.6.1
      */
     export const TlvRequestCommissioningApprovalRequest = TlvObject({
         requestId: TlvField(0, TlvUInt64),
@@ -52,14 +52,14 @@ export namespace CommissionerControl {
     /**
      * Input to the CommissionerControl requestCommissioningApproval command
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.26.6.1
+     * @see {@link MatterSpecification.v141.Core} § 11.26.6.1
      */
     export interface RequestCommissioningApprovalRequest extends TypeFromSchema<typeof TlvRequestCommissioningApprovalRequest> {}
 
     /**
      * Input to the CommissionerControl commissionNode command
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.26.6.5
+     * @see {@link MatterSpecification.v141.Core} § 11.26.6.5
      */
     export const TlvCommissionNodeRequest = TlvObject({
         requestId: TlvField(0, TlvUInt64),
@@ -69,7 +69,7 @@ export namespace CommissionerControl {
     /**
      * Input to the CommissionerControl commissionNode command
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.26.6.5
+     * @see {@link MatterSpecification.v141.Core} § 11.26.6.5
      */
     export interface CommissionNodeRequest extends TypeFromSchema<typeof TlvCommissionNodeRequest> {}
 
@@ -90,7 +90,7 @@ export namespace CommissionerControl {
      *
      * The parameters for ReverseOpenCommissioningWindow command are as follows:
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.26.6.8
+     * @see {@link MatterSpecification.v141.Core} § 11.26.6.8
      */
     export const TlvReverseOpenCommissioningWindowResponse = TlvObject({
         commissioningTimeout: TlvField(0, TlvUInt16),
@@ -117,14 +117,14 @@ export namespace CommissionerControl {
      *
      * The parameters for ReverseOpenCommissioningWindow command are as follows:
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.26.6.8
+     * @see {@link MatterSpecification.v141.Core} § 11.26.6.8
      */
     export interface ReverseOpenCommissioningWindowResponse extends TypeFromSchema<typeof TlvReverseOpenCommissioningWindowResponse> {}
 
     /**
      * Body of the CommissionerControl commissioningRequestResult event
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.26.7.1
+     * @see {@link MatterSpecification.v141.Core} § 11.26.7.1
      */
     export const TlvCommissioningRequestResultEvent = TlvObject({
         requestId: TlvField(0, TlvUInt64),
@@ -136,7 +136,7 @@ export namespace CommissionerControl {
     /**
      * Body of the CommissionerControl commissioningRequestResult event
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.26.7.1
+     * @see {@link MatterSpecification.v141.Core} § 11.26.7.1
      */
     export interface CommissioningRequestResultEvent extends TypeFromSchema<typeof TlvCommissioningRequestResultEvent> {}
 
@@ -156,7 +156,7 @@ export namespace CommissionerControl {
              * A client shall NOT send the RequestCommissioningApproval command if the intended node to be commissioned
              * does not conform to any of the values specified in SupportedDeviceCategories.
              *
-             * @see {@link MatterSpecification.v14.Core} § 11.26.5.1
+             * @see {@link MatterSpecification.v141.Core} § 11.26.5.1
              */
             supportedDeviceCategories: Attribute(
                 0x0,
@@ -187,7 +187,7 @@ export namespace CommissionerControl {
              *
              * The parameters for RequestCommissioningApproval command are as follows:
              *
-             * @see {@link MatterSpecification.v14.Core} § 11.26.6.1
+             * @see {@link MatterSpecification.v141.Core} § 11.26.6.1
              */
             requestCommissioningApproval: Command(
                 0x0,
@@ -218,7 +218,7 @@ export namespace CommissionerControl {
              *
              * The parameters for CommissionNode command are as follows:
              *
-             * @see {@link MatterSpecification.v14.Core} § 11.26.6.5
+             * @see {@link MatterSpecification.v141.Core} § 11.26.6.5
              */
             commissionNode: Command(
                 0x1,
@@ -240,7 +240,7 @@ export namespace CommissionerControl {
              *   presenting the Commissioner Control Cluster. Clients SHOULD send the CommissionNode command immediately
              *   upon receiving a CommissioningRequestResult event.
              *
-             * @see {@link MatterSpecification.v14.Core} § 11.26.7.1
+             * @see {@link MatterSpecification.v141.Core} § 11.26.7.1
              */
             commissioningRequestResult: Event(
                 0x0,
@@ -258,7 +258,7 @@ export namespace CommissionerControl {
      *
      * The generalized flow supported by the Commissioner Control Cluster can be seen in the following diagram.
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.26
+     * @see {@link MatterSpecification.v141.Core} § 11.26
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

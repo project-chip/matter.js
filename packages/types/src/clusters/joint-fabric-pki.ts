@@ -21,14 +21,14 @@ export namespace JointFabricPki {
     /**
      * Input to the JointFabricPki icacsrRequest command
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.25.5.1
+     * @see {@link MatterSpecification.v141.Core} § 11.25.5.1
      */
     export const TlvIcacsrRequest = TlvObject({ icacsr: TlvField(0, TlvByteString.bound({ maxLength: 400 })) });
 
     /**
      * Input to the JointFabricPki icacsrRequest command
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.25.5.1
+     * @see {@link MatterSpecification.v141.Core} § 11.25.5.1
      */
     export interface IcacsrRequest extends TypeFromSchema<typeof TlvIcacsrRequest> {}
 
@@ -36,7 +36,7 @@ export namespace JointFabricPki {
      * This enumeration is used by the ICACSRResponse command to convey the detailed outcome of this cluster’s
      * ICACSRRequest command.
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.25.4.1
+     * @see {@link MatterSpecification.v141.Core} § 11.25.4.1
      */
     export enum IcacsrRequestStatus {
         /**
@@ -84,21 +84,21 @@ export namespace JointFabricPki {
      * This command shall be generated in response to the ICACSRRequest command. Check ICA Cross Signing for details
      * about the generation and contents of ICAC.
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.25.5.2
+     * @see {@link MatterSpecification.v141.Core} § 11.25.5.2
      */
     export const TlvIcacsrResponse = TlvObject({
         /**
          * This field shall contain an ICACSRRequestStatusEnum value representing the status of the Section 11.25.5.1,
          * “ICACSRRequest Command” operation.
          *
-         * @see {@link MatterSpecification.v14.Core} § 11.25.5.2.1
+         * @see {@link MatterSpecification.v141.Core} § 11.25.5.2.1
          */
         statusCode: TlvField(0, TlvEnum<IcacsrRequestStatus>()),
 
         /**
          * If present, it shall contain the NOC Issuer Certificate in PEM format.
          *
-         * @see {@link MatterSpecification.v14.Core} § 11.25.5.2.2
+         * @see {@link MatterSpecification.v141.Core} § 11.25.5.2.2
          */
         icac: TlvOptionalField(1, TlvByteString.bound({ maxLength: 400 }))
     });
@@ -107,7 +107,7 @@ export namespace JointFabricPki {
      * This command shall be generated in response to the ICACSRRequest command. Check ICA Cross Signing for details
      * about the generation and contents of ICAC.
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.25.5.2
+     * @see {@link MatterSpecification.v141.Core} § 11.25.5.2
      */
     export interface IcacsrResponse extends TypeFromSchema<typeof TlvIcacsrResponse> {}
 
@@ -115,7 +115,7 @@ export namespace JointFabricPki {
      * This enumeration is used by the TransferAnchorResponse command to convey the detailed outcome of this cluster’s
      * TransferAnchorRequest command.
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.25.4.2
+     * @see {@link MatterSpecification.v141.Core} § 11.25.4.2
      */
     export enum TransferAnchorResponseStatus {
         /**
@@ -149,7 +149,7 @@ export namespace JointFabricPki {
              *
              * Check ICA Cross Signing for details about the generation and contents of the ICACSR.
              *
-             * @see {@link MatterSpecification.v14.Core} § 11.25.5.1
+             * @see {@link MatterSpecification.v141.Core} § 11.25.5.1
              */
             icacsrRequest: Command(
                 0x0,
@@ -160,7 +160,7 @@ export namespace JointFabricPki {
             ),
 
             /**
-             * @see {@link MatterSpecification.v14.Core} § 11.25.5
+             * @see {@link MatterSpecification.v141.Core} § 11.25.5
              */
             transferAnchorRequest: Command(
                 0x2,
@@ -171,7 +171,7 @@ export namespace JointFabricPki {
             ),
 
             /**
-             * @see {@link MatterSpecification.v14.Core} § 11.25.5
+             * @see {@link MatterSpecification.v141.Core} § 11.25.5
              */
             transferAnchorComplete: Command(
                 0x4,
@@ -187,7 +187,7 @@ export namespace JointFabricPki {
      * An instance of the Joint Fabric PKI Cluster only applies to Joint Fabric Administrator nodes fulfilling the role
      * of Anchor CA.
      *
-     * @see {@link MatterSpecification.v14.Core} § 11.25
+     * @see {@link MatterSpecification.v141.Core} § 11.25
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

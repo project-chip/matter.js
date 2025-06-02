@@ -15,7 +15,7 @@ import { TypeFromSchema } from "../tlv/TlvSchema.js";
  *
  * Represents time without a date component.
  *
- * @see {@link MatterSpecification.v14.Core} § 7.19.2
+ * @see {@link MatterSpecification.v141.Core} § 7.19.2
  */
 export const TlvTod = TlvObject({
     /**
@@ -44,6 +44,6 @@ export const TlvTod = TlvObject({
  *
  * Represents time without a date component.
  *
- * @see {@link MatterSpecification.v14.Core} § 7.19.2
+ * @see {@link MatterSpecification.v141.Core} § 7.19.2
  */
 export interface Tod extends TypeFromSchema<typeof TlvTod> {}

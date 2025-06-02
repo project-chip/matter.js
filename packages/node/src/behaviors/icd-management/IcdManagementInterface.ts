@@ -20,7 +20,7 @@ export namespace IcdManagementInterface {
          * exchanges during that period. The client may slightly overestimate the duration it wants the ICD to be active
          * for, in order to account for network delays.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.17.7.4
+         * @see {@link MatterSpecification.v141.Core} § 9.17.7.4
          */
         stayActiveRequest(request: IcdManagement.StayActiveRequest): MaybePromise<IcdManagement.StayActiveResponse>;
     }
@@ -30,7 +30,7 @@ export namespace IcdManagementInterface {
          * This command allows a client to register itself with the ICD to be notified when the device is available for
          * communication.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.17.7.1
+         * @see {@link MatterSpecification.v141.Core} § 9.17.7.1
          */
         registerClient(request: IcdManagement.RegisterClientRequest): MaybePromise<IcdManagement.RegisterClientResponse>;
 
@@ -39,7 +39,7 @@ export namespace IcdManagementInterface {
          * (e.g. running on a phone which is leaving the home) can (and should) remove its subscriptions and send this
          * UnregisterClient command before leaving to prevent the burden on the ICD of an absent client.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.17.7.3
+         * @see {@link MatterSpecification.v141.Core} § 9.17.7.3
          */
         unregisterClient(request: IcdManagement.UnregisterClientRequest): MaybePromise;
     }
@@ -54,7 +54,7 @@ export namespace IcdManagementInterface {
          * exchanges during that period. The client may slightly overestimate the duration it wants the ICD to be active
          * for, in order to account for network delays.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.17.7.4
+         * @see {@link MatterSpecification.v141.Core} § 9.17.7.4
          */
         stayActiveRequest(request: IcdManagement.StayActiveRequest): MaybePromise<IcdManagement.StayActiveResponse>;
     }

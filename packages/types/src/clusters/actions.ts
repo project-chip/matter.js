@@ -27,7 +27,7 @@ import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
 export namespace Actions {
     /**
-     * @see {@link MatterSpecification.v14.Core} § 9.14.4.2
+     * @see {@link MatterSpecification.v141.Core} § 9.14.4.2
      */
     export enum ActionType {
         /**
@@ -46,7 +46,7 @@ export namespace Actions {
          *
          * Example: see examples 1 and 2.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.2.1
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.2.1
          */
         Scene = 1,
 
@@ -58,7 +58,7 @@ export namespace Actions {
          *
          * Example: see example 4.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.2.2
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.2.2
          */
         Sequence = 2,
 
@@ -68,7 +68,7 @@ export namespace Actions {
          * Indications an automation (e.g. a motion sensor controlling lights, an alarm system) which can bee.g.
          * started, stopped, paused, resumed. Example: see example 3.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.2.3
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.2.3
          */
         Automation = 3,
 
@@ -81,7 +81,7 @@ export namespace Actions {
          * Example: lock the doors when the server’s system has detected no one is at home while the doors are in the
          * 'unlocked' state.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.2.4
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.2.4
          */
         Exception = 4,
 
@@ -92,7 +92,7 @@ export namespace Actions {
          *
          * Example: play a pattern on the lights in the living room if there is someone in the garden in the evening.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.2.5
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.2.5
          */
         Notification = 5,
 
@@ -104,7 +104,7 @@ export namespace Actions {
          *
          * Example: flash all lights in the house when CO sensor triggers.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.2.6
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.2.6
          */
         Alarm = 6
     }
@@ -112,7 +112,7 @@ export namespace Actions {
     /**
      * Note - The bit allocation of this bitmap shall follow the ID’s of the Commands of this cluster.
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.4.1
+     * @see {@link MatterSpecification.v141.Core} § 9.14.4.1
      */
     export const CommandBits = {
         /**
@@ -179,7 +179,7 @@ export namespace Actions {
     /**
      * Note that some of these states are applicable only for certain actions, as determined by their SupportedCommands.
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.4.3
+     * @see {@link MatterSpecification.v141.Core} § 9.14.4.3
      */
     export enum ActionState {
         /**
@@ -206,13 +206,13 @@ export namespace Actions {
     /**
      * This data type holds the details of a single action, and contains the data fields below.
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.4.6
+     * @see {@link MatterSpecification.v141.Core} § 9.14.4.6
      */
     export const TlvAction = TlvObject({
         /**
          * This field shall provide an unique identifier used to identify an action.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.6.1
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.6.1
          */
         actionId: TlvField(0, TlvUInt16),
 
@@ -221,7 +221,7 @@ export namespace Actions {
          * this action. This can be used for identifying the action to the user by the client. Example: "my colorful
          * scene".
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.6.2
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.6.2
          */
         name: TlvField(1, TlvString.bound({ maxLength: 128 })),
 
@@ -230,7 +230,7 @@ export namespace Actions {
          * SupportedCommands can be used by the client in its UX or logic to determine how to present or use such
          * action. See ActionTypeEnum for details and examples.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.6.3
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.6.3
          */
         type: TlvField(2, TlvEnum<ActionType>()),
 
@@ -238,7 +238,7 @@ export namespace Actions {
          * This field shall provide a reference to the associated endpoint list, which specifies the endpoints on this
          * Node which will be impacted by this ActionID.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.6.4
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.6.4
          */
         endpointListId: TlvField(3, TlvUInt16),
 
@@ -247,14 +247,14 @@ export namespace Actions {
          * particular action, with a bit set to 1 for each supported command according to the table below. Other bits
          * shall be set to 0.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.6.5
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.6.5
          */
         supportedCommands: TlvField(4, TlvBitmap(TlvUInt16, CommandBits)),
 
         /**
          * This field shall indicate the current state of this action.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.6.6
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.6.6
          */
         state: TlvField(5, TlvEnum<ActionState>())
     });
@@ -262,7 +262,7 @@ export namespace Actions {
     /**
      * This data type holds the details of a single action, and contains the data fields below.
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.4.6
+     * @see {@link MatterSpecification.v141.Core} § 9.14.4.6
      */
     export interface Action extends TypeFromSchema<typeof TlvAction> {}
 
@@ -270,7 +270,7 @@ export namespace Actions {
      * The Room and Zone values are provided for the cases where a user (or the system on behalf of the user) has
      * created logical grouping of the endpoints (e.g. bridged devices) based on location.
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.4.5
+     * @see {@link MatterSpecification.v141.Core} § 9.14.4.5
      */
     export enum EndpointListType {
         /**
@@ -280,7 +280,7 @@ export namespace Actions {
          * independently created by the user. For Type=Other the Name may be empty. A Matter controller would typically
          * not use this for anything else than just to know which endpoints would be affected by the action.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.5.1
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.5.1
          */
         Other = 0,
 
@@ -293,7 +293,7 @@ export namespace Actions {
          * device in each system - both at first contact and upon later updates to the endpoints (e.g. user adds a
          * bridged device or creates a new room).
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.5.2
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.5.2
          */
         Room = 1,
 
@@ -306,7 +306,7 @@ export namespace Actions {
          * This indicates that a user has defined this list of endpoints as something they logically would like to
          * control as a group, so Matter controllers could provide the user with a way to do as such.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.5.3
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.5.3
          */
         Zone = 2
     }
@@ -315,13 +315,13 @@ export namespace Actions {
      * This data type holds the details of a single endpoint list, which relates to a set of endpoints that have some
      * logical relation, and contains the data fields below.
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.4.7
+     * @see {@link MatterSpecification.v141.Core} § 9.14.4.7
      */
     export const TlvEndpointList = TlvObject({
         /**
          * This field shall provide an unique identifier used to identify the endpoint list.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.7.1
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.7.1
          */
         endpointListId: TlvField(0, TlvUInt16),
 
@@ -330,21 +330,21 @@ export namespace Actions {
          * the set of endpoints in this list. This can be used for identifying the action to the user by the client.
          * Example: "living room".
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.7.2
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.7.2
          */
         name: TlvField(1, TlvString.bound({ maxLength: 128 })),
 
         /**
          * This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.7.3
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.7.3
          */
         type: TlvField(2, TlvEnum<EndpointListType>()),
 
         /**
          * This field shall provide a list of endpoint numbers.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.4.7.4
+         * @see {@link MatterSpecification.v141.Core} § 9.14.4.7.4
          */
         endpoints: TlvField(3, TlvArray(TlvEndpointNumber, { maxLength: 256 }))
     });
@@ -353,14 +353,14 @@ export namespace Actions {
      * This data type holds the details of a single endpoint list, which relates to a set of endpoints that have some
      * logical relation, and contains the data fields below.
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.4.7
+     * @see {@link MatterSpecification.v141.Core} § 9.14.4.7
      */
     export interface EndpointList extends TypeFromSchema<typeof TlvEndpointList> {}
 
     /**
      * Input to the Actions instantAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.1
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.1
      */
     export const TlvInstantActionRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -370,14 +370,14 @@ export namespace Actions {
     /**
      * Input to the Actions instantAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.1
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.1
      */
     export interface InstantActionRequest extends TypeFromSchema<typeof TlvInstantActionRequest> {}
 
     /**
      * Input to the Actions instantActionWithTransition command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.2
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.2
      */
     export const TlvInstantActionWithTransitionRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -386,7 +386,7 @@ export namespace Actions {
         /**
          * This field shall indicate the transition time in 1/10th of seconds.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.6.2.1
+         * @see {@link MatterSpecification.v141.Core} § 9.14.6.2.1
          */
         transitionTime: TlvField(2, TlvUInt16)
     });
@@ -394,14 +394,14 @@ export namespace Actions {
     /**
      * Input to the Actions instantActionWithTransition command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.2
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.2
      */
     export interface InstantActionWithTransitionRequest extends TypeFromSchema<typeof TlvInstantActionWithTransitionRequest> {}
 
     /**
      * Input to the Actions startAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.3
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.3
      */
     export const TlvStartActionRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -411,14 +411,14 @@ export namespace Actions {
     /**
      * Input to the Actions startAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.3
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.3
      */
     export interface StartActionRequest extends TypeFromSchema<typeof TlvStartActionRequest> {}
 
     /**
      * Input to the Actions startActionWithDuration command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.4
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.4
      */
     export const TlvStartActionWithDurationRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -427,7 +427,7 @@ export namespace Actions {
         /**
          * This field shall indicate the requested duration in seconds.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.6.4.1
+         * @see {@link MatterSpecification.v141.Core} § 9.14.6.4.1
          */
         duration: TlvField(2, TlvUInt32)
     });
@@ -435,14 +435,14 @@ export namespace Actions {
     /**
      * Input to the Actions startActionWithDuration command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.4
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.4
      */
     export interface StartActionWithDurationRequest extends TypeFromSchema<typeof TlvStartActionWithDurationRequest> {}
 
     /**
      * Input to the Actions stopAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.5
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.5
      */
     export const TlvStopActionRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -452,14 +452,14 @@ export namespace Actions {
     /**
      * Input to the Actions stopAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.5
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.5
      */
     export interface StopActionRequest extends TypeFromSchema<typeof TlvStopActionRequest> {}
 
     /**
      * Input to the Actions pauseAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.6
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.6
      */
     export const TlvPauseActionRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -469,14 +469,14 @@ export namespace Actions {
     /**
      * Input to the Actions pauseAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.6
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.6
      */
     export interface PauseActionRequest extends TypeFromSchema<typeof TlvPauseActionRequest> {}
 
     /**
      * Input to the Actions pauseActionWithDuration command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.7
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.7
      */
     export const TlvPauseActionWithDurationRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -485,7 +485,7 @@ export namespace Actions {
         /**
          * This field shall indicate the requested duration in seconds.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.6.7.1
+         * @see {@link MatterSpecification.v141.Core} § 9.14.6.7.1
          */
         duration: TlvField(2, TlvUInt32)
     });
@@ -493,14 +493,14 @@ export namespace Actions {
     /**
      * Input to the Actions pauseActionWithDuration command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.7
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.7
      */
     export interface PauseActionWithDurationRequest extends TypeFromSchema<typeof TlvPauseActionWithDurationRequest> {}
 
     /**
      * Input to the Actions resumeAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.8
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.8
      */
     export const TlvResumeActionRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -510,14 +510,14 @@ export namespace Actions {
     /**
      * Input to the Actions resumeAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.8
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.8
      */
     export interface ResumeActionRequest extends TypeFromSchema<typeof TlvResumeActionRequest> {}
 
     /**
      * Input to the Actions enableAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.9
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.9
      */
     export const TlvEnableActionRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -527,14 +527,14 @@ export namespace Actions {
     /**
      * Input to the Actions enableAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.9
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.9
      */
     export interface EnableActionRequest extends TypeFromSchema<typeof TlvEnableActionRequest> {}
 
     /**
      * Input to the Actions enableActionWithDuration command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.10
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.10
      */
     export const TlvEnableActionWithDurationRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -543,7 +543,7 @@ export namespace Actions {
         /**
          * This field shall indicate the requested duration in seconds.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.6.10.1
+         * @see {@link MatterSpecification.v141.Core} § 9.14.6.10.1
          */
         duration: TlvField(2, TlvUInt32)
     });
@@ -551,14 +551,14 @@ export namespace Actions {
     /**
      * Input to the Actions enableActionWithDuration command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.10
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.10
      */
     export interface EnableActionWithDurationRequest extends TypeFromSchema<typeof TlvEnableActionWithDurationRequest> {}
 
     /**
      * Input to the Actions disableAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.11
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.11
      */
     export const TlvDisableActionRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -568,14 +568,14 @@ export namespace Actions {
     /**
      * Input to the Actions disableAction command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.11
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.11
      */
     export interface DisableActionRequest extends TypeFromSchema<typeof TlvDisableActionRequest> {}
 
     /**
      * Input to the Actions disableActionWithDuration command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.12
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.12
      */
     export const TlvDisableActionWithDurationRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
@@ -584,7 +584,7 @@ export namespace Actions {
         /**
          * This field shall indicate the requested duration in seconds.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.6.12.1
+         * @see {@link MatterSpecification.v141.Core} § 9.14.6.12.1
          */
         duration: TlvField(2, TlvUInt32)
     });
@@ -592,20 +592,20 @@ export namespace Actions {
     /**
      * Input to the Actions disableActionWithDuration command
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.6.12
+     * @see {@link MatterSpecification.v141.Core} § 9.14.6.12
      */
     export interface DisableActionWithDurationRequest extends TypeFromSchema<typeof TlvDisableActionWithDurationRequest> {}
 
     /**
      * Body of the Actions stateChanged event
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.7.1
+     * @see {@link MatterSpecification.v141.Core} § 9.14.7.1
      */
     export const TlvStateChangedEvent = TlvObject({
         /**
          * This field shall be set to the ActionID of the action which has changed state.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.7.1.1
+         * @see {@link MatterSpecification.v141.Core} § 9.14.7.1.1
          */
         actionId: TlvField(0, TlvUInt16),
 
@@ -613,14 +613,14 @@ export namespace Actions {
          * This field shall be set to the InvokeID which was provided to the most recent command referencing this
          * ActionID.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.7.1.2
+         * @see {@link MatterSpecification.v141.Core} § 9.14.7.1.2
          */
         invokeId: TlvField(1, TlvUInt32),
 
         /**
          * This field shall be set to state that the action has changed to.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.7.1.3
+         * @see {@link MatterSpecification.v141.Core} § 9.14.7.1.3
          */
         newState: TlvField(2, TlvEnum<ActionState>())
     });
@@ -628,12 +628,12 @@ export namespace Actions {
     /**
      * Body of the Actions stateChanged event
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.7.1
+     * @see {@link MatterSpecification.v141.Core} § 9.14.7.1
      */
     export interface StateChangedEvent extends TypeFromSchema<typeof TlvStateChangedEvent> {}
 
     /**
-     * @see {@link MatterSpecification.v14.Core} § 9.14.4.4
+     * @see {@link MatterSpecification.v141.Core} § 9.14.4.4
      */
     export enum ActionError {
         /**
@@ -650,13 +650,13 @@ export namespace Actions {
     /**
      * Body of the Actions actionFailed event
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.7.2
+     * @see {@link MatterSpecification.v141.Core} § 9.14.7.2
      */
     export const TlvActionFailedEvent = TlvObject({
         /**
          * This field shall be set to the ActionID of the action which encountered an error.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.7.2.1
+         * @see {@link MatterSpecification.v141.Core} § 9.14.7.2.1
          */
         actionId: TlvField(0, TlvUInt16),
 
@@ -664,21 +664,21 @@ export namespace Actions {
          * This field shall be set to the InvokeID which was provided to the most recent command referencing this
          * ActionID.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.7.2.2
+         * @see {@link MatterSpecification.v141.Core} § 9.14.7.2.2
          */
         invokeId: TlvField(1, TlvUInt32),
 
         /**
          * This field shall be set to state that the action is in at the time of generating the event.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.7.2.3
+         * @see {@link MatterSpecification.v141.Core} § 9.14.7.2.3
          */
         newState: TlvField(2, TlvEnum<ActionState>()),
 
         /**
          * This field shall be set to indicate the reason for non-successful progress of the action.
          *
-         * @see {@link MatterSpecification.v14.Core} § 9.14.7.2.4
+         * @see {@link MatterSpecification.v141.Core} § 9.14.7.2.4
          */
         error: TlvField(3, TlvEnum<ActionError>())
     });
@@ -686,7 +686,7 @@ export namespace Actions {
     /**
      * Body of the Actions actionFailed event
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14.7.2
+     * @see {@link MatterSpecification.v141.Core} § 9.14.7.2
      */
     export interface ActionFailedEvent extends TypeFromSchema<typeof TlvActionFailedEvent> {}
 
@@ -703,7 +703,7 @@ export namespace Actions {
              * The ActionList attribute holds the list of actions. Each entry shall have an unique ActionID, and its
              * EndpointListID shall exist in the EndpointLists attribute.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.5.1
+             * @see {@link MatterSpecification.v141.Core} § 9.14.5.1
              */
             actionList: Attribute(0x0, TlvArray(TlvAction, { maxLength: 256 }), { default: [] }),
 
@@ -711,7 +711,7 @@ export namespace Actions {
              * The EndpointLists attribute holds the list of endpoint lists. Each entry shall have an unique
              * EndpointListID.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.5.2
+             * @see {@link MatterSpecification.v141.Core} § 9.14.5.2
              */
             endpointLists: Attribute(0x1, TlvArray(TlvEndpointList, { maxLength: 256 }), { default: [] }),
 
@@ -737,7 +737,7 @@ export namespace Actions {
              *       https://domain.example/Matter/bridgev1/Actions/?a=12345 for linking to specific info/editing of the
              *       action with ActionID 0x3039.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.5.3
+             * @see {@link MatterSpecification.v141.Core} § 9.14.5.3
              */
             setupUrl: OptionalAttribute(0x2, TlvString.bound({ maxLength: 512 }))
         },
@@ -749,7 +749,7 @@ export namespace Actions {
              *
              * Example: recall a scene on a number of lights.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.1
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.1
              */
             instantAction: OptionalCommand(0x0, TlvInstantActionRequest, 0x0, TlvNoResponse),
 
@@ -764,7 +764,7 @@ export namespace Actions {
              *
              * Example: recall a scene on a number of lights, with a specified transition time.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.2
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.2
              */
             instantActionWithTransition: OptionalCommand(
                 0x1,
@@ -783,7 +783,7 @@ export namespace Actions {
              * Example: start a sequence of events such as a wake-up experience involving lights moving through several
              * brightness/color combinations and the window covering gradually opening.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.3
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.3
              */
             startAction: OptionalCommand(0x2, TlvStartActionRequest, 0x2, TlvNoResponse),
 
@@ -795,7 +795,7 @@ export namespace Actions {
              * Example: start a dynamic lighting pattern (such as gradually rotating the colors around the setpoints of
              * the scene) on a set of lights for 1 hour (Duration=3600).
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.4
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.4
              */
             startActionWithDuration: OptionalCommand(0x3, TlvStartActionWithDurationRequest, 0x3, TlvNoResponse),
 
@@ -805,7 +805,7 @@ export namespace Actions {
              *
              * Example: stop a dynamic lighting pattern which was previously started with StartAction.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.5
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.5
              */
             stopAction: OptionalCommand(0x4, TlvStopActionRequest, 0x4, TlvNoResponse),
 
@@ -815,7 +815,7 @@ export namespace Actions {
              * Example: pause a dynamic lighting effect (the lights stay at their current color) which was previously
              * started with StartAction.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.6
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.6
              */
             pauseAction: OptionalCommand(0x5, TlvPauseActionRequest, 0x5, TlvNoResponse),
 
@@ -833,7 +833,7 @@ export namespace Actions {
              * after some hours or during a nightly reset, while an Disable would remain in effect until explicitly
              * enabled again).
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.7
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.7
              */
             pauseActionWithDuration: OptionalCommand(0x6, TlvPauseActionWithDurationRequest, 0x6, TlvNoResponse),
 
@@ -846,7 +846,7 @@ export namespace Actions {
              * Example: resume a dynamic lighting effect (the lights' colors will change gradually, continuing from the
              * point they were paused).
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.8
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.8
              */
             resumeAction: OptionalCommand(0x7, TlvResumeActionRequest, 0x7, TlvNoResponse),
 
@@ -855,7 +855,7 @@ export namespace Actions {
              *
              * Example: enable a motion sensor to control the lights in an area.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.9
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.9
              */
             enableAction: OptionalCommand(0x8, TlvEnableActionRequest, 0x8, TlvNoResponse),
 
@@ -868,7 +868,7 @@ export namespace Actions {
              * Duration field is used to indicated the length of your absence from home. After that period, the presence
              * mimicking behavior will no longer control these lights.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.10
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.10
              */
             enableActionWithDuration: OptionalCommand(0x9, TlvEnableActionWithDurationRequest, 0x9, TlvNoResponse),
 
@@ -877,7 +877,7 @@ export namespace Actions {
              *
              * Example: disable a motion sensor to no longer control the lights in an area.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.11
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.11
              */
             disableAction: OptionalCommand(0xa, TlvDisableActionRequest, 0xa, TlvNoResponse),
 
@@ -890,7 +890,7 @@ export namespace Actions {
              * turning on in the morning while you’re not at home). After this period, the wakeup experience will
              * control the lights as before.
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.6.12
+             * @see {@link MatterSpecification.v141.Core} § 9.14.6.12
              */
             disableActionWithDuration: OptionalCommand(0xb, TlvDisableActionWithDurationRequest, 0xb, TlvNoResponse)
         },
@@ -909,7 +909,7 @@ export namespace Actions {
              *
              *   • one when the transition completed (NewState=Inactive)
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.7.1
+             * @see {@link MatterSpecification.v141.Core} § 9.14.7.1
              */
             stateChanged: Event(0x0, EventPriority.Info, TlvStateChangedEvent),
 
@@ -938,7 +938,7 @@ export namespace Actions {
              *
              *   • StateChanged (InvokeID=2, NewState=Inactive) upon the execution of the action for the second command
              *
-             * @see {@link MatterSpecification.v14.Core} § 9.14.7.2
+             * @see {@link MatterSpecification.v141.Core} § 9.14.7.2
              */
             actionFailed: Event(0x1, EventPriority.Info, TlvActionFailedEvent)
         }
@@ -977,7 +977,7 @@ export namespace Actions {
      * The term 'action' in the description of this cluster should not be confused with the term 'action' as used in the
      * Interaction Model.
      *
-     * @see {@link MatterSpecification.v14.Core} § 9.14
+     * @see {@link MatterSpecification.v141.Core} § 9.14
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

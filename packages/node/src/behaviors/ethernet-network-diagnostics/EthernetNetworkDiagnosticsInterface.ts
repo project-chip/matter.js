@@ -25,7 +25,7 @@ export namespace EthernetNetworkDiagnosticsInterface {
          *
          * This command has no associated data.
          *
-         * @see {@link MatterSpecification.v14.Core} § 11.16.7.1
+         * @see {@link MatterSpecification.v141.Core} § 11.16.7.1
          */
         resetCounts(): MaybePromise;
     }

@@ -21,7 +21,7 @@ import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
 export namespace OvenCavityOperationalState {
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+     * @see {@link MatterSpecification.v141.Cluster} § 8.10.5
      */
     export const TlvOperationalCommandResponse = TlvObject({
         /**
@@ -29,13 +29,13 @@ export namespace OvenCavityOperationalState {
          * of the attempted command, the ErrorStateID shall be populated with NoError. Please see the individual command
          * sections for additional specific requirements on population.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 1.14.6.5.1
+         * @see {@link MatterSpecification.v141.Cluster} § 1.14.6.5.1
          */
         commandResponseState: TlvField(0, OperationalState.TlvErrorStateStruct)
     });
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+     * @see {@link MatterSpecification.v141.Cluster} § 8.10.5
      */
     export interface OperationalCommandResponse extends TypeFromSchema<typeof TlvOperationalCommandResponse> {}
 
@@ -57,7 +57,7 @@ export namespace OvenCavityOperationalState {
              * A null value indicates that the device does not present phases during its operation. When this
              * attribute’s value is null, the CurrentPhase attribute shall also be set to null.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 1.14.5.1
+             * @see {@link MatterSpecification.v141.Cluster} § 1.14.5.1
              */
             phaseList: Attribute(0x0, TlvNullable(TlvArray(TlvString, { maxLength: 32 }))),
 
@@ -69,7 +69,7 @@ export namespace OvenCavityOperationalState {
              *
              * Null if the PhaseList attribute is null or if the PhaseList attribute is an empty list.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 1.14.5.2
+             * @see {@link MatterSpecification.v141.Cluster} § 1.14.5.2
              */
             currentPhase: Attribute(0x1, TlvNullable(TlvUInt8)),
 
@@ -102,7 +102,7 @@ export namespace OvenCavityOperationalState {
              * As this attribute is not being reported during a regular countdown, clients SHOULD NOT rely on the
              * reporting of this attribute in order to keep track of the remaining duration.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 1.14.5.3
+             * @see {@link MatterSpecification.v141.Cluster} § 1.14.5.3
              */
             countdownTime: OptionalAttribute(0x2, TlvNullable(TlvUInt32.bound({ max: 259200 })), { default: null }),
 
@@ -116,7 +116,7 @@ export namespace OvenCavityOperationalState {
              * OperationalStateEnum. A device type requiring implementation of this cluster shall define the set of
              * states that are applicable to that specific device type.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 1.14.5.4
+             * @see {@link MatterSpecification.v141.Cluster} § 1.14.5.4
              */
             operationalStateList: Attribute(0x3, TlvArray(OperationalState.TlvOperationalStateStruct), { default: [] }),
 
@@ -124,7 +124,7 @@ export namespace OvenCavityOperationalState {
              * This attribute specifies the current operational state of a device. This shall be populated with a valid
              * OperationalStateID from the set of values in the OperationalStateList Attribute.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 1.14.5.5
+             * @see {@link MatterSpecification.v141.Cluster} § 1.14.5.5
              */
             operationalState: Attribute(0x4, TlvEnum<OperationalState.OperationalStateEnum>()),
 
@@ -135,19 +135,19 @@ export namespace OvenCavityOperationalState {
              *
              * When there is no error detected, this shall have an ErrorStateID of NoError.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 1.14.5.6
+             * @see {@link MatterSpecification.v141.Cluster} § 1.14.5.6
              */
             operationalError: Attribute(0x5, OperationalState.TlvErrorStateStruct)
         },
 
         commands: {
             /**
-             * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+             * @see {@link MatterSpecification.v141.Cluster} § 8.10.5
              */
             stop: Command(0x1, TlvNoArguments, 0x4, TlvOperationalCommandResponse),
 
             /**
-             * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+             * @see {@link MatterSpecification.v141.Cluster} § 8.10.5
              */
             start: Command(0x2, TlvNoArguments, 0x4, TlvOperationalCommandResponse)
         },
@@ -159,7 +159,7 @@ export namespace OvenCavityOperationalState {
              *
              * This event shall contain the following fields:
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 1.14.7.1
+             * @see {@link MatterSpecification.v141.Cluster} § 1.14.7.1
              */
             operationalError: Event(0x0, EventPriority.Critical, OperationalState.TlvOperationalErrorEvent),
 
@@ -174,7 +174,7 @@ export namespace OvenCavityOperationalState {
              *
              * This event shall contain the following fields:
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 1.14.7.2
+             * @see {@link MatterSpecification.v141.Cluster} § 1.14.7.2
              */
             operationCompletion: OptionalEvent(0x1, EventPriority.Info, OperationalState.TlvOperationCompletionEvent)
         }
@@ -184,7 +184,7 @@ export namespace OvenCavityOperationalState {
      * This cluster is derived from the Operational State cluster and provides an interface for monitoring the
      * operational state of an oven.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 8.10
+     * @see {@link MatterSpecification.v141.Cluster} § 8.10
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

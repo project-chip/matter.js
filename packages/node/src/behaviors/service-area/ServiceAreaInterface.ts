@@ -16,7 +16,7 @@ export namespace ServiceAreaInterface {
          *
          * On receipt of this command the device shall respond with a SelectAreasResponse command.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 1.17.7.1
+         * @see {@link MatterSpecification.v141.Cluster} § 1.17.7.1
          */
         selectAreas(request: ServiceArea.SelectAreasRequest): MaybePromise<ServiceArea.SelectAreasResponse>;
 
@@ -29,7 +29,7 @@ export namespace ServiceAreaInterface {
          *
          * On receipt of this command the device shall respond with a SkipAreaResponse command.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 1.17.7.3
+         * @see {@link MatterSpecification.v141.Cluster} § 1.17.7.3
          */
         skipArea(request: ServiceArea.SkipAreaRequest): MaybePromise<ServiceArea.SkipAreaResponse>;
     }

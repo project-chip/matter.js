@@ -27,7 +27,7 @@ export namespace ContentControl {
     /**
      * These are optional features supported by ContentControlCluster.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.4
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.4
      */
     export enum Feature {
         /**
@@ -89,7 +89,7 @@ export namespace ContentControl {
     }
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.2
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.2
      */
     export const TlvRatingName = TlvObject({
         /**
@@ -97,34 +97,34 @@ export namespace ContentControl {
          * system is dependent upon the region or country where the Node has been provisioned, and may vary from one
          * country to another.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.2.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.2.1
          */
         ratingName: TlvField(0, TlvString.bound({ maxLength: 8 })),
 
         /**
          * This field shall specify a human readable (displayable) description for RatingName.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.2.2
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.2.2
          */
         ratingNameDesc: TlvOptionalField(1, TlvString.bound({ maxLength: 64 }))
     });
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.2
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.2
      */
     export interface RatingName extends TypeFromSchema<typeof TlvRatingName> {}
 
     /**
      * Input to the ContentControl setOnDemandRatingThreshold command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.10
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.10
      */
     export const TlvSetOnDemandRatingThresholdRequest = TlvObject({
         /**
          * This field indicates a threshold rating for filtering on-demand content. This field shall be set to one of
          * the values present in the OnDemandRatings attribute
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.10.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.10.1
          */
         rating: TlvField(0, TlvString.bound({ maxLength: 8 }))
     });
@@ -132,21 +132,21 @@ export namespace ContentControl {
     /**
      * Input to the ContentControl setOnDemandRatingThreshold command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.10
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.10
      */
     export interface SetOnDemandRatingThresholdRequest extends TypeFromSchema<typeof TlvSetOnDemandRatingThresholdRequest> {}
 
     /**
      * Input to the ContentControl setScheduledContentRatingThreshold command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.11
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.11
      */
     export const TlvSetScheduledContentRatingThresholdRequest = TlvObject({
         /**
          * This field indicates a threshold rating for filtering scheduled content. This field shall be set to one of
          * the values present in the ScheduledContentRatings attribute.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.11.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.11.1
          */
         rating: TlvField(0, TlvString.bound({ maxLength: 8 }))
     });
@@ -154,14 +154,14 @@ export namespace ContentControl {
     /**
      * Input to the ContentControl setScheduledContentRatingThreshold command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.11
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.11
      */
     export interface SetScheduledContentRatingThresholdRequest extends TypeFromSchema<typeof TlvSetScheduledContentRatingThresholdRequest> {}
 
     /**
      * Input to the ContentControl addBonusTime command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.6
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.6
      */
     export const TlvAddBonusTimeRequest = TlvObject({
         /**
@@ -172,7 +172,7 @@ export namespace ContentControl {
          * permission is allowed to invoke this command only if the PIN passed in this command is equal to the current
          * PIN value.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.6.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.6.1
          */
         pinCode: TlvOptionalField(0, TlvString.bound({ maxLength: 6 })),
 
@@ -180,7 +180,7 @@ export namespace ContentControl {
          * This field shall indicate the amount of extra time (in seconds) to increase RemainingScreenTime. This field
          * shall NOT exceed the remaining time of this day.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.6.2
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.6.2
          */
         bonusTime: TlvField(1, TlvUInt32)
     });
@@ -188,21 +188,21 @@ export namespace ContentControl {
     /**
      * Input to the ContentControl addBonusTime command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.6
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.6
      */
     export interface AddBonusTimeRequest extends TypeFromSchema<typeof TlvAddBonusTimeRequest> {}
 
     /**
      * Input to the ContentControl setScreenDailyTime command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.7
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.7
      */
     export const TlvSetScreenDailyTimeRequest = TlvObject({
         /**
          * This field shall indicate the time (in seconds) which the User is allowed to spend watching TV on this media
          * device within one day.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.7.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.7.1
          */
         screenTime: TlvField(0, TlvUInt32.bound({ max: 86400 }))
     });
@@ -210,19 +210,19 @@ export namespace ContentControl {
     /**
      * Input to the ContentControl setScreenDailyTime command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.7
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.7
      */
     export interface SetScreenDailyTimeRequest extends TypeFromSchema<typeof TlvSetScreenDailyTimeRequest> {}
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.3
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.3
      */
     export const TlvBlockChannel = TlvObject({
         /**
          * This field shall indicate a unique index value for a blocked channel. This value may be used to indicate one
          * selected channel which will be removed from BlockChannelList attribute.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.3.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.3.1
          */
         blockChannelIndex: TlvField(0, TlvNullable(TlvUInt16)),
 
@@ -232,7 +232,7 @@ export namespace ContentControl {
          * This field is required but shall be set to 0 for channels such as over-the-top channels that are not
          * represented by a major or minor number.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.3.2
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.3.2
          */
         majorNumber: TlvField(1, TlvUInt16),
 
@@ -242,7 +242,7 @@ export namespace ContentControl {
          * This field is required but shall be set to 0 for channels such as over-the-top channels that are not
          * represented by a major or minor number.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.3.3
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.3.3
          */
         minorNumber: TlvField(2, TlvUInt16),
 
@@ -250,20 +250,20 @@ export namespace ContentControl {
          * This field shall indicate the unique identifier for a specific channel. This field is optional, but SHOULD be
          * provided when MajorNumber and MinorNumber are not available.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.3.4
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.3.4
          */
         identifier: TlvOptionalField(3, TlvString)
     });
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.3
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.3
      */
     export interface BlockChannel extends TypeFromSchema<typeof TlvBlockChannel> {}
 
     /**
      * Input to the ContentControl addBlockChannels command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.12
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.12
      */
     export const TlvAddBlockChannelsRequest = TlvObject({
         /**
@@ -271,7 +271,7 @@ export namespace ContentControl {
          * This field shall be set to values present in ChannelList attribute in the Channel cluster. The
          * BlockChannelIndex field passed in this command shall be NULL.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.12.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.12.1
          */
         channels: TlvField(0, TlvArray(TlvBlockChannel))
     });
@@ -279,21 +279,21 @@ export namespace ContentControl {
     /**
      * Input to the ContentControl addBlockChannels command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.12
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.12
      */
     export interface AddBlockChannelsRequest extends TypeFromSchema<typeof TlvAddBlockChannelsRequest> {}
 
     /**
      * Input to the ContentControl removeBlockChannels command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.13
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.13
      */
     export const TlvRemoveBlockChannelsRequest = TlvObject({
         /**
          * This field shall specify a set of indexes indicating Which channels shall be removed from the
          * BlockChannelList attribute.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.13.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.13.1
          */
         channelIndexes: TlvField(0, TlvArray(TlvUInt16))
     });
@@ -301,12 +301,12 @@ export namespace ContentControl {
     /**
      * Input to the ContentControl removeBlockChannels command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.13
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.13
      */
     export interface RemoveBlockChannelsRequest extends TypeFromSchema<typeof TlvRemoveBlockChannelsRequest> {}
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.4
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.4
      */
     export const TlvAppInfo = TlvObject({
         /**
@@ -315,7 +315,7 @@ export namespace ContentControl {
          * Content App Platform providers will have their own catalog vendor ID (set to their own Vendor ID) and will
          * assign an ApplicationID to each Content App.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.4.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.4.1
          */
         catalogVendorId: TlvField(0, TlvUInt16),
 
@@ -323,27 +323,27 @@ export namespace ContentControl {
          * This field shall indicate the application identifier, expressed as a string, such as "PruneVideo" or "Company
          * X". This field shall be unique within a catalog.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.4.2
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.4.2
          */
         applicationId: TlvField(1, TlvString)
     });
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.4
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.4
      */
     export interface AppInfo extends TypeFromSchema<typeof TlvAppInfo> {}
 
     /**
      * Input to the ContentControl addBlockApplications command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.14
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.14
      */
     export const TlvAddBlockApplicationsRequest = TlvObject({
         /**
          * This field indicates a set of applications that shall be blocked when the Content Control feature is
          * activated.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.14.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.14.1
          */
         applications: TlvField(0, TlvArray(TlvAppInfo))
     });
@@ -351,20 +351,20 @@ export namespace ContentControl {
     /**
      * Input to the ContentControl addBlockApplications command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.14
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.14
      */
     export interface AddBlockApplicationsRequest extends TypeFromSchema<typeof TlvAddBlockApplicationsRequest> {}
 
     /**
      * Input to the ContentControl removeBlockApplications command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.15
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.15
      */
     export const TlvRemoveBlockApplicationsRequest = TlvObject({
         /**
          * This field indicates a set of applications which shall be removed from BlockApplicationList attribute.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.15.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.15.1
          */
         applications: TlvField(0, TlvArray(TlvAppInfo))
     });
@@ -372,12 +372,12 @@ export namespace ContentControl {
     /**
      * Input to the ContentControl removeBlockApplications command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.15
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.15
      */
     export interface RemoveBlockApplicationsRequest extends TypeFromSchema<typeof TlvRemoveBlockApplicationsRequest> {}
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.1
      */
     export const DayOfWeek = {
         /**
@@ -417,27 +417,27 @@ export namespace ContentControl {
     };
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.6
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.6
      */
     export const TlvTimePeriod = TlvObject({
         /**
          * This field shall indicate the starting hour.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.6.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.6.1
          */
         startHour: TlvField(0, TlvUInt8.bound({ max: 23 })),
 
         /**
          * This field shall indicate the starting minute.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.6.2
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.6.2
          */
         startMinute: TlvField(1, TlvUInt8.bound({ max: 59 })),
 
         /**
          * This field shall indicate the ending hour. EndHour shall be equal to or greater than StartHour
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.6.3
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.6.3
          */
         endHour: TlvField(2, TlvUInt8.bound({ max: 23 })),
 
@@ -446,58 +446,58 @@ export namespace ContentControl {
          * than StartMinute. If the EndHour is equal to 23 and the EndMinute is equal to 59, all contents shall be
          * blocked until 23:59:59.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.6.4
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.6.4
          */
         endMinute: TlvField(3, TlvUInt8.bound({ max: 59 }))
     });
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.6
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.6
      */
     export interface TimePeriod extends TypeFromSchema<typeof TlvTimePeriod> {}
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.5
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.5
      */
     export const TlvTimeWindow = TlvObject({
         /**
          * This field shall indicate a unique index of a specific time window. This value may be used to indicate a
          * selected time window which will be removed from the BlockContentTimeWindow attribute.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.5.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.5.1
          */
         timeWindowIndex: TlvField(0, TlvNullable(TlvUInt16)),
 
         /**
          * This field shall indicate a day of week.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.5.2
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.5.2
          */
         dayOfWeek: TlvField(1, TlvBitmap(TlvUInt8, DayOfWeek)),
 
         /**
          * This field shall indicate one or more discrete time periods.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.5.3
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.5.3
          */
         timePeriod: TlvField(2, TlvArray(TlvTimePeriod))
     });
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.5.5
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.5.5
      */
     export interface TimeWindow extends TypeFromSchema<typeof TlvTimeWindow> {}
 
     /**
      * Input to the ContentControl setBlockContentTimeWindow command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.16
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.16
      */
     export const TlvSetBlockContentTimeWindowRequest = TlvObject({
         /**
          * This field shall indicate a time window requested to set to the BlockContentTimeWindow attribute.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.16.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.16.1
          */
         timeWindow: TlvField(0, TlvTimeWindow)
     });
@@ -505,21 +505,21 @@ export namespace ContentControl {
     /**
      * Input to the ContentControl setBlockContentTimeWindow command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.16
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.16
      */
     export interface SetBlockContentTimeWindowRequest extends TypeFromSchema<typeof TlvSetBlockContentTimeWindowRequest> {}
 
     /**
      * Input to the ContentControl removeBlockContentTimeWindow command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.17
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.17
      */
     export const TlvRemoveBlockContentTimeWindowRequest = TlvObject({
         /**
          * This field shall specify a set of time window indexes indicating which time windows will be removed from the
          * BlockContentTimeWindow attribute.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.17.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.17.1
          */
         timeWindowIndexes: TlvField(0, TlvArray(TlvUInt16))
     });
@@ -527,28 +527,28 @@ export namespace ContentControl {
     /**
      * Input to the ContentControl removeBlockContentTimeWindow command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.17
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.17
      */
     export interface RemoveBlockContentTimeWindowRequest extends TypeFromSchema<typeof TlvRemoveBlockContentTimeWindowRequest> {}
 
     /**
      * Input to the ContentControl updatePin command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.1
      */
     export const TlvUpdatePinRequest = TlvObject({
         /**
          * This field shall specify the original PIN. Once the UpdatePIN command is performed successfully, it shall be
          * invalid.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.1.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.1.1
          */
         oldPin: TlvField(0, TlvString.bound({ maxLength: 6 })),
 
         /**
          * This field shall indicate a new PIN for the Content Control feature.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.1.2
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.1.2
          */
         newPin: TlvField(1, TlvString.bound({ maxLength: 6 }))
     });
@@ -556,20 +556,20 @@ export namespace ContentControl {
     /**
      * Input to the ContentControl updatePin command
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.1
      */
     export interface UpdatePinRequest extends TypeFromSchema<typeof TlvUpdatePinRequest> {}
 
     /**
      * This command shall be generated in response to a ResetPIN command.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.3
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.3
      */
     export const TlvResetPinResponse = TlvObject({
         /**
          * This field shall indicate a new PIN of the Content Control feature.
          *
-         * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.3.1
+         * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.3.1
          */
         pinCode: TlvField(0, TlvString.bound({ maxLength: 6 }))
     });
@@ -577,12 +577,12 @@ export namespace ContentControl {
     /**
      * This command shall be generated in response to a ResetPIN command.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.3
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.3
      */
     export interface ResetPinResponse extends TypeFromSchema<typeof TlvResetPinResponse> {}
 
     /**
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.6.1
      */
     export enum StatusCode {
         /**
@@ -639,7 +639,7 @@ export namespace ContentControl {
     /**
      * Thrown for cluster status code {@link StatusCode.InvalidPinCode}.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.6.1
      */
     export class InvalidPinCodeError extends StatusResponseError {
         constructor(
@@ -654,7 +654,7 @@ export namespace ContentControl {
     /**
      * Thrown for cluster status code {@link StatusCode.InvalidRating}.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.6.1
      */
     export class InvalidRatingError extends StatusResponseError {
         constructor(
@@ -669,7 +669,7 @@ export namespace ContentControl {
     /**
      * Thrown for cluster status code {@link StatusCode.InvalidChannel}.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.6.1
      */
     export class InvalidChannelError extends StatusResponseError {
         constructor(
@@ -684,7 +684,7 @@ export namespace ContentControl {
     /**
      * Thrown for cluster status code {@link StatusCode.ChannelAlreadyExist}.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.6.1
      */
     export class ChannelAlreadyExistError extends StatusResponseError {
         constructor(
@@ -699,7 +699,7 @@ export namespace ContentControl {
     /**
      * Thrown for cluster status code {@link StatusCode.ChannelNotExist}.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.6.1
      */
     export class ChannelNotExistError extends StatusResponseError {
         constructor(
@@ -714,7 +714,7 @@ export namespace ContentControl {
     /**
      * Thrown for cluster status code {@link StatusCode.UnidentifiableApplication}.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.6.1
      */
     export class UnidentifiableApplicationError extends StatusResponseError {
         constructor(
@@ -729,7 +729,7 @@ export namespace ContentControl {
     /**
      * Thrown for cluster status code {@link StatusCode.ApplicationAlreadyExist}.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.6.1
      */
     export class ApplicationAlreadyExistError extends StatusResponseError {
         constructor(
@@ -744,7 +744,7 @@ export namespace ContentControl {
     /**
      * Thrown for cluster status code {@link StatusCode.ApplicationNotExist}.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.6.1
      */
     export class ApplicationNotExistError extends StatusResponseError {
         constructor(
@@ -759,7 +759,7 @@ export namespace ContentControl {
     /**
      * Thrown for cluster status code {@link StatusCode.TimeWindowAlreadyExist}.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.6.1
      */
     export class TimeWindowAlreadyExistError extends StatusResponseError {
         constructor(
@@ -774,7 +774,7 @@ export namespace ContentControl {
     /**
      * Thrown for cluster status code {@link StatusCode.TimeWindowNotExist}.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13.6.1
      */
     export class TimeWindowNotExistError extends StatusResponseError {
         constructor(
@@ -804,7 +804,7 @@ export namespace ContentControl {
              * The ratings in this collection shall be in order from a rating for the youngest viewers to the one for
              * the oldest viewers. Each rating in the list shall be unique.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.2
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.7.2
              */
             onDemandRatings: Attribute(0x1, TlvArray(TlvRatingName), { default: [] }),
 
@@ -820,7 +820,7 @@ export namespace ContentControl {
              * example, if the feature does not control content within apps, then the device should make this clear to
              * the user when the attribute changes.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.3
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.7.3
              */
             onDemandRatingThreshold: Attribute(0x2, TlvString.bound({ maxLength: 8 }))
         },
@@ -833,7 +833,7 @@ export namespace ContentControl {
              * is one of values present in the OnDemandRatings attribute. If not, then a response with InvalidRating
              * error status shall be returned.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.10
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.10
              */
             setOnDemandRatingThreshold: Command(
                 0x9,
@@ -862,7 +862,7 @@ export namespace ContentControl {
              * The ratings in this collection shall be in order from a rating for the youngest viewers to the one for
              * the oldest viewers. Each rating in the list shall be unique.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.4
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.7.4
              */
             scheduledContentRatings: Attribute(0x3, TlvArray(TlvRatingName), { default: [] }),
 
@@ -878,7 +878,7 @@ export namespace ContentControl {
              * example, if the feature does not control content within apps, then the device should make this clear to
              * the user when the attribute changes.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.5
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.7.5
              */
             scheduledContentRatingThreshold: Attribute(0x4, TlvString.bound({ maxLength: 8 }))
         },
@@ -891,7 +891,7 @@ export namespace ContentControl {
              * Rating field is one of values present in the ScheduledContentRatings attribute. If not, then a response
              * with InvalidRating error status shall be returned.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.11
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.11
              */
             setScheduledContentRatingThreshold: Command(
                 0xa,
@@ -912,7 +912,7 @@ export namespace ContentControl {
              * Indicates the amount of time (in seconds) which the User is allowed to spend watching TV within one day
              * when the Content Control feature is activated.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.6
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.7.6
              */
             screenDailyTime: Attribute(0x5, TlvUInt32.bound({ max: 86400 })),
 
@@ -924,7 +924,7 @@ export namespace ContentControl {
              * This attribute shall be updated when the AddBonusTime command is received and processed successfully
              * (with the correct PIN).
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.7
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.7.7
              */
             remainingScreenTime: Attribute(0x6, TlvUInt32.bound({ max: 86400 }))
         },
@@ -950,7 +950,7 @@ export namespace ContentControl {
              *
              *   • The client has provided a PINCode that matches the expected PIN value.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.6
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.6
              */
             addBonusTime: Command(0x5, TlvAddBonusTimeRequest, 0x5, TlvNoResponse),
 
@@ -960,7 +960,7 @@ export namespace ContentControl {
              * Upon receipt of the SetScreenDailyTime command, the media device shall set the ScreenDailyTime attribute
              * to the ScreenTime value.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.7
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.7
              */
             setScreenDailyTime: Command(
                 0x6,
@@ -975,7 +975,7 @@ export namespace ContentControl {
             /**
              * This event shall be generated when the RemainingScreenTime equals 0.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.9.1
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.9.1
              */
             remainingScreenTimeExpired: Event(0x0, EventPriority.Info, TlvNoArguments)
         }
@@ -996,7 +996,7 @@ export namespace ContentControl {
              * For example, if the feature does not control content within apps, then the device should make this clear
              * to the user when the attribute changes.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.8
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.7.8
              */
             blockUnrated: Attribute(0x7, TlvBoolean)
         },
@@ -1009,7 +1009,7 @@ export namespace ContentControl {
              * Upon receipt of the BlockUnratedContent command, the media device shall set the BlockUnrated attribute to
              * TRUE.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.8
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.8
              */
             blockUnratedContent: Command(0x7, TlvNoArguments, 0x7, TlvNoResponse, { invokeAcl: AccessLevel.Manage }),
 
@@ -1020,7 +1020,7 @@ export namespace ContentControl {
              * Upon receipt of the UnblockUnratedContent command, the media device shall set the BlockUnrated attribute
              * to FALSE.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.9
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.9
              */
             unblockUnratedContent: Command(0x8, TlvNoArguments, 0x8, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
@@ -1034,7 +1034,7 @@ export namespace ContentControl {
             /**
              * Indicates a set of channels that shall be blocked when the Content Control feature is activated.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.9
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.7.9
              */
             blockChannelList: Attribute(0x8, TlvArray(TlvBlockChannel), { default: [] })
         },
@@ -1055,7 +1055,7 @@ export namespace ContentControl {
              * If all channels in Channel field already exist in the BlockChannelList attribute, then a response with
              * ChannelAlreadyExist error Status shall be returned.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.12
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.12
              */
             addBlockChannels: Command(
                 0xb,
@@ -1073,7 +1073,7 @@ export namespace ContentControl {
              * channels indicated by ChannelIndexes passed in this command field are not present in the BlockChannelList
              * attribute, then a response with ChannelNotExist error Status shall be returned.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.13
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.13
              */
             removeBlockChannels: Command(
                 0xc,
@@ -1093,7 +1093,7 @@ export namespace ContentControl {
             /**
              * Indicates a set of applications that shall be blocked when the Content Control feature is activated.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.10
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.7.10
              */
             blockApplicationList: Attribute(0x9, TlvArray(TlvAppInfo), { default: [] })
         },
@@ -1113,7 +1113,7 @@ export namespace ContentControl {
              * If all applications in Applications field are already present in BlockApplicationList attribute, then a
              * response with ApplicationAlreadyExist error Status shall be returned.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.14
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.14
              */
             addBlockApplications: Command(
                 0xd,
@@ -1131,7 +1131,7 @@ export namespace ContentControl {
              * Applications field which are not present in the BlockApplicationList attribute, then a response with
              * ApplicationNotExist error Status shall be returned.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.15
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.15
              */
             removeBlockApplications: Command(
                 0xe,
@@ -1155,7 +1155,7 @@ export namespace ContentControl {
              * block content which is playing and generate an event EnteringBlockContentTimeWindow. There shall NOT be
              * multiple entries in this attribute list for the same day of week.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.11
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.7.11
              */
             blockContentTimeWindow: Attribute(0xa, TlvArray(TlvTimeWindow, { maxLength: 7 }), { default: [] })
         },
@@ -1174,7 +1174,7 @@ export namespace ContentControl {
              * If the TimeWindowIndex field is not NULL and presents in the BlockContentTimeWindow attribute, the media
              * device shall replace the original time window with the new time window passed in this command.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.16
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.16
              */
             setBlockContentTimeWindow: Command(
                 0xf,
@@ -1194,7 +1194,7 @@ export namespace ContentControl {
              * If one or more time window indexes passed in this command are not present in BlockContentTimeWindow
              * attribute, then a response with TimeWindowNotExist error status shall be returned.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.17
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.17
              */
             removeBlockContentTimeWindow: Command(
                 0x10,
@@ -1210,7 +1210,7 @@ export namespace ContentControl {
              * This event shall be generated when entering a period of blocked content as configured in the
              * BlockContentTimeWindow attribute.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.9.2
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.9.2
              */
             enteringBlockContentTimeWindow: Event(0x1, EventPriority.Info, TlvNoArguments)
         }
@@ -1238,7 +1238,7 @@ export namespace ContentControl {
              * performing configuration of the Content Control settings exposed by this cluster. The ResetPIN command
              * can also be used to obtain the default PIN.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.1
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.1
              */
             updatePin: Command(
                 0x0,
@@ -1253,7 +1253,7 @@ export namespace ContentControl {
              *
              * If this command is executed successfully, a ResetPINResponse command with a new PIN shall be returned.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.2
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.2
              */
             resetPin: Command(
                 0x1,
@@ -1321,7 +1321,7 @@ export namespace ContentControl {
              * Indicates whether the Content Control feature implemented on a media device is turned off (FALSE) or
              * turned on (TRUE).
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.1
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.7.1
              */
             enabled: Attribute(0x0, TlvBoolean)
         },
@@ -1332,7 +1332,7 @@ export namespace ContentControl {
              *
              * Upon receipt of the Enable command, the media device shall set the Enabled attribute to TRUE.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.4
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.4
              */
             enable: Command(0x3, TlvNoArguments, 0x3, TlvNoResponse, { invokeAcl: AccessLevel.Manage, timed: true }),
 
@@ -1341,7 +1341,7 @@ export namespace ContentControl {
              *
              * On receipt of the Disable command, the media device shall set the Enabled attribute to FALSE.
              *
-             * @see {@link MatterSpecification.v14.Cluster} § 6.13.8.5
+             * @see {@link MatterSpecification.v141.Cluster} § 6.13.8.5
              */
             disable: Command(0x4, TlvNoArguments, 0x4, TlvNoResponse, { invokeAcl: AccessLevel.Manage, timed: true })
         },
@@ -1378,7 +1378,7 @@ export namespace ContentControl {
      * ContentControlCluster supports optional features that you can enable with the ContentControlCluster.with()
      * factory method.
      *
-     * @see {@link MatterSpecification.v14.Cluster} § 6.13
+     * @see {@link MatterSpecification.v141.Cluster} § 6.13
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
