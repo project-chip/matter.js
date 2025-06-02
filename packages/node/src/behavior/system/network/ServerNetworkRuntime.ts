@@ -8,6 +8,7 @@ import { SubscriptionBehavior } from "#behavior/system/subscription/index.js";
 import {
     Construction,
     InterfaceType,
+    InternalError,
     Logger,
     NetInterfaceSet,
     Network,
@@ -29,6 +30,8 @@ import {
     DeviceAdvertiser,
     DeviceCommissioner,
     ExchangeManager,
+    Fabric,
+    FabricManager,
     InstanceBroadcaster,
     MdnsInstanceBroadcaster,
     MdnsService,
@@ -38,7 +41,7 @@ import {
     SecureChannelProtocol,
     SessionManager,
 } from "#protocol";
-import { CommissioningOptions } from "#types";
+import { CommissioningOptions, FabricIndex, GroupId } from "#types";
 import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { ProductDescriptionServer } from "../product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
@@ -62,8 +65,11 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     #mdnsBroadcaster?: MdnsInstanceBroadcaster;
     #bleBroadcaster?: InstanceBroadcaster;
     #bleTransport?: TransportInterface;
+    #ipv6UdpInterface?: UdpInterface;
     #observers = new ObserverGroup(this);
     #formerSubscriptionsHandled = false;
+    #activeGroupMemberships = new Map<FabricIndex, Map<GroupId, string>>();
+    #fabricObservers = new Map<FabricIndex, ObserverGroup>();
 
     override get owner() {
         return super.owner as ServerNode;
@@ -148,15 +154,15 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         const port = this.owner.state.network.port;
         try {
-            const ipv6Intf = await UdpInterface.create(
+            this.#ipv6UdpInterface = await UdpInterface.create(
                 this.owner.env.get(Network),
                 "udp6",
                 port ? port : undefined,
                 netconf.listeningAddressIpv6,
             );
-            interfaces.add(ipv6Intf);
+            interfaces.add(this.#ipv6UdpInterface);
 
-            await this.owner.set({ network: { operationalPort: ipv6Intf.port } });
+            await this.owner.set({ network: { operationalPort: this.#ipv6UdpInterface.port } });
         } catch (error) {
             NoAddressAvailableError.accept(error);
             logger.info(`IPv6 UDP interface not created because IPv6 is not available, but required my Matter.`);
@@ -285,6 +291,8 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             maxPathsPerInvoke: this.owner.state.basicInformation.maxPathsPerInvoke,
         };
 
+        await this.#initializeGroupNetworking();
+
         // Install our interaction server
         const interactionServer = new InteractionServer(this.owner, env.get(SessionManager));
         env.set(InteractionServer, interactionServer);
@@ -392,5 +400,138 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.owner.act(agent =>
             agent.get(SubscriptionBehavior).reestablishFormerSubscriptions(env.get(InteractionServer)),
         );
+    }
+
+    #observersForFabric(fabricIndex: FabricIndex) {
+        let observers = this.#fabricObservers.get(fabricIndex);
+        if (observers === undefined) {
+            observers = new ObserverGroup(this);
+            this.#fabricObservers.set(fabricIndex, observers);
+        }
+        return observers;
+    }
+
+    #registerFabricGroupObserver(fabric: Fabric) {
+        const fabricIndex = fabric.fabricIndex;
+
+        const observers = this.#observersForFabric(fabricIndex);
+        observers.on(fabric.groups.groupKeyIdMap.added, async groupId => {
+            const memberships = this.#activeGroupMemberships.get(fabricIndex) ?? new Map();
+
+            if (memberships.has(groupId)) {
+                return;
+            }
+
+            const address = fabric.groups.multicastAddressFor(groupId);
+            logger.debug(
+                `Adding membership for group ${groupId} on fabric ${fabric.fabricId} (index ${fabricIndex}) with address ${address}`,
+            );
+            this.#ipv6UdpInterface?.addMembership(address);
+            memberships.set(groupId, address);
+
+            this.#activeGroupMemberships.set(fabricIndex, memberships);
+        });
+
+        observers.on(fabric.groups.groupKeyIdMap.deleted, async groupId => {
+            const memberships = this.#activeGroupMemberships.get(fabricIndex);
+            if (memberships === undefined) {
+                return;
+            }
+            const address = memberships.get(groupId);
+            if (address !== undefined) {
+                logger.debug(
+                    `Dropping membership for group ${groupId} on fabric ${fabric.fabricId} (index ${fabricIndex}) with address ${address}`,
+                );
+                this.#ipv6UdpInterface?.dropMembership(address);
+                memberships.delete(groupId);
+            }
+        });
+    }
+
+    async #initializeGroupNetworking() {
+        const { owner } = this;
+        const { env } = owner;
+
+        const fabrics = env.get(FabricManager);
+
+        for (const fabric of fabrics) {
+            const fabricIndex = fabric.fabricIndex;
+            if (this.#activeGroupMemberships.has(fabricIndex)) {
+                throw new InternalError("Group transport interfaces already initialized for this fabric.");
+            }
+            const memberships = new Map<GroupId, string>();
+            for (const groupId of fabric.groups.groupKeyIdMap.keys()) {
+                const address = fabric.groups.multicastAddressFor(groupId);
+                logger.debug(
+                    `Adding membership for group ${groupId} on fabric ${fabric.fabricId} (index ${fabricIndex}) with address ${address}`,
+                );
+                this.#ipv6UdpInterface?.addMembership(address);
+                memberships.set(groupId, address);
+            }
+            if (memberships.size) {
+                this.#activeGroupMemberships.set(fabricIndex, memberships);
+            }
+
+            this.#registerFabricGroupObserver(fabric);
+        }
+
+        // When new fabric is added we register for group changes - new fabrics can not have groups already configured
+        this.#observers.on(fabrics.events.added, async fabric => this.#registerFabricGroupObserver(fabric));
+
+        // When fabric is deleted, we remove the group memberships
+        this.#observers.on(fabrics.events.deleted, async fabric => {
+            const fabricIndex = fabric.fabricIndex;
+            this.#observersForFabric(fabricIndex).close();
+            this.#fabricObservers.delete(fabricIndex);
+
+            const memberships = this.#activeGroupMemberships.get(fabricIndex);
+            this.#activeGroupMemberships.delete(fabricIndex);
+            if (memberships !== undefined) {
+                for (const [groupId, address] of memberships.entries()) {
+                    logger.debug(
+                        `Dropping membership for group ${groupId} on fabric ${fabric.fabricId} (index ${fabricIndex}) with address ${address}`,
+                    );
+                    this.#ipv6UdpInterface?.dropMembership(address);
+                }
+            }
+        });
+
+        this.#observers.on(fabrics.events.updated, async fabric => {
+            const fabricIndex = fabric.fabricIndex;
+
+            this.#observersForFabric(fabricIndex).close();
+            this.#fabricObservers.delete(fabricIndex);
+            this.#registerFabricGroupObserver(fabric);
+
+            const memberships = this.#activeGroupMemberships.get(fabricIndex);
+            if (memberships === undefined || memberships.size === 0) {
+                return;
+            }
+
+            // Add or remove as needed by new group configuration
+            const { groupKeyIdMap } = fabric.groups;
+            for (const groupId of groupKeyIdMap.keys()) {
+                if (!memberships.has(groupId)) {
+                    const address = fabric.groups.multicastAddressFor(groupId);
+                    logger.debug(
+                        `Adding membership for group ${groupId} on fabric ${fabric.fabricId} (index ${fabricIndex}) with address ${address}`,
+                    );
+                    this.#ipv6UdpInterface?.addMembership(address);
+                    memberships.set(groupId, address);
+                }
+            }
+            for (const groupId of memberships.keys()) {
+                if (!groupKeyIdMap.has(groupId)) {
+                    const address = memberships.get(groupId);
+                    if (address) {
+                        logger.debug(
+                            `Dropping membership for group ${groupId} on fabric ${fabric.fabricId} (index ${fabricIndex}) with address ${address}`,
+                        );
+                        this.#ipv6UdpInterface?.dropMembership(address);
+                        memberships.delete(groupId);
+                    }
+                }
+            }
+        });
     }
 }
