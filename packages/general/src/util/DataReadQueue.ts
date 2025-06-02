@@ -38,6 +38,10 @@ export class DataReadQueue<T> implements Stream<T> {
         this.push(data);
     }
 
+    get size() {
+        return this.#queue.length;
+    }
+
     /**
      * Same as write but doesn't require the await required to satisfy {@link Stream#write}.
      */

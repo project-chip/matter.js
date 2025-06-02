@@ -474,6 +474,8 @@ export class MessageExchange {
         let timeout: number;
         if (options?.timeoutMs !== undefined) {
             timeout = options.timeoutMs;
+        } else if (this.#messagesQueue.size > 0) {
+            timeout = 0; // If we have messages in the queue, we can return them immediately
         } else {
             switch (this.channel.type) {
                 case "tcp":
