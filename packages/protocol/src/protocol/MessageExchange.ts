@@ -412,18 +412,43 @@ export class MessageExchange {
             }
         }
 
-        // TODO Add support to also send controlMessages for Group messages, use different messagecounter!
-        const message: Message = {
-            packetHeader: {
+        let packetHeader: PacketHeader;
+        if (this.session.type === SessionType.Unicast) {
+            packetHeader = {
                 sessionId: this.#peerSessionId,
-                sessionType: SessionType.Unicast, // TODO: support multicast/groups
+                sessionType: SessionType.Unicast,
                 messageId: await this.session.getIncrementedMessageCounter(),
                 destNodeId: this.#peerNodeId,
                 sourceNodeId: this.#nodeId,
                 hasPrivacyEnhancements: false,
                 isControlMessage: false,
                 hasMessageExtensions: false,
-            },
+            };
+        } else if (this.session.type === SessionType.Group) {
+            const session = this.session;
+            if (!isSecureGroupSession(session)) {
+                throw new InternalError("Session is not a SecureGroupSession, but session type is Group.");
+            }
+            const destGroupId = GroupId.fromNodeId(this.#peerNodeId!); // TODO !!! Where get from?
+            if (destGroupId === 0) {
+                throw new InternalError(`Invalid GroupId extracted from NodeId ${this.#peerNodeId}`);
+            }
+            packetHeader = {
+                sessionId: this.#peerSessionId,
+                sessionType: SessionType.Group,
+                messageId: await session.getIncrementedMessageCounter(),
+                destGroupId,
+                sourceNodeId: this.#nodeId, // We are the source node, so use our NodeId
+                hasPrivacyEnhancements: false,
+                isControlMessage: false,
+                hasMessageExtensions: false,
+            };
+        } else {
+            throw new InternalError(`Unknown session type: ${this.session.type}`);
+        }
+
+        const message: Message = {
+            packetHeader,
             payloadHeader: {
                 exchangeId: this.#exchangeId,
                 protocolId:
