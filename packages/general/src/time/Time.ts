@@ -36,6 +36,15 @@ export class Time {
     }
     static readonly nowMs = (): number => Time.get().nowMs();
 
+    nowUs() {
+        if (performance && typeof performance.now === "function" && typeof performance.timeOrigin === "number") {
+            // Use performance.now() if available for more precise timing
+            return Math.floor((performance.now() + performance.timeOrigin) * 1000); // performance returns a floor number
+        }
+        return this.now().getTime() * 1000; // Fallback is a bit less accurate
+    }
+    static readonly nowUs = (): number => Time.get().nowUs();
+
     /**
      * Create a timer that will call callback after durationMs has passed.
      */
