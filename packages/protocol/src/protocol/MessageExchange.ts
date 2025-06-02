@@ -18,8 +18,16 @@ import {
     Timer,
     createPromise,
 } from "#general";
-import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType, StatusCode, StatusResponseError } from "#types";
-import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
+import { isSecureGroupSession } from "#session/index.js";
+import {
+    GroupId,
+    NodeId,
+    SECURE_CHANNEL_PROTOCOL_ID,
+    SecureMessageType,
+    StatusCode,
+    StatusResponseError,
+} from "#types";
+import { Message, MessageCodec, PacketHeader, SessionType } from "../codec/MessageCodec.js";
 import { SecureChannelProtocol } from "../securechannel/SecureChannelProtocol.js";
 import {
     SESSION_ACTIVE_INTERVAL_MS,

@@ -26,7 +26,7 @@ import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { SecureChannelMessenger } from "../securechannel/SecureChannelMessenger.js";
 import { SecureChannelProtocol } from "../securechannel/SecureChannelProtocol.js";
-import { SecureSession } from "../session/SecureSession.js";
+import { isSecureUnicastSession, SecureUnicastSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
 import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
 import { ChannelManager } from "./ChannelManager.js";
@@ -365,12 +365,12 @@ export class ExchangeManager {
             return;
         }
         const { session } = exchange;
-        if (session.isSecure && session.closingAfterExchangeFinished) {
+        if (isSecureUnicastSession(session) && session.closingAfterExchangeFinished) {
             logger.debug(
                 `Exchange index ${exchangeIndex} Session ${session.name} is already marked for closure. Close session now.`,
             );
             try {
-                await this.#closeSession(session as SecureSession);
+                await this.#closeSession(session);
             } catch (error) {
                 logger.error(`Error closing session ${session.name}. Ignoring.`, error);
             }
@@ -378,7 +378,7 @@ export class ExchangeManager {
         this.#exchanges.delete(exchangeIndex);
     }
 
-    async #closeSession(session: SecureSession) {
+    async #closeSession(session: SecureUnicastSession) {
         const sessionId = session.id;
         const sessionName = session.name;
 

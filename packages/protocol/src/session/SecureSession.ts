@@ -4,21 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    BasicSet,
-    Bytes,
-    CRYPTO_SYMMETRIC_KEY_LENGTH,
-    Crypto,
-    DataWriter,
-    Diagnostic,
-    Endian,
-    Logger,
-    MatterFlowError,
-} from "#general";
+import { BasicSet, Bytes, CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto, Diagnostic, Logger, MatterFlowError } from "#general";
 import { Subscription } from "#interaction/Subscription.js";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { CaseAuthenticatedTag, FabricIndex, NodeId, StatusCode, StatusResponseError } from "#types";
-import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
+import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet, SessionType } from "../codec/MessageCodec.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { NoChannelError } from "../protocol/ChannelManager.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
@@ -37,7 +27,12 @@ export class NoAssociatedFabricError extends StatusResponseError {
     }
 }
 
-export class SecureSession extends Session {
+export abstract class SecureSession extends Session {
+    readonly isSecure = true;
+    abstract fabric: Fabric | undefined;
+}
+
+export class SecureUnicastSession extends SecureSession {
     readonly #subscriptions = new BasicSet<Subscription>();
     #closingAfterExchangeFinished = false;
     #sendCloseMessageWhenClosing = true;
@@ -52,6 +47,7 @@ export class SecureSession extends Session {
     #caseAuthenticatedTags: CaseAuthenticatedTag[];
     #isClosing = false;
     readonly supportsMRP = true;
+    readonly type = SessionType.Unicast;
 
     static async create(args: {
         manager?: SessionManager;
@@ -88,7 +84,7 @@ export class SecureSession extends Session {
         const decryptKey = isInitiator ? keys.slice(16, 32) : keys.slice(0, 16);
         const encryptKey = isInitiator ? keys.slice(0, 16) : keys.slice(16, 32);
         const attestationKey = keys.slice(32, 48);
-        return new SecureSession({
+        return new SecureUnicastSession({
             manager,
             id,
             fabric,
@@ -188,10 +184,6 @@ export class SecureSession extends Session {
         return this.#sendCloseMessageWhenClosing;
     }
 
-    get isSecure(): boolean {
-        return true;
-    }
-
     get isPase(): boolean {
         return this.#peerNodeId === NodeId.UNSPECIFIED_NODE_ID;
     }
@@ -221,7 +213,7 @@ export class SecureSession extends Session {
                 `Message extensions are not supported. Ignoring ${messageExtension ? Bytes.toHex(messageExtension) : undefined}`,
             );
         }
-        const nonce = this.generateNonce(header.securityFlags, header.messageId, this.#peerNodeId);
+        const nonce = Session.generateNonce(header.securityFlags, header.messageId, this.#peerNodeId);
         const message = MessageCodec.decodePayload({
             header,
             applicationPayload: Crypto.decrypt(this.#decryptKey, applicationPayload, nonce, aad),
@@ -244,7 +236,7 @@ export class SecureSession extends Session {
         const sessionNodeId = this.isPase
             ? NodeId.UNSPECIFIED_NODE_ID
             : (this.#fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID);
-        const nonce = this.generateNonce(securityFlags, header.messageId, sessionNodeId);
+        const nonce = Session.generateNonce(securityFlags, header.messageId, sessionNodeId);
         return { header, applicationPayload: Crypto.encrypt(this.#encryptKey, applicationPayload, nonce, headerBytes) };
     }
 
@@ -356,18 +348,23 @@ export class SecureSession extends Session {
             this.#peerNodeId === address.nodeId
         );
     }
-
-    private generateNonce(securityFlags: number, messageId: number, nodeId: NodeId) {
-        const writer = new DataWriter(Endian.Little);
-        writer.writeUInt8(securityFlags);
-        writer.writeUInt32(messageId);
-        writer.writeUInt64(nodeId);
-        return writer.toByteArray();
-    }
 }
 
 export function assertSecureSession(session?: Session, errorText?: string): asserts session is SecureSession {
     if (!session?.isSecure) {
         throw new MatterFlowError(errorText ?? "Insecure session in secure context");
     }
+}
+
+export function assertSecureUnicastSession(
+    session?: Session,
+    errorText?: string,
+): asserts session is SecureUnicastSession {
+    if (!isSecureUnicastSession(session)) {
+        throw new MatterFlowError(errorText ?? "Insecure session in secure context");
+    }
+}
+
+export function isSecureUnicastSession(session?: Session): session is SecureUnicastSession {
+    return session?.type === SessionType.Unicast;
 }

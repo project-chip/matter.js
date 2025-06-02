@@ -20,7 +20,7 @@ import {
 } from "#general";
 import { GLOBAL_IDS, Specification } from "#model";
 import {
-    assertSecureSession,
+    assertSecureUnicastSession,
     DataReport,
     DataReportPayloadIterator,
     ExchangeManager,
@@ -33,7 +33,7 @@ import {
     PeerAddress,
     ProtocolHandler,
     ReadRequest,
-    SecureSession,
+    SecureUnicastSession,
     SessionManager,
     SessionType,
     SubscribeRequest,
@@ -474,7 +474,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             );
         }
 
-        assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
+        assertSecureUnicastSession(exchange.session, "Subscriptions are only implemented on secure sessions");
         const session = exchange.session;
         const fabric = session.fabric;
 
@@ -606,7 +606,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             isFabricFiltered,
         }: SubscribeRequest,
         messenger: InteractionServerMessenger,
-        session: SecureSession,
+        session: SecureUnicastSession,
         exchange: MessageExchange,
         message: Message,
     ) {
@@ -660,7 +660,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             maxInterval,
             sendInterval,
         }: PeerSubscription,
-        session: SecureSession,
+        session: SecureUnicastSession,
     ) {
         const exchange = this.#context.exchangeManager.initiateExchange(session.peerAddress, INTERACTION_PROTOCOL_ID);
         const message = {} as Message;
