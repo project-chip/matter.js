@@ -37,8 +37,8 @@ export class UdpMulticastServer {
                     type: "udp4",
                     netInterface,
                     listeningPort,
-                    membershipAddresses: [broadcastAddressIpv4],
                 });
+                ipv4UdpChannel.addMembership(broadcastAddressIpv4);
             } catch (error) {
                 NoAddressAvailableError.accept(error);
                 logger.info(`IPv4 UDP channel not created because IPv4 is not available: ${asError(error).message}`);
@@ -46,18 +46,19 @@ export class UdpMulticastServer {
         }
 
         try {
+            const ipv6UdpChannel = await network.createUdpChannel({
+                type: "udp6",
+                netInterface,
+                listeningPort,
+            });
+            ipv6UdpChannel.addMembership(broadcastAddressIpv6);
             return new UdpMulticastServer(
                 network,
                 broadcastAddressIpv4,
                 broadcastAddressIpv6,
                 listeningPort,
                 ipv4UdpChannel,
-                await network.createUdpChannel({
-                    type: "udp6",
-                    netInterface,
-                    listeningPort,
-                    membershipAddresses: [broadcastAddressIpv6],
-                }),
+                ipv6UdpChannel,
                 netInterface,
             );
         } catch (error) {

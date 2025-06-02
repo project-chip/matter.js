@@ -18,6 +18,7 @@ import {
     Time,
     UdpChannel,
     UdpChannelOptions,
+    UdpSocketType,
 } from "#general";
 import { RetransmissionLimitReachedError } from "#protocol";
 import * as dgram from "node:dgram";
@@ -58,13 +59,11 @@ function createDgramSocket(host: string | undefined, port: number | undefined, o
 }
 
 export class NodeJsUdpChannel implements UdpChannel {
-    static async create({
-        listeningPort,
-        type,
-        listeningAddress,
-        netInterface,
-        membershipAddresses,
-    }: UdpChannelOptions) {
+    readonly #type: UdpSocketType;
+    readonly #socket: dgram.Socket;
+    readonly #netInterface: string | undefined;
+
+    static async create({ listeningPort, type, listeningAddress, netInterface }: UdpChannelOptions) {
         const socketOptions: dgram.SocketOptions = { type, reuseAddr: true };
         if (type === "udp6") {
             socketOptions.ipv6Only = true;
@@ -96,22 +95,6 @@ export class NodeJsUdpChannel implements UdpChannel {
             );
             socket.setMulticastInterface(multicastInterface);
         }
-        if (membershipAddresses !== undefined) {
-            const multicastInterfaces = NodeJsNetwork.getMembershipMulticastInterfaces(netInterface, type === "udp4");
-            for (const address of membershipAddresses) {
-                for (const multicastInterface of multicastInterfaces) {
-                    try {
-                        socket.addMembership(address, multicastInterface);
-                    } catch (error) {
-                        logger.warn(
-                            `Error adding membership for address ${address}${
-                                multicastInterface ? ` with interface ${multicastInterface}` : ""
-                            }: ${error}`,
-                        );
-                    }
-                }
-            }
-        }
         return new NodeJsUdpChannel(type, socket, netInterfaceZone);
     }
 
@@ -126,24 +109,60 @@ export class NodeJsUdpChannel implements UdpChannel {
     );
     readonly #sendsInProgress = new Map<Promise<void>, { sendMs: number; rejecter: (reason?: any) => void }>();
 
-    constructor(
-        private readonly type: "udp4" | "udp6",
-        private readonly socket: dgram.Socket,
-        private readonly netInterface?: string,
-    ) {}
+    constructor(type: UdpSocketType, socket: dgram.Socket, netInterface?: string) {
+        this.#type = type;
+        this.#socket = socket;
+        this.#netInterface = netInterface;
+    }
+
+    addMembership(membershipAddress: string) {
+        const multicastInterfaces = NodeJsNetwork.getMembershipMulticastInterfaces(
+            this.#netInterface,
+            this.#type === "udp4",
+        );
+        for (const multicastInterface of multicastInterfaces) {
+            try {
+                this.#socket.addMembership(membershipAddress, multicastInterface);
+            } catch (error) {
+                logger.warn(
+                    `Error adding membership for address ${membershipAddress}${
+                        multicastInterface ? ` with interface ${multicastInterface}` : ""
+                    }: ${error}`,
+                );
+            }
+        }
+    }
+
+    dropMembership(membershipAddress: string) {
+        const multicastInterfaces = NodeJsNetwork.getMembershipMulticastInterfaces(
+            this.#netInterface,
+            this.#type === "udp4",
+        );
+        for (const multicastInterface of multicastInterfaces) {
+            try {
+                this.#socket.dropMembership(membershipAddress, multicastInterface);
+            } catch (error) {
+                logger.warn(
+                    `Error removing membership for address ${membershipAddress}${
+                        multicastInterface ? ` with interface ${multicastInterface}` : ""
+                    }: ${error}`,
+                );
+            }
+        }
+    }
 
     onData(
         listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Uint8Array) => void,
     ) {
         const messageListener = (data: Uint8Array, { address, port }: dgram.RemoteInfo) => {
-            const netInterface = this.netInterface ?? NodeJsNetwork.getNetInterfaceForIp(address);
+            const netInterface = this.#netInterface ?? NodeJsNetwork.getNetInterfaceForIp(address);
             listener(netInterface, address, port, data);
         };
 
-        this.socket.on("message", messageListener);
+        this.#socket.on("message", messageListener);
         return {
             close: async () => {
-                this.socket.removeListener("message", messageListener);
+                this.#socket.removeListener("message", messageListener);
             },
         };
     }
@@ -200,7 +219,7 @@ export class NodeJsUdpChannel implements UdpChannel {
             this.#sendTimer.start();
         }
         try {
-            this.socket.send(data, port, host, error => rejectOrResolve(error));
+            this.#socket.send(data, port, host, error => rejectOrResolve(error));
         } catch (error) {
             rejectOrResolve(repackErrorAs(error, NetworkError));
         }
@@ -210,7 +229,7 @@ export class NodeJsUdpChannel implements UdpChannel {
 
     async close() {
         try {
-            this.socket.close();
+            this.#socket.close();
         } catch (error) {
             if (!(error instanceof Error) || error.message !== "Not running") {
                 logger.debug("Error on closing socket", error);
@@ -219,7 +238,7 @@ export class NodeJsUdpChannel implements UdpChannel {
     }
 
     get port() {
-        return this.socket.address().port;
+        return this.#socket.address().port;
     }
 
     supports(type: ChannelType, address?: string) {
@@ -233,7 +252,7 @@ export class NodeJsUdpChannel implements UdpChannel {
 
         // TODO - we currently only discriminate based on protocol type.  We should also determine whether the address subnet is correct
 
-        if (this.type === "udp4") {
+        if (this.#type === "udp4") {
             return isIPv4(address);
         }
 
