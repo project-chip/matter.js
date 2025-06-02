@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { AccessControl } from "#clusters/access-control";
-import { Logger, MatterFlowError, toHex } from "#general";
+import { MatterFlowError } from "#general";
 import { AccessLevel } from "#model";
 import {
     CaseAuthenticatedTag,
@@ -15,11 +15,9 @@ import {
     NodeId,
     StatusCode,
     StatusResponseError,
+    SubjectId,
 } from "#types";
-import { Fabric } from "../fabric/Fabric.js";
-import { SecureSession } from "../session/SecureSession.js";
-
-const logger = Logger.get("AccessControlManager");
+import { AccessControl as AccessControlContext } from "../action/server/AccessControl.js";
 
 export type AclEntry = Omit<AccessControl.AccessControlEntry, "privilege"> & {
     privilege: AccessLevel;
@@ -49,7 +47,7 @@ enum AuthModeNone {
 export type IncomingSubjectDescriptor = {
     isCommissioning: boolean;
     authMode: AccessControl.AccessControlEntryAuthMode | AuthModeNone;
-    subjects: NodeId[];
+    subjects: SubjectId[];
     fabricIndex: FabricIndex;
 };
 
@@ -98,22 +96,24 @@ export class AccessControlManager {
     /**
      * Get the Access Control List for a given fabric.
      */
-    #getAccessControlEntriesForFabric(fabric: Fabric): AclList {
-        return this.#aclList.filter(entry => entry.fabricIndex === fabric.fabricIndex);
+    #getAccessControlEntriesForFabric(fabricIndex: FabricIndex): AclList {
+        return this.#aclList.filter(entry => entry.fabricIndex === fabricIndex);
     }
 
     /**
      * Subjects must match exactly, or both are CAT with matching CAT ID and acceptable CAT version
      */
-    #subjectMatches(aclSubject: NodeId, isdSubject: NodeId): boolean {
-        if (aclSubject === isdSubject) {
+    #subjectMatches(aclSubject: SubjectId, isdSubject: SubjectId): boolean {
+        if (BigInt(aclSubject) === BigInt(isdSubject)) {
             return true;
         }
-        if (!NodeId.isCaseAuthenticatedTag(aclSubject) || !NodeId.isCaseAuthenticatedTag(isdSubject)) {
+        const aclNode = NodeId(aclSubject);
+        const isdNode = NodeId(isdSubject);
+        if (!NodeId.isCaseAuthenticatedTag(aclNode) || !NodeId.isCaseAuthenticatedTag(isdNode)) {
             return false;
         }
-        const aclSubjectCat = NodeId.extractAsCaseAuthenticatedTag(aclSubject);
-        const isdSubjectCat = NodeId.extractAsCaseAuthenticatedTag(isdSubject);
+        const aclSubjectCat = NodeId.extractAsCaseAuthenticatedTag(aclNode);
+        const isdSubjectCat = NodeId.extractAsCaseAuthenticatedTag(isdNode);
         return (
             CaseAuthenticatedTag.getIdentifyValue(aclSubjectCat) ===
                 CaseAuthenticatedTag.getIdentifyValue(isdSubjectCat) &&
@@ -149,40 +149,16 @@ export class AccessControlManager {
     }
 
     /**
-     * Check if the given ACL entry is allowed to be used for the given subject descriptor, endpoint, and cluster ID.
-     */
-    allowsPrivilege(
-        session: SecureSession,
-        endpoint: AclEndpointContext,
-        clusterId: ClusterId,
-        privilege: AccessLevel,
-    ): boolean {
-        const grantedPrivileges = this.getGrantedPrivileges(session, endpoint, clusterId);
-        if (grantedPrivileges.includes(privilege)) {
-            return true;
-        }
-
-        logger.notice(
-            `Failed access control check for ${endpoint.id}/0x${toHex(clusterId)} and fabricIndex ${session.associatedFabric.fabricIndex}, acl=`,
-            this.#getAccessControlEntriesForFabric(session.associatedFabric),
-            "with ISD=",
-            this.#getIsdFromMessage(session),
-            "granted privileges=",
-            grantedPrivileges,
-            "not contains",
-            privilege,
-        );
-
-        return false;
-    }
-
-    /**
      * Determines the granted privileges for the given session, endpoint, and cluster ID and returns them.
      */
-    getGrantedPrivileges(session: SecureSession, endpoint: AclEndpointContext, clusterId: ClusterId): AccessLevel[] {
+    getGrantedPrivileges(
+        context: AccessControlContext.Session,
+        endpoint: AclEndpointContext,
+        clusterId: ClusterId,
+    ): AccessLevel[] {
         const endpointId = endpoint.id;
-        const fabric = session.fabric;
-        const subjectDesc = this.#getIsdFromMessage(session);
+        const fabric = context.fabric;
+        const subjectDesc = this.#getIsdFromMessage(context);
         const acl = fabric ? this.#getAccessControlEntriesForFabric(fabric) : [ImplicitDefaultPaseAclEntry];
 
         // Granted privileges set is initially empty
@@ -203,17 +179,11 @@ export class AccessControlManager {
             // other than the implicit PASE entry, which we will not see explicitly in the
             // access control list
             if (aclEntry.fabricIndex === FabricIndex.NO_FABRIC || aclEntry.fabricIndex !== subjectDesc.fabricIndex) {
-                logger.debug(
-                    "Skipping ACL entry with mismatched fabric index",
-                    aclEntry.fabricIndex,
-                    subjectDesc.fabricIndex,
-                );
                 continue;
             }
 
             // Auth mode must match
             if (aclEntry.authMode !== subjectDesc.authMode) {
-                logger.debug("Skipping ACL entry with mismatched auth mode", aclEntry.authMode, subjectDesc.authMode);
                 continue;
             }
 
@@ -304,50 +274,44 @@ export class AccessControlManager {
     /**
      * Determines the Incoming Subject Descriptor (ISD) from the given session.
      */
-    #getIsdFromMessage(session: SecureSession) {
-        const fabric = session.fabric;
+    #getIsdFromMessage(session: AccessControlContext.Session) {
+        const fabricIndex = session.fabric;
         const isd: IncomingSubjectDescriptor = {
             isCommissioning: false,
             authMode: AuthModeNone.None,
-            subjects: new Array<NodeId>(),
+            subjects: new Array<SubjectId>(),
             fabricIndex: FabricIndex.NO_FABRIC,
         };
 
-        if (session.isPase) {
+        const { subjects } = session;
+        if (subjects === undefined) {
+            throw new MatterFlowError("ACL error: ACL checks require an authorized subject");
+        }
+        if (subjects.length === 1 && subjects[0] === NodeId.UNSPECIFIED_NODE_ID) {
+            // Pase Session
             isd.authMode = AccessControl.AccessControlEntryAuthMode.Pase;
             isd.isCommissioning = true; // Or how "commissioning channel" is defined?
-            isd.subjects.push(NodeId(0)); // Default Commissioning Passcode ID
-            if (fabric) {
-                isd.fabricIndex = fabric.fabricIndex;
+            isd.subjects.push(...subjects); // Default Commissioning Passcode ID
+            if (fabricIndex !== undefined && fabricIndex !== FabricIndex.NO_FABRIC) {
+                isd.fabricIndex = fabricIndex;
+            }
+        } else if (session.isGroupSubject) {
+            if (fabricIndex === undefined || fabricIndex === FabricIndex.NO_FABRIC) {
+                throw new MatterFlowError("ACL error: fabric needs to be associated for group sessions");
+            }
+            if (session.hasValidGroupMapping) {
+                isd.authMode = AccessControl.AccessControlEntryAuthMode.Group;
+                isd.subjects.push(...subjects);
+                isd.fabricIndex = fabricIndex;
             }
         } else {
-            // TODO Add Group session handling when implementing groups
-            // if (session instanceof SecureGroupSession) {
-            //   Groups
-            //   # Message is assumed to have been decrypted and matched properly prior to
-            //       # this procedure occurring.
-            //       group_id = message.get_dst_group_id()
-            //       group_key_id = sessions_metadata.get_group_key_id(message)
-            //       # Group membership must be verified against Group Key Management Cluster
-            //       if group_key_management_cluster.group_key_map_has_mapping(group_id, group_key_id):
-            //         isd.AuthMode = AuthModeEnum.Group
-            //         isd.Subjects.append(group_id)
-            //         isd.FabricIndex = sessions_metadata.get_fabric_index(message)
-            //         assert(isd.FabricIndex != 0) # cannot be zero
-            //
-            //     isd.authMode = AccessControl.AccessControlEntryAuthMode.Group;
-            // } else {
-
             // CASE session
-            isd.authMode = AccessControl.AccessControlEntryAuthMode.Case;
-            isd.subjects.push(session.peerNodeId);
-            // Append CASE session CATs which also serve as subjects
-            session.caseAuthenticatedTags.forEach(cat => isd.subjects.push(NodeId.fromCaseAuthenticatedTag(cat)));
-            // }
-            if (fabric === undefined) {
-                throw new MatterFlowError("ACL error: fabric is undefined");
+            if (fabricIndex === undefined || fabricIndex === FabricIndex.NO_FABRIC) {
+                throw new MatterFlowError("ACL error: Case session must be associated with a fabric");
             }
-            isd.fabricIndex = fabric.fabricIndex;
+            isd.authMode = AccessControl.AccessControlEntryAuthMode.Case;
+            isd.subjects.push(...subjects);
+            isd.fabricIndex = fabricIndex;
         }
 
         return isd;

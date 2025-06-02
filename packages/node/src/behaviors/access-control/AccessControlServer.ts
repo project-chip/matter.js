@@ -160,7 +160,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
 
                 if (subjects !== null) {
                     for (const subject of subjects) {
-                        if (GroupId(subject) === GroupId.UNSPECIFIED_GROUP_ID) {
+                        if (GroupId(Number(subject)) === GroupId.UNSPECIFIED_GROUP_ID) {
                             throw new StatusResponseError(
                                 "Subject must be a valid GroupId for Group ACLs",
                                 StatusCode.ConstraintError,
@@ -361,7 +361,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
             return [AccessLevel.View];
         }
 
-        return this.aclManager.getGrantedPrivileges(context.session, endpoint, location.cluster);
+        return this.aclManager.getGrantedPrivileges(context, endpoint, location.cluster);
     }
 
     /**

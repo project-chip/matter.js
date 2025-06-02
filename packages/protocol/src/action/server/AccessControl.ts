@@ -134,14 +134,26 @@ export namespace AccessControl {
         readonly fabric?: FabricIndex;
 
         /**
-         * The authenticated {@link SubjectId} for online sessions.
+         * The authenticated {@link SubjectId}s for online sessions. This includes the relevant Node Id, Group ID and
+         * also potential relevant Case Authenticated Tags.
          */
-        readonly subject?: SubjectId;
+        readonly subjects?: SubjectId[];
 
         /**
          * Flag subject as a group rather than a peer.
          */
         readonly isGroupSubject?: boolean;
+
+        /**
+         * Contains the information if the group id has a valid mapping to a groupKeySet. Only exists when the
+         * subject is a group subject
+         */
+        readonly hasValidGroupMapping?: boolean;
+
+        /**
+         * The endpoints that are configured for the group subject. Only exists when the subject is a group
+         */
+        readonly groupEndpoints?: EndpointNumber[];
 
         /**
          * If this is true, fabric-scoped lists are filtered to the accessing fabric.

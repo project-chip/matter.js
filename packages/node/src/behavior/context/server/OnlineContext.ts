@@ -11,9 +11,16 @@ import { EndpointType } from "#endpoint/type/EndpointType.js";
 import { Diagnostic, ImplementationError, InternalError, MaybePromise, Transaction } from "#general";
 import { AccessLevel } from "#model";
 import { Node } from "#node/Node.js";
-import type { Message, NodeProtocol, SecureSession } from "#protocol";
-import { AccessControl, AclEndpointContext, assertSecureSession, MessageExchange } from "#protocol";
-import { FabricIndex, NodeId, SubjectId } from "#types";
+import type { Message, NodeProtocol } from "#protocol";
+import {
+    AccessControl,
+    AclEndpointContext,
+    assertSecureSession,
+    assertSecureUnicastSession,
+    isSecureGroupSession,
+    MessageExchange,
+} from "#protocol";
+import { EndpointNumber, FabricIndex, GroupId, NodeId, SubjectId } from "#types";
 import { ActionContext } from "../ActionContext.js";
 import { Contextual } from "../Contextual.js";
 import { NodeActivity } from "../NodeActivity.js";
@@ -24,31 +31,45 @@ import { ContextAgents } from "./ContextAgents.js";
  */
 export function OnlineContext(options: OnlineContext.Options) {
     let fabric: FabricIndex | undefined;
-    let subject: SubjectId;
+    let subjects: SubjectId[];
     let nodeProtocol: NodeProtocol | undefined;
     let accessLevelCache: Map<AccessControl.Location, number[]> | undefined;
+    let hasValidGroupMapping: boolean | undefined;
+    let groupEndpoints: EndpointNumber[] | undefined;
 
-    const { exchange } = options;
+    const { exchange, message } = options;
     const session = exchange?.session;
 
+    let isGroupSubject = false;
     if (session) {
-        assertSecureSession(session);
-        fabric = session.fabric?.fabricIndex;
-
-        // TODO - group subject
-        subject = session.peerNodeId;
+        if (isSecureGroupSession(session)) {
+            fabric = session.fabric.fabricIndex;
+            if (message === undefined || message.packetHeader.destGroupId === undefined) {
+                throw new ImplementationError("SecureGroupSession requires a message with destGroupId");
+            }
+            const groupId = GroupId(message.packetHeader.destGroupId);
+            subjects = [groupId];
+            isGroupSubject = true;
+            hasValidGroupMapping = session.fabric.groups.groupKeyIdMap.get(groupId) === session.keySetId;
+            groupEndpoints = session.fabric.groups.groupEndpoints.get(groupId);
+        } else {
+            assertSecureUnicastSession(session);
+            fabric = session.fabric?.fabricIndex;
+            subjects = [session.peerNodeId];
+            session.caseAuthenticatedTags.forEach(cat => subjects.push(NodeId.fromCaseAuthenticatedTag(cat)));
+        }
     } else {
         fabric = options.fabric;
-        subject = options.subject as NodeId;
+        if (options.subject !== undefined) {
+            subjects = [options.subject];
+        } else {
+            throw new ImplementationError("OnlineContext requires an authorized subject");
+        }
     }
 
-    if (subject === undefined) {
-        throw new ImplementationError("OnlineContext requires an authorized subject");
-    }
-
-    const { message } = options;
+    // If we have subjects, the first is the main one, used for diagnostics
     const via = Diagnostic.via(
-        `online#${message?.packetHeader?.messageId?.toString(16) ?? "?"}@${subject.toString(16)}`,
+        `online#${message?.packetHeader?.messageId?.toString(16) ?? "?"}@${subjects[0].toString(16)}`,
     );
 
     return {
@@ -133,12 +154,18 @@ export function OnlineContext(options: OnlineContext.Options) {
      * Initialization stage two - create context object after obtaining transaction
      */
     function createContext(transaction: Transaction, methods: {}) {
+        if (session) {
+            assertSecureSession(session);
+        }
         let agents: undefined | ContextAgents;
         const context: ActionContext = {
             ...options,
-            session: session as SecureSession | undefined,
+            session,
             exchange,
-            subject,
+            subjects,
+            isGroupSubject,
+            hasValidGroupMapping,
+            groupEndpoints,
             fabric,
             transaction,
 
