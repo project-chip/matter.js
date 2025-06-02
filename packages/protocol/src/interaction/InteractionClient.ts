@@ -134,7 +134,8 @@ export class InteractionClientProvider {
             return client;
         }
 
-        const nodeStore = this.#peers.get(address)?.dataStore;
+        const isGroupAddress = PeerAddress.isGroup(address);
+        const nodeStore = isGroupAddress ? undefined : this.#peers.get(address)?.dataStore;
         await nodeStore?.construction; // Lazy initialize the data if not already done
 
         const exchangeProvider = await this.#peers.exchangeProviderFor(address, discoveryOptions);
@@ -167,6 +168,7 @@ export class InteractionClient {
     readonly #subscriptionClient: SubscriptionClient;
     readonly #queue?: PromiseQueue;
     readonly #address?: PeerAddress;
+    readonly isGroupAddress: boolean;
 
     constructor(
         exchangeProvider: ExchangeProvider,
@@ -180,6 +182,7 @@ export class InteractionClient {
         this.#subscriptionClient = subscriptionClient;
         this.#queue = queue;
         this.#address = address;
+        this.isGroupAddress = address !== undefined ? PeerAddress.isGroup(address) : false;
     }
 
     get address() {
@@ -321,6 +324,10 @@ export class InteractionClient {
             executeQueued?: boolean;
         } = {},
     ): Promise<DecodedDataReport> {
+        if (this.isGroupAddress) {
+            throw new ImplementationError("Reading data from group addresses is not supported.");
+        }
+
         const {
             attributes: attributeRequests,
             dataVersionFilters,
@@ -411,6 +418,10 @@ export class InteractionClient {
         clusterId: ClusterId;
         attribute: A;
     }): { value: AttributeJsType<A>; version: number } | undefined {
+        if (this.isGroupAddress) {
+            throw new ImplementationError("Reading data from group addresses is not supported.");
+        }
+
         const { endpointId, clusterId, attribute } = options;
         const { id: attributeId } = attribute;
         if (this.#nodeStore !== undefined) {
@@ -430,6 +441,10 @@ export class InteractionClient {
         requestFromRemote?: boolean;
         executeQueued?: boolean;
     }): Promise<{ value: AttributeJsType<A>; version: number } | undefined> {
+        if (this.isGroupAddress) {
+            throw new ImplementationError("Reading data from group addresses is not supported.");
+        }
+
         const { endpointId, clusterId, attribute, requestFromRemote, isFabricFiltered, executeQueued } = options;
         const { id: attributeId } = attribute;
         if (this.#nodeStore !== undefined) {
@@ -516,7 +531,7 @@ export class InteractionClient {
 
     async setAttribute<T>(options: {
         attributeData: {
-            endpointId: EndpointNumber;
+            endpointId?: EndpointNumber;
             clusterId: ClusterId;
             attribute: Attribute<T, any>;
             value: T;
@@ -557,7 +572,7 @@ export class InteractionClient {
 
     async setMultipleAttributes(options: {
         attributes: {
-            endpointId: EndpointNumber;
+            endpointId?: EndpointNumber;
             clusterId: ClusterId;
             attribute: Attribute<any, any>;
             value: any;
@@ -575,9 +590,22 @@ export class InteractionClient {
             attributes,
             asTimedRequest,
             timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
-            suppressResponse = false, // TODO needs to be TRUE for Group writes
+            suppressResponse = this.isGroupAddress,
             chunkLists = true, // Should be true currently to stay in sync with chip sdk
         } = options;
+        if (this.isGroupAddress) {
+            if (!suppressResponse) {
+                throw new ImplementationError("Writing attributes on a group address can not return a response.");
+            }
+            if (
+                attributes.some(
+                    ({ endpointId, clusterId, attribute }) =>
+                        endpointId !== undefined || clusterId === undefined || attribute.id === undefined,
+                )
+            ) {
+                throw new ImplementationError("Not all attribute write paths are valid for group address writes.");
+            }
+        }
         logger.debug(
             `Sending write request: ${attributes
                 .map(
@@ -621,6 +649,9 @@ export class InteractionClient {
             attributes.some(({ attribute: { timed } }) => timed) ||
             asTimedRequest === true ||
             options.timedRequestTimeoutMs !== undefined;
+        if (this.isGroupAddress && timedRequest) {
+            throw new ImplementationError("Timed requests are not supported for group address writes.");
+        }
 
         const response = await this.withMessenger<TypeFromSchema<typeof TlvWriteResponse> | undefined>(
             async messenger => {
@@ -671,6 +702,9 @@ export class InteractionClient {
     }): Promise<{
         maxInterval: number;
     }> {
+        if (this.isGroupAddress) {
+            throw new ImplementationError("Subscribing to attributes on a group address is not supported.");
+        }
         const {
             endpointId,
             clusterId,
@@ -792,6 +826,9 @@ export class InteractionClient {
     }): Promise<{
         maxInterval: number;
     }> {
+        if (this.isGroupAddress) {
+            throw new ImplementationError("Subscribing to events on a group address is not supported.");
+        }
         const {
             endpointId,
             clusterId,
@@ -923,6 +960,9 @@ export class InteractionClient {
         eventReports?: DecodedEventReportValue<any>[];
         maxInterval: number;
     }> {
+        if (this.isGroupAddress) {
+            throw new ImplementationError("Subscribing to attributes or events on a group address is not supported.");
+        }
         const {
             attributes: attributeRequests = [],
             events: eventRequests = [],
@@ -1097,7 +1137,7 @@ export class InteractionClient {
     }
 
     async invoke<C extends Command<any, any, any>>(options: {
-        endpointId: EndpointNumber;
+        endpointId?: EndpointNumber;
         clusterId: ClusterId;
         request: RequestType<C>;
         command: C;
@@ -1117,6 +1157,10 @@ export class InteractionClient {
         /** Skip request data validation. Use this only when you know that your data is correct and validation would return an error. */
         skipValidation?: boolean;
     }): Promise<ResponseType<C>> {
+        if (this.isGroupAddress) {
+            throw new ImplementationError("Invoking a concrete command on a group address is not supported.");
+        }
+
         const { executeQueued } = options;
 
         const {
@@ -1228,8 +1272,9 @@ export class InteractionClient {
     }
 
     // TODO Add to ClusterClient when needed/when Group communication is implemented
+    // TODO Additionally support it without endpoint
     async invokeWithSuppressedResponse<C extends Command<any, any, any>>(options: {
-        endpointId: EndpointNumber;
+        endpointId?: EndpointNumber;
         clusterId: ClusterId;
         request: RequestType<C>;
         command: C;
@@ -1248,6 +1293,16 @@ export class InteractionClient {
             timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
         } = options;
         const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+
+        if (this.isGroupAddress) {
+            if (timed) {
+                throw new ImplementationError("Timed requests are not supported for group address invokes.");
+            }
+            if (endpointId !== undefined) {
+                throw new ImplementationError("Invoking a concrete command on a group address is not supported.");
+            }
+        }
+
         logger.debug(
             `Invoking command with suppressedResponse: ${resolveCommandName({
                 endpointId,

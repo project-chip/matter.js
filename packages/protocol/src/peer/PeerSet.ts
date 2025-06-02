@@ -12,6 +12,7 @@ import {
     ChannelType,
     Construction,
     createPromise,
+    DEFAULT_MATTER_PORT,
     Environment,
     Environmental,
     ImmutableSet,
@@ -34,7 +35,7 @@ import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { CaseClient, SecureSession, Session } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
-import { NodeId, ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "#types";
+import { assertOperationalGroupId, GroupId, NodeId, ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "#types";
 import { ChannelManager } from "../protocol/ChannelManager.js";
 import { ChannelNotConnectedError, ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
 import { DedicatedChannelExchangeProvider, ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
@@ -240,14 +241,20 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             operationalAddress?: ServerAddressIp;
         },
     ) {
+        address = PeerAddress(address);
+
+        const isGroupNode = PeerAddress.isGroup(address);
         const { discoveryOptions, allowUnknownPeer, operationalAddress } = options;
-        if (!this.#peersByAddress.has(address) && !allowUnknownPeer) {
+        if (!this.#peersByAddress.has(address) && !allowUnknownPeer && !isGroupNode) {
             throw new UnknownNodeError(`Cannot connect to unknown device ${PeerAddress(address)}`);
         }
 
-        address = PeerAddress(address);
-
         if (!this.#channels.hasChannel(address)) {
+            if (isGroupNode) {
+                await this.#createGroupChannel(address);
+                return;
+            }
+
             const { promise: existingReconnectPromise } = this.#runningPeerReconnections.get(address) ?? {};
             if (existingReconnectPromise !== undefined) {
                 return existingReconnectPromise;
@@ -278,6 +285,13 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             return new DedicatedChannelExchangeProvider(this.#exchanges, addressOrChannel);
         }
         const address: PeerAddress = addressOrChannel;
+        if (PeerAddress.isGroup(address)) {
+            if (!this.#channels.hasChannel(address)) {
+                // Ensure that we have a group channel
+                await this.#createGroupChannel(address);
+            }
+            return new DedicatedChannelExchangeProvider(this.#exchanges, this.#channels.getChannel(address));
+        }
         let initiallyConnected = this.#channels.hasChannel(address);
         return new ReconnectableExchangeProvider(this.#exchanges, this.#channels, address, async () => {
             if (!initiallyConnected && !this.#channels.hasChannel(address)) {
@@ -618,6 +632,27 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                 throw error;
             }
         }
+    }
+
+    async #createGroupChannel(address: PeerAddress) {
+        const groupId = GroupId.fromNodeId(address.nodeId);
+        assertOperationalGroupId(groupId);
+        const multicastAddress = this.#sessions.fabricFor(address).groups.multicastAddressFor(groupId);
+
+        const operationalInterface = this.#netInterfaces.interfaceFor(ChannelType.UDP, multicastAddress);
+        if (operationalInterface === undefined) {
+            throw new PairRetransmissionLimitReachedError(`IPv6 interface not initialized`);
+        }
+        const operationalChannel = await operationalInterface.openChannel({
+            type: ChannelType.UDP,
+            ip: multicastAddress,
+            port: DEFAULT_MATTER_PORT,
+        });
+
+        const session = this.#sessions.groupSessionForAddress(address);
+        const channel = new MessageChannel(operationalChannel, session);
+        await this.#channels.setChannel(address, channel);
+        return channel;
     }
 
     /** Pair with an operational device (already commissioned) and establish a CASE session. */

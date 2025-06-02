@@ -16,7 +16,7 @@ import { NoAssociatedFabricError } from "../../session/SecureSession.js";
 export function createAttributeClient<T>(
     attribute: Attribute<T, any>,
     name: string,
-    endpointId: EndpointNumber,
+    endpointId: EndpointNumber | undefined,
     clusterId: ClusterId,
     interactionClient: InteractionClient,
     present = false,
@@ -45,7 +45,7 @@ export class AttributeClient<T = any> {
     constructor(
         readonly attribute: Attribute<T, any>,
         readonly name: string,
-        readonly endpointId: EndpointNumber,
+        readonly endpointId: EndpointNumber | undefined,
         readonly clusterId: ClusterId,
         interactionClient: InteractionClient,
     ) {
@@ -111,6 +111,9 @@ export class AttributeClient<T = any> {
     }
 
     getLocal() {
+        if (this.endpointId === undefined) {
+            throw new ImplementationError(`Cannot read attribute ${this.name} without endpointId.`);
+        }
         return this.#interactionClient.getStoredAttribute({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
@@ -126,6 +129,9 @@ export class AttributeClient<T = any> {
      * - `undefined` returns local values if available or if the read is fabric filtered, otherwise remote read
      */
     async get(requestFromRemote?: boolean, isFabricFiltered = true) {
+        if (this.endpointId === undefined) {
+            throw new ImplementationError(`Cannot read attribute ${this.name} without endpointId.`);
+        }
         if (requestFromRemote === undefined) {
             requestFromRemote = this.#isFabricScoped || !this.#updatedBySubscriptions ? true : undefined;
         } else if (!requestFromRemote && this.#isFabricScoped) {
@@ -148,6 +154,9 @@ export class AttributeClient<T = any> {
      * - `undefined` returns local values if available or if the read is fabric filtered, otherwise remote read
      */
     async getWithVersion(requestFromRemote?: boolean, isFabricFiltered = true) {
+        if (this.endpointId === undefined) {
+            throw new ImplementationError(`Cannot read attribute ${this.name} without endpointId.`);
+        }
         if (requestFromRemote === undefined) {
             requestFromRemote = this.#isFabricScoped || !this.#updatedBySubscriptions ? true : undefined;
         } else if (!requestFromRemote && this.#isFabricScoped) {
@@ -169,6 +178,9 @@ export class AttributeClient<T = any> {
         knownDataVersion?: number,
         isFabricFiltered = true,
     ) {
+        if (this.endpointId === undefined) {
+            throw new ImplementationError(`Cannot read attribute ${this.name} without endpointId.`);
+        }
         if (!this.#updatedBySubscriptions) {
             throw new ImplementationError(`Attribute ${this.name} is not updated by subscriptions.`);
         }
