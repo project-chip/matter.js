@@ -14,6 +14,8 @@ import { TlvUInt16, TlvEnum, TlvEpochS, TlvUInt8, TlvBitmap, TlvInt16 } from "..
 import { TlvString, TlvByteString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status as GlobalStatus } from "../globals/Status.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { ContentLauncher } from "./content-launcher.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
@@ -256,6 +258,36 @@ export namespace Channel {
          * No matches for the ChannelInfoStruct passed in.
          */
         NoMatches = 2
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.MultipleMatches}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.6.5.3
+     */
+    export class MultipleMatchesError extends StatusResponseError {
+        constructor(
+            message = "More than one equal match for the ChannelInfoStruct passed in",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.MultipleMatches
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link Status.NoMatches}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.6.5.3
+     */
+    export class NoMatchesError extends StatusResponseError {
+        constructor(
+            message = "No matches for the ChannelInfoStruct passed in",
+            code = GlobalStatus.Failure,
+            clusterCode = Status.NoMatches
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

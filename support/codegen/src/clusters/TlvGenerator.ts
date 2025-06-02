@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "#general";
+import { capitalize, decamelize, InternalError } from "#general";
 import {
     ClusterModel,
     CommandModel,
@@ -279,7 +279,52 @@ export class TlvGenerator {
             });
         });
 
+        // For cluster status codes, also generate appropriate MatterErrors
+        if (model.name === "StatusEnum" || model.name === "StatusCodeEnum") {
+            this.defineErrors(name, model, this.definitions);
+        }
+
         return enumBlock;
+    }
+
+    defineErrors(enumName: string, model: ValueModel, block: Block) {
+        for (const field of model.fields) {
+            let { name: errName } = field;
+            if (errName === "Success") {
+                continue;
+            }
+
+            if (!errName.endsWith("Error")) {
+                errName = `${errName}Error`;
+            }
+
+            this.#file.addImport("!types/common/StatusResponseError.js", "StatusResponseError");
+            const error = block.statements(`export class ${errName} extends StatusResponseError {`, "}");
+            const constructor = error.expressions(
+                "constructor(",
+                // Ugh, manual formatting necessary here because we use args for children
+                ") {\n            super(message, code, clusterCode);\n        }",
+            );
+            constructor.shouldDelimit = false;
+
+            let { description: message } = field;
+            if (message === undefined) {
+                message = capitalize(decamelize(field.name, " "));
+            }
+            if (message.endsWith(".")) {
+                message = message.slice(0, message.length - 1);
+            }
+            constructor.atom(`message = ${serialize(message)}`);
+
+            const globalStatus = this.#importGlobalStatus();
+            constructor.atom(`code = ${globalStatus}.Failure`);
+
+            const ref = `${enumName}.${field.name}`;
+            constructor.atom(`clusterCode = ${ref}`);
+
+            const description = `Thrown for cluster status code {@link ${ref}}.`;
+            error.document({ description, xref: field.effectiveXref });
+        }
     }
 
     #defineStruct(name: string, model: ValueModel) {
@@ -371,18 +416,27 @@ export class TlvGenerator {
         return this.#defineSpecificDatatype(defining);
     }
 
+    #importGlobalStatus() {
+        const owner = this.#file.model;
+        if (owner instanceof DatatypeModel && owner.name === "status" && owner.isGlobal) {
+            return "Status";
+        }
+
+        let as;
+        if (this.owner?.get(DatatypeModel, "Status") || this.owner?.get(DatatypeModel, "StatusEnum")) {
+            // Status would conflict with local type so import as an alias
+            as = "GlobalStatus";
+        }
+
+        this.importTlv("globals/Status", "Status", as);
+        return as ?? "Status";
+    }
+
     #defineSpecificDatatype(model: ValueModel) {
         // Special case for status codes.  "Status code" in door lock cluster seems to be the global status codes
         // instead of the local one.  So always reference the global one until we see something different
         if (model.isGlobal && model.name === status.name && this.file.scope.owner !== model) {
-            let as;
-            if (this.owner?.get(DatatypeModel, "Status")) {
-                // Status would conflict with local type so import as an alias
-                as = "GlobalStatus";
-            }
-
-            this.importTlv("globals/Status", "Status", as);
-            return as ?? "Status";
+            return this.#importGlobalStatus();
         }
 
         // If the model is not local, import rather than define

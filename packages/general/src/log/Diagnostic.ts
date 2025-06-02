@@ -418,17 +418,24 @@ export namespace Diagnostic {
     export function messageAndStackFor(
         error: any,
         parentStack?: string[],
-    ): { message: string; stack?: unknown[]; stackLines?: string[] } {
+    ): { message: string; id?: string; stack?: unknown[]; stackLines?: string[] } {
         let message: string | undefined;
         let rawStack: string | undefined;
+        let id: string | undefined;
         if (error !== undefined && error !== null) {
             if (typeof error === "string" || typeof error === "number") {
                 return { message: `${error}` };
             }
+
             if ("message" in error) {
                 ({ message, stack: rawStack } = error);
             } else if (error.message) {
                 message = typeof error.message === "string" ? message : error.toString();
+            }
+
+            id = error.id;
+            if (typeof id !== "string") {
+                id = undefined;
             }
         }
         if (message === undefined || message === null || message === "") {
@@ -442,7 +449,7 @@ export namespace Diagnostic {
             }
         }
         if (!rawStack) {
-            return { message };
+            return { message, id };
         }
 
         rawStack = rawStack.toString();
@@ -535,7 +542,7 @@ export namespace Diagnostic {
             stack.push(Diagnostic.weak("(see parent frames)"));
         }
 
-        return { message, stack, stackLines };
+        return { message, id, stack, stackLines };
     }
 }
 
@@ -544,13 +551,23 @@ function formatError(error: any, options: { messagePrefix?: string; parentStack?
 
     const messageAndStack = Diagnostic.messageAndStackFor(error, parentStack);
     let { stack, stackLines } = messageAndStack;
+    const { id } = messageAndStack;
 
     let { message } = messageAndStack;
-    if (messagePrefix) {
-        message = `${messagePrefix} ${message}`;
-    }
 
-    message = Diagnostic.upgrade(message, Diagnostic(Diagnostic.Presentation.Error, message));
+    const messageDiagnostic = Array<unknown>();
+    if (messagePrefix) {
+        messageDiagnostic.push(messagePrefix, " ");
+    }
+    if (id) {
+        messageDiagnostic.push("[", Diagnostic.strong(id), "] ");
+    }
+    messageDiagnostic.push(message);
+
+    message = Diagnostic.upgrade(
+        message,
+        Diagnostic(Diagnostic.Presentation.Error, Diagnostic.squash(...messageDiagnostic)),
+    );
 
     let cause, errors;
     if (typeof error === "object" && error !== null) {

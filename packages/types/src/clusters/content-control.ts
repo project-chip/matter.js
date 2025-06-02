@@ -18,6 +18,8 @@ import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status } from "../globals/Status.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -632,6 +634,156 @@ export namespace ContentControl {
          * Provided time window doesn’t exist in BlockContentTimeWindow attribute.
          */
         TimeWindowNotExist = 11
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.InvalidPinCode}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     */
+    export class InvalidPinCodeError extends StatusResponseError {
+        constructor(
+            message = "Provided PIN Code does not match the current PIN code",
+            code = Status.Failure,
+            clusterCode = StatusCode.InvalidPinCode
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.InvalidRating}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     */
+    export class InvalidRatingError extends StatusResponseError {
+        constructor(
+            message = "Provided Rating is out of scope of the corresponding Rating list",
+            code = Status.Failure,
+            clusterCode = StatusCode.InvalidRating
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.InvalidChannel}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     */
+    export class InvalidChannelError extends StatusResponseError {
+        constructor(
+            message = "Provided Channel(s) is invalid",
+            code = Status.Failure,
+            clusterCode = StatusCode.InvalidChannel
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.ChannelAlreadyExist}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     */
+    export class ChannelAlreadyExistError extends StatusResponseError {
+        constructor(
+            message = "Provided Channel(s) already exists",
+            code = Status.Failure,
+            clusterCode = StatusCode.ChannelAlreadyExist
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.ChannelNotExist}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     */
+    export class ChannelNotExistError extends StatusResponseError {
+        constructor(
+            message = "Provided Channel(s) doesn’t exist in BlockChannelList attribute",
+            code = Status.Failure,
+            clusterCode = StatusCode.ChannelNotExist
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.UnidentifiableApplication}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     */
+    export class UnidentifiableApplicationError extends StatusResponseError {
+        constructor(
+            message = "Provided Application(s) is not identified",
+            code = Status.Failure,
+            clusterCode = StatusCode.UnidentifiableApplication
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.ApplicationAlreadyExist}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     */
+    export class ApplicationAlreadyExistError extends StatusResponseError {
+        constructor(
+            message = "Provided Application(s) already exists",
+            code = Status.Failure,
+            clusterCode = StatusCode.ApplicationAlreadyExist
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.ApplicationNotExist}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     */
+    export class ApplicationNotExistError extends StatusResponseError {
+        constructor(
+            message = "Provided Application(s) doesn’t exist in BlockApplicationList attribute",
+            code = Status.Failure,
+            clusterCode = StatusCode.ApplicationNotExist
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.TimeWindowAlreadyExist}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     */
+    export class TimeWindowAlreadyExistError extends StatusResponseError {
+        constructor(
+            message = "Provided time Window already exists in BlockContentTimeWindow attribute",
+            code = Status.Failure,
+            clusterCode = StatusCode.TimeWindowAlreadyExist
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.TimeWindowNotExist}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 6.13.6.1
+     */
+    export class TimeWindowNotExistError extends StatusResponseError {
+        constructor(
+            message = "Provided time window doesn’t exist in BlockContentTimeWindow attribute",
+            code = Status.Failure,
+            clusterCode = StatusCode.TimeWindowNotExist
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

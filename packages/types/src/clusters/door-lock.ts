@@ -32,6 +32,7 @@ import { Status } from "../globals/Status.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvNodeId } from "../datatype/NodeId.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
 import { ClusterType } from "../cluster/ClusterType.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
@@ -3106,6 +3107,36 @@ export namespace DoorLock {
          * Entry would replace an occupied slot.
          */
         Occupied = 3
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.Duplicate}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 5.2.7.1
+     */
+    export class DuplicateError extends StatusResponseError {
+        constructor(
+            message = "Entry would cause a duplicate credential/ID",
+            code = Status.Failure,
+            clusterCode = StatusCode.Duplicate
+        ) {
+            super(message, code, clusterCode);
+        }
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.Occupied}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 5.2.7.1
+     */
+    export class OccupiedError extends StatusResponseError {
+        constructor(
+            message = "Entry would replace an occupied slot",
+            code = Status.Failure,
+            clusterCode = StatusCode.Occupied
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

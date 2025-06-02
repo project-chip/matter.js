@@ -1241,7 +1241,7 @@ describe("InteractionProtocol", () => {
                     ILLEGAL_MASS_WRITE_REQUEST,
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith("(128) Wildcard path write must specify a clusterId and attributeId");
+            ).rejectedWith("Wildcard path write must specify a clusterId and attributeId");
         });
 
         it("performs mass write with wildcard endpoint", async () => {
@@ -1268,7 +1268,7 @@ describe("InteractionProtocol", () => {
                     interaction.BarelyMockedMessage,
                 ),
             ).rejectedWith(
-                "(201) timedRequest flag of write interaction (true) mismatch with expected timed interaction (false).",
+                "timedRequest flag of write interaction (true) mismatch with expected timed interaction (false).",
             );
 
             expect(timedInteractionCleared).equals(false);
@@ -1283,7 +1283,7 @@ describe("InteractionProtocol", () => {
             await expect(
                 interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, interaction.BarelyMockedMessage),
             ).rejectedWith(
-                "(201) timedRequest flag of write interaction (false) mismatch with expected timed interaction (true).",
+                "timedRequest flag of write interaction (false) mismatch with expected timed interaction (true).",
             );
 
             expect(timedInteractionCleared).equals(false);
@@ -1337,7 +1337,7 @@ describe("InteractionProtocol", () => {
                     { ...WRITE_REQUEST, timedRequest: true },
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith("(148) Timed request window expired. Decline write request.");
+            ).rejectedWith("Timed request window expired. Decline write request.");
 
             expect(timedInteractionCleared).equals(true);
             expect(node.state.basicInformation.nodeLabel).equals("");
@@ -1354,9 +1354,7 @@ describe("InteractionProtocol", () => {
                     { ...WRITE_REQUEST, timedRequest: true },
                     interaction.BarelyMockedGroupMessage,
                 ),
-            ).rejectedWith(
-                "(128) Write requests are only allowed on unicast sessions when a timed interaction is running.",
-            );
+            ).rejectedWith("Write requests are only allowed on unicast sessions when a timed interaction is running.");
 
             expect(timedInteractionCleared).equals(true);
             expect(node.state.basicInformation.nodeLabel).equals("");
@@ -1487,7 +1485,7 @@ describe("InteractionProtocol", () => {
                     new InteractionServerMessenger(exchange),
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith("(128) Wildcard path must not be used with multiple invokes");
+            ).rejectedWith("Wildcard path must not be used with multiple invokes");
             expect(result).equals(undefined);
         });
 
@@ -1517,7 +1515,7 @@ describe("InteractionProtocol", () => {
                     new InteractionServerMessenger(exchange),
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith("(128) Only 1 invoke requests are supported in one message. This message contains 4");
+            ).rejectedWith("Only 1 invoke requests are supported in one message. This message contains 4");
 
             //expect(result, INVOKE_COMMAND_RESPONSE_MULTI); // TODO Add again later when we support it officially
             expect(triggeredOn).equals(false);
@@ -1627,7 +1625,7 @@ describe("InteractionProtocol", () => {
                     new InteractionServerMessenger(exchange),
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith("(128) Duplicate concrete command path RootNode:0x0.OnOff:0x6.on:0x1 on batch invoke");
+            ).rejectedWith("Duplicate concrete command path RootNode:0x0.OnOff:0x6.on:0x1 on batch invoke");
 
             expect(result).equals(undefined);
         });
@@ -1680,7 +1678,7 @@ describe("InteractionProtocol", () => {
                     interaction.BarelyMockedMessage,
                 ),
             ).rejectedWith(
-                "(201) timedRequest flag of invoke interaction (true) mismatch with expected timed interaction (false).",
+                "timedRequest flag of invoke interaction (true) mismatch with expected timed interaction (false).",
             );
 
             expect(timedInteractionCleared).equals(false);
@@ -1713,7 +1711,7 @@ describe("InteractionProtocol", () => {
                     interaction.BarelyMockedMessage,
                 ),
             ).rejectedWith(
-                "(201) timedRequest flag of invoke interaction (false) mismatch with expected timed interaction (true).",
+                "timedRequest flag of invoke interaction (false) mismatch with expected timed interaction (true).",
             );
 
             expect(timedInteractionCleared).equals(false);
@@ -1743,7 +1741,7 @@ describe("InteractionProtocol", () => {
                     new InteractionServerMessenger(exchange),
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith("(148) Timed request window expired. Decline invoke request.");
+            ).rejectedWith("Timed request window expired. Decline invoke request.");
 
             expect(timedInteractionCleared).equals(true);
             expect(onOffState).equals(false);
@@ -1772,9 +1770,7 @@ describe("InteractionProtocol", () => {
                     new InteractionServerMessenger(exchange),
                     interaction.BarelyMockedGroupMessage,
                 ),
-            ).rejectedWith(
-                "(128) Invoke requests are only allowed on unicast sessions when a timed interaction is running.",
-            );
+            ).rejectedWith("Invoke requests are only allowed on unicast sessions when a timed interaction is running.");
 
             expect(timedInteractionCleared).equals(true);
             expect(onOffState).equals(false);

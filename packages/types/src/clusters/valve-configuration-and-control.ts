@@ -24,6 +24,8 @@ import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvOptionalField, TlvObject, TlvField } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { StatusResponseError } from "../common/StatusResponseError.js";
+import { Status } from "../globals/Status.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -200,6 +202,21 @@ export namespace ValveConfigurationAndControl {
          * The requested action could not be performed due to a fault on the valve.
          */
         FailureDueToFault = 2
+    }
+
+    /**
+     * Thrown for cluster status code {@link StatusCode.FailureDueToFault}.
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6.6.1
+     */
+    export class FailureDueToFaultError extends StatusResponseError {
+        constructor(
+            message = "The requested action could not be performed due to a fault on the valve",
+            code = Status.Failure,
+            clusterCode = StatusCode.FailureDueToFault
+        ) {
+            super(message, code, clusterCode);
+        }
     }
 
     /**

@@ -6,4 +6,5 @@
 
 export * from "./ProductDescription.js";
 export * from "./StatusCode.js";
+export * from "./StatusResponseError.js";
 export * from "./ValidationError.js";
