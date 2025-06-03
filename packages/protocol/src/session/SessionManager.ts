@@ -457,7 +457,7 @@ export class SessionManager {
                 fabric,
                 keySetId,
                 operationalGroupKey: key,
-                sourceNodeId: fabric.nodeId, // We are sender, so the source node ID is the fabric's node ID
+                peerNodeId: address.nodeId, // The peer node ID is the group node ID
             });
         }
         return session;
@@ -488,7 +488,7 @@ export class SessionManager {
                 fabric,
                 keySetId,
                 operationalGroupKey: key,
-                sourceNodeId,
+                peerNodeId: sourceNodeId,
             });
         }
 

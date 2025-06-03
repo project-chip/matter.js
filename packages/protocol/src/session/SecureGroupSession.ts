@@ -38,10 +38,10 @@ export class SecureGroupSession extends SecureSession {
         id: number; // Records the Group Session ID derived from the Operational Group Key used to encrypt the message.
         fabric: Fabric;
         keySetId: number; // The Group Key Set ID that was used to encrypt the incoming group message.
-        sourceNodeId: NodeId; //The Source Node ID enclosed by the sender of a groupcast message, Together, Fabric Index, Group ID and Source Node ID comprise a unique identifier that upper layers may use to understand the source and destination of groupcast messages.
+        peerNodeId: NodeId; //The Target Group Node Id
         operationalGroupKey: Uint8Array; // The Operational Group Key that was used to encrypt the incoming group message.
     }) {
-        const { manager, fabric, operationalGroupKey, id, sourceNodeId, keySetId } = args;
+        const { manager, fabric, operationalGroupKey, id, peerNodeId, keySetId } = args;
         super({
             ...args,
             setActiveTimestamp: false, // We always set the active timestamp for Secure sessions TODO Check
@@ -49,7 +49,7 @@ export class SecureGroupSession extends SecureSession {
         });
         this.#id = id;
         this.#fabric = fabric;
-        this.#peerNodeId = sourceNodeId;
+        this.#peerNodeId = peerNodeId;
         this.keySetId = keySetId;
         this.#operationalGroupKey = operationalGroupKey;
 
