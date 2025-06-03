@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError } from "#MatterError.js";
 import { Observable } from "./Observable.js";
 
 /**
@@ -136,13 +137,8 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
         this.#added?.emit(created);
     }
 
-    /**
-     * Retrieve entry with field {@link field} set to {@link value}.
-     *
-     * This assumes {@link field} is
-     */
     get<F extends keyof T>(field: F, value: T[F]) {
-        return this.#indexOf(field)?.get(value);
+        return this.#indexOf(field).get(value);
     }
 
     #indexOf<F extends keyof T>(field: F) {
@@ -161,9 +157,14 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
             }
             this.#indices[field] = index;
         }
-        return index;
+        return index!; // Need "!" due to (apparent) TS bug
     }
 
+    /**
+     * Obtain key/value map using specific field as key.
+     *
+     * Note we use {@link This} to constrain usage to sets where {@link T} === {@link AddT} as required by {@link Map}.
+     */
     mapOf<This extends BasicSet<T, T>, F extends keyof T>(this: This, field: F): Map<T[F], T> {
         if (!this.#maps) {
             this.#maps = {};
@@ -285,7 +286,15 @@ export class MapOfIndexedSet<T, S extends ImmutableSet<T> & MutableSet<T> & Inde
     }
 
     set(key: T[K], value: T): this {
+        if (value[this.#key] !== key) {
+            throw new MapOfIndexedSet.KeyValueMismatchError(
+                `Cannot set key "${key}" because value property ${String(this.#key)} is "${value[this.#key]}"`,
+            );
+        }
         if (this.has(key)) {
+            if (this.get(key) === value) {
+                return this;
+            }
             this.#set.delete((this.#index ? this.#index.get(key) : this.#set.get(this.#key, key)) as T);
         }
         this.#set.add(value);
@@ -327,4 +336,8 @@ export class MapOfIndexedSet<T, S extends ImmutableSet<T> & MutableSet<T> & Inde
     }
 
     [Symbol.toStringTag] = "Map";
+}
+
+export namespace MapOfIndexedSet {
+    export class KeyValueMismatchError extends ImplementationError {}
 }
