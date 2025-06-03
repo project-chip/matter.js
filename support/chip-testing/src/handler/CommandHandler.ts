@@ -112,6 +112,7 @@ export type InvokeRequest = {
     commandId: CommandId;
     data: unknown;
     timedInteractionTimeoutMs?: number;
+    suppressResponse?: boolean;
 };
 export type InvokeResponse = {
     clusterId: number;

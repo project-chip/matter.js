@@ -321,7 +321,15 @@ export class LegacyControllerCommandHandler extends CommandHandler {
     }
 
     async handleInvoke(data: InvokeRequest): Promise<any> {
-        const { nodeId, endpointId, clusterId, commandId, data: commandData, timedInteractionTimeoutMs } = data;
+        const {
+            nodeId,
+            endpointId,
+            clusterId,
+            commandId,
+            data: commandData,
+            timedInteractionTimeoutMs,
+            suppressResponse,
+        } = data;
         let client: InteractionClient;
         if (this.#paseChannel) {
             logger.info("Force reuse of PASE connection", this.#paseChannel.name);
@@ -349,6 +357,14 @@ export class LegacyControllerCommandHandler extends CommandHandler {
         }
         if (!clusterCommand) {
             throw new Error("Command for Cluster not found");
+        }
+        if (suppressResponse) {
+            return await client.invokeWithSuppressedResponse<Command<any, any, any>>({
+                endpointId,
+                clusterId,
+                command: clusterCommand,
+                request: commandData,
+            });
         }
         return await client.invoke<Command<any, any, any>>({
             endpointId,

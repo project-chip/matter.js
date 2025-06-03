@@ -1196,10 +1196,11 @@ export class ChipToolWebSocketHandler {
         const commandName = camelize(command);
         const commandModel = clusterData.commands[commandName.toLowerCase()];
         const nodeId = NodeId(parseNumber(destinationId));
+        const isGroupNode = NodeId.isGroupNodeId(nodeId);
         try {
             const result = await handler.handleInvoke({
                 nodeId,
-                endpointId: NodeId.isGroupNodeId(nodeId) ? undefined : EndpointNumber(parseInt(endpointId)),
+                endpointId: isGroupNode ? undefined : EndpointNumber(parseInt(endpointId)),
                 clusterId: clusterData.clusterId,
                 commandId: CommandId(commandModel.id),
                 data: convertWebsocketDataToMatter(
@@ -1208,6 +1209,7 @@ export class ChipToolWebSocketHandler {
                 ),
                 timedInteractionTimeoutMs:
                     timedInteractionTimeoutMs !== undefined ? parseInt(timedInteractionTimeoutMs) : undefined,
+                suppressResponse: isGroupNode,
             });
             if (result && commandModel.responseModel) {
                 return {
