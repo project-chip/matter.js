@@ -143,6 +143,7 @@ export class MatterController {
                     adminFabricLabel,
                     sessionClosedCallback,
                 });
+                fabric.storage = fabricStorage;
             } else {
                 if (rootFabric !== undefined) {
                     throw new MatterError("Fabric CA certificate is not in sync with CA.");
@@ -170,6 +171,7 @@ export class MatterController {
                 await ca.generateNoc(fabricBuilder.publicKey, adminFabricId, controllerNodeId, caseAuthenticatedTags),
             );
             const fabric = await fabricBuilder.build(adminFabricIndex);
+            fabric.storage = fabricStorage;
 
             controller = new MatterController({
                 controllerStore,
