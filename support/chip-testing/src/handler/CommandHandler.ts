@@ -58,7 +58,7 @@ export type SubscribeAttributeResponse = {
 
 export type WriteAttributeRequest = {
     nodeId: NodeId;
-    endpointId: EndpointNumber;
+    endpointId?: EndpointNumber;
     clusterId: ClusterId;
     attributeName: string;
     value: unknown;
@@ -66,7 +66,7 @@ export type WriteAttributeRequest = {
 
 export type WriteAttributeByIdRequest = {
     nodeId: NodeId;
-    endpointId: EndpointNumber;
+    endpointId?: EndpointNumber;
     clusterId: ClusterId;
     attributeId: AttributeId;
     value: unknown;
@@ -107,7 +107,7 @@ export type SubscribeEventResponse = {
 
 export type InvokeRequest = {
     nodeId: NodeId;
-    endpointId: EndpointNumber;
+    endpointId?: EndpointNumber;
     clusterId: ClusterId;
     commandId: CommandId;
     data: unknown;
