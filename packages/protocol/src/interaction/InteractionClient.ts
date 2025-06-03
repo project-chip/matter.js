@@ -1157,10 +1157,6 @@ export class InteractionClient {
         /** Skip request data validation. Use this only when you know that your data is correct and validation would return an error. */
         skipValidation?: boolean;
     }): Promise<ResponseType<C>> {
-        if (this.isGroupAddress) {
-            throw new ImplementationError("Invoking a concrete command on a group address is not supported.");
-        }
-
         const { executeQueued } = options;
 
         const {
@@ -1175,6 +1171,15 @@ export class InteractionClient {
         let { request } = options;
         const timedRequest =
             (timed && !skipValidation) || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+
+        if (this.isGroupAddress) {
+            if (endpointId !== undefined) {
+                throw new ImplementationError("Invoking a concrete command on a group address is not supported.");
+            }
+            if (timedRequest) {
+                throw new ImplementationError("Timed requests are not supported for group address invokes.");
+            }
+        }
 
         if (requestSchema instanceof ObjectSchema) {
             if (request === undefined) {
