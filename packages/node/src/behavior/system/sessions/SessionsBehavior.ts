@@ -6,7 +6,7 @@
 
 import { EventEmitter, Observable } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
-import { ExposedFabricInformation, SecureUnicastSession, SessionManager, Subscription } from "#protocol";
+import { ExposedFabricInformation, NodeSession, SessionManager, Subscription } from "#protocol";
 import { NodeId } from "#types";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { Behavior } from "../../Behavior.js";
@@ -28,7 +28,7 @@ export class SessionsBehavior extends Behavior {
         this.reactTo((this.endpoint.lifecycle as NodeLifecycle).offline, this.#enterOfflineMode);
     }
 
-    #convertToExposedSession(session: SecureUnicastSession): SessionsBehavior.Session {
+    #convertToExposedSession(session: NodeSession): SessionsBehavior.Session {
         return {
             name: session.name,
             nodeId: session.nodeId,
@@ -49,7 +49,7 @@ export class SessionsBehavior extends Behavior {
         this.reactTo(sessions.subscriptionsChanged, this.#subscriptionsChanged, { lock: true });
     }
 
-    #sessionOpened(session: SecureUnicastSession) {
+    #sessionOpened(session: NodeSession) {
         if (session.isPase) {
             return;
         }
@@ -58,7 +58,7 @@ export class SessionsBehavior extends Behavior {
         this.events.opened.emit(exposedSession);
     }
 
-    #sessionClosed(session: SecureUnicastSession) {
+    #sessionClosed(session: NodeSession) {
         if (!(session.id in this.state.sessions)) {
             return;
         }
@@ -67,7 +67,7 @@ export class SessionsBehavior extends Behavior {
         this.events.closed.emit(this.#convertToExposedSession(session));
     }
 
-    #subscriptionsChanged(session: SecureUnicastSession, subscription: Subscription) {
+    #subscriptionsChanged(session: NodeSession, subscription: Subscription) {
         if (session.isPase) {
             return;
         }

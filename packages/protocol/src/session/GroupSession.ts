@@ -3,6 +3,7 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { Subject } from "#action/index.js";
 import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet, SessionType } from "#codec/index.js";
 import { Fabric } from "#fabric/Fabric.js";
 import { FabricManager } from "#fabric/FabricManager.js";
@@ -10,20 +11,21 @@ import {
     Bytes,
     Crypto,
     CryptoDecryptError,
+    ImplementationError,
     InternalError,
     Logger,
     MatterFlowError,
     UnexpectedDataError,
 } from "#general";
 import type { SessionManager } from "#session/SessionManager.js";
-import { NodeId } from "#types";
+import { GroupId, NodeId } from "#types";
 import { SecureSession } from "./SecureSession.js";
 import { Session } from "./Session.js";
 
 const logger = Logger.get("SecureGroupSession");
 
 /** Secure Group session instance */
-export class SecureGroupSession extends SecureSession {
+export class GroupSession extends SecureSession {
     readonly #id: number;
     readonly #fabric: Fabric;
     readonly #peerNodeId: NodeId;
@@ -91,13 +93,25 @@ export class SecureGroupSession extends SecureSession {
         return this.#fabric;
     }
 
+    subjectFor(message?: Message): Subject {
+        if (message === undefined || message.packetHeader.destGroupId === undefined) {
+            throw new ImplementationError("GroupSession requires a message with destGroupId");
+        }
+        const id = GroupId(message.packetHeader.destGroupId);
+        return Subject.Group({
+            id,
+            hasValidMapping: this.fabric.groups.groupKeyIdMap.get(id) === this.keySetId,
+            endpoints: this.fabric.groups.groupEndpoints.get(id) ?? [],
+        });
+    }
+
     override notifyActivity(_messageReceived: boolean) {
         // Group sessions do not have a specific activity notification, so we do nothing here
     }
 
     override updateMessageCounter(messageCounter: number, sourceNodeId: NodeId, operationalKey: Uint8Array) {
         if (sourceNodeId === undefined || operationalKey === undefined) {
-            throw new InternalError("Source Node ID is required for SecureGroupSession updateMessageCounter.");
+            throw new InternalError("Source Node ID is required for GroupSession updateMessageCounter.");
         }
         const receptionState = this.#fabric.groups.receptionStateFor(sourceNodeId, operationalKey);
         receptionState.updateMessageCounter(messageCounter);
@@ -108,7 +122,7 @@ export class SecureGroupSession extends SecureSession {
         const { header, applicationPayload } = MessageCodec.encodePayload(message);
         if (header.destGroupId === undefined) {
             // Just to be sure
-            throw new UnexpectedDataError("Group ID is required for SecureGroupSession encode.");
+            throw new UnexpectedDataError("Group ID is required for GroupSession encode.");
         }
 
         const headerBytes = MessageCodec.encodePacketHeader(message.packetHeader);
@@ -122,7 +136,7 @@ export class SecureGroupSession extends SecureSession {
     }
 
     decode(): DecodedMessage {
-        throw new InternalError("SecureGroupSession does not support decode on instance.");
+        throw new InternalError("GroupSession does not support decode on instance.");
     }
 
     static decode(
@@ -145,7 +159,7 @@ export class SecureGroupSession extends SecureSession {
         const sourceNodeId = header.sourceNodeId;
         if (sourceNodeId === undefined) {
             // Already checked on decoding, but validate twice
-            throw new UnexpectedDataError("Source Node ID is required for SecureGroupSession decode.");
+            throw new UnexpectedDataError("Source Node ID is required for GroupSession decode.");
         }
         const nonce = Session.generateNonce(header.securityFlags, header.messageId, sourceNodeId);
         const sessionId = header.sessionId;
@@ -201,6 +215,14 @@ export class SecureGroupSession extends SecureSession {
     }
 }
 
-export function isSecureGroupSession(session?: Session): session is SecureGroupSession {
-    return session?.type === SessionType.Group;
+export namespace GroupSession {
+    export function assert(session?: Session, errorText?: string): asserts session is GroupSession {
+        if (!is(session)) {
+            throw new MatterFlowError(errorText ?? "Insecure session in secure context");
+        }
+    }
+
+    export function is(session?: Session): session is GroupSession {
+        return session?.type === SessionType.Group;
+    }
 }

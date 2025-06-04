@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommandInvokeHandler, Invoke, InvokeResult } from "#action/index.js";
+import { CommandInvokeHandler, Invoke, InvokeResult, Subject } from "#action/index.js";
 import { InteractionSession } from "#action/Interactable.js";
 import { CommandTypeProtocol, EndpointProtocol, NodeProtocol } from "#action/protocols.js";
 import { AccessControl } from "#action/server/AccessControl.js";
@@ -75,7 +75,7 @@ export class CommandInvokeResponse<
                 }
                 this.#processWildcard(path, commandRef, commandFields);
             } else {
-                if (this.session.isGroupSubject) {
+                if (Subject.isGroup(this.session.subject)) {
                     // Group command cannot be concrete paths
                     throw new StatusResponseError("Group commands connot be concrete paths", StatusCode.InvalidAction);
                 }
@@ -122,7 +122,7 @@ export class CommandInvokeResponse<
 
         // Formally, according to spec, we should check for node mismatch here but commandPath do not have a nodeId
 
-        const isGroupPath = this.session.isGroupSubject;
+        const isGroupPath = Subject.isGroup(this.session.subject);
         if (isGroupPath && endpointId !== undefined) {
             throw new StatusResponseError(
                 "Illegal command invoke with group ID and endpoint ID",
@@ -139,11 +139,11 @@ export class CommandInvokeResponse<
 
         let groupEndpoints: EndpointNumber[] | undefined;
         if (isGroupPath) {
-            if (this.session.groupEndpoints?.length) {
-                groupEndpoints = this.session.groupEndpoints;
+            if (this.session.subject.endpoints.length) {
+                groupEndpoints = this.session.subject.endpoints;
             } else {
                 // No endpoints mapped to this group, so we cannot invoke anything
-                logger.debug(`No endpoints mapped to group ${this.session.subjects?.[0]}, skipping wildcard invoke`);
+                logger.debug(`No endpoints mapped to group ${this.session.subject.id}, skipping wildcard invoke`);
                 return;
             }
         }

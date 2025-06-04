@@ -3,6 +3,7 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { Subject } from "#action/server/Subject.js";
 import { AccessControl } from "#clusters/access-control";
 import { MatterFlowError } from "#general";
 import { AccessLevel } from "#model";
@@ -283,34 +284,37 @@ export class AccessControlManager {
             fabricIndex: FabricIndex.NO_FABRIC,
         };
 
-        const { subjects } = session;
-        if (subjects === undefined) {
+        const { subject } = session;
+        if (subject === undefined) {
             throw new MatterFlowError("ACL error: ACL checks require an authorized subject");
         }
-        if (subjects.length === 1 && subjects[0] === NodeId.UNSPECIFIED_NODE_ID) {
+        if (subject.id === NodeId.UNSPECIFIED_NODE_ID) {
             // Pase Session
             isd.authMode = AccessControl.AccessControlEntryAuthMode.Pase;
             isd.isCommissioning = true; // Or how "commissioning channel" is defined?
-            isd.subjects.push(...subjects); // Default Commissioning Passcode ID
+            isd.subjects.push(NodeId.UNSPECIFIED_NODE_ID); // Default Commissioning Passcode ID
             if (fabricIndex !== undefined && fabricIndex !== FabricIndex.NO_FABRIC) {
                 isd.fabricIndex = fabricIndex;
             }
-        } else if (session.isGroupSubject) {
+        } else if (Subject.isGroup(subject)) {
             if (fabricIndex === undefined || fabricIndex === FabricIndex.NO_FABRIC) {
                 throw new MatterFlowError("ACL error: fabric needs to be associated for group sessions");
             }
-            if (session.hasValidGroupMapping) {
+            if (subject.hasValidMapping) {
                 isd.authMode = AccessControl.AccessControlEntryAuthMode.Group;
-                isd.subjects.push(...subjects);
+                isd.subjects.push(subject.id);
                 isd.fabricIndex = fabricIndex;
             }
-        } else {
+        } else if (Subject.isNode(subject)) {
             // CASE session
             if (fabricIndex === undefined || fabricIndex === FabricIndex.NO_FABRIC) {
                 throw new MatterFlowError("ACL error: Case session must be associated with a fabric");
             }
             isd.authMode = AccessControl.AccessControlEntryAuthMode.Case;
-            isd.subjects.push(...subjects);
+            isd.subjects.push(subject.id);
+            if (subject.catSubjects !== undefined) {
+                isd.subjects.push(...subject.catSubjects);
+            }
             isd.fabricIndex = fabricIndex;
         }
 

@@ -18,7 +18,7 @@ import {
     Timer,
     createPromise,
 } from "#general";
-import { isSecureGroupSession } from "#session/index.js";
+import { GroupSession } from "#session/index.js";
 import {
     GroupId,
     NodeId,
@@ -426,8 +426,8 @@ export class MessageExchange {
             };
         } else if (this.session.type === SessionType.Group) {
             const session = this.session;
-            if (!isSecureGroupSession(session)) {
-                throw new InternalError("Session is not a SecureGroupSession, but session type is Group.");
+            if (!GroupSession.is(session)) {
+                throw new InternalError("Session is not a GroupSession, but session type is Group.");
             }
             const destGroupId = GroupId.fromNodeId(this.#peerNodeId!); // TODO !!! Where get from?
             if (destGroupId === 0) {

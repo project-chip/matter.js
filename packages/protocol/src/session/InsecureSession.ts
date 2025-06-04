@@ -10,7 +10,7 @@ import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet, SessionTy
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateUnencryptedWithRollover } from "../protocol/MessageReceptionState.js";
-import { NoAssociatedFabricError } from "./SecureSession.js";
+import { NoAssociatedFabricError } from "./NodeSession.js";
 import { Session, SessionParameterOptions } from "./Session.js";
 import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 

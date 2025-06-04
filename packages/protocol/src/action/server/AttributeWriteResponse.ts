@@ -23,6 +23,7 @@ import {
     TlvSchema,
     TlvStream,
 } from "#types";
+import { Subject } from "./Subject.js";
 
 const logger = Logger.get("AttributeWriteResponse");
 
@@ -61,7 +62,7 @@ export class AttributeWriteResponse<
                     writeResponses.push(...responses);
                 }
             } else {
-                if (this.session.isGroupSubject) {
+                if (Subject.isGroup(this.session.subject)) {
                     // Group command cannot be concrete paths
                     throw new StatusResponseError("Group writes can not be concrete paths", StatusCode.InvalidAction);
                 }
@@ -111,17 +112,15 @@ export class AttributeWriteResponse<
             return;
         }
 
-        const isGroupPath = this.session.isGroupSubject;
+        const isGroupPath = Subject.isGroup(this.session.subject);
         if (endpointId === undefined) {
             let groupEndpoints: EndpointNumber[] | undefined;
             if (isGroupPath) {
-                if (this.session.groupEndpoints?.length) {
-                    groupEndpoints = this.session.groupEndpoints;
+                if (this.session.subject.endpoints?.length) {
+                    groupEndpoints = this.session.subject.endpoints;
                 } else {
                     // No endpoints mapped to this group, so we cannot write anything
-                    logger.debug(
-                        `No endpoints mapped to group ${this.session.subjects?.[0]}, skipping wildcard invoke`,
-                    );
+                    logger.debug(`No endpoints mapped to group ${this.session.subject.id}, skipping wildcard invoke`);
                     return;
                 }
             }

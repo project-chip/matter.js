@@ -62,26 +62,26 @@ describe("IP", () => {
             expect(result).equal("fe80::e777:4f5e:c61e:7314");
         });
 
-        it("konvertiert eine reine Null-Adresse (::)", () => {
+        it("converts an address with all zeros (::)", () => {
             const result = ipv6BytesToString(Uint8Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
             expect(result).equal("::");
         });
 
-        it("konvertiert eine Adresse mit führenden Nullen", () => {
+        it("converts an address with leading zeros", () => {
             const result = ipv6BytesToString(Uint8Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
             expect(result).equal("::1");
         });
 
-        it("konvertiert eine Adresse mit abschließenden Nullen", () => {
+        it("converts an address with trailing zeros", () => {
             const result = ipv6BytesToString(Uint8Array.of(0xff, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
             expect(result).equal("ffff::");
         });
 
-        it("wirft einen Fehler bei falscher Länge", () => {
+        it("throws an error on wrong length", () => {
             expect(() => ipv6BytesToString(Uint8Array.of(0, 1, 2))).to.throw("IPv6 address must be 16 bytes");
         });
 
-        it("konvertiert eine Adresse ohne komprimierbare Nullen", () => {
+        it("converts an address without compressed zeros", () => {
             const result = ipv6BytesToString(
                 Uint8Array.of(
                     0x20,

@@ -10,8 +10,8 @@ import {
     MATTER_MESSAGE_OVERHEAD,
     Message,
     MessageExchange,
+    NodeSession,
     SecureSession,
-    SecureUnicastSession,
     SessionType,
 } from "#protocol";
 import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
@@ -111,7 +111,7 @@ export async function createDummyMessageExchange(
     clearTimedInteractionCallback?: () => void,
     closeCallback?: () => void,
 ) {
-    const session = await SecureUnicastSession.create({
+    const session = await NodeSession.create({
         id: 1,
         fabric: testFabric,
         peerNodeId: NodeId(BigInt(1)),

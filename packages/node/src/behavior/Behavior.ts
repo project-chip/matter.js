@@ -16,7 +16,7 @@ import {
     Transaction,
 } from "#general";
 import { Schema } from "#model";
-import { assertSecureSession } from "#protocol";
+import { SecureSession } from "#protocol";
 import type { ClusterType } from "#types";
 import { Reactor } from "./Reactor.js";
 import type { BehaviorBacking } from "./internal/BehaviorBacking.js";
@@ -116,7 +116,7 @@ export abstract class Behavior {
         }
 
         // TODO - would a behavior ever need access to an insecure session?
-        assertSecureSession(session);
+        SecureSession.assert(session);
 
         return session;
     }

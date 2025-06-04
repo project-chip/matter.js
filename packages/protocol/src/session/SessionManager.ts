@@ -26,7 +26,7 @@ import {
 import { Subscription } from "#interaction/Subscription.js";
 import { Specification } from "#model";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
-import { SecureGroupSession } from "#session/SecureGroupSession.js";
+import { GroupSession } from "#session/GroupSession.js";
 import { CaseAuthenticatedTag, DEFAULT_MAX_PATHS_PER_INVOKE, FabricId, FabricIndex, GroupId, NodeId } from "#types";
 import { UnexpectedDataError } from "@matter/general";
 import { assertOperationalGroupId } from "@matter/types";
@@ -34,7 +34,8 @@ import { SupportedTransportsSchema } from "../common/Scanner.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { InsecureSession } from "./InsecureSession.js";
-import { isSecureUnicastSession, SecureSession, SecureUnicastSession } from "./SecureSession.js";
+import { NodeSession } from "./NodeSession.js";
+import { SecureSession } from "./SecureSession.js";
 import {
     FALLBACK_DATAMODEL_REVISION,
     FALLBACK_INTERACTIONMODEL_REVISION,
@@ -122,12 +123,12 @@ const ID_SPACE_UPPER_BOUND = 0xffff;
 export class SessionManager {
     readonly #context: SessionManagerContext;
     readonly #insecureSessions = new Map<NodeId, InsecureSession>();
-    readonly #sessions = new BasicSet<SecureUnicastSession>();
-    readonly #groupSessions = new Map<NodeId, BasicSet<SecureGroupSession>>();
+    readonly #sessions = new BasicSet<NodeSession>();
+    readonly #groupSessions = new Map<NodeId, BasicSet<GroupSession>>();
     #nextSessionId = Crypto.getRandomUInt16();
     #resumptionRecords = new PeerAddressMap<ResumptionRecord>();
     readonly #globalUnencryptedMessageCounter = new MessageCounter();
-    readonly #subscriptionsChanged = Observable<[session: SecureUnicastSession, subscription: Subscription]>();
+    readonly #subscriptionsChanged = Observable<[session: NodeSession, subscription: Subscription]>();
     #sessionParameters: SessionParameters;
     readonly #resubmissionStarted = Observable<[session: Session]>();
     readonly #construction: Construction<SessionManager>;
@@ -283,7 +284,7 @@ export class SessionManager {
             peerSessionParameters,
             caseAuthenticatedTags,
         } = args;
-        const session = await SecureUnicastSession.create({
+        const session = await NodeSession.create({
             manager: this,
             id: sessionId,
             fabric,
@@ -352,7 +353,7 @@ export class SessionManager {
     findOldestInactiveSession() {
         this.#construction.assert();
 
-        let oldestSession: SecureUnicastSession | undefined = undefined;
+        let oldestSession: NodeSession | undefined = undefined;
         for (const session of this.#sessions) {
             if (!oldestSession || session.activeTimestamp < oldestSession.activeTimestamp) {
                 oldestSession = session;
@@ -394,8 +395,8 @@ export class SessionManager {
         this.#construction.assert();
 
         return [...this.#sessions].find(
-            session => isSecureUnicastSession(session) && session.isPase && !session.closingAfterExchangeFinished,
-        ) as SecureUnicastSession;
+            session => NodeSession.is(session) && session.isPase && !session.closingAfterExchangeFinished,
+        ) as NodeSession;
     }
 
     getSessionForNode(address: PeerAddress) {
@@ -451,7 +452,7 @@ export class SessionManager {
 
         let session = this.#groupSessions.get(fabric.nodeId)?.get("id", sessionId);
         if (session === undefined) {
-            session = new SecureGroupSession({
+            session = new GroupSession({
                 manager: this,
                 id: sessionId,
                 fabric,
@@ -470,11 +471,11 @@ export class SessionManager {
     groupSessionFromPacket(packet: DecodedPacket, aad: Uint8Array) {
         const groupId = packet.header.destGroupId;
         if (groupId === undefined) {
-            throw new UnexpectedDataError("Group ID is required for SecureGroupSession fromPacket.");
+            throw new UnexpectedDataError("Group ID is required for GroupSession fromPacket.");
         }
         assertOperationalGroupId(GroupId(groupId));
 
-        const { message, key, sessionId, sourceNodeId, keySetId, fabric } = SecureGroupSession.decode(
+        const { message, key, sessionId, sourceNodeId, keySetId, fabric } = GroupSession.decode(
             this.#context.fabrics,
             packet,
             aad,
@@ -482,7 +483,7 @@ export class SessionManager {
 
         let session = this.#groupSessions.get(sourceNodeId)?.get("id", sessionId);
         if (session === undefined) {
-            session = new SecureGroupSession({
+            session = new GroupSession({
                 manager: this,
                 id: sessionId,
                 fabric,
@@ -495,14 +496,14 @@ export class SessionManager {
         return { session, message, key };
     }
 
-    registerGroupSession(session: SecureGroupSession) {
+    registerGroupSession(session: GroupSession) {
         const sourceNodeId = session.peerNodeId;
         const peerSessions = this.#groupSessions.get(sourceNodeId) ?? new BasicSet();
         peerSessions.add(session);
         this.#groupSessions.set(sourceNodeId, peerSessions);
     }
 
-    removeGroupSession(session: SecureGroupSession) {
+    removeGroupSession(session: GroupSession) {
         const sourceNodeId = session.peerNodeId;
         const peerSessions = this.#groupSessions.get(sourceNodeId);
         if (peerSessions) {

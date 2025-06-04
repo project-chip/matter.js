@@ -7,7 +7,7 @@
 import { Endpoint } from "#device/Endpoint.js";
 import { Diagnostic, ImplementationError, InternalError, Logger, MatterError, camelize, isDeepEqual } from "#general";
 import { AccessLevel, AttributeModel, ClusterModel, DatatypeModel, FabricIndex, MatterModel } from "#model";
-import { Fabric, Message, NoAssociatedFabricError, SecureSession, Session, assertSecureSession } from "#protocol";
+import { Fabric, Message, NoAssociatedFabricError, SecureSession, Session } from "#protocol";
 import {
     Attribute,
     AttributeId,
@@ -665,7 +665,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
                     throw new FabricScopeError(`Session is required for fabric scoped attribute ${name}`);
 
                 if (isFabricFiltered === true) {
-                    assertSecureSession(session);
+                    SecureSession.assert(session);
                     return this.getLocalForFabric(session.associatedFabric);
                 } else {
                     const values = new Array<any>();

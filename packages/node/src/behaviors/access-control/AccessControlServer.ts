@@ -28,7 +28,7 @@ import {
     TlvTaggedList,
     TlvType,
 } from "#types";
-import { isSecureUnicastSession } from "@matter/protocol";
+import { NodeSession } from "@matter/protocol";
 import { AccessControlBehavior } from "./AccessControlBehavior.js";
 
 const logger = Logger.get("AccessControlServer");
@@ -219,7 +219,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         if (relevantFabricIndex === undefined || this.events.accessControlEntryChanged === undefined) {
             return;
         }
-        const adminPasscodeId = session === undefined || (isSecureUnicastSession(session) && session.isPase) ? 0 : null;
+        const adminPasscodeId = session === undefined || (NodeSession.is(session) && session.isPase) ? 0 : null;
         const adminNodeId = adminPasscodeId === null ? session?.associatedFabric.rootNodeId : null;
         if (adminNodeId === undefined) {
             // Should never happen
@@ -303,7 +303,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         if (relevantFabricIndex === undefined || this.events.accessControlExtensionChanged === undefined) {
             return;
         }
-        const adminPasscodeId = session === undefined || (isSecureUnicastSession(session) && session.isPase) ? 0 : null;
+        const adminPasscodeId = session === undefined || (NodeSession.is(session) && session.isPase) ? 0 : null;
         const adminNodeId = adminPasscodeId === null ? session?.associatedFabric.rootNodeId : null;
         if (adminNodeId === undefined) {
             // Should never happen

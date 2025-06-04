@@ -10,17 +10,7 @@ import { AdministratorCommissioning } from "#clusters/administrator-commissionin
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { Logger, MatterFlowError, MaybePromise } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
-import {
-    assertSecureSession,
-    assertSecureUnicastSession,
-    DeviceCommissioner,
-    FabricManager,
-    isSecureGroupSession,
-    isSecureUnicastSession,
-    SecureSession,
-    SecureUnicastSession,
-    SessionManager,
-} from "#protocol";
+import { DeviceCommissioner, FabricManager, GroupSession, NodeSession, SecureSession, SessionManager } from "#protocol";
 import { GeneralCommissioningBehavior } from "./GeneralCommissioningBehavior.js";
 import { ServerNodeFailsafeContext } from "./ServerNodeFailsafeContext.js";
 
@@ -55,7 +45,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
     }
 
     /** As required by Commissioning Flows any new PASE session needs to arm the failsafe for 60s. */
-    async #handleAddedPaseSessions(session: SecureUnicastSession) {
+    async #handleAddedPaseSessions(session: NodeSession) {
         if (
             !session.isPase || // Only PASE sessions
             session.fabric !== undefined // That does not have an assigned fabric (can never happen in real usecases)
@@ -70,7 +60,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         { breadcrumb, expiryLengthSeconds }: GeneralCommissioning.ArmFailSafeRequest,
         session: SecureSession,
     ) {
-        assertSecureUnicastSession(session, "armFailSafe can only be called on a secure session");
+        NodeSession.assert(session, "armFailSafe can only be called on a secure session");
         const commissioner = this.env.get(DeviceCommissioner);
 
         try {
@@ -206,7 +196,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
 
     override async commissioningComplete() {
         const session = this.session;
-        if ((isSecureUnicastSession(session) && session.isPase) || isSecureGroupSession(session)) {
+        if ((NodeSession.is(session) && session.isPase) || GroupSession.is(session)) {
             return {
                 errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
                 debugText: "Command must be executed over CASE session.",
@@ -222,7 +212,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         }
         const failsafeContext = commissioner.failsafeContext;
 
-        assertSecureSession(session, "commissioningComplete can only be called on a secure session");
+        SecureSession.assert(session, "commissioningComplete can only be called on a secure session");
 
         const timedFabric = failsafeContext.associatedFabric?.fabricIndex;
         if (fabric.fabricIndex !== timedFabric) {

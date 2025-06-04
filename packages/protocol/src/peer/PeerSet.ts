@@ -12,7 +12,6 @@ import {
     ChannelType,
     Construction,
     createPromise,
-    DEFAULT_MATTER_PORT,
     Environment,
     Environmental,
     ImmutableSet,
@@ -26,6 +25,7 @@ import {
     ObservableSet,
     ServerAddressIp,
     serverAddressToString,
+    STANDARD_MATTER_PORT,
     Time,
     Timer,
 } from "#general";
@@ -646,7 +646,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         const operationalChannel = await operationalInterface.openChannel({
             type: ChannelType.UDP,
             ip: multicastAddress,
-            port: DEFAULT_MATTER_PORT,
+            port: STANDARD_MATTER_PORT,
         });
 
         const session = this.#sessions.groupSessionForAddress(address);

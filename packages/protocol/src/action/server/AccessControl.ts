@@ -7,6 +7,7 @@
 import { Access, AccessLevel, DataModelPath, ElementTag, Schema, ValueModel } from "#model";
 import { ClusterId, EndpointNumber, FabricIndex, StatusCode, SubjectId } from "#types";
 import { InvokeError, ReadError, SchemaImplementationError, WriteError } from "../errors.js";
+import { Subject } from "./Subject.js";
 
 const cache = new WeakMap<Schema, AccessControl>();
 
@@ -137,23 +138,7 @@ export namespace AccessControl {
          * The authenticated {@link SubjectId}s for online sessions. This includes the relevant Node Id, Group ID and
          * also potential relevant Case Authenticated Tags.
          */
-        readonly subjects?: SubjectId[];
-
-        /**
-         * Flag subject as a group rather than a peer.
-         */
-        readonly isGroupSubject?: boolean;
-
-        /**
-         * Contains the information if the group id has a valid mapping to a groupKeySet. Only exists when the
-         * subject is a group subject
-         */
-        readonly hasValidGroupMapping?: boolean;
-
-        /**
-         * The endpoints that are configured for the group subject. Only exists when the subject is a group
-         */
-        readonly groupEndpoints?: EndpointNumber[];
+        readonly subject?: Subject;
 
         /**
          * If this is true, fabric-scoped lists are filtered to the accessing fabric.

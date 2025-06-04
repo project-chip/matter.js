@@ -19,7 +19,7 @@ import {
 import { Message } from "../codec/MessageCodec.js";
 import { MessageExchange } from "../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../protocol/ProtocolHandler.js";
-import { assertSecureSession } from "../session/SecureSession.js";
+import { SecureSession } from "../session/SecureSession.js";
 import { CaseServer } from "../session/case/CaseServer.js";
 import { MaximumPasePairingErrorsReachedError, PaseServer } from "../session/pase/PaseServer.js";
 import { ChannelStatusResponseError, SecureChannelMessenger } from "./SecureChannelMessenger.js";
@@ -79,7 +79,7 @@ export class StatusReportOnlySecureChannelProtocol implements ProtocolHandler {
         }
 
         const { session } = exchange;
-        assertSecureSession(session);
+        SecureSession.assert(session);
         logger.debug(`Peer requested to close session ${session.name}. Remove session now.`);
         // TODO: and do more - see Core Specs 5.5
         await session.destroy(false, false);

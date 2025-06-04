@@ -7,6 +7,9 @@
 describe("IDM", () => {
     chip("IDM/*").exclude(
         // Spec issues for DoorLock, see https://github.com/CHIP-Specifications/connectedhomeip-spec/issues/11712
+        //  Summary: the command responses from command 0xa and 0x15 have "wider" conformance than the requests which
+        //           leads to the effect that the responses are expected to be present but are not because we do not
+        //           have the requests. After Spec fix of conformance, the chip model used in test will match again
         "IDM/10.2",
 
         // IDM 10.4 in TC_pics_checker.py appears to fail because it needs an endpoint ID specified

@@ -26,7 +26,7 @@ import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
 import { DecodedMessage, Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { SecureChannelMessenger } from "../securechannel/SecureChannelMessenger.js";
 import { SecureChannelProtocol } from "../securechannel/SecureChannelProtocol.js";
-import { isSecureUnicastSession, SecureUnicastSession } from "../session/SecureSession.js";
+import { NodeSession } from "../session/NodeSession.js";
 import { Session } from "../session/Session.js";
 import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
 import { ChannelManager } from "./ChannelManager.js";
@@ -381,7 +381,7 @@ export class ExchangeManager {
             return;
         }
         const { session } = exchange;
-        if (isSecureUnicastSession(session) && session.closingAfterExchangeFinished) {
+        if (NodeSession.is(session) && session.closingAfterExchangeFinished) {
             logger.debug(
                 `Exchange index ${exchangeIndex} Session ${session.name} is already marked for closure. Close session now.`,
             );
@@ -394,7 +394,7 @@ export class ExchangeManager {
         this.#exchanges.delete(exchangeIndex);
     }
 
-    async #closeSession(session: SecureUnicastSession) {
+    async #closeSession(session: NodeSession) {
         const sessionId = session.id;
         const sessionName = session.name;
 

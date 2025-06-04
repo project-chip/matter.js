@@ -10,7 +10,7 @@ import { GroupKeyManagement } from "#clusters/group-key-management";
 import { deepCopy, ImplementationError, Logger, MaybePromise } from "#general";
 import { DatatypeElement, FieldElement } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
-import { assertSecureSession, Fabric, FabricManager } from "#protocol";
+import { Fabric, FabricManager, SecureSession } from "#protocol";
 import { EndpointNumber, FabricIndex, GroupId, StatusCode, StatusResponseError } from "#types";
 import { GroupKeyManagementBehavior } from "./GroupKeyManagementBehavior.js";
 
@@ -316,7 +316,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
     }
 
     override async keySetWrite({ groupKeySet }: GroupKeyManagement.KeySetWriteRequest) {
-        assertSecureSession(this.session);
+        SecureSession.assert(this.session);
 
         const {
             groupKeySetId,

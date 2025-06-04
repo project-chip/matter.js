@@ -6,7 +6,7 @@
 
 import { AsyncObservable, Channel, Environment, Environmental, Logger, MatterError } from "#general";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
-import { isSecureUnicastSession } from "../session/SecureSession.js";
+import { NodeSession } from "../session/NodeSession.js";
 import { Session } from "../session/Session.js";
 import { MessageChannel } from "./ExchangeManager.js";
 
@@ -91,7 +91,7 @@ export class ChannelManager {
      * Returns the last established session for a Fabric and Node
      */
     getChannelForSession(session: Session) {
-        if (isSecureUnicastSession(session) && !session.isPase) {
+        if (NodeSession.is(session) && !session.isPase) {
             const fabric = session.fabric;
             const nodeId = session.peerNodeId;
             if (fabric === undefined) {
@@ -141,7 +141,7 @@ export class ChannelManager {
     }
 
     async getOrCreateChannel(byteArrayChannel: Channel<Uint8Array>, session: Session) {
-        if (!isSecureUnicastSession(session)) {
+        if (!NodeSession.is(session)) {
             return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }
         const fabric = session.fabric;

@@ -15,8 +15,6 @@ import { CryptoVerifyError, Logger, MatterFlowError, MaybePromise, UnexpectedDat
 import { AccessLevel } from "#model";
 import type { Node } from "#node/Node.js";
 import {
-    assertSecureSession,
-    assertSecureUnicastSession,
     CertificateError,
     DeviceCertification,
     DeviceCommissioner,
@@ -26,6 +24,7 @@ import {
     FabricTableFullError,
     MatterFabricConflictError,
     MatterFabricInvalidAdminSubjectError,
+    NodeSession,
     PublicKeyError,
     TlvAttestation,
     TlvCertSigningRequest,
@@ -103,7 +102,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         const certification = await this.getCertification();
 
         const session = this.session;
-        assertSecureUnicastSession(session);
+        NodeSession.assert(session);
 
         const elements = TlvAttestation.encode({
             declaration: certification.declaration,
@@ -122,7 +121,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         const session = this.session;
-        assertSecureUnicastSession(session);
+        NodeSession.assert(session);
         if (isForUpdateNoc && session.isPase) {
             throw new StatusResponseError(
                 "csrRequest for UpdateNoc received on a PASE session",
@@ -271,7 +270,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         });
 
         const session = this.session;
-        assertSecureUnicastSession(session);
+        NodeSession.assert(session);
 
         await failsafeContext.addFabric(fabric);
 
@@ -311,7 +310,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override async updateNoc({ nocValue, icacValue }: OperationalCredentials.UpdateNocRequest) {
-        assertSecureSession(this.session);
+        NodeSession.assert(this.session);
 
         const timedOp = this.#failsafeContext;
 

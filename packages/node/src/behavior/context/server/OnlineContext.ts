@@ -12,15 +12,8 @@ import { Diagnostic, ImplementationError, InternalError, MaybePromise, Transacti
 import { AccessLevel } from "#model";
 import { Node } from "#node/Node.js";
 import type { Message, NodeProtocol } from "#protocol";
-import {
-    AccessControl,
-    AclEndpointContext,
-    assertSecureSession,
-    assertSecureUnicastSession,
-    isSecureGroupSession,
-    MessageExchange,
-} from "#protocol";
-import { EndpointNumber, FabricIndex, GroupId, NodeId, SubjectId } from "#types";
+import { AccessControl, AclEndpointContext, MessageExchange, SecureSession, Subject } from "#protocol";
+import { FabricIndex, NodeId } from "#types";
 import { ActionContext } from "../ActionContext.js";
 import { Contextual } from "../Contextual.js";
 import { NodeActivity } from "../NodeActivity.js";
@@ -31,37 +24,21 @@ import { ContextAgents } from "./ContextAgents.js";
  */
 export function OnlineContext(options: OnlineContext.Options) {
     let fabric: FabricIndex | undefined;
-    let subjects: SubjectId[];
+    let subject: Subject;
     let nodeProtocol: NodeProtocol | undefined;
     let accessLevelCache: Map<AccessControl.Location, number[]> | undefined;
-    let hasValidGroupMapping: boolean | undefined;
-    let groupEndpoints: EndpointNumber[] | undefined;
 
     const { exchange, message } = options;
     const session = exchange?.session;
 
-    let isGroupSubject = false;
     if (session) {
-        if (isSecureGroupSession(session)) {
-            fabric = session.fabric.fabricIndex;
-            if (message === undefined || message.packetHeader.destGroupId === undefined) {
-                throw new ImplementationError("SecureGroupSession requires a message with destGroupId");
-            }
-            const groupId = GroupId(message.packetHeader.destGroupId);
-            subjects = [groupId];
-            isGroupSubject = true;
-            hasValidGroupMapping = session.fabric.groups.groupKeyIdMap.get(groupId) === session.keySetId;
-            groupEndpoints = session.fabric.groups.groupEndpoints.get(groupId);
-        } else {
-            assertSecureUnicastSession(session);
-            fabric = session.fabric?.fabricIndex;
-            subjects = [session.peerNodeId];
-            session.caseAuthenticatedTags.forEach(cat => subjects.push(NodeId.fromCaseAuthenticatedTag(cat)));
-        }
+        SecureSession.assert(session);
+        fabric = session.fabric?.fabricIndex;
+        subject = session.subjectFor(message);
     } else {
         fabric = options.fabric;
         if (options.subject !== undefined) {
-            subjects = [options.subject];
+            subject = Subject.Node({ id: options.subject });
         } else {
             throw new ImplementationError("OnlineContext requires an authorized subject");
         }
@@ -69,7 +46,7 @@ export function OnlineContext(options: OnlineContext.Options) {
 
     // If we have subjects, the first is the main one, used for diagnostics
     const via = Diagnostic.via(
-        `online#${message?.packetHeader?.messageId?.toString(16) ?? "?"}@${subjects[0].toString(16)}`,
+        `online#${message?.packetHeader?.messageId?.toString(16) ?? "?"}@${subject.id.toString(16)}`,
     );
 
     return {
@@ -155,17 +132,15 @@ export function OnlineContext(options: OnlineContext.Options) {
      */
     function createContext(transaction: Transaction, methods: {}) {
         if (session) {
-            assertSecureSession(session);
+            SecureSession.assert(session);
         }
         let agents: undefined | ContextAgents;
         const context: ActionContext = {
             ...options,
             session,
             exchange,
-            subjects,
-            isGroupSubject,
-            hasValidGroupMapping,
-            groupEndpoints,
+            subject,
+
             fabric,
             transaction,
 
@@ -265,7 +240,7 @@ export namespace OnlineContext {
         message?: Message;
     } & (
         | { exchange: MessageExchange; fabric?: undefined; subject?: undefined }
-        | { exchange?: undefined; fabric: FabricIndex; subject: SubjectId }
+        | { exchange?: undefined; fabric: FabricIndex; subject: NodeId }
     );
 
     export interface ReadOnly extends ActionContext {

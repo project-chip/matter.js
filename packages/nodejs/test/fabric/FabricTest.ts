@@ -5,7 +5,7 @@
  */
 
 import { Bytes, Crypto, StorageBackendMemory, StorageManager } from "#general";
-import { Fabric, FabricManager, SecureUnicastSession, SessionManager } from "#protocol";
+import { Fabric, FabricManager, NodeSession, SessionManager } from "#protocol";
 import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
 import * as assert from "node:assert";
 import { buildFabric } from "./FabricTestingUtil.js";
@@ -119,7 +119,7 @@ describe("Fabric", () => {
             let session1Destroyed = false;
             let session2Destroyed = false;
             const manager = await createManager();
-            const secureSession1 = new SecureUnicastSession({
+            const secureSession1 = new NodeSession({
                 manager,
                 id: 1,
                 fabric: undefined,
@@ -132,7 +132,7 @@ describe("Fabric", () => {
             });
 
             fabric.addSession(secureSession1);
-            const secureSession2 = new SecureUnicastSession({
+            const secureSession2 = new NodeSession({
                 manager,
                 id: 2,
                 fabric: undefined,
@@ -179,7 +179,7 @@ describe("Fabric", () => {
             let session1Destroyed = false;
             let session2Destroyed = false;
             const manager = await createManager();
-            const secureSession1 = new SecureUnicastSession({
+            const secureSession1 = new NodeSession({
                 manager,
                 id: 1,
                 fabric: undefined,
@@ -191,7 +191,7 @@ describe("Fabric", () => {
                 isInitiator: true,
             });
             fabric.addSession(secureSession1);
-            const secureSession2 = new SecureUnicastSession({
+            const secureSession2 = new NodeSession({
                 manager,
                 id: 2,
                 fabric: undefined,

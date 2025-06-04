@@ -8,7 +8,7 @@ import { ImplementationError } from "#general";
 import { FabricIndex as FabricIndexElement } from "#model";
 import { Attribute, AttributeError, AttributeId, ClusterId, EndpointNumber, FabricIndex, TlvSchema } from "#types";
 import { InteractionClient } from "../../interaction/InteractionClient.js";
-import { NoAssociatedFabricError } from "../../session/SecureSession.js";
+import { NoAssociatedFabricError } from "../../session/NodeSession.js";
 
 /**
  * Factory function to create an AttributeClient for a given attribute.

@@ -12,7 +12,7 @@ export class NetworkError extends MatterError {}
 
 export class NoAddressAvailableError extends NetworkError {}
 
-export const DEFAULT_MATTER_PORT = 5540;
+export const STANDARD_MATTER_PORT = 5540;
 
 /**
  * @see {@link MatterSpecification.v11.Core} § 11.11.4.4
