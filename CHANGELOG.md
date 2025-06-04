@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.14.0 (2025-06-04)
 
 - NOTE: This version is compatible with Node.js 20.x, 22.x and 24.x. Node.js 18.x is also supported with the following exceptions:
     - The matter.js tools for building and running test and applications (matter-*) which are mainly used by the npm scripts which use the "commander" dependency.
