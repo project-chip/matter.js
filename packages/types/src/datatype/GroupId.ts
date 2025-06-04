@@ -32,7 +32,7 @@ export function GroupId(groupId: number, validate = true): GroupId {
 }
 
 export namespace GroupId {
-    export const UNSPECIFIED_GROUP_ID = GroupId(0);
+    export const NO_GROUP_ID = GroupId(0);
 
     /** This group is used to message all Nodes in a Fabric. */
     export const ALL_NODES = 0xffff as GroupId;
@@ -49,6 +49,12 @@ export namespace GroupId {
     /** Application Group ID, assigned by fabric Administrator */
     export function isApplicationGroupId(groupId: GroupId): boolean {
         return groupId >= 0x0001 && groupId <= 0xfeff;
+    }
+
+    export function assertGroupId(groupId: GroupId) {
+        if (groupId === GroupId.NO_GROUP_ID) {
+            throw new UnexpectedDataError(`A Group ID need to be specified and can not be 0`);
+        }
     }
 
     export function fromNodeId(nodeId: NodeId): GroupId {
@@ -68,11 +74,3 @@ export const TlvGroupId = new TlvWrapper<GroupId, number>(
     groupId => groupId,
     value => GroupId(value, false), // No automatic validation on decode
 );
-
-export function assertOperationalGroupId(
-    groupId: GroupId,
-): asserts groupId is Exclude<GroupId, typeof GroupId.UNSPECIFIED_GROUP_ID> {
-    if (groupId === GroupId.UNSPECIFIED_GROUP_ID) {
-        throw new UnexpectedDataError(`Group ID cannot be UNSPECIFIED_GROUP_ID`);
-    }
-}

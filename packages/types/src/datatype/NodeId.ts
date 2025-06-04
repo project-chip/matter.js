@@ -5,7 +5,7 @@
  */
 
 import { GroupId } from "#datatype/GroupId.js";
-import { Branded, Bytes, Crypto, DataWriter, Endian, toBigInt, UnexpectedDataError } from "#general";
+import { Branded, Bytes, Crypto, DataWriter, toBigInt, UnexpectedDataError } from "#general";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { CaseAuthenticatedTag } from "./CaseAuthenticatedTag.js";
@@ -33,7 +33,7 @@ export namespace NodeId {
     export const UNSPECIFIED_NODE_ID = NodeId(0);
 
     export const toHexString = (nodeId: NodeId) => {
-        const writer = new DataWriter(Endian.Big);
+        const writer = new DataWriter();
         writer.writeUInt64(nodeId);
         return Bytes.toHex(writer.toByteArray()).toUpperCase();
     };

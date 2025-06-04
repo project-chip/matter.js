@@ -14,7 +14,7 @@ import {
     SrvRecord,
     TxtRecord,
 } from "#codec/DnsCodec.js";
-import { Bytes, Endian } from "#util/Bytes.js";
+import { Bytes } from "#util/Bytes.js";
 import { DataReader } from "#util/index.js";
 
 const DNS_RESPONSE: DnsMessage = {
@@ -265,7 +265,7 @@ describe("DnsCodec", () => {
         for (const { testCase, data, offset, result, error } of QNameTestData) {
             it(`decodes ${testCase}`, () => {
                 const dataBytes = Uint8Array.from(data, x => x.charCodeAt(0));
-                const reader = new DataReader(dataBytes, Endian.Big);
+                const reader = new DataReader(dataBytes);
                 if (offset !== undefined) {
                     reader.offset = offset;
                 }

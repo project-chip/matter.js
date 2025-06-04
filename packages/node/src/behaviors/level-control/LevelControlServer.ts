@@ -13,8 +13,8 @@ import { OnOffServer } from "#behaviors/on-off";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { LevelControl } from "#clusters/level-control";
 import { Endpoint } from "#endpoint/index.js";
-import { RootEndpoint } from "#endpoints/root";
 import { AsyncObservable, Logger, MaybePromise } from "#general";
+import { ServerNode } from "#node/index.js";
 import { Val } from "#protocol";
 import { ClusterType, StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
 import { LevelControlBehavior } from "./LevelControlBehavior.js";
@@ -572,8 +572,8 @@ export class LevelControlBaseServer extends LevelControlBase {
     }
 
     #getBootReason() {
-        const rootEndpoint = this.endpoint.ownerOfType(RootEndpoint);
-        if (rootEndpoint !== undefined && rootEndpoint.behaviors.has(GeneralDiagnosticsBehavior)) {
+        const rootEndpoint = this.env.get(ServerNode);
+        if (rootEndpoint.behaviors.has(GeneralDiagnosticsBehavior)) {
             return rootEndpoint.stateOf(GeneralDiagnosticsBehavior).bootReason;
         }
     }

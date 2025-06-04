@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { UnexpectedDataError } from "../MatterError.js";
-import { Bytes, Endian } from "../util/Bytes.js";
+import { Bytes } from "../util/Bytes.js";
 import { DataReader } from "../util/DataReader.js";
 import { toHex } from "../util/Number.js";
 import { isObject } from "../util/Type.js";
@@ -267,15 +267,15 @@ export class DerCodec {
     }
 
     static decode(data: Uint8Array): DerNode {
-        return this.decodeRec(new DataReader(data, Endian.Big));
+        return this.decodeRec(new DataReader(data));
     }
 
-    private static decodeRec(reader: DataReader<Endian.Big>): DerNode {
+    private static decodeRec(reader: DataReader): DerNode {
         const { tag, bytes } = this.decodeAsn1(reader);
         if (tag === DerType.BitString)
             return { [DerKey.TagId]: tag, [DerKey.Bytes]: bytes.slice(1), [DerKey.BitsPadding]: bytes[0] };
         if ((tag & CONSTRUCTED) === 0) return { [DerKey.TagId]: tag, [DerKey.Bytes]: bytes };
-        const elementsReader = new DataReader(bytes, Endian.Big);
+        const elementsReader = new DataReader(bytes);
         const elements: DerNode[] = [];
         while (elementsReader.remainingBytesCount > 0) {
             elements.push(this.decodeRec(elementsReader));
@@ -283,7 +283,7 @@ export class DerCodec {
         return { [DerKey.TagId]: tag, [DerKey.Bytes]: bytes, [DerKey.Elements]: elements };
     }
 
-    private static decodeAsn1(reader: DataReader<Endian.Big>): { tag: number; bytes: Uint8Array } {
+    private static decodeAsn1(reader: DataReader): { tag: number; bytes: Uint8Array } {
         const tag = reader.readUInt8();
         let length = reader.readUInt8();
         if ((length & 0x80) !== 0) {

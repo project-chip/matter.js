@@ -10,7 +10,6 @@ import {
     Crypto,
     DataReader,
     DataWriter,
-    Endian,
     ImplementationError,
     InternalError,
     ipv6BytesToString,
@@ -21,7 +20,7 @@ import {
 import { GroupKeySet, OperationalGroupKeySet } from "#groups/OperationalGroupKeySet.js";
 import { PersistedMessageCounter } from "#protocol/MessageCounter.js";
 import { MessageReceptionStateEncryptedWithRollover } from "#protocol/MessageReceptionState.js";
-import { assertOperationalGroupId, EndpointNumber, GroupId, NodeId } from "#types";
+import { EndpointNumber, GroupId, NodeId } from "#types";
 
 export const GROUP_SECURITY_INFO = Bytes.fromString("GroupKey v1.0");
 export const GROUP_KEY_INFO = Bytes.fromString("GroupKeyHash");
@@ -113,12 +112,12 @@ export class FabricGroupsManager {
 
     /** Returns the multicast address for a given group id for this fabric. */
     multicastAddressFor(groupId: GroupId) {
-        assertOperationalGroupId(groupId);
+        GroupId.assertGroupId(groupId);
 
         // If GroupKeyMulticastPolicy ever becomes non-provisional then we need to adjust logic here, but so far we
         // just use the default which is PerGroupId, which means we use the GroupId to create the multicast address.
 
-        const writer = new DataWriter(Endian.Big);
+        const writer = new DataWriter();
         writer.writeUInt16(0xff35);
         writer.writeUInt16(0x0040);
         writer.writeUInt8(0xfd);
@@ -275,7 +274,7 @@ export class FabricGroupsManager {
         // GroupSessionId is computed by considering the GroupKeyHash as a Big-Endian value. GroupSessionId is a scalar.
         // Its use in fields within messages may cause a re-serialization into a different byte order than the one used
         // for initial generation.
-        return new DataReader(groupKeyHash, Endian.Big).readUInt16();
+        return new DataReader(groupKeyHash).readUInt16();
     }
 
     /**

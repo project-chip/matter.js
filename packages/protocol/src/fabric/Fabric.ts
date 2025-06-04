@@ -29,15 +29,7 @@ import {
 import { FabricGroupsManager, GROUP_SECURITY_INFO } from "#groups/FabricGroupsManager.js";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { Session } from "#session/Session.js";
-import {
-    assertOperationalGroupId,
-    CaseAuthenticatedTag,
-    FabricId,
-    FabricIndex,
-    GroupId,
-    NodeId,
-    VendorId,
-} from "#types";
+import { CaseAuthenticatedTag, FabricId, FabricIndex, GroupId, NodeId, VendorId } from "#types";
 
 const logger = Logger.get("Fabric");
 
@@ -253,7 +245,7 @@ export class Fabric {
     }
 
     groupAddressOf(groupId: GroupId) {
-        assertOperationalGroupId(groupId);
+        GroupId.assertGroupId(groupId);
 
         return PeerAddress({ fabricIndex: this.fabricIndex, nodeId: NodeId.fromGroupId(groupId) });
     }
@@ -407,7 +399,7 @@ export class FabricBuilder {
             throw new InternalError("operationalCert needs to be set");
 
         this.#fabricIndex = fabricIndex;
-        const saltWriter = new DataWriter(Endian.Big);
+        const saltWriter = new DataWriter();
         saltWriter.writeUInt64(this.#fabricId);
         const operationalId = await Crypto.hkdf(
             this.#rootPublicKey.slice(1),

@@ -5,7 +5,7 @@
  */
 
 import { NodeJsCrypto } from "#crypto/NodeJsCrypto.js";
-import { Bytes, DataReader, Endian, Key, PrivateKey, PublicKey } from "#general";
+import { Bytes, DataReader, Key, PrivateKey, PublicKey } from "#general";
 import * as assert from "node:assert";
 import * as crypto from "node:crypto";
 
@@ -118,7 +118,7 @@ describe("Crypto", () => {
                 2,
             );
 
-            assert.equal(new DataReader(result, Endian.Big).readUInt16(), 0xb9f7);
+            assert.equal(new DataReader(result).readUInt16(), 0xb9f7);
         });
     });
 });

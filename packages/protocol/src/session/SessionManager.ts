@@ -29,7 +29,6 @@ import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { GroupSession } from "#session/GroupSession.js";
 import { CaseAuthenticatedTag, DEFAULT_MAX_PATHS_PER_INVOKE, FabricId, FabricIndex, GroupId, NodeId } from "#types";
 import { UnexpectedDataError } from "@matter/general";
-import { assertOperationalGroupId } from "@matter/types";
 import { SupportedTransportsSchema } from "../common/Scanner.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
@@ -440,7 +439,7 @@ export class SessionManager {
      */
     groupSessionForAddress(address: PeerAddress) {
         const groupId = GroupId.fromNodeId(address.nodeId);
-        assertOperationalGroupId(groupId);
+        GroupId.assertGroupId(groupId);
 
         const fabric = this.fabricFor(address);
         const { key, keySetId, sessionId } = fabric.groups.currentKeyForGroup(groupId);
@@ -473,7 +472,7 @@ export class SessionManager {
         if (groupId === undefined) {
             throw new UnexpectedDataError("Group ID is required for GroupSession fromPacket.");
         }
-        assertOperationalGroupId(GroupId(groupId));
+        GroupId.assertGroupId(GroupId(groupId));
 
         const { message, key, sessionId, sourceNodeId, keySetId, fabric } = GroupSession.decode(
             this.#context.fabrics,

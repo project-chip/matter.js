@@ -7,9 +7,9 @@
 import { GroupKeyManagementServer } from "#behaviors/group-key-management";
 import { IdentifyBehavior } from "#behaviors/identify";
 import { Groups } from "#clusters/groups";
-import { RootEndpoint } from "#endpoints/root";
-import { InternalError, Logger } from "#general";
+import { Logger } from "#general";
 import { AccessLevel } from "#model";
+import { ServerNode } from "#node/ServerNode.js";
 import {
     Command,
     StatusCode,
@@ -64,16 +64,8 @@ export class GroupsServer extends GroupsBase {
         this.state.nameSupport.groupNames = this.features.groupNames;
     }
 
-    #findRootEndpoint() {
-        const rootEndpoint = this.endpoint.ownerOfType(RootEndpoint);
-        if (rootEndpoint === undefined) {
-            throw new InternalError("RootEndpoint not found");
-        }
-        return rootEndpoint;
-    }
-
     #actOnGroupKeyManagement(act: (groupKeyManagement: GroupKeyManagementServer) => unknown) {
-        return this.#findRootEndpoint().act(agent => act(agent.get(GroupKeyManagementServer)));
+        return this.env.get(ServerNode).act(agent => act(agent.get(GroupKeyManagementServer)));
     }
 
     override async addGroup({ groupId, groupName }: Groups.AddGroupRequest): Promise<Groups.AddGroupResponse> {
@@ -115,7 +107,7 @@ export class GroupsServer extends GroupsBase {
         const fabricIndex = fabric.fabricIndex;
         const endpointNumber = this.endpoint.number;
 
-        const { groupTable } = this.#findRootEndpoint().stateOf(GroupKeyManagementServer);
+        const { groupTable } = this.env.get(ServerNode).stateOf(GroupKeyManagementServer);
         const groupEntry = groupTable.find(entry => entry.groupId === groupId && entry.fabricIndex === fabricIndex);
         if (groupEntry === undefined || !groupEntry.endpoints.includes(endpointNumber)) {
             return { status: StatusCode.NotFound, groupId, groupName: "" };
@@ -130,7 +122,7 @@ export class GroupsServer extends GroupsBase {
         const fabricIndex = fabric.fabricIndex;
         const endpointNumber = this.endpoint.number;
 
-        const { groupTable } = this.#findRootEndpoint().stateOf(GroupKeyManagementServer);
+        const { groupTable } = this.env.get(ServerNode).stateOf(GroupKeyManagementServer);
         const endpointGroups = groupTable.filter(
             entry => entry.endpoints.includes(endpointNumber) && entry.fabricIndex === fabricIndex,
         );
