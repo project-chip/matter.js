@@ -178,7 +178,7 @@ export class Fabric {
      * When groupId is provided, it returns the time-wise valid operational keys for that groupId.
      */
     async currentDestinationIdFor(nodeId: NodeId, random: Uint8Array) {
-        return await Crypto.hmac(this.groups.currentKeyForKeySet(0).key, this.#generateSalt(nodeId, random));
+        return await Crypto.hmac(this.groups.keySets.currentKeyForId(0).key, this.#generateSalt(nodeId, random));
     }
 
     /**
@@ -188,7 +188,7 @@ export class Fabric {
     async destinationIdsFor(nodeId: NodeId, random: Uint8Array) {
         const salt = this.#generateSalt(nodeId, random);
         // Check all keys of keyset 0 - typically it is only the IPK
-        const destinationIds = this.groups.allKeysForKeySet(0).map(({ key }) => Crypto.hmac(key, salt));
+        const destinationIds = this.groups.keySets.allKeysForId(0).map(({ key }) => Crypto.hmac(key, salt));
         return await Promise.all(destinationIds);
     }
 

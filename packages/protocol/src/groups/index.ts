@@ -5,4 +5,4 @@
  */
 
 export * from "./FabricGroupsManager.js";
-export * from "./OperationalGroupKeySet.js";
+export * from "./KeySets.js";

@@ -177,7 +177,19 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
         return map;
     }
 
-    delete(item: T) {
+    delete(item: T): boolean;
+    delete<F extends keyof T>(field: keyof T, value: T[F]): boolean;
+    delete<F extends keyof T>(itemOrField: T | F, value?: T[F]): boolean {
+        let item: T | undefined;
+        if (value === undefined) {
+            item = itemOrField as T;
+        } else {
+            item = this.get(itemOrField as F, value);
+            if (item === undefined) {
+                return false; // Item not found
+            }
+        }
+
         if (!this.#entries.delete(item)) {
             return false;
         }

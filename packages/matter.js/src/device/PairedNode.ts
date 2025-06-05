@@ -302,7 +302,7 @@ export class PairedNode {
         interactionClient: InteractionClient,
         reconnectFunc: (discoveryType?: NodeDiscoveryType, noForcedConnection?: boolean) => Promise<void>,
         assignDisconnectedHandler: (handler: () => Promise<void>) => void,
-        sessions: BasicSet<NodeSession, NodeSession>,
+        sessions: BasicSet<NodeSession>,
         storedAttributeData?: DecodedAttributeReportValue<any>[],
     ): Promise<PairedNode> {
         const node = new PairedNode(

@@ -97,12 +97,7 @@ export class GroupSession extends SecureSession {
         if (message === undefined || message.packetHeader.destGroupId === undefined) {
             throw new ImplementationError("GroupSession requires a message with destGroupId");
         }
-        const id = GroupId(message.packetHeader.destGroupId);
-        return Subject.Group({
-            id,
-            hasValidMapping: this.fabric.groups.groupKeyIdMap.get(id) === this.keySetId,
-            endpoints: this.fabric.groups.groupEndpoints.get(id) ?? [],
-        });
+        return this.fabric.groups.subjectForGroup(GroupId(message.packetHeader.destGroupId), this.keySetId);
     }
 
     override notifyActivity(_messageReceived: boolean) {
@@ -165,7 +160,7 @@ export class GroupSession extends SecureSession {
         const sessionId = header.sessionId;
         const keys = new Array<{ key: Uint8Array; keySetId: number; fabric: Fabric }>();
         for (const fabric of fabrics) {
-            const sessions = fabric.groups.groupKeyBySessionId.get(sessionId);
+            const sessions = fabric.groups.sessions.get(sessionId);
             if (sessions?.length) {
                 for (const session of sessions) {
                     keys.push({ ...session, fabric });

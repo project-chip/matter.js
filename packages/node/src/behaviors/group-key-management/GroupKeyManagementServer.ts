@@ -7,7 +7,6 @@
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { GroupsBehavior } from "#behaviors/groups";
 import { GroupKeyManagement } from "#clusters/group-key-management";
-import { AggregatorEndpoint } from "#endpoints/aggregator";
 import { deepCopy, ImplementationError, Logger, MaybePromise } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
@@ -19,6 +18,7 @@ const logger = Logger.get("GroupKeyManagementServer");
 
 const MAX_64BIT_TIME = BigInt("0xffffffffffffffff");
 
+// Enhance the schema by a fabric scoped structure for the GroupKeySetStruct to enable persistence
 const groupKeySetStruct = GroupKeyManagementBehavior.schema!.get(DatatypeModel, "GroupKeySetStruct")!;
 const groupKeySetStructFS = groupKeySetStruct.extend({
     name: "GroupKeySetStructFS",
@@ -43,6 +43,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
             throw new ImplementationError("The CacheAndSync feature is provisional. Do not use it.");
         }
 
+        // Initialize if not persisted to enable persistence
         if (this.state.groupKeySets === undefined) {
             this.state.groupKeySets = [];
         }
@@ -59,26 +60,19 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
     }
 
     async #online() {
-        // TODO we should better detect whether the defaults have changed, but for now we assume that the defaults are
-        //  unchanged if the values are 0 and 1, which is the default in the spec.
-        //  Additionally, we do not handle the case of later-added Grooups clusters, but to compensate we assume that
-        //  a bridge will have groups
+        // Validate the maximum supported group keys and groups per fabric if they are set to minimum values.
         if (this.state.maxGroupKeysPerFabric === 0 && this.state.maxGroupsPerFabric === 1) {
             // We assume unchanged defaults
-            let groupsOrAggregatorFound = false;
+            let groupsFound = false;
             this.endpoint.visit(endpoint => {
-                if (
-                    !groupsOrAggregatorFound &&
-                    (endpoint.type.deviceType === AggregatorEndpoint.deviceType ||
-                        endpoint.behaviors.has(GroupsBehavior))
-                ) {
-                    groupsOrAggregatorFound = true;
+                if (!groupsFound && endpoint.behaviors.has(GroupsBehavior)) {
+                    groupsFound = true;
                 }
             });
-            if (groupsOrAggregatorFound) {
-                // If we have groups, we assume the defaults are set to the minimum values
-                this.state.maxGroupKeysPerFabric = 10; // The Minimum would be 3;
-                this.state.maxGroupsPerFabric = 11; // The Minimum would be 4;
+            if (groupsFound) {
+                throw new ImplementationError(
+                    "One of the device types you use has a Groups cluster. Please adjust the Group Key Management cluster maximum defaults. You need to support groups management.",
+                );
             }
         }
 
@@ -100,14 +94,10 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
                 groupKeysForFabric.set(fabricIndex, keys);
             }
 
-            for (const fabric of fabrics) {
-                const fabricIndex = fabric.fabricIndex;
-                const keys = groupKeysForFabric.get(fabricIndex);
-                if (keys === undefined) {
-                    continue;
-                }
+            for (const [fabricIndex, keys] of groupKeysForFabric.entries()) {
+                const fabric = fabrics.for(fabricIndex);
                 for (const groupKeySet of keys) {
-                    await fabric.groups.setGroupKeySet(groupKeySet);
+                    await fabric.groups.setFromGroupKeySet(groupKeySet);
                 }
             }
         }
@@ -116,6 +106,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
         }
     }
 
+    /** Handle the recreation (update) of a fabric, so we need to reinitialize the group key sets */
     async #handleFabricUpdate(fabric: Fabric) {
         if (this.state.groupKeySets.length === 0) {
             return; // No group key sets, so nothing to do
@@ -125,7 +116,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
             ({ fabricIndex: entryIndex }) => entryIndex === fabricIndex,
         );
         for (const groupKeySet of groupKeysForFabric) {
-            await fabric.groups.setGroupKeySet(groupKeySet);
+            await fabric.groups.setFromGroupKeySet(groupKeySet);
         }
         if (this.state.groupKeyMap.length) {
             fabric.groups.groupKeyIdMap = new Map<GroupId, number>(
@@ -139,9 +130,9 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
             const groupTable = this.state.groupTable.filter(
                 ({ fabricIndex: entryIndex }) => entryIndex === fabricIndex,
             );
-            fabric.groups.groupEndpoints.clear();
+            fabric.groups.endpoints.clear();
             for (const entry of groupTable) {
-                fabric.groups.groupEndpoints.set(entry.groupId, entry.endpoints);
+                fabric.groups.endpoints.set(entry.groupId, entry.endpoints);
             }
         }
     }
@@ -158,10 +149,10 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
         const groupIdsPerFabric = new Array<number>();
         for (const entry of groupKeyMap) {
             const { groupId, fabricIndex } = entry;
-            if (groupId === 0) {
+            if (!GroupId.isApplicationGroupId(groupId)) {
                 throw new StatusResponseError(
-                    "GroupId 0 can not be used as operational group id",
-                    StatusCode.ConstraintError,
+                    "Only operational GroupIds are allowed in GroupKeyMap",
+                    StatusCode.InvalidAction,
                 );
             }
 
@@ -360,7 +351,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
         }
 
         // Update the Fabric group manager to kick off the internal processes
-        await fabric.groups.setGroupKeySet(groupKeySet);
+        await fabric.groups.setFromGroupKeySet(groupKeySet);
     }
 
     override keySetRead({
@@ -369,7 +360,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
         const fabric = this.session.associatedFabric;
 
         // We use the fabric group manager to retrieve the group key set because he also has the id 0 and is synced anyway
-        const groupKeySet = fabric.groups.groupKeySet(groupKeySetId);
+        const groupKeySet = fabric.groups.keySets.asGroupKeySet(groupKeySetId);
         if (groupKeySet === undefined) {
             throw new StatusResponseError(`GroupKeySet ${groupKeySetId} not found`, StatusCode.NotFound);
         }
@@ -435,7 +426,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
             // If the group already exists, add the endpoint
             if (!this.state.groupTable[existingGroupIndex].endpoints.includes(endpointId)) {
                 this.state.groupTable[existingGroupIndex].endpoints.push(endpointId);
-                fabric.groups.groupEndpoints.set(groupId, this.state.groupTable[existingGroupIndex].endpoints);
+                fabric.groups.endpoints.set(groupId, this.state.groupTable[existingGroupIndex].endpoints);
             }
             this.state.groupTable[existingGroupIndex].groupName = groupName;
         } else {
@@ -446,12 +437,12 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
                 groupName,
                 fabricIndex,
             });
-            fabric.groups.groupEndpoints.set(groupId, [endpointId]);
+            fabric.groups.endpoints.set(groupId, [endpointId]);
         }
         logger.warn(
             `Added endpoint ${endpointId} to group ${groupId} on fabric ${fabricIndex} with name "${groupName}"`,
         );
-        logger.warn(fabric.groups.groupEndpoints.get(groupId) ?? "No endpoints found for group", this.state.groupTable);
+        logger.warn(fabric.groups.endpoints.get(groupId) ?? "No endpoints found for group", this.state.groupTable);
     }
 
     /**
@@ -475,10 +466,10 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
                     // If no endpoints left, remove the group entry
                     const index = groupTable.indexOf(entry);
                     groupTable.splice(index, 1);
-                    fabric.groups.groupEndpoints.delete(groupId);
+                    fabric.groups.endpoints.delete(groupId);
                 } else {
                     entry.endpoints = entry.endpoints.filter(id => id !== endpointId);
-                    fabric.groups.groupEndpoints.set(entry.groupId, entry.endpoints);
+                    fabric.groups.endpoints.set(entry.groupId, entry.endpoints);
                 }
                 existing = true;
             }
@@ -494,5 +485,9 @@ export namespace GroupKeyManagementServer {
          * GroupKeySet entries for all fabrics beside the fabric specific entries of the groupKeyset 0
          */
         groupKeySets: (GroupKeyManagement.GroupKeySet & { fabricIndex: FabricIndex })[] = [];
+
+        // Overwrite defaults to allow more than 3 group keys and 4 groups per fabric, because we can
+        override maxGroupKeysPerFabric = 20; // The Minimum would be 3;
+        override maxGroupsPerFabric = 21; // The Minimum would be 4;
     }
 }
