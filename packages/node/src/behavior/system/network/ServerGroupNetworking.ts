@@ -58,7 +58,7 @@ export class ServerGroupNetworking {
                 this.#activeGroupMemberships.delete(fabricIndex);
                 return;
             }
-            for (const groupId of memberships?.keys()) {
+            for (const groupId of memberships.keys()) {
                 await this.#dropGroupMembership(groupId, fabric);
             }
             this.#activeGroupMemberships.delete(fabricIndex);

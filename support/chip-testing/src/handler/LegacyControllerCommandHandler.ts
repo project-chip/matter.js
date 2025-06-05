@@ -87,7 +87,7 @@ export class LegacyControllerCommandHandler extends CommandHandler {
             // https://github.com/project-chip/connectedhomeip/blob/master/src/lib/support/TestGroupData.h
             // Start times here are formally epoch since 2020-01-01. We use 1970 base, but the used values are that
             // small that they are all irrelevant anyway
-            await this.#controllerInstance.groups.setGroupKeySet({
+            await this.#controllerInstance.groups.setFromGroupKeySet({
                 groupKeySetId: 0x01a1,
                 epochKey0: Bytes.fromHex("a0a1a2a3a4a5a6a7a8a9aaabacadaeaf"),
                 epochStartTime0: 1110000,
@@ -98,7 +98,7 @@ export class LegacyControllerCommandHandler extends CommandHandler {
                 groupKeySecurityPolicy: GroupKeyManagement.GroupKeySecurityPolicy.CacheAndSync,
                 groupKeyMulticastPolicy: GroupKeyManagement.GroupKeyMulticastPolicy.PerGroupId,
             });
-            await this.#controllerInstance.groups.setGroupKeySet({
+            await this.#controllerInstance.groups.setFromGroupKeySet({
                 groupKeySetId: 0x01a2,
                 epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
                 epochStartTime0: 2220000,
@@ -109,7 +109,7 @@ export class LegacyControllerCommandHandler extends CommandHandler {
                 groupKeySecurityPolicy: GroupKeyManagement.GroupKeySecurityPolicy.CacheAndSync,
                 groupKeyMulticastPolicy: GroupKeyManagement.GroupKeyMulticastPolicy.PerGroupId,
             });
-            await this.#controllerInstance.groups.setGroupKeySet({
+            await this.#controllerInstance.groups.setFromGroupKeySet({
                 groupKeySetId: 0x01a3,
                 epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
                 epochStartTime0: 2220000,
