@@ -7,8 +7,9 @@
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { GroupsBehavior } from "#behaviors/groups";
 import { GroupKeyManagement } from "#clusters/group-key-management";
+import { AggregatorEndpoint } from "#endpoints/aggregator";
 import { deepCopy, ImplementationError, Logger, MaybePromise } from "#general";
-import { DatatypeElement, FieldElement } from "#model";
+import { DatatypeModel, FieldElement } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import { Fabric, FabricManager, SecureSession } from "#protocol";
 import { EndpointNumber, FabricIndex, GroupId, StatusCode, StatusResponseError } from "#types";
@@ -18,80 +19,14 @@ const logger = Logger.get("GroupKeyManagementServer");
 
 const MAX_64BIT_TIME = BigInt("0xffffffffffffffff");
 
+const groupKeySetStruct = GroupKeyManagementBehavior.schema!.get(DatatypeModel, "GroupKeySetStruct")!;
+const groupKeySetStructFS = groupKeySetStruct.extend({
+    name: "GroupKeySetStructFS",
+    children: [FieldElement({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })],
+});
 const schema = GroupKeyManagementBehavior.schema!.extend({
     children: [
-        DatatypeElement(
-            /** Enhanced GroupKeySetStruct with a fabric Index to act as fabric scoped struct */
-            { name: "GroupKeySetStructFS", type: "struct" },
-            FieldElement({ name: "GroupKeySetId", id: 0x0, type: "uint16", conformance: "M" }),
-            FieldElement({
-                name: "GroupKeySecurityPolicy",
-                id: 0x1,
-                type: "GroupKeySecurityPolicyEnum",
-                access: "S",
-                conformance: "M",
-            }),
-            FieldElement({
-                name: "EpochKey0",
-                id: 0x2,
-                type: "octstr",
-                access: "S",
-                conformance: "M",
-                constraint: "16",
-                quality: "X",
-            }),
-            FieldElement({
-                name: "EpochStartTime0",
-                id: 0x3,
-                type: "epoch-us",
-                access: "S",
-                conformance: "M",
-                quality: "X",
-            }),
-            FieldElement({
-                name: "EpochKey1",
-                id: 0x4,
-                type: "octstr",
-                access: "S",
-                conformance: "M",
-                constraint: "16",
-                quality: "X",
-            }),
-            FieldElement({
-                name: "EpochStartTime1",
-                id: 0x5,
-                type: "epoch-us",
-                access: "S",
-                conformance: "M",
-                quality: "X",
-            }),
-            FieldElement({
-                name: "EpochKey2",
-                id: 0x6,
-                type: "octstr",
-                access: "S",
-                conformance: "M",
-                constraint: "16",
-                quality: "X",
-            }),
-            FieldElement({
-                name: "EpochStartTime2",
-                id: 0x7,
-                type: "epoch-us",
-                access: "S",
-                conformance: "M",
-                quality: "X",
-            }),
-            FieldElement({
-                name: "GroupKeyMulticastPolicy",
-                id: 0x8,
-                type: "GroupKeyMulticastPolicyEnum",
-                access: "S",
-                conformance: "O",
-                default: 0,
-            }),
-            FieldElement({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" }),
-        ),
+        groupKeySetStructFS,
         FieldElement({ name: "groupKeySets", type: "GroupKeySetStructFS", quality: "N", access: "RW VM F" }),
     ],
 });
@@ -108,6 +43,10 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
             throw new ImplementationError("The CacheAndSync feature is provisional. Do not use it.");
         }
 
+        if (this.state.groupKeySets === undefined) {
+            this.state.groupKeySets = [];
+        }
+
         // Validate the state
         this.reactTo(this.events.groupKeyMap$Changing, this.#validateGroupKeyMap);
         this.reactTo(this.events.groupTable$Changing, this.#validateGroupTable);
@@ -120,19 +59,26 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
     }
 
     async #online() {
-        // When a groups cluster exists on any other endpoint maxGroupKeysPerFabric needs to be minimum 3
-        let groupsFound = false;
-        this.endpoint.visit(endpoint => {
-            if (!groupsFound && endpoint.behaviors.has(GroupsBehavior)) {
-                groupsFound = true;
-            }
-        });
-        if (groupsFound) {
-            if (this.state.maxGroupKeysPerFabric < 3) {
-                this.state.maxGroupKeysPerFabric = 3;
-            }
-            if (this.state.maxGroupsPerFabric < 4) {
-                this.state.maxGroupsPerFabric = 4;
+        // TODO we should better detect whether the defaults have changed, but for now we assume that the defaults are
+        //  unchanged if the values are 0 and 1, which is the default in the spec.
+        //  Additionally, we do not handle the case of later-added Grooups clusters, but to compensate we assume that
+        //  a bridge will have groups
+        if (this.state.maxGroupKeysPerFabric === 0 && this.state.maxGroupsPerFabric === 1) {
+            // We assume unchanged defaults
+            let groupsOrAggregatorFound = false;
+            this.endpoint.visit(endpoint => {
+                if (
+                    !groupsOrAggregatorFound &&
+                    (endpoint.type.deviceType === AggregatorEndpoint.deviceType ||
+                        endpoint.behaviors.has(GroupsBehavior))
+                ) {
+                    groupsOrAggregatorFound = true;
+                }
+            });
+            if (groupsOrAggregatorFound) {
+                // If we have groups, we assume the defaults are set to the minimum values
+                this.state.maxGroupKeysPerFabric = 10; // The Minimum would be 3;
+                this.state.maxGroupsPerFabric = 11; // The Minimum would be 4;
             }
         }
 
