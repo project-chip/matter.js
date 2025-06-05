@@ -16,7 +16,6 @@ export const GROUP_SECURITY_INFO = Bytes.fromString("GroupKey v1.0");
  * Class that contains an operational view on the Group Keys for a fabric
  */
 export class FabricGroupsManager {
-    #storage?: StorageContext;
     #fabric: Fabric;
     #groups: Groups;
     #messagingState: MessagingState;
@@ -54,10 +53,7 @@ export class FabricGroupsManager {
     }
 
     set storage(storage: StorageContext) {
-        if (this.#storage !== undefined) {
-            throw new InternalError("Storage context can only be set once.");
-        }
-        this.#storage = storage;
+        this.#messagingState.storage = storage;
     }
 
     /** Operative lookup of the group key sets by their id. */
