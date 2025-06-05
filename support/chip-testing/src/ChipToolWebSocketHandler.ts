@@ -789,10 +789,11 @@ export class ChipToolWebSocketHandler {
             return { results: [] };
         }
 
+        const nodeId = NodeId(parseNumber(destinationId));
         try {
             await handler.handleWriteAttributeById({
-                nodeId: NodeId(parseNumber(destinationId)),
-                endpointId: EndpointNumber(parseInt(endpointId)),
+                nodeId,
+                endpointId: NodeId.isGroupNodeId(nodeId) ? undefined : EndpointNumber(parseInt(endpointId)),
                 clusterId: ClusterId(parseInt(clusterId)),
                 attributeId: AttributeId(parseInt(attributeId)),
                 value: parsedValue,
@@ -1154,10 +1155,11 @@ export class ChipToolWebSocketHandler {
             }
         }
         const matterValue = convertWebsocketDataToMatter(parsedValue, attributeModel);
+        const nodeId = NodeId(parseNumber(destinationId));
         try {
             await handler.handleWriteAttribute({
-                nodeId: NodeId(parseNumber(destinationId)),
-                endpointId: EndpointNumber(parseInt(endpointId)),
+                nodeId,
+                endpointId: NodeId.isGroupNodeId(nodeId) ? undefined : EndpointNumber(parseInt(endpointId)),
                 clusterId: clusterData.clusterId,
                 attributeName: camelize(attributeModel.name),
                 value: matterValue,
@@ -1193,10 +1195,12 @@ export class ChipToolWebSocketHandler {
         });
         const commandName = camelize(command);
         const commandModel = clusterData.commands[commandName.toLowerCase()];
+        const nodeId = NodeId(parseNumber(destinationId));
+        const isGroupNode = NodeId.isGroupNodeId(nodeId);
         try {
             const result = await handler.handleInvoke({
-                nodeId: NodeId(parseNumber(destinationId)),
-                endpointId: EndpointNumber(parseInt(endpointId)),
+                nodeId,
+                endpointId: isGroupNode ? undefined : EndpointNumber(parseInt(endpointId)),
                 clusterId: clusterData.clusterId,
                 commandId: CommandId(commandModel.id),
                 data: convertWebsocketDataToMatter(
@@ -1205,6 +1209,7 @@ export class ChipToolWebSocketHandler {
                 ),
                 timedInteractionTimeoutMs:
                     timedInteractionTimeoutMs !== undefined ? parseInt(timedInteractionTimeoutMs) : undefined,
+                suppressResponse: isGroupNode,
             });
             if (result && commandModel.responseModel) {
                 return {

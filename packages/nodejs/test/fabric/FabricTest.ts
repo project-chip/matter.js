@@ -5,7 +5,7 @@
  */
 
 import { Bytes, Crypto, StorageBackendMemory, StorageManager } from "#general";
-import { Fabric, FabricManager, SecureSession, SessionManager } from "#protocol";
+import { Fabric, FabricManager, NodeSession, SessionManager } from "#protocol";
 import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
 import * as assert from "node:assert";
 import { buildFabric } from "./FabricTestingUtil.js";
@@ -72,7 +72,7 @@ describe("Fabric", () => {
                 label: "",
             });
 
-            const result = await fabric.getDestinationId(TEST_NODE_ID, TEST_RANDOM);
+            const result = await fabric.currentDestinationIdFor(TEST_NODE_ID, TEST_RANDOM);
 
             assert.equal(Bytes.toHex(result), Bytes.toHex(EXPECTED_DESTINATION_ID));
         });
@@ -80,7 +80,7 @@ describe("Fabric", () => {
         it("generates the correct destination ID 2", async () => {
             const fabric = await buildFabric();
 
-            const result = await fabric.getDestinationId(TEST_NODE_ID_2, TEST_RANDOM_2);
+            const result = await fabric.currentDestinationIdFor(TEST_NODE_ID_2, TEST_RANDOM_2);
 
             assert.equal(Bytes.toHex(result), Bytes.toHex(EXPECTED_DESTINATION_ID_2));
         });
@@ -103,7 +103,7 @@ describe("Fabric", () => {
                 label: "",
             });
 
-            const result = await fabric.getDestinationId(TEST_NODE_ID_3, TEST_RANDOM_3);
+            const result = await fabric.currentDestinationIdFor(TEST_NODE_ID_3, TEST_RANDOM_3);
 
             assert.equal(Bytes.toHex(result), Bytes.toHex(EXPECTED_DESTINATION_ID_3));
         });
@@ -119,7 +119,7 @@ describe("Fabric", () => {
             let session1Destroyed = false;
             let session2Destroyed = false;
             const manager = await createManager();
-            const secureSession1 = new SecureSession({
+            const secureSession1 = new NodeSession({
                 manager,
                 id: 1,
                 fabric: undefined,
@@ -132,7 +132,7 @@ describe("Fabric", () => {
             });
 
             fabric.addSession(secureSession1);
-            const secureSession2 = new SecureSession({
+            const secureSession2 = new NodeSession({
                 manager,
                 id: 2,
                 fabric: undefined,
@@ -179,7 +179,7 @@ describe("Fabric", () => {
             let session1Destroyed = false;
             let session2Destroyed = false;
             const manager = await createManager();
-            const secureSession1 = new SecureSession({
+            const secureSession1 = new NodeSession({
                 manager,
                 id: 1,
                 fabric: undefined,
@@ -191,7 +191,7 @@ describe("Fabric", () => {
                 isInitiator: true,
             });
             fabric.addSession(secureSession1);
-            const secureSession2 = new SecureSession({
+            const secureSession2 = new NodeSession({
                 manager,
                 id: 2,
                 fabric: undefined,

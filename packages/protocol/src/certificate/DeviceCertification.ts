@@ -5,7 +5,7 @@
  */
 
 import { Construction, Crypto, ImplementationError, InternalError, PrivateKey } from "#general";
-import { SecureSession } from "#session/SecureSession.js";
+import { NodeSession } from "#session/NodeSession.js";
 import { ProductDescription } from "#types";
 import { AttestationCertificateManager } from "./AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./CertificationDeclarationManager.js";
@@ -71,7 +71,7 @@ export class DeviceCertification {
         });
     }
 
-    sign(session: SecureSession, data: Uint8Array) {
+    sign(session: NodeSession, data: Uint8Array) {
         return Crypto.sign(this.#assertInitialized().privateKey, [data, session.attestationChallengeKey]);
     }
 

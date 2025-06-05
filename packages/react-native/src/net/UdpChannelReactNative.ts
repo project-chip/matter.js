@@ -17,6 +17,7 @@ import {
     repackErrorAs,
     UdpChannel,
     UdpChannelOptions,
+    UdpSocketType,
 } from "#general";
 import { NetworkReactNative } from "./NetworkReactNative.js";
 
@@ -30,9 +31,9 @@ interface RemoteInfo {
     port: number;
     size: number;
 }
-type SocketType = "udp4" | "udp6";
+
 interface SocketOptions {
-    type: SocketType;
+    type: UdpSocketType;
     reuseAddr?: boolean | undefined;
     /**
      * @default false
@@ -48,10 +49,12 @@ interface SocketOptions {
           ) => void)
         | undefined;
 }
+
 interface Socket {
     setBroadcast(flag: boolean): void;
     setMulticastInterface(interfaceAddress: string): void;
     addMembership(multicastAddress: string, multicastInterface?: string): void;
+    dropMembership(multicastAddress: string, multicastInterface?: string): void;
     on(event: "message", listener: (msg: Uint8Array, rinfo: RemoteInfo) => void): void;
     on(event: "error", listener: (error: Error) => void): void;
     removeListener(event: "message", listener: (msg: Uint8Array, rinfo: RemoteInfo) => void): void;
@@ -95,13 +98,11 @@ function createDgramSocket(host: string | undefined, port: number | undefined, o
 }
 
 export class UdpChannelReactNative implements UdpChannel {
-    static async create({
-        listeningPort,
-        type,
-        listeningAddress,
-        netInterface,
-        membershipAddresses,
-    }: UdpChannelOptions) {
+    readonly #type: UdpSocketType;
+    readonly #socket: Socket;
+    readonly #netInterface?: string;
+
+    static async create({ listeningPort, type, listeningAddress, netInterface }: UdpChannelOptions) {
         const socketOptions: SocketOptions = { type, reuseAddr: true };
         if (type === "udp6") {
             socketOptions.ipv6Only = true;
@@ -130,57 +131,74 @@ export class UdpChannelReactNative implements UdpChannel {
             );
             socket.setMulticastInterface(multicastInterface);
         }
-        if (membershipAddresses !== undefined) {
-            const multicastInterfaces = await NetworkReactNative.getMembershipMulticastInterfaces(
-                netInterface,
-                type === "udp4",
-            );
-            for (const address of membershipAddresses) {
-                for (const multicastInterface of multicastInterfaces) {
-                    try {
-                        socket.addMembership(address, multicastInterface);
-                    } catch (error) {
-                        logger.warn(
-                            `Error adding membership for address ${address}${
-                                multicastInterface ? ` with interface ${multicastInterface}` : ""
-                            }: ${error}`,
-                        );
-                    }
-                }
-            }
-        }
         return new UdpChannelReactNative(type, socket, netInterfaceZone);
     }
 
     readonly maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
 
-    constructor(
-        private readonly type: "udp4" | "udp6",
-        private readonly socket: Socket,
-        private readonly netInterface?: string,
-    ) {}
+    constructor(type: UdpSocketType, socket: Socket, netInterface?: string) {
+        this.#type = type;
+        this.#socket = socket;
+        this.#netInterface = netInterface;
+    }
+
+    async addMembership(membershipAddress: string) {
+        const multicastInterfaces = await NetworkReactNative.getMembershipMulticastInterfaces(
+            this.#netInterface,
+            this.#type === "udp4",
+        );
+        for (const multicastInterface of multicastInterfaces) {
+            try {
+                this.#socket.addMembership(membershipAddress, multicastInterface);
+            } catch (error) {
+                logger.warn(
+                    `Error adding membership for address ${membershipAddress}${
+                        multicastInterface ? ` with interface ${multicastInterface}` : ""
+                    }: ${error}`,
+                );
+            }
+        }
+    }
+
+    async dropMembership(membershipAddress: string) {
+        const multicastInterfaces = await NetworkReactNative.getMembershipMulticastInterfaces(
+            this.#netInterface,
+            this.#type === "udp4",
+        );
+        for (const multicastInterface of multicastInterfaces) {
+            try {
+                this.#socket.dropMembership(membershipAddress, multicastInterface);
+            } catch (error) {
+                logger.warn(
+                    `Error removing membership for address ${membershipAddress}${
+                        multicastInterface ? ` with interface ${multicastInterface}` : ""
+                    }: ${error}`,
+                );
+            }
+        }
+    }
 
     onData(
         listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Uint8Array) => void,
     ) {
         const messageListener = async (data: Uint8Array, { address, port }: RemoteInfo) => {
-            const netInterface = this.netInterface ?? (await NetworkReactNative.getNetInterfaceForIp(address));
+            const netInterface = this.#netInterface ?? (await NetworkReactNative.getNetInterfaceForIp(address));
             listener(netInterface, address, port, data);
         };
 
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        this.socket.on("message", messageListener);
+        this.#socket.on("message", messageListener);
         return {
             close: async () => {
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                this.socket.removeListener("message", messageListener);
+                this.#socket.removeListener("message", messageListener);
             },
         };
     }
 
     async send(host: string, port: number, data: Uint8Array) {
         return new Promise<void>((resolve, reject) => {
-            this.socket.send(data, port, host, error => {
+            this.#socket.send(data, port, host, error => {
                 if (error !== null) {
                     reject(repackErrorAs(error, NetworkError) as Error);
                     return;
@@ -192,14 +210,14 @@ export class UdpChannelReactNative implements UdpChannel {
 
     async close() {
         try {
-            this.socket.close();
+            this.#socket.close();
         } catch (error) {
             logger.debug("Error on closing socket", error);
         }
     }
 
     get port() {
-        return this.socket.address().port;
+        return this.#socket.address().port;
     }
 
     supports(type: ChannelType, address?: string) {
@@ -211,7 +229,7 @@ export class UdpChannelReactNative implements UdpChannel {
             return true;
         }
 
-        if (this.type === "udp4") {
+        if (this.#type === "udp4") {
             return isIPv4(address);
         }
 

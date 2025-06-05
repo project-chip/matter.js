@@ -15,6 +15,7 @@ import { AttributeModel, DataModelPath, ElementTag, FabricIndex as FabricIndexFi
 import {
     ArraySchema,
     AttributePath,
+    EndpointNumber,
     FabricIndex,
     Status,
     StatusCode,
@@ -22,6 +23,7 @@ import {
     TlvSchema,
     TlvStream,
 } from "#types";
+import { Subject } from "./Subject.js";
 
 const logger = Logger.get("AttributeWriteResponse");
 
@@ -60,6 +62,10 @@ export class AttributeWriteResponse<
                     writeResponses.push(...responses);
                 }
             } else {
+                if (Subject.isGroup(this.session.subject)) {
+                    // Group command cannot be concrete paths
+                    throw new StatusResponseError("Group writes can not be concrete paths", StatusCode.InvalidAction);
+                }
                 writeResponses.push(
                     await this.#writeConcrete(path as WriteResult.ConcreteAttributePath, data, dataVersion),
                 );
@@ -106,22 +112,38 @@ export class AttributeWriteResponse<
             return;
         }
 
-        // TODO: Add Group handling and validation
-        /*
-        if (isGroupSession && endpointId !== undefined) {
-            throw new StatusResponseError("Illegal write request with group ID and endpoint ID", StatusCode.InvalidAction);
-        }
-        */
-
+        const isGroupPath = Subject.isGroup(this.session.subject);
         if (endpointId === undefined) {
+            let groupEndpoints: EndpointNumber[] | undefined;
+            if (isGroupPath) {
+                if (this.session.subject.endpoints?.length) {
+                    groupEndpoints = this.session.subject.endpoints;
+                } else {
+                    // No endpoints mapped to this group, so we cannot write anything
+                    logger.debug(`No endpoints mapped to group ${this.session.subject.id}, skipping wildcard invoke`);
+                    return;
+                }
+            }
+
             const responses = new Array<WriteResult.AttributeStatus>();
             for (const endpoint of this.node) {
+                if (groupEndpoints !== undefined && !groupEndpoints.includes(endpoint.id)) {
+                    // This endpoint is not part of the group, skip it
+                    continue;
+                }
                 const response = await this.#writeEndpointForWildcard(endpoint, path, value);
                 if (response !== undefined) {
                     responses.push(response);
                 }
             }
             return responses;
+        }
+
+        if (isGroupPath) {
+            throw new StatusResponseError(
+                "Illegal write request with group ID and endpoint ID",
+                StatusCode.InvalidAction,
+            );
         }
 
         const endpoint = this.node[endpointId];

@@ -49,7 +49,7 @@ jobs:
         id: check-trigger
         run: echo "controller-tests-required=true" >> $GITHUB_OUTPUT
 
-  # If we need to do anything make sure that chip binaries are build and environment can be set up
+  # If we need to do anything, make sure that chip binaries are build and environment can be set up
   prepare-chip-build:
     needs: [tests-needed]
     if: ${{ github.repository == 'project-chip/matter.js' && needs.tests-needed.outputs.controller-tests-required == 'true' }}
@@ -107,7 +107,7 @@ jobs:
               --chip-tool ../support/chip-testing/dist/esm/ControllerWebSocketTestApp.js \
               --log-level info \
               --target-glob "{Test_*,}" \
-              --target-skip-glob "{Test_TC_BDX_*,Test_TC_DGTHREAD*,Test_TC_DGWIFI*,Test_TC_ACE_1_6,Test_TC_SC_5_2,Test_TC_S_2_3}" \
+              --target-skip-glob "{Test_TC_BDX_*,Test_TC_DGTHREAD*,Test_TC_DGWIFI*,Test_TC_S_2_3}" \
               run \
               --all-clusters-app ../bin/chip-all-clusters-app \
               --lock-app ../bin/chip-lock-app \

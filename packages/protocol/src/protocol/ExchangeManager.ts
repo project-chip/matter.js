@@ -15,18 +15,18 @@ import {
     MatterAggregateError,
     MatterError,
     MatterFlowError,
-    NotImplementedError,
     ObserverGroup,
     TransportInterface,
     TransportInterfaceSet,
     UdpInterface,
+    UnexpectedDataError,
 } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
-import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
+import { DecodedMessage, Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { SecureChannelMessenger } from "../securechannel/SecureChannelMessenger.js";
 import { SecureChannelProtocol } from "../securechannel/SecureChannelProtocol.js";
-import { SecureSession } from "../session/SecureSession.js";
+import { NodeSession } from "../session/NodeSession.js";
 import { Session } from "../session/Session.js";
 import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
 import { ChannelManager } from "./ChannelManager.js";
@@ -73,7 +73,7 @@ export class MessageChannel implements Channel<Message> {
         return this.channel.maxPayloadSize;
     }
 
-    send(message: Message, logContext?: ExchangeLogContext): Promise<void> {
+    async send(message: Message, logContext?: ExchangeLogContext) {
         logger.debug("Message »", MessageCodec.messageDiagnostics(message, logContext));
         const packet = this.session.encode(message);
         const bytes = MessageCodec.encodePacket(packet);
@@ -83,7 +83,7 @@ export class MessageChannel implements Channel<Message> {
             );
         }
 
-        return this.channel.send(bytes);
+        return await this.channel.send(bytes);
     }
 
     get name() {
@@ -202,11 +202,13 @@ export class ExchangeManager {
 
     private async onMessage(channel: Channel<Uint8Array>, messageBytes: Uint8Array) {
         const packet = MessageCodec.decodePacket(messageBytes);
+        const aad = messageBytes.slice(0, messageBytes.length - packet.applicationPayload.length); // Header+Extensions
 
-        if (packet.header.sessionType === SessionType.Group)
-            throw new NotImplementedError("Group messages are not supported");
+        const messageId = packet.header.messageId;
 
+        let isDuplicate: boolean;
         let session: Session | undefined;
+        let message: DecodedMessage | undefined;
         if (packet.header.sessionType === SessionType.Unicast) {
             if (packet.header.sessionId === UNICAST_UNSECURE_SESSION_ID) {
                 if (this.#closing) return;
@@ -219,35 +221,46 @@ export class ExchangeManager {
             } else {
                 session = this.#sessionManager.getSession(packet.header.sessionId);
             }
+
+            if (session === undefined) {
+                throw new MatterFlowError(
+                    `Cannot find a session for ID ${packet.header.sessionId}${
+                        packet.header.sourceNodeId !== undefined
+                            ? ` and source NodeId ${packet.header.sourceNodeId}`
+                            : ""
+                    }`,
+                );
+            }
+
+            message = session.decode(packet, aad);
+
+            try {
+                session.updateMessageCounter(messageId);
+                isDuplicate = false;
+            } catch (e) {
+                DuplicateMessageError.accept(e);
+                isDuplicate = true;
+            }
         } else if (packet.header.sessionType === SessionType.Group) {
             if (this.#closing) return;
-            if (packet.header.sourceNodeId !== undefined) {
-                //session = this.sessionManager.findGroupSession(packet.header.destGroupId, packet.header.sessionId);
+            if (packet.header.sourceNodeId === undefined) {
+                throw new UnexpectedDataError("Group session message must include a source NodeId");
             }
-            // if (packet.header.destGroupId !== undefined) { ???
+
+            let key: Uint8Array;
+            ({ session, message, key } = this.#sessionManager.groupSessionFromPacket(packet, aad));
+
+            try {
+                session.updateMessageCounter(messageId, packet.header.sourceNodeId, key);
+                isDuplicate = false;
+            } catch (e) {
+                DuplicateMessageError.accept(e);
+                isDuplicate = true;
+            }
+        } else {
+            throw new MatterFlowError(`Unsupported session type: ${packet.header.sessionType}`);
         }
 
-        if (session === undefined) {
-            throw new MatterFlowError(
-                `Cannot find a session for ID ${packet.header.sessionId}${
-                    packet.header.sourceNodeId !== undefined ? ` and source NodeId ${packet.header.sourceNodeId}` : ""
-                }`,
-            );
-        }
-
-        const messageId = packet.header.messageId;
-
-        let isDuplicate;
-        try {
-            session.updateMessageCounter(packet.header.messageId, packet.header.sourceNodeId);
-            isDuplicate = false;
-        } catch (e) {
-            DuplicateMessageError.accept(e);
-            isDuplicate = true;
-        }
-
-        const aad = messageBytes.slice(0, messageBytes.length - packet.applicationPayload.length); // Header+Extensions
-        const message = session.decode(packet, aad);
         const exchangeIndex = message.payloadHeader.isInitiatorMessage
             ? message.payloadHeader.exchangeId
             : message.payloadHeader.exchangeId | 0x10000;
@@ -343,9 +356,12 @@ export class ExchangeManager {
                     throw new MatterFlowError(`Unsupported protocol ${message.payloadHeader.protocolId}`);
                 }
                 if (isDuplicate) {
-                    logger.info(
-                        `Ignoring duplicate message ${messageId} (requires no ack) for protocol ${message.payloadHeader.protocolId} on channel ${channel.name}`,
-                    );
+                    if (message.packetHeader.destGroupId === undefined) {
+                        // Duplicate Non-Group messages are still interesting to log to know them
+                        logger.info(
+                            `Ignoring duplicate message ${messageId} (requires no ack) for protocol ${message.payloadHeader.protocolId} on channel ${channel.name}`,
+                        );
+                    }
                     return;
                 } else {
                     logger.info(
@@ -365,12 +381,12 @@ export class ExchangeManager {
             return;
         }
         const { session } = exchange;
-        if (session.isSecure && session.closingAfterExchangeFinished) {
+        if (NodeSession.is(session) && session.closingAfterExchangeFinished) {
             logger.debug(
                 `Exchange index ${exchangeIndex} Session ${session.name} is already marked for closure. Close session now.`,
             );
             try {
-                await this.#closeSession(session as SecureSession);
+                await this.#closeSession(session);
             } catch (error) {
                 logger.error(`Error closing session ${session.name}. Ignoring.`, error);
             }
@@ -378,7 +394,7 @@ export class ExchangeManager {
         this.#exchanges.delete(exchangeIndex);
     }
 
-    async #closeSession(session: SecureSession) {
+    async #closeSession(session: NodeSession) {
         const sessionId = session.id;
         const sessionName = session.name;
 

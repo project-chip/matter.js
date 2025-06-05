@@ -124,7 +124,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     ownerOfType<T extends EndpointType.Empty>(type: T): Endpoint<T> | undefined {
         for (let endpoint: Endpoint | undefined = this; endpoint !== undefined; endpoint = endpoint.owner) {
-            if (endpoint.type.deviceClass === type.deviceClass) {
+            if (endpoint.type.deviceType === type.deviceType) {
                 return endpoint as Endpoint<T>;
             }
         }

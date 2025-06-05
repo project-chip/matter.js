@@ -5,7 +5,7 @@
  */
 
 import { Bytes } from "#general";
-import { Message, MessageCodec, SecureSession, SessionType } from "#protocol";
+import { Message, MessageCodec, NodeSession, SessionType } from "#protocol";
 import { NodeId } from "#types";
 import * as assert from "node:assert";
 
@@ -44,9 +44,9 @@ const ENCRYPTED_BYTES = Bytes.fromHex(
     "1f9c4e278a2e2a755ebb4fcb9478211efb09aa9518fcafb56d74f135544636037c16fb6b62347794da0c5bde142e1a8b1cc96575e9e55471c08b58f7640b7d7f4173c8ff967c39e9961f30a29cb1f64f68df4b5bc1e742587f778eeb9ec586c162ff384558596792a2c1e43c150cd0e9ec1484c50950f17cd6c084d07caed94ce45c20004210cbde48da44ebcf7d931657f03e07e3ea29ae41868b804bf39e628323cd025507773f07268301aa1e77a82927fce041241839cee4114f6307b6befe3befde87a2d3f13eeef96b27b36e788d907b44bef2d195aa802692f4f12acc015aede3cd29da272d1e4b7f3f59683d25bf08f0e29fba2a8a9b",
 );
 
-describe("SecureSession", () => {
+describe("NodeSession", () => {
     function secureSession() {
-        return new SecureSession({
+        return new NodeSession({
             id: 1,
             fabric: undefined,
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,

@@ -15,6 +15,8 @@ import {
     AclEndpointContext,
     FabricManager,
     IncomingSubjectDescriptor,
+    NodeSession,
+    SecureSession,
 } from "#protocol";
 import {
     CaseAuthenticatedTag,
@@ -159,7 +161,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
 
                 if (subjects !== null) {
                     for (const subject of subjects) {
-                        if (GroupId(subject) === GroupId.UNSPECIFIED_GROUP_ID) {
+                        if (GroupId(Number(subject)) === GroupId.NO_GROUP_ID) {
                             throw new StatusResponseError(
                                 "Subject must be a valid GroupId for Group ACLs",
                                 StatusCode.ConstraintError,
@@ -202,6 +204,21 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         }
     }
 
+    /**
+     * Determine and return the adminPassCodeId and adminNodeId from the node that initiated the ACL change.
+     * it is either the root node of the fabric or 0 if the session is undefined or a PASE session.
+     */
+    #adminDataFromSession(session: SecureSession | undefined) {
+        if (session === undefined || (NodeSession.is(session) && session.isPase)) {
+            return { adminPasscodeId: 0, adminNodeId: null };
+        }
+        const adminNodeId = session?.associatedFabric.rootNodeId;
+        if (adminNodeId === undefined) {
+            throw new InternalError("Admin Node ID is undefined, should never happen");
+        }
+        return { adminPasscodeId: null, adminNodeId };
+    }
+
     #handleAccessControlListChange(
         value: AccessControlTypes.AccessControlEntry[],
         oldValue: AccessControlTypes.AccessControlEntry[],
@@ -218,12 +235,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         if (relevantFabricIndex === undefined || this.events.accessControlEntryChanged === undefined) {
             return;
         }
-        const adminPasscodeId = session === undefined || session?.isPase ? 0 : null;
-        const adminNodeId = adminPasscodeId === null ? session?.associatedFabric.rootNodeId : null;
-        if (adminNodeId === undefined) {
-            // Should never happen
-            return;
-        }
+        const { adminPasscodeId, adminNodeId } = this.#adminDataFromSession(session);
         const fabricAcls = value.filter(entry => entry.fabricIndex === relevantFabricIndex);
         const oldFabricAcls = oldValue.filter(entry => entry.fabricIndex === relevantFabricIndex);
 
@@ -302,12 +314,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         if (relevantFabricIndex === undefined || this.events.accessControlExtensionChanged === undefined) {
             return;
         }
-        const adminPasscodeId = session === undefined || session?.isPase ? 0 : null;
-        const adminNodeId = adminPasscodeId === null ? session?.associatedFabric.rootNodeId : null;
-        if (adminNodeId === undefined) {
-            // Should never happen
-            return;
-        }
+        const { adminPasscodeId, adminNodeId } = this.#adminDataFromSession(session);
 
         const fabricExtensions = value.filter(entry => entry.fabricIndex === relevantFabricIndex);
         const oldFabricExtensions = oldValue.filter(entry => entry.fabricIndex === relevantFabricIndex);
@@ -360,7 +367,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
             return [AccessLevel.View];
         }
 
-        return this.aclManager.getGrantedPrivileges(context.session, endpoint, location.cluster);
+        return this.aclManager.getGrantedPrivileges(context, endpoint, location.cluster);
     }
 
     /**

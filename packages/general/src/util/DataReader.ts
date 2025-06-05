@@ -7,13 +7,13 @@
 import { Bytes, Endian } from "./Bytes.js";
 
 /** Reader that auto-increments its offset after each read. */
-export class DataReader<E extends Endian> {
+export class DataReader<E extends Endian = Endian.Big> {
     readonly #littleEndian: boolean;
     readonly #dataView: DataView;
     readonly #buffer: Uint8Array;
     #offset = 0;
 
-    constructor(buffer: Uint8Array, endian: E) {
+    constructor(buffer: Uint8Array, endian?: E) {
         this.#buffer = buffer;
         this.#dataView = Bytes.dataViewOf(this.#buffer);
         this.#littleEndian = endian === Endian.Little;

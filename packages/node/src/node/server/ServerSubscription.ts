@@ -7,8 +7,8 @@
 import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { Logger, MatterError, NetworkError, NoResponseTimeoutError, ObserverGroup, Time, Timer } from "#general";
 import { Specification } from "#model";
-import { ServerNode } from "#node/index.js";
-import type { AttributeResponseFilter, Message, MessageExchange } from "#protocol";
+import type { ServerNode } from "#node/ServerNode.js";
+import type { AttributeResponseFilter, Message, MessageExchange, NodeSession } from "#protocol";
 import {
     AttributeReadResponse,
     AttributeSubscriptionResponse,
@@ -19,7 +19,6 @@ import {
     PeerAddress,
     Read,
     ReadResult,
-    SecureSession,
     Subscription,
     SubscriptionCriteria,
 } from "#protocol";
@@ -95,7 +94,7 @@ export namespace ServerSubscriptionConfig {
  * Interface between {@link ServerSubscription} and the local Matter environment.
  */
 export interface ServerSubscriptionContext {
-    session: SecureSession;
+    session: NodeSession;
     node: ServerNode;
     initiateExchange(address: PeerAddress, protocolId: number): MessageExchange;
 }

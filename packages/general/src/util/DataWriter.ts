@@ -9,12 +9,12 @@ import { toBigInt, toNumber } from "./Number.js";
 
 /** Writer that auto-increments its offset after each write. */
 // TODO: some research should be done to make sure this is most performant implementation.
-export class DataWriter<E extends Endian> {
+export class DataWriter<E extends Endian = Endian.Big> {
     private readonly littleEndian: boolean;
     private length = 0;
     private readonly chunks = new Array<Uint8Array>();
 
-    constructor(endian: E) {
+    constructor(endian?: E) {
         this.littleEndian = endian === Endian.Little;
     }
 

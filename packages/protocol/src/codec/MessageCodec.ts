@@ -4,7 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, DataReader, DataWriter, Diagnostic, Endian, NotImplementedError, UnexpectedDataError } from "#general";
+import {
+    Bytes,
+    DataReader,
+    DataWriter,
+    Diagnostic,
+    Endian,
+    InternalError,
+    NotImplementedError,
+    UnexpectedDataError,
+} from "#general";
 import { ExchangeLogContext } from "#protocol/index.js";
 import { GroupId, INTERACTION_PROTOCOL_ID, NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
 import { MessageType } from "../interaction/InteractionMessenger.js";
@@ -84,6 +93,7 @@ const enum SecurityFlag {
     HasPrivacyEnhancements = 0b10000000,
     IsControlMessage = 0b01000000,
     HasMessageExtension = 0b00100000,
+    SessionTypeMask = 0b00000011,
 }
 
 function mapProtocolAndMessageType(protocolId: number, messageType: number): { type: string; for?: string } {
@@ -129,6 +139,13 @@ export class MessageCodec {
             const extensionLength = reader.readUInt16();
             securityExtension = reader.readByteArray(extensionLength);
         }
+
+        if (header.sessionType === SessionType.Group && !header.isControlMessage) {
+            if (payloadHeader.requiresAck || payloadHeader.ackedMessageId) {
+                throw new UnexpectedDataError(`Group data messages cannot have requiresAck or ackedMessageId set.`);
+            }
+        }
+
         return {
             packetHeader: header,
             payloadHeader,
@@ -176,13 +193,31 @@ export class MessageCodec {
         const destNodeId = hasDestNodeId ? NodeId(reader.readUInt64()) : undefined;
         const destGroupId = hasDestGroupId ? GroupId(reader.readUInt16()) : undefined;
 
-        const sessionType = securityFlags & 0b00000011;
-        if (sessionType !== SessionType.Group && sessionType !== SessionType.Unicast)
-            throw new UnexpectedDataError(`Unsupported session type ${sessionType}`);
+        const sessionType = securityFlags & SecurityFlag.SessionTypeMask;
+
+        if (sessionType !== SessionType.Group && sessionType !== SessionType.Unicast) {
+            throw new UnexpectedDataError(`Unsupported session type ${sessionType}.`);
+        }
+        if (sessionType === SessionType.Unicast && hasDestGroupId) {
+            throw new UnexpectedDataError(`Unicast session cannot have destination group id.`);
+        }
+        if (sessionType === SessionType.Group) {
+            if (!hasDestGroupId && !hasDestNodeId) {
+                throw new UnexpectedDataError(`Group session must have destination group id or destination node id.`);
+            }
+            if (!hasSourceNodeId) {
+                throw new UnexpectedDataError(`Group session must have source node id.`);
+            }
+        }
         const hasPrivacyEnhancements = (securityFlags & SecurityFlag.HasPrivacyEnhancements) !== 0;
-        if (hasPrivacyEnhancements) throw new NotImplementedError(`Privacy enhancements not supported`);
+        if (hasPrivacyEnhancements) {
+            throw new NotImplementedError(`Privacy enhancements not supported.`);
+        }
         const isControlMessage = (securityFlags & SecurityFlag.IsControlMessage) !== 0;
-        if (isControlMessage) throw new NotImplementedError(`Control Messages not supported`);
+        if (isControlMessage) {
+            // And also currently not needed because MCP is not relevant
+            throw new NotImplementedError(`Control Messages not supported.`);
+        }
         const hasMessageExtensions = (securityFlags & SecurityFlag.HasMessageExtension) !== 0;
 
         return {
@@ -207,7 +242,7 @@ export class MessageCodec {
         const hasSecuredExtension = (exchangeFlags & PayloadHeaderFlag.HasSecureExtension) !== 0;
         const hasVendorId = (exchangeFlags & PayloadHeaderFlag.HasVendorId) !== 0;
 
-        const messageType = reader.readUInt8();
+        const messageType = reader.readUInt8(); // Protocol Opcode
         const exchangeId = reader.readUInt16();
         const vendorId = hasVendorId ? reader.readUInt16() : COMMON_VENDOR_ID;
         const protocolId = (vendorId << 16) | reader.readUInt16();
@@ -232,6 +267,12 @@ export class MessageCodec {
         sourceNodeId,
         sessionType,
     }: PacketHeader) {
+        if (
+            sessionType === SessionType.Group &&
+            (destGroupId === undefined || sourceNodeId === undefined || destNodeId !== undefined)
+        ) {
+            throw new InternalError(`Group session must have destination group id or source node id.`);
+        }
         const writer = new DataWriter(Endian.Little);
         const flags =
             (HEADER_VERSION << 4) |
@@ -246,7 +287,7 @@ export class MessageCodec {
         writer.writeUInt32(messageCounter);
         if (sourceNodeId !== undefined) writer.writeUInt64(sourceNodeId);
         if (destNodeId !== undefined) writer.writeUInt64(destNodeId);
-        if (destGroupId !== undefined) writer.writeUInt32(destGroupId);
+        if (destGroupId !== undefined) writer.writeUInt16(destGroupId);
         return writer.toByteArray();
     }
 

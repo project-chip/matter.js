@@ -8,7 +8,7 @@ import { Behavior } from "#behavior/Behavior.js";
 import { ImplementationError, NotImplementedError, ServerAddress, Time } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import type { ClientNode } from "#node/ClientNode.js";
-import { Node } from "#node/Node.js";
+import type { Node } from "#node/Node.js";
 import { IdentityService } from "#node/server/IdentityService.js";
 import {
     CommissioningMode,

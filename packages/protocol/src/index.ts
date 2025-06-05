@@ -12,6 +12,7 @@ export * from "./codec/index.js";
 export * from "./common/index.js";
 export * from "./events/index.js";
 export * from "./fabric/index.js";
+export * from "./groups/index.js";
 export * from "./interaction/index.js";
 export * from "./mdns/index.js";
 export * from "./peer/index.js";

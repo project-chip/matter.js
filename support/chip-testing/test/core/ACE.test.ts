@@ -20,8 +20,5 @@ describe("ACE", () => {
         ),
     );
 
-    chip("ACE/*").exclude(
-        // Our group management server is too limited to pass this test
-        "ACE/1.6",
-    );
+    chip("ACE/*");
 });

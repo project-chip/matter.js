@@ -36,6 +36,11 @@ export class Time {
     }
     static readonly nowMs = (): number => Time.get().nowMs();
 
+    nowUs() {
+        return Math.floor(performance.now() + performance.timeOrigin) * 1000;
+    }
+    static readonly nowUs = (): number => Time.get().nowUs();
+
     /**
      * Create a timer that will call callback after durationMs has passed.
      */
@@ -89,6 +94,11 @@ export class Time {
     static get timers() {
         return registry;
     }
+}
+
+// Check if performance API is available and has the required methods. Use lower accuracy fallback if not.
+if (!performance || typeof performance.now !== "function" || typeof performance.timeOrigin !== "number") {
+    Time.prototype.nowUs = () => Time.nowMs() * 1000; // Fallback is a bit less accurate
 }
 
 const time = new Time();

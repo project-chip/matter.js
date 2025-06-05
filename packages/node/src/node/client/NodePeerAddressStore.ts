@@ -5,7 +5,7 @@
  */
 
 import { RemoteDescriptor } from "#behavior/system/commissioning/RemoteDescriptor.js";
-import { ClientNode } from "#node/ClientNode.js";
+import type { ClientNode } from "#node/ClientNode.js";
 import { IdentityService } from "#node/server/IdentityService.js";
 import type { ServerNode } from "#node/ServerNode.js";
 import { OperationalPeer, PeerAddress, PeerAddressMap, PeerAddressStore } from "#protocol";

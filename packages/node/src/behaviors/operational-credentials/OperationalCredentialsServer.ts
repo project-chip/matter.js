@@ -15,7 +15,6 @@ import { CryptoVerifyError, Logger, MatterFlowError, MaybePromise, UnexpectedDat
 import { AccessLevel } from "#model";
 import type { Node } from "#node/Node.js";
 import {
-    assertSecureSession,
     CertificateError,
     DeviceCertification,
     DeviceCommissioner,
@@ -25,6 +24,7 @@ import {
     FabricTableFullError,
     MatterFabricConflictError,
     MatterFabricInvalidAdminSubjectError,
+    NodeSession,
     PublicKeyError,
     TlvAttestation,
     TlvCertSigningRequest,
@@ -101,6 +101,9 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         const certification = await this.getCertification();
 
+        const session = this.session;
+        NodeSession.assert(session);
+
         const elements = TlvAttestation.encode({
             declaration: certification.declaration,
             attestationNonce: attestationNonce,
@@ -108,7 +111,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         });
         return {
             attestationElements: elements,
-            attestationSignature: await certification.sign(this.session, elements),
+            attestationSignature: await certification.sign(session, elements),
         };
     }
 
@@ -117,7 +120,9 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             throw new StatusResponseError("Invalid csr nonce length", StatusCode.InvalidCommand);
         }
 
-        if (isForUpdateNoc && this.session.isPase) {
+        const session = this.session;
+        NodeSession.assert(session);
+        if (isForUpdateNoc && session.isPase) {
             throw new StatusResponseError(
                 "csrRequest for UpdateNoc received on a PASE session",
                 StatusCode.InvalidCommand,
@@ -140,7 +145,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             this.session.id,
         );
         const nocsrElements = TlvCertSigningRequest.encode({ certSigningRequest, csrNonce });
-        return { nocsrElements, attestationSignature: await certification.sign(this.session, nocsrElements) };
+        return { nocsrElements, attestationSignature: await certification.sign(session, nocsrElements) };
     }
 
     override async certificateChainRequest({ certificateType }: OperationalCredentials.CertificateChainRequest) {
@@ -264,12 +269,15 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             targets: null, // entire node
         });
 
+        const session = this.session;
+        NodeSession.assert(session);
+
         await failsafeContext.addFabric(fabric);
 
         try {
-            if (this.session.isPase) {
-                logger.debug(`Add Fabric ${fabric.fabricIndex} to PASE session ${this.session.name}`);
-                this.session.addAssociatedFabric(fabric);
+            if (session.isPase) {
+                logger.debug(`Add Fabric ${fabric.fabricIndex} to PASE session ${session.name}`);
+                session.addAssociatedFabric(fabric);
             }
 
             // Update attributes
@@ -282,7 +290,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             }
         } catch (e) {
             // Fabric insertion into FabricManager is not currently transactional so we need to remove manually
-            await fabric.remove(this.session.id);
+            await fabric.remove(session.id);
             throw e;
         }
 
@@ -302,7 +310,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override async updateNoc({ nocValue, icacValue }: OperationalCredentials.UpdateNocRequest) {
-        assertSecureSession(this.session);
+        NodeSession.assert(this.session);
 
         const timedOp = this.#failsafeContext;
 

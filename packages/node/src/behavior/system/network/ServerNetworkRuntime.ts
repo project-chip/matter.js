@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SubscriptionBehavior } from "#behavior/system/subscription/index.js";
+import { SubscriptionBehavior } from "#behavior/system/subscription/SubscriptionBehavior.js";
 import {
     Construction,
     InterfaceType,
@@ -20,7 +20,7 @@ import {
     UdpInterface,
 } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
-import { NodePeerAddressStore } from "#node/index.js";
+import { NodePeerAddressStore } from "#node/client/NodePeerAddressStore.js";
 import { InteractionServer } from "#node/server/InteractionServer.js";
 import {
     Ble,
@@ -43,6 +43,7 @@ import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { ProductDescriptionServer } from "../product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
+import { ServerGroupNetworking } from "./ServerGroupNetworking.js";
 
 const logger = Logger.get("ServerNetworkRuntime");
 
@@ -62,8 +63,10 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     #mdnsBroadcaster?: MdnsInstanceBroadcaster;
     #bleBroadcaster?: InstanceBroadcaster;
     #bleTransport?: TransportInterface;
+    #ipv6UdpInterface?: UdpInterface;
     #observers = new ObserverGroup(this);
     #formerSubscriptionsHandled = false;
+    #groupNetworking?: ServerGroupNetworking;
 
     override get owner() {
         return super.owner as ServerNode;
@@ -148,15 +151,15 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         const port = this.owner.state.network.port;
         try {
-            const ipv6Intf = await UdpInterface.create(
+            this.#ipv6UdpInterface = await UdpInterface.create(
                 this.owner.env.get(Network),
                 "udp6",
                 port ? port : undefined,
                 netconf.listeningAddressIpv6,
             );
-            interfaces.add(ipv6Intf);
+            interfaces.add(this.#ipv6UdpInterface);
 
-            await this.owner.set({ network: { operationalPort: ipv6Intf.port } });
+            await this.owner.set({ network: { operationalPort: this.#ipv6UdpInterface.port } });
         } catch (error) {
             NoAddressAvailableError.accept(error);
             logger.info(`IPv6 UDP interface not created because IPv6 is not available, but required my Matter.`);
@@ -285,6 +288,8 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             maxPathsPerInvoke: this.owner.state.basicInformation.maxPathsPerInvoke,
         };
 
+        await this.#initializeGroupNetworking();
+
         // Install our interaction server
         const interactionServer = new InteractionServer(this.owner, env.get(SessionManager));
         env.set(InteractionServer, interactionServer);
@@ -359,6 +364,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         await this.owner.prepareRuntimeShutdown();
 
+        this.#groupNetworking?.close();
+        this.#groupNetworking = undefined;
+
         // Now all sessions are closed, so we wait for Advertiser to be gone
         await advertisementShutdown;
 
@@ -392,5 +400,19 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.owner.act(agent =>
             agent.get(SubscriptionBehavior).reestablishFormerSubscriptions(env.get(InteractionServer)),
         );
+    }
+
+    async #initializeGroupNetworking() {
+        if (this.#groupNetworking) {
+            logger.warn("Group networking already initialized, skipping.");
+            return;
+        }
+        if (this.#ipv6UdpInterface === undefined) {
+            logger.warn("No IPv6 UDP interface available, skipping group networking initialization.");
+            return;
+        }
+
+        this.#groupNetworking = new ServerGroupNetworking(this.owner.env, this.#ipv6UdpInterface);
+        await this.#groupNetworking.construction;
     }
 }

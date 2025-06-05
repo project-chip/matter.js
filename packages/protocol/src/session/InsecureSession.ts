@@ -6,11 +6,11 @@
 
 import { Logger, MatterFlowError } from "#general";
 import { NodeId } from "#types";
-import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
+import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet, SessionType } from "../codec/MessageCodec.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateUnencryptedWithRollover } from "../protocol/MessageReceptionState.js";
-import { NoAssociatedFabricError } from "./SecureSession.js";
+import { NoAssociatedFabricError } from "./NodeSession.js";
 import { Session, SessionParameterOptions } from "./Session.js";
 import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 
@@ -20,6 +20,7 @@ export class InsecureSession extends Session {
     readonly #initiatorNodeId: NodeId;
     readonly closingAfterExchangeFinished = false;
     readonly supportsMRP = true;
+    readonly type = SessionType.Unicast;
 
     constructor(args: {
         manager?: SessionManager;

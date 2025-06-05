@@ -47,7 +47,7 @@ export class NodeJsCrypto extends Crypto {
         try {
             cipher.final();
         } catch (e) {
-            throw new CryptoDecryptError(`${CRYPTO_ENCRYPT_ALGORITHM} decription failed: ${asError(e).message}`);
+            throw new CryptoDecryptError(`${CRYPTO_ENCRYPT_ALGORITHM} decryption failed: ${asError(e).message}`);
         }
         return new Uint8Array(result);
     }

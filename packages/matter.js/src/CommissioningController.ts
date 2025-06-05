@@ -772,6 +772,13 @@ export class CommissioningController {
             }
         }
     }
+
+    get groups() {
+        if (this.#controllerInstance === undefined) {
+            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
+        }
+        return this.#controllerInstance.getFabrics()[0].groups;
+    }
 }
 
 export async function configureNetwork(options: {

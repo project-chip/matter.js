@@ -5,7 +5,7 @@
  */
 
 import { AsyncObservable, InternalError, Logger } from "#general";
-import { type SecureSession } from "#session/SecureSession.js";
+import { NodeSession } from "#session/NodeSession.js";
 import { TlvAttributePath, TlvDataVersionFilter, TlvEventFilter, TlvEventPath, TypeFromSchema } from "#types";
 
 const logger = Logger.get("Subscription");
@@ -24,7 +24,7 @@ export interface SubscriptionCriteria {
  * A single active subscription.
  */
 export abstract class Subscription {
-    #session: SecureSession;
+    #session: NodeSession;
     #id: SubscriptionId;
     #isClosed?: boolean;
     #isCanceledByPeer?: boolean;
@@ -32,7 +32,7 @@ export abstract class Subscription {
     #cancelled = AsyncObservable<[subscription: Subscription]>();
     #maxIntervalMs?: number;
 
-    constructor(session: SecureSession, id: SubscriptionId, criteria: SubscriptionCriteria) {
+    constructor(session: NodeSession, id: SubscriptionId, criteria: SubscriptionCriteria) {
         this.#session = session;
         this.#id = id;
         this.#criteria = criteria;

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { toBigInt } from "#general";
+import { GroupId } from "./GroupId.js";
 import { NodeId, TlvNodeId } from "./NodeId.js";
 
 /**
@@ -12,7 +14,11 @@ import { NodeId, TlvNodeId } from "./NodeId.js";
  *
  * @see {@link MatterSpecification.v10.Core} § 6.6.2.1
  */
-export type SubjectId = NodeId; // Only NodeId is supported for now...
+export type SubjectId = NodeId | GroupId;
+
+export function SubjectId(v: bigint | number): SubjectId {
+    return toBigInt(v) as SubjectId;
+}
 
 /** Tlv schema for a Subject Id */
 export const TlvSubjectId = TlvNodeId;

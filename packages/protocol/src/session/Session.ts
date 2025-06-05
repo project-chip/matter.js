@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AsyncObservable, Time } from "#general";
+import { AsyncObservable, DataWriter, Endian, InternalError, Time } from "#general";
 import { NodeId, TypeFromPartialBitSchema } from "#types";
-import { DecodedMessage, DecodedPacket, Message, Packet } from "../codec/MessageCodec.js";
+import { DecodedMessage, DecodedPacket, Message, Packet, SessionType } from "../codec/MessageCodec.js";
 import { SupportedTransportsBitmap } from "../common/Scanner.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
@@ -103,6 +103,7 @@ export abstract class Session {
     timestamp = Time.nowMs();
     readonly createdAt = Time.nowMs();
     activeTimestamp = 0;
+    abstract type: SessionType;
     protected readonly idleIntervalMs: number;
     protected readonly activeIntervalMs: number;
     protected readonly activeThresholdMs: number;
@@ -111,7 +112,7 @@ export abstract class Session {
     protected readonly specificationVersion: number;
     protected readonly maxPathsPerInvoke: number;
     protected readonly messageCounter: MessageCounter;
-    protected readonly messageReceptionState: MessageReceptionState;
+    protected readonly messageReceptionState?: MessageReceptionState;
     protected readonly supportedTransports: TypeFromPartialBitSchema<typeof SupportedTransportsBitmap>;
     protected readonly maxTcpMessageSize: number;
 
@@ -126,7 +127,7 @@ export abstract class Session {
     constructor(args: {
         manager?: SessionManager;
         messageCounter: MessageCounter;
-        messageReceptionState: MessageReceptionState;
+        messageReceptionState?: MessageReceptionState;
         sessionParameters?: SessionParameterOptions;
         setActiveTimestamp: boolean;
     }) {
@@ -184,8 +185,19 @@ export abstract class Session {
         return this.messageCounter.getIncrementedCounter();
     }
 
-    updateMessageCounter(messageCounter: number, _sourceNodeId?: NodeId) {
+    updateMessageCounter(messageCounter: number, _sourceNodeId?: NodeId, _operationalKey?: Uint8Array) {
+        if (this.messageReceptionState === undefined) {
+            throw new InternalError("MessageReceptionState is not defined for this session");
+        }
         this.messageReceptionState.updateMessageCounter(messageCounter);
+    }
+
+    protected static generateNonce(securityFlags: number, messageId: number, nodeId: NodeId) {
+        const writer = new DataWriter(Endian.Little);
+        writer.writeUInt8(securityFlags);
+        writer.writeUInt32(messageId);
+        writer.writeUInt64(nodeId);
+        return writer.toByteArray();
     }
 
     /**
@@ -217,7 +229,6 @@ export abstract class Session {
     }
 
     abstract isSecure: boolean;
-    abstract isPase: boolean;
     abstract id: number;
     abstract peerSessionId: number;
     abstract nodeId: NodeId | undefined;

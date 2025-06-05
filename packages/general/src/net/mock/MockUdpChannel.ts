@@ -59,4 +59,12 @@ export class MockUdpChannel implements UdpChannel {
     supports(type: ChannelType, _address: string) {
         return type === ChannelType.UDP;
     }
+
+    addMembership(_address: string): void {
+        // No-op for mock channel
+    }
+
+    dropMembership(_address: string): void {
+        // No-op for mock channel
+    }
 }

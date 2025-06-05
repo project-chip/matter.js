@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ipv4ToBytes, ipv4ToNumber, ipv6ToArray, ipv6ToBytes, onSameNetwork } from "#util/Ip.js";
+import { ipv4ToBytes, ipv4ToNumber, ipv6BytesToString, ipv6ToArray, ipv6ToBytes, onSameNetwork } from "#util/Ip.js";
 
 describe("IP", () => {
     describe("iPv4ToNumber", () => {
@@ -50,6 +50,59 @@ describe("IP", () => {
             expect(result).deep.equal(
                 Uint8Array.of(0xfe, 0x80, 0, 0, 0, 0, 0, 0, 0xe7, 0x77, 0x4f, 0x5e, 0xc6, 0x1e, 0x73, 0x14),
             );
+        });
+    });
+
+    describe("iPv6BytesToString", () => {
+        it("converts an IPv6 address to a string", () => {
+            const result = ipv6BytesToString(
+                Uint8Array.of(0xfe, 0x80, 0, 0, 0, 0, 0, 0, 0xe7, 0x77, 0x4f, 0x5e, 0xc6, 0x1e, 0x73, 0x14),
+            );
+
+            expect(result).equal("fe80::e777:4f5e:c61e:7314");
+        });
+
+        it("converts an address with all zeros (::)", () => {
+            const result = ipv6BytesToString(Uint8Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+            expect(result).equal("::");
+        });
+
+        it("converts an address with leading zeros", () => {
+            const result = ipv6BytesToString(Uint8Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
+            expect(result).equal("::1");
+        });
+
+        it("converts an address with trailing zeros", () => {
+            const result = ipv6BytesToString(Uint8Array.of(0xff, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+            expect(result).equal("ffff::");
+        });
+
+        it("throws an error on wrong length", () => {
+            expect(() => ipv6BytesToString(Uint8Array.of(0, 1, 2))).to.throw("IPv6 address must be 16 bytes");
+        });
+
+        it("converts an address without compressed zeros", () => {
+            const result = ipv6BytesToString(
+                Uint8Array.of(
+                    0x20,
+                    0x01,
+                    0x0d,
+                    0xb8,
+                    0x85,
+                    0xa3,
+                    0x00,
+                    0x01,
+                    0x00,
+                    0x00,
+                    0x8a,
+                    0x2e,
+                    0x03,
+                    0x70,
+                    0x73,
+                    0x34,
+                ),
+            );
+            expect(result).equal("2001:db8:85a3:1:0:8a2e:370:7334");
         });
     });
 

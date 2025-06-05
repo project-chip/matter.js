@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError } from "#general";
 import { ClusterId, EndpointNumber, Event, EventId, EventNumber } from "#types";
 import { DecodedEventData } from "../../interaction/EventDataDecoder.js";
 import { InteractionClient } from "../../interaction/InteractionClient.js";
@@ -14,7 +15,7 @@ import { InteractionClient } from "../../interaction/InteractionClient.js";
 export function createEventClient<T>(
     event: Event<T, any>,
     name: string,
-    endpointId: EndpointNumber,
+    endpointId: EndpointNumber | undefined,
     clusterId: ClusterId,
     interactionClient: InteractionClient,
 ): EventClient<T> {
@@ -32,7 +33,7 @@ export class EventClient<T> {
     constructor(
         readonly event: Event<T, any>,
         readonly name: string,
-        readonly endpointId: EndpointNumber,
+        readonly endpointId: EndpointNumber | undefined,
         readonly clusterId: ClusterId,
         interactionClient: InteractionClient,
     ) {
@@ -44,6 +45,9 @@ export class EventClient<T> {
         minimumEventNumber?: EventNumber,
         isFabricFiltered?: boolean,
     ): Promise<DecodedEventData<T>[] | undefined> {
+        if (this.endpointId === undefined) {
+            throw new ImplementationError("Cannot read event without endpointId");
+        }
         return await this.#interactionClient.getEvent({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
@@ -60,6 +64,9 @@ export class EventClient<T> {
         minimumEventNumber?: EventNumber,
         isFabricFiltered?: boolean,
     ) {
+        if (this.endpointId === undefined) {
+            throw new ImplementationError("Cannot read event without endpointId");
+        }
         return await this.#interactionClient.subscribeEvent({
             endpointId: this.endpointId,
             clusterId: this.clusterId,

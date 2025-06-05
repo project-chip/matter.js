@@ -4,22 +4,26 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MaybePromise } from "#util/index.js";
 import { ChannelType } from "./Channel.js";
 import { TransportInterface } from "./TransportInterface.js";
 
 /** @see {@link MatterSpecification.v12.Core} § 4.4.4 */
 export const MAX_UDP_MESSAGE_SIZE = 1280 - 48; // 48 bytes IP and UDP header size for IPv6
 
+export type UdpSocketType = "udp4" | "udp6";
+
 export interface UdpChannelOptions {
     listeningPort?: number;
-    type: "udp4" | "udp6";
+    type: UdpSocketType;
     listeningAddress?: string;
     netInterface?: string;
-    membershipAddresses?: string[];
 }
 
 export interface UdpChannel {
     maxPayloadSize: number;
+    addMembership(address: string): MaybePromise<void>;
+    dropMembership(address: string): MaybePromise<void>;
     onData(
         listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Uint8Array) => void,
     ): TransportInterface.Listener;

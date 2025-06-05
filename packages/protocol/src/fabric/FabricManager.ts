@@ -167,6 +167,9 @@ export class FabricManager {
                 }
             });
         };
+        if (this.#storage !== undefined) {
+            fabric.storage = this.#storage.createContext(`fabric-${fabricIndex}`);
+        }
         if (this.#initializationDone) {
             this.#events.added.emit(fabric);
         }
@@ -182,6 +185,7 @@ export class FabricManager {
             );
         this.#fabrics.delete(fabricIndex);
         await this.persistFabrics();
+        await fabric.storage?.clearAll();
         this.#events.deleted.emit(fabric);
     }
 
@@ -213,9 +217,10 @@ export class FabricManager {
         this.#construction.assert();
 
         for (const fabric of this.#fabrics.values()) {
-            const candidateDestinationId = await fabric.getDestinationId(fabric.nodeId, initiatorRandom);
-            if (!Bytes.areEqual(candidateDestinationId, destinationId)) continue;
-            return fabric;
+            const candidateDestinationIds = await fabric.destinationIdsFor(fabric.nodeId, initiatorRandom);
+            if (candidateDestinationIds.some(candidate => Bytes.areEqual(candidate, destinationId))) {
+                return fabric;
+            }
         }
 
         throw new FabricNotFoundError();
@@ -233,7 +238,9 @@ export class FabricManager {
     }
 
     findByIndex(index: FabricIndex) {
-        return Array.from(this.#fabrics.values()).find(fabric => fabric.fabricIndex === index);
+        this.#construction.assert();
+
+        return this.#fabrics.get(index);
     }
 
     async updateFabric(fabric: Fabric) {

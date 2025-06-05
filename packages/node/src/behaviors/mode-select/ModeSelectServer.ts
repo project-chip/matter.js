@@ -9,8 +9,8 @@ import { OnOffServer } from "#behaviors/on-off";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { ModeSelect } from "#clusters/mode-select";
 import { OnOff } from "#clusters/on-off";
-import { RootEndpoint } from "#endpoints/root";
 import { Logger, MaybePromise } from "#general";
+import { ServerNode } from "#node/ServerNode.js";
 import { ClusterType, StatusCode, StatusResponseError } from "#types";
 import { ModeSelectBehavior } from "./ModeSelectBehavior.js";
 
@@ -101,8 +101,8 @@ export class ModeSelectBaseServer extends ModeSelectBase {
     }
 
     #getBootReason() {
-        const rootEndpoint = this.endpoint.ownerOfType(RootEndpoint);
-        if (rootEndpoint !== undefined && rootEndpoint.behaviors.has(GeneralDiagnosticsBehavior)) {
+        const rootEndpoint = this.env.get(ServerNode);
+        if (rootEndpoint.behaviors.has(GeneralDiagnosticsBehavior)) {
             return rootEndpoint.stateOf(GeneralDiagnosticsBehavior).bootReason;
         }
     }

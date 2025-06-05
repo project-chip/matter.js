@@ -4,15 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Behavior } from "#behavior/Behavior.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
-import { Behavior } from "#behavior/index.js";
 import { Transitions } from "#behavior/Transitions.js";
 import { GeneralDiagnosticsBehavior } from "#behaviors/general-diagnostics";
 import { OnOffServer } from "#behaviors/on-off";
 import { ColorControl } from "#clusters/color-control";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { RootEndpoint } from "#endpoints/root";
 import {
     addValueWithOverflow,
     AsyncObservable,
@@ -21,6 +20,7 @@ import {
     Logger,
     MaybePromise,
 } from "#general";
+import { ServerNode } from "#node/ServerNode.js";
 import { Val } from "#protocol";
 import { ClusterType, StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
 import { ColorControlBehavior } from "./ColorControlBehavior.js";
@@ -1726,8 +1726,8 @@ export class ColorControlBaseServer extends ColorControlBase {
     }
 
     #getBootReason() {
-        const rootEndpoint = this.endpoint.ownerOfType(RootEndpoint);
-        if (rootEndpoint !== undefined && rootEndpoint.behaviors.has(GeneralDiagnosticsBehavior)) {
+        const rootEndpoint = this.env.get(ServerNode);
+        if (rootEndpoint.behaviors.has(GeneralDiagnosticsBehavior)) {
             return rootEndpoint.stateOf(GeneralDiagnosticsBehavior).bootReason;
         }
     }

@@ -64,6 +64,10 @@ export namespace PeerAddress {
 
         return addr1.fabricIndex === addr2.fabricIndex && addr1.nodeId === addr2.nodeId;
     }
+
+    export function isGroup(address: PeerAddress): boolean {
+        return NodeId.isGroupNodeId(address.nodeId);
+    }
 }
 
 /**

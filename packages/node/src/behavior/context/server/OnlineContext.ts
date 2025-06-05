@@ -10,10 +10,10 @@ import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
 import { Diagnostic, ImplementationError, InternalError, MaybePromise, Transaction } from "#general";
 import { AccessLevel } from "#model";
-import { Node } from "#node/Node.js";
-import type { Message, NodeProtocol, SecureSession } from "#protocol";
-import { AccessControl, AclEndpointContext, assertSecureSession, MessageExchange } from "#protocol";
-import { FabricIndex, NodeId, SubjectId } from "#types";
+import type { Node } from "#node/Node.js";
+import type { Message, NodeProtocol } from "#protocol";
+import { AccessControl, AclEndpointContext, MessageExchange, SecureSession, Subject } from "#protocol";
+import { FabricIndex, NodeId } from "#types";
 import { ActionContext } from "../ActionContext.js";
 import { Contextual } from "../Contextual.js";
 import { NodeActivity } from "../NodeActivity.js";
@@ -24,31 +24,29 @@ import { ContextAgents } from "./ContextAgents.js";
  */
 export function OnlineContext(options: OnlineContext.Options) {
     let fabric: FabricIndex | undefined;
-    let subject: SubjectId;
+    let subject: Subject;
     let nodeProtocol: NodeProtocol | undefined;
     let accessLevelCache: Map<AccessControl.Location, number[]> | undefined;
 
-    const { exchange } = options;
+    const { exchange, message } = options;
     const session = exchange?.session;
 
     if (session) {
-        assertSecureSession(session);
+        SecureSession.assert(session);
         fabric = session.fabric?.fabricIndex;
-
-        // TODO - group subject
-        subject = session.peerNodeId;
+        subject = session.subjectFor(message);
     } else {
         fabric = options.fabric;
-        subject = options.subject as NodeId;
+        if (options.subject !== undefined) {
+            subject = Subject.Node({ id: options.subject });
+        } else {
+            throw new ImplementationError("OnlineContext requires an authorized subject");
+        }
     }
 
-    if (subject === undefined) {
-        throw new ImplementationError("OnlineContext requires an authorized subject");
-    }
-
-    const { message } = options;
+    // If we have subjects, the first is the main one, used for diagnostics
     const via = Diagnostic.via(
-        `online#${message?.packetHeader?.messageId?.toString(16) ?? "?"}@${subject.toString(16)}`,
+        `online#${message?.packetHeader?.messageId?.toString(16) ?? "?"}@${subject.id.toString(16)}`,
     );
 
     return {
@@ -133,12 +131,16 @@ export function OnlineContext(options: OnlineContext.Options) {
      * Initialization stage two - create context object after obtaining transaction
      */
     function createContext(transaction: Transaction, methods: {}) {
+        if (session) {
+            SecureSession.assert(session);
+        }
         let agents: undefined | ContextAgents;
         const context: ActionContext = {
             ...options,
-            session: session as SecureSession | undefined,
+            session,
             exchange,
             subject,
+
             fabric,
             transaction,
 
@@ -238,7 +240,7 @@ export namespace OnlineContext {
         message?: Message;
     } & (
         | { exchange: MessageExchange; fabric?: undefined; subject?: undefined }
-        | { exchange?: undefined; fabric: FabricIndex; subject: SubjectId }
+        | { exchange?: undefined; fabric: FabricIndex; subject: NodeId }
     );
 
     export interface ReadOnly extends ActionContext {

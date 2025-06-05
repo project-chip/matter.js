@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { STANDARD_MATTER_PORT } from "#general";
 import { Behavior } from "../../Behavior.js";
 import type { NetworkRuntime } from "./NetworkRuntime.js";
 
@@ -31,7 +32,7 @@ export namespace NetworkBehavior {
     }
 
     export class State {
-        port = 5540;
+        port = STANDARD_MATTER_PORT;
         operationalPort = -1;
     }
 }

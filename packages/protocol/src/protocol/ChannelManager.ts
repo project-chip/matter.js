@@ -6,7 +6,7 @@
 
 import { AsyncObservable, Channel, Environment, Environmental, Logger, MatterError } from "#general";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
-import { SecureSession } from "../session/SecureSession.js";
+import { NodeSession } from "../session/NodeSession.js";
 import { Session } from "../session/Session.js";
 import { MessageChannel } from "./ExchangeManager.js";
 
@@ -91,10 +91,9 @@ export class ChannelManager {
      * Returns the last established session for a Fabric and Node
      */
     getChannelForSession(session: Session) {
-        if (session.isSecure && !session.isPase) {
-            const secureSession = session as SecureSession;
-            const fabric = secureSession.fabric;
-            const nodeId = secureSession.peerNodeId;
+        if (NodeSession.is(session) && !session.isPase) {
+            const fabric = session.fabric;
+            const nodeId = session.peerNodeId;
             if (fabric === undefined) {
                 return this.#paseChannels.get(session);
             }
@@ -142,12 +141,11 @@ export class ChannelManager {
     }
 
     async getOrCreateChannel(byteArrayChannel: Channel<Uint8Array>, session: Session) {
-        if (!session.isSecure) {
+        if (!NodeSession.is(session)) {
             return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }
-        const secureSession = session as SecureSession;
-        const fabric = secureSession.fabric;
-        const nodeId = secureSession.peerNodeId;
+        const fabric = session.fabric;
+        const nodeId = session.peerNodeId;
         if (fabric === undefined) {
             return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }

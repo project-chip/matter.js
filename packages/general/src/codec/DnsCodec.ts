@@ -141,7 +141,7 @@ export enum DnsRecordClass {
 export class DnsCodec {
     static decode(message: Uint8Array): DnsMessage | undefined {
         try {
-            const reader = new DataReader(message, Endian.Big);
+            const reader = new DataReader(message);
             const transactionId = reader.readUInt16();
             const messageType = reader.readUInt16();
             const queriesCount = reader.readUInt16();
@@ -198,7 +198,7 @@ export class DnsCodec {
         }
         visited.add(reader.offset);
 
-        const messageReader = new DataReader(message, Endian.Big);
+        const messageReader = new DataReader(message);
         const qNameItems = new Array<string>();
         while (true) {
             const itemLength = reader.readUInt8();
@@ -227,7 +227,7 @@ export class DnsCodec {
     private static decodeRecordValue(valueBytes: Uint8Array, recordType: DnsRecordType, message: Uint8Array) {
         switch (recordType) {
             case DnsRecordType.PTR:
-                return this.decodeQName(new DataReader(valueBytes, Endian.Big), message);
+                return this.decodeQName(new DataReader(valueBytes), message);
             case DnsRecordType.SRV:
                 return this.decodeSrvRecord(valueBytes, message);
             case DnsRecordType.TXT:
@@ -243,7 +243,7 @@ export class DnsCodec {
     }
 
     static decodeSrvRecord(valueBytes: Uint8Array, message: Uint8Array): SrvRecordValue {
-        const reader = new DataReader(valueBytes, Endian.Big);
+        const reader = new DataReader(valueBytes);
         const priority = reader.readUInt16();
         const weight = reader.readUInt16();
         const port = reader.readUInt16();
@@ -252,7 +252,7 @@ export class DnsCodec {
     }
 
     static decodeTxtRecord(valueBytes: Uint8Array): string[] {
-        const reader = new DataReader(valueBytes, Endian.Big);
+        const reader = new DataReader(valueBytes);
         const result = new Array<string>();
         let bytesRead = 0;
         while (bytesRead < valueBytes.length) {
@@ -264,7 +264,7 @@ export class DnsCodec {
     }
 
     static decodeAaaaRecord(valueBytes: Uint8Array): string {
-        const reader = new DataReader(valueBytes, Endian.Big);
+        const reader = new DataReader(valueBytes);
         const ipItems = new Array<string>();
         for (let i = 0; i < 8; i++) {
             ipItems.push(reader.readUInt16().toString(16));
@@ -290,7 +290,7 @@ export class DnsCodec {
     }
 
     static decodeARecord(valueBytes: Uint8Array): string {
-        const reader = new DataReader(valueBytes, Endian.Big);
+        const reader = new DataReader(valueBytes);
         const ipItems = new Array<string>();
         for (let i = 0; i < 4; i++) {
             ipItems.push(reader.readUInt8().toString());
@@ -311,7 +311,7 @@ export class DnsCodec {
             throw new InternalError("Queries can only be included in query messages!");
         if (authorities.length > 0) throw new NotImplementedError("Authority answers are not supported yet!");
 
-        const writer = new DataWriter(Endian.Big);
+        const writer = new DataWriter();
         writer.writeUInt16(transactionId);
         writer.writeUInt16(messageType);
         writer.writeUInt16(queries.length);
@@ -336,7 +336,7 @@ export class DnsCodec {
     static encodeRecord(record: DnsRecord<any>): Uint8Array {
         const { name, recordType, recordClass, ttl, value, flushCache = false } = record;
 
-        const writer = new DataWriter(Endian.Big);
+        const writer = new DataWriter();
         writer.writeByteArray(this.encodeQName(name));
         writer.writeUInt16(recordType);
         writer.writeUInt16(recordClass | (flushCache ? 0x8000 : 0));
@@ -367,7 +367,7 @@ export class DnsCodec {
 
     static encodeARecord(ip: string) {
         if (!isIPv4(ip)) throw new UnexpectedDataError(`Invalid A Record value: ${ip}`);
-        const writer = new DataWriter(Endian.Big);
+        const writer = new DataWriter();
         ip.split(".").forEach(part => {
             writer.writeUInt8(parseInt(part));
         });
@@ -376,7 +376,7 @@ export class DnsCodec {
 
     static encodeAaaaRecord(ip: string) {
         if (!isIPv6(ip)) throw new UnexpectedDataError(`Invalid AAAA Record value: ${ip}`);
-        const writer = new DataWriter(Endian.Big);
+        const writer = new DataWriter();
         const parts = ip.split(":");
         parts.forEach(part => {
             if (part === "") {
@@ -391,7 +391,7 @@ export class DnsCodec {
     }
 
     static encodeTxtRecord(entries: string[]) {
-        const writer = new DataWriter(Endian.Big);
+        const writer = new DataWriter();
         entries.forEach(entry => {
             const entryData = Bytes.fromString(entry);
             writer.writeUInt8(entryData.length);
@@ -401,7 +401,7 @@ export class DnsCodec {
     }
 
     static encodeSrvRecord({ priority, weight, port, target }: SrvRecordValue) {
-        const writer = new DataWriter(Endian.Big);
+        const writer = new DataWriter();
         writer.writeUInt16(priority);
         writer.writeUInt16(weight);
         writer.writeUInt16(port);
@@ -410,7 +410,7 @@ export class DnsCodec {
     }
 
     static encodeQName(qname: string) {
-        const writer = new DataWriter(Endian.Big);
+        const writer = new DataWriter();
         if (qname !== undefined && qname.length > 0) {
             // TODO: Implement compression
             qname.split(".").forEach(label => {

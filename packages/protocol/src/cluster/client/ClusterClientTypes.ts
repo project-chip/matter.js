@@ -72,6 +72,23 @@ export type SignatureFromCommandSpec<C extends Command<any, any, any>> = (
         useExtendedFailSafeMessageResponseTimeout?: boolean;
     },
 ) => Promise<ResponseType<C>>;
+
+export type SignatureFromCommandSpecWithoutResponse<C extends Command<any, any, any>> = (
+    request: RequestType<C>,
+    options?: {
+        /** Send this command as a timed request also when not required. Default timeout are 10 seconds. */
+        asTimedRequest?: boolean;
+
+        /** Override the request timeout when the command is sent as times request. Default are 10s. */
+        timedRequestTimeoutMs?: number;
+
+        /**
+         * Use the extended fail-safe message response timeout of 30 seconds. Use this for all commands
+         * executed during an activated FailSafe context!
+         */
+        useExtendedFailSafeMessageResponseTimeout?: boolean;
+    },
+) => Promise<void>;
 type GetterTypeFromSpec<A extends Attribute<any, any>> =
     A extends OptionalAttribute<infer T, any> ? T | undefined : AttributeJsType<A>;
 type ClientAttributeGetters<A extends Attributes> = Omit<
@@ -116,6 +133,7 @@ type ClientAttributeListeners<A extends Attributes> = {
 };
 
 type CommandServers<C extends Commands> = { [P in keyof C]: SignatureFromCommandSpec<C[P]> };
+type NoResponseCommandServers<C extends Commands> = { [P in keyof C]: SignatureFromCommandSpecWithoutResponse<C[P]> };
 
 type ClientEventGetters<E extends Events> = {
     [P in keyof E as `get${Capitalize<string & P>}Event`]: (
@@ -143,8 +161,8 @@ type ClientEventListeners<E extends Events> = {
     ) => void;
 };
 
-/** Strongly typed interface of a cluster client */
-export type ClusterClientObj<T extends ClusterType = ClusterType> = {
+/** Strongly typed interface of a group cluster client (limited functionalities) */
+export type BaseClusterClientObj<T extends ClusterType = ClusterType> = {
     /**
      * Cluster ID
      * @readonly
@@ -178,12 +196,6 @@ export type ClusterClientObj<T extends ClusterType = ClusterType> = {
     readonly isUnknown: boolean;
 
     /**
-     * Endpoint ID the cluster is on.
-     * @readonly
-     */
-    readonly endpointId: number;
-
-    /**
      * Supported Features of the cluster
      * @readonly
      */
@@ -195,6 +207,24 @@ export type ClusterClientObj<T extends ClusterType = ClusterType> = {
      * @readonly
      */
     readonly attributes: AttributeClients<T["features"], T["attributes"]>;
+} & ClientAttributeSetters<T["attributes"]>;
+
+export type GroupClusterClientObj<T extends ClusterType = ClusterType> = BaseClusterClientObj<T> & {
+    /**
+     * Commands of the cluster as object with named keys. This can be used to discover the commands of the cluster
+     * programmatically.
+     * @readonly
+     */
+    readonly commands: NoResponseCommandServers<T["commands"]>;
+} & NoResponseCommandServers<T["commands"]>;
+
+/** Strongly typed interface of a cluster client */
+export type ClusterClientObj<T extends ClusterType = ClusterType> = BaseClusterClientObj<T> & {
+    /**
+     * Endpoint ID the cluster is on.
+     * @readonly
+     */
+    readonly endpointId: number;
 
     /**
      * Events of the cluster as object with named keys. This can be used to discover the events of the cluster
@@ -236,7 +266,6 @@ export type ClusterClientObj<T extends ClusterType = ClusterType> = {
     isCommandSupportedByName: (commandName: string) => boolean;
 } & ClientAttributeGetters<T["attributes"]> &
     ClientGlobalAttributeGetters<T["features"]> &
-    ClientAttributeSetters<T["attributes"]> &
     ClientAttributeSubscribers<T["attributes"]> &
     ClientAttributeListeners<T["attributes"]> &
     CommandServers<T["commands"]> &

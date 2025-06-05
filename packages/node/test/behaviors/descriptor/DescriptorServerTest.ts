@@ -13,7 +13,7 @@ import { OnOffLightSwitchDevice } from "#devices/on-off-light-switch";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { MutableEndpoint } from "#endpoint/type/MutableEndpoint.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
-import { Node } from "#node/Node.js";
+import type { Node } from "#node/Node.js";
 import { ClusterId, DeviceTypeId, EndpointNumber } from "#types";
 import { MockEndpointType } from "../../behavior/mock-behavior.js";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";

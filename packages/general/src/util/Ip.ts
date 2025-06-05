@@ -46,6 +46,56 @@ export function ipv6ToBytes(ip: string) {
     return Uint8Array.from(Array.from(ipv6ToArray(ip)).flatMap(value => [value >> 8, value & 0xff]));
 }
 
+export function ipv6BytesToString(bytes: Uint8Array): string {
+    if (bytes.length !== 16) {
+        throw new Error("IPv6 address must be 16 bytes");
+    }
+
+    // Divide into 8 blocks of 2 bytes (16 bits) each
+    const blocks = [];
+    for (let i = 0; i < 16; i += 2) {
+        blocks.push(((bytes[i] << 8) | bytes[i + 1]).toString(16));
+    }
+
+    // Compression of the longest zero sequence (RFC 5952)
+    let bestStart = -1;
+    let bestLen = 0;
+    let currStart = -1;
+    let currLen = 0;
+    for (let i = 0; i < 8; i++) {
+        if (blocks[i] === "0") {
+            if (currStart === -1) {
+                currStart = i;
+                currLen = 1;
+            } else {
+                currLen++;
+            }
+        } else {
+            if (currLen > bestLen) {
+                bestStart = currStart;
+                bestLen = currLen;
+            }
+            currStart = -1;
+            currLen = 0;
+        }
+    }
+    if (currLen > bestLen) {
+        bestStart = currStart;
+        bestLen = currLen;
+    }
+    if (bestLen > 1) {
+        blocks.splice(bestStart, bestLen, "");
+        if (bestStart === 0) {
+            blocks.unshift("");
+        }
+        if (bestStart + bestLen === 8) {
+            blocks.push("");
+        }
+    }
+
+    return blocks.join(":").replace(/:{3,}/, "::").toLowerCase();
+}
+
 export function onSameNetwork(ip1: string, ip2: string, mask: string) {
     if (isIPv4(ip1)) {
         // IPv4 addresses

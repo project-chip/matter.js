@@ -29,12 +29,12 @@ describe("NodeId", () => {
     });
 
     it("should create a NodeId from a group NodeId", () => {
-        const nodeId = NodeId.fromGroupNodeId(0x1234);
+        const nodeId = NodeId.fromGroupId(0x1234);
         expect(nodeId).to.be.a("bigint");
     });
 
     it("should throw an error when creating a NodeId from a group NodeId with negative value", () => {
-        expect(() => NodeId.fromGroupNodeId(-1)).to.throw(UnexpectedDataError);
+        expect(() => NodeId.fromGroupId(-1)).to.throw(UnexpectedDataError);
     });
 
     it("should create a NodeId from a temporary local NodeId", () => {

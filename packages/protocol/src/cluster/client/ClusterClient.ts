@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { capitalize, Diagnostic, Logger, Merge } from "#general";
+import { capitalize, Diagnostic, ImplementationError, Logger, Merge } from "#general";
 import {
     Attribute,
     AttributeId,
@@ -31,18 +31,37 @@ import {
     AttributeClientValues,
     ClusterClientObj,
     EventClients,
+    GroupClusterClientObj,
     SignatureFromCommandSpec,
+    SignatureFromCommandSpecWithoutResponse,
 } from "./ClusterClientTypes.js";
 import { createEventClient } from "./EventClient.js";
 
 const logger = Logger.get("ClusterClient");
 
+export function GroupClusterClient<const T extends ClusterType>(
+    clusterDef: T,
+    interactionClient: InteractionClient,
+    globalAttributeValues: Partial<AttributeClientValues<GlobalAttributes<T["features"]>>> = {},
+): GroupClusterClientObj<T> {
+    if (!interactionClient.isGroupAddress) {
+        throw new Error("GroupClusterClient must be used with a GroupAddress InteractionClient");
+    }
+
+    return ClusterClient(clusterDef, undefined, interactionClient, globalAttributeValues);
+}
+
 export function ClusterClient<const T extends ClusterType>(
     clusterDef: T,
-    endpointId: EndpointNumber,
+    endpointId: EndpointNumber | undefined,
     interactionClient: InteractionClient,
     globalAttributeValues: Partial<AttributeClientValues<GlobalAttributes<T["features"]>>> = {},
 ): ClusterClientObj<T> {
+    const isGroupAddress = interactionClient.isGroupAddress;
+    if (isGroupAddress !== (endpointId === undefined)) {
+        throw new Error("Endpoint ID must be defined for a Non-Group ClusterClient");
+    }
+
     function addAttributeToResult(attribute: Attribute<any, any>, attributeName: string) {
         (attributes as any)[attributeName] = createAttributeClient(
             attribute,
@@ -59,6 +78,10 @@ export function ClusterClient<const T extends ClusterType>(
             requestFromRemote?: boolean,
             isFabricFiltered = true,
         ) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not support reading attributes");
+            }
+
             try {
                 return await (attributes as any)[attributeName].get(requestFromRemote, isFabricFiltered);
             } catch (e) {
@@ -77,6 +100,10 @@ export function ClusterClient<const T extends ClusterType>(
             knownDataVersion?: number,
             isFabricFiltered?: boolean,
         ) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not support subscribing attributes");
+            }
+
             (attributes as any)[attributeName].addListener(listener);
             return (attributes as any)[attributeName].subscribe(
                 minIntervalS,
@@ -86,9 +113,17 @@ export function ClusterClient<const T extends ClusterType>(
             );
         };
         result[`add${capitalizedAttributeName}AttributeListener`] = <T>(listener: (value: T) => void) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not support subscribing attributes");
+            }
+
             (attributes as any)[attributeName].addListener(listener);
         };
         result[`remove${capitalizedAttributeName}AttributeListener`] = <T>(listener: (value: T) => void) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not support subscribing attributes");
+            }
+
             (attributes as any)[attributeName].removeListener(listener);
         };
     }
@@ -102,6 +137,10 @@ export function ClusterClient<const T extends ClusterType>(
             minimumEventNumber?: number | bigint,
             isFabricFiltered?: boolean,
         ) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not support reading events");
+            }
+
             try {
                 return await (events as any)[eventName].get(minimumEventNumber, isFabricFiltered);
             } catch (e) {
@@ -119,6 +158,10 @@ export function ClusterClient<const T extends ClusterType>(
             minimumEventNumber?: number | bigint,
             isFabricFiltered?: boolean,
         ) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not support subscribing to events");
+            }
+
             (events as any)[eventName].addListener(listener);
             return (events as any)[eventName].subscribe(
                 minIntervalS,
@@ -129,9 +172,17 @@ export function ClusterClient<const T extends ClusterType>(
             );
         };
         result[`add${capitalizedEventName}EventListener`] = <T>(listener: (value: DecodedEventData<T>) => void) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not support subscribing events");
+            }
+
             (events as any)[eventName].addListener(listener);
         };
         result[`remove${capitalizedEventName}EventListener`] = <T>(listener: (value: DecodedEventData<T>) => void) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not support subscribing events");
+            }
+
             (events as any)[eventName].removeListener(listener);
         };
     }
@@ -149,7 +200,13 @@ export function ClusterClient<const T extends ClusterType>(
     } = clusterDef;
     const attributes = <AttributeClients<T["features"], T["attributes"]>>{};
     const events = <EventClients<T["events"]>>{};
-    const commands = <{ [P in keyof T["commands"]]: SignatureFromCommandSpec<T["commands"][P]> }>{};
+    const commands = <
+        {
+            [P in keyof T["commands"]]:
+                | SignatureFromCommandSpec<T["commands"][P]>
+                | SignatureFromCommandSpecWithoutResponse<T["commands"][P]>;
+        }
+    >{};
 
     let reportedFeatures: TypeFromPartialBitSchema<T["features"]> | undefined = undefined;
     // If we have global attribute values we use them to modify
@@ -178,6 +235,10 @@ export function ClusterClient<const T extends ClusterType>(
             eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
             dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
         }) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not support subscribing attributes");
+            }
+
             const {
                 minIntervalFloorSeconds,
                 maxIntervalCeilingSeconds,
@@ -237,10 +298,18 @@ export function ClusterClient<const T extends ClusterType>(
         },
 
         isAttributeSupported: (attributeId: AttributeId) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not allow to determine attribute existence.");
+            }
+
             return !!globalAttributeValues?.attributeList?.includes(attributeId);
         },
 
         isAttributeSupportedByName: (attributeName: string) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not allow to determine attribute existence.");
+            }
+
             const attribute = (attributes as any)[attributeName];
             if (attribute === undefined) {
                 return false;
@@ -249,10 +318,18 @@ export function ClusterClient<const T extends ClusterType>(
         },
 
         isCommandSupported: (commandId: CommandId) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not allow to determine command existence.");
+            }
+
             return !!globalAttributeValues?.acceptedCommandList?.includes(commandId);
         },
 
         isCommandSupportedByName: (commandName: string) => {
+            if (isGroupAddress) {
+                throw new ImplementationError("Group cluster clients do not allow to determine attribute existence.");
+            }
+
             const command = commandDef[commandName];
             if (command === undefined) {
                 return false;
@@ -308,8 +385,17 @@ export function ClusterClient<const T extends ClusterType>(
             } = {},
         ) => {
             const { asTimedRequest, timedRequestTimeoutMs, useExtendedFailSafeMessageResponseTimeout } = options;
+            if (isGroupAddress) {
+                return interactionClient.invokeWithSuppressedResponse<Command<RequestT, ResponseT, any>>({
+                    clusterId,
+                    command: commandDef[commandName],
+                    request,
+                    asTimedRequest,
+                    timedRequestTimeoutMs,
+                });
+            }
             return interactionClient.invoke<Command<RequestT, ResponseT, any>>({
-                endpointId,
+                endpointId: endpointId!,
                 clusterId,
                 command: commandDef[commandName],
                 request,

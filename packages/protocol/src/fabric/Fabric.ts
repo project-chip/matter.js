@@ -10,7 +10,6 @@ import {
     TlvOperationalCertificate,
     TlvRootCertificate,
 } from "#certificate/CertificateManager.js";
-import { GroupKeyManagement } from "#clusters/group-key-management";
 import {
     BinaryKeyPair,
     Bytes,
@@ -25,55 +24,18 @@ import {
     MatterFlowError,
     MaybePromise,
     PrivateKey,
+    StorageContext,
 } from "#general";
+import { FabricGroupsManager, GROUP_SECURITY_INFO } from "#groups/FabricGroupsManager.js";
 import { PeerAddress } from "#peer/PeerAddress.js";
-import { CaseAuthenticatedTag, FabricId, FabricIndex, NodeId, TypeFromSchema, VendorId } from "#types";
-import { SecureSession } from "../session/SecureSession.js";
+import { Session } from "#session/Session.js";
+import { CaseAuthenticatedTag, FabricId, FabricIndex, GroupId, NodeId, VendorId } from "#types";
 
 const logger = Logger.get("Fabric");
 
 const COMPRESSED_FABRIC_ID_INFO = Bytes.fromString("CompressedFabric");
-const GROUP_SECURITY_INFO = Bytes.fromString("GroupKey v1.0");
 
 export class PublicKeyError extends MatterError {}
-
-type OperationalGroupKeySet = TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySet> & {
-    operationalEpochKey0: Uint8Array;
-    groupSessionId0: number | null;
-    operationalEpochKey1: Uint8Array | null;
-    groupSessionId1: number | null;
-    operationalEpochKey2: Uint8Array | null;
-    groupSessionId2: number | null;
-};
-
-namespace OperationalGroupKeySet {
-    export const asTlvGroupSet = (
-        operationalGroupSet: OperationalGroupKeySet,
-    ): TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySet> => {
-        const {
-            groupKeySetId,
-            epochKey0,
-            epochStartTime0,
-            epochKey1,
-            epochStartTime1,
-            epochKey2,
-            epochStartTime2,
-            groupKeySecurityPolicy,
-            groupKeyMulticastPolicy,
-        } = operationalGroupSet;
-        return {
-            groupKeySetId,
-            epochKey0,
-            epochStartTime0,
-            epochKey1,
-            epochStartTime1,
-            epochKey2,
-            epochStartTime2,
-            groupKeySecurityPolicy,
-            groupKeyMulticastPolicy,
-        };
-    };
-}
 
 export type ExposedFabricInformation = {
     fabricIndex: FabricIndex;
@@ -97,14 +59,13 @@ export class Fabric {
     readonly operationalIdentityProtectionKey: Uint8Array;
     readonly intermediateCACert: Uint8Array | undefined;
     readonly operationalCert: Uint8Array;
-
     readonly #keyPair: Key;
-
-    readonly #sessions = new Set<SecureSession>();
-
+    readonly #sessions = new Set<Session>();
+    readonly #groupManager: FabricGroupsManager;
     #label: string;
     #removeCallbacks = new Array<() => MaybePromise<void>>();
     #persistCallback: ((isUpdate?: boolean) => MaybePromise<void>) | undefined;
+    #storage?: StorageContext;
 
     constructor(config: Fabric.Config) {
         this.fabricIndex = config.fabricIndex;
@@ -120,8 +81,8 @@ export class Fabric {
         this.intermediateCACert = config.intermediateCACert;
         this.operationalCert = config.operationalCert;
         this.#label = config.label;
-
         this.#keyPair = PrivateKey(config.keyPair);
+        this.#groupManager = new FabricGroupsManager(this);
     }
 
     get config(): Fabric.Config {
@@ -158,6 +119,19 @@ export class Fabric {
         await this.persist();
     }
 
+    set storage(storage: StorageContext) {
+        this.#storage = storage;
+        this.#groupManager.storage = storage;
+    }
+
+    get storage(): StorageContext | undefined {
+        return this.#storage;
+    }
+
+    get groups() {
+        return this.#groupManager;
+    }
+
     get publicKey() {
         return this.#keyPair.publicKey;
     }
@@ -190,20 +164,39 @@ export class Fabric {
         );
     }
 
-    getDestinationId(nodeId: NodeId, random: Uint8Array) {
+    #generateSalt(nodeId: NodeId, random: Uint8Array) {
         const writer = new DataWriter(Endian.Little);
         writer.writeByteArray(random);
         writer.writeByteArray(this.rootPublicKey);
         writer.writeUInt64(this.fabricId);
         writer.writeUInt64(nodeId);
-        return Crypto.hmac(this.operationalIdentityProtectionKey, writer.toByteArray());
+        return writer.toByteArray();
     }
 
-    addSession(session: SecureSession) {
+    /**
+     * Returns the destination IDs for a given nodeId, random value and optional groupId.
+     * When groupId is provided, it returns the time-wise valid operational keys for that groupId.
+     */
+    async currentDestinationIdFor(nodeId: NodeId, random: Uint8Array) {
+        return await Crypto.hmac(this.groups.keySets.currentKeyForId(0).key, this.#generateSalt(nodeId, random));
+    }
+
+    /**
+     * Returns the destination IDs for a given nodeId, random value and optional groupId.
+     * When groupId is provided, it returns all operational keys for that groupId.
+     */
+    async destinationIdsFor(nodeId: NodeId, random: Uint8Array) {
+        const salt = this.#generateSalt(nodeId, random);
+        // Check all keys of keyset 0 - typically it is only the IPK
+        const destinationIds = this.groups.keySets.allKeysForId(0).map(({ key }) => Crypto.hmac(key, salt));
+        return await Promise.all(destinationIds);
+    }
+
+    addSession(session: Session) {
         this.#sessions.add(session);
     }
 
-    removeSession(session: SecureSession) {
+    removeSession(session: Session) {
         this.#sessions.delete(session);
     }
 
@@ -236,39 +229,6 @@ export class Fabric {
         return this.#persistCallback?.(isUpdate);
     }
 
-    getGroupKeySet(groupKeySetId: number) {
-        if (groupKeySetId === 0) {
-            return OperationalGroupKeySet.asTlvGroupSet(this.getGroupSetForIpk());
-        }
-        // TODO add correct group handling later, right now only IPK exists
-        return undefined;
-    }
-
-    private getGroupSetForIpk(): OperationalGroupKeySet {
-        return {
-            groupKeySetId: 0,
-            epochKey0: this.identityProtectionKey,
-            operationalEpochKey0: this.operationalIdentityProtectionKey,
-            epochStartTime0: 0, // or do we need to track Fabric creation date?
-            groupSessionId0: null,
-            epochKey1: null,
-            operationalEpochKey1: null,
-            epochStartTime1: null,
-            groupSessionId1: null,
-            epochKey2: null,
-            operationalEpochKey2: null,
-            epochStartTime2: null,
-            groupSessionId2: null,
-            groupKeySecurityPolicy: GroupKeyManagement.GroupKeySecurityPolicy.TrustFirst,
-            groupKeyMulticastPolicy: GroupKeyManagement.GroupKeyMulticastPolicy.PerGroupId,
-        };
-    }
-
-    getAllGroupKeySets() {
-        // TODO add correct group handling later, right now only IPK exists
-        return [OperationalGroupKeySet.asTlvGroupSet(this.getGroupSetForIpk())];
-    }
-
     get externalInformation(): ExposedFabricInformation {
         return {
             fabricIndex: this.fabricIndex,
@@ -282,6 +242,12 @@ export class Fabric {
 
     addressOf(nodeId: NodeId) {
         return PeerAddress({ fabricIndex: this.fabricIndex, nodeId });
+    }
+
+    groupAddressOf(groupId: GroupId) {
+        GroupId.assertGroupId(groupId);
+
+        return PeerAddress({ fabricIndex: this.fabricIndex, nodeId: NodeId.fromGroupId(groupId) });
     }
 }
 
@@ -433,7 +399,7 @@ export class FabricBuilder {
             throw new InternalError("operationalCert needs to be set");
 
         this.#fabricIndex = fabricIndex;
-        const saltWriter = new DataWriter(Endian.Big);
+        const saltWriter = new DataWriter();
         saltWriter.writeUInt64(this.#fabricId);
         const operationalId = await Crypto.hkdf(
             this.#rootPublicKey.slice(1),

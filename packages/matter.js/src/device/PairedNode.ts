@@ -29,8 +29,8 @@ import {
     DecodedEventReportValue,
     InteractionClient,
     NodeDiscoveryType,
+    NodeSession,
     PaseClient,
-    SecureSession,
     UnknownNodeError,
     structureReadAttributeDataToClusterObject,
 } from "#protocol";
@@ -302,7 +302,7 @@ export class PairedNode {
         interactionClient: InteractionClient,
         reconnectFunc: (discoveryType?: NodeDiscoveryType, noForcedConnection?: boolean) => Promise<void>,
         assignDisconnectedHandler: (handler: () => Promise<void>) => void,
-        sessions: BasicSet<SecureSession, SecureSession>,
+        sessions: BasicSet<NodeSession>,
         storedAttributeData?: DecodedAttributeReportValue<any>[],
     ): Promise<PairedNode> {
         const node = new PairedNode(
@@ -328,7 +328,7 @@ export class PairedNode {
         interactionClient: InteractionClient,
         reconnectFunc: (discoveryType?: NodeDiscoveryType, noForcedConnection?: boolean) => Promise<void>,
         assignDisconnectedHandler: (handler: () => Promise<void>) => void,
-        sessions: BasicSet<SecureSession, SecureSession>,
+        sessions: BasicSet<NodeSession, NodeSession>,
         storedAttributeData?: DecodedAttributeReportValue<any>[],
     ) {
         assignDisconnectedHandler(async () => {
