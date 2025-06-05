@@ -12,7 +12,7 @@ import { NetworkServer } from "#behavior/system/network/NetworkServer.js";
 import { ServerNetworkRuntime } from "#behavior/system/network/ServerNetworkRuntime.js";
 import { ProductDescriptionServer } from "#behavior/system/product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "#behavior/system/sessions/SessionsBehavior.js";
-import { SubscriptionBehavior } from "#behavior/system/subscription/index.js";
+import { SubscriptionBehavior } from "#behavior/system/subscription/SubscriptionBehavior.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import type { Environment } from "#general";
 import { Construction, DiagnosticSource, Identity, MatterError, asyncNew, errorOf } from "#general";

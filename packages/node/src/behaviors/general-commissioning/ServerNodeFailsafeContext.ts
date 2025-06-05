@@ -7,7 +7,7 @@
 import { NetworkCommissioningBehavior } from "#behaviors/network-commissioning";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { Immutable, Lifecycle, UnsupportedDependencyError } from "#general";
-import { ServerNode } from "#node/ServerNode.js";
+import type { ServerNode } from "#node/ServerNode.js";
 import { Fabric, FabricManager, FailsafeContext } from "#protocol";
 
 /**

@@ -9,7 +9,7 @@ import { BasicInformationServer } from "#behaviors/basic-information";
 import { AdministratorCommissioning } from "#clusters/administrator-commissioning";
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { Logger, MatterFlowError, MaybePromise } from "#general";
-import { ServerNode } from "#node/ServerNode.js";
+import type { ServerNode } from "#node/ServerNode.js";
 import { DeviceCommissioner, FabricManager, GroupSession, NodeSession, SecureSession, SessionManager } from "#protocol";
 import { GeneralCommissioningBehavior } from "./GeneralCommissioningBehavior.js";
 import { ServerNodeFailsafeContext } from "./ServerNodeFailsafeContext.js";

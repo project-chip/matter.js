@@ -19,7 +19,7 @@ import {
 } from "#general";
 import { Behavior } from "./Behavior.js";
 import { ClusterEvents } from "./cluster/ClusterEvents.js";
-import { OfflineContext } from "./context/index.js";
+import { OfflineContext } from "./context/server/OfflineContext.js";
 import { BehaviorBacking } from "./internal/BehaviorBacking.js";
 
 const logger = Logger.get("Transition");

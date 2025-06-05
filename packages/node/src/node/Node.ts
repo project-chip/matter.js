@@ -10,8 +10,8 @@ import { IndexBehavior } from "#behavior/system/index/IndexBehavior.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { PartsBehavior } from "#behavior/system/parts/PartsBehavior.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { MutableEndpoint } from "#endpoint/index.js";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
+import { MutableEndpoint } from "#endpoint/type/MutableEndpoint.js";
 import {
     Construction,
     Diagnostic,

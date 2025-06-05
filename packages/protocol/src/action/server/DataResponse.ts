@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { InteractionSession } from "#action/index.js";
+import { InteractionSession } from "#action/Interactable.js";
 import { NodeProtocol } from "#action/protocols.js";
 import { AccessControl } from "#action/server/AccessControl.js";
 import { AccessLevel } from "#model";

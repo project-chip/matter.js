@@ -10,7 +10,7 @@ import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { ModeSelect } from "#clusters/mode-select";
 import { OnOff } from "#clusters/on-off";
 import { Logger, MaybePromise } from "#general";
-import { ServerNode } from "#node/index.js";
+import { ServerNode } from "#node/ServerNode.js";
 import { ClusterType, StatusCode, StatusResponseError } from "#types";
 import { ModeSelectBehavior } from "./ModeSelectBehavior.js";
 

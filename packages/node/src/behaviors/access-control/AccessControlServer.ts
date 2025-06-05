@@ -15,6 +15,7 @@ import {
     AclEndpointContext,
     FabricManager,
     IncomingSubjectDescriptor,
+    NodeSession,
     SecureSession,
 } from "#protocol";
 import {
@@ -29,7 +30,6 @@ import {
     TlvTaggedList,
     TlvType,
 } from "#types";
-import { NodeSession } from "@matter/protocol";
 import { AccessControlBehavior } from "./AccessControlBehavior.js";
 
 const logger = Logger.get("AccessControlServer");

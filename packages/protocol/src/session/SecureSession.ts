@@ -3,9 +3,9 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Subject } from "#action/index.js";
-import { Message } from "#codec/index.js";
-import { Fabric } from "#fabric/index.js";
+import { Subject } from "#action/server/Subject.js";
+import { Message } from "#codec/MessageCodec.js";
+import { Fabric } from "#fabric/Fabric.js";
 import { MatterFlowError } from "#general";
 import { Session } from "./Session.js";
 

@@ -8,7 +8,7 @@ import { GeneralDiagnosticsBehavior } from "#behaviors/general-diagnostics";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { OnOff } from "#clusters/on-off";
 import { MaybePromise, Time, Timer } from "#general";
-import { ServerNode } from "#node/index.js";
+import { ServerNode } from "#node/ServerNode.js";
 import { OnOffBehavior } from "./OnOffBehavior.js";
 
 const OnOffLogicBase = OnOffBehavior.with(OnOff.Feature.Lighting);

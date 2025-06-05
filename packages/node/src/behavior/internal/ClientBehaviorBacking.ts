@@ -7,7 +7,8 @@
 import { Behavior } from "#behavior/Behavior.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { EndpointStore, SupportedElements } from "#endpoint/index.js";
+import { SupportedElements } from "#endpoint/properties/Behaviors.js";
+import { EndpointStore } from "#endpoint/storage/EndpointStore.js";
 import { NotImplementedError } from "#general";
 import { BehaviorBacking } from "./BehaviorBacking.js";
 

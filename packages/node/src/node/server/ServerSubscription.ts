@@ -7,7 +7,7 @@
 import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { Logger, MatterError, NetworkError, NoResponseTimeoutError, ObserverGroup, Time, Timer } from "#general";
 import { Specification } from "#model";
-import { ServerNode } from "#node/index.js";
+import type { ServerNode } from "#node/ServerNode.js";
 import type { AttributeResponseFilter, Message, MessageExchange, NodeSession } from "#protocol";
 import {
     AttributeReadResponse,

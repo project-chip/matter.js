@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ActionContext } from "#behavior/index.js";
+import { ActionContext } from "#behavior/context/ActionContext.js";
 import { GroupsBehavior } from "#behaviors/groups";
 import { GroupKeyManagement } from "#clusters/group-key-management";
 import { deepCopy, ImplementationError, Logger, MaybePromise } from "#general";

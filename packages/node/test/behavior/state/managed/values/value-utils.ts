@@ -11,7 +11,7 @@ import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
 import { camelize, Identity, MaybePromise, Observable } from "#general";
 import { DataModelPath, FieldElement, FieldModel } from "#model";
-import { Node } from "#node/Node.js";
+import type { Node } from "#node/Node.js";
 import { Val } from "#protocol";
 import { EndpointNumber } from "#types";
 

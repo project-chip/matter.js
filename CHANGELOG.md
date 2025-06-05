@@ -9,6 +9,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+
 ## 0.14.0 (2025-06-04)
 
 - NOTE: This version is compatible with Node.js 20.x, 22.x and 24.x. Node.js 18.x is also supported with the following exceptions:
@@ -58,7 +61,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Retries to re-establish a CASE session when connection fails because of invalid resumption data
     - Adjustment: ACL writes are not sent chunked by default from now on like also in chip SDK
     - Fix: Handles messages only that are secured as required for the relevant protocol
-    - Fix: Correctly responds with a CASE Status response in f´case of commissioning errors for client CASE establishment
+    - Fix: Correctly responds with a CASE Status response in case of commissioning errors for a client CASE establishment
 
 -   @matter/general
     - Enhancement: Allows async implementation of crypto methods

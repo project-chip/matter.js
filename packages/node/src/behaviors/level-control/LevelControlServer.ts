@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Behavior } from "#behavior/Behavior.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
-import { Behavior } from "#behavior/index.js";
 import { Transitions } from "#behavior/Transitions.js";
 import { ColorControlServer } from "#behaviors/color-control";
 import { GeneralDiagnosticsBehavior } from "#behaviors/general-diagnostics";
 import { OnOffServer } from "#behaviors/on-off";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { LevelControl } from "#clusters/level-control";
-import { Endpoint } from "#endpoint/index.js";
+import { Endpoint } from "#endpoint/Endpoint.js";
 import { AsyncObservable, Logger, MaybePromise } from "#general";
-import { ServerNode } from "#node/index.js";
+import { ServerNode } from "#node/ServerNode.js";
 import { Val } from "#protocol";
 import { ClusterType, StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
 import { LevelControlBehavior } from "./LevelControlBehavior.js";

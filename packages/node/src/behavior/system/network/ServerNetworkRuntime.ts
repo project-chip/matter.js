@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SubscriptionBehavior } from "#behavior/system/subscription/index.js";
+import { SubscriptionBehavior } from "#behavior/system/subscription/SubscriptionBehavior.js";
 import {
     Construction,
     InterfaceType,
@@ -21,7 +21,7 @@ import {
     UdpInterface,
 } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
-import { NodePeerAddressStore } from "#node/index.js";
+import { NodePeerAddressStore } from "#node/client/NodePeerAddressStore.js";
 import { InteractionServer } from "#node/server/InteractionServer.js";
 import {
     Ble,

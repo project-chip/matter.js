@@ -10,7 +10,7 @@ import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
 import { Diagnostic, ImplementationError, InternalError, MaybePromise, Transaction } from "#general";
 import { AccessLevel } from "#model";
-import { Node } from "#node/Node.js";
+import type { Node } from "#node/Node.js";
 import type { Message, NodeProtocol } from "#protocol";
 import { AccessControl, AclEndpointContext, MessageExchange, SecureSession, Subject } from "#protocol";
 import { FabricIndex, NodeId } from "#types";

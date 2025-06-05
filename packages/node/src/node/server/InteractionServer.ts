@@ -5,7 +5,7 @@
  */
 
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
-import { OnlineContext } from "#behavior/index.js";
+import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { AccessControlServer } from "#behaviors/access-control";
 import { AccessControl as AccessControlClusterType } from "#clusters/access-control";
 import {
