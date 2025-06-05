@@ -439,10 +439,9 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
             });
             fabric.groups.endpoints.set(groupId, [endpointId]);
         }
-        logger.warn(
+        logger.info(
             `Added endpoint ${endpointId} to group ${groupId} on fabric ${fabricIndex} with name "${groupName}"`,
         );
-        logger.warn(fabric.groups.endpoints.get(groupId) ?? "No endpoints found for group", this.state.groupTable);
     }
 
     /**
