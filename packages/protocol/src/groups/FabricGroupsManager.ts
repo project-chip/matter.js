@@ -192,7 +192,7 @@ export class FabricGroupsManager {
 
     /** Cleans up the counters and data for a group key set by its id. */
     async #cleanUpCounters(groupKeySetId: number, forDelete = false) {
-        if (this.#keySets.forId(groupKeySetId) !== undefined) {
+        if (this.#keySets.forId(groupKeySetId) === undefined) {
             return;
         }
 
