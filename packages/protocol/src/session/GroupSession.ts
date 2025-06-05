@@ -47,7 +47,7 @@ export class GroupSession extends SecureSession {
         super({
             ...args,
             setActiveTimestamp: false, // We always set the active timestamp for Secure sessions TODO Check
-            messageCounter: fabric.groups.messageCounterFor(operationalGroupKey),
+            messageCounter: fabric.groups.messaging.counterFor(operationalGroupKey),
         });
         this.#id = id;
         this.#fabric = fabric;
@@ -108,7 +108,7 @@ export class GroupSession extends SecureSession {
         if (sourceNodeId === undefined || operationalKey === undefined) {
             throw new InternalError("Source Node ID is required for GroupSession updateMessageCounter.");
         }
-        const receptionState = this.#fabric.groups.receptionStateFor(sourceNodeId, operationalKey);
+        const receptionState = this.#fabric.groups.messaging.receptionStateFor(sourceNodeId, operationalKey);
         receptionState.updateMessageCounter(messageCounter);
     }
 

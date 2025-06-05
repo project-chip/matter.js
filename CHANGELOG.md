@@ -11,6 +11,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/*
+    - Feature: Implement Matter Groups support in protocol, node and (partly) controller packages
 
 ## 0.14.0 (2025-06-04)
 
