@@ -18,6 +18,7 @@ export class KeySets<T extends OperationalKeySet> extends BasicSet<T> {
     }
 
     override add(item: T): void {
+        this.delete("groupKeySetId", item.groupKeySetId); // Remove any existing item with the same groupKeySetId
         super.add(item);
         this.#updateSessions();
     }
