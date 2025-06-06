@@ -14,6 +14,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/*
     - Feature: Implement Matter Groups support in protocol, node and (partly) controller packages
 
+-   @matter/protocol
+    - Enhancement: Exposed reading cached ClusterClient attributes via `get*AttributeFromCache()` method
+
 ## 0.14.0 (2025-06-04)
 
 - NOTE: This version is compatible with Node.js 20.x, 22.x and 24.x. Node.js 18.x is also supported with the following exceptions:
