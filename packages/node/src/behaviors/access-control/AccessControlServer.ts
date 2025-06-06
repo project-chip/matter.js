@@ -16,8 +16,9 @@ import {
     Fabric,
     FabricManager,
     IncomingSubjectDescriptor,
+    MessageExchange,
     NodeSession,
-    SecureSession,MessageExchange
+    SecureSession,
 } from "#protocol";
 import {
     CaseAuthenticatedTag,
@@ -80,7 +81,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         for (const fabric of fabrics) {
             const fabricAcls = aclsForFabric.get(fabric.fabricIndex) ?? [];
 
-            if (!acl.length) {
+            if (!fabricAcls.length) {
                 // Handle Backward compatibility to Matter.js before 0.9.1 and add the missing ACL entry if no entry was set
                 // so far by the controller
                 const fallbackAcl: AccessControlTypes.AccessControlEntry = {
