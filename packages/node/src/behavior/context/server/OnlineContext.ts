@@ -26,6 +26,12 @@ import { NodeActivity } from "../NodeActivity.js";
 import { ContextAgents } from "./ContextAgents.js";
 
 /**
+ * Caches completion events per exchange. Uses if multiple OnlineContext instances are created for an exchange.
+ * Entries will be cleaned up when the exchange is closed.
+ */
+const exchangeCompleteEvents = new Map<MessageExchange, AsyncObservable<[session?: ActionContext | undefined]>>();
+
+/**
  * Operate in online context.  Public Matter API interactions happen in online context.
  */
 export function OnlineContext(options: OnlineContext.Options) {
@@ -145,6 +151,23 @@ export function OnlineContext(options: OnlineContext.Options) {
             SecureSession.assert(session);
         }
         let agents: undefined | ContextAgents;
+        let interactionComplete: AsyncObservable<[session?: ActionContext | undefined]> | undefined;
+        if (exchange !== undefined) {
+            interactionComplete = exchangeCompleteEvents.get(exchange);
+            if (interactionComplete === undefined) {
+                interactionComplete = new AsyncObservable();
+                exchangeCompleteEvents.set(exchange, interactionComplete);
+            }
+
+            const notifyInteractionComplete = () => {
+                exchange.closing.off(notifyInteractionComplete);
+                exchangeCompleteEvents.delete(exchange);
+                if (context.interactionComplete?.isObserved) {
+                    context.interactionComplete.emit(context);
+                }
+            };
+            exchange.closing.on(notifyInteractionComplete);
+        }
         const context: ActionContext = {
             ...options,
             session,
@@ -154,7 +177,7 @@ export function OnlineContext(options: OnlineContext.Options) {
             fabric,
             transaction,
 
-            interactionComplete: exchange !== undefined ? new AsyncObservable() : undefined,
+            interactionComplete,
 
             ...methods,
 
@@ -202,16 +225,6 @@ export function OnlineContext(options: OnlineContext.Options) {
 
         if (message) {
             Contextual.setContextOf(message, context);
-        }
-
-        if (exchange !== undefined) {
-            const notifyInteractionComplete = () => {
-                exchange.closing.off(notifyInteractionComplete);
-                if (context.interactionComplete?.isObserved) {
-                    context.interactionComplete.emit(context);
-                }
-            };
-            exchange.closing.on(notifyInteractionComplete);
         }
 
         return context;
