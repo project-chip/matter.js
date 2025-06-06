@@ -91,19 +91,12 @@ export function ClusterClient<const T extends ClusterType>(
                 throw e;
             }
         };
-        result[`get${capitalizedAttributeName}AttributeFromCache`] = async () => {
+        result[`get${capitalizedAttributeName}AttributeFromCache`] = () => {
             if (isGroupAddress) {
                 throw new ImplementationError("Group cluster clients do not support reading attributes");
             }
 
-            try {
-                return await (attributes as any)[attributeName].getLocal();
-            } catch (e) {
-                if (StatusResponseError.is(e, StatusCode.UnsupportedAttribute)) {
-                    return undefined;
-                }
-                throw e;
-            }
+            return (attributes as any)[attributeName].getLocal();
         };
         result[`set${capitalizedAttributeName}Attribute`] = async <T>(value: T, dataVersion?: number) =>
             (attributes as any)[attributeName].set(value, dataVersion);

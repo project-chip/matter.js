@@ -102,10 +102,7 @@ type ClientAttributeGetters<A extends Attributes> = Omit<
 >;
 type ClientLocalAttributeGetters<A extends Attributes> = Omit<
     {
-        [P in keyof A as `get${Capitalize<string & P>}AttributeFromCache`]: (
-            requestFromRemote?: boolean,
-            isFabricFiltered?: boolean,
-        ) => Promise<GetterTypeFromSpec<A[P]>>;
+        [P in keyof A as `get${Capitalize<string & P>}AttributeFromCache`]: () => GetterTypeFromSpec<A[P]> | undefined;
     },
     keyof GlobalAttributes<any>
 >;
