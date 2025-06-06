@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./AccessControlManager.js";
 export * from "./AttributeDataDecoder.js";
 export * from "./AttributeDataEncoder.js";
 export * from "./EventDataDecoder.js";
+export * from "./FabricAccessControlManager.js";
 export * from "./InteractionClient.js";
 export * from "./InteractionMessenger.js";
 export * from "./Subscription.js";

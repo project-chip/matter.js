@@ -8,7 +8,6 @@ import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
 import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
 import { ProductDescriptionServer } from "#behavior/system/product-description/ProductDescriptionServer.js";
 import { AccessControlServer } from "#behaviors/access-control";
-import { AccessControl } from "#clusters/access-control";
 import { OperationalCredentials } from "#clusters/operational-credentials";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { CryptoVerifyError, Logger, MatterFlowError, MaybePromise, UnexpectedDataError } from "#general";
@@ -260,14 +259,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         // The receiver SHALL create and add a new Access Control Entry using the CaseAdminSubject field to grant
         // subsequent Administer access to an Administrator member of the new Fabric.
-        const aclCluster = this.agent.get(AccessControlServer);
-        aclCluster.state.acl.push({
-            fabricIndex: fabric.fabricIndex,
-            privilege: AccessControl.AccessControlEntryPrivilege.Administer,
-            authMode: AccessControl.AccessControlEntryAuthMode.Case,
-            subjects: [caseAdminSubject],
-            targets: null, // entire node
-        });
+        await this.endpoint.act(agent => agent.get(AccessControlServer).addDefaultCaseAcl(fabric, [caseAdminSubject]));
 
         const session = this.session;
         NodeSession.assert(session);

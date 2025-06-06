@@ -7,26 +7,29 @@
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { AccessControl as AccessControlTypes } from "#clusters/access-control";
 import { deepCopy, InternalError, Logger, MaybePromise } from "#general";
-import { AccessLevel } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import {
     AccessControl,
-    AccessControlManager,
     AclEndpointContext,
+    AclEntry,
+    AclList,
+    Fabric,
     FabricManager,
     IncomingSubjectDescriptor,
     NodeSession,
-    SecureSession,
+    SecureSession,MessageExchange
 } from "#protocol";
 import {
     CaseAuthenticatedTag,
     ClusterId,
     DeviceTypeId,
     EndpointNumber,
+    FabricIndex,
     GroupId,
     NodeId,
     StatusCode,
     StatusResponseError,
+    SubjectId,
     TlvTaggedList,
     TlvType,
 } from "#types";
@@ -36,6 +39,9 @@ const logger = Logger.get("AccessControlServer");
 
 /**
  * This is the default server implementation of AccessControlBehavior.
+ *
+ * When custom extensions are used, the `extensionEntryValidator` and `extensionEntryAccessCheck` methods can be
+ * overridden to implement custom validation and access checks for the extension entries.
  */
 export class AccessControlServer extends AccessControlBehavior.with("Extension") {
     declare internal: AccessControlServer.Internal;
@@ -57,20 +63,35 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
     }
 
     #online() {
-        // Handle Backward compatibility to Matter.js before 0.9.1 and add the missing ACL entry if no entry was set
-        // so far by the controller
-        const fabrics = this.env.get(FabricManager);
         const acl = deepCopy(this.state.acl);
         const originalAclLength = acl.length;
+
+        // Collect ACLs for each fabric
+        const aclsForFabric = new Map<FabricIndex, AccessControlTypes.AccessControlEntry[]>();
+        for (const entry of acl) {
+            const { fabricIndex } = entry;
+            const acls = aclsForFabric.get(fabricIndex) ?? [];
+            acls.push(entry);
+            aclsForFabric.set(fabricIndex, acls);
+        }
+
+        // Initialize the ACL managers for each fabric
+        const fabrics = this.env.get(FabricManager);
         for (const fabric of fabrics) {
-            if (!acl.some(entry => entry.fabricIndex === fabric.fabricIndex)) {
-                acl.push({
+            const fabricAcls = aclsForFabric.get(fabric.fabricIndex) ?? [];
+
+            if (!acl.length) {
+                // Handle Backward compatibility to Matter.js before 0.9.1 and add the missing ACL entry if no entry was set
+                // so far by the controller
+                const fallbackAcl: AccessControlTypes.AccessControlEntry = {
                     fabricIndex: fabric.fabricIndex,
                     privilege: AccessControlTypes.AccessControlEntryPrivilege.Administer,
                     authMode: AccessControlTypes.AccessControlEntryAuthMode.Case,
                     subjects: [fabric.rootNodeId],
                     targets: null, // entire node
-                });
+                };
+                acl.push(fallbackAcl);
+                fabricAcls.push(fallbackAcl);
                 logger.warn(
                     "Added missing ACL entry for fabric",
                     fabric.fabricIndex,
@@ -79,28 +100,56 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
                     ". This should only happen once after upgrading to matter.js 0.9.1",
                 );
             }
+            fabric.acl.aclList = fabricAcls;
+            fabric.acl.extensionEntryAccessCheck = this.extensionEntryAccessCheck.bind(this);
+
+            // TODO handle delete fabric more generically later to remove fabric scoped data
+            this.reactTo(fabrics.events.updated, this.#updateFabricAcls);
+            this.reactTo(fabrics.events.added, this.#updateFabricAcls);
         }
+
+        // The Fallback Logic added a new ACL entry; update the ACL list for the future
         if (acl.length > originalAclLength) {
             this.state.acl = acl;
         }
 
-        logger.info("initializing ACL manager with ACL", acl);
-        this.internal.aclManager = new AccessControlManager(
-            acl,
-            (aclList, aclEntry, subjectDesc, endpoint, clusterId) =>
-                this.extensionEntryAccessCheck(
-                    aclList as unknown as AccessControlTypes.AccessControlEntry[],
-                    aclEntry as unknown as AccessControlTypes.AccessControlEntry,
-                    subjectDesc,
-                    endpoint,
-                    clusterId,
-                ),
-        );
+        this.reactTo(this.events.interactionBegin, this.#handleInteractionBegin);
+        this.reactTo(this.events.interactionEnd, this.#handleInteractionEnd);
 
         this.reactTo(this.events.acl$Changed, this.#updateAccessControlList);
+
+        this.internal.initialized = true;
     }
 
-    #validateAccessControlListChanges(value: AccessControlTypes.AccessControlEntry[]) {
+    addDefaultCaseAcl(fabric: Fabric, subjects: SubjectId[]) {
+        const entry = {
+            fabricIndex: fabric.fabricIndex,
+            privilege: AccessControlTypes.AccessControlEntryPrivilege.Administer,
+            authMode: AccessControlTypes.AccessControlEntryAuthMode.Case,
+            subjects: subjects as NodeId[],
+            targets: null, // entire node
+        };
+        this.state.acl.push(entry);
+        this.#updateFabricAcls(fabric);
+        // The update of the ACL is not validated because it has no assigned sess/fabric (and even then would use
+        //  the wrong one), so we trigger the event ourself.
+        this.events.accessControlEntryChanged?.emit(
+            {
+                changeType: AccessControlTypes.ChangeType.Added,
+                adminNodeId: null, // When we add it, it is always from a PASE session
+                adminPasscodeId: 0, // When we add it, it is always from a PASE session
+                latestValue: entry,
+                fabricIndex: fabric.fabricIndex,
+            },
+            this.context,
+        );
+    }
+
+    #validateAccessControlListChanges(
+        value: AccessControlTypes.AccessControlEntry[],
+        _oldValue: AccessControlTypes.AccessControlEntry[],
+        context?: ActionContext,
+    ) {
         // TODO: This might be not really correct for local ACL changes because there the session fabric could be
         //  different which would lead to missing validation of the relevant entries
         const relevantFabricIndex = this.context.session?.associatedFabric.fabricIndex;
@@ -108,6 +157,21 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         if (relevantFabricIndex === undefined) {
             return;
         }
+        if (context !== undefined && context.exchange !== undefined) {
+            const delayedChangeExchange = this.internal.aclUpdateDelayed.get(relevantFabricIndex);
+            if (delayedChangeExchange !== undefined && delayedChangeExchange !== context.exchange) {
+                // We are in a delayed ACL update with another exchange, so we do not process this one with Busy error
+                // This is formally not in specification, but chip also does this that way
+                logger.warn(
+                    "Decline parallel ACL changes from multiple exchanges",
+                    context.exchange.id,
+                    "vs.",
+                    delayedChangeExchange.id,
+                );
+                throw new StatusResponseError("Parallel ACL change from multiple exchanges", StatusCode.Busy);
+            }
+        }
+
         const fabricAcls = value.filter(entry => entry.fabricIndex === relevantFabricIndex);
         if (fabricAcls.length > this.state.accessControlEntriesPerFabric) {
             throw new StatusResponseError("AccessControlEntriesPerFabric exceeded", StatusCode.ResourceExhausted);
@@ -223,7 +287,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         value: AccessControlTypes.AccessControlEntry[],
         oldValue: AccessControlTypes.AccessControlEntry[],
     ) {
-        if (this.internal.aclManager === undefined) {
+        if (!this.internal.initialized) {
             return; // Too early to send events
         }
         const { session } = this.context;
@@ -302,7 +366,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         value: AccessControlTypes.AccessControlExtension[],
         oldValue: AccessControlTypes.AccessControlExtension[],
     ) {
-        if (this.internal.aclManager === undefined) {
+        if (!this.internal.initialized) {
             return; // Too early to send events
         }
         const { session } = this.context;
@@ -342,35 +406,6 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
     }
 
     /**
-     * Implements the access control check for the given context, location and endpoint and is called by the
-     * InteractionServer. The method returns the list of granted Access privileges for the given context, location and
-     * endpoint.
-     */
-    accessLevelsFor(
-        context: ActionContext,
-        location: AccessControl.Location,
-        endpoint?: AclEndpointContext,
-    ): AccessLevel[] {
-        if (location.cluster === undefined) {
-            // Without a cluster, internal behaviors are only accessible internally so this is an irrelevant placeholder
-            logger.warn("Access control check without cluster, returning View access level");
-            return [AccessLevel.View];
-        }
-        if (context.session === undefined) {
-            // Without a session, we can't determine access levels
-            logger.warn("Access control check without session, returning View access level");
-            return [AccessLevel.View];
-        }
-        if (endpoint === undefined) {
-            // Without an endpoint, we can't determine access levels, ???
-            logger.warn("Access control check without endpoint, returning View access level");
-            return [AccessLevel.View];
-        }
-
-        return this.aclManager.getGrantedPrivileges(context, endpoint, location.cluster);
-    }
-
-    /**
      * This method allows to implement the validation of manufacturer specific ACL extensions when an extension entry is
      * added or changed. The default implementation checks whether the extension is a valid TLV and possible to decode.
      *
@@ -399,8 +434,8 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
      * validation.
      */
     protected extensionEntryAccessCheck(
-        _aclList: AccessControlTypes.AccessControlEntry[],
-        _aclEntry: AccessControlTypes.AccessControlEntry,
+        _aclList: AclList,
+        _aclEntry: AclEntry,
         _subjectDesc: IncomingSubjectDescriptor,
         _endpoint: AclEndpointContext,
         _clusterId: ClusterId,
@@ -408,77 +443,159 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         return true;
     }
 
-    /**
-     * The AccessControlManager instance that is used to manage the ACL for this behavior.
-     */
-    get aclManager() {
-        if (this.internal.aclManager === undefined) {
-            throw new InternalError("ACL manager not initialized yet");
-        }
-        return this.internal.aclManager;
+    /** A fabric was added or updated, so we need to initialize the ACL for this fabric */
+    #updateFabricAcls(fabric: Fabric) {
+        const fabricIndex = fabric.fabricIndex;
+        fabric.acl.aclList = deepCopy(this.state.acl).filter(entry => entry.fabricIndex === fabricIndex);
     }
 
-    #updateAccessControlList(acl: AccessControlTypes.AccessControlEntry[]) {
-        if (!this.aclUpdateDelayed) {
-            logger.info("ACL updated, updating ACL manager", acl);
-            this.aclManager.updateAccessControlList(deepCopy(acl));
+    /**
+     * When beginning an interaction for an online session, we register the potential ACL change for the associated
+     * fabric index. If ACL data are really changed later, the exchange gets added then.
+     */
+    #handleInteractionBegin(session?: AccessControl.Session) {
+        if (session !== undefined && !session.offline && session.fabric !== undefined) {
+            this.#prepareAclUpdateFor(session.fabric);
+        }
+    }
+
+    /**
+     * When an interaction is finished, we check if there was a delayed ACL update for the associated fabric and apply
+     * it to the manager. For this we check if we have an exchange stored because otherwise the interaction was in fact
+     * not changing the ACL.
+     */
+    #handleInteractionEnd(session?: AccessControl.Session) {
+        if (session !== undefined && !session.offline && session.fabric !== undefined) {
+            if (this.internal.aclUpdateDelayed.get(session.fabric) !== undefined) {
+                this.#applyDelayedAclUpdateFor(session.fabric);
+            }
+        }
+    }
+
+    /** The ACL list was changed, so we need to determine if and when to apply the update to the ACL manager */
+    #updateAccessControlList(
+        acl: AccessControlTypes.AccessControlEntry[],
+        _oldAcl: AccessControlTypes.AccessControlEntry[],
+        context?: ActionContext,
+    ) {
+        if (context === undefined || context.offline) {
+            // local or offline ACL change, so we update all fabrics because we do not know better
+            this.#updateAllFabricsAcls();
         } else {
-            logger.info("ACL updated, but ACL manager update is delayed", acl);
-            this.internal.delayedAclData = acl;
+            const fabric = context.session?.associatedFabric;
+            if (fabric === undefined || fabric.fabricIndex === undefined || context.exchange === undefined) {
+                throw new InternalError("We require a fabric bound online session to write ACL changes");
+            }
+            this.#handleFabricAclUpdate(fabric, acl, context.exchange);
         }
-    }
-
-    resetDelayedAccessControlList() {
-        this.internal.delayedAclData = undefined;
-        this.aclUpdateDelayed = false;
     }
 
     /**
-     * If set to true, the ACL will not be updated immediately when it changes, but only when the `aclUpdateDelayed`
-     * property is set to false again.
-     * This is a hack to prevent the ACL from updating while we are in the middle of a write transaction and will be
-     * removed again once we somehow handle relevant sub transactions.
+     * Handles the ACL update for a specific fabric. If an exchange is present, we delay the update until the
+     * interaction is finished.
      */
-    get aclUpdateDelayed() {
-        return this.internal.aclUpdateDelayed;
+    #handleFabricAclUpdate(fabric: Fabric, acl: AccessControlTypes.AccessControlEntry[], exchange: MessageExchange) {
+        const fabricIndex = fabric.fabricIndex;
+        if (this.internal.aclUpdateDelayed.has(fabricIndex)) {
+            // We have registered an interaction for this fabric, so we delay the update
+            logger.debug(
+                "ACL attribute updated, but interaction still in progress, delaying update of ACL manager for FabricIndex",
+                fabricIndex,
+            );
+            this.#delayAclUpdateFor(fabricIndex, exchange, acl);
+        } else {
+            // No interaction registered, so we apply directly because local/offline change
+            logger.debug("ACL attribute updated, applying update to ACL manager", fabricIndex);
+
+            fabric.acl.aclList = deepCopy(acl).filter(entry => entry.fabricIndex === fabricIndex);
+        }
+    }
+
+    /** Update all fabrics with the current ACL list */
+    #updateAllFabricsAcls() {
+        const acl = deepCopy(this.state.acl);
+        const aclsForFabric = new Map<FabricIndex, AccessControlTypes.AccessControlEntry[]>();
+        // Collect ACLs for each fabric
+        for (const entry of acl) {
+            const { fabricIndex } = entry;
+            const acls = aclsForFabric.get(fabricIndex) ?? [];
+            acls.push(entry);
+            aclsForFabric.set(fabricIndex, acls);
+        }
+
+        const fabrics = this.env.get(FabricManager);
+        for (const fabric of fabrics) {
+            // Update all Fabrics and set the ACL list for each fabric, empty ACLs when none are present
+            fabric.acl.aclList = aclsForFabric.get(fabric.fabricIndex) ?? [];
+        }
     }
 
     /**
-     * If set to true, the ACL will not be updated immediately when it changes, but only when the `aclUpdateDelayed`
-     * property is set to false again.
-     * This is a hack to prevent the ACL from updating while we are in the middle of a write transaction and will be
-     * removed again once we somehow handle relevant sub transactions.
+     * Register a potential change of ACL for a specific fabric index. if changes happened is checked when interaction
+     * ends.
      */
-    set aclUpdateDelayed(value: boolean) {
-        if (!value) {
-            logger.info("Committing delayed ACL update");
-            this.#updateDelayedAccessControlList();
-        } else if (!this.internal.aclUpdateDelayed) {
-            logger.info("Register ACL update to be delayed");
+    #prepareAclUpdateFor(fabricIndex: FabricIndex) {
+        if (!this.internal.aclUpdateDelayed.has(fabricIndex)) {
+            logger.info("Register ACL update to be delayed for fabricIndex", fabricIndex);
+            this.internal.aclUpdateDelayed.set(fabricIndex, undefined);
         }
-        this.internal.aclUpdateDelayed = value;
     }
 
-    #updateDelayedAccessControlList() {
-        if (this.internal.delayedAclData === undefined) {
-            return;
+    /**
+     * Register a concrete change of ACL for a specific fabric index. The exchange allows to also limit ACL changes to
+     * that exchange until interaction is finished.
+     */
+    #delayAclUpdateFor(
+        fabricIndex: FabricIndex,
+        exchange: MessageExchange,
+        acl: AccessControlTypes.AccessControlEntry[],
+    ) {
+        if (!this.internal.aclUpdateDelayed.has(fabricIndex)) {
+            logger.info("Register ACL update to be delayed for fabricIndex", fabricIndex);
         }
-        const delayedData = deepCopy(this.internal.delayedAclData);
-        this.internal.delayedAclData = undefined;
-        logger.info("Updating ACL manager with ACL", delayedData);
-        this.aclManager.updateAccessControlList(delayedData);
+        this.internal.aclUpdateDelayed.set(fabricIndex, exchange);
+        this.internal.delayedAclData.set(
+            fabricIndex,
+            deepCopy(acl).filter(entry => entry.fabricIndex === fabricIndex),
+        );
+    }
+
+    /** Applies the delayed ACL update for a specific fabric index, if existing */
+    #applyDelayedAclUpdateFor(fabricIndex: FabricIndex) {
+        const updateDelayed = !!this.internal.aclUpdateDelayed.get(fabricIndex);
+        const delayedData = this.internal.delayedAclData.get(fabricIndex);
+
+        this.internal.delayedAclData.delete(fabricIndex);
+        this.internal.aclUpdateDelayed.delete(fabricIndex);
+        if (updateDelayed && delayedData !== undefined) {
+            this.env.get(FabricManager).for(fabricIndex).acl.aclList = delayedData;
+        }
     }
 }
 
 export namespace AccessControlServer {
     export class Internal {
-        /** AccessControlManager instance that is used to manage the ACL checks for this device. */
-        aclManager?: AccessControlManager;
+        /** Is the cluster logic initialized? Used to block events before full initialization. */
+        initialized = false;
 
-        /** If set to true ACL updates are delayed while in a write transaction. More details see getter/setter above. */
-        aclUpdateDelayed = false;
+        /**
+         * When an online and potentially chunked ACL writing happens, we will delay the update and store the exchange
+         * used for the writing. With this we also verify that concurrent writes are blocked and will not mix the data.
+         */
+        aclUpdateDelayed = new Map<FabricIndex, MessageExchange | undefined>();
 
-        /** Latest delayed data of acl */
-        delayedAclData?: AccessControlTypes.AccessControlEntry[];
+        /** Latest delayed data of acl attribute */
+        delayedAclData = new Map<FabricIndex, AccessControlTypes.AccessControlEntry[]>();
     }
+
+    export declare const ExtensionInterface: {
+        extensionEntryValidator: (extension: AccessControlTypes.AccessControlExtension) => void;
+        extensionEntryAccessCheck: (
+            aclList: AclList,
+            aclEntry: AclEntry,
+            subjectDesc: IncomingSubjectDescriptor,
+            endpoint: AclEndpointContext,
+            clusterId: ClusterId,
+        ) => boolean;
+    };
 }

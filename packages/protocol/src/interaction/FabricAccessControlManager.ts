@@ -5,7 +5,8 @@
  */
 import { Subject } from "#action/server/Subject.js";
 import { AccessControl } from "#clusters/access-control";
-import { MatterFlowError } from "#general";
+import { Fabric } from "#fabric/Fabric.js";
+import { InternalError, Logger, MatterFlowError } from "#general";
 import { AccessLevel } from "#model";
 import {
     CaseAuthenticatedTag,
@@ -19,6 +20,8 @@ import {
     SubjectId,
 } from "#types";
 import { AccessControl as AccessControlContext } from "../action/server/AccessControl.js";
+
+const logger = Logger.get("FabricAccessControlManager");
 
 export type AclEntry = Omit<AccessControl.AccessControlEntry, "privilege"> & {
     privilege: AccessLevel;
@@ -59,10 +62,11 @@ export class AccessDeniedError extends StatusResponseError {
 }
 
 /**
- * Implements Access Control Logic as per Matter Specification @see {@link MatterSpecification.v12.Core} § 6.6.5.2.
+ * Implements Access Control Logic For one fabric as per Matter Specification @see {@link MatterSpecification.v12.Core} § 6.6.5.2.
  */
-export class AccessControlManager {
-    #aclList: AclList;
+export class FabricAccessControlManager {
+    #fabricIndex: FabricIndex;
+    #aclList: AclList = [];
     #extensionEntryAccessCheck: (
         aclList: AclList,
         aclEntry: AclEntry,
@@ -71,9 +75,36 @@ export class AccessControlManager {
         clusterId: ClusterId,
     ) => boolean = () => true;
 
-    constructor(
-        aclList: AccessControl.AccessControlEntry[] = [],
-        extensionEntryAccessCheck?: (
+    constructor(fabric?: Fabric) {
+        if (fabric === undefined) {
+            this.#fabricIndex = FabricIndex.NO_FABRIC;
+            // Add the implicit default PASE ACL entry for the fabric
+            this.#aclList.push(ImplicitDefaultPaseAclEntry);
+        } else {
+            this.#fabricIndex = fabric.fabricIndex;
+        }
+    }
+
+    set fabricIndex(fabricIndex: FabricIndex) {
+        if (this.#fabricIndex === undefined || this.#fabricIndex === FabricIndex.NO_FABRIC) {
+            this.#fabricIndex = fabricIndex;
+        }
+        throw new InternalError("Can not overwrite FabricIndex");
+    }
+
+    /**
+     * Public method used to update the Access Control List on changes.
+     */
+    set aclList(aclList: AccessControl.AccessControlEntry[]) {
+        if (aclList.some(({ fabricIndex }) => fabricIndex !== this.#fabricIndex)) {
+            throw new InternalError("ACL entries must match the fabric index of the manager");
+        }
+        this.#aclList = [...aclList] as unknown as AclList; // It is the same structure we just use an internal type for privilege
+        logger.info("ACL List updated for FabricIndex ", this.#fabricIndex, this.#aclList);
+    }
+
+    set extensionEntryAccessCheck(
+        func: (
             aclList: AclList,
             aclEntry: AclEntry,
             subjectDesc: IncomingSubjectDescriptor,
@@ -81,24 +112,31 @@ export class AccessControlManager {
             clusterId: ClusterId,
         ) => boolean,
     ) {
-        this.#aclList = aclList as unknown as AclList; // It is the same structure we just use an internal type for privilege
-        if (extensionEntryAccessCheck !== undefined) {
-            this.#extensionEntryAccessCheck = extensionEntryAccessCheck;
+        this.#extensionEntryAccessCheck = func;
+    }
+
+    /**
+     * Implements the access control check for the given context, location and endpoint and is called by the
+     * InteractionServer. The method returns the list of granted Access privileges for the given context, location and
+     * endpoint.
+     */
+    accessLevelsFor(
+        context: AccessControlContext.Session,
+        location: AccessControlContext.Location,
+        endpoint?: AclEndpointContext,
+    ): AccessLevel[] {
+        if (location.cluster === undefined) {
+            // Without a cluster, internal behaviors are only accessible internally, so this is an irrelevant placeholder
+            logger.warn("Access control check without cluster, returning View access level");
+            return [AccessLevel.View];
         }
-    }
+        if (endpoint === undefined) {
+            // Without an endpoint, we can't determine access levels, ???
+            logger.warn("Access control check without endpoint, returning View access level");
+            return [AccessLevel.View];
+        }
 
-    /**
-     * Public method used to update the Access Control List on changes.
-     */
-    updateAccessControlList(aclList: AccessControl.AccessControlEntry[] = []): void {
-        this.#aclList = [...aclList] as unknown as AclList; // It is the same structure we just use an internal type for privilege
-    }
-
-    /**
-     * Get the Access Control List for a given fabric.
-     */
-    #getAccessControlEntriesForFabric(fabricIndex: FabricIndex): AclList {
-        return this.#aclList.filter(entry => entry.fabricIndex === fabricIndex);
+        return this.#getGrantedPrivileges(context, endpoint, location.cluster);
     }
 
     /**
@@ -152,15 +190,13 @@ export class AccessControlManager {
     /**
      * Determines the granted privileges for the given session, endpoint, and cluster ID and returns them.
      */
-    getGrantedPrivileges(
+    #getGrantedPrivileges(
         context: AccessControlContext.Session,
         endpoint: AclEndpointContext,
         clusterId: ClusterId,
     ): AccessLevel[] {
         const endpointId = endpoint.id;
-        const fabric = context.fabric;
         const subjectDesc = this.#getIsdFromMessage(context);
-        const acl = fabric ? this.#getAccessControlEntriesForFabric(fabric) : [ImplicitDefaultPaseAclEntry];
 
         // Granted privileges set is initially empty
         const grantedPrivileges = new Set<AccessLevel>();
@@ -170,7 +206,7 @@ export class AccessControlManager {
             this.#addGrantedPrivilege(grantedPrivileges, AccessLevel.Administer);
         }
 
-        for (const aclEntry of acl) {
+        for (const aclEntry of this.#aclList) {
             if (grantedPrivileges.has(AccessLevel.Administer)) {
                 // End checking if highest privilege is granted
                 break;
@@ -254,7 +290,7 @@ export class AccessControlManager {
             }
 
             // Extensions processing must not fail
-            if (!this.#extensionEntryAccessCheck(acl, aclEntry, subjectDesc, endpoint, clusterId)) {
+            if (!this.#extensionEntryAccessCheck(this.#aclList, aclEntry, subjectDesc, endpoint, clusterId)) {
                 continue;
             }
 
