@@ -14,6 +14,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/*
     - Feature: Implement Matter Groups support in protocol, node and (partly) controller packages
 
+-   @matter/node
+    - Enhancement: Finalizes behavior event `interactionBegin` to fire at the begin of an interaction as soon as the datasource is about to be changed on a behavior
+    - Enhancement: Finalizes behavior event `interactionEnd` to fire at the end of an interaction when all logic is done and executed
+    - Enhancement: Finalizes behavior event `datasourceChanged` to fire when an interaction changed the state of the behavior. It fires at the end after all concrete `$Changed` events are sent out
+
 ## 0.14.0 (2025-06-04)
 
 - NOTE: This version is compatible with Node.js 20.x, 22.x and 24.x. Node.js 18.x is also supported with the following exceptions:
