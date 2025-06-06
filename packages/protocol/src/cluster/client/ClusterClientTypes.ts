@@ -100,6 +100,12 @@ type ClientAttributeGetters<A extends Attributes> = Omit<
     },
     keyof GlobalAttributes<any>
 >;
+type ClientLocalAttributeGetters<A extends Attributes> = Omit<
+    {
+        [P in keyof A as `get${Capitalize<string & P>}AttributeFromCache`]: () => GetterTypeFromSpec<A[P]> | undefined;
+    },
+    keyof GlobalAttributes<any>
+>;
 type ClientGlobalAttributeGetters<F extends BitSchema> = {
     [P in GlobalAttributeNames<F> as `get${Capitalize<string & P>}Attribute`]: () => Promise<
         GetterTypeFromSpec<GlobalAttributes<F>[P]>
@@ -265,6 +271,7 @@ export type ClusterClientObj<T extends ClusterType = ClusterType> = BaseClusterC
     /** Returns if a given Command with provided name is present and supported at the connected cluster server. */
     isCommandSupportedByName: (commandName: string) => boolean;
 } & ClientAttributeGetters<T["attributes"]> &
+    ClientLocalAttributeGetters<T["attributes"]> &
     ClientGlobalAttributeGetters<T["features"]> &
     ClientAttributeSubscribers<T["attributes"]> &
     ClientAttributeListeners<T["attributes"]> &
