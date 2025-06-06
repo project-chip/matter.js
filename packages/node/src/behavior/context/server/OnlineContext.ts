@@ -144,7 +144,7 @@ export function OnlineContext(options: OnlineContext.Options) {
             fabric,
             transaction,
 
-            interactionComplete: exchange?.closed,
+            interactionComplete: exchange !== undefined ? new AsyncObservable() : undefined,
 
             ...methods,
 
@@ -196,6 +196,16 @@ export function OnlineContext(options: OnlineContext.Options) {
 
         if (message) {
             Contextual.setContextOf(message, context);
+        }
+
+        if (exchange !== undefined) {
+            const notifyInteractionComplete = () => {
+                exchange.closing.off(notifyInteractionComplete);
+                if (context.interactionComplete?.isObserved) {
+                    context.interactionComplete.emit(context);
+                }
+            };
+            exchange.closing.on(notifyInteractionComplete);
         }
 
         return context;
