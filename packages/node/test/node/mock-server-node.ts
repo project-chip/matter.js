@@ -9,6 +9,7 @@ import { OnOffLightDevice } from "#devices/on-off-light";
 import { Agent } from "#endpoint/Agent.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import {
+    AsyncObservable,
     Bytes,
     Crypto,
     DataReadQueue,
@@ -175,6 +176,7 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
             hasExpiredTimedInteraction: () => false,
             session: await this.createSession(options),
             maxPayloadSize: 1000,
+            closing: AsyncObservable<[void]>(),
         } as unknown as MessageExchange;
     }
 

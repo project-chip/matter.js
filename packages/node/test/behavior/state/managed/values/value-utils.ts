@@ -14,6 +14,7 @@ import { DataModelPath, FieldElement, FieldModel } from "#model";
 import type { Node } from "#node/Node.js";
 import { Val } from "#protocol";
 import { EndpointNumber } from "#types";
+import { FabricAccessControlManager } from "@matter/protocol";
 
 /**
  * Create schema for a single field.
@@ -119,16 +120,22 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
 
 export type TestStruct = Identity<ReturnType<typeof TestStruct>>;
 
-export function aclEndpoint(acls: number[]) {
+export function aclEndpoint() {
     return {
         protocol: {
             1: {
                 deviceTypes: [],
             },
         },
-
-        act: () => ({
-            accessLevelsFor: () => acls,
-        }),
     } as unknown as Node;
+}
+
+export class MockAccessControlManager extends FabricAccessControlManager {
+    constructor(protected acls: number[]) {
+        super();
+    }
+
+    override accessLevelsFor() {
+        return this.acls;
+    }
 }

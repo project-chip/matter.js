@@ -12,7 +12,7 @@ import { MaybePromise } from "#general";
 import { ClusterModel, DataModelPath, FeatureMap, FeatureSet, FieldElement } from "#model";
 import { ConstraintError, Val } from "#protocol";
 import { EndpointNumber, FabricIndex, NodeId } from "#types";
-import { aclEndpoint, TestStruct } from "./value-utils.js";
+import { aclEndpoint, MockAccessControlManager, TestStruct } from "./value-utils.js";
 
 export type Nested = {
     substruct: {
@@ -23,7 +23,8 @@ export type Nested = {
 const TestContext = {
     fabric: FabricIndex(1),
     subject: NodeId(1),
-    node: aclEndpoint([1, 3]),
+    node: aclEndpoint(),
+    aclManager: new MockAccessControlManager([1, 3]),
 };
 
 function testNested(
