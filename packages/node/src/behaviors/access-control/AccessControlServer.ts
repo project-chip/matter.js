@@ -103,11 +103,11 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
             }
             fabric.acl.aclList = fabricAcls;
             fabric.acl.extensionEntryAccessCheck = this.extensionEntryAccessCheck.bind(this);
-
-            // TODO handle delete fabric more generically later to remove fabric scoped data
-            this.reactTo(fabrics.events.updated, this.#updateFabricAcls);
-            this.reactTo(fabrics.events.added, this.#updateFabricAcls);
         }
+
+        // TODO handle delete fabric more generically later to remove fabric scoped data
+        this.reactTo(fabrics.events.updated, this.#updateFabricAcls);
+        this.reactTo(fabrics.events.added, this.#updateFabricAcls);
 
         // The Fallback Logic added a new ACL entry; update the ACL list for the future
         if (acl.length > originalAclLength) {

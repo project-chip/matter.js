@@ -347,14 +347,14 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         // Build a new Fabric with the updated NOC and ICAC
         try {
-            const updateFabric = await timedOp.buildUpdatedFabric(nocValue, icacValue);
+            const updatedFabric = await timedOp.buildUpdatedFabric(nocValue, icacValue);
 
             // update FabricManager and Resumption records but leave current session intact
-            await timedOp.updateFabric(updateFabric);
+            await timedOp.updateFabric(updatedFabric);
 
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
-                fabricIndex: updateFabric.fabricIndex,
+                fabricIndex: updatedFabric.fabricIndex,
             };
         } catch (error) {
             logger.info("Building fabric for updateNoc failed", error);
