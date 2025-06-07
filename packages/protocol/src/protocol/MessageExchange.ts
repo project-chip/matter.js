@@ -202,6 +202,7 @@ export class MessageExchange {
     readonly #exchangeId: number;
     readonly #protocolId: number;
     readonly #closed = AsyncObservable<[]>();
+    readonly #closing = AsyncObservable<[]>();
     readonly #useMRP: boolean;
 
     constructor(
@@ -252,8 +253,17 @@ export class MessageExchange {
         );
     }
 
+    /** Emits when the exchange is actually closed. This happens after all Retries and Communication are done. */
     get closed() {
         return this.#closed;
+    }
+
+    /**
+     * Emit when the exchange is closing, but not yet closed. We only wait for acks and retries to happen, but the
+     * actual interaction logic is already done.
+     */
+    get closing() {
+        return this.#closing;
     }
 
     get isClosing() {
@@ -705,6 +715,7 @@ export class MessageExchange {
             return this.#close();
         }
         this.#isClosing = true;
+        this.#closing.emit();
 
         if (this.#receivedMessageToAck !== undefined) {
             this.#receivedMessageAckTimer.stop();
@@ -742,6 +753,9 @@ export class MessageExchange {
     }
 
     async #close() {
+        if (!this.#isClosing) {
+            this.#closing.emit();
+        }
         this.#isClosing = true;
         this.#retransmissionTimer?.stop();
         this.#closeTimer?.stop();

@@ -7,7 +7,7 @@
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { MaybePromise } from "#general";
 import { FabricIndex, NodeId } from "#types";
-import { TestStruct, aclEndpoint, listOf, structOf } from "./value-utils.js";
+import { MockAccessControlManager, TestStruct, aclEndpoint, listOf, structOf } from "./value-utils.js";
 
 export type ValueList = { value: number }[];
 export type ValueSubList = { value: number[] }[];
@@ -49,14 +49,16 @@ export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLis
         fabricFiltered: true,
         fabric: FabricIndex(1),
         subject: NodeId(1),
-        node: aclEndpoint([1, 3]),
+        node: aclEndpoint(),
+        aclManager: new MockAccessControlManager([1, 3]),
     };
 
     const cx2 = {
         fabricFiltered: true,
         fabric: FabricIndex(2),
         subject: NodeId(2),
-        node: aclEndpoint([1, 3]),
+        node: aclEndpoint(),
+        aclManager: new MockAccessControlManager([1, 3]),
     };
 
     return struct.online2(cx1, cx2, async ({ cx1, cx2, ref1, ref2 }) => {
@@ -87,17 +89,25 @@ describe("ListManager", () => {
     it("basic get/set", async () => {
         const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
-        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1), node: aclEndpoint([1, 3]) }, async ref => {
-            const list = ref.list as string[];
+        await struct.online(
+            {
+                subject: NodeId(1),
+                fabric: FabricIndex(1),
+                node: aclEndpoint(),
+                aclManager: new MockAccessControlManager([1, 3]),
+            },
+            async ref => {
+                const list = ref.list as string[];
 
-            list[0] = "hi";
-            list[1] = "there";
-            list[0] = "HI";
+                list[0] = "hi";
+                list[1] = "there";
+                list[0] = "HI";
 
-            expect(list[0]).equals("HI");
-            expect(list[1]).equals("there");
-            expect(list.length).equals(2);
-        });
+                expect(list[0]).equals("HI");
+                expect(list[1]).equals("there");
+                expect(list.length).equals(2);
+            },
+        );
 
         struct.expect({ list: ["HI", "there"] });
     });
@@ -106,7 +116,12 @@ describe("ListManager", () => {
         const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
         await struct.online(
-            { subject: NodeId(1), fabric: FabricIndex(1), node: aclEndpoint([1, 3]) },
+            {
+                subject: NodeId(1),
+                fabric: FabricIndex(1),
+                node: aclEndpoint(),
+                aclManager: new MockAccessControlManager([1, 3]),
+            },
             async (ref, cx) => {
                 const list = ref.list as string[];
 
@@ -136,20 +151,28 @@ describe("ListManager", () => {
     it("basic array iteration", async () => {
         const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
-        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1), node: aclEndpoint([1, 3]) }, async ref => {
-            const list = ref.list as string[];
+        await struct.online(
+            {
+                subject: NodeId(1),
+                fabric: FabricIndex(1),
+                node: aclEndpoint(),
+                aclManager: new MockAccessControlManager([1, 3]),
+            },
+            async ref => {
+                const list = ref.list as string[];
 
-            (list[0] = "hi"), (list[1] = "there");
-            list[2] = "aaaaand goodbye";
+                (list[0] = "hi"), (list[1] = "there");
+                list[2] = "aaaaand goodbye";
 
-            const list2 = Array<string>();
+                const list2 = Array<string>();
 
-            for (const value of list) {
-                list2.push(value);
-            }
+                for (const value of list) {
+                    list2.push(value);
+                }
 
-            expect(list2).deep.equals(["hi", "there", "aaaaand goodbye"]);
-        });
+                expect(list2).deep.equals(["hi", "there", "aaaaand goodbye"]);
+            },
+        );
     });
 
     it("fabric-scoped get/set", async () => {

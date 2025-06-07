@@ -226,6 +226,9 @@ describe("ServerNode", () => {
     it("times out commissioning", async () => {
         const { node } = await commissioning.almostCommission();
 
+        // Somewhere there is another promise left that updates the fabrics correctly, so give that time to be fullfilled
+        await MockTime.yield();
+
         const opcreds = node.state.operationalCredentials;
 
         expect(opcreds.commissionedFabrics).equals(1);

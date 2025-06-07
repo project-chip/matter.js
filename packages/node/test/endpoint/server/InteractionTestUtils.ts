@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { DataReadQueue, MAX_UDP_MESSAGE_SIZE } from "#general";
+import { AsyncObservable, DataReadQueue, MAX_UDP_MESSAGE_SIZE } from "#general";
 import {
     ExchangeSendOptions,
     MATTER_MESSAGE_OVERHEAD,
@@ -20,6 +20,7 @@ export class DummyMessageExchange {
     messagesQueue = new DataReadQueue<Message>();
     channel = { name: "test" };
     maxPayloadSize = MAX_UDP_MESSAGE_SIZE - MATTER_MESSAGE_OVERHEAD;
+    closing = AsyncObservable();
 
     constructor(
         public session: SecureSession,
