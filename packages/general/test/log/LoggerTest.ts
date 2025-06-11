@@ -479,6 +479,63 @@ describe("Logger", () => {
         });
     });
 
+    describe("renders falsy value", () => {
+        it("undefined", () => {
+            const result = captureOne(() => {
+                Logger.format = LogFormat.ANSI;
+                logger.notice("Not defined:", Diagnostic.strong(undefined));
+            });
+
+            expect(result?.message).equals(
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mNot defined: \u001b[1mundefined\u001b[0m",
+            );
+        });
+
+        it("null", () => {
+            const result = captureOne(() => {
+                Logger.format = LogFormat.ANSI;
+                logger.notice("Not defined:", Diagnostic.strong(null));
+            });
+
+            expect(result?.message).equals(
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mNot defined: \u001b[1mnull\u001b[0m",
+            );
+        });
+
+        it("0", () => {
+            const result = captureOne(() => {
+                Logger.format = LogFormat.ANSI;
+                logger.notice("Not defined:", Diagnostic.strong(0));
+            });
+
+            expect(result?.message).equals(
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mNot defined: \u001b[1m0\u001b[0m",
+            );
+        });
+
+        it("bare object", () => {
+            const result = captureOne(() => {
+                Logger.format = LogFormat.ANSI;
+                logger.notice("Object:", {});
+            });
+
+            expect(result?.message).equals(
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mObject: {}\u001b[0m",
+            );
+        });
+
+        it("presentation without value", () => {
+            const result = captureOne(() => {
+                Logger.format = LogFormat.ANSI;
+                logger.notice("Object:", { [Diagnostic.presentation]: "strong" });
+            });
+
+            expect(result?.message).equals(
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mObject: \u001b[1m{}\u001b[0m",
+            );
+        });
+    });
+
     function itUsesCorrectConsoleMethod(sourceName: string, sinkName: string = sourceName) {
         it(`maps logger.${sourceName} to console.${sinkName}`, () => {
             const actualWrite = Logger.destinations.default.write;
