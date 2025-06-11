@@ -10,6 +10,8 @@ install(); // Install the react-native crypto module
 
 import { CRYPTO_HASH_ALGORITHM, CryptoDsaEncoding, CryptoVerifyError } from "#general";
 import { NodeJsCrypto } from "#nodejs";
+
+// TODO -
 import jwk2pem from "jwk-to-pem";
 
 // @ts-expect-error No types but all fine
@@ -62,6 +64,12 @@ crypto.hkdf = (
     return T.slice(0, keylen);
 };
 
+/**
+ * Crypto implementation for React Native
+ *
+ * We do not install this implementation by default because it is not fully functional.  The Node.js crypto
+ * compatibility interface in React Native does not implement all features (AES-CCM, at least, is missing).
+ */
 export class CryptoReactNative extends NodeJsCrypto {
     override signEcdsa(
         privateKey: JsonWebKey,

@@ -14,6 +14,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/*
     - Feature: Implement Matter Groups support in protocol, node and (partly) controller packages
 
+-   @matter/general
+    - Breaking: The `Network.get()` singleton is removed
+    - Breaking: The `Crypto` API is now an interface rather than abstract class and the API has changed slightly
+    - Feature: Adds a crypto implementation that should function in any modern JS VM
+
 -   @matter/node
     - Enhancement: Finalizes behavior event `interactionBegin` to fire at the begin of an interaction as soon as the datasource is about to be changed on a behavior
     - Enhancement: Finalizes behavior event `interactionEnd` to fire at the end of an interaction when all logic is done and executed
@@ -21,6 +26,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/protocol
     - Enhancement: Exposed reading cached ClusterClient attributes via `get*AttributeFromCache()` method
+
+-   @matter/nodejs
+    - Enhancement: New variables `nodejs.crypto`, `nodejs.network` and `nodejs.storage` allow users to enable/disable the implementation of these features that use Node.js APIs
 
 ## 0.14.0 (2025-06-04)
 

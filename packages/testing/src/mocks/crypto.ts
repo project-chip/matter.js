@@ -17,7 +17,7 @@ interface CryptoInstance {
 }
 
 interface CryptoNamespace {
-    get(): CryptoInstance;
+    default: CryptoInstance;
 }
 
 let RealCrypto: undefined | CryptoNamespace;
@@ -36,7 +36,7 @@ export const MockCrypto: MockCrypto = {
 
         restoreRandomness?.();
         if (!value) {
-            const instance = RealCrypto.get();
+            const instance = RealCrypto.default;
 
             const realGetRandomData = instance.getRandomData;
             instance.getRandomData = length => {

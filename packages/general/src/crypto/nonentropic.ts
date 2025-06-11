@@ -23,21 +23,21 @@ export function nonentropic<T>(index: number, actor: () => T): T {
         throw new ImplementationError(`Index for stable crypto must be 0-255`);
     }
 
-    const instance = Crypto.get();
-    const { getRandomData, createKeyPair } = instance;
+    const crypto = Crypto.default;
+    const { getRandomData, createKeyPair } = crypto;
     let isAsync = false;
 
     try {
         // Create random data consisting of index repeated
-        instance.getRandomData = function getRandomDataNONENTROPIC(length) {
+        crypto.getRandomData = function getRandomDataNONENTROPIC(length) {
             const result = new Uint8Array(length);
             result.fill(index);
             return result;
         };
 
         // Ensure EC key generation uses our own "entropy" source rather than the platform's
-        instance.createKeyPair = function getRandomDataNONENTROPIC() {
-            const privateBits = ec.mapHashToField(instance.getRandomData(48), ec.p256.CURVE.n);
+        crypto.createKeyPair = function getRandomDataNONENTROPIC() {
+            const privateBits = ec.mapHashToField(crypto.getRandomData(48), ec.p256.CURVE.n);
             return Key({
                 kty: KeyType.EC,
                 crv: CurveType.p256,
@@ -59,7 +59,7 @@ export function nonentropic<T>(index: number, actor: () => T): T {
     }
 
     function revert() {
-        instance.getRandomData = getRandomData;
-        instance.createKeyPair = createKeyPair;
+        crypto.getRandomData = getRandomData;
+        crypto.createKeyPair = createKeyPair;
     }
 }

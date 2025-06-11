@@ -12,7 +12,9 @@ export enum Endian {
 }
 
 /**
- * String tag for hex literals.
+ * A string tag for hex literals.
+ *
+ * Example: b$`01020304` creates a four-byte Uint8Array.
  */
 export function b$(strings: TemplateStringsArray, ...values: unknown[]) {
     if (strings.length === 1 && values.length === 0) {

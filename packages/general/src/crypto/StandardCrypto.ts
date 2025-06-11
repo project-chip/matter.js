@@ -31,6 +31,12 @@ const SIGNATURE_ALGORITHM = <EcdsaParams>{
  * warnings in the "aes" subdirectory.
  */
 export class StandardCrypto implements Crypto {
+    implementationName = "JS";
+
+    static provider() {
+        return new StandardCrypto();
+    }
+
     getRandomData(length: number): Uint8Array {
         const result = new Uint8Array(length);
         crypto.getRandomValues(result);
@@ -218,15 +224,7 @@ export class StandardCrypto implements Crypto {
 // Only install if VM supports Web Crypto
 if ((globalThis.crypto as any)?.subtle?.[Symbol.toStringTag] === "SubtleCrypto") {
     Boot.init(() => {
-        let standard: StandardCrypto | undefined;
-
-        Crypto.get = () => {
-            if (!standard) {
-                standard = new StandardCrypto();
-            }
-
-            return standard;
-        };
+        Crypto.provider = StandardCrypto.provider;
     });
 }
 

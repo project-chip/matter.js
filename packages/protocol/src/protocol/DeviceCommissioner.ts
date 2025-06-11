@@ -153,7 +153,7 @@ export class DeviceCommissioner {
         this.#context.secureChannelProtocol.setPaseCommissioner(
             await PaseServer.fromPin(this.#context.sessions, this.#context.commissioningConfig.values.passcode, {
                 iterations: 1000,
-                salt: Crypto.get().getRandomData(32),
+                salt: Crypto.getRandomData(32),
             }),
         );
 

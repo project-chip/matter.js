@@ -258,7 +258,7 @@ export class FabricManager {
             );
         }
         this.#fabrics.set(fabricIndex, fabric);
-        if (this.#fabrics) {
+        if (this.#storage) {
             await this.persistFabrics();
         }
         this.#events.updated.emit(fabric);

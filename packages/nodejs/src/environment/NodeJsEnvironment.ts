@@ -15,7 +15,6 @@ import {
     LogFormat,
     Logger,
     Network,
-    singleton,
     StorageService,
     VariableService,
 } from "#general";
@@ -52,13 +51,16 @@ import { ProcessManager } from "./ProcessManager.js";
  * 4. Command line parameters
  *
  * The following variables are defined by this class additionally to {@link Environment}:
- * * `environment` - Name of the environment, Default "default"
+ * * `environment` - Name of the environment. Default "default"
  * * `path.root` - Path considered as root for any files to store, Fallback: ".", Default: APPDATA/.matter (Windows), HOME/.matter else (or .matter-<envname>)
  * * `path.config` - Path to config file, Default: "config.json"
- * * `trace.path` - Path of the trace file to write, Default: "trace.jsonl" relative to path.root
+ * * `trace.path` - Path of the trace file to write. Default: "trace.jsonl" relative to path.root
  * * `trace.enable` - Enable writing a trace file
  * * `storage.path` - Where to store storage files, Default: "path.root"
  * * `storage.clear` - Clear storage on start? Default: false
+ * * `nodejs.crypto` - Enables crypto implementation in this package.  Default: true
+ * * `nodejs.network` - Enables network implementation in this package.  Default: true
+ * * `nodejs.storage` - Enables file-based storage implementation in this package.  Default: true
  * * `runtime.signals` - By default register SIGINT and SIGUSR2 (diag) handlers, set to false if not wanted
  * * `runtime.exitcode` - By default we set the process.exitcode to 0 (ok) or 1 (crash); set to false to disable
  * * `runtime.unhandlederrors` - By default we log unhandled errors to matter.js log; set to false to disable
@@ -128,7 +130,7 @@ function configureCrypto(env: Environment) {
     }
 
     Boot.init(() => {
-        Crypto.get = singleton(() => new NodeJsCrypto());
+        Crypto.provider = () => new NodeJsCrypto();
     });
 }
 

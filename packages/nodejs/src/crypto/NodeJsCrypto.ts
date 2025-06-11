@@ -23,6 +23,8 @@ import {
 import * as crypto from "node:crypto";
 
 export class NodeJsCrypto implements Crypto {
+    implementationName = "Node.js";
+
     encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array {
         const cipher = crypto.createCipheriv(CRYPTO_ENCRYPT_ALGORITHM, key, nonce, {
             authTagLength: CRYPTO_AUTH_TAG_LENGTH,
