@@ -557,8 +557,8 @@ function valueFor(value: unknown) {
     if (typeof value !== "object" || value === null) {
         return value;
     }
-    const proxied = (value as Diagnostic)[Diagnostic.value];
-    if (proxied) {
+    if (Diagnostic.value in value) {
+        const proxied = (value as Diagnostic)[Diagnostic.value];
         if (proxied === value) {
             throw new InternalError("Diagnostic value proxies to itself");
         }
@@ -586,9 +586,17 @@ function presentationFor(value: unknown) {
 /**
  * Render a value with presentation support
  */
-function renderDiagnostic(value: unknown, formatter: Formatter): string {
-    const presentation = presentationFor(value);
-    value = valueFor(value);
+function renderDiagnostic(value: unknown, formatter: Formatter, ignorePresentation?: boolean): string {
+    const presentation = ignorePresentation ? undefined : presentationFor(value);
+
+    const logValue = valueFor(value);
+    if (logValue === value) {
+        // Ignore presentation when we recurse or it would be an infinite loop
+        ignorePresentation = true;
+    } else {
+        ignorePresentation = undefined;
+        value = logValue;
+    }
 
     switch (presentation) {
         case undefined:
@@ -610,22 +618,22 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
             return renderValue(value, formatter, true);
 
         case Diagnostic.Presentation.Strong:
-            return formatter.strong(() => renderDiagnostic(value, formatter));
+            return formatter.strong(() => renderDiagnostic(value, formatter, ignorePresentation));
 
         case Diagnostic.Presentation.Weak:
-            return formatter.weak(() => renderDiagnostic(value, formatter));
+            return formatter.weak(() => renderDiagnostic(value, formatter, ignorePresentation));
 
         case Diagnostic.Presentation.Added:
-            return formatter.added(() => renderDiagnostic(value, formatter));
+            return formatter.added(() => renderDiagnostic(value, formatter, ignorePresentation));
 
         case Diagnostic.Presentation.Deleted:
-            return formatter.deleted(() => renderDiagnostic(value, formatter));
+            return formatter.deleted(() => renderDiagnostic(value, formatter, ignorePresentation));
 
         case Diagnostic.Presentation.Flag:
             return (value as string).length ? formatter.keylike(value as string) : "";
 
         case Diagnostic.Presentation.Error:
-            return formatter.error(() => renderDiagnostic(value, formatter));
+            return formatter.error(() => renderDiagnostic(value, formatter, ignorePresentation));
 
         case Diagnostic.Presentation.Via:
             return formatter.via(`${value}`);
@@ -642,7 +650,7 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
         case Lifecycle.Status.Active:
         case Lifecycle.Status.Crashed:
         case Lifecycle.Status.Destroyed:
-            return formatter.status(presentation, () => renderDiagnostic(value, formatter));
+            return formatter.status(presentation, () => renderDiagnostic(value, formatter, ignorePresentation));
 
         default:
             throw new ImplementationError(`Unsupported diagnostic presentation "${presentation}"`);
