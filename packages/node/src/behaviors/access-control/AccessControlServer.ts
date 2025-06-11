@@ -64,17 +64,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
     }
 
     #online() {
-        const acl = deepCopy(this.state.acl);
-        const originalAclLength = acl.length;
-
-        // Collect ACLs for each fabric
-        const aclsForFabric = new Map<FabricIndex, AccessControlTypes.AccessControlEntry[]>();
-        for (const entry of acl) {
-            const { fabricIndex } = entry;
-            const acls = aclsForFabric.get(fabricIndex) ?? [];
-            acls.push(entry);
-            aclsForFabric.set(fabricIndex, acls);
-        }
+        const aclsForFabric = this.#mapFabricAcls();
 
         // Initialize the ACL managers for each fabric
         const fabrics = this.env.get(FabricManager);
@@ -91,7 +81,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
                     subjects: [fabric.rootNodeId],
                     targets: null, // entire node
                 };
-                acl.push(fallbackAcl);
+                this.state.acl.push(fallbackAcl);
                 fabricAcls.push(fallbackAcl);
                 logger.warn(
                     "Added missing ACL entry for fabric",
@@ -108,11 +98,6 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         // TODO handle delete fabric more generically later to remove fabric scoped data
         this.reactTo(fabrics.events.updated, this.#updateFabricAcls);
         this.reactTo(fabrics.events.added, this.#updateFabricAcls);
-
-        // The Fallback Logic added a new ACL entry; update the ACL list for the future
-        if (acl.length > originalAclLength) {
-            this.state.acl = acl;
-        }
 
         this.reactTo(this.events.interactionBegin, this.#handleInteractionBegin);
         this.reactTo(this.events.interactionEnd, this.#handleInteractionEnd);
@@ -512,8 +497,7 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         }
     }
 
-    /** Update all fabrics with the current ACL list */
-    #updateAllFabricsAcls() {
+    #mapFabricAcls() {
         const acl = deepCopy(this.state.acl);
         const aclsForFabric = new Map<FabricIndex, AccessControlTypes.AccessControlEntry[]>();
         // Collect ACLs for each fabric
@@ -523,6 +507,12 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
             acls.push(entry);
             aclsForFabric.set(fabricIndex, acls);
         }
+        return aclsForFabric;
+    }
+
+    /** Update all fabrics with the current ACL list */
+    #updateAllFabricsAcls() {
+        const aclsForFabric = this.#mapFabricAcls();
 
         const fabrics = this.env.get(FabricManager);
         for (const fabric of fabrics) {

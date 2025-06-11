@@ -14,7 +14,7 @@ import type { Message, NodeProtocol } from "#protocol";
 import {
     AccessControl,
     AclEndpointContext,
-    FabricAccessControlManager,
+    FabricAccessControl,
     MessageExchange,
     SecureSession,
     Subject,
@@ -29,7 +29,7 @@ import { ContextAgents } from "./ContextAgents.js";
  * Caches completion events per exchange. Uses if multiple OnlineContext instances are created for an exchange.
  * Entries will be cleaned up when the exchange is closed.
  */
-const exchangeCompleteEvents = new Map<MessageExchange, AsyncObservable<[session?: ActionContext | undefined]>>();
+const exchangeCompleteEvents = new WeakMap<MessageExchange, AsyncObservable<[session?: ActionContext | undefined]>>();
 
 /**
  * Operate in online context.  Public Matter API interactions happen in online context.
@@ -39,7 +39,7 @@ export function OnlineContext(options: OnlineContext.Options) {
     let subject: Subject;
     let nodeProtocol: NodeProtocol | undefined;
     let accessLevelCache: Map<AccessControl.Location, number[]> | undefined;
-    let aclManager: FabricAccessControlManager;
+    let aclManager: FabricAccessControl;
 
     const { exchange, message } = options;
     const session = exchange?.session;
@@ -49,7 +49,7 @@ export function OnlineContext(options: OnlineContext.Options) {
         fabric = session.fabric?.fabricIndex;
         subject = session.subjectFor(message);
         // Without a fabric, we assume default PASE based access controls and use a fresh FabricAccessControlManager instance
-        aclManager = session?.fabric?.acl ?? new FabricAccessControlManager();
+        aclManager = session?.fabric?.acl ?? new FabricAccessControl();
     } else {
         fabric = options.fabric;
         if (options.subject !== undefined) {
@@ -57,7 +57,7 @@ export function OnlineContext(options: OnlineContext.Options) {
         } else {
             throw new ImplementationError("OnlineContext requires an authorized subject");
         }
-        aclManager = options.aclManager ?? new FabricAccessControlManager();
+        aclManager = options.aclManager ?? new FabricAccessControl();
     }
 
     // If we have subjects, the first is the main one, used for diagnostics
@@ -267,7 +267,7 @@ export namespace OnlineContext {
         timed?: boolean;
         fabricFiltered?: boolean;
         message?: Message;
-        aclManager?: FabricAccessControlManager;
+        aclManager?: FabricAccessControl;
     } & (
         | { exchange: MessageExchange; fabric?: undefined; subject?: undefined }
         | { exchange?: undefined; fabric: FabricIndex; subject: NodeId }

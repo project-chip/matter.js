@@ -15,7 +15,7 @@ export const GROUP_SECURITY_INFO = Bytes.fromString("GroupKey v1.0");
 /**
  * Class that contains an operational view on the Group Keys for a fabric
  */
-export class FabricGroupsManager {
+export class FabricGroups {
     #fabric: Fabric;
     #groups: Groups;
     #messagingState: MessagingState;

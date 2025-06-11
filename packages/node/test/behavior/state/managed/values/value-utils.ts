@@ -14,7 +14,7 @@ import { DataModelPath, FieldElement, FieldModel } from "#model";
 import type { Node } from "#node/Node.js";
 import { Val } from "#protocol";
 import { EndpointNumber } from "#types";
-import { FabricAccessControlManager } from "@matter/protocol";
+import { FabricAccessControl } from "@matter/protocol";
 
 /**
  * Create schema for a single field.
@@ -130,7 +130,7 @@ export function aclEndpoint() {
     } as unknown as Node;
 }
 
-export class MockAccessControlManager extends FabricAccessControlManager {
+export class MockFabricAccessControl extends FabricAccessControl {
     constructor(protected acls: number[]) {
         super();
     }

@@ -141,10 +141,6 @@ export function CommissioningHelper() {
                     await agent.operationalCredentials.addTrustedRootCertificate({ rootCaCertificate: params.caCert });
                 });
 
-                //const fabrics = node.env.get(FabricManager);
-                //const { promise, resolver } = createPromise();
-                //fabrics.events.added.on(resolver);
-
                 await node.online(context, async agent => {
                     const result = await agent.operationalCredentials.addNoc({
                         nocValue: params.nocValue,
@@ -155,8 +151,6 @@ export function CommissioningHelper() {
                     });
                     expect(result.statusCode).deep.equals(0);
                 });
-
-                //await promise;
 
                 return { node, context };
             } finally {

@@ -52,9 +52,9 @@ export class Events extends EventEmitter {
     interactionEnd = Observable<[context?: ValueSupervisor.Session], MaybePromise>();
 
     /**
-     * Emitted when the datasource of this behavior changes at the end after all concrete $Changed events were emitted.
+     * Emitted when the state of this behavior changes at the end after all concrete $Changed events were emitted.
      */
-    datasourceChanged = Observable<[context?: ValueSupervisor.Session], MaybePromise>();
+    stateChanged = Observable<[context?: ValueSupervisor.Session], MaybePromise>();
 
     get endpoint() {
         return this.#endpoint;

@@ -7,7 +7,7 @@
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { MaybePromise } from "#general";
 import { FabricIndex, NodeId } from "#types";
-import { MockAccessControlManager, TestStruct, aclEndpoint, listOf, structOf } from "./value-utils.js";
+import { MockFabricAccessControl, TestStruct, aclEndpoint, listOf, structOf } from "./value-utils.js";
 
 export type ValueList = { value: number }[];
 export type ValueSubList = { value: number[] }[];
@@ -50,7 +50,7 @@ export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLis
         fabric: FabricIndex(1),
         subject: NodeId(1),
         node: aclEndpoint(),
-        aclManager: new MockAccessControlManager([1, 3]),
+        aclManager: new MockFabricAccessControl([1, 3]),
     };
 
     const cx2 = {
@@ -58,7 +58,7 @@ export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLis
         fabric: FabricIndex(2),
         subject: NodeId(2),
         node: aclEndpoint(),
-        aclManager: new MockAccessControlManager([1, 3]),
+        aclManager: new MockFabricAccessControl([1, 3]),
     };
 
     return struct.online2(cx1, cx2, async ({ cx1, cx2, ref1, ref2 }) => {
@@ -94,7 +94,7 @@ describe("ListManager", () => {
                 subject: NodeId(1),
                 fabric: FabricIndex(1),
                 node: aclEndpoint(),
-                aclManager: new MockAccessControlManager([1, 3]),
+                aclManager: new MockFabricAccessControl([1, 3]),
             },
             async ref => {
                 const list = ref.list as string[];
@@ -120,7 +120,7 @@ describe("ListManager", () => {
                 subject: NodeId(1),
                 fabric: FabricIndex(1),
                 node: aclEndpoint(),
-                aclManager: new MockAccessControlManager([1, 3]),
+                aclManager: new MockFabricAccessControl([1, 3]),
             },
             async (ref, cx) => {
                 const list = ref.list as string[];
@@ -156,7 +156,7 @@ describe("ListManager", () => {
                 subject: NodeId(1),
                 fabric: FabricIndex(1),
                 node: aclEndpoint(),
-                aclManager: new MockAccessControlManager([1, 3]),
+                aclManager: new MockFabricAccessControl([1, 3]),
             },
             async ref => {
                 const list = ref.list as string[];
