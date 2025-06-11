@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import {
     asError,
-    AsyncObservable,
     BasicObservable,
     camelize,
     EventEmitter,
@@ -44,12 +44,17 @@ export class Events extends EventEmitter {
     /**
      * Emitted when state associated with this behavior is first mutated by a specific interaction.
      */
-    interactionBegin = Observable<[]>();
+    interactionBegin = Observable<[context?: ValueSupervisor.Session], MaybePromise>();
 
     /**
      * Emitted when a mutating interaction completes.
      */
-    interactionEnd = AsyncObservable<[]>();
+    interactionEnd = Observable<[context?: ValueSupervisor.Session], MaybePromise>();
+
+    /**
+     * Emitted when the state of this behavior changes at the end after all concrete $Changed events were emitted.
+     */
+    stateChanged = Observable<[context?: ValueSupervisor.Session], MaybePromise>();
 
     get endpoint() {
         return this.#endpoint;

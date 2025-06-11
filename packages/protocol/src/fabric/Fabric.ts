@@ -26,7 +26,8 @@ import {
     PrivateKey,
     StorageContext,
 } from "#general";
-import { FabricGroupsManager, GROUP_SECURITY_INFO } from "#groups/FabricGroupsManager.js";
+import { FabricGroups, GROUP_SECURITY_INFO } from "#groups/FabricGroups.js";
+import { FabricAccessControl } from "#interaction/FabricAccessControl.js";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { Session } from "#session/Session.js";
 import { CaseAuthenticatedTag, FabricId, FabricIndex, GroupId, NodeId, VendorId } from "#types";
@@ -61,7 +62,8 @@ export class Fabric {
     readonly operationalCert: Uint8Array;
     readonly #keyPair: Key;
     readonly #sessions = new Set<Session>();
-    readonly #groupManager: FabricGroupsManager;
+    readonly #groupManager: FabricGroups;
+    readonly #aclManager: FabricAccessControl;
     #label: string;
     #removeCallbacks = new Array<() => MaybePromise<void>>();
     #persistCallback: ((isUpdate?: boolean) => MaybePromise<void>) | undefined;
@@ -82,7 +84,8 @@ export class Fabric {
         this.operationalCert = config.operationalCert;
         this.#label = config.label;
         this.#keyPair = PrivateKey(config.keyPair);
-        this.#groupManager = new FabricGroupsManager(this);
+        this.#aclManager = new FabricAccessControl(this);
+        this.#groupManager = new FabricGroups(this);
     }
 
     get config(): Fabric.Config {
@@ -130,6 +133,10 @@ export class Fabric {
 
     get groups() {
         return this.#groupManager;
+    }
+
+    get acl() {
+        return this.#aclManager;
     }
 
     get publicKey() {

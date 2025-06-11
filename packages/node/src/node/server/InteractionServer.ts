@@ -7,7 +7,6 @@
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { AccessControlServer } from "#behaviors/access-control";
-import { AccessControl as AccessControlClusterType } from "#clusters/access-control";
 import {
     Crypto,
     Diagnostic,
@@ -39,7 +38,6 @@ import {
     TimedRequest,
     WriteRequest,
     WriteResponse,
-    WriteResult,
 } from "#protocol";
 import {
     DEFAULT_MAX_PATHS_PER_INVOKE,
@@ -67,10 +65,6 @@ export const activityKey = Symbol("activity");
 export interface WithActivity {
     [activityKey]?: NodeActivity.Activity;
 }
-
-const AclClusterId = AccessControlClusterType.Complete.id;
-const AclAttributeId = AccessControlClusterType.Complete.attributes.acl.id;
-const AclExtensionAttributeId = AccessControlClusterType.Complete.attributes.extension.id;
 
 export interface PeerSubscription {
     subscriptionId: number;
@@ -139,7 +133,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     #activity: NodeActivity;
     #newActivityBlocked = false;
     #aclServer?: AccessControlServer;
-    #aclUpdateIsDelayedInExchange = new Set<MessageExchange>();
     #serverInteraction: OnlineServerInteraction;
 
     constructor(node: ServerNode, sessions: SessionManager) {
@@ -372,63 +365,17 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             );
         }
 
-        // This is a hack to prevent the ACL from updating while we are in the middle of a write transaction
-        // and is needed because Acl should not become effective during writing of the ACL itself.
-        // We check if any ACL path is written and assume that acl write will happen, so we delay the update.
-        // If nothing changed in the end this does not matter
-        for (const {
-            path: { endpointId, clusterId, attributeId },
-        } of writeRequest.writeRequests) {
-            if (
-                (endpointId === undefined || endpointId === 0) &&
-                clusterId === AclClusterId &&
-                (attributeId === AclAttributeId || attributeId === AclExtensionAttributeId)
-            ) {
-                this.aclServer.aclUpdateDelayed = true;
-                this.#aclUpdateIsDelayedInExchange.add(exchange);
-            }
-        }
+        // TODO: We still need to add multi message writes!
 
-        let result: Awaited<WriteResult<any>>;
-        try {
-            // TODO: We still need to add multi message writes!
-
-            result = await this.#serverInteraction.write(
-                writeRequest,
-                this.#prepareOnlineContext(
-                    exchange,
-                    message,
-                    true, // always fabric filtered
-                    receivedWithinTimedInteraction,
-                ),
-            );
-        } catch (error) {
-            if (this.#aclUpdateIsDelayedInExchange.has(exchange)) {
-                // Unlikely to get there at all, but make sure we handle it best we can for now
-                this.#aclUpdateIsDelayedInExchange.delete(exchange);
-
-                if (this.#aclUpdateIsDelayedInExchange.size === 0) {
-                    // only that one ACl change in flight, so we can reset the delayed ACL
-                    this.aclServer.resetDelayedAccessControlList();
-                } else {
-                    // TODO: we should restore the delayed data just for this errored fabric?
-                    logger.error("One of multiple concurrent ACL writes failed, unhandled case for now.");
-                }
-            }
-            throw error;
-        }
-
-        // We delayed the ACL update during this write transaction, so we need to update it now that anything is written
-        if (this.#aclUpdateIsDelayedInExchange.has(exchange)) {
-            this.#aclUpdateIsDelayedInExchange.delete(exchange);
-
-            if (this.#aclUpdateIsDelayedInExchange.size === 0) {
-                //  Committing the ACL changes in case of an unhandled exception might be dangerous, but we do it anyway
-                this.aclServer.aclUpdateDelayed = false;
-            } else {
-                logger.info("Multiple concurrent ACL writes, waiting for all to finish.");
-            }
-        }
+        const result = await this.#serverInteraction.write(
+            writeRequest,
+            this.#prepareOnlineContext(
+                exchange,
+                message,
+                true, // always fabric filtered
+                receivedWithinTimedInteraction,
+            ),
+        );
 
         return {
             writeResponses: result?.map(({ path, status, clusterStatus }) => ({

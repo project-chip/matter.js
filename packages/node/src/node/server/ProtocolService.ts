@@ -316,7 +316,7 @@ class ClusterState implements DisposableClusterProtocol {
         }
 
         // Emit all attributes as changed that are not omitted or quieter
-        this.#quieterObservers.on(this.#datasource.stateChanged, (changes: string[], version: number) => {
+        this.#quieterObservers.on(this.#datasource.changed, (changes: string[], version: number) => {
             const data = changes
                 .map(name => attributeNameToIdMap.get(name))
                 .filter(

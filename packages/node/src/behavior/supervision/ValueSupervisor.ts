@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Transaction } from "#general";
-import { AsyncObservable } from "#general";
+import { ActionContext } from "#behavior/context/ActionContext.js";
+import type { AsyncObservable, Transaction } from "#general";
 import { DataModelPath, Schema } from "#model";
 import type { AccessControl, Val } from "#protocol";
 import type { ValidationLocation } from "../state/validation/location.js";
@@ -84,7 +84,12 @@ export namespace ValueSupervisor {
         /**
          * If present the session is associated with an online interaction.  Emits when the interaction ends.
          */
-        interactionComplete?: AsyncObservable<[]>;
+        interactionComplete?: AsyncObservable<[session?: ActionContext]>;
+
+        /**
+         * Set to true when the interaction has started and the interactionBegin event was emitted for this session
+         */
+        interactionStarted?: boolean;
 
         /**
          * If true, structs initialize without named properties which are more expensive to install.  This is useful

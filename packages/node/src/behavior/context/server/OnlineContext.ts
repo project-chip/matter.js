@@ -4,20 +4,32 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessControlServer } from "#behaviors/access-control";
 import { Agent } from "#endpoint/Agent.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
-import { Diagnostic, ImplementationError, InternalError, MaybePromise, Transaction } from "#general";
+import { AsyncObservable, Diagnostic, ImplementationError, InternalError, MaybePromise, Transaction } from "#general";
 import { AccessLevel } from "#model";
 import type { Node } from "#node/Node.js";
 import type { Message, NodeProtocol } from "#protocol";
-import { AccessControl, AclEndpointContext, MessageExchange, SecureSession, Subject } from "#protocol";
+import {
+    AccessControl,
+    AclEndpointContext,
+    FabricAccessControl,
+    MessageExchange,
+    SecureSession,
+    Subject,
+} from "#protocol";
 import { FabricIndex, NodeId } from "#types";
 import { ActionContext } from "../ActionContext.js";
 import { Contextual } from "../Contextual.js";
 import { NodeActivity } from "../NodeActivity.js";
 import { ContextAgents } from "./ContextAgents.js";
+
+/**
+ * Caches completion events per exchange. Uses if multiple OnlineContext instances are created for an exchange.
+ * Entries will be cleaned up when the exchange is closed.
+ */
+const exchangeCompleteEvents = new WeakMap<MessageExchange, AsyncObservable<[session?: ActionContext | undefined]>>();
 
 /**
  * Operate in online context.  Public Matter API interactions happen in online context.
@@ -27,6 +39,7 @@ export function OnlineContext(options: OnlineContext.Options) {
     let subject: Subject;
     let nodeProtocol: NodeProtocol | undefined;
     let accessLevelCache: Map<AccessControl.Location, number[]> | undefined;
+    let aclManager: FabricAccessControl;
 
     const { exchange, message } = options;
     const session = exchange?.session;
@@ -35,6 +48,8 @@ export function OnlineContext(options: OnlineContext.Options) {
         SecureSession.assert(session);
         fabric = session.fabric?.fabricIndex;
         subject = session.subjectFor(message);
+        // Without a fabric, we assume default PASE based access controls and use a fresh FabricAccessControlManager instance
+        aclManager = session?.fabric?.acl ?? new FabricAccessControl();
     } else {
         fabric = options.fabric;
         if (options.subject !== undefined) {
@@ -42,6 +57,7 @@ export function OnlineContext(options: OnlineContext.Options) {
         } else {
             throw new ImplementationError("OnlineContext requires an authorized subject");
         }
+        aclManager = options.aclManager ?? new FabricAccessControl();
     }
 
     // If we have subjects, the first is the main one, used for diagnostics
@@ -135,6 +151,23 @@ export function OnlineContext(options: OnlineContext.Options) {
             SecureSession.assert(session);
         }
         let agents: undefined | ContextAgents;
+        let interactionComplete: AsyncObservable<[session?: ActionContext | undefined]> | undefined;
+        if (exchange !== undefined) {
+            interactionComplete = exchangeCompleteEvents.get(exchange);
+            if (interactionComplete === undefined) {
+                interactionComplete = new AsyncObservable();
+                exchangeCompleteEvents.set(exchange, interactionComplete);
+            }
+
+            const notifyInteractionComplete = () => {
+                exchange.closing.off(notifyInteractionComplete);
+                exchangeCompleteEvents.delete(exchange);
+                if (context.interactionComplete?.isObserved) {
+                    context.interactionComplete.emit(context);
+                }
+            };
+            exchange.closing.on(notifyInteractionComplete);
+        }
         const context: ActionContext = {
             ...options,
             session,
@@ -144,7 +177,7 @@ export function OnlineContext(options: OnlineContext.Options) {
             fabric,
             transaction,
 
-            interactionComplete: exchange?.closed,
+            interactionComplete,
 
             ...methods,
 
@@ -166,11 +199,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                     throw new InternalError("OnlineContext initialized without node");
                 }
 
-                const accessControl = options.node.act(agent => agent.get(AccessControlServer));
-                if (MaybePromise.is(accessControl)) {
-                    throw new InternalError("AccessControlServer should already be initialized.");
-                }
-                const accessLevels = accessControl.accessLevelsFor(context, location, aclEndpointContextFor(location));
+                const accessLevels = aclManager.accessLevelsFor(context, location, aclEndpointContextFor(location));
 
                 if (accessLevelCache === undefined) {
                     accessLevelCache = new Map();
@@ -238,6 +267,7 @@ export namespace OnlineContext {
         timed?: boolean;
         fabricFiltered?: boolean;
         message?: Message;
+        aclManager?: FabricAccessControl;
     } & (
         | { exchange: MessageExchange; fabric?: undefined; subject?: undefined }
         | { exchange?: undefined; fabric: FabricIndex; subject: NodeId }

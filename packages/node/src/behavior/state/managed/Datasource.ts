@@ -26,7 +26,7 @@ const logger = Logger.get("Datasource");
 
 const FEATURES_KEY = "__features__";
 
-const stateChanged = Symbol("stateChanged");
+const changed = Symbol("changed");
 
 const viewTx = Transaction.open("offline-view", "ro");
 
@@ -66,7 +66,7 @@ export interface Datasource<T extends StateType = StateType> extends Transaction
     /**
      * Event that gets emitted when the state changes.
      */
-    stateChanged: Observable<[changes: string[], version: number], MaybePromise>;
+    changed: Observable<[changes: string[], version: number], MaybePromise>;
 
     /**
      * Events registered for this Datasource
@@ -103,8 +103,8 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
             return internals.location;
         },
 
-        get stateChanged() {
-            return internals.events[stateChanged];
+        get changed() {
+            return internals.events[changed];
         },
 
         get events() {
@@ -142,14 +142,15 @@ export namespace Datasource {
      * Datasource events.
      */
     export type Events = {
-        interactionBegin?: Observable<[]>;
-        interactionEnd?: Observable<[], MaybePromise>;
+        interactionBegin?: Observable<[context?: ValueSupervisor.Session], MaybePromise>;
+        interactionEnd?: Observable<[context?: ValueSupervisor.Session], MaybePromise>;
+        stateChanged?: Observable<[context?: ValueSupervisor.Session], MaybePromise>;
     } & {
         [K in `${string}$Changing` | `${string}$Changed`]: Observable<Parameters<ValueObserver>, MaybePromise>;
     };
 
     export type InternalEvents = Events & {
-        [stateChanged]: Observable<[changes: string[], version: number], MaybePromise>;
+        [changed]: Observable<[changes: string[], version: number], MaybePromise>;
     };
 
     /**
@@ -235,7 +236,7 @@ interface Internals extends Datasource.Options {
     version: number;
     sessions?: Map<ValueSupervisor.Session, SessionContext>;
     featuresKey?: string;
-    interactionObserver(): MaybePromise<void>;
+    interactionObserver(session?: AccessControl.Session): MaybePromise<void>;
     events: Datasource.InternalEvents;
 }
 
@@ -246,7 +247,7 @@ interface CommitChanges {
     persistent?: Val.Struct;
     notifications: Array<{
         event: Observable<any[], MaybePromise>;
-        params: Parameters<Datasource.ValueObserver>;
+        params: Parameters<Datasource.ValueObserver> | [context?: ValueSupervisor.Session];
     }>;
     changeList: Set<string>;
 }
@@ -285,7 +286,7 @@ function configure(options: Datasource.Options): Internals {
     Object.freeze(options.location);
 
     const events = (options.events ?? {}) as Datasource.InternalEvents;
-    events[stateChanged] = new Observable();
+    events[changed] = new Observable();
 
     return {
         ...options,
@@ -294,18 +295,20 @@ function configure(options: Datasource.Options): Internals {
         values: values,
         featuresKey,
 
-        interactionObserver() {
+        interactionObserver(session?: ValueSupervisor.Session) {
             function handleObserverError(error: any) {
                 logger.error(`Error in ${options.location.path} observer:`, error);
             }
 
-            try {
-                const result = options.events?.interactionEnd?.emit();
-                if (MaybePromise.is(result)) {
-                    return MaybePromise.then(result, undefined, handleObserverError);
+            if (options.events?.interactionEnd?.isObserved) {
+                try {
+                    const result = options.events?.interactionEnd?.emit(session);
+                    if (MaybePromise.is(result)) {
+                        return MaybePromise.then(result, undefined, handleObserverError);
+                    }
+                } catch (e) {
+                    handleObserverError(e);
                 }
-            } catch (e) {
-                handleObserverError(e);
             }
         },
     };
@@ -468,8 +471,15 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
         // Enter exclusive mode.  This will throw if my lock is unavailable
         transaction.beginSync();
 
-        if (session.interactionComplete && !session.interactionComplete.isObservedBy(internals.interactionObserver)) {
-            internals.events?.interactionBegin?.emit();
+        if (
+            !session.interactionStarted &&
+            session.interactionComplete &&
+            !session.interactionComplete.isObservedBy(internals.interactionObserver)
+        ) {
+            session.interactionStarted = true;
+            if (internals.events?.interactionBegin?.isObserved) {
+                internals.events?.interactionBegin?.emit(session);
+            }
             session.interactionComplete.on(internals.interactionObserver);
         }
     }
@@ -613,6 +623,13 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
         if (changes) {
             // We don't revert the version number on rollback.  Should be OK
             incrementVersion();
+
+            if (internals.events.stateChanged?.isObserved) {
+                changes.notifications.push({
+                    event: internals.events.stateChanged,
+                    params: [session],
+                });
+            }
         }
     }
 
@@ -678,7 +695,7 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
             }
         }
 
-        const changeSetResult = internals.events[stateChanged]?.emit(
+        const changeSetResult = internals.events[changed]?.emit(
             Array.from(changes.changeList.values()),
             internals.version,
         );

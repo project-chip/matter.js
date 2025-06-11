@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./FabricGroupsManager.js";
+export * from "./FabricGroups.js";
 export * from "./KeySets.js";
