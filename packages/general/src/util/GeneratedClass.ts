@@ -4,48 +4,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../MatterError.js";
-
 /**
  * Helper function for class generation.
  *
  * This factory does not offer TypeScript types for the resulting class.  You must cast separately.
  */
 export function GeneratedClass(options: GeneratedClass.Options) {
-    const { base, name, args, mixins } = options;
+    const { base, name, beforeSuper, mixins: extraMixins } = options;
 
     // Options + any additional mixins defines complete functionality
-    const allMixins = mixins ? [...mixins, options] : [options];
+    const mixins = extraMixins ? [...extraMixins, options] : [options];
 
     // Create the constructor function
-    const type = createConstructor({
+    const klass = createConstructor({
         name: name ?? (base ? `${base.name}$` : "GeneratedClass"),
         base,
-        args,
-        mixins: allMixins,
+        beforeSuper,
+        mixins,
     });
 
-    // Install properties
-    for (const mixin of allMixins) {
-        applyMixin(type, mixin);
-    }
+    // Configure inheritance and other class aspects not handled by the constructor
+    configureClass(klass, base, mixins);
 
-    return type;
-}
-
-function applyMixin(
-    constructor: new (...args: any) => any,
-    { staticProperties, staticDescriptors, instanceDescriptors }: GeneratedClass.Mixin,
-) {
-    if (staticProperties) {
-        Object.assign(constructor, staticProperties);
-    }
-    if (staticDescriptors) {
-        Object.defineProperties(constructor, staticDescriptors);
-    }
-    if (instanceDescriptors) {
-        Object.defineProperties(constructor.prototype, instanceDescriptors);
-    }
+    return klass;
 }
 
 export namespace GeneratedClass {
@@ -98,107 +79,185 @@ export namespace GeneratedClass {
          * A preprocessor for arguments.  Derivatives may use this to transform arguments prior to call to super() and
          * initialize().
          */
-        args?: (...args: any[]) => any[];
+        beforeSuper?: (...args: any[]) => any[];
 
         /**
-         * Options is a default mixin but you can provide others here.
+         * Other {@link Mixin} objects in addition to this one.
          */
         mixins?: Mixin[];
     }
 }
 
+function createConstructor({ name, base, beforeSuper, mixins }: ConstructorOptions) {
+    // We generate this function to execute construction logic based on input options; invoked by the actual constructor
+    let construct: ConstructFn;
+
+    // Base constructor
+    if (base) {
+        construct = function (self, args) {
+            return reflectConstruct(base, args, self.constructor as new (...args: unknown[]) => unknown);
+        };
+    } else {
+        construct = function (self) {
+            return self;
+        };
+    }
+
+    // Next apply mixins in order.  We create a specialized function depending on whether the mixin has an initialize
+    // function and/or includes instance properties
+    if (mixins) {
+        for (const { initialize, instanceProperties } of mixins) {
+            const before: ConstructFn = construct;
+            if (initialize) {
+                if (instanceProperties) {
+                    // Has initialize + instanceProperties
+                    construct = function (self: {}, args: unknown[]) {
+                        self = before(self, args);
+                        for (const k in instanceProperties) {
+                            (self as Record<any, any>)[k] = (instanceProperties as any)[k];
+                        }
+                        initialize.apply(self, args);
+                        return self;
+                    };
+                } else {
+                    // Has initialize
+                    construct = function (self: {}, args: unknown[]) {
+                        self = before(self, args);
+                        initialize.apply(self, args);
+                        return self;
+                    };
+                }
+            } else if (instanceProperties) {
+                // Has instanceProperties
+                construct = function (self: {}, args: unknown[]) {
+                    self = before(self, args) as Record<any, any>;
+                    for (const k in instanceProperties) {
+                        (self as Record<any, any>)[k] = (instanceProperties as any)[k];
+                    }
+                    return self;
+                };
+            }
+        }
+    }
+
+    // This is the actual constructor.
+    //
+    // We install the function into a named property of a temporary object because the VM will then assign it a name.
+    // Otherwise it would be anonymous which is confusing in diagnostics and the debugger
+    //
+    // The "beforeSuper" function contains logic that would appear before the "super" call in a normal ES6 class.  We
+    // generate a different function if present to avoid an extra conditional on every instantiation
+    let klass: (...args: unknown[]) => unknown;
+    if (beforeSuper) {
+        // "beforeSuper" is present; generate a constructor that invokes it before proceeding
+        ({ [name]: klass } = {
+            [name]: function (...args: unknown[]) {
+                // This is mandated for ES6 classes; try to behave the same
+                if (!(this instanceof klass)) {
+                    throw new TypeError(`Class constructor ${klass.name} cannot be invoked without 'new'`);
+                }
+
+                // Apply pre-construction logic
+                args = beforeSuper(...args);
+
+                // Actual construction logic
+                return construct(this, args);
+            },
+        });
+    } else {
+        // Delegate to "construct" function
+        ({ [name]: klass } = {
+            [name]: function (...args: unknown[]) {
+                // See the comment above
+                if (!(this instanceof klass)) {
+                    throw new TypeError(`Class constructor ${klass.name} cannot be invoked without 'new'`);
+                }
+
+                // Actual construction logic
+                return construct(this, args);
+            },
+        });
+    }
+
+    // Cast to constructor type
+    return klass as unknown as new (...args: unknown[]) => {};
+}
+
+function configureClass(
+    klass: new (...args: unknown[]) => unknown,
+    base: undefined | (new (...args: any[]) => any),
+    mixins: GeneratedClass.Mixin[],
+) {
+    // Configure inheritance for derived classes
+    if (base) {
+        // Enable static inheritance
+        Object.setPrototypeOf(klass, base);
+
+        // Enable instance inheritance
+        klass.prototype = Reflect.construct(base, []);
+    }
+
+    // Expose the correct constructor for instances via the prototype
+    Object.defineProperty(klass.prototype, "constructor", { value: klass });
+
+    // Install properties.  "Own instance" properties we install in the constructor but this handles static properties
+    // and those installed on the prototype
+    if (mixins) {
+        for (const { staticProperties, staticDescriptors, instanceDescriptors } of mixins) {
+            if (staticProperties) {
+                Object.assign(klass, staticProperties);
+            }
+            if (staticDescriptors) {
+                Object.defineProperties(klass, staticDescriptors);
+            }
+            if (instanceDescriptors) {
+                Object.defineProperties(klass.prototype, instanceDescriptors);
+            }
+        }
+    }
+}
+
+/**
+ * {@link Reflect.construct} equivalent.
+ *
+ * On modern VMs this is just {@link Reflect.construct} but we fall back to an ES5 version if necessary.
+ */
+let reflectConstruct: (
+    target: new (...args: unknown[]) => unknown,
+    args: unknown[],
+    newTarget?: new (...args: unknown[]) => unknown,
+) => {};
+
+if (typeof globalThis.Reflect?.construct === "function") {
+    reflectConstruct = Reflect.construct;
+} else {
+    reflectConstruct = (
+        target: new (...args: unknown[]) => unknown,
+        args: unknown[],
+        newTarget?: new (...args: unknown[]) => unknown,
+    ) => {
+        if (typeof newTarget === "undefined") {
+            newTarget = target;
+        }
+
+        const initialThis = Object.create(newTarget.prototype);
+        const constructorResult = target.apply(initialThis, args);
+        if (
+            (typeof constructorResult === "object" && constructorResult !== null) ||
+            typeof constructorResult === "function"
+        ) {
+            return constructorResult;
+        }
+
+        return initialThis;
+    };
+}
+
 interface ConstructorOptions {
     name: string;
-    mixins: GeneratedClass.Mixin[];
     base?: new (...args: any[]) => any;
-    args?: (...args: any[]) => any[];
+    beforeSuper?: (...args: any[]) => any[];
+    mixins: GeneratedClass.Mixin[];
 }
 
-function createConstructor({ name, base, args, mixins }: ConstructorOptions) {
-    // CJS Transpilation renames this symbol so bring it local to access
-    // @ts-expect-error this is used by generated code that TS knows nothing of
-    const _InternalError = InternalError;
-
-    // Have to use eval if we don't want every class to be called "GeneratedClass" in the debugger but we can ensure
-    // this won't be abused.
-    //
-    // "name" is the only input to this function that appears textually in the eval.  We limit it to letters, numbers,
-    // "$" and "_".
-    if (!name.match(/^[\p{L}0-9$_]+$/u)) {
-        throw new InternalError("Refusing to generate class with untrustworthy name");
-    }
-
-    let ext;
-    if (base) {
-        ext = `extends base `;
-    } else {
-        ext = "";
-    }
-
-    const code = [`class ${name} ${ext}{`];
-
-    // Consolidate mixins to a single initialize and instanceProperties
-    let initialize: undefined | GeneratedClass.Options["initialize"];
-    let instanceProperties: undefined | GeneratedClass.Options["instanceProperties"];
-
-    for (const mixin of mixins) {
-        const mixinInitialize = mixin.initialize;
-
-        // Add initializer
-        if (mixinInitialize) {
-            if (initialize) {
-                const baseInitialize = initialize;
-                initialize = function (this: any, ...args) {
-                    baseInitialize.call(this, ...args);
-                    mixinInitialize.call(this, ...args);
-                };
-            } else {
-                initialize = mixinInitialize;
-            }
-        }
-
-        // Add instance properties
-        if (mixin.instanceProperties) {
-            if (instanceProperties) {
-                instanceProperties = {
-                    ...instanceProperties,
-                    ...mixin.instanceProperties,
-                };
-            } else {
-                instanceProperties = mixin.instanceProperties;
-            }
-        }
-    }
-
-    // If we need a constructor, add it
-    if (args || initialize || instanceProperties) {
-        code.push("constructor() {");
-
-        let argsName;
-        if (args) {
-            argsName = "a";
-            code.push(`const a = args(...arguments)`);
-        } else {
-            argsName = "arguments";
-        }
-
-        if (base) {
-            code.push(`super(...${argsName})`);
-        }
-
-        if (instanceProperties) {
-            // Do not use Object.assign because we want to support accessors
-            code.push(`for (const k in instanceProperties) this[k] = instanceProperties[k]`);
-        }
-
-        if (initialize) {
-            code.push(`initialize.apply(this, ${argsName})`);
-        }
-
-        code.push("}");
-    }
-
-    code.push("}", name);
-
-    return eval(code.join("\n")) as new (...args: any) => any;
-}
+type ConstructFn = (self: {}, args: unknown[]) => {};

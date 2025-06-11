@@ -56,21 +56,25 @@ describe("GeneratedClass", () => {
     });
 
     it("sets instance property", () => {
-        expect(new (GeneratedClass({ instanceProperties: { foo: "bar" } }))().foo).equals("bar");
+        const instance = new (GeneratedClass({ instanceProperties: { foo: "bar" } }))() as any;
+        expect(instance.foo).equals("bar");
     });
 
     it("sets instance descriptor", () => {
-        expect(new (GeneratedClass({ instanceDescriptors: { foo: { value: "bar" } } }))().foo).equals("bar");
+        const instance = new (GeneratedClass({ instanceDescriptors: { foo: { value: "bar" } } }))() as any;
+        expect(instance.foo).equals("bar");
     });
 
     it("inherits instance property", () => {
         const Base = GeneratedClass({ instanceProperties: { foo: "bar" } });
-        expect(new (GeneratedClass({ base: Base }))().foo).equals("bar");
+        const instance = new (GeneratedClass({ base: Base }))() as any;
+        expect(instance.foo).equals("bar");
     });
 
     it("inherits instance descriptor", () => {
         const Base = GeneratedClass({ instanceDescriptors: { foo: { value: "bar" } } });
-        expect(new (GeneratedClass({ base: Base }))().foo).equals("bar");
+        const instance = new (GeneratedClass({ base: Base }))() as any;
+        expect(instance.foo).equals("bar");
     });
 
     it("initializes", () => {
@@ -80,7 +84,8 @@ describe("GeneratedClass", () => {
             },
         });
 
-        expect(new klass("hello").foo).equals("HELLO");
+        const instance = new klass("hello") as any;
+        expect(instance.foo).equals("HELLO");
     });
 
     it("preprocesses arguments", () => {
@@ -93,12 +98,13 @@ describe("GeneratedClass", () => {
                 }
             },
 
-            args(foo: string) {
+            beforeSuper(foo: string) {
                 return [foo.toUpperCase()];
             },
         });
 
-        expect(new klass("bar").foo).equals("BAR");
+        const instance = new klass("bar") as any;
+        expect(instance.foo).equals("BAR");
     });
 
     function expectBizesAndBazes(...types: Array<new () => any>) {
