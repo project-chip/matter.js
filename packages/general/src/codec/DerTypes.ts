@@ -5,10 +5,10 @@
  */
 
 import {
-    BitByteArray,
     ContextTagged,
     ContextTaggedBytes,
     DatatypeOverride,
+    DerBitString,
     DerCodec,
     DerError,
     DerObject,
@@ -22,7 +22,7 @@ export namespace X962 {
             algorithm: ObjectId("2A8648CE3D0201") /* EC Public Key */,
             curve: ObjectId("2A8648CE3D030107") /* Curve P256_V1 */,
         },
-        bytes: BitByteArray(key),
+        bytes: DerBitString(key),
     });
     export const EcdsaWithSHA256 = DerObject("2A8648CE3D040302");
 }

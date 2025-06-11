@@ -53,7 +53,7 @@ export class AttestationCertificateManager {
 
     static async create(vendorId: VendorId) {
         const key = await Crypto.createKeyPair();
-        const identifier = await Crypto.hash(key.publicKey);
+        const identifier = await Crypto.computeSha256(key.publicKey);
         return new AttestationCertificateManager(vendorId, key, identifier.slice(0, 20));
     }
 
@@ -167,7 +167,7 @@ export class AttestationCertificateManager {
                 keyUsage: {
                     digitalSignature: true,
                 },
-                subjectKeyIdentifier: (await Crypto.hash(publicKey)).slice(0, 20),
+                subjectKeyIdentifier: (await Crypto.computeSha256(publicKey)).slice(0, 20),
                 authorityKeyIdentifier: this.#paiKeyIdentifier,
             },
         };

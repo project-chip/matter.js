@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { FabricManager } from "#fabric/FabricManager.js";
 import { StorageBackendMemory, StorageContext } from "#general";
-import { FabricManager, SessionManager, SessionParameters } from "#protocol";
+import { SessionParameters } from "#session/Session.js";
+import { SessionManager } from "#session/SessionManager.js";
 import { NodeId } from "#types";
-import * as assert from "node:assert";
 
 const DUMMY_BYTEARRAY = new Uint8Array();
 
@@ -38,20 +39,20 @@ describe("SessionManager", () => {
                 first = await sessionManager.getNextAvailableSessionId();
             }
             const second = await sessionManager.getNextAvailableSessionId();
-            assert.strictEqual(first + 1, second);
+            expect(first + 1).to.equal(second);
         });
 
         it("verify that id is 1 after being 0xffff", async () => {
             const first = await sessionManager.getNextAvailableSessionId();
             if (first === 0xffff) {
-                assert.strictEqual(await sessionManager.getNextAvailableSessionId(), 1);
+                expect(await sessionManager.getNextAvailableSessionId()).to.equal(1);
             } else {
                 for (let i = first; i < 0xfffe; i++) {
                     // read over until one before overrun
                     await sessionManager.getNextAvailableSessionId();
                 }
-                assert.strictEqual(await sessionManager.getNextAvailableSessionId(), 0xffff);
-                assert.strictEqual(await sessionManager.getNextAvailableSessionId(), 1);
+                expect(await sessionManager.getNextAvailableSessionId()).to.equal(0xffff);
+                expect(await sessionManager.getNextAvailableSessionId()).to.equal(1);
             }
         });
 
@@ -76,7 +77,7 @@ describe("SessionManager", () => {
                 isInitiator: false,
                 isResumption: false,
             });
-            assert.strictEqual(await sessionManager.getNextAvailableSessionId(), first + 2);
+            expect(await sessionManager.getNextAvailableSessionId()).to.equal(first + 2);
         });
 
         it("verify that oldest session gets closed when no more ids are available", async () => {
@@ -114,8 +115,8 @@ describe("SessionManager", () => {
                     isResumption: false,
                 });
             }
-            assert.strictEqual(await sessionManager.getNextAvailableSessionId(), first);
-            assert.strictEqual(firstClosed, true);
-        }).timeout(20000);
+            expect(await sessionManager.getNextAvailableSessionId()).to.equal(first);
+            expect(firstClosed).to.be.true;
+        });
     });
 });

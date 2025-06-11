@@ -39,7 +39,7 @@ jobs:
     strategy:
       matrix:
         node-version: [ 18.x, 20.x, 22.x, 24.x ]
-        os: [ macos-latest, windows-2019 ]
+        os: [ macos-latest, windows-latest ]
     steps:
       - uses: actions/checkout@v4
         if: ${{ needs.check-and-lint.outputs.package-changes == 'true' }}

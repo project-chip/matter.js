@@ -106,9 +106,8 @@ export class ProcessManager implements Destructable {
 
     protected interruptHandler = () => {
         this.uninstallInterruptHandlers();
-        if (this.runtime.interrupt()) {
-            this.installInterruptHandlers();
-        }
+        this.installInterruptHandlers();
+        this.runtime.interrupt();
     };
 
     protected exitHandler = () => {

@@ -50,7 +50,7 @@ describe("AttributeReadResponse", () => {
                     },
                     tlv: {},
                     value: "Matter.js Test Vendor",
-                    version: 1,
+                    version: 0x80808081,
                 },
             ],
         ]);
@@ -77,7 +77,7 @@ describe("AttributeReadResponse", () => {
                     },
                     tlv: {},
                     value: "Matter.js Test Vendor",
-                    version: 1,
+                    version: 0x80808081,
                 },
             ],
         ]);
@@ -95,7 +95,7 @@ describe("AttributeReadResponse", () => {
             dataVersionFilters: [
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(40) },
-                    dataVersion: 1,
+                    dataVersion: 0x80808081,
                 },
             ],
         });

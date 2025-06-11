@@ -103,15 +103,15 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         const session = this.session;
         NodeSession.assert(session);
 
-        const elements = TlvAttestation.encode({
+        const attestationElements = TlvAttestation.encode({
             declaration: certification.declaration,
             attestationNonce: attestationNonce,
             timestamp: 0,
         });
-        return {
-            attestationElements: elements,
-            attestationSignature: await certification.sign(session, elements),
-        };
+
+        const attestationSignature = await certification.sign(session, attestationElements);
+
+        return { attestationElements, attestationSignature };
     }
 
     override async csrRequest({ csrNonce, isForUpdateNoc }: OperationalCredentials.CsrRequest) {
@@ -424,7 +424,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         try {
             await failsafeContext.setRootCert(rootCaCertificate);
         } catch (error) {
-            logger.info("setting root certificate failed", error);
+            logger.info("Error installing root certificate:", error);
             if (
                 error instanceof CryptoVerifyError ||
                 error instanceof CertificateError ||

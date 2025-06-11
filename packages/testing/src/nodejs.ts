@@ -15,11 +15,14 @@ import type { TestRunner } from "./runner.js";
 // Load globals so settings get applied
 import { FailureDetail } from "./failure-detail.js";
 import "./global-definitions.js";
+import { Boot } from "./mocks/boot.js";
 import { TestDescriptor } from "./test-descriptor.js";
 
 extendApi(Mocha);
 
 export async function testNodejs(runner: TestRunner, format: "cjs" | "esm") {
+    Boot.format = format;
+
     // Grr Mocha (as of 10.2.0) classifies certain unhandled rejections as "mocha".  For others, it uninstalls its
     // unhandled rejection handler and re-emits the "unhandledRejection" event.  But since it already handled the event,
     // Node knows nothing about this and the event disappears silently.

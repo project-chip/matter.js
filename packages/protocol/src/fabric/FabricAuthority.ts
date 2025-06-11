@@ -67,6 +67,13 @@ export class FabricAuthority {
     }
 
     /**
+     * Access the certificate authority.
+     */
+    get ca() {
+        return this.#ca;
+    }
+
+    /**
      * Obtain the default fabric for this authority.
      */
     async defaultFabric() {

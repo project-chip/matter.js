@@ -4,16 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto, DerCodec, DerKey, DerNode, PrivateKey, PublicKey, X962 } from "#general";
 import {
     CertificateError,
     CertificateManager,
     TlvIntermediateCertificate,
     TlvOperationalCertificate,
     TlvRootCertificate,
-} from "#protocol";
+} from "#certificate/CertificateManager.js";
+import { Bytes, Crypto, DerCodec, DerKey, DerNode, PrivateKey, PublicKey, X962 } from "#general";
 import { CaseAuthenticatedTag, FabricId, NodeId, ValidationOutOfBoundsError } from "#types";
-import * as assert from "node:assert";
 import {
     CERTIFICATE_SETS,
     TEST_CSR_REQUEST_ASN1,
@@ -66,8 +65,7 @@ describe("CertificateManager", () => {
                 if ("ASN1" in certs.ROOT) {
                     it("encode root certificate", () => {
                         const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        assert.equal(
-                            Bytes.toHex(CertificateManager.rootCertToAsn1(rootTlv)),
+                        expect(Bytes.toHex(CertificateManager.rootCertToAsn1(rootTlv))).equal(
                             // @ts-expect-error ASN1 might be absent, but checked above
                             Bytes.toHex(certs.ROOT.ASN1),
                         );
@@ -77,8 +75,7 @@ describe("CertificateManager", () => {
                 if ("ICAC" in certs && "ASN1" in certs.ICAC) {
                     it("encode intermediate certificate", () => {
                         const icacTlv = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        assert.equal(
-                            Bytes.toHex(CertificateManager.intermediateCaCertToAsn1(icacTlv)),
+                        expect(Bytes.toHex(CertificateManager.intermediateCaCertToAsn1(icacTlv))).equal(
                             // @ts-expect-error ASN1 might not be in TlvIntermediateCertificate
                             Bytes.toHex(certs.ICAC.ASN1),
                         );
@@ -88,8 +85,7 @@ describe("CertificateManager", () => {
                 if ("ASN1" in certs.NOC) {
                     it("encode operational certificate", () => {
                         const nocTlv = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                        assert.equal(
-                            Bytes.toHex(CertificateManager.nodeOperationalCertToAsn1(nocTlv)),
+                        expect(Bytes.toHex(CertificateManager.nodeOperationalCertToAsn1(nocTlv))).equal(
                             // @ts-expect-error ASN1 might not be in TlvOperationalCertificate
                             Bytes.toHex(certs.NOC.ASN1),
                         );
@@ -157,25 +153,25 @@ describe("CertificateManager", () => {
                         const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
                         rootCert.subject.fabricId = FabricId(nocCert.subject.fabricId + 1n);
                         icacCert.subject.fabricId = undefined;
-                        await assert.rejects(
-                            () => CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert),
-                            new CertificateError(
-                                `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${rootCert.subject.fabricId.toString()}" !== "${nocCert.subject.fabricId.toString()}"`,
-                            ),
+                        await expect(
+                            CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert),
+                        ).to.be.rejectedWith(
+                            CertificateError,
+                            `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${rootCert.subject.fabricId.toString()}" !== "${nocCert.subject.fabricId.toString()}"`,
                         );
                     });
 
-                    it("verify operational certificate via ICAC and ROOT with fabricId in ica matching", async () => {
+                    it("verify operational certificate via ICAC and ROOT with fabricId in ica not matching", async () => {
                         const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
                         const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
                         const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
                         rootCert.subject.fabricId = undefined;
                         icacCert.subject.fabricId = FabricId(nocCert.subject.fabricId + 1n);
-                        await assert.rejects(
-                            () => CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert),
-                            new CertificateError(
-                                `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${icacCert.subject.fabricId.toString()}" !== "${nocCert.subject.fabricId.toString()}"`,
-                            ),
+                        await expect(
+                            CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert),
+                        ).to.be.rejectedWith(
+                            CertificateError,
+                            `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${icacCert.subject.fabricId.toString()}" !== "${nocCert.subject.fabricId.toString()}"`,
                         );
                     });
                 } else {
@@ -256,7 +252,7 @@ describe("CertificateManager", () => {
             };
             const result = CertificateManager.nodeOperationalCertToAsn1(nocWithCat);
 
-            assert.equal(Bytes.toHex(result), Bytes.toHex(TEST_NOC_CERT_CAT_ASN1));
+            expect(Bytes.toHex(result)).equal(Bytes.toHex(TEST_NOC_CERT_CAT_ASN1));
         });
 
         it("throws error if more then 3 tags are provided", () => {
@@ -275,9 +271,9 @@ describe("CertificateManager", () => {
                     ],
                 },
             };
-            assert.throws(
-                () => CertificateManager.nodeOperationalCertToAsn1(nocWithCat),
-                new ValidationOutOfBoundsError("Too many CaseAuthenticatedTags (4)."),
+            expect(() => CertificateManager.nodeOperationalCertToAsn1(nocWithCat)).to.throw(
+                ValidationOutOfBoundsError,
+                "Too many CaseAuthenticatedTags (4).",
             );
         });
 
@@ -296,19 +292,19 @@ describe("CertificateManager", () => {
                     ],
                 },
             };
-            assert.throws(
-                () => CertificateManager.nodeOperationalCertToAsn1(nocWithCat),
-                new ValidationOutOfBoundsError("CASEAuthenticatedTags field contains duplicate identifier values."),
+            expect(() => CertificateManager.nodeOperationalCertToAsn1(nocWithCat)).to.throw(
+                ValidationOutOfBoundsError,
+                "CASEAuthenticatedTags field contains duplicate identifier values.",
             );
         });
     });
 
     describe("decodeIcacCertificate", () => {
         it("decodes a correct ICAC cert", () => {
-            const SPECS_ICAC_CERT_TLV = TlvIntermediateCertificate.decode(
+            const specsIcacCertTlv = TlvIntermediateCertificate.decode(
                 CERTIFICATE_SETS["Matter 1.2 Specification Certificates"].ICAC.TLV,
             );
-            assert.deepEqual(SPECS_ICAC_CERT_TLV, {
+            expect(specsIcacCertTlv).deep.equal({
                 serialNumber: new Uint8Array([45, 180, 68, 133, 86, 65, 174, 223]),
                 signatureAlgorithm: 1,
                 issuer: { rcacId: BigInt("14612714909889200129") },
@@ -358,12 +354,17 @@ describe("CertificateManager", () => {
             );
 
             const derNode = DerCodec.decode(result);
-            assert.equal(derNode[DerKey.Elements]?.length, 3);
+            expect(derNode[DerKey.Elements]?.length).equal(3);
             const [requestNode, signatureAlgorithmNode, signatureNode] = derNode[DerKey.Elements] as DerNode[];
-            assert.deepEqual(DerCodec.encode(signatureAlgorithmNode), DerCodec.encode(X962.EcdsaWithSHA256));
+            expect(DerCodec.encode(signatureAlgorithmNode)).deep.equal(DerCodec.encode(X962.EcdsaWithSHA256));
             const requestBytes = DerCodec.encode(requestNode);
-            assert.deepEqual(requestBytes, TEST_CSR_REQUEST_ASN1);
-            Crypto.verify(PublicKey(TEST_PUBLIC_KEY), DerCodec.encode(requestNode), signatureNode[DerKey.Bytes], "der");
+            expect(requestBytes).deep.equal(TEST_CSR_REQUEST_ASN1);
+            Crypto.verifyEcdsa(
+                PublicKey(TEST_PUBLIC_KEY),
+                DerCodec.encode(requestNode),
+                signatureNode[DerKey.Bytes],
+                "der",
+            );
         });
     });
 
@@ -375,7 +376,7 @@ describe("CertificateManager", () => {
 
             const result = await CertificateManager.getPublicKeyFromCsr(csr);
 
-            assert.deepEqual(result, TEST_PUBLIC_KEY);
+            expect(result).deep.equal(TEST_PUBLIC_KEY);
         });
     });
 });

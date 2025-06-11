@@ -4,17 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    ExchangeProvider,
-    InteractionClientMessenger,
-    MessageExchange,
-    MessageType,
-    ReadRequest,
-    SubscribeRequest,
-} from "#protocol";
+import { InteractionClientMessenger, MessageType } from "#interaction/InteractionMessenger.js";
+import { ExchangeProvider } from "#protocol/ExchangeProvider.js";
+import { MessageExchange } from "#protocol/MessageExchange.js";
 import {
     EndpointNumber,
+    ReadRequest,
     StatusCode,
+    SubscribeRequest,
     TlvDataReport,
     TlvReadRequest,
     TlvStatusResponse,
@@ -22,12 +19,11 @@ import {
     TlvSubscribeResponse,
 } from "#types";
 import { Specification } from "@matter/model";
-import assert from "node:assert";
-import { createDummyMessageExchange } from "./InteractionTestUtils.js";
+import { createDummyMessageExchange } from "./interaction-utils.js";
 
 function handleReadRequest(exchange: MessageExchange, messageType: number, payload: Uint8Array) {
-    assert.deepEqual(payload.length < exchange.maxPayloadSize, true);
-    assert.deepEqual(messageType, MessageType.ReadRequest);
+    expect(payload.length < exchange.maxPayloadSize).to.be.true;
+    expect(messageType).to.equal(MessageType.ReadRequest);
     return {
         response: {
             payload: TlvDataReport.encode({
@@ -49,7 +45,7 @@ function handleSubscribeRequest(
     request?: SubscribeRequest;
     subscriptionFinalized?: boolean;
 } {
-    assert.deepEqual(payload.length < exchange.maxPayloadSize, true);
+    expect(payload.length < exchange.maxPayloadSize).to.be.true;
     if (messageType === MessageType.SubscribeRequest) {
         return {
             response: {
@@ -64,7 +60,7 @@ function handleSubscribeRequest(
         };
     } else if (messageType === MessageType.StatusResponse) {
         const status = TlvStatusResponse.decode(payload).status;
-        assert.strictEqual(status, StatusCode.Success);
+        expect(status).to.equal(StatusCode.Success);
         return {
             response: {
                 payload: TlvSubscribeResponse.encode({
@@ -101,7 +97,7 @@ describe("InteractionClientMessenger", () => {
 
         await messenger.sendReadRequest(requestData);
 
-        assert.deepEqual(request, requestData);
+        expect(request).to.deep.equal(requestData);
     });
 
     it("reads attributes with too many dataVersionFilters", async () => {
@@ -132,10 +128,10 @@ describe("InteractionClientMessenger", () => {
 
         await messenger.sendReadRequest(requestData);
 
-        assert.ok(request);
-        assert.deepEqual((request as SubscribeRequest).dataVersionFilters?.length, 68);
+        expect(request).to.exist;
+        expect((request! as SubscribeRequest).dataVersionFilters?.length).to.equal(68);
         requestData.dataVersionFilters!.length = 68;
-        assert.deepEqual(request, requestData);
+        expect(request).to.deep.equal(requestData);
     });
 
     it("subscribes attributes", async () => {
@@ -148,15 +144,15 @@ describe("InteractionClientMessenger", () => {
                 request: result,
                 subscriptionFinalized: isFinalized,
             } = handleSubscribeRequest(exchange, messageType, payload);
-            assert.ok(response);
+            expect(response).to.exist;
             if (result !== undefined && isFinalized === undefined) {
-                assert.deepEqual(subscriptionFinalized, false);
+                expect(subscriptionFinalized).to.be.false;
                 request = result;
             } else if (isFinalized !== undefined && result === undefined) {
-                assert.deepEqual(subscriptionFinalized, false);
+                expect(subscriptionFinalized).to.be.false;
                 subscriptionFinalized = isFinalized;
             } else {
-                assert.fail("Invalid response");
+                throw new Error("Invalid response");
             }
             return response;
         });
@@ -173,8 +169,8 @@ describe("InteractionClientMessenger", () => {
 
         await messenger.sendSubscribeRequest(requestData);
 
-        assert.deepEqual(request, requestData);
-        assert.deepEqual(subscriptionFinalized, true);
+        expect(request).to.deep.equal(requestData);
+        expect(subscriptionFinalized).to.be.true;
     });
 
     it("subscribes attributes with too many dataVersionFilters", async () => {
@@ -187,15 +183,15 @@ describe("InteractionClientMessenger", () => {
                 request: result,
                 subscriptionFinalized: isFinalized,
             } = handleSubscribeRequest(exchange, messageType, payload);
-            assert.ok(response);
+            expect(response).to.exist;
             if (result !== undefined && isFinalized === undefined) {
-                assert.deepEqual(subscriptionFinalized, false);
+                expect(subscriptionFinalized).to.be.false;
                 request = result;
             } else if (isFinalized !== undefined && result === undefined) {
-                assert.deepEqual(subscriptionFinalized, false);
+                expect(subscriptionFinalized).to.be.false;
                 subscriptionFinalized = isFinalized;
             } else {
-                assert.fail("Invalid response");
+                throw new Error("Invalid response");
             }
             return response;
         });
@@ -220,10 +216,10 @@ describe("InteractionClientMessenger", () => {
 
         await messenger.sendSubscribeRequest(requestData);
 
-        assert.ok(request);
-        assert.deepEqual((request as SubscribeRequest).dataVersionFilters?.length, 67);
+        expect(request).to.exist;
+        expect((request as unknown as SubscribeRequest).dataVersionFilters?.length).to.equal(67);
         requestData.dataVersionFilters!.length = 67;
-        assert.deepEqual(request, requestData);
-        assert.deepEqual(subscriptionFinalized, true);
+        expect(request).to.deep.equal(requestData);
+        expect(subscriptionFinalized).to.be.true;
     });
 });

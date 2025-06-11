@@ -34,7 +34,9 @@
         "@matter/general": "*",
         "@matter/intermediate-models": "*",
         "@matter/model": "*",
-        "@matter/tools": "*"
+        "@matter/tools": "*",
+        "@matter/protocol": "*",
+        "@matter/types": "*"
     },
     "devDependencies": {
         "@types/jsdom": "^21.1.6",

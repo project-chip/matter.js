@@ -4,15 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic } from "#log/Diagnostic.js";
+import { Logger } from "#log/Logger.js";
 import { Boot } from "#util/Boot.js";
 import { MaybePromise } from "#util/Promises.js";
 import * as mod from "@noble/curves/abstract/modular";
 import * as utils from "@noble/curves/abstract/utils";
 import { p256 } from "@noble/curves/p256";
-import { MatterError, NoProviderError } from "../MatterError.js";
+import { NoProviderError } from "../MatterError.js";
 import { Endian } from "../util/Bytes.js";
 import { DataReader } from "../util/DataReader.js";
-import { PrivateKey } from "./Key.js";
+import { PrivateKey, PublicKey } from "./Key.js";
 
 export const ec = {
     p256,
@@ -29,35 +31,172 @@ export const CRYPTO_AUTH_TAG_LENGTH = 16;
 export const CRYPTO_SYMMETRIC_KEY_LENGTH = 16;
 export type CryptoDsaEncoding = "ieee-p1363" | "der";
 
-export class CryptoVerifyError extends MatterError {}
-export class CryptoDecryptError extends MatterError {}
+const logger = Logger.get("Crypto");
 
-export abstract class Crypto {
-    static get: () => Crypto;
+/**
+ * These are the cryptographic primitives required to implement the Matter protocol.
+ *
+ * We provide a platform-independent implementation that uses Web Crypto via {@link crypto.subtle} and a JS-based
+ * AES-CCM implementation.
+ *
+ * If your platform does not fully implement Web Crypto, or offers a native implementation of AES-CCM, you can replace
+ * {@link Crypto.get} to expose a different implementation.
+ *
+ * WARNING: The standard implementation is unaudited.  See relevant warnings in StandardCrypto.ts.
+ */
+export interface Crypto {
+    /**
+     * The name used in log messages.
+     */
+    implementationName: string;
 
-    abstract encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array;
-    static readonly encrypt = (key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array =>
-        Crypto.get().encrypt(key, data, nonce, aad);
+    /**
+     * Encrypt using AES-CCM with constants limited to those required by Matter.
+     */
+    encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array;
 
-    abstract decrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array;
-    static readonly decrypt = (key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array =>
-        Crypto.get().decrypt(key, data, nonce, aad);
+    /**
+     * Decrypt using AES-CCM with constants limited to those required by Matter.
+     */
+    decrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array;
 
-    abstract getRandomData(length: number): Uint8Array;
-    static readonly getRandomData = (length: number): Uint8Array => Crypto.get().getRandomData(length);
+    /**
+     * Obtain random bytes from the most cryptographically-appropriate source available.
+     */
+    getRandomData(length: number): Uint8Array;
 
-    static readonly getRandom = (): Uint8Array => Crypto.get().getRandomData(CRYPTO_RANDOM_LENGTH);
+    /**
+     * Compute the SHA-256 hash of a buffer.
+     */
+    computeSha256(data: Uint8Array | Uint8Array[]): MaybePromise<Uint8Array>;
 
-    static readonly getRandomUInt16 = (): number =>
-        new DataReader(Crypto.get().getRandomData(2), Endian.Little).readUInt16();
+    /**
+     * Create a key from a secret using PBKDF2.
+     */
+    createPbkdf2Key(
+        secret: Uint8Array,
+        salt: Uint8Array,
+        iteration: number,
+        keyLength: number,
+    ): MaybePromise<Uint8Array>;
 
-    static readonly getRandomUInt32 = (): number =>
-        new DataReader(Crypto.get().getRandomData(4), Endian.Little).readUInt32();
+    /**
+     * Create a key from a secret using HKDF.
+     */
+    createHkdfKey(secret: Uint8Array, salt: Uint8Array, info: Uint8Array, length?: number): MaybePromise<Uint8Array>;
 
-    static readonly getRandomBigUInt64 = (): bigint =>
-        new DataReader(Crypto.get().getRandomData(8), Endian.Little).readUInt64();
+    /**
+     * Create an HMAC signature.
+     */
+    signHmac(key: Uint8Array, data: Uint8Array): MaybePromise<Uint8Array>;
 
-    static readonly getRandomBigInt = (size: number, maxValue?: bigint): bigint => {
+    /**
+     * Create an ECDSA signature.
+     */
+    signEcdsa(
+        privateKey: JsonWebKey,
+        data: Uint8Array | Uint8Array[],
+        dsaEncoding?: CryptoDsaEncoding,
+    ): MaybePromise<Uint8Array>;
+
+    /**
+     * Authenticate an ECDSA signature.
+     */
+    verifyEcdsa(
+        publicKey: JsonWebKey,
+        data: Uint8Array,
+        signature: Uint8Array,
+        dsaEncoding?: CryptoDsaEncoding,
+    ): MaybePromise<void>;
+
+    /**
+     * Create a general-purpose EC key.
+     */
+    createKeyPair(): MaybePromise<PrivateKey>;
+
+    /**
+     * Compute the shared secret for a Diffie-Hellman exchange.
+     */
+    generateDhSecret(key: PrivateKey, peerKey: PublicKey): MaybePromise<Uint8Array>;
+}
+
+let logImplementationName = true;
+let defaultInstance: undefined | Crypto;
+let defaultProvider: undefined | (() => Crypto);
+
+/**
+ * Crypto support functions.
+ */
+export const Crypto = {
+    /**
+     * The default crypto implementation.
+     */
+    get default() {
+        if (defaultInstance) {
+            return defaultInstance;
+        }
+
+        if (defaultProvider === undefined) {
+            throw new NoProviderError("There is no cryptography implementation installed");
+        }
+
+        defaultInstance = defaultProvider();
+
+        if (logImplementationName) {
+            logger.debug("Using", Diagnostic.strong(defaultInstance.implementationName), "cryptography implementation");
+        }
+
+        return defaultInstance;
+    },
+
+    get provider(): undefined | (() => Crypto) {
+        return defaultProvider;
+    },
+
+    /**
+     * Set the default crypto provider.
+     */
+    set provider(provider: () => Crypto) {
+        if (defaultProvider === provider) {
+            return;
+        }
+        defaultProvider = undefined;
+        defaultProvider = provider;
+    },
+
+    get implementationName() {
+        return Crypto.default.implementationName;
+    },
+
+    encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array) {
+        return Crypto.default.encrypt(key, data, nonce, aad);
+    },
+
+    decrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array) {
+        return Crypto.default.decrypt(key, data, nonce, aad);
+    },
+
+    getRandomData(length: number) {
+        return Crypto.default.getRandomData(length);
+    },
+
+    getRandom() {
+        return Crypto.default.getRandomData(CRYPTO_RANDOM_LENGTH);
+    },
+
+    getRandomUInt16() {
+        return new DataReader(Crypto.default.getRandomData(2), Endian.Little).readUInt16();
+    },
+
+    getRandomUInt32() {
+        return new DataReader(Crypto.default.getRandomData(4), Endian.Little).readUInt32();
+    },
+
+    getRandomBigUInt64() {
+        return new DataReader(Crypto.default.getRandomData(8), Endian.Little).readUInt64();
+    },
+
+    getRandomBigInt(size: number, maxValue?: bigint) {
         const { bytesToNumberBE } = ec;
         if (maxValue === undefined) {
             return bytesToNumberBE(Crypto.getRandomData(size));
@@ -66,73 +205,54 @@ export abstract class Crypto {
             const random = bytesToNumberBE(Crypto.getRandomData(size));
             if (random < maxValue) return random;
         }
-    };
+    },
 
-    abstract ecdhGeneratePublicKey(): MaybePromise<{ publicKey: Uint8Array; ecdh: any }>;
-    static readonly ecdhGeneratePublicKey = () => Crypto.get().ecdhGeneratePublicKey();
+    computeSha256(data: Uint8Array | Uint8Array[]) {
+        return Crypto.default.computeSha256(data);
+    },
 
-    abstract ecdhGeneratePublicKeyAndSecret(peerPublicKey: Uint8Array): MaybePromise<{
-        publicKey: Uint8Array;
-        sharedSecret: Uint8Array;
-    }>;
-    static readonly ecdhGeneratePublicKeyAndSecret = (peerPublicKey: Uint8Array) =>
-        Crypto.get().ecdhGeneratePublicKeyAndSecret(peerPublicKey);
+    createPbkdf2Key(secret: Uint8Array, salt: Uint8Array, iteration: number, keyLength: number) {
+        return Crypto.default.createPbkdf2Key(secret, salt, iteration, keyLength);
+    },
 
-    abstract ecdhGenerateSecret(peerPublicKey: Uint8Array, ecdh: any): MaybePromise<Uint8Array>;
-    static readonly ecdhGenerateSecret = (peerPublicKey: Uint8Array, ecdh: any) =>
-        Crypto.get().ecdhGenerateSecret(peerPublicKey, ecdh);
+    createHkdfKey(secret: Uint8Array, salt: Uint8Array, info: Uint8Array, length?: number) {
+        return Crypto.default.createHkdfKey(secret, salt, info, length);
+    },
 
-    abstract hash(data: Uint8Array | Uint8Array[]): MaybePromise<Uint8Array>;
-    static readonly hash = (data: Uint8Array | Uint8Array[]) => Crypto.get().hash(data);
+    signHmac(key: Uint8Array, data: Uint8Array) {
+        return Crypto.default.signHmac(key, data);
+    },
 
-    abstract pbkdf2(
-        secret: Uint8Array,
-        salt: Uint8Array,
-        iteration: number,
-        keyLength: number,
-    ): MaybePromise<Uint8Array>;
-    static readonly pbkdf2 = (secret: Uint8Array, salt: Uint8Array, iteration: number, keyLength: number) =>
-        Crypto.get().pbkdf2(secret, salt, iteration, keyLength);
+    signEcdsa(privateKey: JsonWebKey, data: Uint8Array | Uint8Array[], dsaEncoding?: CryptoDsaEncoding) {
+        return Crypto.default.signEcdsa(privateKey, data, dsaEncoding);
+    },
 
-    abstract hkdf(secret: Uint8Array, salt: Uint8Array, info: Uint8Array, length?: number): MaybePromise<Uint8Array>;
-    static readonly hkdf = (secret: Uint8Array, salt: Uint8Array, info: Uint8Array, length?: number) =>
-        Crypto.get().hkdf(secret, salt, info, length);
+    verifyEcdsa(publicKey: JsonWebKey, data: Uint8Array, signature: Uint8Array, dsaEncoding?: CryptoDsaEncoding) {
+        return Crypto.default.verifyEcdsa(publicKey, data, signature, dsaEncoding);
+    },
 
-    abstract hmac(key: Uint8Array, data: Uint8Array): MaybePromise<Uint8Array>;
-    static readonly hmac = (key: Uint8Array, data: Uint8Array) => Crypto.get().hmac(key, data);
+    createKeyPair() {
+        return Crypto.default.createKeyPair();
+    },
 
-    abstract sign(
-        privateKey: JsonWebKey,
-        data: Uint8Array | Uint8Array[],
-        dsaEncoding?: CryptoDsaEncoding,
-    ): MaybePromise<Uint8Array>;
-    static readonly sign = (privateKey: JsonWebKey, data: Uint8Array | Uint8Array[], dsaEncoding?: CryptoDsaEncoding) =>
-        Crypto.get().sign(privateKey, data, dsaEncoding);
+    generateDhSecret(key: PrivateKey, peerKey: PublicKey) {
+        return Crypto.default.generateDhSecret(key, peerKey);
+    },
+};
 
-    abstract verify(
-        publicKey: JsonWebKey,
-        data: Uint8Array,
-        signature: Uint8Array,
-        dsaEncoding?: CryptoDsaEncoding,
-    ): MaybePromise<void>;
-    static readonly verify = (
-        publicKey: JsonWebKey,
-        data: Uint8Array,
-        signature: Uint8Array,
-        dsaEncoding?: CryptoDsaEncoding,
-    ) => Crypto.get().verify(publicKey, data, signature, dsaEncoding);
-
-    abstract createKeyPair(): MaybePromise<PrivateKey>;
-    static readonly createKeyPair = () => Crypto.get().createKeyPair();
-}
+Crypto satisfies Crypto;
 
 Boot.init(() => {
-    Crypto.get = () => {
-        throw new NoProviderError("No provider configured");
-    };
+    logImplementationName = true;
+    defaultInstance = undefined;
+    defaultProvider = undefined;
 
-    // Hook for testing frameworks
+    // Testing framework configuration
     if (typeof MatterHooks !== "undefined") {
+        // Crypto access occurs before log messages are intercepted so do not log implementation in test environment
+        logImplementationName = true;
+
+        // Configure mocking
         MatterHooks.cryptoSetup?.(Crypto);
     }
 });

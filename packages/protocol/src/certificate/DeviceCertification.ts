@@ -55,7 +55,7 @@ export class DeviceCertification {
                     privateKey: PrivateKey(dacKeyPair.privateKey),
                     certificate: dac,
                     intermediateCertificate: await paa.getPAICert(),
-                    declaration: CertificationDeclarationManager.generate(product.vendorId, product.productId),
+                    declaration: await CertificationDeclarationManager.generate(product.vendorId, product.productId),
                 };
             };
         }
@@ -71,8 +71,10 @@ export class DeviceCertification {
         });
     }
 
-    sign(session: NodeSession, data: Uint8Array) {
-        return Crypto.sign(this.#assertInitialized().privateKey, [data, session.attestationChallengeKey]);
+    async sign(session: NodeSession, data: Uint8Array) {
+        const { privateKey } = this.#assertInitialized();
+        const signature = await Crypto.signEcdsa(privateKey, [data, session.attestationChallengeKey]);
+        return signature;
     }
 
     /**

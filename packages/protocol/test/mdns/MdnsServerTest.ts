@@ -35,6 +35,8 @@ function removeUndefinedForInstanceField(arr: DnsRecord<any>[]) {
 }
 
 describe("MdnsServer", () => {
+    before(MockTime.enable);
+
     const clientIps = [CLIENT_IPv4];
     const simulator = new NetworkSimulator();
     const clientNetwork = new MockNetwork(simulator, CLIENT_MAC, clientIps);

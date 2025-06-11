@@ -221,7 +221,7 @@ export class MatterController {
         }
 
         const certificateManager =
-            rootCertificateAuthority ?? (await CertificateAuthority.create(certificateAuthorityConfig!));
+            rootCertificateAuthority ?? (await CertificateAuthority.create(certificateAuthorityConfig));
 
         // Stored data are temporary anyway and no node will be connected, so just use an in-memory storage
         const storageManager = new StorageManager(new StorageBackendMemory());

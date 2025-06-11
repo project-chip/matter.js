@@ -15,6 +15,8 @@ let initializeStorage = true;
 let trapProcessSignals = true;
 let trapUnhandledErrors = true;
 let setProcessExitCodeOnError = true;
+let installCrypto = true;
+let installNetwork = true;
 
 export class NodeJsAlreadyInitializedError extends Error {}
 
@@ -118,6 +120,30 @@ export const config = {
     set loadConfigFile(value: boolean) {
         assertUninitialized("loadConfigFile");
         loadConfigFile = value;
+    },
+
+    /**
+     * Enables installation of native node.js crypto implementation (default: true).
+     */
+    get installCrypto() {
+        return installCrypto;
+    },
+
+    set installCrypto(value: boolean) {
+        assertUninitialized("installNodeJsCrypto");
+        installCrypto = value;
+    },
+
+    /**
+     * Enables installation of node.js networking into default environment.
+     */
+    get installNetwork() {
+        return installNetwork;
+    },
+
+    set installNetwork(value: boolean) {
+        assertUninitialized("installNodeJsNetwork");
+        installNetwork = value;
     },
 
     /**

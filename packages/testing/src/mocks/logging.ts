@@ -25,7 +25,7 @@ export interface MockLogger {
     injectExternalMessage: (source: string, text: string) => void;
 }
 
-export const TheMockLogger: MockLogger = {
+export const MockLogger: MockLogger = {
     emitAll: false,
     injectExternalMessage: (source: string, text: string) => console.log(formatExternalMessage(source, text)),
 };
@@ -67,7 +67,7 @@ export function loggerSetup(Logger: LoggerLike) {
     }
 
     function interceptingWriter(...args: [string, DiagnosticMessageLike]) {
-        let emitAll = TheMockLogger.emitAll;
+        let emitAll = MockLogger.emitAll;
         if (MatterHooks?.loggerSink) {
             MatterHooks.loggerSink(...args);
         } else if (!emitAll) {
@@ -83,14 +83,14 @@ export function loggerSetup(Logger: LoggerLike) {
         }
     }
 
-    TheMockLogger.injectExternalMessage = (source, text) =>
+    MockLogger.injectExternalMessage = (source, text) =>
         interceptingWriter(formatExternalMessage(source, text), { level: 0 });
 
     Logger.destinations.default.write = interceptingWriter;
 
     // Divert log messages for test duration
     LoggerHooks.beforeEach.push(function () {
-        if (!TheMockLogger.emitAll) {
+        if (!MockLogger.emitAll) {
             messageBuffer = [];
         }
     });

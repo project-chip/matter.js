@@ -34,7 +34,7 @@ describe("AttributeSubscriptionResponse", () => {
                     },
                     tlv: {},
                     value: "Matter.js Test Vendor",
-                    version: 1,
+                    version: 0x80808081,
                 },
             ],
         ]);

@@ -5,7 +5,7 @@
  */
 
 import { GroupId } from "#datatype/GroupId.js";
-import { Branded, Bytes, Crypto, DataWriter, toBigInt, UnexpectedDataError } from "#general";
+import { Branded, Bytes, Crypto, DataWriter, UnexpectedDataError } from "#general";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { CaseAuthenticatedTag } from "./CaseAuthenticatedTag.js";
@@ -18,8 +18,8 @@ import { CaseAuthenticatedTag } from "./CaseAuthenticatedTag.js";
  */
 export type NodeId = Branded<bigint, "NodeId">;
 
-export function NodeId(v: bigint | number): NodeId {
-    return toBigInt(v) as NodeId;
+export function NodeId(v: Parameters<typeof BigInt>[0]): NodeId {
+    return BigInt(v) as NodeId;
 }
 
 export namespace NodeId {

@@ -101,10 +101,6 @@ if (!performance || typeof performance.now !== "function" || typeof performance.
     Time.prototype.nowUs = () => Time.nowMs() * 1000; // Fallback is a bit less accurate
 }
 
-const time = new Time();
-
-Time.startup.systemMs = Time.startup.processMs = time.nowMs();
-
 export interface Timer {
     /** Name (diagnostics) */
     name: string;
@@ -221,6 +217,10 @@ DiagnosticSource.add({
 });
 
 Boot.init(() => {
+    const time = new Time();
+
+    Time.startup.systemMs = Time.startup.processMs = time.nowMs();
+
     Time.get = () => time;
 
     // Hook for testing frameworks

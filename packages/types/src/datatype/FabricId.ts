@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Branded, toBigInt } from "#general";
+import { Branded } from "#general";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 
@@ -16,8 +16,8 @@ import { TlvWrapper } from "../tlv/TlvWrapper.js";
  */
 export type FabricId = Branded<bigint, "FabricId">;
 
-export function FabricId(value: bigint | number): FabricId {
-    return toBigInt(value) as FabricId;
+export function FabricId(value: Parameters<typeof BigInt>[0]): FabricId {
+    return BigInt(value) as FabricId;
 }
 
 export namespace FabricId {

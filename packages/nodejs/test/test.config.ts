@@ -4,8 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NodeJsCrypto } from "#crypto/NodeJsCrypto.js";
-import { Crypto } from "#general";
-
-const TheCrypto = new NodeJsCrypto();
-Crypto.get = () => TheCrypto;
+// Init library
+import "../src/index.js";

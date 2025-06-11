@@ -5,12 +5,12 @@
  */
 
 import {
-    BitByteArray,
     Bytes,
     ContextTagged,
     ContextTaggedBytes,
     Crypto,
     DatatypeOverride,
+    DerBitString,
     DerCodec,
     DerKey,
     DerObject,
@@ -666,10 +666,11 @@ export namespace CertificateManager {
 
     export async function deviceAttestationCertToAsn1(cert: Unsigned<DeviceAttestationCertificate>, key: Key) {
         const certificate = genericBuildAsn1Structure(cert);
+        const signature = await Crypto.signEcdsa(key, DerCodec.encode(certificate), "der");
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
-            signature: BitByteArray(await Crypto.sign(key, DerCodec.encode(certificate), "der")),
+            signature: DerBitString(signature),
         });
         assertCertificateDerSize(certBytes);
         return certBytes;
@@ -680,10 +681,11 @@ export namespace CertificateManager {
         key: Key,
     ) {
         const certificate = genericBuildAsn1Structure(cert);
+        const signature = await Crypto.signEcdsa(key, DerCodec.encode(certificate), "der");
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
-            signature: BitByteArray(await Crypto.sign(key, DerCodec.encode(certificate), "der")),
+            signature: DerBitString(signature),
         });
         assertCertificateDerSize(certBytes);
         return certBytes;
@@ -697,13 +699,13 @@ export namespace CertificateManager {
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
-            signature: BitByteArray(await Crypto.sign(key, DerCodec.encode(certificate), "der")),
+            signature: DerBitString(await Crypto.signEcdsa(key, DerCodec.encode(certificate), "der")),
         });
         assertCertificateDerSize(certBytes);
         return certBytes;
     }
 
-    export function certificationDeclarationToAsn1(
+    export async function certificationDeclarationToAsn1(
         eContent: Uint8Array,
         subjectKeyIdentifier: Uint8Array,
         privateKey: JsonWebKey,
@@ -718,7 +720,7 @@ export namespace CertificateManager {
                     subjectKeyIdentifier: ContextTaggedBytes(0, subjectKeyIdentifier),
                     digestAlgorithm: SHA256_CMS,
                     signatureAlgorithm: X962.EcdsaWithSHA256,
-                    signature: Crypto.sign(privateKey, eContent, "der"),
+                    signature: await Crypto.signEcdsa(privateKey, eContent, "der"),
                 },
             ],
         };
@@ -861,7 +863,11 @@ export namespace CertificateManager {
             );
         }
 
-        await Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), rootCertToAsn1(rootCert), rootCert.signature);
+        await Crypto.verifyEcdsa(
+            PublicKey(rootCert.ellipticCurvePublicKey),
+            rootCertToAsn1(rootCert),
+            rootCert.signature,
+        );
     }
 
     /**
@@ -985,7 +991,7 @@ export namespace CertificateManager {
             );
         }
 
-        await Crypto.verify(
+        await Crypto.verifyEcdsa(
             PublicKey((icaCert ?? rootCert).ellipticCurvePublicKey),
             nodeOperationalCertToAsn1(nocCert),
             nocCert.signature,
@@ -1103,7 +1109,7 @@ export namespace CertificateManager {
             );
         }
 
-        await Crypto.verify(
+        await Crypto.verifyEcdsa(
             PublicKey(rootCert.ellipticCurvePublicKey),
             intermediateCaCertToAsn1(icaCert),
             icaCert.signature,
@@ -1121,7 +1127,7 @@ export namespace CertificateManager {
         return DerCodec.encode({
             request,
             signAlgorithm: X962.EcdsaWithSHA256,
-            signature: BitByteArray(await Crypto.sign(key, DerCodec.encode(request), "der")),
+            signature: DerBitString(await Crypto.signEcdsa(key, DerCodec.encode(request), "der")),
         });
     }
 
@@ -1153,7 +1159,12 @@ export namespace CertificateManager {
             )
         )
             throw new CertificateError("Unsupported signature type");
-        await Crypto.verify(PublicKey(publicKey), DerCodec.encode(requestNode), signatureNode[DerKey.Bytes], "der");
+        await Crypto.verifyEcdsa(
+            PublicKey(publicKey),
+            DerCodec.encode(requestNode),
+            signatureNode[DerKey.Bytes],
+            "der",
+        );
 
         return publicKey;
     }

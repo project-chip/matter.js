@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Network } from "@matter/general";
+import { Environment, Network } from "#general";
 
 export * from "./NetworkReactNative.js";
 
 export async function closeNetwork() {
-    return Network.get().close();
+    if (Environment.default.has(Network)) {
+        return Environment.default.get(Network).close();
+    }
 }

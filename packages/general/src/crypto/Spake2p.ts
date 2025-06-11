@@ -32,7 +32,7 @@ export class Spake2p {
     static async computeW0W1({ iterations, salt }: PbkdfParameters, pin: number) {
         const pinWriter = new DataWriter(Endian.Little);
         pinWriter.writeUInt32(pin);
-        const ws = await Crypto.pbkdf2(pinWriter.toByteArray(), salt, iterations, CRYPTO_W_SIZE_BYTES * 2);
+        const ws = await Crypto.createPbkdf2Key(pinWriter.toByteArray(), salt, iterations, CRYPTO_W_SIZE_BYTES * 2);
         const w0 = mod(bytesToNumberBE(ws.slice(0, 40)), P256_CURVE.n);
         const w1 = mod(bytesToNumberBE(ws.slice(40, 80)), P256_CURVE.n);
         return { w0, w1 };
@@ -96,12 +96,12 @@ export class Spake2p {
         const Ka = TT_HASH.slice(0, 16);
         const Ke = TT_HASH.slice(16, 32);
 
-        const KcAB = await Crypto.hkdf(Ka, new Uint8Array(0), Bytes.fromString("ConfirmationKeys"), 32);
+        const KcAB = await Crypto.createHkdfKey(Ka, new Uint8Array(0), Bytes.fromString("ConfirmationKeys"), 32);
         const KcA = KcAB.slice(0, 16);
         const KcB = KcAB.slice(16, 32);
 
-        const hAY = await Crypto.hmac(KcA, Y);
-        const hBX = await Crypto.hmac(KcB, X);
+        const hAY = await Crypto.signHmac(KcA, Y);
+        const hBX = await Crypto.signHmac(KcB, X);
 
         return { Ke, hAY, hBX };
     }
@@ -118,7 +118,7 @@ export class Spake2p {
         this.addToContext(TTwriter, Z);
         this.addToContext(TTwriter, V);
         this.addToContext(TTwriter, numberToBytesBE(this.w0, 32));
-        return Crypto.hash(TTwriter.toByteArray());
+        return Crypto.computeSha256(TTwriter.toByteArray());
     }
 
     private addToContext(TTwriter: DataWriter<Endian.Little>, data: Uint8Array) {

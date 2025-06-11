@@ -11,8 +11,8 @@ import Chai from "chai";
 import ChaiAsPromised from "chai-as-promised";
 import { browserSetup, extendApi, generalSetup } from "./mocha.js";
 import { bootSetup } from "./mocks/boot.js";
-import { cryptoSetup } from "./mocks/crypto.js";
-import { TheMockLogger, loggerSetup } from "./mocks/logging.js";
+import { MockCrypto, cryptoSetup } from "./mocks/crypto.js";
+import { MockLogger, loggerSetup } from "./mocks/logging.js";
 import { timeSetup } from "./mocks/time.js";
 
 Chai.config.truncateThreshold = 200;
@@ -22,17 +22,24 @@ Object.assign(globalThis, {
     expect: Chai.expect,
 
     MatterHooks: {
+        interrupt,
         bootSetup,
         loggerSetup,
         timeSetup,
         cryptoSetup,
     },
 
-    MockLogger: TheMockLogger,
+    MockLogger,
+
+    MockCrypto,
 });
 
 if (globalThis === (globalThis as any).window) {
     extendApi(Mocha);
     generalSetup(mocha);
     browserSetup(mocha);
+}
+
+function interrupt() {
+    // Interrupt handling is platform dependent
 }

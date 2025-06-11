@@ -34,15 +34,11 @@ import { ServerNode } from "#node/ServerNode.js";
 import { AttestationCertificateManager, CertificationDeclarationManager, Val } from "#protocol";
 import { VendorId } from "#types";
 import { MockServerNode } from "./mock-server-node.js";
-import { CommissioningHelper, Fixtures, testFactoryReset } from "./node-helpers.js";
+import { CommissioningHelper, FAILSAFE_LENGTH_S, testFactoryReset } from "./node-helpers.js";
 
 const commissioning = CommissioningHelper();
 
 describe("ServerNode", () => {
-    before(() => {
-        MockTime.reset(663774400000); // Initialize later then Certificate validity start time
-    });
-
     beforeEach(() => {
         commissioning.fabricNumber = undefined;
     });
@@ -233,7 +229,7 @@ describe("ServerNode", () => {
 
         expect(opcreds.commissionedFabrics).equals(1);
 
-        await MockTime.advance(Fixtures.failsafeLengthS * 1000 + 1);
+        await MockTime.advance(FAILSAFE_LENGTH_S * 1000 + 1);
 
         if (opcreds.commissionedFabrics > 0) {
             await node.events.operationalCredentials.commissionedFabrics$Changed;
@@ -255,7 +251,7 @@ describe("ServerNode", () => {
                     certification: async () => {
                         const paa = await AttestationCertificateManager.create(vendorId);
                         const { keyPair: dacKeyPair, dac } = await paa.getDACert(productId);
-                        const declaration = CertificationDeclarationManager.generate(vendorId, productId);
+                        const declaration = await CertificationDeclarationManager.generate(vendorId, productId);
 
                         commissioningServer2CertificateProviderCalled = true;
                         return {
@@ -275,7 +271,7 @@ describe("ServerNode", () => {
 
         await node.online(contextOptions, async agent => {
             await agent.generalCommissioning.armFailSafe({
-                expiryLengthSeconds: Fixtures.failsafeLengthS,
+                expiryLengthSeconds: FAILSAFE_LENGTH_S,
                 breadcrumb: 4,
             });
         });
@@ -361,7 +357,7 @@ describe("ServerNode", () => {
             lastFabricsCount = fabrics.length;
         });
 
-        await commissioning.commission(node, 1);
+        await commissioning.commission(node, 2);
 
         expect(node.state.operationalCredentials.nocs.length).equals(2);
         expect(Object.keys(node.state.commissioning.fabrics).length).equals(2);
@@ -551,7 +547,7 @@ describe("ServerNode", () => {
             const bi = ep0[id]!;
             expect(typeof bi).equals("object");
 
-            expect(bi.version).equals(1);
+            expect(bi.version).equals(0x80808081);
             expect(bi.type.id).equals(BasicInformation.id);
             expect([...bi.type.attributes].length).equals(21);
             expect([...bi.type.events].length).equals(3);

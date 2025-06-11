@@ -16,13 +16,13 @@ import {
 import { MAX_COUNTER_VALUE_32BIT, MessageCounter, PersistedMessageCounter } from "#protocol/MessageCounter.js";
 
 describe("MessageCounter", () => {
-    let realGetRandomData = Crypto.get().getRandomData;
+    let realGetRandomData = Crypto.getRandomData;
     let getRandom32BitNumber: (() => number) | undefined;
     let testStorageContext: StorageContext;
 
     before(() => {
-        realGetRandomData = Crypto.get().getRandomData;
-        Crypto.get().getRandomData = (length: number) => {
+        realGetRandomData = Crypto.getRandomData;
+        Crypto.default.getRandomData = (length: number) => {
             if (length === 4 && getRandom32BitNumber !== undefined) {
                 const writer = new DataWriter(Endian.Little);
                 writer.writeUInt32(getRandom32BitNumber());
@@ -33,7 +33,7 @@ describe("MessageCounter", () => {
     });
 
     after(() => {
-        Crypto.get().getRandomData = realGetRandomData;
+        Crypto.default.getRandomData = realGetRandomData;
     });
 
     beforeEach(async () => {

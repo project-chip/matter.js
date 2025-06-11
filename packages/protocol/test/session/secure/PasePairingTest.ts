@@ -5,7 +5,7 @@
  */
 
 import { Bytes, Crypto, Spake2p } from "#general";
-import { SPAKE_CONTEXT } from "#protocol";
+import { SPAKE_CONTEXT } from "#session/pase/PaseMessenger.js";
 
 describe("PasePairing", () => {
     describe("Test PASE Spake2 process", () => {
@@ -42,7 +42,7 @@ describe("PasePairing", () => {
 
             // Process pake1 and send pake2
             const spake2p = new Spake2p(
-                await Crypto.hash([SPAKE_CONTEXT, requestPayload, responsePayload]),
+                await Crypto.computeSha256([SPAKE_CONTEXT, requestPayload, responsePayload]),
                 BigInt("0xde583b5685529de9544b92c9c8cba696751b14d65092d13458879b3bc9814b53"),
                 w0,
             );
@@ -94,7 +94,7 @@ describe("PasePairing", () => {
 
             // Process pake1 and send pake2
             const spake2p = new Spake2p(
-                await Crypto.hash([SPAKE_CONTEXT, requestPayload, responsePayload]),
+                await Crypto.computeSha256([SPAKE_CONTEXT, requestPayload, responsePayload]),
                 BigInt("0xfee695b4972a4f620951010c87390d3fe1313efce399fbc2c9c7cdc04d22b4c6"),
                 w0,
             );

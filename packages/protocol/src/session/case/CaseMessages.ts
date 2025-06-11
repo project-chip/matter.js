@@ -59,23 +59,23 @@ export const TlvCaseSigma3 = TlvObject({
 
 /** @see {@link MatterSpecification.v10.Core} § 4.13.2.3 */
 export const TlvSignedData = TlvObject({
-    nodeOpCert: TlvField(1, TlvByteString),
-    intermediateCACert: TlvOptionalField(2, TlvByteString),
-    ecdhPublicKey: TlvField(3, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
-    peerEcdhPublicKey: TlvField(4, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
+    responderNoc: TlvField(1, TlvByteString),
+    responderIcac: TlvOptionalField(2, TlvByteString),
+    responderPublicKey: TlvField(3, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
+    initiatorPublicKey: TlvField(4, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
 });
 
 /** @see {@link MatterSpecification.v10.Core} § 4.13.2.3 */
 export const TlvEncryptedDataSigma2 = TlvObject({
-    nodeOpCert: TlvField(1, TlvByteString),
-    intermediateCACert: TlvOptionalField(2, TlvByteString),
+    responderNoc: TlvField(1, TlvByteString),
+    responderIcac: TlvOptionalField(2, TlvByteString),
     signature: TlvField(3, TlvByteString.bound({ length: CASE_SIGNATURE_LENGTH })),
     resumptionId: TlvField(4, TlvByteString.bound({ length: 16 })),
 });
 
 /** @see {@link MatterSpecification.v10.Core} § 4.13.2.3 */
 export const TlvEncryptedDataSigma3 = TlvObject({
-    nodeOpCert: TlvField(1, TlvByteString),
-    intermediateCACert: TlvOptionalField(2, TlvByteString),
+    responderNoc: TlvField(1, TlvByteString),
+    responderIcac: TlvOptionalField(2, TlvByteString),
     signature: TlvField(3, TlvByteString.bound({ length: CASE_SIGNATURE_LENGTH })),
 });

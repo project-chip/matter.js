@@ -158,6 +158,7 @@ export class VariableService {
 
             case null:
             case 0:
+            case "0":
             case false:
             case "false":
             case "off":

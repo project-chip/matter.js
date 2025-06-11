@@ -1285,7 +1285,7 @@ export class PairedNode {
 
         const discriminator = PaseClient.generateRandomDiscriminator();
         const passcode = PaseClient.generateRandomPasscode();
-        const salt = Crypto.get().getRandomData(32);
+        const salt = Crypto.getRandomData(32);
         const iterations = 1_000; // Minimum 1_000, Maximum 100_000
         const pakePasscodeVerifier = await PaseClient.generatePakePasscodeVerifier(passcode, {
             iterations,

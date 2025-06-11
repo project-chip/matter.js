@@ -46,7 +46,7 @@ describe("EventReadResponse", () => {
                     },
                     number: 1n,
                     priority: 2,
-                    timestamp: 0,
+                    timestamp: MockTime.epoch.getTime(),
                     tlv: {},
                     value: { softwareVersion: 0 },
                 },

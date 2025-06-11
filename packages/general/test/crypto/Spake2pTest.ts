@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto, Spake2p } from "#general";
-import * as assert from "node:assert";
+import { Spake2p } from "#crypto/Spake2p.js";
+import { Crypto } from "#index.js";
+import { Bytes } from "#util/Bytes.js";
 
 describe("Spake2p", () => {
     describe("https://datatracker.ietf.org/doc/html/draft-bar-cfrg-spake2plus-01 test vectors", () => {
@@ -32,29 +33,29 @@ describe("Spake2p", () => {
         it("generates X", () => {
             const result = spake2pInitiator.computeX();
 
-            assert.deepEqual(result, X);
+            expect(result).deep.equal(X);
         });
 
         it("generates Y", () => {
             const result = spake2pReceiver.computeY();
 
-            assert.deepEqual(result, Y);
+            expect(result).deep.equal(Y);
         });
 
         it("generates shared secret and key confirmation for the initiator", async () => {
             const result = await spake2pInitiator.computeSecretAndVerifiersFromY(w1, X, Y);
 
-            assert.equal(Bytes.toHex(result.Ke), Bytes.toHex(Ke));
-            assert.equal(Bytes.toHex(result.hAY), Bytes.toHex(hAY));
-            assert.equal(Bytes.toHex(result.hBX), Bytes.toHex(hBX));
+            expect(Bytes.toHex(result.Ke)).equals(Bytes.toHex(Ke));
+            expect(Bytes.toHex(result.hAY)).equals(Bytes.toHex(hAY));
+            expect(Bytes.toHex(result.hBX)).equals(Bytes.toHex(hBX));
         }).timeout(20000);
 
         it("generates shared secret and key confirmation for the receiver", async () => {
             const result = await spake2pReceiver.computeSecretAndVerifiersFromX(L, X, Y);
 
-            assert.equal(Bytes.toHex(result.Ke), Bytes.toHex(Ke));
-            assert.equal(Bytes.toHex(result.hAY), Bytes.toHex(hAY));
-            assert.equal(Bytes.toHex(result.hBX), Bytes.toHex(hBX));
+            expect(Bytes.toHex(result.Ke)).equals(Bytes.toHex(Ke));
+            expect(Bytes.toHex(result.hAY)).equals(Bytes.toHex(hAY));
+            expect(Bytes.toHex(result.hBX)).equals(Bytes.toHex(hBX));
         }).timeout(20000);
     });
 
@@ -77,9 +78,9 @@ describe("Spake2p", () => {
                     "15300120b2901e92036f7bca007a3a1bf24bd71f18772105e83479c92b7a8af35e81827430022008070f685f2077779b824adf91e4bab6253b9d1a3c0f6615c6d447780f0feef325039c8d35042501e803300220163f8501fbbc0e6a8f69a9b999d038ca388ecffccc18fe259c4253f26e494dda1835052501881325022c011818",
                 ),
             );
-            const result = await Crypto.hash(context);
+            const result = await Crypto.computeSha256(context);
 
-            assert.equal(Bytes.toHex(result), "c49718b0275b6f81fd6a081f6c34c5833382b75b3bd997895d13a51c71a02855");
+            expect(Bytes.toHex(result)).equals("c49718b0275b6f81fd6a081f6c34c5833382b75b3bd997895d13a51c71a02855");
         });
     });
 });

@@ -114,6 +114,7 @@ export default [
             "@typescript-eslint/no-redundant-type-constituents": "off",
             "import/no-unresolved": "off",
             "regexp/optimal-quantifier-concatenation": "off",
+            "no-sparse-arrays": "off",
         },
     },
     {

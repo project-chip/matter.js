@@ -72,7 +72,7 @@ export class NodeSession extends SecureSession {
             peerSessionParameters,
             caseAuthenticatedTags,
         } = args;
-        const keys = await Crypto.hkdf(
+        const keys = await Crypto.createHkdfKey(
             sharedSecret,
             salt,
             isResumption ? SESSION_RESUMPTION_KEYS_INFO : SESSION_KEYS_INFO,

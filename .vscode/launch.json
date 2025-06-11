@@ -94,7 +94,7 @@
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
             "name": "Run shell",
-            "cwd": "${workspaceFolder}/support/codegen/packages/nodejs-shell",
+            "cwd": "${workspaceFolder}/packages/nodejs-shell",
             "args": [
                 "--clear",
                 "dist/cjs/app.js"
@@ -121,7 +121,7 @@
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
             "name": "Run CLI tool",
-            "cwd": "${workspaceFolder}/support/codegen/packages/cli-tool",
+            "cwd": "${workspaceFolder}/packages/cli-tool",
             "args": [
                 "--clear",
                 "bin/matter.js"
@@ -331,6 +331,32 @@
             ],
             "name": "Test @matter/chip-testing",
             "cwd": "${workspaceFolder}/support/chip-testing",
+            "group": "test",
+            "args": [
+                "--clear"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "02test"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "name": "Test @matter/integration-tests",
+            "cwd": "${workspaceFolder}/support/tests",
             "group": "test",
             "args": [
                 "--clear"

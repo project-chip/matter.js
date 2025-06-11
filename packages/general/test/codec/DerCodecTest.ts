@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BitByteArray, ContextTagged, DatatypeOverride, DerCodec, DerType } from "#codec/DerCodec.js";
+import { ContextTagged, DatatypeOverride, DerBitString, DerCodec, DerType } from "#codec/DerCodec.js";
 import { X520, X962 } from "#codec/DerTypes.js";
 
 import { Bytes } from "#util/Bytes.js";
@@ -21,7 +21,7 @@ const DECODED = {
         endSignedBytes: ContextTagged(0),
     },
     signAlgorithm: X962.EcdsaWithSHA256,
-    signature: BitByteArray(
+    signature: DerBitString(
         Bytes.fromHex(
             "00304602210080861AD536EFF01CAD42816A8172F71BE3E4FD7230CF73A45E34945FE89D5D7202210087FC1F47ADB6D150580706865E2E21E2963C9C15006B64DAB5658BFB980A2AD3",
         ),

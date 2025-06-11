@@ -1274,10 +1274,8 @@ export class ControllerCommissioningFlow {
                 // Assume concurrent connections are supported if not know (which should not be the case when we came here)
                 isConcurrentFlow,
             );
-        } catch (error) {
-            const commError = new OperativeConnectionFailedError("Operative reconnection with device failed");
-            commError.cause = error;
-            throw commError;
+        } catch (cause) {
+            throw new OperativeConnectionFailedError("Operative reconnection with device failed", { cause });
         }
 
         reArmFailsafeInterval.stop();

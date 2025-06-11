@@ -14,7 +14,13 @@
             "path": "../../../packages/model/src"
         },
         {
+            "path": "../../../packages/protocol/src"
+        },
+        {
             "path": "../../../packages/tools/src"
+        },
+        {
+            "path": "../../../packages/types/src"
         },
         {
             "path": "../../models/src"

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { existsSync } from "node:fs";
 import { realpath } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { exit, stdout } from "node:process";
@@ -77,6 +78,11 @@ export async function main(argv = process.argv) {
                 .replace(/\.ts$/, ".js")
                 .replace(/^src[\\/]/, `dist/${format}/`),
         );
+    }
+
+    if (!existsSync(script)) {
+        console.error(`Error: File not found: ${script}`);
+        exit(2);
     }
 
     // If we run in the same process we cannot enable source maps so default mode is to fork.  However for development
