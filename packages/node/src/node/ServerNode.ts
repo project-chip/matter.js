@@ -15,7 +15,7 @@ import { SessionsBehavior } from "#behavior/system/sessions/SessionsBehavior.js"
 import { SubscriptionBehavior } from "#behavior/system/subscription/SubscriptionBehavior.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import type { Environment } from "#general";
-import { Construction, DiagnosticSource, Identity, MatterError, asyncNew, errorOf } from "#general";
+import { asyncNew, Construction, DiagnosticSource, errorOf, Identity, MatterError } from "#general";
 import { FabricManager, Interactable, OccurrenceManager, ServerInteraction, SessionManager } from "#protocol";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoints/root.js";
 import { Node } from "./Node.js";
@@ -184,9 +184,9 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     }
 
     /**
-     * By default on factory reset we erase all stored data.
+     * By default, on factory reset we erase all stored data.
      *
-     * If this is inappropriate for your application you may override to alter the behavior.   Matter requires that all
+     * If this is inappropriate for your application, you may override to alter the behavior.  Matter requires that all
      * "security- and privacy-related data and key material" is removed on factory reset.
      *
      * @see {@link MatterSpecification.v12.Core} § 13.4

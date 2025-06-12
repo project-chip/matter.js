@@ -49,7 +49,6 @@ export interface OccurrenceManagerContext {
  */
 export class OccurrenceManager {
     #store: EventStore;
-    #storedEventCount = 0;
     #bufferConfig: OccurrenceManager.BufferConfig;
     #cull?: Promise<void>;
     #iteratingValuesInProgress = false;
@@ -87,7 +86,6 @@ export class OccurrenceManager {
 
         this.#construction = Construction(this, () => {
             return MaybePromise.then(this.#store.load(), index => {
-                this.#storedEventCount = index.length;
                 // To be sure, sort the entries by number
                 index.sort(
                     // sort that way because Bigint & Number mix
@@ -108,7 +106,6 @@ export class OccurrenceManager {
     async clear() {
         await this.construction;
         await this.#store.clear();
-        this.#storedEventCount = 0;
         this.#occurrences.length = 0;
     }
 
@@ -282,8 +279,7 @@ export class OccurrenceManager {
         return MaybePromise.then(this.#store.add(occurrence), entry => {
             logger.debug(`Recorded event #${entry.number}: ${Diagnostic.json(occurrence)}`);
             this.#occurrences.push(entry);
-            this.#storedEventCount++;
-            if (this.#storedEventCount > this.#bufferConfig.maxEventAllowance) {
+            if (this.#occurrences.length > this.#bufferConfig.maxEventAllowance) {
                 this.#startCull();
             }
             const numberedOccurrence = {
@@ -293,6 +289,19 @@ export class OccurrenceManager {
             this.#added.emit(numberedOccurrence);
             return numberedOccurrence;
         });
+    }
+
+    remove(number: EventNumber) {
+        const index = this.#occurrences.findIndex(entry => entry.number === number);
+        if (index === -1) {
+            // Should not happen but just in case
+            return;
+        }
+        this.#occurrences.splice(index, 1);
+        if (this.#cull) {
+            return this.#cull.then(() => this.#store.delete(number));
+        }
+        return this.#store.delete(number);
     }
 
     #startCull() {
@@ -306,7 +315,7 @@ export class OccurrenceManager {
     }
 
     #dropOldOccurrences() {
-        let toDelete = this.#storedEventCount - this.#bufferConfig.minEventAllowance;
+        let toDelete = this.#occurrences.length - this.#bufferConfig.minEventAllowance;
         if (toDelete <= 0) {
             return;
         }
@@ -357,7 +366,7 @@ export class OccurrenceManager {
         const occurrences = this.#occurrences as Array<OccurrenceSummary | undefined>;
         for (const priority of [EventPriority.Debug, EventPriority.Info, EventPriority.Critical]) {
             const checkUpTo =
-                priority === EventPriority.Critical ? this.#storedEventCount : prioData[priority].minPosition;
+                priority === EventPriority.Critical ? this.#occurrences.length : prioData[priority].minPosition;
             if (checkUpTo === -1) {
                 // We have less than the minimum of this event type, so we can not remove any
                 continue;
@@ -381,8 +390,6 @@ export class OccurrenceManager {
             }
         }
         this.#occurrences = occurrences.filter(entry => entry) as OccurrenceSummary[];
-
-        this.#storedEventCount = this.#occurrences.length;
 
         if (asyncDrops.length) {
             return MatterAggregateError.allSettled(asyncDrops, "Error dropping occurrences")
