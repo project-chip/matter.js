@@ -120,9 +120,7 @@ export interface MdnsScannerTargetCriteria {
  * queries to discover various types of Matter device types and listens for announcements.
  */
 export class MdnsScanner implements Scanner {
-    get type() {
-        return ChannelType.UDP;
-    }
+    readonly type = ChannelType.UDP;
 
     static async create(network: Network, options?: { enableIpv4?: boolean; netInterface?: string }) {
         const { enableIpv4, netInterface } = options ?? {};
@@ -502,9 +500,7 @@ export class MdnsScanner implements Scanner {
         const { timer, resolver, resolveOnUpdatedRecords, commissionable } = waiter;
         if (isUpdatedRecord && !resolveOnUpdatedRecords) return;
         logger.debug(`Finishing waiter for query ${queryId}, resolving: ${resolvePromise}`);
-        if (timer !== undefined) {
-            timer.stop();
-        }
+        timer?.stop();
         if (resolvePromise) {
             resolver();
         }

@@ -90,9 +90,7 @@ export class NobleBleClient {
         this.shouldScan = true;
         if (this.nobleState === "poweredOn") {
             logger.debug("Start BLE scanning for Matter Services ...");
-            // TODO Remove this Windows hack once Noble Windows issue is fixed
-            //  see https://github.com/stoprocent/noble/issues/20
-            await noble.startScanningAsync(process.platform !== "win32" ? [BLE_MATTER_SERVICE_UUID] : undefined, true);
+            await noble.startScanningAsync([BLE_MATTER_SERVICE_UUID], true);
         } else {
             logger.debug("noble state is not poweredOn ... delay scanning till poweredOn");
         }
