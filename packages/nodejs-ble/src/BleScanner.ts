@@ -23,28 +23,29 @@ type CommissionableDeviceData = CommissionableDevice & {
 };
 
 export class BleScanner implements Scanner {
-    get type() {
-        return ChannelType.BLE;
-    }
+    readonly type = ChannelType.BLE;
 
-    private readonly recordWaiters = new Map<
+    readonly #nobleClient: NobleBleClient;
+    readonly #recordWaiters = new Map<
         string,
         {
             resolver: () => void;
             timer?: Timer;
             resolveOnUpdatedRecords: boolean;
+            cancelResolver?: (value: void) => void;
         }
     >();
-    private readonly discoveredMatterDevices = new Map<string, DiscoveredBleDevice>();
+    readonly #discoveredMatterDevices = new Map<string, DiscoveredBleDevice>();
 
-    constructor(private readonly nobleClient: NobleBleClient) {
-        this.nobleClient.setDiscoveryCallback((address, manufacturerData) =>
-            this.handleDiscoveredDevice(address, manufacturerData),
+    constructor(nobleClient: NobleBleClient) {
+        this.#nobleClient = nobleClient;
+        this.#nobleClient.setDiscoveryCallback((address, manufacturerData) =>
+            this.#handleDiscoveredDevice(address, manufacturerData),
         );
     }
 
     public getDiscoveredDevice(address: string): DiscoveredBleDevice {
-        const device = this.discoveredMatterDevices.get(address);
+        const device = this.#discoveredMatterDevices.get(address);
         if (device === undefined) {
             throw new BleError(`No device found for address ${address}`);
         }
@@ -55,15 +56,21 @@ export class BleScanner implements Scanner {
      * Registers a deferred promise for a specific queryId together with a timeout and return the promise.
      * The promise will be resolved when the timer runs out latest.
      */
-    private async registerWaiterPromise(queryId: string, timeoutSeconds?: number, resolveOnUpdatedRecords = true) {
+    async #registerWaiterPromise(
+        queryId: string,
+        timeoutSeconds?: number,
+        resolveOnUpdatedRecords = true,
+        cancelResolver?: (value: void) => void,
+    ) {
         const { promise, resolver } = createPromise<void>();
         let timer;
         if (timeoutSeconds !== undefined) {
-            timer = Time.getTimer("BLE query timeout", timeoutSeconds * 1000, () =>
-                this.finishWaiter(queryId, true),
-            ).start();
+            timer = Time.getTimer("BLE query timeout", timeoutSeconds * 1000, () => {
+                cancelResolver?.();
+                this.#finishWaiter(queryId, true);
+            }).start();
         }
-        this.recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords });
+        this.#recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords, cancelResolver });
         logger.debug(
             `Registered waiter for query ${queryId} with timeout ${timeoutSeconds} seconds${
                 resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"
@@ -76,8 +83,8 @@ export class BleScanner implements Scanner {
      * Remove a waiter promise for a specific queryId and stop the connected timer. If required also resolve the
      * promise.
      */
-    private finishWaiter(queryId: string, resolvePromise: boolean, isUpdatedRecord = false) {
-        const waiter = this.recordWaiters.get(queryId);
+    #finishWaiter(queryId: string, resolvePromise: boolean, isUpdatedRecord = false) {
+        const waiter = this.#recordWaiters.get(queryId);
         if (waiter === undefined) return;
         const { timer, resolver, resolveOnUpdatedRecords } = waiter;
         if (isUpdatedRecord && !resolveOnUpdatedRecords) return;
@@ -86,19 +93,19 @@ export class BleScanner implements Scanner {
         if (resolvePromise) {
             resolver();
         }
-        this.recordWaiters.delete(queryId);
+        this.#recordWaiters.delete(queryId);
     }
 
-    cancelCommissionableDeviceDiscovery(identifier: CommissionableDeviceIdentifiers) {
-        const queryKey = this.buildCommissionableQueryIdentifier(identifier);
-        this.finishWaiter(queryKey, true);
+    cancelCommissionableDeviceDiscovery(identifier: CommissionableDeviceIdentifiers, resolvePromise = true) {
+        const queryKey = this.#buildCommissionableQueryIdentifier(identifier);
+        const { cancelResolver } = this.#recordWaiters.get(queryKey) ?? {};
+        // Mark as canceled to not loop further in discovery, if cancel-resolver is used
+        cancelResolver?.();
+        this.#finishWaiter(queryKey, resolvePromise);
     }
 
-    private handleDiscoveredDevice(peripheral: Peripheral, manufacturerServiceData: Uint8Array) {
+    #handleDiscoveredDevice(peripheral: Peripheral, manufacturerServiceData: Uint8Array) {
         const address = peripheral.address;
-        logger.debug(
-            `Discovered device ${address} ${manufacturerServiceData === undefined ? undefined : Bytes.toHex(manufacturerServiceData)}`,
-        );
 
         try {
             const { discriminator, vendorId, productId, hasAdditionalAdvertisementData } =
@@ -112,56 +119,58 @@ export class BleScanner implements Scanner {
                 CM: 1, // Can be no other mode,
                 addresses: [{ type: "ble", peripheralAddress: address }],
             };
-            const deviceExisting = this.discoveredMatterDevices.has(address);
+            const deviceExisting = this.#discoveredMatterDevices.has(address);
 
             logger.debug(
                 `${deviceExisting ? "Re-" : ""}Discovered device ${address} data: ${Diagnostic.json(deviceData)}`,
             );
 
-            this.discoveredMatterDevices.set(address, {
+            this.#discoveredMatterDevices.set(address, {
                 deviceData,
                 peripheral,
                 hasAdditionalAdvertisementData,
             });
 
-            const queryKey = this.findCommissionableQueryIdentifier(deviceData);
+            const queryKey = this.#findCommissionableQueryIdentifier(deviceData);
             if (queryKey !== undefined) {
-                this.finishWaiter(queryKey, true, deviceExisting);
+                this.#finishWaiter(queryKey, true, deviceExisting);
             }
         } catch (error) {
-            logger.debug(`Seems not to be a valid Matter device: Failed to decode device data: ${error}`);
+            logger.debug(
+                `Discovered device ${address} ${manufacturerServiceData === undefined ? undefined : Bytes.toHex(manufacturerServiceData)} does not seem to be a valid Matter device: ${error}`,
+            );
         }
     }
 
-    private findCommissionableQueryIdentifier(record: CommissionableDeviceData) {
-        const longDiscriminatorQueryId = this.buildCommissionableQueryIdentifier({ longDiscriminator: record.D });
-        if (this.recordWaiters.has(longDiscriminatorQueryId)) {
+    #findCommissionableQueryIdentifier(record: CommissionableDeviceData) {
+        const longDiscriminatorQueryId = this.#buildCommissionableQueryIdentifier({ longDiscriminator: record.D });
+        if (this.#recordWaiters.has(longDiscriminatorQueryId)) {
             return longDiscriminatorQueryId;
         }
 
-        const shortDiscriminatorQueryId = this.buildCommissionableQueryIdentifier({ shortDiscriminator: record.SD });
-        if (this.recordWaiters.has(shortDiscriminatorQueryId)) {
+        const shortDiscriminatorQueryId = this.#buildCommissionableQueryIdentifier({ shortDiscriminator: record.SD });
+        if (this.#recordWaiters.has(shortDiscriminatorQueryId)) {
             return shortDiscriminatorQueryId;
         }
 
         if (record.VP !== undefined) {
-            const vendorIdQueryId = this.buildCommissionableQueryIdentifier({
+            const vendorIdQueryId = this.#buildCommissionableQueryIdentifier({
                 vendorId: VendorId(parseInt(record.VP.split("+")[0])),
             });
-            if (this.recordWaiters.has(vendorIdQueryId)) {
+            if (this.#recordWaiters.has(vendorIdQueryId)) {
                 return vendorIdQueryId;
             }
             if (record.VP.includes("+")) {
-                const productIdQueryId = this.buildCommissionableQueryIdentifier({
+                const productIdQueryId = this.#buildCommissionableQueryIdentifier({
                     vendorId: VendorId(parseInt(record.VP.split("+")[1])),
                 });
-                if (this.recordWaiters.has(productIdQueryId)) {
+                if (this.#recordWaiters.has(productIdQueryId)) {
                     return productIdQueryId;
                 }
             }
         }
 
-        if (this.recordWaiters.has("*")) {
+        if (this.#recordWaiters.has("*")) {
             return "*";
         }
 
@@ -172,7 +181,7 @@ export class BleScanner implements Scanner {
      * Builds an identifier string for commissionable queries based on the given identifier object.
      * Some identifiers are identical to the official DNS-SD identifiers, others are custom.
      */
-    private buildCommissionableQueryIdentifier(identifier: CommissionableDeviceIdentifiers) {
+    #buildCommissionableQueryIdentifier(identifier: CommissionableDeviceIdentifiers) {
         if ("longDiscriminator" in identifier) {
             return `D:${identifier.longDiscriminator}`;
         } else if ("shortDiscriminator" in identifier) {
@@ -185,8 +194,8 @@ export class BleScanner implements Scanner {
         } else return "*";
     }
 
-    private getCommissionableDevices(identifier: CommissionableDeviceIdentifiers) {
-        const storedRecords = Array.from(this.discoveredMatterDevices.values());
+    #getCommissionableDevices(identifier: CommissionableDeviceIdentifiers) {
+        const storedRecords = Array.from(this.#discoveredMatterDevices.values());
 
         const foundRecords = new Array<DiscoveredBleDevice>();
         if ("longDiscriminator" in identifier) {
@@ -228,22 +237,22 @@ export class BleScanner implements Scanner {
         timeoutSeconds = 10,
         ignoreExistingRecords = false,
     ): Promise<CommissionableDevice[]> {
-        let storedRecords = this.getCommissionableDevices(identifier);
+        let storedRecords = this.#getCommissionableDevices(identifier);
         if (ignoreExistingRecords) {
             // We want to have a fresh discovery result, so clear out the stored records because they might be outdated
             for (const record of storedRecords) {
-                this.discoveredMatterDevices.delete(record.peripheral.address);
+                this.#discoveredMatterDevices.delete(record.peripheral.address);
             }
             storedRecords = [];
         }
         if (storedRecords.length === 0) {
-            const queryKey = this.buildCommissionableQueryIdentifier(identifier);
+            const queryKey = this.#buildCommissionableQueryIdentifier(identifier);
 
-            await this.nobleClient.startScanning();
-            await this.registerWaiterPromise(queryKey, timeoutSeconds);
+            await this.#nobleClient.startScanning();
+            await this.#registerWaiterPromise(queryKey, timeoutSeconds);
 
-            storedRecords = this.getCommissionableDevices(identifier);
-            await this.nobleClient.stopScanning();
+            storedRecords = this.#getCommissionableDevices(identifier);
+            await this.#nobleClient.stopScanning();
         }
         return storedRecords.map(({ deviceData }) => deviceData);
     }
@@ -257,14 +266,24 @@ export class BleScanner implements Scanner {
         const discoveredDevices = new Set<string>();
 
         const discoveryEndTime = timeoutSeconds ? Time.nowMs() + timeoutSeconds * 1000 : undefined;
-        const queryKey = this.buildCommissionableQueryIdentifier(identifier);
-        await this.nobleClient.startScanning();
+        const queryKey = this.#buildCommissionableQueryIdentifier(identifier);
+        await this.#nobleClient.startScanning();
+
+        let queryResolver: ((value: void) => void) | undefined;
+        if (cancelSignal === undefined) {
+            const { promise, resolver } = createPromise<void>();
+            cancelSignal = promise;
+            queryResolver = resolver;
+        }
 
         let canceled = false;
         cancelSignal?.then(
             () => {
                 canceled = true;
-                this.finishWaiter(queryKey, true);
+                if (queryResolver === undefined) {
+                    // Always finish when cancelSignal parameter was used, else cancelling is done separately
+                    this.#finishWaiter(queryKey, true);
+                }
             },
             cause => {
                 logger.error("Unexpected error canceling commissioning", cause);
@@ -272,7 +291,7 @@ export class BleScanner implements Scanner {
         );
 
         while (!canceled) {
-            this.getCommissionableDevices(identifier).forEach(({ deviceData }) => {
+            this.#getCommissionableDevices(identifier).forEach(({ deviceData }) => {
                 const { deviceIdentifier } = deviceData;
                 if (!discoveredDevices.has(deviceIdentifier)) {
                     discoveredDevices.add(deviceIdentifier);
@@ -282,27 +301,26 @@ export class BleScanner implements Scanner {
 
             let remainingTime;
             if (discoveryEndTime !== undefined) {
-                const remainingTime = Math.ceil((discoveryEndTime - Time.nowMs()) / 1000);
+                remainingTime = Math.ceil((discoveryEndTime - Time.nowMs()) / 1000);
                 if (remainingTime <= 0) {
                     break;
                 }
             }
 
-            const waiter = this.registerWaiterPromise(queryKey, remainingTime, false);
-            await waiter;
+            await this.#registerWaiterPromise(queryKey, remainingTime, false, queryResolver);
         }
-        await this.nobleClient.stopScanning();
-        return this.getCommissionableDevices(identifier).map(({ deviceData }) => deviceData);
+        await this.#nobleClient.stopScanning();
+        return this.#getCommissionableDevices(identifier).map(({ deviceData }) => deviceData);
     }
 
     getDiscoveredCommissionableDevices(identifier: CommissionableDeviceIdentifiers): CommissionableDevice[] {
-        return this.getCommissionableDevices(identifier).map(({ deviceData }) => deviceData);
+        return this.#getCommissionableDevices(identifier).map(({ deviceData }) => deviceData);
     }
 
     async close() {
-        this.nobleClient.close();
-        [...this.recordWaiters.keys()].forEach(queryId =>
-            this.finishWaiter(queryId, !!this.recordWaiters.get(queryId)?.timer),
+        this.#nobleClient.close();
+        [...this.#recordWaiters.keys()].forEach(queryId =>
+            this.#finishWaiter(queryId, !!this.#recordWaiters.get(queryId)?.timer),
         );
     }
 }
