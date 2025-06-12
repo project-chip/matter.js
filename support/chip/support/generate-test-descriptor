@@ -35,7 +35,8 @@ PYTHON_IGNORE_ARGS = [
     "--discriminator",
     "--passcode",
     "--trace-to",
-    "--PICS"
+    "--PICS",
+    "--app-pipe",
 ]
 
 # Somewhere in the code we run for test reflection CHIP decides to create a directory for the test name.  So execute in
