@@ -5,6 +5,7 @@
  */
 
 import {
+    AsyncObservable,
     Bytes,
     Construction,
     Environment,
@@ -40,7 +41,7 @@ export class FabricManager {
     #events = {
         added: Observable<[fabric: Fabric]>(),
         updated: Observable<[fabric: Fabric]>(),
-        deleted: Observable<[fabric: Fabric]>(),
+        deleted: AsyncObservable<[fabric: Fabric]>(),
         failsafeClosed: Observable<[]>(),
     };
     #construction: Construction<FabricManager>;
@@ -191,7 +192,7 @@ export class FabricManager {
             await this.persistFabrics();
         }
         await fabric.storage?.clearAll();
-        this.#events.deleted.emit(fabric);
+        await this.#events.deleted.emit(fabric);
     }
 
     [Symbol.iterator]() {

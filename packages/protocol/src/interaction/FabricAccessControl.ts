@@ -21,7 +21,7 @@ import {
 } from "#types";
 import { AccessControl as AccessControlContext } from "../action/server/AccessControl.js";
 
-const logger = Logger.get("FabricAccessControlManager");
+const logger = Logger.get("FabricAccessControl");
 
 export type AclEntry = Omit<AccessControl.AccessControlEntry, "privilege"> & {
     privilege: AccessLevel;

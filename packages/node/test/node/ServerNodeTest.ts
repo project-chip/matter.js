@@ -22,6 +22,7 @@ import {
     DnsMessage,
     DnsRecordType,
     Environment,
+    isObject,
     MockUdpChannel,
     NetworkSimulator,
     StorageBackendMemory,
@@ -32,7 +33,8 @@ import { OfflineContext } from "#index.js";
 import { AccessLevel, BasicInformation, ElementTag, FeatureMap } from "#model";
 import { ServerNode } from "#node/ServerNode.js";
 import { AttestationCertificateManager, CertificationDeclarationManager, Val } from "#protocol";
-import { VendorId } from "#types";
+import { FabricIndex, VendorId } from "#types";
+import { OccurrenceManager } from "@matter/protocol";
 import { MockServerNode } from "./mock-server-node.js";
 import { CommissioningHelper, FAILSAFE_LENGTH_S, testFactoryReset } from "./node-helpers.js";
 
@@ -365,6 +367,59 @@ describe("ServerNode", () => {
         expect(lastCommissionedFabricCount).equals(2);
         expect(lastCommissionedFabricIndex).equals(2);
         expect(lastFabricsCount).equals(2);
+
+        await node.close();
+    });
+
+    it("commissions twice and removes first including fabric scoped data", async () => {
+        const { node, contextOptions } = await commissioning.commission();
+
+        await commissioning.commission(node, 2);
+
+        //Verify that each fabric has some fabric scoped data in common places like nocs and acl
+        expect(node.state.operationalCredentials.nocs.filter(({ fabricIndex }) => fabricIndex === 1).length).equals(1);
+        expect(node.state.operationalCredentials.nocs.filter(({ fabricIndex }) => fabricIndex === 2).length).equals(1);
+        expect(node.state.accessControl.acl.filter(({ fabricIndex }) => fabricIndex === 1).length).equals(1);
+        expect(node.state.accessControl.acl.filter(({ fabricIndex }) => fabricIndex === 2).length).equals(1);
+        expect(Object.keys(node.state.commissioning.fabrics).length).equals(2);
+        expect(node.state.commissioning.fabrics[FabricIndex(1)]).to.be.ok;
+        expect(node.state.commissioning.fabrics[FabricIndex(2)]).to.be.ok;
+
+        const occurrences = node.env.get(OccurrenceManager);
+        const occurrencesPerFabric = new Map<FabricIndex, number>();
+        for await (const { payload } of occurrences.get()) {
+            if (isObject(payload) && "fabricIndex" in payload) {
+                const fabricIndex = FabricIndex(payload.fabricIndex as number);
+                occurrencesPerFabric.set(fabricIndex, (occurrencesPerFabric.get(fabricIndex) ?? 0) + 1);
+            }
+        }
+        expect(occurrencesPerFabric.get(FabricIndex(1))).equals(1);
+        expect(occurrencesPerFabric.get(FabricIndex(2))).equals(1);
+
+        await node.online(contextOptions, async agent => {
+            await agent.operationalCredentials.removeFabric({ fabricIndex: FabricIndex(1) });
+        });
+
+        // Verify that the fabric scoped data are gone for the removed fabricIndex 1, but still exist for Index 2
+        expect(node.state.operationalCredentials.nocs.filter(({ fabricIndex }) => fabricIndex === 1).length).equals(0);
+        expect(node.state.operationalCredentials.nocs.filter(({ fabricIndex }) => fabricIndex === 2).length).equals(1);
+        expect(node.state.accessControl.acl.filter(({ fabricIndex }) => fabricIndex === 1).length).equals(0);
+        expect(node.state.accessControl.acl.filter(({ fabricIndex }) => fabricIndex === 2).length).equals(1);
+        expect(Object.keys(node.state.commissioning.fabrics).length).equals(1);
+        expect(node.state.commissioning.fabrics[FabricIndex(1)]).to.be.not.ok;
+        expect(node.state.commissioning.fabrics[FabricIndex(2)]).to.be.ok;
+
+        occurrencesPerFabric.clear();
+        for await (const event of occurrences.get()) {
+            const { payload, clusterId, eventId } = event;
+            // count events but ignore the leave event, which is not fabric scoped
+            if (isObject(payload) && "fabricIndex" in payload && clusterId !== 0x28 && eventId !== 0x2) {
+                const fabricIndex = FabricIndex(payload.fabricIndex as number);
+                occurrencesPerFabric.set(fabricIndex, (occurrencesPerFabric.get(fabricIndex) ?? 0) + 1);
+            }
+        }
+        expect(occurrencesPerFabric.get(FabricIndex(1))).equals(undefined);
+        expect(occurrencesPerFabric.get(FabricIndex(2))).equals(1);
 
         await node.close();
     });

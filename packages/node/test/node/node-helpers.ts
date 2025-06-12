@@ -314,11 +314,14 @@ export namespace interaction {
         });
     }
 
-    export async function receiveData(node: MockServerNode, attributeCount: number, eventCount: number) {
+    export async function receiveData(node: MockServerNode, minAttributeCount: number, minEventCount: number) {
         const attributes = Array<AttributeReport>();
         const events = Array<EventReport>();
 
-        while (attributes.length < attributeCount || events.length < eventCount) {
+        while (
+            (minAttributeCount > 0 && attributes.length < minAttributeCount) ||
+            (minEventCount > 0 && events.length < minEventCount)
+        ) {
             const { attributeReports, eventReports } = await receiveDataReport(node);
             if (attributeReports) {
                 attributes.push(...attributeReports);
