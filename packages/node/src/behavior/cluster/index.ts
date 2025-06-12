@@ -9,4 +9,5 @@ export * from "./ClusterBehaviorUtil.js";
 export * from "./ClusterEvents.js";
 export * from "./ClusterInterface.js";
 export * from "./ClusterState.js";
+export * from "./FabricScopedDataHandler.js";
 export * from "./ValidatedElements.js";

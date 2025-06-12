@@ -418,7 +418,6 @@ describe("ServerNode", () => {
             // count events but ignore the leave event, which is not fabric scoped
             if (isObject(payload) && "fabricIndex" in payload && clusterId !== 0x28 && eventId !== 0x2) {
                 const fabricIndex = FabricIndex(payload.fabricIndex as number);
-                console.log(event);
                 occurrencesPerFabric.set(fabricIndex, (occurrencesPerFabric.get(fabricIndex) ?? 0) + 1);
             }
         }

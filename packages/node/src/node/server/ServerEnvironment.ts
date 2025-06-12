@@ -4,20 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { limitNodeDataToAllowedFabrics } from "#behaviors/operational-credentials";
+import { limitNodeDataToAllowedFabrics } from "#behavior/cluster/FabricScopedDataHandler.js";
 import { EndpointInitializer } from "#endpoint/index.js";
+import { ServerEndpointInitializer } from "#endpoint/server/ServerEndpointInitializer.js";
+import { Observable } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
 import { FabricManager, SessionManager } from "#protocol";
-import { Observable } from "@matter/general";
-import { ServerEndpointInitializer } from "../../endpoint/server/ServerEndpointInitializer.js";
 import { IdentityService } from "./IdentityService.js";
 
 /**
  * Manages the environment of a server.
  */
 export namespace ServerEnvironment {
-    /** Emmits the fabric-scoped data are sanitized after the removal of a fabric. Only use for testing! */
+    /** Emits the fabric-scoped data are sanitized after the removal of a fabric. Only use for testing! */
     export const fabricScopedDataSanitized = Observable();
 
     export async function initialize(node: ServerNode) {

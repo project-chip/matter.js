@@ -6,6 +6,7 @@
 
 import { Behavior } from "#behavior/Behavior.js";
 import type { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
+import { limitEndpointAttributeDataToAllowedFabrics } from "#behavior/cluster/FabricScopedDataHandler.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
@@ -26,7 +27,7 @@ import {
 } from "#general";
 import { FeatureSet } from "#model";
 import { ProtocolService } from "#node/server/ProtocolService.js";
-import { ClusterTypeProtocol, Val } from "#protocol";
+import { ClusterTypeProtocol, FabricManager, Val } from "#protocol";
 import { ClusterType, VoidSchema } from "#types";
 import { DescriptorServer } from "../../behaviors/descriptor/DescriptorServer.js";
 import type { Agent } from "../Agent.js";
@@ -219,6 +220,16 @@ export class Behaviors {
                 promise = promise.then(() => endpointInitializer.behaviorsInitialized(agent));
             } else {
                 promise = endpointInitializer.behaviorsInitialized(agent);
+            }
+
+            if (this.#endpoint.env.has(FabricManager)) {
+                const fabricIndices = this.#endpoint.env.get(FabricManager).fabrics.map(fabric => fabric.fabricIndex);
+                if (fabricIndices.length > 0) {
+                    // Make sure the state on startup only includes allowed Fabric scoped data
+                    return limitEndpointAttributeDataToAllowedFabrics(this.#endpoint, fabricIndices).then(
+                        () => promise,
+                    );
+                }
             }
 
             return promise;
