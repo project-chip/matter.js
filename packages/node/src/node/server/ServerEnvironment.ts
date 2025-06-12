@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { limitNodeDataToAllowedFabrics } from "#behaviors/operational-credentials";
 import { EndpointInitializer } from "#endpoint/index.js";
 import type { ServerNode } from "#node/ServerNode.js";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
 import { FabricManager, SessionManager } from "#protocol";
+import { Observable } from "@matter/general";
 import { ServerEndpointInitializer } from "../../endpoint/server/ServerEndpointInitializer.js";
 import { IdentityService } from "./IdentityService.js";
 
@@ -15,6 +17,9 @@ import { IdentityService } from "./IdentityService.js";
  * Manages the environment of a server.
  */
 export namespace ServerEnvironment {
+    /** Emmits the fabric-scoped data are sanitized after the removal of a fabric. Only use for testing! */
+    export const fabricScopedDataSanitized = Observable();
+
     export async function initialize(node: ServerNode) {
         const { env } = node;
 
@@ -24,7 +29,16 @@ export namespace ServerEnvironment {
         env.set(IdentityService, new IdentityService(node));
 
         // Ensure these are fully initialized
-        await env.load(FabricManager);
+        const fabrics = await env.load(FabricManager);
+
+        fabrics.events.deleted.on(async () => {
+            const fabricIndices = fabrics.fabrics.map(fabric => fabric.fabricIndex);
+            if (fabricIndices.length > 0) {
+                await limitNodeDataToAllowedFabrics(node, fabricIndices);
+            }
+            fabricScopedDataSanitized.emit(); // Only for testing purposes
+        });
+
         await env.load(SessionManager);
     }
 

@@ -9,3 +9,4 @@
 export * from "./OperationalCredentialsInterface.js";
 export * from "./OperationalCredentialsBehavior.js";
 export * from "./OperationalCredentialsServer.js";
+export * from "./FabricScopedDataHandler.js";

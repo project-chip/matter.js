@@ -15,20 +15,18 @@ import {
     MaybePromise,
     Network,
     NetworkSimulator,
-    Observable,
     StorageBackendMemory,
     StorageService,
 } from "#general";
 import { Node } from "#node/Node.js";
 import { ServerNode } from "#node/ServerNode.js";
-import { ExchangeManager, Fabric, FabricManager, MessageExchange, SessionManager, TestFabric } from "#protocol";
+import { ExchangeManager, FabricManager, MessageExchange, SessionManager, TestFabric } from "#protocol";
 import { FabricIndex, NodeId } from "#types";
 import { MockExchange } from "./mock-exchange.js";
 
 export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends ServerNode<T> {
     #newExchanges = new DataReadQueue<MockExchange>();
     #simulator = new NetworkSimulator();
-    readonly dataSanitized = Observable();
 
     constructor(type?: T, options?: Node.Options<T>, simulator?: NetworkSimulator);
     constructor(config: Partial<Node.Configuration<T>>);
@@ -171,11 +169,6 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
         await this.events.commissioning.fabricsChanged;
 
         return fabric;
-    }
-
-    override async sanitizeFabricData(fabric: Fabric) {
-        await super.sanitizeFabricData(fabric);
-        this.dataSanitized.emit();
     }
 }
 

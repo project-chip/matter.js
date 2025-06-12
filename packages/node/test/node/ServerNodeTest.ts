@@ -31,6 +31,7 @@ import {
 } from "#general";
 import { OfflineContext } from "#index.js";
 import { AccessLevel, BasicInformation, ElementTag, FeatureMap } from "#model";
+import { ServerEnvironment } from "#node/server/ServerEnvironment.js";
 import { ServerNode } from "#node/ServerNode.js";
 import { AttestationCertificateManager, CertificationDeclarationManager, Val } from "#protocol";
 import { FabricIndex, VendorId } from "#types";
@@ -400,7 +401,7 @@ describe("ServerNode", () => {
             await agent.operationalCredentials.removeFabric({ fabricIndex: FabricIndex(1) });
         });
 
-        await node.dataSanitized;
+        await ServerEnvironment.fabricScopedDataSanitized;
 
         // Verify that the fabric scoped data are gone for the removed fabricIndex 1, but still exist for Index 2
         expect(node.state.operationalCredentials.nocs.filter(({ fabricIndex }) => fabricIndex === 1).length).equals(0);
@@ -417,6 +418,7 @@ describe("ServerNode", () => {
             // count events but ignore the leave event, which is not fabric scoped
             if (isObject(payload) && "fabricIndex" in payload && clusterId !== 0x28 && eventId !== 0x2) {
                 const fabricIndex = FabricIndex(payload.fabricIndex as number);
+                console.log(event);
                 occurrencesPerFabric.set(fabricIndex, (occurrencesPerFabric.get(fabricIndex) ?? 0) + 1);
             }
         }
