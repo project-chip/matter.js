@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto, Logger, PublicKey, UnexpectedDataError } from "#general";
+import { Bytes, Logger, PublicKey, UnexpectedDataError } from "#general";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId, ProtocolStatusCode } from "#types";
@@ -49,11 +49,13 @@ export class CaseClient {
     }
 
     async #doPair(messenger: CaseClientMessenger, exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId) {
+        const { crypto } = fabric;
+
         // Generate pairing info
-        const initiatorRandom = Crypto.getRandom();
+        const initiatorRandom = crypto.randomBytes(32);
         const initiatorSessionId = await this.#sessions.getNextAvailableSessionId(); // Initiator Session Id
         const { operationalIdentityProtectionKey, operationalCert: localNoc, intermediateCACert: localIcac } = fabric;
-        const localKey = await Crypto.createKeyPair();
+        const localKey = await crypto.createKeyPair();
 
         // Send sigma1
         let sigma1Bytes;
@@ -61,12 +63,12 @@ export class CaseClient {
         let resumptionRecord = this.#sessions.findResumptionRecordByAddress(fabric.addressOf(peerNodeId));
         if (resumptionRecord !== undefined) {
             const { sharedSecret, resumptionId } = resumptionRecord;
-            const resumeKey = await Crypto.createHkdfKey(
+            const resumeKey = await crypto.createHkdfKey(
                 sharedSecret,
                 Bytes.concat(initiatorRandom, resumptionId),
                 KDFSR1_KEY_INFO,
             );
-            const initiatorResumeMic = Crypto.encrypt(resumeKey, new Uint8Array(0), RESUME1_MIC_NONCE);
+            const initiatorResumeMic = crypto.encrypt(resumeKey, new Uint8Array(0), RESUME1_MIC_NONCE);
             sigma1Bytes = await messenger.sendSigma1({
                 initiatorSessionId,
                 destinationId: await fabric.currentDestinationIdFor(peerNodeId, initiatorRandom),
@@ -106,8 +108,8 @@ export class CaseClient {
             };
 
             const resumeSalt = Bytes.concat(initiatorRandom, resumptionId);
-            const resumeKey = await Crypto.createHkdfKey(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
-            Crypto.decrypt(resumeKey, resumeMic, RESUME2_MIC_NONCE);
+            const resumeKey = await crypto.createHkdfKey(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
+            crypto.decrypt(resumeKey, resumeMic, RESUME2_MIC_NONCE);
 
             const secureSessionSalt = Bytes.concat(initiatorRandom, resumptionRecord.resumptionId);
             secureSession = await this.#sessions.createSecureSession({
@@ -145,15 +147,15 @@ export class CaseClient {
                 ...exchange.session.parameters,
                 ...(responderSessionParams ?? {}),
             };
-            const sharedSecret = await Crypto.generateDhSecret(localKey, PublicKey(peerKey));
+            const sharedSecret = await crypto.generateDhSecret(localKey, PublicKey(peerKey));
             const sigma2Salt = Bytes.concat(
                 operationalIdentityProtectionKey,
                 responderRandom,
                 peerKey,
-                await Crypto.computeSha256(sigma1Bytes),
+                await crypto.computeSha256(sigma1Bytes),
             );
-            const sigma2Key = await Crypto.createHkdfKey(sharedSecret, sigma2Salt, KDFSR2_INFO);
-            const peerEncryptedData = Crypto.decrypt(sigma2Key, peerEncrypted, TBE_DATA2_NONCE);
+            const sigma2Key = await crypto.createHkdfKey(sharedSecret, sigma2Salt, KDFSR2_INFO);
+            const peerEncryptedData = crypto.decrypt(sigma2Key, peerEncrypted, TBE_DATA2_NONCE);
             const {
                 responderNoc: peerNoc,
                 responderIcac: peerIcac,
@@ -171,7 +173,7 @@ export class CaseClient {
                 subject: { fabricId: peerFabricIdNOCert, nodeId: peerNodeIdNOCert },
             } = TlvOperationalCertificate.decode(peerNoc);
 
-            await Crypto.verifyEcdsa(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
+            await crypto.verifyEcdsa(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
             if (peerNodeIdNOCert !== peerNodeId) {
                 throw new UnexpectedDataError(
@@ -199,9 +201,9 @@ export class CaseClient {
             // Generate and send sigma3
             const sigma3Salt = Bytes.concat(
                 operationalIdentityProtectionKey,
-                await Crypto.computeSha256([sigma1Bytes, sigma2Bytes]),
+                await crypto.computeSha256([sigma1Bytes, sigma2Bytes]),
             );
-            const sigma3Key = await Crypto.createHkdfKey(sharedSecret, sigma3Salt, KDFSR3_INFO);
+            const sigma3Key = await crypto.createHkdfKey(sharedSecret, sigma3Salt, KDFSR3_INFO);
             const signatureData = TlvSignedData.encode({
                 responderNoc: localNoc,
                 responderIcac: localIcac,
@@ -214,7 +216,7 @@ export class CaseClient {
                 responderIcac: localIcac,
                 signature,
             });
-            const encrypted = Crypto.encrypt(sigma3Key, encryptedData, TBE_DATA3_NONCE);
+            const encrypted = crypto.encrypt(sigma3Key, encryptedData, TBE_DATA3_NONCE);
             const sigma3Bytes = await messenger.sendSigma3({ encrypted });
             await messenger.waitForSuccess("Sigma3-Success");
 
@@ -222,7 +224,7 @@ export class CaseClient {
             const { caseAuthenticatedTags } = resumptionRecord ?? {}; // Even if resumption does not work try to reuse the caseAuthenticatedTags
             const secureSessionSalt = Bytes.concat(
                 operationalIdentityProtectionKey,
-                await Crypto.computeSha256([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
+                await crypto.computeSha256([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
             secureSession = await this.#sessions.createSecureSession({
                 sessionId: initiatorSessionId,

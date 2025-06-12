@@ -12,7 +12,7 @@ import { StateType } from "#behavior/state/StateType.js";
 import { BehaviorSupervisor } from "#behavior/supervision/BehaviorSupervisor.js";
 import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
-import { AsyncObservable, MaybePromise, Observable, UnsettledStateError } from "#general";
+import { AsyncObservable, MaybePromise, MockCrypto, Observable, UnsettledStateError } from "#general";
 import { DataModelPath, DatatypeModel, FieldElement, FieldModel } from "#model";
 import { Val } from "#protocol";
 import { EndpointNumber } from "#types";
@@ -52,6 +52,7 @@ function createDatasource<const T extends StateType = typeof MyState>(
     options: Partial<Datasource.Options<T>> = {},
 ): Datasource<T> {
     return Datasource({
+        crypto: MockCrypto(),
         location: {
             endpoint: EndpointNumber(1),
             path: DataModelPath("TestDatasource"),

@@ -5,10 +5,12 @@
  */
 
 import { Spake2p } from "#crypto/Spake2p.js";
-import { Crypto } from "#index.js";
+import { MockCrypto } from "#index.js";
 import { Bytes } from "#util/Bytes.js";
 
 describe("Spake2p", () => {
+    const crypto = MockCrypto();
+
     describe("https://datatracker.ietf.org/doc/html/draft-bar-cfrg-spake2plus-01 test vectors", () => {
         const context = Bytes.fromString("SPAKE2+-P256-SHA256-HKDF draft-01");
         const w0 = BigInt("0xe6887cf9bdfb7579c69bf47928a84514b5e355ac034863f7ffaf4390e67d798c");
@@ -27,8 +29,8 @@ describe("Spake2p", () => {
         const Ke = Bytes.fromHex("ea3276d68334576097e04b19ee5a3a8b");
         const hAY = Bytes.fromHex("71d9412779b6c45a2c615c9df3f1fd93dc0aaf63104da8ece4aa1b5a3a415fea");
         const hBX = Bytes.fromHex("095dc0400355cc233fde7437811815b3c1524aae80fd4e6810cf531cf11d20e3");
-        const spake2pInitiator = new Spake2p(context, x, w0);
-        const spake2pReceiver = new Spake2p(context, y, w0);
+        const spake2pInitiator = new Spake2p(crypto, context, x, w0);
+        const spake2pReceiver = new Spake2p(crypto, context, y, w0);
 
         it("generates X", () => {
             const result = spake2pInitiator.computeX();
@@ -78,7 +80,7 @@ describe("Spake2p", () => {
                     "15300120b2901e92036f7bca007a3a1bf24bd71f18772105e83479c92b7a8af35e81827430022008070f685f2077779b824adf91e4bab6253b9d1a3c0f6615c6d447780f0feef325039c8d35042501e803300220163f8501fbbc0e6a8f69a9b999d038ca388ecffccc18fe259c4253f26e494dda1835052501881325022c011818",
                 ),
             );
-            const result = await Crypto.computeSha256(context);
+            const result = await crypto.computeSha256(context);
 
             expect(Bytes.toHex(result)).equals("c49718b0275b6f81fd6a081f6c34c5833382b75b3bd997895d13a51c71a02855");
         });

@@ -7,7 +7,7 @@
 import { limitNodeDataToAllowedFabrics } from "#behavior/cluster/FabricScopedDataHandler.js";
 import { EndpointInitializer } from "#endpoint/index.js";
 import { ServerEndpointInitializer } from "#endpoint/server/ServerEndpointInitializer.js";
-import { Observable } from "#general";
+import { Crypto, Observable } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
 import { FabricManager, SessionManager } from "#protocol";
@@ -40,6 +40,8 @@ export namespace ServerEnvironment {
         });
 
         await env.load(SessionManager);
+
+        env.get(Crypto).reportUsage(node.id);
     }
 
     export async function close(node: ServerNode) {

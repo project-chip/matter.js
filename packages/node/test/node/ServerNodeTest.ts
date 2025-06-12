@@ -18,11 +18,13 @@ import { EndpointBehaviorsError, EndpointPartsError } from "#endpoint/errors.js"
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import {
     CrashedDependenciesError,
+    Crypto,
     DnsCodec,
     DnsMessage,
     DnsRecordType,
     Environment,
     isObject,
+    MockCrypto,
     MockUdpChannel,
     NetworkSimulator,
     StorageBackendMemory,
@@ -252,9 +254,13 @@ describe("ServerNode", () => {
                 type: ServerNode.RootEndpoint,
                 operationalCredentials: {
                     certification: async () => {
-                        const paa = await AttestationCertificateManager.create(vendorId);
+                        const paa = await AttestationCertificateManager.create(MockCrypto(), vendorId);
                         const { keyPair: dacKeyPair, dac } = await paa.getDACert(productId);
-                        const declaration = await CertificationDeclarationManager.generate(vendorId, productId);
+                        const declaration = await CertificationDeclarationManager.generate(
+                            MockCrypto(),
+                            vendorId,
+                            productId,
+                        );
 
                         commissioningServer2CertificateProviderCalled = true;
                         return {
@@ -360,6 +366,7 @@ describe("ServerNode", () => {
             lastFabricsCount = fabrics.length;
         });
 
+        (node.env.get(Crypto) as MockCrypto).index++;
         await commissioning.commission(node, 2);
 
         expect(node.state.operationalCredentials.nocs.length).equals(2);
@@ -375,6 +382,7 @@ describe("ServerNode", () => {
     it("commissions twice and removes first including fabric scoped data", async () => {
         const { node, contextOptions } = await commissioning.commission();
 
+        (node.env.get(Crypto) as MockCrypto).index++;
         await commissioning.commission(node, 2);
 
         //Verify that each fabric has some fabric scoped data in common places like nocs and acl

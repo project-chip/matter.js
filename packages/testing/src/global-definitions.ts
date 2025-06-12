@@ -11,7 +11,6 @@ import Chai from "chai";
 import ChaiAsPromised from "chai-as-promised";
 import { browserSetup, extendApi, generalSetup } from "./mocha.js";
 import { bootSetup } from "./mocks/boot.js";
-import { MockCrypto, cryptoSetup } from "./mocks/crypto.js";
 import { MockLogger, loggerSetup } from "./mocks/logging.js";
 import { timeSetup } from "./mocks/time.js";
 
@@ -26,12 +25,9 @@ Object.assign(globalThis, {
         bootSetup,
         loggerSetup,
         timeSetup,
-        cryptoSetup,
     },
 
     MockLogger,
-
-    MockCrypto,
 });
 
 if (globalThis === (globalThis as any).window) {

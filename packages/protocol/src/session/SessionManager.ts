@@ -10,7 +10,6 @@ import {
     BasicSet,
     Bytes,
     Construction,
-    Crypto,
     Environment,
     Environmental,
     Lifecycle,
@@ -124,9 +123,9 @@ export class SessionManager {
     readonly #insecureSessions = new Map<NodeId, InsecureSession>();
     readonly #sessions = new BasicSet<NodeSession>();
     readonly #groupSessions = new Map<NodeId, BasicSet<GroupSession>>();
-    #nextSessionId = Crypto.getRandomUInt16();
+    #nextSessionId: number;
     #resumptionRecords = new PeerAddressMap<ResumptionRecord>();
-    readonly #globalUnencryptedMessageCounter = new MessageCounter();
+    readonly #globalUnencryptedMessageCounter;
     readonly #subscriptionsChanged = Observable<[session: NodeSession, subscription: Subscription]>();
     #sessionParameters: SessionParameters;
     readonly #resubmissionStarted = Observable<[session: Session]>();
@@ -137,7 +136,12 @@ export class SessionManager {
 
     constructor(context: SessionManagerContext) {
         this.#context = context;
+        const {
+            fabrics: { crypto },
+        } = context;
         this.#sessionParameters = { ...DEFAULT_SESSION_PARAMETERS, ...context.parameters };
+        this.#nextSessionId = crypto.randomUint16;
+        this.#globalUnencryptedMessageCounter = new MessageCounter(crypto);
 
         // When fabric is removed, also remove the resumption record
         this.#observers.on(context.fabrics.events.deleted, async fabric => {
@@ -162,6 +166,10 @@ export class SessionManager {
 
     get context() {
         return this.#context;
+    }
+
+    get crypto() {
+        return this.#context.fabrics.crypto;
     }
 
     /**
@@ -242,6 +250,7 @@ export class SessionManager {
         }
         while (true) {
             const session = new InsecureSession({
+                crypto: this.#context.fabrics.crypto,
                 manager: this,
                 messageCounter: this.#globalUnencryptedMessageCounter,
                 initiatorNodeId,
@@ -284,6 +293,7 @@ export class SessionManager {
             caseAuthenticatedTags,
         } = args;
         const session = await NodeSession.create({
+            crypto: this.crypto,
             manager: this,
             id: sessionId,
             fabric,
@@ -698,7 +708,7 @@ export class SessionManager {
      */
     compressIdRange(upperBound: number) {
         this.#idUpperBound = upperBound;
-        this.#nextSessionId = Crypto.getRandomUInt32() % upperBound;
+        this.#nextSessionId = this.#context.fabrics.crypto.randomUint32 % upperBound;
         if (this.#nextSessionId === 0) this.#nextSessionId++;
     }
 }

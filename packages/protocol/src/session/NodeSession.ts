@@ -30,6 +30,7 @@ export class NoAssociatedFabricError extends StatusResponseError {
 }
 
 export class NodeSession extends SecureSession {
+    readonly #crypto: Crypto;
     readonly #subscriptions = new BasicSet<Subscription>();
     #closingAfterExchangeFinished = false;
     #sendCloseMessageWhenClosing = true;
@@ -47,6 +48,7 @@ export class NodeSession extends SecureSession {
     readonly type = SessionType.Unicast;
 
     static async create(args: {
+        crypto: Crypto;
         manager?: SessionManager;
         id: number;
         fabric: Fabric | undefined;
@@ -60,6 +62,7 @@ export class NodeSession extends SecureSession {
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
     }) {
         const {
+            crypto,
             manager,
             id,
             fabric,
@@ -72,7 +75,7 @@ export class NodeSession extends SecureSession {
             peerSessionParameters,
             caseAuthenticatedTags,
         } = args;
-        const keys = await Crypto.createHkdfKey(
+        const keys = await args.crypto.createHkdfKey(
             sharedSecret,
             salt,
             isResumption ? SESSION_RESUMPTION_KEYS_INFO : SESSION_KEYS_INFO,
@@ -82,6 +85,7 @@ export class NodeSession extends SecureSession {
         const encryptKey = isInitiator ? keys.slice(0, 16) : keys.slice(16, 32);
         const attestationKey = keys.slice(32, 48);
         return new NodeSession({
+            crypto,
             manager,
             id,
             fabric,
@@ -97,6 +101,7 @@ export class NodeSession extends SecureSession {
     }
 
     constructor(args: {
+        crypto: Crypto;
         manager?: SessionManager;
         id: number;
         fabric: Fabric | undefined;
@@ -109,18 +114,8 @@ export class NodeSession extends SecureSession {
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
         isInitiator: boolean;
     }) {
-        super({
-            ...args,
-            setActiveTimestamp: true, // We always set the active timestamp for Secure sessions
-            // Can be changed to a PersistedMessageCounter if we implement session storage
-            messageCounter: new MessageCounter(() => {
-                // Secure Session Message Counter
-                // Expire/End the session before the counter rolls over
-                this.end(true, true).catch(error => logger.error(`Error while closing session: ${error}`));
-            }),
-            messageReceptionState: new MessageReceptionStateEncryptedWithoutRollover(),
-        });
         const {
+            crypto,
             manager,
             id,
             fabric,
@@ -133,6 +128,19 @@ export class NodeSession extends SecureSession {
             isInitiator,
         } = args;
 
+        super({
+            ...args,
+            setActiveTimestamp: true, // We always set the active timestamp for Secure sessions
+            // Can be changed to a PersistedMessageCounter if we implement session storage
+            messageCounter: new MessageCounter(crypto, () => {
+                // Secure Session Message Counter
+                // Expire/End the session before the counter rolls over
+                this.end(true, true).catch(error => logger.error(`Error while closing session: ${error}`));
+            }),
+            messageReceptionState: new MessageReceptionStateEncryptedWithoutRollover(),
+        });
+
+        this.#crypto = crypto;
         this.#id = id;
         this.#fabric = fabric;
         this.#peerNodeId = peerNodeId;
@@ -220,7 +228,7 @@ export class NodeSession extends SecureSession {
         const nonce = Session.generateNonce(header.securityFlags, header.messageId, this.#peerNodeId);
         const message = MessageCodec.decodePayload({
             header,
-            applicationPayload: Crypto.decrypt(this.#decryptKey, applicationPayload, nonce, aad),
+            applicationPayload: this.#crypto.decrypt(this.#decryptKey, applicationPayload, nonce, aad),
         });
 
         if (message.payloadHeader.hasSecuredExtension) {
@@ -241,7 +249,10 @@ export class NodeSession extends SecureSession {
             ? NodeId.UNSPECIFIED_NODE_ID
             : (this.#fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID);
         const nonce = Session.generateNonce(securityFlags, header.messageId, sessionNodeId);
-        return { header, applicationPayload: Crypto.encrypt(this.#encryptKey, applicationPayload, nonce, headerBytes) };
+        return {
+            header,
+            applicationPayload: this.#crypto.encrypt(this.#encryptKey, applicationPayload, nonce, headerBytes),
+        };
     }
 
     get attestationChallengeKey(): Uint8Array {

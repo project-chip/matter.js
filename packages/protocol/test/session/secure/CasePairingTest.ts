@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { b$, Bytes, Crypto, PublicKey } from "#general";
+import { b$, Bytes, PublicKey, StandardCrypto } from "#general";
 import { TlvEncryptedDataSigma2, TlvEncryptedDataSigma3, TlvSignedData } from "#session/index.js";
 
 describe("CasePairing", () => {
+    const crypto = new StandardCrypto();
+
     describe("pair", () => {
         it("generates the right bytes for sigma 2", async () => {
             const sigma1Bytes = b$`153001208681a088651b1803d3027e7994756aedb4c4bd56ca1f5e1c54cf6da4a104fffa25028830300320066ab9dc4e84686b9fb7850d4b8306e8c42189f39c919459a552cf27ad34004230044104ae6e458cf40ad53761ee90bc458aa577e6a1acf75410524551bb0bc4c708832c6525991ee2eed47df35ce2d83dad743bff6769ebbf731395d62453cb37303e0335052501881325022c011818`;
@@ -19,13 +21,13 @@ describe("CasePairing", () => {
             const peerPubKey = b$`04ae6e458cf40ad53761ee90bc458aa577e6a1acf75410524551bb0bc4c708832c6525991ee2eed47df35ce2d83dad743bff6769ebbf731395d62453cb37303e03`;
             const fabricPubKey = b$`04531a14e4c1b4cc7ac69aa5e403d5ccc3c5152c29fddedc29ac98ecff6c8f8695317446029cf3eb3e295ee18f0fd0ba9f06f7fa229138db0bc8d8c6f9875c9707`;
 
-            const sigma2Salt = Bytes.concat(ipk, random, pubKey, await Crypto.computeSha256(sigma1Bytes));
+            const sigma2Salt = Bytes.concat(ipk, random, pubKey, await crypto.computeSha256(sigma1Bytes));
 
             expect(Bytes.toHex(sigma2Salt)).to.equal(
                 "0c677d9b5ac585827b577470bd9bd51675d1443943a23371699bb017958a87e9ec6bbcad5f990aa3822a45bec778648904e2690445cc017a388853eaeca3a1ffd2712f6898e0bb523b8b496590804a39bf1555300bbd2a159e927b428397fb07a41e26c8cdf858ec62a310d0480d94eb64df506d7014c72ed4a18169954cf24a5cacf44fc7c13eb39906c06a50864f8106",
             );
 
-            const sigma2Key = await Crypto.createHkdfKey(sharedSecret, sigma2Salt, Bytes.fromString("Sigma2"));
+            const sigma2Key = await crypto.createHkdfKey(sharedSecret, sigma2Salt, Bytes.fromString("Sigma2"));
 
             expect(Bytes.toHex(sigma2Key)).to.equal("7ed5e720195c511dc2d97535e262f935");
 
@@ -41,7 +43,7 @@ describe("CasePairing", () => {
 
             const signature = b$`1736972364d84c4ae069f642f491256c6e74c86eda9f5ed4d89dfd7cadb68b67574f032afa2764fcc890e9218eaedcc484576d2d65e4df1ae22dd916f12ab59e`;
 
-            await Crypto.verifyEcdsa(PublicKey(fabricPubKey), signatureData, signature);
+            await crypto.verifyEcdsa(PublicKey(fabricPubKey), signatureData, signature);
 
             const encryptedDataPlain = TlvEncryptedDataSigma2.encode({
                 responderNoc: noc,
@@ -53,19 +55,19 @@ describe("CasePairing", () => {
                 "153001f1153001010124020137032414001826048012542826058015203b370624150124115a1824070124080130094104531a14e4c1b4cc7ac69aa5e403d5ccc3c5152c29fddedc29ac98ecff6c8f8695317446029cf3eb3e295ee18f0fd0ba9f06f7fa229138db0bc8d8c6f9875c9707370a3501280118240201360304020401183004149038f60c3542d5e610f29abc5f42ac09b07ee0d7300514e766069362d7e35b79687161644d222bdde93a6818300b40cbd9a06e77e9a7bcd19d02da0f2e50042f7d78201e8be26e793e995ca8f02f1094b34d0fd53b1f1458908d0d29183f2611e6132c6401d15dfff081d1021358ad183003401736972364d84c4ae069f642f491256c6e74c86eda9f5ed4d89dfd7cadb68b67574f032afa2764fcc890e9218eaedcc484576d2d65e4df1ae22dd916f12ab59e3004108731f8cec507136df7558fca9360e9fc18",
             );
 
-            const encrypted = Crypto.encrypt(sigma2Key, encryptedDataPlain, Bytes.fromString("NCASE_Sigma2N"));
+            const encrypted = crypto.encrypt(sigma2Key, encryptedDataPlain, Bytes.fromString("NCASE_Sigma2N"));
 
             expect(Bytes.toHex(encrypted)).to.equal(
                 "7db57138c40bd8f37deb377764270e35143ec2cadfa73ef138d5ff3818ca3f003db767061051a19cb2cb1756ff214a855b6c32a07798c22756ff22338928928baa9ed8ab9484e3a662612616a95a7dbd11ac8d84ebe33b141366349452e47ebac98423140dffa764c83257c079c29a925f5a065ba98c491ae54289fc3d09d8bd8519e9f82dd51dfe4317e22b8481ada14462f01a1b837dc7af1000a3869bc1f9539d69cf73e0eb2377e35b5f9799ccb38b14dab2735edf37660a641669031820133122b5b62267b8b543e797977278b4bef14b6a820749ce66617251356ab8b759ccb3b3cdb376ec1862268aacb46145527f7940794fbc77c852a02bafb64e8e461e50349a342c34f493ac20abc7442ecf78531b4e07047af37dbe2e4746fb344169dd302f1ecc9339cb54a40b11957e2d395e4bcfb98a560247dffa5c22454febdb94b82c40838a279143a089b6ef8df76222ecdf4e04bcd6e6e222",
             );
         });
 
-        it("generates the right signature", () => {
+        it("generates the right signature", async () => {
             const fabricPubKey = b$`049bfa105c3d209ff226c31da689dafb297b73499ec1844bba89c60ce65938b722300dd0abbb201e9451c6ab284ec99b8d90c5dd892388c59fde30c299c64af8c4`;
             const signatureData = b$`153001f1153001010124020137032414001826048012542826058015203b370624150124115d18240701240801300941049bfa105c3d209ff226c31da689dafb297b73499ec1844bba89c60ce65938b722300dd0abbb201e9451c6ab284ec99b8d90c5dd892388c59fde30c299c64af8c4370a3501280118240201360304020401183004142c3494bc756f4b58a73bde64a3141285a3efd5c9300514e766069362d7e35b79687161644d222bdde93a6818300b406772b5445ef466a669d9e5e5663238b817511e73ce992937ddd975690abda8b86b0a79f2fd49bae78c653fad9bd3d53463d4abd7f996964988a7644c4cc1d0321830020030034104473bd04e2a9c4e6a12b9008739c64a16d0113295822faf17e3d2ffcb77b0cae437701b0f0525ddcc6139da5a56dfda2af2b86a2836ef6b03f8f5c231dbaf950b3004410441838848a7e58ab46a1a71a539c474780002bf22adccbeaa43ee07f5176c61aaa3d718102333fc856595ea3a6a5bfd37d2890049acb82c49440e1f490cd970e018`;
             const signature = b$`75e35c22a5da60805d65772b3d4decc8c6eabe30bd2925608524ea12b729efd00a12faeb5757cdfc65aaefddd01c57be9f14d37e2c0beca43434f8ebdd81d635`;
 
-            Crypto.verifyEcdsa(PublicKey(fabricPubKey), signatureData, signature);
+            await crypto.verifyEcdsa(PublicKey(fabricPubKey), signatureData, signature);
         });
 
         it("generates the right bytes for sigma 3", async () => {
@@ -80,18 +82,18 @@ describe("CasePairing", () => {
 
             const sigma3Salt = Bytes.concat(
                 identityProtectionKey,
-                await Crypto.computeSha256([sigma1Bytes, sigma2Bytes]),
+                await crypto.computeSha256([sigma1Bytes, sigma2Bytes]),
             );
 
             expect(Bytes.toHex(sigma3Salt)).to.equal(
                 "0c677d9b5ac585827b577470bd9bd51678d8306a4055524d843215d1e697791dd53abd3db440370264bf9d191f1cb786",
             );
 
-            const sigma3Key = await Crypto.createHkdfKey(sharedSecret, sigma3Salt, Bytes.fromString("Sigma3"));
+            const sigma3Key = await crypto.createHkdfKey(sharedSecret, sigma3Salt, Bytes.fromString("Sigma3"));
 
             expect(Bytes.toHex(sigma3Key)).to.equal("5ba760e89d08efcfe22dbe5832684415");
 
-            const peerEncryptedData = Crypto.decrypt(sigma3Key, peerEncrypted, Bytes.fromString("NCASE_Sigma3N"));
+            const peerEncryptedData = crypto.decrypt(sigma3Key, peerEncrypted, Bytes.fromString("NCASE_Sigma3N"));
 
             expect(Bytes.toHex(peerEncryptedData)).to.equal(
                 "153001f4153001010124020137032414001826048012542826058015203b3706241501261169b6010018240701240801300941041b5c00110e57c1c9bc0619ada179f31bb8c07c8b95b5b0f94ffb21acb87c4d307678026d858be56e2a2ad146b3a895480fc8a616c9199980bd620503f4a311e7370a3501280118240201360304020401183004144cf0ce8e72e489e884550045a3bc6469b135fa3c300514e766069362d7e35b79687161644d222bdde93a6818300b40fa1b589089ed43e6ea3dc500eb18b4933d735c3cf384246e641fe13701a46cfe5d5e7b8d9e6e6e7d203d24c23c7f8b56a7849b813c0bb8709a47ce089d19a71b18300340b474e61e26d3a4bb243890632e2c12a82263a9433f31e9c0303d7b3ffc61799bce5b219679c90c820eebb9af5fb8066c7d459b69cef49e37ccbb8c66534240f218",
@@ -112,9 +114,9 @@ describe("CasePairing", () => {
 
             const secureSessionSalt = Bytes.concat(
                 identityProtectionKey,
-                await Crypto.computeSha256([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
+                await crypto.computeSha256([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
-            const decryptKey = await Crypto.createHkdfKey(
+            const decryptKey = await crypto.createHkdfKey(
                 sharedSecret,
                 secureSessionSalt,
                 Bytes.fromString("SessionKeys"),

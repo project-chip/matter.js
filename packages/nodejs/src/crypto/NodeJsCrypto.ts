@@ -22,7 +22,7 @@ import {
 } from "#general";
 import * as crypto from "node:crypto";
 
-export class NodeJsCrypto implements Crypto {
+export class NodeJsCrypto extends Crypto {
     implementationName = "Node.js";
 
     encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array {
@@ -55,7 +55,7 @@ export class NodeJsCrypto implements Crypto {
         return new Uint8Array(result);
     }
 
-    getRandomData(length: number): Uint8Array {
+    randomBytes(length: number): Uint8Array {
         return new Uint8Array(crypto.randomBytes(length));
     }
 

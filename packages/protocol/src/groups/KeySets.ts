@@ -141,9 +141,9 @@ export class KeySets<T extends OperationalKeySet> extends BasicSet<T> {
     }
 
     /** Calculates a group session id based on the operational group key. */
-    async sessionIdFromKey(operationalGroupKey: Uint8Array) {
+    async sessionIdFromKey(crypto: Crypto, operationalGroupKey: Uint8Array) {
         // GroupKeyHash is an array of 2 bytes (16 bits) per Crypto_KDF
-        const groupKeyHash = await Crypto.createHkdfKey(operationalGroupKey, new Uint8Array(), GROUP_KEY_INFO, 2);
+        const groupKeyHash = await crypto.createHkdfKey(operationalGroupKey, new Uint8Array(), GROUP_KEY_INFO, 2);
 
         // GroupSessionId is computed by considering the GroupKeyHash as a Big-Endian value. GroupSessionId is a scalar.
         // Its use in fields within messages may cause a re-serialization into a different byte order than the one used

@@ -258,6 +258,7 @@ export class PairedNode {
     #options: CommissioningControllerNodeOptions;
     readonly #reconnectFunc: (discoveryType?: NodeDiscoveryType, noForcedConnection?: boolean) => Promise<void>;
     #currentSubscriptionIntervalS?: number;
+    #crypto: Crypto;
 
     readonly events = {
         /**
@@ -303,6 +304,7 @@ export class PairedNode {
         reconnectFunc: (discoveryType?: NodeDiscoveryType, noForcedConnection?: boolean) => Promise<void>,
         assignDisconnectedHandler: (handler: () => Promise<void>) => void,
         sessions: BasicSet<NodeSession>,
+        crypto: Crypto,
         storedAttributeData?: DecodedAttributeReportValue<any>[],
     ): Promise<PairedNode> {
         const node = new PairedNode(
@@ -314,6 +316,7 @@ export class PairedNode {
             reconnectFunc,
             assignDisconnectedHandler,
             sessions,
+            crypto,
             storedAttributeData,
         );
         await node.construction;
@@ -329,6 +332,7 @@ export class PairedNode {
         reconnectFunc: (discoveryType?: NodeDiscoveryType, noForcedConnection?: boolean) => Promise<void>,
         assignDisconnectedHandler: (handler: () => Promise<void>) => void,
         sessions: BasicSet<NodeSession, NodeSession>,
+        crypto: Crypto,
         storedAttributeData?: DecodedAttributeReportValue<any>[],
     ) {
         assignDisconnectedHandler(async () => {
@@ -345,6 +349,7 @@ export class PairedNode {
         this.#commissioningController = commissioningController;
         this.#options = options;
         this.#reconnectFunc = reconnectFunc;
+        this.#crypto = crypto;
 
         this.#interactionClient = interactionClient;
         if (this.#interactionClient.isReconnectable) {
@@ -1283,11 +1288,11 @@ export class PairedNode {
         const vendorId = await basicInformationCluster.getVendorIdAttribute();
         const productId = await basicInformationCluster.getProductIdAttribute();
 
-        const discriminator = PaseClient.generateRandomDiscriminator();
-        const passcode = PaseClient.generateRandomPasscode();
-        const salt = Crypto.getRandomData(32);
+        const discriminator = PaseClient.generateRandomDiscriminator(this.#crypto);
+        const passcode = PaseClient.generateRandomPasscode(this.#crypto);
+        const salt = this.#crypto.randomBytes(32);
         const iterations = 1_000; // Minimum 1_000, Maximum 100_000
-        const pakePasscodeVerifier = await PaseClient.generatePakePasscodeVerifier(passcode, {
+        const pakePasscodeVerifier = await PaseClient.generatePakePasscodeVerifier(this.#crypto, passcode, {
             iterations,
             salt,
         });

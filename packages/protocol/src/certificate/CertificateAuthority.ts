@@ -38,6 +38,7 @@ const logger = Logger.get("CertificateAuthority");
  * TODO: Add support for (optional) ICACs
  */
 export class CertificateAuthority {
+    #certs: CertificateManager;
     #rootCertId = BigInt(0);
     #rootKeyPair?: PrivateKey;
     #rootKeyIdentifier?: Uint8Array<ArrayBufferLike>;
@@ -45,21 +46,29 @@ export class CertificateAuthority {
     #nextCertificateId = BigInt(1);
     #construction: Construction<CertificateAuthority>;
 
+    get certs() {
+        return this.#certs;
+    }
+
     get construction() {
         return this.#construction;
     }
 
-    static async create(options?: StorageContext | CertificateAuthority.Configuration) {
-        return asyncNew(CertificateAuthority, options);
+    static async create(crypto: Crypto, options?: StorageContext | CertificateAuthority.Configuration) {
+        return asyncNew(CertificateAuthority, crypto, options);
     }
 
-    constructor(options?: StorageContext | CertificateAuthority.Configuration) {
+    constructor(crypto: Crypto, options?: StorageContext | CertificateAuthority.Configuration) {
+        this.#certs = new CertificateManager(crypto);
         this.#construction = Construction(this, async () => {
             // Use provided CA config or read from storage, otherwise initialize and store
             const certValues = options instanceof StorageContext ? await options.values() : (options ?? {});
 
-            this.#rootKeyPair = await Crypto.createKeyPair();
-            this.#rootKeyIdentifier = (await Crypto.computeSha256(this.#rootKeyPair.publicKey)).slice(0, 20);
+            this.#rootKeyPair = await this.#certs.crypto.createKeyPair();
+            this.#rootKeyIdentifier = (await this.#certs.crypto.computeSha256(this.#rootKeyPair.publicKey)).slice(
+                0,
+                20,
+            );
             this.#rootCertBytes = await this.#generateRootCert();
 
             if (
@@ -94,7 +103,7 @@ export class CertificateAuthority {
 
     static [Environmental.create](env: Environment) {
         const storage = env.get(StorageManager).createContext("certificates");
-        const instance = new CertificateAuthority(storage);
+        const instance = new CertificateAuthority(env.get(Crypto), storage);
         env.set(CertificateAuthority, instance);
         return instance;
     }
@@ -135,9 +144,9 @@ export class CertificateAuthority {
                 authorityKeyIdentifier: this.#initializedRootKeyIdentifier,
             },
         };
-        const signature = await Crypto.signEcdsa(
+        const signature = await this.#certs.crypto.signEcdsa(
             this.#initializedRootKeyPair,
-            CertificateManager.rootCertToAsn1(unsignedCertificate),
+            this.#certs.rootCertToAsn1(unsignedCertificate),
         );
         return TlvRootCertificate.encode({ ...unsignedCertificate, signature });
     }
@@ -166,14 +175,14 @@ export class CertificateAuthority {
                     digitalSignature: true,
                 },
                 extendedKeyUsage: [2, 1],
-                subjectKeyIdentifier: (await Crypto.computeSha256(publicKey)).slice(0, 20),
+                subjectKeyIdentifier: (await this.#certs.crypto.computeSha256(publicKey)).slice(0, 20),
                 authorityKeyIdentifier: this.#initializedRootKeyIdentifier,
             },
         };
 
-        const signature = await Crypto.signEcdsa(
+        const signature = await this.#certs.crypto.signEcdsa(
             this.#initializedRootKeyPair,
-            CertificateManager.nodeOperationalCertToAsn1(unsignedCertificate),
+            this.#certs.nodeOperationalCertToAsn1(unsignedCertificate),
         );
 
         return TlvOperationalCertificate.encode({ ...unsignedCertificate, signature });

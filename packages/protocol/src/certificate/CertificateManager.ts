@@ -578,52 +578,62 @@ function extensionsToAsn1(extensions: BaseCertificate["extensions"]) {
     return asn;
 }
 
-export namespace CertificateManager {
-    function assertCertificateDerSize(certBytes: Uint8Array) {
-        if (certBytes.length > MAX_DER_CERTIFICATE_SIZE) {
-            throw new ImplementationError(
-                `Certificate to generate is too big: ${certBytes.length} bytes instead of max ${MAX_DER_CERTIFICATE_SIZE} bytes`,
-            );
-        }
+function genericBuildAsn1Structure({
+    serialNumber,
+    notBefore,
+    notAfter,
+    issuer,
+    subject,
+    ellipticCurvePublicKey,
+    extensions,
+}: Unsigned<BaseCertificate>) {
+    const {
+        basicConstraints: { isCa, pathLen },
+    } = extensions;
+    if (!isCa && pathLen !== undefined) {
+        throw new CertificateError("Path length must be undefined for non-CA certificates.");
+    }
+    return {
+        version: ContextTagged(0, 2), // v3
+        serialNumber: DatatypeOverride(DerType.Integer, serialNumber),
+        signatureAlgorithm: X962.EcdsaWithSHA256,
+        issuer: subjectOrIssuerToAsn1(issuer),
+        validity: {
+            notBefore: matterToJsDate(notBefore),
+            notAfter: matterToJsDate(notAfter),
+        },
+        subject: subjectOrIssuerToAsn1(subject),
+        publicKey: X962.PublicKeyEcPrime256v1(ellipticCurvePublicKey),
+        extensions: ContextTagged(3, extensionsToAsn1(extensions)),
+    };
+}
+
+function genericCertToAsn1(cert: Unsigned<BaseCertificate>) {
+    const certBytes = DerCodec.encode(genericBuildAsn1Structure(cert));
+    assertCertificateDerSize(certBytes);
+    return certBytes;
+}
+
+function assertCertificateDerSize(certBytes: Uint8Array) {
+    if (certBytes.length > MAX_DER_CERTIFICATE_SIZE) {
+        throw new ImplementationError(
+            `Certificate to generate is too big: ${certBytes.length} bytes instead of max ${MAX_DER_CERTIFICATE_SIZE} bytes`,
+        );
+    }
+}
+
+export class CertificateManager {
+    #crypto: Crypto;
+
+    constructor(crypto: Crypto) {
+        this.#crypto = crypto;
     }
 
-    function genericBuildAsn1Structure({
-        serialNumber,
-        notBefore,
-        notAfter,
-        issuer,
-        subject,
-        ellipticCurvePublicKey,
-        extensions,
-    }: Unsigned<BaseCertificate>) {
-        const {
-            basicConstraints: { isCa, pathLen },
-        } = extensions;
-        if (!isCa && pathLen !== undefined) {
-            throw new CertificateError("Path length must be undefined for non-CA certificates.");
-        }
-        return {
-            version: ContextTagged(0, 2), // v3
-            serialNumber: DatatypeOverride(DerType.Integer, serialNumber),
-            signatureAlgorithm: X962.EcdsaWithSHA256,
-            issuer: subjectOrIssuerToAsn1(issuer),
-            validity: {
-                notBefore: matterToJsDate(notBefore),
-                notAfter: matterToJsDate(notAfter),
-            },
-            subject: subjectOrIssuerToAsn1(subject),
-            publicKey: X962.PublicKeyEcPrime256v1(ellipticCurvePublicKey),
-            extensions: ContextTagged(3, extensionsToAsn1(extensions)),
-        };
+    get crypto() {
+        return this.#crypto;
     }
 
-    function genericCertToAsn1(cert: Unsigned<BaseCertificate>) {
-        const certBytes = DerCodec.encode(genericBuildAsn1Structure(cert));
-        assertCertificateDerSize(certBytes);
-        return certBytes;
-    }
-
-    export function rootCertToAsn1(cert: Unsigned<RootCertificate>) {
+    rootCertToAsn1(cert: Unsigned<RootCertificate>) {
         const {
             extensions: {
                 basicConstraints: { isCa },
@@ -635,7 +645,7 @@ export namespace CertificateManager {
         return genericCertToAsn1(cert);
     }
 
-    export function intermediateCaCertToAsn1(cert: Unsigned<IntermediateCertificate>) {
+    intermediateCaCertToAsn1(cert: Unsigned<IntermediateCertificate>) {
         const {
             extensions: {
                 basicConstraints: { isCa },
@@ -647,7 +657,7 @@ export namespace CertificateManager {
         return genericCertToAsn1(cert);
     }
 
-    export function nodeOperationalCertToAsn1(cert: Unsigned<OperationalCertificate>) {
+    nodeOperationalCertToAsn1(cert: Unsigned<OperationalCertificate>) {
         const {
             issuer: { icacId, rcacId },
             extensions: {
@@ -664,9 +674,9 @@ export namespace CertificateManager {
         return genericCertToAsn1(cert);
     }
 
-    export async function deviceAttestationCertToAsn1(cert: Unsigned<DeviceAttestationCertificate>, key: Key) {
+    async deviceAttestationCertToAsn1(cert: Unsigned<DeviceAttestationCertificate>, key: Key) {
         const certificate = genericBuildAsn1Structure(cert);
-        const signature = await Crypto.signEcdsa(key, DerCodec.encode(certificate), "der");
+        const signature = await this.#crypto.signEcdsa(key, DerCodec.encode(certificate), "der");
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
@@ -676,12 +686,12 @@ export namespace CertificateManager {
         return certBytes;
     }
 
-    export async function productAttestationIntermediateCertToAsn1(
+    async productAttestationIntermediateCertToAsn1(
         cert: Unsigned<ProductAttestationIntermediateCertificate>,
         key: Key,
     ) {
         const certificate = genericBuildAsn1Structure(cert);
-        const signature = await Crypto.signEcdsa(key, DerCodec.encode(certificate), "der");
+        const signature = await this.#crypto.signEcdsa(key, DerCodec.encode(certificate), "der");
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
@@ -691,21 +701,18 @@ export namespace CertificateManager {
         return certBytes;
     }
 
-    export async function productAttestationAuthorityCertToAsn1(
-        cert: Unsigned<ProductAttestationAuthorityCertificate>,
-        key: Key,
-    ) {
+    async productAttestationAuthorityCertToAsn1(cert: Unsigned<ProductAttestationAuthorityCertificate>, key: Key) {
         const certificate = genericBuildAsn1Structure(cert);
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
-            signature: DerBitString(await Crypto.signEcdsa(key, DerCodec.encode(certificate), "der")),
+            signature: DerBitString(await this.#crypto.signEcdsa(key, DerCodec.encode(certificate), "der")),
         });
         assertCertificateDerSize(certBytes);
         return certBytes;
     }
 
-    export async function certificationDeclarationToAsn1(
+    async certificationDeclarationToAsn1(
         eContent: Uint8Array,
         subjectKeyIdentifier: Uint8Array,
         privateKey: JsonWebKey,
@@ -720,7 +727,7 @@ export namespace CertificateManager {
                     subjectKeyIdentifier: ContextTaggedBytes(0, subjectKeyIdentifier),
                     digestAlgorithm: SHA256_CMS,
                     signatureAlgorithm: X962.EcdsaWithSHA256,
-                    signature: await Crypto.signEcdsa(privateKey, eContent, "der"),
+                    signature: await this.#crypto.signEcdsa(privateKey, eContent, "der"),
                 },
             ],
         };
@@ -734,9 +741,7 @@ export namespace CertificateManager {
      * Validate general requirements a Matter certificate fields must fulfill.
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
-    export function validateGeneralCertificateFields(
-        cert: RootCertificate | OperationalCertificate | IntermediateCertificate,
-    ) {
+    validateGeneralCertificateFields(cert: RootCertificate | OperationalCertificate | IntermediateCertificate) {
         if (cert.serialNumber.length > 20)
             throw new CertificateError(
                 `Serial number must not be longer then 20 octets. Current serial number has ${cert.serialNumber.length} octets.`,
@@ -779,8 +784,8 @@ export namespace CertificateManager {
      * Verify requirements a Matter Root certificate must fulfill.
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
-    export async function verifyRootCertificate(rootCert: RootCertificate) {
-        CertificateManager.validateGeneralCertificateFields(rootCert);
+    async verifyRootCertificate(rootCert: RootCertificate) {
+        this.validateGeneralCertificateFields(rootCert);
 
         // The subject DN SHALL NOT encode any matter-node-id attribute.
         if ("nodeId" in rootCert.subject) {
@@ -863,9 +868,9 @@ export namespace CertificateManager {
             );
         }
 
-        await Crypto.verifyEcdsa(
+        await this.#crypto.verifyEcdsa(
             PublicKey(rootCert.ellipticCurvePublicKey),
-            rootCertToAsn1(rootCert),
+            this.rootCertToAsn1(rootCert),
             rootCert.signature,
         );
     }
@@ -874,12 +879,12 @@ export namespace CertificateManager {
      * Verify requirements a Matter Node Operational certificate must fulfill.
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
-    export async function verifyNodeOperationalCertificate(
+    async verifyNodeOperationalCertificate(
         nocCert: OperationalCertificate,
         rootCert: RootCertificate,
         icaCert?: IntermediateCertificate,
     ) {
-        CertificateManager.validateGeneralCertificateFields(nocCert);
+        this.validateGeneralCertificateFields(nocCert);
 
         // The subject DN SHALL encode exactly one matter-node-id attribute.
         if (nocCert.subject.nodeId === undefined || Array.isArray(nocCert.subject.nodeId)) {
@@ -991,9 +996,9 @@ export namespace CertificateManager {
             );
         }
 
-        await Crypto.verifyEcdsa(
+        await this.#crypto.verifyEcdsa(
             PublicKey((icaCert ?? rootCert).ellipticCurvePublicKey),
-            nodeOperationalCertToAsn1(nocCert),
+            this.nodeOperationalCertToAsn1(nocCert),
             nocCert.signature,
         );
     }
@@ -1002,8 +1007,8 @@ export namespace CertificateManager {
      * Verify requirements a Matter Intermediate CA certificate must fulfill.
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
-    export async function verifyIntermediateCaCertificate(rootCert: RootCertificate, icaCert: IntermediateCertificate) {
-        CertificateManager.validateGeneralCertificateFields(icaCert);
+    async verifyIntermediateCaCertificate(rootCert: RootCertificate, icaCert: IntermediateCertificate) {
+        this.validateGeneralCertificateFields(icaCert);
 
         // The subject DN SHALL NOT encode any matter-node-id attribute.
         if ("nodeId" in icaCert.subject) {
@@ -1109,14 +1114,14 @@ export namespace CertificateManager {
             );
         }
 
-        await Crypto.verifyEcdsa(
+        await this.#crypto.verifyEcdsa(
             PublicKey(rootCert.ellipticCurvePublicKey),
-            intermediateCaCertToAsn1(icaCert),
+            this.intermediateCaCertToAsn1(icaCert),
             icaCert.signature,
         );
     }
 
-    export async function createCertificateSigningRequest(key: Key) {
+    async createCertificateSigningRequest(key: Key) {
         const request = {
             version: 0,
             subject: { organization: X520.OrganisationName("CSR") },
@@ -1127,11 +1132,11 @@ export namespace CertificateManager {
         return DerCodec.encode({
             request,
             signAlgorithm: X962.EcdsaWithSHA256,
-            signature: DerBitString(await Crypto.signEcdsa(key, DerCodec.encode(request), "der")),
+            signature: DerBitString(await this.#crypto.signEcdsa(key, DerCodec.encode(request), "der")),
         });
     }
 
-    export async function getPublicKeyFromCsr(csr: Uint8Array) {
+    async getPublicKeyFromCsr(csr: Uint8Array) {
         const { [DerKey.Elements]: rootElements } = DerCodec.decode(csr);
         if (rootElements?.length !== 3) throw new CertificateError("Invalid CSR data");
         const [requestNode, signAlgorithmNode, signatureNode] = rootElements;
@@ -1159,7 +1164,7 @@ export namespace CertificateManager {
             )
         )
             throw new CertificateError("Unsupported signature type");
-        await Crypto.verifyEcdsa(
+        await this.#crypto.verifyEcdsa(
             PublicKey(publicKey),
             DerCodec.encode(requestNode),
             signatureNode[DerKey.Bytes],

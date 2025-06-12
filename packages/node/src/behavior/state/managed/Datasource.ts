@@ -173,6 +173,11 @@ export namespace Datasource {
         location: AccessControl.Location;
 
         /**
+         * Used for random data.
+         */
+        crypto: Crypto;
+
+        /**
          * Events triggered automatically.
          *
          * Events named "fieldName$Changing", if present, emit before changes commit.  Events named "fieldName$Changed",
@@ -291,7 +296,7 @@ function configure(options: Datasource.Options): Internals {
     return {
         ...options,
         events,
-        version: Crypto.getRandomUInt32(),
+        version: options.crypto.randomUint32,
         values: values,
         featuresKey,
 

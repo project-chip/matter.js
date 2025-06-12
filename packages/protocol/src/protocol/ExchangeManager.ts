@@ -104,6 +104,7 @@ export class MessageChannel implements Channel<Message> {
  * Interfaces {@link ExchangeManager} with other components.
  */
 export interface ExchangeManagerContext {
+    crypto: Crypto;
     transportInterfaces: TransportInterfaceSet;
     sessionManager: SessionManager;
     channelManager: ChannelManager;
@@ -113,7 +114,7 @@ export class ExchangeManager {
     readonly #transportInterfaces: TransportInterfaceSet;
     readonly #sessionManager: SessionManager;
     readonly #channelManager: ChannelManager;
-    readonly #exchangeCounter = new ExchangeCounter();
+    readonly #exchangeCounter: ExchangeCounter;
     readonly #exchanges = new Map<number, MessageExchange>();
     readonly #protocols = new Map<number, ProtocolHandler>();
     readonly #listeners = new Map<TransportInterface, TransportInterface.Listener>();
@@ -125,6 +126,7 @@ export class ExchangeManager {
         this.#transportInterfaces = context.transportInterfaces;
         this.#sessionManager = context.sessionManager;
         this.#channelManager = context.channelManager;
+        this.#exchangeCounter = new ExchangeCounter(context.crypto);
 
         for (const transportInterface of this.#transportInterfaces) {
             this.#addListener(transportInterface);
@@ -143,6 +145,7 @@ export class ExchangeManager {
 
     static [Environmental.create](env: Environment) {
         const instance = new ExchangeManager({
+            crypto: env.get(Crypto),
             transportInterfaces: env.get(TransportInterfaceSet),
             sessionManager: env.get(SessionManager),
             channelManager: env.get(ChannelManager),
@@ -515,13 +518,17 @@ export class ExchangeManager {
 }
 
 export class ExchangeCounter {
-    private exchangeCounter = Crypto.getRandomUInt16();
+    #exchangeCounter: number;
+
+    constructor(crypto: Crypto) {
+        this.#exchangeCounter = crypto.randomUint16;
+    }
 
     getIncrementedCounter() {
-        this.exchangeCounter++;
-        if (this.exchangeCounter > 0xffff) {
-            this.exchangeCounter = 0;
+        this.#exchangeCounter++;
+        if (this.#exchangeCounter > 0xffff) {
+            this.#exchangeCounter = 0;
         }
-        return this.exchangeCounter;
+        return this.#exchangeCounter;
     }
 }

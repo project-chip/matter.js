@@ -20,6 +20,7 @@ import {
     Construction,
     Crypto,
     CRYPTO_SYMMETRIC_KEY_LENGTH,
+    Environment,
     ImplementationError,
     Logger,
     MatterError,
@@ -109,6 +110,7 @@ export class MatterController {
         rootNodeId?: NodeId;
         rootCertificateAuthority?: CertificateAuthority;
         rootFabric?: Fabric;
+        crypto?: Crypto;
     }): Promise<MatterController> {
         const {
             controllerStore,
@@ -125,13 +127,15 @@ export class MatterController {
             rootFabric,
         } = options;
 
-        const ca = rootCertificateAuthority ?? (await CertificateAuthority.create(controllerStore.caStorage));
+        const crypto = options.crypto ?? Environment.default.get(Crypto);
+
+        const ca = rootCertificateAuthority ?? (await CertificateAuthority.create(crypto, controllerStore.caStorage));
         const fabricStorage = controllerStore.fabricStorage;
 
         let controller: MatterController | undefined = undefined;
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         if (rootFabric !== undefined || (await fabricStorage.has("fabric"))) {
-            const fabric = rootFabric ?? new Fabric(await fabricStorage.get<Fabric.Config>("fabric"));
+            const fabric = rootFabric ?? new Fabric(crypto, await fabricStorage.get<Fabric.Config>("fabric"));
             if (Bytes.areEqual(fabric.rootCert, ca.rootCert)) {
                 logger.info("Used existing fabric");
                 controller = new MatterController({
@@ -158,9 +162,9 @@ export class MatterController {
         }
         if (controller === undefined) {
             logger.info("Creating new fabric");
-            const controllerNodeId = rootNodeId ?? NodeId.randomOperationalNodeId();
-            const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
-            const fabricBuilder = await FabricBuilder.create();
+            const controllerNodeId = rootNodeId ?? NodeId.randomOperationalNodeId(crypto);
+            const ipkValue = crypto.randomBytes(CRYPTO_SYMMETRIC_KEY_LENGTH);
+            const fabricBuilder = await FabricBuilder.create(crypto);
             await fabricBuilder.setRootCert(ca.rootCert);
             fabricBuilder
                 .setRootNodeId(controllerNodeId)
@@ -195,6 +199,7 @@ export class MatterController {
         netInterfaces: NetInterfaceSet;
         adminFabricLabel: string;
         sessionClosedCallback?: (peerNodeId: NodeId) => void;
+        crypto?: Crypto;
     }): Promise<MatterController> {
         const {
             certificateAuthorityConfig,
@@ -205,6 +210,8 @@ export class MatterController {
             netInterfaces,
             sessionClosedCallback,
         } = options;
+
+        const crypto = options.crypto ?? Environment.default.get(Crypto);
 
         // Verify an appropriate network interface is available
         if (!netInterfaces.hasInterfaceFor(ChannelType.BLE)) {
@@ -221,13 +228,13 @@ export class MatterController {
         }
 
         const certificateManager =
-            rootCertificateAuthority ?? (await CertificateAuthority.create(certificateAuthorityConfig));
+            rootCertificateAuthority ?? (await CertificateAuthority.create(crypto, certificateAuthorityConfig));
 
         // Stored data are temporary anyway and no node will be connected, so just use an in-memory storage
         const storageManager = new StorageManager(new StorageBackendMemory());
         await storageManager.initialize();
 
-        const fabric = new Fabric(fabricConfig);
+        const fabric = new Fabric(crypto, fabricConfig);
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         const controller = new MatterController({
             controllerStore: new LegacyControllerStore(storageManager.createContext("Commissioner")),
@@ -288,7 +295,7 @@ export class MatterController {
         this.fabric = fabric;
         this.sessionClosedCallback = sessionClosedCallback;
 
-        const fabricManager = new FabricManager();
+        const fabricManager = new FabricManager(fabric.crypto);
         fabricManager.addFabric(fabric);
         // Overwrite the persist callback and store fabric when needed
         fabric.persistCallback = async () => {
@@ -309,6 +316,7 @@ export class MatterController {
         const subscriptionClient = new SubscriptionClient();
 
         this.exchangeManager = new ExchangeManager({
+            crypto: fabric.crypto,
             sessionManager: this.sessionManager,
             channelManager: this.channelManager,
             transportInterfaces: this.netInterfaces,

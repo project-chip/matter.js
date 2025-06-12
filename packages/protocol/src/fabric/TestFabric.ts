@@ -5,7 +5,7 @@
  */
 
 import { CertificateAuthority } from "#certificate/CertificateAuthority.js";
-import { ImplementationError, nonentropic } from "#general";
+import { ImplementationError, MockCrypto } from "#general";
 import { FabricIndex, VendorId } from "#types";
 import { FabricAuthority } from "./FabricAuthority.js";
 import { FabricManager } from "./FabricManager.js";
@@ -40,34 +40,29 @@ export namespace TestFabric {
             }
         }
 
-        return forFabric(index, async () => {
-            const authority = new FabricAuthority({
-                ca: await CertificateAuthority.create(),
-                config: {
-                    adminFabricLabel: `mock-fabric-${index}`,
-                    adminVendorId: VendorId(0xfff1),
-                    fabricIndex: FabricIndex(index),
-                },
-                fabrics: fabrics ?? new FabricManager(),
-            });
+        if (index < 1 || index > 254) {
+            throw new ImplementationError("Test fabric indexes must be in the range 1-254");
+        }
 
-            const createFabric = authority.createFabric.bind(authority);
-            authority.createFabric = () => forFabric(index ?? 1, createFabric);
+        if (!fabrics) {
+            fabrics = new FabricManager(MockCrypto(index));
+        }
 
-            return authority;
+        const authority = new FabricAuthority({
+            ca: await CertificateAuthority.create(fabrics.crypto),
+            config: {
+                adminFabricLabel: `mock-fabric-${index}`,
+                adminVendorId: VendorId(0xfff1),
+                fabricIndex: FabricIndex(index),
+            },
+            fabrics,
         });
+
+        return authority;
     }
 
     export interface Options {
         index?: number;
         fabrics?: FabricManager;
     }
-}
-
-async function forFabric<T>(index: number, actor: () => Promise<T>): Promise<T> {
-    if (index < 1 || index > 254) {
-        throw new ImplementationError("Test fabric indexes must be in the range 1-254");
-    }
-
-    return nonentropic(index, actor);
 }

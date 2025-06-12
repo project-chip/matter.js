@@ -68,21 +68,28 @@ const DEFAULT_PAIRING_HINT = {
 export class MdnsBroadcaster {
     readonly #activeCommissioningAnnouncements = new Set<number>();
     readonly #activeOperationalAnnouncements = new Map<number, { fabricIndex: FabricIndex; forInstance: string }[]>();
+    readonly #crypto: Crypto;
     readonly #network: Network;
     readonly #mdnsServer: MdnsServer;
     readonly #enableIpv4?: boolean;
     readonly #instances = new BasicSet<MdnsInstanceBroadcaster>();
 
-    static async create(network: Network, options?: { enableIpv4?: boolean; multicastInterface?: string }) {
+    static async create(
+        crypto: Crypto,
+        network: Network,
+        options?: { enableIpv4?: boolean; multicastInterface?: string },
+    ) {
         const { enableIpv4, multicastInterface } = options ?? {};
         return new MdnsBroadcaster(
+            crypto,
             network,
             await MdnsServer.create(network, { enableIpv4, netInterface: multicastInterface }),
             enableIpv4,
         );
     }
 
-    constructor(network: Network, mdnsServer: MdnsServer, enableIpv4?: boolean) {
+    constructor(crypto: Crypto, network: Network, mdnsServer: MdnsServer, enableIpv4?: boolean) {
+        this.#crypto = crypto;
         this.#network = network;
         this.#mdnsServer = mdnsServer;
         this.#enableIpv4 = enableIpv4;
@@ -182,7 +189,7 @@ export class MdnsBroadcaster {
         this.#activeCommissioningAnnouncements.add(announcedNetPort);
 
         const shortDiscriminator = (discriminator >> 8) & 0x0f;
-        const instanceId = Bytes.toHex(Crypto.getRandomData(8)).toUpperCase();
+        const instanceId = Bytes.toHex(this.#crypto.randomBytes(8)).toUpperCase();
         const vendorQname = getVendorQname(vendorId);
         const deviceTypeQname = getDeviceTypeQname(deviceType);
         const shortDiscriminatorQname = getShortDiscriminatorQname(shortDiscriminator);
@@ -360,7 +367,7 @@ export class MdnsBroadcaster {
             }),
         );
 
-        const instanceId = Bytes.toHex(Crypto.getRandomData(8)).toUpperCase();
+        const instanceId = Bytes.toHex(this.#crypto.randomBytes(8)).toUpperCase();
         const deviceTypeQname = `_T${deviceType}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
         const vendorQname = `_V${vendorId}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
         const deviceQname = `${instanceId}.${MATTER_COMMISSIONER_SERVICE_QNAME}`;

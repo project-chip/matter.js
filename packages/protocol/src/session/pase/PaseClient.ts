@@ -22,27 +22,28 @@ export class PaseClient {
         this.#sessions = sessions;
     }
 
-    static async generatePakePasscodeVerifier(setupPinCode: number, pbkdfParameters: PbkdfParameters) {
-        const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
+    static async generatePakePasscodeVerifier(crypto: Crypto, setupPinCode: number, pbkdfParameters: PbkdfParameters) {
+        const { w0, L } = await Spake2p.computeW0L(crypto, pbkdfParameters, setupPinCode);
         return Bytes.concat(numberToBytesBE(w0, 32), L);
     }
 
-    static generateRandomPasscode() {
+    static generateRandomPasscode(crypto: Crypto) {
         let passcode: number;
-        passcode = (Crypto.getRandomUInt32() % 99999998) + 1; // prevents 00000000 and 99999999
+        passcode = (crypto.randomUint32 % 99999998) + 1; // prevents 00000000 and 99999999
         if (CommissioningOptions.FORBIDDEN_PASSCODES.includes(passcode)) {
             passcode += 1; // With current forbidden passcode list can never collide
         }
         return passcode;
     }
 
-    static generateRandomDiscriminator() {
-        return Crypto.getRandomUInt16() % 4096;
+    static generateRandomDiscriminator(crypto: Crypto) {
+        return crypto.randomUint16 % 4096;
     }
 
     async pair(sessionParameters: SessionParameters, exchange: MessageExchange, setupPin: number) {
         const messenger = new PaseClientMessenger(exchange);
-        const initiatorRandom = Crypto.getRandom();
+        const { crypto } = this.#sessions;
+        const initiatorRandom = crypto.randomBytes(32);
         const initiatorSessionId = await this.#sessions.getNextAvailableSessionId(); // Initiator Session Id
 
         // Send pbkdfRequest and Read pbkdfResponse
@@ -80,9 +81,10 @@ export class PaseClient {
         };
 
         // Compute pake1 and read pake2
-        const { w0, w1 } = await Spake2p.computeW0W1(pbkdfParameters, setupPin);
+        const { w0, w1 } = await Spake2p.computeW0W1(crypto, pbkdfParameters, setupPin);
         const spake2p = Spake2p.create(
-            await Crypto.computeSha256([SPAKE_CONTEXT, requestPayload, responsePayload]),
+            crypto,
+            await crypto.computeSha256([SPAKE_CONTEXT, requestPayload, responsePayload]),
             w0,
         );
         const X = spake2p.computeX();

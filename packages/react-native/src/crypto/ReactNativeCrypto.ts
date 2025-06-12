@@ -8,10 +8,16 @@ import { install } from "react-native-quick-crypto";
 
 install(); // Install the react-native crypto module
 
-import { CRYPTO_HASH_ALGORITHM, CryptoDsaEncoding, CryptoVerifyError } from "#general";
+import {
+    Crypto,
+    CRYPTO_HASH_ALGORITHM,
+    CryptoDsaEncoding,
+    CryptoVerifyError,
+    Environment,
+    StandardCrypto,
+} from "#general";
 import { NodeJsCrypto } from "#nodejs";
 
-// TODO -
 import jwk2pem from "jwk-to-pem";
 
 // @ts-expect-error No types but all fine
@@ -66,11 +72,10 @@ crypto.hkdf = (
 
 /**
  * Crypto implementation for React Native
- *
- * We do not install this implementation by default because it is not fully functional.  The Node.js crypto
- * compatibility interface in React Native does not implement all features (AES-CCM, at least, is missing).
  */
-export class CryptoReactNative extends NodeJsCrypto {
+export class ReactNativeCrypto extends NodeJsCrypto {
+    override implementationName = "React Native";
+
     override signEcdsa(
         privateKey: JsonWebKey,
         data: Uint8Array | Uint8Array[],
@@ -113,4 +118,11 @@ export class CryptoReactNative extends NodeJsCrypto {
         );
         if (!success) throw new CryptoVerifyError("Signature verification failed");
     }
+
+    // Quick crypto does not support AES-CCM.  Install the JS version to compensate
+    // TODO - remove this once we have proper feature detection to configure crypto
+    override encrypt = StandardCrypto.prototype.encrypt;
+    override decrypt = StandardCrypto.prototype.decrypt;
 }
+
+Environment.default.set(Crypto, new ReactNativeCrypto());

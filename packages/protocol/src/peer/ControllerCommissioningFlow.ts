@@ -13,7 +13,6 @@ import { TimeSynchronizationCluster } from "#clusters/time-synchronization";
 import {
     Bytes,
     ChannelType,
-    Crypto,
     Diagnostic,
     Logger,
     MatterError,
@@ -32,7 +31,6 @@ import {
     VendorId,
 } from "#types";
 import { CertificateAuthority } from "../certificate/CertificateAuthority.js";
-import { CertificateManager } from "../certificate/CertificateManager.js";
 import { ClusterClient } from "../cluster/client/ClusterClient.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { TlvCertSigningRequest } from "../common/OperationalCredentialsTypes.js";
@@ -207,7 +205,7 @@ export class ControllerCommissioningFlow {
         /** InteractionClient for the initiated PASE session */
         interactionClient: InteractionClient,
 
-        /** CertificateManager of the controller. */
+        /** CertificateAuthority of the controller. */
         ca: CertificateAuthority,
 
         /** Fabric of the controller. */
@@ -759,7 +757,7 @@ export class ControllerCommissioningFlow {
         const { attestationElements, attestationSignature } =
             await operationalCredentialsClusterClient.attestationRequest(
                 {
-                    attestationNonce: Crypto.getRandomData(32),
+                    attestationNonce: this.fabric.crypto.randomBytes(32),
                 },
                 { useExtendedFailSafeMessageResponseTimeout: true },
             );
@@ -801,7 +799,7 @@ export class ControllerCommissioningFlow {
         const operationalCredentialsClusterClient = this.#getClusterClient(OperationalCredentials.Cluster);
         const { nocsrElements, attestationSignature: csrSignature } =
             await operationalCredentialsClusterClient.csrRequest(
-                { csrNonce: Crypto.getRandomData(32) },
+                { csrNonce: this.fabric.crypto.randomBytes(32) },
                 { useExtendedFailSafeMessageResponseTimeout: true },
             );
         if (nocsrElements.length === 0 || csrSignature.length === 0) {
@@ -810,7 +808,7 @@ export class ControllerCommissioningFlow {
         }
         // TODO: validate csrSignature using device public key
         const { certSigningRequest } = TlvCertSigningRequest.decode(nocsrElements);
-        const operationalPublicKey = await CertificateManager.getPublicKeyFromCsr(certSigningRequest);
+        const operationalPublicKey = await this.ca.certs.getPublicKeyFromCsr(certSigningRequest);
 
         await operationalCredentialsClusterClient.addTrustedRootCertificate(
             {

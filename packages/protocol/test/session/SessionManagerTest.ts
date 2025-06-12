@@ -5,7 +5,7 @@
  */
 
 import { FabricManager } from "#fabric/FabricManager.js";
-import { StorageBackendMemory, StorageContext } from "#general";
+import { StandardCrypto, StorageBackendMemory, StorageContext } from "#general";
 import { SessionParameters } from "#session/Session.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId } from "#types";
@@ -25,7 +25,7 @@ describe("SessionManager", () => {
 
             sessionManager = new SessionManager({
                 parameters: {} as SessionParameters,
-                fabrics: new FabricManager(),
+                fabrics: new FabricManager(new StandardCrypto()),
                 storage: storageContext,
             });
 

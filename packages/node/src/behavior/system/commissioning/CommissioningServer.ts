@@ -7,6 +7,7 @@
 import { Endpoint } from "#endpoint/Endpoint.js";
 import {
     AsyncObservable,
+    Crypto,
     Diagnostic,
     EventEmitter,
     ImplementationError,
@@ -54,13 +55,13 @@ export class CommissioningServer extends Behavior {
 
     override initialize() {
         if (this.state.passcode === -1) {
-            this.state.passcode = PaseClient.generateRandomPasscode();
+            this.state.passcode = PaseClient.generateRandomPasscode(this.env.get(Crypto));
         } else if (CommissioningOptions.FORBIDDEN_PASSCODES.includes(this.state.passcode)) {
             throw new ImplementationError(`Passcode ${this.state.passcode} is not allowed`);
         }
 
         if (this.state.discriminator === -1) {
-            this.state.discriminator = PaseClient.generateRandomDiscriminator();
+            this.state.discriminator = PaseClient.generateRandomDiscriminator(this.env.get(Crypto));
         }
 
         this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline);

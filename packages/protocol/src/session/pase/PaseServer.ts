@@ -40,7 +40,7 @@ export class PaseServer implements ProtocolHandler {
     #pairingErrors = 0;
 
     static async fromPin(sessions: SessionManager, setupPinCode: number, pbkdfParameters: PbkdfParameters) {
-        const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
+        const { w0, L } = await Spake2p.computeW0L(sessions.crypto, pbkdfParameters, setupPinCode);
         return new PaseServer(sessions, w0, L, pbkdfParameters);
     }
 
@@ -76,7 +76,7 @@ export class PaseServer implements ProtocolHandler {
                 );
             } else {
                 // Ok new pairing try, handle it
-                await this.handlePairingRequest(messenger);
+                await this.handlePairingRequest(this.sessions.crypto, messenger);
             }
         } catch (error) {
             this.#pairingErrors++;
@@ -100,7 +100,7 @@ export class PaseServer implements ProtocolHandler {
         }
     }
 
-    private async handlePairingRequest(messenger: PaseServerMessenger) {
+    private async handlePairingRequest(crypto: Crypto, messenger: PaseServerMessenger) {
         logger.info(`Received pairing request from ${messenger.getChannelName()}.`);
 
         this.#pairingTimer = Time.getTimer("PASE pairing timeout", PASE_PAIRING_TIMEOUT_MS, () =>
@@ -123,7 +123,7 @@ export class PaseServer implements ProtocolHandler {
         }
 
         const responderSessionId = await this.sessions.getNextAvailableSessionId(); // Responder Session Id
-        const responderRandom = Crypto.getRandom();
+        const responderRandom = crypto.randomBytes(32);
 
         const responderSessionParams = this.sessions.sessionParameters;
         const tcpSupported =
@@ -145,7 +145,8 @@ export class PaseServer implements ProtocolHandler {
 
         // Process pake1 and send pake2
         const spake2p = Spake2p.create(
-            await Crypto.computeSha256([SPAKE_CONTEXT, requestPayload, responsePayload]),
+            crypto,
+            await crypto.computeSha256([SPAKE_CONTEXT, requestPayload, responsePayload]),
             this.w0,
         );
         const { x: X } = await messenger.readPasePake1();

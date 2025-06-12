@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, MatterFlowError } from "#general";
+import { Crypto, Logger, MatterFlowError } from "#general";
 import { NodeId } from "#types";
 import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet, SessionType } from "../codec/MessageCodec.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -23,19 +23,20 @@ export class InsecureSession extends Session {
     readonly type = SessionType.Unicast;
 
     constructor(args: {
+        crypto: Crypto;
         manager?: SessionManager;
         messageCounter: MessageCounter;
         initiatorNodeId?: NodeId;
         sessionParameters?: SessionParameterOptions;
         isInitiator?: boolean;
     }) {
-        const { initiatorNodeId, isInitiator } = args;
+        const { crypto, initiatorNodeId, isInitiator } = args;
         super({
             ...args,
             setActiveTimestamp: !isInitiator, // When we are the initiator we assume the node is in idle mode
             messageReceptionState: new MessageReceptionStateUnencryptedWithRollover(),
         });
-        this.#initiatorNodeId = initiatorNodeId ?? NodeId.randomOperationalNodeId();
+        this.#initiatorNodeId = initiatorNodeId ?? NodeId.randomOperationalNodeId(crypto);
     }
 
     get isSecure() {

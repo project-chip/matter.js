@@ -10,7 +10,7 @@ import { ProductDescriptionServer } from "#behavior/system/product-description/P
 import { AccessControlServer } from "#behaviors/access-control";
 import { OperationalCredentials } from "#clusters/operational-credentials";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { CryptoVerifyError, Logger, MatterFlowError, MaybePromise, UnexpectedDataError } from "#general";
+import { Crypto, CryptoVerifyError, Logger, MatterFlowError, MaybePromise, UnexpectedDataError } from "#general";
 import { AccessLevel } from "#model";
 import type { Node } from "#node/Node.js";
 import {
@@ -470,6 +470,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         const certification =
             this.internal.certification ??
             (this.internal.certification = new DeviceCertification(
+                this.env.get(Crypto),
                 this.state.certification,
                 this.agent.get(ProductDescriptionServer).state,
             ));

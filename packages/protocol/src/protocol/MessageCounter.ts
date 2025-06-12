@@ -43,7 +43,7 @@ export enum MessageCounterTypes {
  * Rollover can be allowed or forbidden and a callback can be provided to be notified before a rollover would happen.
  */
 export class MessageCounter {
-    protected messageCounter = (Crypto.getRandomUInt32() >>> 4) + 1; // 28 bit random number plus 1
+    protected messageCounter: number;
 
     /**
      * Creates a new message counter with a random start value. If a aboutToRolloverCallback is provided this
@@ -51,9 +51,14 @@ export class MessageCounter {
      * a number of messages before the rollover callback is called (Default 1000).
      */
     constructor(
+        crypto: Crypto,
         protected readonly aboutToRolloverCallback?: () => void,
+
+        // Counter is a 28 bit random number plus 1
         protected readonly rolloverInfoDifference = ROLLOVER_INFO_DIFFERENCE,
-    ) {}
+    ) {
+        this.messageCounter = (crypto.randomUint32 >>> 4) + 1;
+    }
 
     async getIncrementedCounter() {
         this.messageCounter++;
@@ -82,6 +87,7 @@ export class PersistedMessageCounter extends MessageCounter {
     }
 
     static async create(
+        crypto: Crypto,
         storageContext: StorageContext,
         storageKey: string,
         aboutToRolloverCallback?: () => void,
@@ -89,6 +95,7 @@ export class PersistedMessageCounter extends MessageCounter {
     ) {
         return asyncNew(
             PersistedMessageCounter,
+            crypto,
             storageContext,
             storageKey,
             aboutToRolloverCallback,
@@ -97,12 +104,13 @@ export class PersistedMessageCounter extends MessageCounter {
     }
 
     constructor(
+        crypto: Crypto,
         private readonly storageContext: StorageContext,
         private readonly storageKey: string,
         aboutToRolloverCallback?: () => void,
         rolloverInfoDifference = ROLLOVER_INFO_DIFFERENCE,
     ) {
-        super(aboutToRolloverCallback, rolloverInfoDifference);
+        super(crypto, aboutToRolloverCallback, rolloverInfoDifference);
         this.#construction = Construction(this, async () => {
             if (await storageContext.has(storageKey)) {
                 this.messageCounter = await storageContext.get<number>(storageKey);

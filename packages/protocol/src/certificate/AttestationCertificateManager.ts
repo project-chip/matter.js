@@ -36,6 +36,7 @@ export class AttestationCertificateManager {
     readonly #paaKeyPair = PrivateKey(TestCert_PAA_NoVID_PrivateKey, {
         publicKey: TestCert_PAA_NoVID_PublicKey,
     });
+    readonly #certs: CertificateManager;
     readonly #vendorId: VendorId;
     readonly #paiKeyPair: PrivateKey;
     readonly #paiKeyIdentifier: Uint8Array;
@@ -44,17 +45,18 @@ export class AttestationCertificateManager {
     readonly #paiCertBytes;
     #nextCertificateId = 2;
 
-    constructor(vendorId: VendorId, paiKeyPair: PrivateKey, paiKeyIdentifier: Uint8Array) {
+    constructor(crypto: Crypto, vendorId: VendorId, paiKeyPair: PrivateKey, paiKeyIdentifier: Uint8Array) {
+        this.#certs = new CertificateManager(crypto);
         this.#vendorId = vendorId;
         this.#paiKeyPair = paiKeyPair;
         this.#paiKeyIdentifier = paiKeyIdentifier;
         this.#paiCertBytes = this.generatePAICert(vendorId);
     }
 
-    static async create(vendorId: VendorId) {
-        const key = await Crypto.createKeyPair();
-        const identifier = await Crypto.computeSha256(key.publicKey);
-        return new AttestationCertificateManager(vendorId, key, identifier.slice(0, 20));
+    static async create(crypto: Crypto, vendorId: VendorId) {
+        const key = await crypto.createKeyPair();
+        const identifier = await crypto.computeSha256(key.publicKey);
+        return new AttestationCertificateManager(crypto, vendorId, key, identifier.slice(0, 20));
     }
 
     getPAICert() {
@@ -62,7 +64,7 @@ export class AttestationCertificateManager {
     }
 
     async getDACert(productId: number) {
-        const dacKeyPair = await Crypto.createKeyPair();
+        const dacKeyPair = await this.#certs.crypto.createKeyPair();
         return {
             keyPair: dacKeyPair,
             dac: await this.generateDaCert(dacKeyPair.publicKey, this.#vendorId, productId),
@@ -103,7 +105,7 @@ export class AttestationCertificateManager {
                 authorityKeyIdentifier: this.#paaKeyIdentifier,
             },
         };
-        return CertificateManager.productAttestationAuthorityCertToAsn1(unsignedCertificate, this.#paaKeyPair);
+        return this.#certs.productAttestationAuthorityCertToAsn1(unsignedCertificate, this.#paaKeyPair);
     }
 
     private generatePAICert(vendorId: VendorId, productId?: number) {
@@ -137,7 +139,7 @@ export class AttestationCertificateManager {
                 authorityKeyIdentifier: this.#paaKeyIdentifier,
             },
         };
-        return CertificateManager.productAttestationIntermediateCertToAsn1(unsignedCertificate, this.#paaKeyPair);
+        return this.#certs.productAttestationIntermediateCertToAsn1(unsignedCertificate, this.#paaKeyPair);
     }
 
     async generateDaCert(publicKey: Uint8Array, vendorId: VendorId, productId: number) {
@@ -167,10 +169,10 @@ export class AttestationCertificateManager {
                 keyUsage: {
                     digitalSignature: true,
                 },
-                subjectKeyIdentifier: (await Crypto.computeSha256(publicKey)).slice(0, 20),
+                subjectKeyIdentifier: (await this.#certs.crypto.computeSha256(publicKey)).slice(0, 20),
                 authorityKeyIdentifier: this.#paiKeyIdentifier,
             },
         };
-        return CertificateManager.deviceAttestationCertToAsn1(unsignedCertificate, this.#paiKeyPair);
+        return this.#certs.deviceAttestationCertToAsn1(unsignedCertificate, this.#paiKeyPair);
     }
 }

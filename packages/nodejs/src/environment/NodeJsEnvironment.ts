@@ -125,12 +125,12 @@ function loadVariables(env: Environment) {
 }
 
 function configureCrypto(env: Environment) {
-    if (!config.installCrypto || !(env.vars.boolean("nodejs.crypto") ?? true)) {
-        return;
-    }
-
     Boot.init(() => {
-        Crypto.provider = () => new NodeJsCrypto();
+        if (config.installCrypto || (env.vars.boolean("nodejs.crypto") ?? true)) {
+            env.set(Crypto, new NodeJsCrypto());
+        } else if (Environment.default.has(Crypto)) {
+            env.set(Crypto, Environment.default.get(Crypto));
+        }
     });
 }
 
@@ -140,7 +140,11 @@ function configureNetwork(env: Environment) {
     }
 
     Boot.init(() => {
-        env.set(Network, new NodeJsNetwork());
+        if (config.installNetwork || (env.vars.boolean("nodejs.network") ?? true)) {
+            env.set(Network, new NodeJsNetwork());
+        } else if (Environment.default.has(Network)) {
+            env.set(Network, Environment.default.get(Network));
+        }
     });
 }
 
