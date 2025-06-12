@@ -9,7 +9,7 @@ import { Container } from "../docker/container.js";
 import { Terminal } from "../docker/terminal.js";
 import { CommandPipe } from "./command-pipe.js";
 
-const FIFO_PATH = "/command-pipe.fifo";
+export const FIFO_PATH = "/command-pipe.fifo";
 
 /**
  * A command pipe that reads commands from a Docker container.

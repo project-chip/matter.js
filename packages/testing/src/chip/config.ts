@@ -5,6 +5,7 @@
  */
 
 import { env } from "node:process";
+import { FIFO_PATH } from "./container-command-pipe.js";
 import { PicsSource } from "./pics/source.js";
 
 /**
@@ -87,12 +88,7 @@ export namespace Constants {
     /**
      * Default arguments provided to the Python runner.
      */
-    export const PythonRunnerArgs = [
-        // Our PID is meaningless within the container but Python uses in the name of the command pipe.  We pass in our
-        // actual PID to ensure no collision if multiple instances run
-        "--app-pid",
-        process.pid.toString(),
-    ];
+    export const PythonRunnerArgs = ["--app-pipe", FIFO_PATH];
 
     export const defaultPics: PicsSource = {
         kind: "composite",
