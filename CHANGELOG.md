@@ -30,6 +30,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/nodejs
     - Enhancement: New variables `nodejs.crypto`, `nodejs.network` and `nodejs.storage` allow users to enable/disable the implementation of these features that use Node.js APIs
 
+-   @matter/nodejs-ble
+    - Fix: Removes Windows-specific workaround needed in older versions of Noble
+    - Fix: Adjusts BLEScanner to also be cancelable to allow cancellation of discovery processes
+
 ## 0.14.0 (2025-06-04)
 
 - NOTE: This version is compatible with Node.js 20.x, 22.x and 24.x. Node.js 18.x is also supported with the following exceptions:
