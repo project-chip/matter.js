@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Behavior } from "#behavior/Behavior.js";
 import type { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
@@ -39,6 +40,7 @@ import {
     Val,
 } from "#protocol";
 import { ObjectSchema } from "#types";
+import { withTimeout } from "@matter/general";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoints/root.js";
 import { Node } from "./Node.js";
 import { ClientNodes } from "./client/ClientNodes.js";
@@ -204,7 +206,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     protected override async initialize() {
         await ServerEnvironment.initialize(this);
 
-        this.env.get(FabricManager).events.deleted.on(fabric => this.#sanitizeFabricData(fabric));
+        this.env.get(FabricManager).events.deleted.on(fabric => this.sanitizeFabricData(fabric));
 
         await super.initialize();
     }
@@ -214,7 +216,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * The logic walks through all endpoints and removes relevant fabric-scoped attribute values for the relevant fabric
      * from the state. After all state changes are processed, it removes all occurrences of fabric-scoped events.
      */
-    async #sanitizeFabricData(fabric: Fabric) {
+    protected async sanitizeFabricData(fabric: Fabric) {
         const fabricIndex = fabric.fabricIndex;
         const fabricRelevantEvents = new Set<string>();
         const stateUpdatePromises = new Array<Promise<void>>();
@@ -247,10 +249,10 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
                     // Errors are being logged and ignored
                     if (Object.keys(stateUpdate).length > 0) {
                         const { resolver, promise } = createPromise<void>();
-                        (endpoint.eventsOf(type) as any).stateChanged?.on(resolver);
+                        (endpoint.eventsOf(type) as Behavior.EventsOf<any>).stateChanged?.on(resolver);
                         try {
                             await endpoint.setStateOf(type, stateUpdate);
-                            stateUpdatePromises.push(promise);
+                            stateUpdatePromises.push(withTimeout(5_000, promise)); // 5s should be enough for state change
                         } catch (error) {
                             logger.warn(
                                 `Could not sanitize fabric-scoped attributes for cluster ${cluster.name} on endpoint ${endpoint.id}`,

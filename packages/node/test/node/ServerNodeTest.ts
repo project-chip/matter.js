@@ -400,6 +400,8 @@ describe("ServerNode", () => {
             await agent.operationalCredentials.removeFabric({ fabricIndex: FabricIndex(1) });
         });
 
+        await node.dataSanitized;
+
         // Verify that the fabric scoped data are gone for the removed fabricIndex 1, but still exist for Index 2
         expect(node.state.operationalCredentials.nocs.filter(({ fabricIndex }) => fabricIndex === 1).length).equals(0);
         expect(node.state.operationalCredentials.nocs.filter(({ fabricIndex }) => fabricIndex === 2).length).equals(1);
