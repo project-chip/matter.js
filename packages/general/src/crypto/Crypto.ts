@@ -28,7 +28,7 @@ export const CRYPTO_AUTH_TAG_LENGTH = 16;
 export const CRYPTO_SYMMETRIC_KEY_LENGTH = 16;
 export type CryptoDsaEncoding = "ieee-p1363" | "der";
 
-const logger = new Logger("Crypto");
+const logger = Logger.get("Crypto");
 
 /**
  * These are the cryptographic primitives required to implement the Matter protocol.

@@ -55,7 +55,7 @@ export class Spake2p {
     }
 
     constructor(
-        readonly crypto: Crypto,
+        crypto: Crypto,
         readonly context: Uint8Array,
         readonly random: bigint,
         readonly w0: bigint,
