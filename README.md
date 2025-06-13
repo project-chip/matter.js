@@ -238,3 +238,4 @@ The following projects are available on any platform with access to Node.js 18+:
   - [matterbridge-somfy-tahoma](https://github.com/Luligu/matterbridge-somfy-tahoma): matterbridge production-level plugin that expose all somfy tahoma screens to Matter
   - [matterbridge-shelly](https://github.com/Luligu/matterbridge-shelly): matterbridge production-level plugin that expose all Shelly Gen 1, 2, 3, BLU devices to Matter
   - ... and more plugins
+- Web-Based [matter-controller](https://github.com/JimBuzbee/matter-controller): Examples of Matter Controllers that utilize a web socket to communicate with the Matter Shell 
