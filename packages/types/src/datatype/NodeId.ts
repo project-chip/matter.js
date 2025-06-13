@@ -43,9 +43,9 @@ export namespace NodeId {
      * must have an Operational Node ID as the source address. All unicast messages must have an Operational Node ID
      * as the destination address.
      */
-    export const randomOperationalNodeId = (): NodeId => {
+    export const randomOperationalNodeId = (crypto: Crypto): NodeId => {
         while (true) {
-            const randomBigInt = Crypto.getRandomBigInt(8);
+            const randomBigInt = crypto.randomBigInt(8);
             if (randomBigInt >= OPERATIONAL_NODE_MIN && randomBigInt <= OPERATIONAL_NODE_MAX) {
                 return NodeId(randomBigInt);
             }

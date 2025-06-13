@@ -9,7 +9,6 @@ import { Fabric } from "#fabric/Fabric.js";
 import { FabricManager } from "#fabric/FabricManager.js";
 import {
     Bytes,
-    Crypto,
     CryptoDecryptError,
     ImplementationError,
     InternalError,
@@ -126,7 +125,12 @@ export class GroupSession extends SecureSession {
 
         return {
             header,
-            applicationPayload: Crypto.encrypt(this.#operationalGroupKey, applicationPayload, nonce, headerBytes),
+            applicationPayload: this.#fabric.crypto.encrypt(
+                this.#operationalGroupKey,
+                applicationPayload,
+                nonce,
+                headerBytes,
+            ),
         };
     }
 
@@ -179,7 +183,7 @@ export class GroupSession extends SecureSession {
             try {
                 message = MessageCodec.decodePayload({
                     header,
-                    applicationPayload: Crypto.decrypt(key, applicationPayload, nonce, aad),
+                    applicationPayload: fabric.crypto.decrypt(key, applicationPayload, nonce, aad),
                 });
                 found = true;
                 break; // Exit loop on first successful decryption

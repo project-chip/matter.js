@@ -7,7 +7,7 @@
 import { Fabric } from "#fabric/Fabric.js";
 import { FabricManager } from "#fabric/FabricManager.js";
 import { TestFabric } from "#fabric/TestFabric.js";
-import { b$, Bytes, Crypto, StorageBackendMemory, StorageManager } from "#general";
+import { b$, Bytes, MockCrypto, StorageBackendMemory, StorageManager } from "#general";
 import { NodeSession } from "#session/NodeSession.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
@@ -52,18 +52,18 @@ describe("FabricBuilder", () => {
 
 const NO_BYTES = new Uint8Array();
 
-describe("Fabric", () => {
-    before(MockCrypto.init);
+const crypto = MockCrypto();
 
+describe("Fabric", () => {
     describe("getDestinationId", () => {
         it("generates the correct destination ID", async () => {
-            const fabric = new Fabric({
+            const fabric = new Fabric(crypto, {
                 fabricIndex: TEST_FABRIC_INDEX,
                 fabricId: TEST_FABRIC_ID,
                 nodeId: TEST_NODE_ID,
                 rootNodeId: TEST_ROOT_NODE,
                 operationalId: NO_BYTES,
-                keyPair: await Crypto.createKeyPair(),
+                keyPair: await crypto.createKeyPair(),
                 rootPublicKey: TEST_ROOT_PUBLIC_KEY,
                 rootVendorId: VendorId(0),
                 rootCert: NO_BYTES,
@@ -87,13 +87,13 @@ describe("Fabric", () => {
         });
 
         it("generates the correct destination ID 3", async () => {
-            const fabric = new Fabric({
+            const fabric = new Fabric(crypto, {
                 fabricIndex: TEST_FABRIC_INDEX,
                 fabricId: TEST_FABRIC_ID_3,
                 nodeId: TEST_NODE_ID_3,
                 rootNodeId: TEST_ROOT_NODE,
                 operationalId: NO_BYTES,
-                keyPair: await Crypto.createKeyPair(),
+                keyPair: await crypto.createKeyPair(),
                 rootPublicKey: TEST_ROOT_PUBLIC_KEY_3,
                 rootVendorId: VendorId(0),
                 rootCert: NO_BYTES,
@@ -121,6 +121,7 @@ describe("Fabric", () => {
             let session2Destroyed = false;
             const manager = await createManager();
             const secureSession1 = new NodeSession({
+                crypto,
                 manager,
                 id: 1,
                 fabric: undefined,
@@ -134,6 +135,7 @@ describe("Fabric", () => {
 
             fabric.addSession(secureSession1);
             const secureSession2 = new NodeSession({
+                crypto,
                 manager,
                 id: 2,
                 fabric: undefined,
@@ -181,6 +183,7 @@ describe("Fabric", () => {
             let session2Destroyed = false;
             const manager = await createManager();
             const secureSession1 = new NodeSession({
+                crypto,
                 manager,
                 id: 1,
                 fabric: undefined,
@@ -193,6 +196,7 @@ describe("Fabric", () => {
             });
             fabric.addSession(secureSession1);
             const secureSession2 = new NodeSession({
+                crypto,
                 manager,
                 id: 2,
                 fabric: undefined,
@@ -226,7 +230,7 @@ async function createManager() {
     const storage = new StorageManager(new StorageBackendMemory());
     await storage.initialize();
     return new SessionManager({
-        fabrics: new FabricManager(),
+        fabrics: new FabricManager(crypto),
         storage: storage.createContext("session"),
     });
 }

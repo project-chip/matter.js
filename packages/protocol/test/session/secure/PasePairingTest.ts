@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto, Spake2p } from "#general";
+import { Bytes, Spake2p, StandardCrypto } from "#general";
 import { SPAKE_CONTEXT } from "#session/pase/PaseMessenger.js";
 
 describe("PasePairing", () => {
+    const crypto = new StandardCrypto();
+
     describe("Test PASE Spake2 process", () => {
         it("test fix for elliptic library failure", async () => {
             /*
@@ -18,7 +20,7 @@ describe("PasePairing", () => {
                 iterations: 1000,
                 salt: Bytes.fromHex("03959ebc20b8fcbda262d97f9a7a9e76e32d7a1b9c5166b6a3721e88acad8808"),
             };
-            const { w0, L } = await Spake2p.computeW0L(serverPbkdfParameters, 20202021);
+            const { w0, L } = await Spake2p.computeW0L(crypto, serverPbkdfParameters, 20202021);
             expect(w0.toString(16)).equal("177867f1e564cc4d9f347edfc28263ee5a50f1e21177cfb9a7dc2504437ccb");
             expect(Bytes.toHex(L)).equal(
                 "04cf26d253cae2dd44c6954d443c7badc1e8811b8484eaae2d7bf43ec2f7e3173527877ea4a554513063036f55d2871e87e294dfdc18cd39edd6519fb4dfcde976",
@@ -42,12 +44,13 @@ describe("PasePairing", () => {
 
             // Process pake1 and send pake2
             const spake2p = new Spake2p(
-                await Crypto.computeSha256([SPAKE_CONTEXT, requestPayload, responsePayload]),
+                crypto,
+                await crypto.computeSha256([SPAKE_CONTEXT, requestPayload, responsePayload]),
                 BigInt("0xde583b5685529de9544b92c9c8cba696751b14d65092d13458879b3bc9814b53"),
                 w0,
             );
 
-            const { w0: clientw0 } = await Spake2p.computeW0W1(serverPbkdfParameters, 20202021);
+            const { w0: clientw0 } = await Spake2p.computeW0W1(crypto, serverPbkdfParameters, 20202021);
             expect(w0.toString(16)).equal(clientw0.toString(16));
 
             const X = Bytes.fromHex(
@@ -70,7 +73,7 @@ describe("PasePairing", () => {
                 iterations: 1000,
                 salt: Bytes.fromHex("2bb41e9d75f30c2e6b2f059410c56965717cc2bf14ed6c73a169435326a89652"),
             };
-            const { w0, L } = await Spake2p.computeW0L(serverPbkdfParameters, 20202021);
+            const { w0, L } = await Spake2p.computeW0L(crypto, serverPbkdfParameters, 20202021);
             expect(w0.toString(16)).equal("501f85a83d1da77983ff6f0c1f742d6d98f6d0ab0ba740a38032200099c8981f");
             expect(Bytes.toHex(L)).equal(
                 "0463e7f225296bcd9b100e605d636a3d2c84524665cbd9b8b75e737d04bca1241486b37bdba74284de76f2db9df271d2c5bda21b8e26bc0943dcbf0542665c3aa8",
@@ -94,12 +97,13 @@ describe("PasePairing", () => {
 
             // Process pake1 and send pake2
             const spake2p = new Spake2p(
-                await Crypto.computeSha256([SPAKE_CONTEXT, requestPayload, responsePayload]),
+                crypto,
+                await crypto.computeSha256([SPAKE_CONTEXT, requestPayload, responsePayload]),
                 BigInt("0xfee695b4972a4f620951010c87390d3fe1313efce399fbc2c9c7cdc04d22b4c6"),
                 w0,
             );
 
-            const { w0: clientw0 } = await Spake2p.computeW0W1(serverPbkdfParameters, 20202021);
+            const { w0: clientw0 } = await Spake2p.computeW0W1(crypto, serverPbkdfParameters, 20202021);
             expect(w0.toString(16)).equal(clientw0.toString(16));
 
             const X = Bytes.fromHex(

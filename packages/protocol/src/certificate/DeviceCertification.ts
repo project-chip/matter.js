@@ -14,6 +14,7 @@ import { CertificationDeclarationManager } from "./CertificationDeclarationManag
  * Device certification used by the OperationalCredentials cluster.
  */
 export class DeviceCertification {
+    #crypto: Crypto;
     #privateKey?: PrivateKey;
     #certificate?: Uint8Array;
     #intermediateCertificate?: Uint8Array;
@@ -36,7 +37,8 @@ export class DeviceCertification {
         return this.#assertInitialized().declaration;
     }
 
-    constructor(config?: DeviceCertification.Definition, product?: ProductDescription) {
+    constructor(crypto: Crypto, config?: DeviceCertification.Definition, product?: ProductDescription) {
+        this.#crypto = crypto;
         let configProvider;
         if (typeof config === "function") {
             configProvider = config;
@@ -48,14 +50,18 @@ export class DeviceCertification {
                     throw new ImplementationError(`Cannot generate device certification without product information`);
                 }
 
-                const paa = await AttestationCertificateManager.create(product.vendorId);
+                const paa = await AttestationCertificateManager.create(crypto, product.vendorId);
                 const { keyPair: dacKeyPair, dac } = await paa.getDACert(product.productId);
 
                 return {
                     privateKey: PrivateKey(dacKeyPair.privateKey),
                     certificate: dac,
                     intermediateCertificate: await paa.getPAICert(),
-                    declaration: await CertificationDeclarationManager.generate(product.vendorId, product.productId),
+                    declaration: await CertificationDeclarationManager.generate(
+                        crypto,
+                        product.vendorId,
+                        product.productId,
+                    ),
                 };
             };
         }
@@ -73,7 +79,7 @@ export class DeviceCertification {
 
     async sign(session: NodeSession, data: Uint8Array) {
         const { privateKey } = this.#assertInitialized();
-        const signature = await Crypto.signEcdsa(privateKey, [data, session.attestationChallengeKey]);
+        const signature = await this.#crypto.signEcdsa(privateKey, [data, session.attestationChallengeKey]);
         return signature;
     }
 

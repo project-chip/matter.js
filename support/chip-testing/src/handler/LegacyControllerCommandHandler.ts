@@ -535,10 +535,12 @@ export class LegacyControllerCommandHandler extends CommandHandler {
             fabricData: { fabricId, identityProtectionKey },
         } = this.#controllerInstance.paseCommissionerConfig;
         const { rootCertBytes } = caConfig;
-        const ca = await CertificateAuthority.create(caConfig);
+        const ca = await CertificateAuthority.create(this.#controllerInstance.crypto, caConfig);
 
         const { certSigningRequest } = TlvCertSigningRequest.decode(elements);
-        const operationalPublicKey = await CertificateManager.getPublicKeyFromCsr(certSigningRequest);
+        const operationalPublicKey = await new CertificateManager(this.#controllerInstance.crypto).getPublicKeyFromCsr(
+            certSigningRequest,
+        );
 
         return {
             IPK: identityProtectionKey,

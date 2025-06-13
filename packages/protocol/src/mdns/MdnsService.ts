@@ -6,6 +6,7 @@
 
 import {
     Construction,
+    Crypto,
     Diagnostic,
     Environment,
     Environmental,
@@ -43,9 +44,10 @@ export class MdnsService {
         this.limitedToNetInterface = vars.get("mdns.networkInterface", options?.networkInterface);
 
         this.#construction = Construction(this, async () => {
+            const crypto = environment.get(Crypto);
             const network = environment.get(Network);
 
-            this.#broadcaster = await MdnsBroadcaster.create(network, {
+            this.#broadcaster = await MdnsBroadcaster.create(crypto, network, {
                 enableIpv4: this.enableIpv4,
                 multicastInterface: this.limitedToNetInterface,
             });

@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Bytes, PrivateKey } from "#general";
+import { Bytes, Crypto, PrivateKey } from "#general";
 import { VendorId } from "#types";
 import { CertificateManager, TlvCertificationDeclaration } from "./CertificateManager.js";
 
@@ -30,7 +30,7 @@ const TestCMS_SignerPrivateKey = Bytes.fromHex("AEF3484116E9481EC57BE0472DF41BF4
 const TestCMS_SignerSubjectKeyIdentifier = Bytes.fromHex("62FA823359ACFAA9963E1CFA140ADDF504F37160");
 
 export class CertificationDeclarationManager {
-    static generate(vendorId: VendorId, productId: number, provisional = false) {
+    static generate(crypto: Crypto, vendorId: VendorId, productId: number, provisional = false) {
         const certificationElements = TlvCertificationDeclaration.encode({
             formatVersion: 1,
             vendorId,
@@ -43,7 +43,7 @@ export class CertificationDeclarationManager {
             certificationType: provisional ? 1 : 0, // 0 = Test, 1 = Provisional/In certification, 2 = official
         });
 
-        return CertificateManager.certificationDeclarationToAsn1(
+        return new CertificateManager(crypto).certificationDeclarationToAsn1(
             certificationElements,
             TestCMS_SignerSubjectKeyIdentifier,
             PrivateKey(TestCMS_SignerPrivateKey),

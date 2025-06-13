@@ -123,7 +123,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     readonly id = INTERACTION_PROTOCOL_ID;
     readonly requiresSecureSession = true;
     #context: InteractionContext;
-    #nextSubscriptionId = Crypto.getRandomUInt32();
+    #nextSubscriptionId: number;
     #isClosing = false;
     #clientHandler?: ProtocolHandler;
     readonly #subscriptionConfig: ServerSubscriptionConfig;
@@ -136,6 +136,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     #serverInteraction: OnlineServerInteraction;
 
     constructor(node: ServerNode, sessions: SessionManager) {
+        this.#nextSubscriptionId = node.env.get(Crypto).randomUint32;
+
         this.#context = {
             sessions,
             exchangeManager: node.env.get(ExchangeManager),

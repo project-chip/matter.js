@@ -7,6 +7,7 @@
 import {
     Bytes,
     Construction,
+    Crypto,
     Environment,
     Environmental,
     ImplementationError,
@@ -33,6 +34,7 @@ export enum FabricAction {
 }
 
 export class FabricManager {
+    #crypto: Crypto;
     #nextFabricIndex = 1;
     readonly #fabrics = new Map<FabricIndex, Fabric>();
     #initializationDone = false;
@@ -45,7 +47,8 @@ export class FabricManager {
     };
     #construction: Construction<FabricManager>;
 
-    constructor(storage?: StorageContext) {
+    constructor(crypto: Crypto, storage?: StorageContext) {
+        this.#crypto = crypto;
         this.#storage = storage;
 
         let construct;
@@ -60,7 +63,7 @@ export class FabricManager {
 
                 const fabrics = await this.#storage.get<Fabric.Config[]>("fabrics", []);
                 for (const fabricConfig of fabrics) {
-                    this.#addFabric(new Fabric(fabricConfig));
+                    this.#addFabric(new Fabric(crypto, fabricConfig));
                 }
 
                 this.#nextFabricIndex = await this.#storage.get("nextFabricIndex", this.#nextFabricIndex);
@@ -72,6 +75,10 @@ export class FabricManager {
         this.#construction = Construction(this, construct);
     }
 
+    get crypto() {
+        return this.#crypto;
+    }
+
     get construction() {
         return this.#construction;
     }
@@ -81,7 +88,7 @@ export class FabricManager {
     }
 
     static [Environmental.create](env: Environment) {
-        const instance = new FabricManager(env.get(StorageManager).createContext("fabrics"));
+        const instance = new FabricManager(env.get(Crypto), env.get(StorageManager).createContext("fabrics"));
         env.set(FabricManager, instance);
         return instance;
     }

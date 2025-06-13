@@ -5,10 +5,11 @@
  */
 import { FabricManager, FabricNotFoundError, FabricTableFullError } from "#fabric/FabricManager.js";
 import { TestFabric } from "#fabric/TestFabric.js";
-import { MatterFlowError, StorageBackendMemory, StorageManager } from "#general";
+import { MatterFlowError, StandardCrypto, StorageBackendMemory, StorageManager } from "#general";
 import { FabricIndex } from "#types";
 
 describe("FabricManager", () => {
+    const crypto = new StandardCrypto();
     let storage: StorageBackendMemory;
     let storageManager: StorageManager;
     let fabrics: FabricManager;
@@ -17,7 +18,7 @@ describe("FabricManager", () => {
         storage = new StorageBackendMemory();
         storageManager = new StorageManager(storage);
         await storageManager.initialize();
-        fabrics = new FabricManager(storageManager.createContext("Context"));
+        fabrics = new FabricManager(crypto, storageManager.createContext("Context"));
         await fabrics.construction.ready;
     });
 
@@ -34,7 +35,7 @@ describe("FabricManager", () => {
         it("adding a fabric with same index twice throws error", async () => {
             const storage = new StorageManager(new StorageBackendMemory());
             await storage.initialize();
-            const fabricManager = new FabricManager(storage.createContext("Context"));
+            const fabricManager = new FabricManager(crypto, storage.createContext("Context"));
             await fabricManager.construction.ready;
             const fabric = await TestFabric();
             fabricManager.addFabric(fabric);
@@ -61,7 +62,7 @@ describe("FabricManager", () => {
             const fabric = await TestFabric();
             storage.set(["Context"], "fabrics", [fabric.config]);
 
-            fabrics = new FabricManager(storageManager.createContext("Context"));
+            fabrics = new FabricManager(crypto, storageManager.createContext("Context"));
             await fabrics.construction.ready;
             expect(fabrics.fabrics.length).to.equal(1);
             expect(fabrics.fabrics[0].config).to.deep.equal(fabric.config);

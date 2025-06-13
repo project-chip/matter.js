@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { Fabric } from "#fabric/Fabric.js";
-import { BasicMap, Bytes, Crypto, InternalError, MatterFlowError, StorageContext } from "#general";
+import { BasicMap, Bytes, InternalError, MatterFlowError, StorageContext } from "#general";
 import { GroupKeySet, KeySets, OperationalKeySet } from "#groups/KeySets.js";
 import { MessagingState } from "#groups/MessagingState.js";
 import { GroupId } from "#types";
@@ -26,7 +26,7 @@ export class FabricGroups {
     constructor(fabric: Fabric, storage?: StorageContext) {
         this.#fabric = fabric;
         this.#groups = new Groups(fabric, this.#keySets);
-        this.#messagingState = new MessagingState(storage);
+        this.#messagingState = new MessagingState(fabric.crypto, storage);
 
         // KeySet with ID 0 is always the Fabric IPK, so we initialize from there because this is not stored
         // in Key Management Cluster
@@ -122,21 +122,33 @@ export class FabricGroups {
 
         // Lets pre-calculate the operational keys
         const operationalId = this.#fabric.operationalId;
-        const operationalEpochKey0 = await Crypto.createHkdfKey(epochKey0, operationalId, GROUP_SECURITY_INFO);
+        const operationalEpochKey0 = await this.#fabric.crypto.createHkdfKey(
+            epochKey0,
+            operationalId,
+            GROUP_SECURITY_INFO,
+        );
         const operationalEpochKey1 =
-            epochKey1 !== null ? await Crypto.createHkdfKey(epochKey1, operationalId, GROUP_SECURITY_INFO) : null;
+            epochKey1 !== null
+                ? await this.#fabric.crypto.createHkdfKey(epochKey1, operationalId, GROUP_SECURITY_INFO)
+                : null;
         const operationalEpochKey2 =
-            epochKey2 !== null ? await Crypto.createHkdfKey(epochKey2, operationalId, GROUP_SECURITY_INFO) : null;
+            epochKey2 !== null
+                ? await this.#fabric.crypto.createHkdfKey(epochKey2, operationalId, GROUP_SECURITY_INFO)
+                : null;
         this.#keySets.add({
             ...groupKeySet,
             operationalEpochKey0,
-            groupSessionId0: await this.#keySets.sessionIdFromKey(operationalEpochKey0),
+            groupSessionId0: await this.#keySets.sessionIdFromKey(this.#fabric.crypto, operationalEpochKey0),
             operationalEpochKey1,
             groupSessionId1:
-                operationalEpochKey1 !== null ? await this.#keySets.sessionIdFromKey(operationalEpochKey1) : null,
+                operationalEpochKey1 !== null
+                    ? await this.#keySets.sessionIdFromKey(this.#fabric.crypto, operationalEpochKey1)
+                    : null,
             operationalEpochKey2,
             groupSessionId2:
-                operationalEpochKey2 !== null ? await this.#keySets.sessionIdFromKey(operationalEpochKey2) : null,
+                operationalEpochKey2 !== null
+                    ? await this.#keySets.sessionIdFromKey(this.#fabric.crypto, operationalEpochKey2)
+                    : null,
         });
     }
 

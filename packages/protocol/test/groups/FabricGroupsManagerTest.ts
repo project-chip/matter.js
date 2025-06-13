@@ -5,7 +5,7 @@
  */
 
 import { Fabric } from "#fabric/Fabric.js";
-import { Bytes, Key, PrivateKey } from "#general";
+import { Bytes, Key, PrivateKey, StandardCrypto } from "#general";
 import { FabricId, FabricIndex, GroupId, NodeId, VendorId } from "#types";
 
 const TEST_ROOT_PUBLIC_KEY = Bytes.fromHex(
@@ -19,7 +19,7 @@ const SEC1_KEY = Bytes.fromHex(
 describe("FabricGroupsManager", () => {
     describe("Group IPv6 address calculation", () => {
         it("should calculate group IPv6 address", async () => {
-            const fabric = new Fabric({
+            const fabric = new Fabric(new StandardCrypto(), {
                 fabricIndex: FabricIndex(1),
                 fabricId: FabricId(BigInt("0x456789ABCDEF1234")),
                 nodeId: NodeId(1),

@@ -10,6 +10,7 @@ import { IdentityService } from "#node/server/IdentityService.js";
 import type { ServerNode } from "#node/ServerNode.js";
 import { OperationalPeer, PeerAddress, PeerAddressMap, PeerAddressStore } from "#protocol";
 import { FabricIndex, NodeId } from "#types";
+import { Crypto } from "@matter/general";
 
 /**
  * This is an adapter for lower-level components in the protocol package.
@@ -36,7 +37,7 @@ export class NodePeerAddressStore extends PeerAddressStore {
 
     assignNewAddress(node: ClientNode, fabricIndex: FabricIndex, nodeId?: NodeId) {
         while (nodeId === undefined) {
-            nodeId = NodeId.randomOperationalNodeId();
+            nodeId = NodeId.randomOperationalNodeId(this.#owner.env.get(Crypto));
             if (this.#assignedAddresses.has({ fabricIndex, nodeId })) {
                 nodeId = undefined;
             }

@@ -8,9 +8,9 @@ import { Fabric } from "#fabric/Fabric.js";
 import {
     Bytes,
     createPromise,
-    Crypto,
     DnsCodec,
     DnsMessageType,
+    MockCrypto,
     MockNetwork,
     MockUdpChannel,
     NetworkSimulator,
@@ -75,7 +75,7 @@ const NODE_ID = NodeId(BigInt(1));
     describe(`MDNS Scanner and Broadcaster ${testIpv4Enabled ? "with" : "without"} IPv4 (and Ipv4 ${
         serverHasIpv4Addresses ? "" : "not "
     }provided)`, () => {
-        before(MockCrypto.enable);
+        const crypto = MockCrypto();
         before(MockTime.enable);
 
         let broadcaster: MdnsBroadcaster;
@@ -94,7 +94,7 @@ const NODE_ID = NodeId(BigInt(1));
                 type: testIpv4Enabled ? "udp4" : "udp6",
             });
 
-            broadcaster = await MdnsBroadcaster.create(serverNetwork, {
+            broadcaster = await MdnsBroadcaster.create(crypto, serverNetwork, {
                 enableIpv4: testIpv4Enabled,
                 multicastInterface: "fake0",
             });
@@ -130,7 +130,7 @@ const NODE_ID = NodeId(BigInt(1));
         describe("broadcaster", () => {
             it("has correct crypto installed", async () => {
                 // This is the first place we encounter this in a full test run so be a little explicit about it
-                expect(Crypto.getRandomData(1)[0]).equals(0x80, "Crypto mocking is broken, tests will fail");
+                expect(crypto.randomUint8).equals(0x80, "Crypto mocking is broken, tests will fail");
             });
 
             it("it broadcasts the device fabric on one port and expires", async () => {

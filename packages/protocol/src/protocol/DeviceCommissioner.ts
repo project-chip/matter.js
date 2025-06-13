@@ -9,7 +9,6 @@ import { FailsafeContext } from "#common/FailsafeContext.js";
 import { CommissioningMode } from "#common/InstanceBroadcaster.js";
 import { FabricManager } from "#fabric/FabricManager.js";
 import {
-    Crypto,
     Diagnostic,
     Environment,
     Environmental,
@@ -153,7 +152,7 @@ export class DeviceCommissioner {
         this.#context.secureChannelProtocol.setPaseCommissioner(
             await PaseServer.fromPin(this.#context.sessions, this.#context.commissioningConfig.values.passcode, {
                 iterations: 1000,
-                salt: Crypto.getRandomData(32),
+                salt: this.#context.fabrics.crypto.randomBytes(32),
             }),
         );
 

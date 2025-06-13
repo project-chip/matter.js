@@ -73,7 +73,7 @@ export class CaseServer implements ProtocolHandler {
                 ? this.#sessions.findResumptionRecordById(sigma1.resumptionId)
                 : undefined;
 
-        const context = new Sigma1Context(messenger, sigma1Bytes, sigma1, resumptionRecord);
+        const context = new Sigma1Context(this.#fabrics.crypto, messenger, sigma1Bytes, sigma1, resumptionRecord);
 
         // Attempt resumption
         if (await this.#resume(context)) {
@@ -100,14 +100,15 @@ export class CaseServer implements ProtocolHandler {
         }
 
         const { sharedSecret, fabric, peerNodeId, caseAuthenticatedTags } = cx.resumptionRecord;
-        const peerResumeKey = await Crypto.createHkdfKey(
+        const { crypto } = this.#fabrics;
+        const peerResumeKey = await crypto.createHkdfKey(
             sharedSecret,
             Bytes.concat(cx.peerRandom, cx.peerResumptionId),
             KDFSR1_KEY_INFO,
         );
 
         try {
-            Crypto.decrypt(peerResumeKey, cx.peerResumeMic, RESUME1_MIC_NONCE);
+            crypto.decrypt(peerResumeKey, cx.peerResumeMic, RESUME1_MIC_NONCE);
         } catch (e) {
             CryptoDecryptError.accept(e);
 
@@ -135,8 +136,8 @@ export class CaseServer implements ProtocolHandler {
 
         // Generate sigma 2 resume
         const resumeSalt = Bytes.concat(cx.peerRandom, cx.localResumptionId);
-        const resumeKey = await Crypto.createHkdfKey(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
-        const resumeMic = Crypto.encrypt(resumeKey, new Uint8Array(0), RESUME2_MIC_NONCE);
+        const resumeKey = await crypto.createHkdfKey(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
+        const resumeMic = crypto.encrypt(resumeKey, new Uint8Array(0), RESUME2_MIC_NONCE);
         try {
             await cx.messenger.sendSigma2Resume({
                 resumptionId: cx.localResumptionId,
@@ -179,22 +180,23 @@ export class CaseServer implements ProtocolHandler {
         }
 
         // Generate pairing info
-        const responderRandom = Crypto.getRandom();
+        const { crypto } = this.#fabrics;
+        const responderRandom = crypto.randomBytes(32);
 
         // TODO: Pass through a group id?
         const fabric = await this.#fabrics.findFabricFromDestinationId(cx.destinationId, cx.peerRandom);
         const { operationalCert: nodeOpCert, intermediateCACert, operationalIdentityProtectionKey } = fabric;
-        const key = await Crypto.createKeyPair();
+        const key = await crypto.createKeyPair();
         const responderEcdhPublicKey = key.publicBits;
-        const sharedSecret = await Crypto.generateDhSecret(key, PublicKey(cx.peerEcdhPublicKey));
+        const sharedSecret = await crypto.generateDhSecret(key, PublicKey(cx.peerEcdhPublicKey));
 
         const sigma2Salt = Bytes.concat(
             operationalIdentityProtectionKey,
             responderRandom,
             responderEcdhPublicKey,
-            await Crypto.computeSha256(cx.bytes),
+            await crypto.computeSha256(cx.bytes),
         );
-        const sigma2Key = await Crypto.createHkdfKey(sharedSecret, sigma2Salt, KDFSR2_INFO);
+        const sigma2Key = await crypto.createHkdfKey(sharedSecret, sigma2Salt, KDFSR2_INFO);
         const signatureData = TlvSignedData.encode({
             responderNoc: nodeOpCert,
             responderIcac: intermediateCACert,
@@ -208,7 +210,7 @@ export class CaseServer implements ProtocolHandler {
             signature,
             resumptionId: cx.localResumptionId,
         });
-        const encrypted = Crypto.encrypt(sigma2Key, encryptedData, TBE_DATA2_NONCE);
+        const encrypted = crypto.encrypt(sigma2Key, encryptedData, TBE_DATA2_NONCE);
         const responderSessionId = await this.#sessions.getNextAvailableSessionId();
         const sigma2Bytes = await cx.messenger.sendSigma2({
             responderRandom,
@@ -225,10 +227,10 @@ export class CaseServer implements ProtocolHandler {
         } = await cx.messenger.readSigma3();
         const sigma3Salt = Bytes.concat(
             operationalIdentityProtectionKey,
-            await Crypto.computeSha256([cx.bytes, sigma2Bytes]),
+            await crypto.computeSha256([cx.bytes, sigma2Bytes]),
         );
-        const sigma3Key = await Crypto.createHkdfKey(sharedSecret, sigma3Salt, KDFSR3_INFO);
-        const peerDecryptedData = Crypto.decrypt(sigma3Key, peerEncrypted, TBE_DATA3_NONCE);
+        const sigma3Key = await crypto.createHkdfKey(sharedSecret, sigma3Salt, KDFSR3_INFO);
+        const peerDecryptedData = crypto.decrypt(sigma3Key, peerEncrypted, TBE_DATA3_NONCE);
         const {
             responderNoc: peerNewOpCert,
             responderIcac: peerIntermediateCACert,
@@ -252,12 +254,12 @@ export class CaseServer implements ProtocolHandler {
             throw new UnexpectedDataError(`Fabric ID mismatch: ${fabric.fabricId} !== ${peerFabricId}`);
         }
 
-        await Crypto.verifyEcdsa(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
+        await crypto.verifyEcdsa(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
         // All good! Create secure session
         const secureSessionSalt = Bytes.concat(
             operationalIdentityProtectionKey,
-            await Crypto.computeSha256([cx.bytes, sigma2Bytes, sigma3Bytes]),
+            await crypto.computeSha256([cx.bytes, sigma2Bytes, sigma3Bytes]),
         );
         const secureSession = await this.#sessions.createSecureSession({
             sessionId: responderSessionId,
@@ -301,6 +303,7 @@ export class CaseServer implements ProtocolHandler {
 }
 
 class Sigma1Context {
+    crypto: Crypto;
     messenger: CaseServerMessenger;
     bytes: Uint8Array;
     peerSessionId: number;
@@ -315,11 +318,13 @@ class Sigma1Context {
     #localResumptionId?: Uint8Array;
 
     constructor(
+        crypto: Crypto,
         messenger: CaseServerMessenger,
         bytes: Uint8Array,
         sigma1: TypeFromSchema<typeof TlvCaseSigma1>,
         resumptionRecord?: ResumptionRecord,
     ) {
+        this.crypto = crypto;
         this.messenger = messenger;
         this.bytes = bytes;
         this.peerSessionId = sigma1.initiatorSessionId;
@@ -333,6 +338,6 @@ class Sigma1Context {
     }
 
     get localResumptionId() {
-        return (this.#localResumptionId ??= Crypto.getRandomData(16));
+        return (this.#localResumptionId ??= this.crypto.randomBytes(16));
     }
 }

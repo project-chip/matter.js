@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Bytes, ImplementationError, InternalError, StorageContext } from "#general";
+import { Bytes, Crypto, ImplementationError, InternalError, StorageContext } from "#general";
 import { PersistedMessageCounter } from "#protocol/MessageCounter.js";
 import { MessageReceptionStateEncryptedWithRollover } from "#protocol/MessageReceptionState.js";
 import { NodeId } from "#types";
@@ -19,9 +19,12 @@ export class MessagingState {
 
     /** Message reception state for data messages per Operational key and source node. */
     readonly #messageDataReceptionState = new Map<string, Map<NodeId, MessageReceptionStateEncryptedWithRollover>>();
+
+    #crypto: Crypto;
     #storage?: StorageContext;
 
-    constructor(storage?: StorageContext) {
+    constructor(crypto: Crypto, storage?: StorageContext) {
+        this.#crypto = crypto;
         if (storage !== undefined) {
             this.#storage = storage;
         }
@@ -44,7 +47,7 @@ export class MessagingState {
         const operationalKeyHex = Bytes.toHex(operationalKey);
         let counter = this.#groupDataCounters.get(operationalKeyHex);
         if (counter === undefined) {
-            counter = new PersistedMessageCounter(this.#storage, `${operationalKeyHex}-data`);
+            counter = new PersistedMessageCounter(this.#crypto, this.#storage, `${operationalKeyHex}-data`);
             this.#groupDataCounters.set(operationalKeyHex, counter);
         }
         return counter;

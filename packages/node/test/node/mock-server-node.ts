@@ -10,9 +10,11 @@ import { Agent } from "#endpoint/Agent.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import {
     AsyncObservable,
+    Crypto,
     DataReadQueue,
     Environment,
     MaybePromise,
+    MockCrypto,
     Network,
     NetworkSimulator,
     StorageBackendMemory,
@@ -31,9 +33,6 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
     constructor(type?: T, options?: Node.Options<T>, simulator?: NetworkSimulator);
     constructor(config: Partial<Node.Configuration<T>>);
     constructor(definition: T | Node.Configuration<T>, options?: Node.Options<T>, simulator?: NetworkSimulator) {
-        // Stabilize version numbers
-        MockCrypto.init();
-
         // Server operation contains numeric time components that must be mocked
         MockTime.init();
 
@@ -43,6 +42,10 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
         if (!environment) {
             environment = new Environment("test");
         }
+
+        // Stabilize random numbers
+        environment.set(Crypto, MockCrypto());
+
         const storage = environment.get(StorageService);
         if (storage.location !== "(memory-for-test)") {
             storage.location = "(memory-for-test)";

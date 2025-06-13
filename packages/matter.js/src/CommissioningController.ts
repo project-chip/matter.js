@@ -7,6 +7,7 @@
 import { OperationalCredentials } from "#clusters";
 import {
     ClassExtends,
+    Crypto,
     Environment,
     ImplementationError,
     InternalError,
@@ -155,6 +156,7 @@ export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
 
 /** Controller class to commission and connect multiple nodes into one fabric. */
 export class CommissioningController {
+    #crypto: Crypto;
     #started = false;
     #ipv4Disabled?: boolean;
     readonly #listeningAddressIpv4?: string;
@@ -182,6 +184,12 @@ export class CommissioningController {
      */
     constructor(options: CommissioningControllerOptions) {
         this.#options = options;
+        this.#crypto = (options.environment?.environment ?? Environment.default).get(Crypto);
+        this.#crypto.reportUsage();
+    }
+
+    get crypto() {
+        return this.#crypto;
     }
 
     get nodeId() {
@@ -419,6 +427,7 @@ export class CommissioningController {
             async (discoveryType?: NodeDiscoveryType) => void (await controller.connect(nodeId, { discoveryType })),
             handler => this.#sessionDisconnectedHandler.set(nodeId, handler),
             controller.sessions,
+            this.#crypto,
             await this.#collectStoredAttributeData(nodeId),
         );
         this.#initializedNodes.set(nodeId, pairedNode);

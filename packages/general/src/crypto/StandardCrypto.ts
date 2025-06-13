@@ -6,7 +6,7 @@
  */
 
 import { DerBigUint, DerCodec, DerError } from "#codec/DerCodec.js";
-import { Boot } from "#util/Boot.js";
+import { Environment } from "#environment/Environment.js";
 import { Bytes } from "#util/Bytes.js";
 import { Ccm } from "./aes/Ccm.js";
 import { Crypto, CRYPTO_SYMMETRIC_KEY_LENGTH, CryptoDsaEncoding } from "./Crypto.js";
@@ -30,14 +30,14 @@ const SIGNATURE_ALGORITHM = <EcdsaParams>{
  * Web Crypto doesn't support AES-CCM required by Matter so fall back to a JS implementation for that.  See relevant
  * warnings in the "aes" subdirectory.
  */
-export class StandardCrypto implements Crypto {
+export class StandardCrypto extends Crypto {
     implementationName = "JS";
 
     static provider() {
         return new StandardCrypto();
     }
 
-    getRandomData(length: number): Uint8Array {
+    randomBytes(length: number): Uint8Array {
         const result = new Uint8Array(length);
         crypto.getRandomValues(result);
         return result;
@@ -221,13 +221,6 @@ export class StandardCrypto implements Crypto {
     }
 }
 
-// Only install if VM supports Web Crypto
-if ((globalThis.crypto as any)?.subtle?.[Symbol.toStringTag] === "SubtleCrypto") {
-    Boot.init(() => {
-        Crypto.provider = StandardCrypto.provider;
-    });
-}
-
 function importKey(
     format: "jwk",
     keyData: JsonWebKey,
@@ -250,3 +243,6 @@ async function importKey(...params: unknown[]) {
         throw new KeyInputError("Invalid key", { cause });
     }
 }
+
+// Unconditionally add to Environment as it has not been exported yet so there can be no other implementation present
+Environment.default.set(Crypto, new StandardCrypto());

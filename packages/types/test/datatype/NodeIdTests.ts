@@ -6,7 +6,7 @@
 
 import { CaseAuthenticatedTag } from "#datatype/CaseAuthenticatedTag.js";
 import { NodeId } from "#datatype/NodeId.js";
-import { UnexpectedDataError } from "#general";
+import { StandardCrypto, UnexpectedDataError } from "#general";
 
 describe("NodeId", () => {
     it("should create a valid NodeId as BigInt", () => {
@@ -24,7 +24,7 @@ describe("NodeId", () => {
     });
 
     it("should generate a random operational NodeId", () => {
-        const nodeId = NodeId.randomOperationalNodeId();
+        const nodeId = NodeId.randomOperationalNodeId(new StandardCrypto());
         expect(nodeId).to.be.a("bigint");
     });
 

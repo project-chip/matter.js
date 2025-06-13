@@ -89,4 +89,26 @@ export namespace Bytes {
         });
         return result;
     }
+
+    export function asBigInt(bytes: Uint8Array) {
+        const view = new DataView(bytes.buffer);
+        let result = 0n;
+        for (let i = 0; i < bytes.length; ) {
+            const remaining = bytes.length - i;
+            if (remaining >= 8) {
+                result = (result << 64n) + view.getBigUint64(i);
+                i += 8;
+            } else if (remaining >= 4) {
+                result = (result << 32n) + BigInt(view.getUint32(i));
+                i += 4;
+            } else if (remaining >= 2) {
+                result = (result << 16n) + BigInt(view.getUint16(i));
+                i += 2;
+            } else {
+                result = (result << 8n) + BigInt(view.getUint8(i));
+                i++;
+            }
+        }
+        return result;
+    }
 }

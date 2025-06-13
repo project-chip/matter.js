@@ -10,7 +10,15 @@ import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { EndpointStore } from "#endpoint/storage/EndpointStore.js";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
-import { Environment, StorageBackendMemory, StorageContext, StorageManager, StorageService } from "#general";
+import {
+    Crypto,
+    Environment,
+    MockCrypto,
+    StorageBackendMemory,
+    StorageContext,
+    StorageManager,
+    StorageService,
+} from "#general";
 import { Node } from "#node/Node.js";
 import { ServerNode } from "#node/ServerNode.js";
 import { IdentityService } from "#node/server/IdentityService.js";
@@ -88,6 +96,8 @@ export class MockNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoin
 
     constructor(type: T = ServerNode.RootEndpoint as T) {
         const environment = new Environment("test");
+
+        environment.set(Crypto, MockCrypto());
 
         const config = {
             type,

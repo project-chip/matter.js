@@ -381,7 +381,7 @@ export class ControllerCommissioner {
     /** Finds an unused random Node-ID to use for commissioning if not already provided. */
     #determineAddress(fabric: Fabric, nodeId?: NodeId) {
         while (true) {
-            const address = fabric.addressOf(nodeId ?? NodeId.randomOperationalNodeId());
+            const address = fabric.addressOf(nodeId ?? NodeId.randomOperationalNodeId(fabric.crypto));
             try {
                 this.#assertPeerAddress(address);
             } catch (error) {

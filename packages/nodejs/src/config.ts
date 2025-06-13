@@ -15,8 +15,11 @@ let initializeStorage = true;
 let trapProcessSignals = true;
 let trapUnhandledErrors = true;
 let setProcessExitCodeOnError = true;
-let installCrypto = true;
 let installNetwork = true;
+
+// TODO - until we have proper feature detection, disable by default Node.js version of crypto in environments where
+// Node.js crypto emulation is insufficient
+let installCrypto = !process.versions.bun;
 
 export class NodeJsAlreadyInitializedError extends Error {}
 

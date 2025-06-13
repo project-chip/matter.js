@@ -118,14 +118,16 @@ export function CommissioningHelper() {
                 await agent.operationalCredentials.certificateChainRequest({ certificateType: 1 });
             });
 
+            const crypto = node.env.get(Crypto);
+
             await node.online(context, async agent => {
                 await agent.operationalCredentials.attestationRequest({
-                    attestationNonce: Crypto.getRandomData(32),
+                    attestationNonce: crypto.randomBytes(32),
                 });
             });
 
             const { nocsrElements } = await node.online(context, agent =>
-                agent.operationalCredentials.csrRequest({ csrNonce: Crypto.getRandomData(32) }),
+                agent.operationalCredentials.csrRequest({ csrNonce: crypto.randomBytes(32) }),
             );
 
             await node.online(context, async agent => {
@@ -135,7 +137,7 @@ export function CommissioningHelper() {
             });
 
             const { certSigningRequest } = TlvCertSigningRequest.decode(nocsrElements);
-            const peerPublicKey = await CertificateManager.getPublicKeyFromCsr(certSigningRequest);
+            const peerPublicKey = await new CertificateManager(crypto).getPublicKeyFromCsr(certSigningRequest);
             const noc = await authority.ca.generateNoc(
                 peerPublicKey,
                 controllerFabric.fabricId,

@@ -8,6 +8,6 @@ export * from "./Crypto.js";
 export * from "./CryptoConstants.js";
 export * from "./CryptoError.js";
 export * from "./Key.js";
-export * from "./nonentropic.js";
+export * from "./MockCrypto.js";
 export * from "./Spake2p.js";
 export * from "./StandardCrypto.js";

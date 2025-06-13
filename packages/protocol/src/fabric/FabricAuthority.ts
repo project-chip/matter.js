@@ -5,15 +5,7 @@
  */
 
 import { CertificateAuthority } from "#certificate/CertificateAuthority.js";
-import {
-    Bytes,
-    Crypto,
-    CRYPTO_SYMMETRIC_KEY_LENGTH,
-    Environment,
-    Environmental,
-    ImplementationError,
-    Logger,
-} from "#general";
+import { Bytes, CRYPTO_SYMMETRIC_KEY_LENGTH, Environment, Environmental, ImplementationError, Logger } from "#general";
 import { CaseAuthenticatedTag, FabricId, FabricIndex, NodeId, VendorId } from "#types";
 import { Fabric, FabricBuilder } from "./Fabric.js";
 import { FabricManager } from "./FabricManager.js";
@@ -60,10 +52,10 @@ export class FabricAuthority {
     #fabrics: FabricManager;
     #config: FabricAuthorityConfiguration;
 
-    constructor(context: FabricAuthorityContext) {
-        this.#ca = context.ca;
-        this.#fabrics = context.fabrics;
-        this.#config = context.config;
+    constructor({ ca, fabrics, config }: FabricAuthorityContext) {
+        this.#ca = ca;
+        this.#fabrics = fabrics;
+        this.#config = config;
     }
 
     /**
@@ -108,8 +100,8 @@ export class FabricAuthority {
      * Create a new fabric under our control.
      */
     async createFabric() {
-        const rootNodeId = NodeId.randomOperationalNodeId();
-        const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
+        const rootNodeId = NodeId.randomOperationalNodeId(this.#fabrics.crypto);
+        const ipkValue = this.#fabrics.crypto.randomBytes(CRYPTO_SYMMETRIC_KEY_LENGTH);
 
         let vendorId = this.#config.adminVendorId;
         if (vendorId === undefined) {
@@ -117,7 +109,7 @@ export class FabricAuthority {
             logger.warn(`Using test vendor ID 0x${vendorId.toString(16)} for controller fabric`);
         }
 
-        const fabricBuilder = await FabricBuilder.create();
+        const fabricBuilder = await FabricBuilder.create(this.#fabrics.crypto);
         await fabricBuilder.setRootCert(this.#ca.rootCert);
         fabricBuilder
             .setRootNodeId(rootNodeId)

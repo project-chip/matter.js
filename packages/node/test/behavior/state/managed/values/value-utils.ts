@@ -9,7 +9,7 @@ import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
-import { camelize, Identity, MaybePromise, Observable } from "#general";
+import { camelize, Identity, MaybePromise, MockCrypto, Observable } from "#general";
 import { DataModelPath, FieldElement, FieldModel } from "#model";
 import type { Node } from "#node/Node.js";
 import { Val } from "#protocol";
@@ -84,6 +84,7 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
     }
 
     const datasource = Datasource({
+        crypto: MockCrypto(),
         location: {
             endpoint: EndpointNumber(1),
             path: DataModelPath("TestStruct"),

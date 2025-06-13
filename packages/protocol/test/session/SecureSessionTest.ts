@@ -5,7 +5,7 @@
  */
 
 import { Message, MessageCodec, SessionType } from "#codec/MessageCodec.js";
-import { b$, Bytes } from "#general";
+import { b$, Bytes, StandardCrypto } from "#general";
 import { NodeSession } from "#session/NodeSession.js";
 import { NodeId } from "#types";
 
@@ -37,8 +37,11 @@ const MESSAGE: Message = {
 };
 
 describe("SecureSession", () => {
+    const crypto = new StandardCrypto();
+
     function secureSession() {
         return new NodeSession({
+            crypto,
             id: 1,
             fabric: undefined,
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,

@@ -5,7 +5,7 @@
  */
 import { Message, SessionType } from "#codec/MessageCodec.js";
 import { Fabric } from "#fabric/Fabric.js";
-import { Bytes, DataReadQueue, MAX_UDP_MESSAGE_SIZE, PrivateKey } from "#general";
+import { Bytes, DataReadQueue, MAX_UDP_MESSAGE_SIZE, PrivateKey, StandardCrypto } from "#general";
 import { ExchangeSendOptions, MATTER_MESSAGE_OVERHEAD, MessageExchange } from "#protocol/MessageExchange.js";
 import { NodeSession } from "#session/NodeSession.js";
 import { SecureSession } from "#session/SecureSession.js";
@@ -16,7 +16,7 @@ PRIVATE_KEY[31] = 1; // EC doesn't like all-zero private key
 export const KEY = PrivateKey(PRIVATE_KEY);
 
 export function createTestFabric() {
-    return new Fabric({
+    return new Fabric(new StandardCrypto(), {
         fabricIndex: FabricIndex(1),
         fabricId: FabricId(1n),
         nodeId: NodeId(1n),
@@ -107,6 +107,7 @@ export async function createDummyMessageExchange(
     closeCallback?: () => void,
 ) {
     const session = await NodeSession.create({
+        crypto: testFabric.crypto,
         id: 1,
         fabric: testFabric,
         peerNodeId: NodeId(BigInt(1)),
