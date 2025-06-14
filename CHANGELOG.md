@@ -16,7 +16,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/general
     - Breaking: The `Network.get()` singleton is removed
-    - Breaking: The `Crypto` API is now an interface rather than abstract class and the API has changed slightly
+    - Breaking: The Crypto interface has changed; `Crypto.get()` singleton is removed, the API is modernized, methods are renamed for clarity, and the ecdh* methods are replaced with generateDhSecret
     - Feature: Adds a crypto implementation that should function in any modern JS VM
 
 -   @matter/node

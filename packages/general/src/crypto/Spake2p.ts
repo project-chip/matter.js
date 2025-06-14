@@ -54,12 +54,7 @@ export class Spake2p {
         return new Spake2p(crypto, context, random, w0);
     }
 
-    constructor(
-        crypto: Crypto,
-        readonly context: Uint8Array,
-        readonly random: bigint,
-        readonly w0: bigint,
-    ) {
+    constructor(crypto: Crypto, context: Uint8Array, random: bigint, w0: bigint) {
         this.#crypto = crypto;
         this.#context = context;
         this.#random = random;
