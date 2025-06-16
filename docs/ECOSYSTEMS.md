@@ -170,6 +170,8 @@ The Aqara Hub can not only serve as leader of a hub cluster, but also acts as a 
 - [Aqara Smart Hub M3](https://eu.aqara.com/products/aqara-smart-hub-m3)
 - [Aqara Smart Hub M100](https://eu.aqara.com/products/aqara-smart-hub-m100)
 
+For a list of supported devices, see the [Aqara Supported Matter Device Type List](https://opendoc.aqara.com/en/docs/Matter/Aqara%20Supported%20Matter%20Device%20Type%20List.html)
+
 ### chip-tool
 
 Compile chip-tool from [project-chip](https://github.com/project-chip/connectedhomeip/tree/c438b8945e26a84f68ba3608de202e4b939a9080/examples/chip-tool)
