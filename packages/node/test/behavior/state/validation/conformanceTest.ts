@@ -6,6 +6,7 @@
 
 import { FieldElement } from "#model";
 import { ConformanceError } from "#protocol";
+import { ConstraintError } from "@matter/protocol";
 import { Features, Fields, Tests, testValidation } from "./validation-test-utils.js";
 
 function missing(conformance: string, fieldName = "test") {
@@ -24,8 +25,8 @@ function disallowed(conformance: string, fieldName = "test") {
 
 function disallowedEnum(conformance: string, name: string, value: number) {
     return {
-        type: ConformanceError,
-        message: `Validating Test.test: Conformance "${conformance}": Matter does not allow enum value ${name} (ID ${value}) here`,
+        type: ConstraintError,
+        message: `Validating Test.test: Constraint "${conformance}": Matter does not allow enum value ${name} (ID ${value}) here`,
     };
 }
 
@@ -466,12 +467,12 @@ const AllTests = Tests({
 
                 "disallows disallowed": {
                     record: { test: 3 },
-                    error: disallowedEnum("X", "disallowed", 3),
+                    error: disallowedEnum("all", "disallowed", 3),
                 },
 
                 "disallows non-conformant by feature": {
                     record: { test: 4 },
-                    error: disallowedEnum("FT", "ifFeature", 4),
+                    error: disallowedEnum("all", "ifFeature", 4),
                 },
 
                 "allows conformant by feature": {

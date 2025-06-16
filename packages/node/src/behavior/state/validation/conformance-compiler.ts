@@ -9,6 +9,7 @@ import { camelize } from "#general";
 import type { Schema } from "#model";
 import { Conformance, DataModelPath, FeatureSet, FieldValue, Metatype, ValueModel } from "#model";
 import { AccessControl, ConformanceError, SchemaImplementationError, Val } from "#protocol";
+import { ConstraintError } from "@matter/protocol";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { NameResolver } from "../managed/NameResolver.js";
 import {
@@ -582,7 +583,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
 
     function disallowEnumValue(schema: Schema): EnumMemberValidator {
         return location => {
-            throw new ConformanceError(
+            throw new ConstraintError(
                 schema,
                 location,
                 `Matter does not allow enum value ${schema.name} (ID ${schema.effectiveId}) here`,
