@@ -5,5 +5,7 @@
  */
 
 describe("CNET", () => {
-    chip("CNET/*");
+    chip("CNET/*")
+        // Wifi Commissioning required, but no check to skip when not relevant
+        .exclude("CNET/4.9");
 });
