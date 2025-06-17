@@ -619,7 +619,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
 
         // Create a validator for each member with conformance.  If the member is not constrained then we perform no
         // special validation for it
-        let memberValidators: undefined | Record<number, EnumMemberValidator | undefined>;
+        let memberValidators: undefined | Record<number, EnumMemberValidator>;
         for (const member of members) {
             // If there's no ID the schema is invalid so just skip
             const id = member.effectiveId;
