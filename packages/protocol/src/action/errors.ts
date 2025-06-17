@@ -81,6 +81,24 @@ export class ConstraintError extends ValidateError {
 }
 
 /**
+ * Thrown when an enum value is not valid based on conformance definitions
+ */
+export class EnumValueConformanceError extends ValidateError {
+    constructor(schema: Schema, path: SchemaErrorPath, message: string) {
+        super(path, `Conformance "${(schema as ValueModel).conformance}": ${message}`, StatusCode.ConstraintError);
+    }
+}
+
+/**
+ * Thrown when an enum value is not known based on Matter specification
+ */
+export class UnknownEnumValueError extends ValidateError {
+    constructor(path: SchemaErrorPath, message: string) {
+        super(path, message, StatusCode.ConstraintError);
+    }
+}
+
+/**
  * Thrown when conformance is violated.
  */
 export class ConformanceError extends ValidateError {

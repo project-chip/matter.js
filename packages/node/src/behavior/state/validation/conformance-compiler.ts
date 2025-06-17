@@ -9,7 +9,7 @@ import { camelize } from "#general";
 import type { Schema } from "#model";
 import { Conformance, DataModelPath, FeatureSet, FieldValue, Metatype, ValueModel } from "#model";
 import { AccessControl, ConformanceError, SchemaImplementationError, Val } from "#protocol";
-import { ConstraintError } from "@matter/protocol";
+import { EnumValueConformanceError, UnknownEnumValueError } from "@matter/protocol";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { NameResolver } from "../managed/NameResolver.js";
 import {
@@ -31,6 +31,9 @@ import {
     type RuntimeNode,
 } from "./conformance-util.js";
 import { ValidationLocation } from "./location.js";
+
+/** A no-op function used to mark that a conformance expression is valid. */
+const enumValueOk: EnumMemberValidator = () => {};
 
 /**
  * Generates JS function equivalent of a conformance expression.
@@ -583,7 +586,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
 
     function disallowEnumValue(schema: Schema): EnumMemberValidator {
         return location => {
-            throw new ConstraintError(
+            throw new EnumValueConformanceError(
                 schema,
                 location,
                 `Matter does not allow enum value ${schema.name} (ID ${schema.effectiveId}) here`,
@@ -616,7 +619,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
 
         // Create a validator for each member with conformance.  If the member is not constrained then we perform no
         // special validation for it
-        let memberValidators: undefined | Record<number, EnumMemberValidator>;
+        let memberValidators: undefined | Record<number, EnumMemberValidator | undefined>;
         for (const member of members) {
             // If there's no ID the schema is invalid so just skip
             const id = member.effectiveId;
@@ -631,7 +634,8 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
                 case Code.Conformant:
                 case Code.Optional:
                     // There's nothing to enforce here
-                    continue;
+                    memberValidator = enumValueOk;
+                    break;
 
                 case Code.Nonconformant:
                 case Code.Disallowed:
@@ -689,8 +693,14 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
             mainValidator?.(value, session, location);
 
             if (typeof value === "number") {
+                if (!memberValidators[value]) {
+                    throw new UnknownEnumValueError(
+                        location,
+                        `Matter does not define the enum value ${value} for ${schema.name}`,
+                    );
+                }
                 // Invoke the member validator if one exists for the selected value
-                memberValidators[value]?.(location);
+                memberValidators[value](location);
             }
         };
     }
