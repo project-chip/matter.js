@@ -51,9 +51,10 @@ export class Icac extends OperationalBase<OperationalCertificate.Icac> {
         const {
             subject,
             issuer: { rcacId },
-            extensions: { basicConstraints, extendedKeyUsage, subjectKeyIdentifier, authorityKeyIdentifier },
+            extensions,
         } = this.cert;
         const { fabricId, icacId } = subject;
+        const { basicConstraints, extendedKeyUsage, subjectKeyIdentifier, authorityKeyIdentifier } = extensions;
 
         const { fabricId: rootFabricId } = root.cert.subject;
         // The subject DN SHALL NOT encode any matter-node-id attribute.
@@ -115,8 +116,8 @@ export class Icac extends OperationalBase<OperationalCertificate.Icac> {
 
         // The key usage extension SHALL be encoded with at least two flags: keyCertSign (0x0020) and CRLSign (0x0040)
         // and optionally with digitalSignature (0x0001).
-        const extensionKeyUsage = ExtensionKeyUsageSchema.encode(root.cert.extensions.keyUsage);
-        if (extensionKeyUsage !== 0x0060 && extensionKeyUsage !== 0x0061) {
+        const keyUsage = ExtensionKeyUsageSchema.encode(extensions.keyUsage);
+        if (keyUsage !== 0x0060 && keyUsage !== 0x0061) {
             throw new CertificateError(
                 `Ica certificate keyUsage must have keyCertSign and CRLSign and optionally digitalSignature set.`,
             );

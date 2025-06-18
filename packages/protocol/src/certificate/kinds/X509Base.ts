@@ -350,7 +350,7 @@ export abstract class X509Base<CT extends X509Certificate> {
         if (requestElements?.length !== 4) throw new CertificateError("Invalid CSR data");
         const [versionNode, _subjectNode, publicKeyNode] = requestElements;
         const requestVersion = versionNode[DerKey.Bytes][0];
-        if (requestVersion !== 0) throw new CertificateError(`Unsupported request version${requestVersion}`);
+        if (requestVersion !== 0) throw new CertificateError(`Unsupported request version ${requestVersion}`);
         // TODO: verify subject = { OrganisationName: "CSR" }
 
         const { [DerKey.Elements]: publicKeyElements } = publicKeyNode;

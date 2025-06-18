@@ -119,7 +119,7 @@ export class Noc extends OperationalBase<OperationalCertificate.Noc> {
 
         // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
         // Formally the check should be the following line but Amazon uses a wrong Root cert which also has
-        // digitalCertificate set, so we just check the the two needed are set and ignore additionally set parameters.
+        // digitalCertificate set, so we just check that the two needed are set and ignore additionally set parameters.
         //if (ExtensionKeyUsageSchema.encode(nocCert.extensions.keyUsage) !== 1) {
         if (!this.cert.extensions.keyUsage.digitalSignature) {
             throw new CertificateError(`Noc certificate must have keyUsage set to digitalSignature.`);
