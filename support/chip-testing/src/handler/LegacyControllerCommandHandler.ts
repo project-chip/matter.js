@@ -7,20 +7,22 @@
 import { Bytes, Logger } from "@matter/general";
 import { NodeId, Observable, ServerAddressIp } from "@matter/main";
 import { GeneralCommissioning, GroupKeyManagement } from "@matter/main/clusters";
-import { InteractionClient, MessageChannel } from "@matter/main/protocol";
-import { ManualPairingCodeCodec, QrPairingCodeCodec, VendorId } from "@matter/main/types";
 import {
     CertificateAuthority,
-    CertificateManager,
+    InteractionClient,
+    MessageChannel,
     NodeDiscoveryType,
     SupportedTransportsSchema,
     TlvCertSigningRequest,
-} from "@matter/protocol";
+    X509Base,
+} from "@matter/main/protocol";
 import {
     Attribute,
     Command,
     getClusterById,
     GroupId,
+    ManualPairingCodeCodec,
+    QrPairingCodeCodec,
     TlvAny,
     TlvBoolean,
     TlvByteString,
@@ -31,7 +33,8 @@ import {
     TlvString,
     TlvUInt64,
     TlvVoid,
-} from "@matter/types";
+    VendorId,
+} from "@matter/main/types";
 import { CommissioningController, NodeCommissioningOptions } from "@project-chip/matter.js";
 import { CustomCommissioningFlow } from "../CustomCommissioningFlow.js";
 import {
@@ -538,7 +541,8 @@ export class LegacyControllerCommandHandler extends CommandHandler {
         const ca = await CertificateAuthority.create(this.#controllerInstance.crypto, caConfig);
 
         const { certSigningRequest } = TlvCertSigningRequest.decode(elements);
-        const operationalPublicKey = await new CertificateManager(this.#controllerInstance.crypto).getPublicKeyFromCsr(
+        const operationalPublicKey = await X509Base.getPublicKeyFromCsr(
+            this.#controllerInstance.crypto,
             certSigningRequest,
         );
 
