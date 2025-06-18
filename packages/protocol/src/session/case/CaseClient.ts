@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Icac, Noc } from "#certificate/index.js";
 import { Bytes, Logger, PublicKey, UnexpectedDataError } from "#general";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId, ProtocolStatusCode } from "#types";
-import { TlvIntermediateCertificate, TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import {
@@ -171,7 +171,7 @@ export class CaseClient {
             const {
                 ellipticCurvePublicKey: peerPublicKey,
                 subject: { fabricId: peerFabricIdNOCert, nodeId: peerNodeIdNOCert },
-            } = TlvOperationalCertificate.decode(peerNoc);
+            } = Noc.fromTlv(peerNoc).cert;
 
             await crypto.verifyEcdsa(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
@@ -188,7 +188,7 @@ export class CaseClient {
             if (peerIcac !== undefined) {
                 const {
                     subject: { fabricId: peerFabricIdIcaCert },
-                } = TlvIntermediateCertificate.decode(peerIcac);
+                } = Icac.fromTlv(peerIcac).cert;
 
                 if (peerFabricIdIcaCert !== undefined && peerFabricIdIcaCert !== fabric.fabricId) {
                     throw new UnexpectedDataError(

@@ -4,12 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    CertificateManager,
-    TlvIntermediateCertificate,
-    TlvOperationalCertificate,
-    TlvRootCertificate,
-} from "#certificate/CertificateManager.js";
+import { Icac, Noc, Rcac, X509Base } from "#certificate/index.js";
 import {
     BinaryKeyPair,
     Bytes,
@@ -49,7 +44,7 @@ export type ExposedFabricInformation = {
 };
 
 export class Fabric {
-    readonly #certs: CertificateManager;
+    readonly #crypto: Crypto;
     readonly fabricIndex: FabricIndex;
     readonly fabricId: FabricId;
     readonly nodeId: NodeId;
@@ -71,11 +66,8 @@ export class Fabric {
     #persistCallback: ((isUpdate?: boolean) => MaybePromise<void>) | undefined;
     #storage?: StorageContext;
 
-    constructor(certs: CertificateManager | Crypto, config: Fabric.Config) {
-        if (!(certs instanceof CertificateManager)) {
-            certs = new CertificateManager(certs);
-        }
-        this.#certs = certs;
+    constructor(crypto: Crypto, config: Fabric.Config) {
+        this.#crypto = crypto;
         this.fabricIndex = config.fabricIndex;
         this.fabricId = config.fabricId;
         this.nodeId = config.nodeId;
@@ -95,7 +87,7 @@ export class Fabric {
     }
 
     get crypto() {
-        return this.#certs.crypto;
+        return this.#crypto;
     }
 
     get config(): Fabric.Config {
@@ -154,20 +146,19 @@ export class Fabric {
     }
 
     sign(data: Uint8Array) {
-        return this.#certs.crypto.signEcdsa(this.#keyPair, data);
+        return this.crypto.signEcdsa(this.#keyPair, data);
     }
 
     async verifyCredentials(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
-        const rootCert = TlvRootCertificate.decode(this.rootCert);
-        const nocCert = TlvOperationalCertificate.decode(operationalCert);
-        const icaCert =
-            intermediateCACert !== undefined ? TlvIntermediateCertificate.decode(intermediateCACert) : undefined;
+        const rootCert = Rcac.fromTlv(this.rootCert);
+        const nocCert = Noc.fromTlv(operationalCert);
+        const icaCert = intermediateCACert !== undefined ? Icac.fromTlv(intermediateCACert) : undefined;
         if (icaCert !== undefined) {
             // Validate ICACertificate against Root Certificate
-            await this.#certs.verifyIntermediateCaCertificate(rootCert, icaCert);
+            await icaCert.verify(this.#crypto, rootCert);
         }
         // Validate NOC Certificate against ICA Certificate
-        await this.#certs.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
+        await nocCert.verify(this.#crypto, rootCert, icaCert);
     }
 
     matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: Uint8Array) {
@@ -195,7 +186,7 @@ export class Fabric {
      * returns the time-wise valid operational keys for that groupId.
      */
     async currentDestinationIdFor(nodeId: NodeId, random: Uint8Array) {
-        return await this.#certs.crypto.signHmac(
+        return await this.#crypto.signHmac(
             this.groups.keySets.currentKeyForId(0).key,
             this.#generateSalt(nodeId, random),
         );
@@ -208,9 +199,7 @@ export class Fabric {
     async destinationIdsFor(nodeId: NodeId, random: Uint8Array) {
         const salt = this.#generateSalt(nodeId, random);
         // Check all keys of keyset 0 - typically it is only the IPK
-        const destinationIds = this.groups.keySets
-            .allKeysForId(0)
-            .map(({ key }) => this.#certs.crypto.signHmac(key, salt));
+        const destinationIds = this.groups.keySets.allKeysForId(0).map(({ key }) => this.#crypto.signHmac(key, salt));
         return await Promise.all(destinationIds);
     }
 
@@ -274,7 +263,7 @@ export class Fabric {
 }
 
 export class FabricBuilder {
-    #certs: CertificateManager;
+    #crypto: Crypto;
     #keyPair: PrivateKey;
     #rootVendorId?: VendorId;
     #rootCert?: Uint8Array;
@@ -289,7 +278,7 @@ export class FabricBuilder {
     #label = "";
 
     constructor(crypto: Crypto, key: PrivateKey) {
-        this.#certs = new CertificateManager(crypto);
+        this.#crypto = crypto;
         this.#keyPair = key;
     }
 
@@ -306,14 +295,14 @@ export class FabricBuilder {
     }
 
     createCertificateSigningRequest() {
-        return this.#certs.createCertificateSigningRequest(this.#keyPair);
+        return X509Base.createCertificateSigningRequest(this.#crypto, this.#keyPair);
     }
 
     async setRootCert(rootCert: Uint8Array) {
-        const decodedRootCertificate = TlvRootCertificate.decode(rootCert);
-        await this.#certs.verifyRootCertificate(decodedRootCertificate);
+        const root = Rcac.fromTlv(rootCert);
+        await root.verify(this.#crypto);
         this.#rootCert = rootCert;
-        this.#rootPublicKey = decodedRootCertificate.ellipticCurvePublicKey;
+        this.#rootPublicKey = root.cert.ellipticCurvePublicKey;
         return this;
     }
 
@@ -328,7 +317,7 @@ export class FabricBuilder {
         const {
             subject: { nodeId, fabricId, caseAuthenticatedTags },
             ellipticCurvePublicKey,
-        } = TlvOperationalCertificate.decode(operationalCert);
+        } = Noc.fromTlv(operationalCert).cert;
         logger.debug(
             "Installing operational certificate",
             Diagnostic.dict({ nodeId, fabricId, caseAuthenticatedTags }),
@@ -345,14 +334,13 @@ export class FabricBuilder {
             throw new MatterFlowError("Root certificate needs to be set first");
         }
 
-        const rootCert = TlvRootCertificate.decode(this.#rootCert);
-        const nocCert = TlvOperationalCertificate.decode(operationalCert);
-        const icaCert =
-            intermediateCACert !== undefined ? TlvIntermediateCertificate.decode(intermediateCACert) : undefined;
+        const rootCert = Rcac.fromTlv(this.#rootCert);
+        const nocCert = Noc.fromTlv(operationalCert);
+        const icaCert = intermediateCACert !== undefined ? Icac.fromTlv(intermediateCACert) : undefined;
         if (icaCert !== undefined) {
-            await this.#certs.verifyIntermediateCaCertificate(rootCert, icaCert);
+            await icaCert.verify(this.#crypto, rootCert);
         }
-        await this.#certs.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
+        await nocCert.verify(this.#crypto, rootCert, icaCert);
 
         this.#operationalCert = operationalCert;
         this.#intermediateCACert = intermediateCACert;
@@ -426,14 +414,14 @@ export class FabricBuilder {
         this.#fabricIndex = fabricIndex;
         const saltWriter = new DataWriter();
         saltWriter.writeUInt64(this.#fabricId);
-        const operationalId = await this.#certs.crypto.createHkdfKey(
+        const operationalId = await this.#crypto.createHkdfKey(
             this.#rootPublicKey.slice(1),
             saltWriter.toByteArray(),
             COMPRESSED_FABRIC_ID_INFO,
             8,
         );
 
-        return new Fabric(this.#certs, {
+        return new Fabric(this.#crypto, {
             fabricIndex: this.#fabricIndex,
             fabricId: this.#fabricId,
             nodeId: this.#nodeId,
@@ -444,7 +432,7 @@ export class FabricBuilder {
             rootVendorId: this.#rootVendorId,
             rootCert: this.#rootCert,
             identityProtectionKey: this.#identityProtectionKey, // Epoch Key
-            operationalIdentityProtectionKey: await this.#certs.crypto.createHkdfKey(
+            operationalIdentityProtectionKey: await this.#crypto.createHkdfKey(
                 this.#identityProtectionKey,
                 operationalId,
                 GROUP_SECURITY_INFO,

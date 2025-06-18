@@ -21,15 +21,9 @@ import {
     toHex,
 } from "#general";
 import { CaseAuthenticatedTag, FabricId, NodeId } from "#types";
-import {
-    CertificateManager,
-    OperationalCertificate,
-    RootCertificate,
-    TlvOperationalCertificate,
-    TlvRootCertificate,
-    Unsigned,
-    jsToMatterDate,
-} from "./CertificateManager.js";
+import { jsToMatterDate } from "./kinds/definitions/asn.js";
+import { Noc } from "./kinds/Noc.js";
+import { Rcac } from "./kinds/Rcac.js";
 
 const logger = Logger.get("CertificateAuthority");
 
@@ -38,7 +32,7 @@ const logger = Logger.get("CertificateAuthority");
  * TODO: Add support for (optional) ICACs
  */
 export class CertificateAuthority {
-    #certs: CertificateManager;
+    #crypto: Crypto;
     #rootCertId = BigInt(0);
     #rootKeyPair?: PrivateKey;
     #rootKeyIdentifier?: Uint8Array<ArrayBufferLike>;
@@ -46,8 +40,8 @@ export class CertificateAuthority {
     #nextCertificateId = BigInt(1);
     #construction: Construction<CertificateAuthority>;
 
-    get certs() {
-        return this.#certs;
+    get crypto() {
+        return this.#crypto;
     }
 
     get construction() {
@@ -59,16 +53,13 @@ export class CertificateAuthority {
     }
 
     constructor(crypto: Crypto, options?: StorageContext | CertificateAuthority.Configuration) {
-        this.#certs = new CertificateManager(crypto);
+        this.#crypto = crypto;
         this.#construction = Construction(this, async () => {
             // Use provided CA config or read from storage, otherwise initialize and store
             const certValues = options instanceof StorageContext ? await options.values() : (options ?? {});
 
-            this.#rootKeyPair = await this.#certs.crypto.createKeyPair();
-            this.#rootKeyIdentifier = (await this.#certs.crypto.computeSha256(this.#rootKeyPair.publicKey)).slice(
-                0,
-                20,
-            );
+            this.#rootKeyPair = await this.#crypto.createKeyPair();
+            this.#rootKeyIdentifier = (await this.#crypto.computeSha256(this.#rootKeyPair.publicKey)).slice(0, 20);
             this.#rootCertBytes = await this.#generateRootCert();
 
             if (
@@ -124,7 +115,7 @@ export class CertificateAuthority {
 
     async #generateRootCert() {
         const now = Time.get().now();
-        const unsignedCertificate: Unsigned<RootCertificate> = {
+        const cert = new Rcac({
             serialNumber: Bytes.fromHex(toHex(this.#rootCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
@@ -143,12 +134,9 @@ export class CertificateAuthority {
                 subjectKeyIdentifier: this.#initializedRootKeyIdentifier,
                 authorityKeyIdentifier: this.#initializedRootKeyIdentifier,
             },
-        };
-        const signature = await this.#certs.crypto.signEcdsa(
-            this.#initializedRootKeyPair,
-            this.#certs.rootCertToAsn1(unsignedCertificate),
-        );
-        return TlvRootCertificate.encode({ ...unsignedCertificate, signature });
+        });
+        await cert.sign(this.#crypto, this.#initializedRootKeyPair);
+        return cert.asSignedTlv();
     }
 
     async generateNoc(
@@ -159,7 +147,7 @@ export class CertificateAuthority {
     ) {
         const now = Time.get().now();
         const certId = this.#nextCertificateId++;
-        const unsignedCertificate: Unsigned<OperationalCertificate> = {
+        const cert = new Noc({
             serialNumber: Bytes.fromHex(toHex(certId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
@@ -175,17 +163,12 @@ export class CertificateAuthority {
                     digitalSignature: true,
                 },
                 extendedKeyUsage: [2, 1],
-                subjectKeyIdentifier: (await this.#certs.crypto.computeSha256(publicKey)).slice(0, 20),
+                subjectKeyIdentifier: (await this.#crypto.computeSha256(publicKey)).slice(0, 20),
                 authorityKeyIdentifier: this.#initializedRootKeyIdentifier,
             },
-        };
-
-        const signature = await this.#certs.crypto.signEcdsa(
-            this.#initializedRootKeyPair,
-            this.#certs.nodeOperationalCertToAsn1(unsignedCertificate),
-        );
-
-        return TlvOperationalCertificate.encode({ ...unsignedCertificate, signature });
+        });
+        await cert.sign(this.#crypto, this.#initializedRootKeyPair);
+        return cert.asSignedTlv();
     }
 
     get #initializedRootKeyPair() {

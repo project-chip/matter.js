@@ -4,13 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    CertificateError,
-    CertificateManager,
-    TlvIntermediateCertificate,
-    TlvOperationalCertificate,
-    TlvRootCertificate,
-} from "#certificate/CertificateManager.js";
+import { CertificateError, Icac, Noc, Rcac, X509Base } from "#certificate/index.js";
 import { Bytes, DerCodec, DerKey, DerNode, PrivateKey, PublicKey, StandardCrypto, X962 } from "#general";
 import { CaseAuthenticatedTag, FabricId, NodeId, ValidationOutOfBoundsError } from "#types";
 import {
@@ -21,8 +15,8 @@ import {
     TEST_PUBLIC_KEY,
 } from "./TestCertificates.js";
 
-describe("CertificateManager", () => {
-    const cm = new CertificateManager(new StandardCrypto());
+describe("Certificates", () => {
+    const crypto = new StandardCrypto();
 
     before(() => {
         MockTime.reset(767158951000);
@@ -36,22 +30,20 @@ describe("CertificateManager", () => {
         Object.entries(CERTIFICATE_SETS).forEach(([key, certs]) => {
             describe(`recodes Tlv for ${key}`, () => {
                 it("recode root certificate", () => {
-                    const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
-                    expect(Bytes.toHex(TlvRootCertificate.encode(rootTlv))).equal(Bytes.toHex(certs.ROOT.TLV));
+                    const root = Rcac.fromTlv(certs.ROOT.TLV);
+                    expect(Bytes.toHex(root.asSignedTlv())).equal(Bytes.toHex(certs.ROOT.TLV));
                 });
 
                 if ("ICAC" in certs) {
                     it("recode intermediate certificate", () => {
-                        const icacTlv = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        expect(Bytes.toHex(TlvIntermediateCertificate.encode(icacTlv))).equal(
-                            Bytes.toHex(certs.ICAC.TLV),
-                        );
+                        const icac = Icac.fromTlv(certs.ICAC.TLV);
+                        expect(Bytes.toHex(icac.asSignedTlv())).equal(Bytes.toHex(certs.ICAC.TLV));
                     });
                 }
 
                 it("recode operational certificate", () => {
-                    const nocTlv = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                    expect(Bytes.toHex(TlvOperationalCertificate.encode(nocTlv))).equal(Bytes.toHex(certs.NOC.TLV));
+                    const noc = Noc.fromTlv(certs.NOC.TLV);
+                    expect(Bytes.toHex(noc.asSignedTlv())).equal(Bytes.toHex(certs.NOC.TLV));
                 });
             });
         });
@@ -66,8 +58,8 @@ describe("CertificateManager", () => {
             describe(`generates the correct ASN1 bytes for ${key}`, () => {
                 if ("ASN1" in certs.ROOT) {
                     it("encode root certificate", () => {
-                        const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        expect(Bytes.toHex(cm.rootCertToAsn1(rootTlv))).equal(
+                        const root = Rcac.fromTlv(certs.ROOT.TLV);
+                        expect(Bytes.toHex(root.asUnsignedAsn1())).equal(
                             // @ts-expect-error ASN1 might be absent, but checked above
                             Bytes.toHex(certs.ROOT.ASN1),
                         );
@@ -76,9 +68,9 @@ describe("CertificateManager", () => {
 
                 if ("ICAC" in certs && "ASN1" in certs.ICAC) {
                     it("encode intermediate certificate", () => {
-                        const icacTlv = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        expect(Bytes.toHex(cm.intermediateCaCertToAsn1(icacTlv))).equal(
-                            // @ts-expect-error ASN1 might not be in TlvIntermediateCertificate
+                        const icac = Icac.fromTlv(certs.ICAC.TLV);
+                        expect(Bytes.toHex(icac.asUnsignedAsn1())).equal(
+                            // @ts-expect-error ASN1 might not be in OperationalCertificate.TlvIcac
                             Bytes.toHex(certs.ICAC.ASN1),
                         );
                     });
@@ -86,9 +78,9 @@ describe("CertificateManager", () => {
 
                 if ("ASN1" in certs.NOC) {
                     it("encode operational certificate", () => {
-                        const nocTlv = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                        expect(Bytes.toHex(cm.nodeOperationalCertToAsn1(nocTlv))).equal(
-                            // @ts-expect-error ASN1 might not be in TlvOperationalCertificate
+                        const noc = Noc.fromTlv(certs.NOC.TLV);
+                        expect(Bytes.toHex(noc.asUnsignedAsn1())).equal(
+                            // @ts-expect-error ASN1 might not be in OperationalCertificate.TlvNoc
                             Bytes.toHex(certs.NOC.ASN1),
                         );
                     });
@@ -104,83 +96,79 @@ describe("CertificateManager", () => {
         Object.entries(CERTIFICATE_SETS).forEach(([key, certs]) => {
             describe(`verify certificates for ${key}`, () => {
                 it("verify root certificate", async () => {
-                    const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
-                    await cm.verifyRootCertificate(rootTlv);
+                    const root = Rcac.fromTlv(certs.ROOT.TLV);
+                    await root.verify(crypto);
                 });
 
                 if ("ICAC" in certs) {
                     it("verify intermediate certificate via ROOT", async () => {
-                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        await cm.verifyIntermediateCaCertificate(rootCert, icacCert);
+                        const root = Rcac.fromTlv(certs.ROOT.TLV);
+                        const icac = Icac.fromTlv(certs.ICAC.TLV);
+                        await icac.verify(crypto, root);
                     });
 
                     it("verify operational certificate via ICAC and ROOT", async () => {
-                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                        await cm.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert);
+                        const root = Rcac.fromTlv(certs.ROOT.TLV);
+                        const icac = Icac.fromTlv(certs.ICAC.TLV);
+                        const noc = Noc.fromTlv(certs.NOC.TLV);
+                        await noc.verify(crypto, root, icac);
                     });
 
                     it("verify operational certificate via ICAC and ROOT with fabricId in root matching", async () => {
-                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                        rootCert.subject.fabricId = nocCert.subject.fabricId;
-                        icacCert.subject.fabricId = undefined;
-                        await cm.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert);
+                        const root = Rcac.fromTlv(certs.ROOT.TLV);
+                        const icac = Icac.fromTlv(certs.ICAC.TLV);
+                        const noc = Noc.fromTlv(certs.NOC.TLV);
+                        root.cert.subject.fabricId = noc.cert.subject.fabricId;
+                        icac.cert.subject.fabricId = undefined;
+                        await noc.verify(crypto, root, icac);
                     });
 
                     it("verify operational certificate via ICAC and ROOT with fabricId in ica matching", async () => {
-                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                        rootCert.subject.fabricId = undefined;
-                        icacCert.subject.fabricId = nocCert.subject.fabricId;
-                        await cm.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert);
+                        const root = Rcac.fromTlv(certs.ROOT.TLV);
+                        const icac = Icac.fromTlv(certs.ICAC.TLV);
+                        const noc = Noc.fromTlv(certs.NOC.TLV);
+                        root.cert.subject.fabricId = undefined;
+                        icac.cert.subject.fabricId = noc.cert.subject.fabricId;
+                        await noc.verify(crypto, root, icac);
                     });
 
                     it("verify operational certificate via ICAC and ROOT with fabricId in all matching", async () => {
-                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                        rootCert.subject.fabricId = nocCert.subject.fabricId;
-                        icacCert.subject.fabricId = nocCert.subject.fabricId;
-                        await cm.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert);
+                        const root = Rcac.fromTlv(certs.ROOT.TLV);
+                        const icac = Icac.fromTlv(certs.ICAC.TLV);
+                        const noc = Noc.fromTlv(certs.NOC.TLV);
+                        root.cert.subject.fabricId = noc.cert.subject.fabricId;
+                        icac.cert.subject.fabricId = noc.cert.subject.fabricId;
+                        await noc.verify(crypto, root, icac);
                     });
 
                     it("verify operational certificate via ICAC and ROOT with fabricId in root not matching", async () => {
-                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                        rootCert.subject.fabricId = FabricId(nocCert.subject.fabricId + 1n);
-                        icacCert.subject.fabricId = undefined;
-                        await expect(
-                            cm.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert),
-                        ).to.be.rejectedWith(
+                        const root = Rcac.fromTlv(certs.ROOT.TLV);
+                        const icac = Icac.fromTlv(certs.ICAC.TLV);
+                        const noc = Noc.fromTlv(certs.NOC.TLV);
+                        root.cert.subject.fabricId = FabricId(noc.cert.subject.fabricId + 1n);
+                        icac.cert.subject.fabricId = undefined;
+                        await expect(noc.verify(crypto, root, icac)).to.be.rejectedWith(
                             CertificateError,
-                            `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${rootCert.subject.fabricId.toString()}" !== "${nocCert.subject.fabricId.toString()}"`,
+                            `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${root.cert.subject.fabricId.toString()}" !== "${noc.cert.subject.fabricId.toString()}"`,
                         );
                     });
 
                     it("verify operational certificate via ICAC and ROOT with fabricId in ica not matching", async () => {
-                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                        rootCert.subject.fabricId = undefined;
-                        icacCert.subject.fabricId = FabricId(nocCert.subject.fabricId + 1n);
-                        await expect(
-                            cm.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert),
-                        ).to.be.rejectedWith(
+                        const root = Rcac.fromTlv(certs.ROOT.TLV);
+                        const icac = Icac.fromTlv(certs.ICAC.TLV);
+                        const noc = Noc.fromTlv(certs.NOC.TLV);
+                        root.cert.subject.fabricId = undefined;
+                        icac.cert.subject.fabricId = FabricId(noc.cert.subject.fabricId + 1n);
+                        await expect(noc.verify(crypto, root, icac)).to.be.rejectedWith(
                             CertificateError,
-                            `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${icacCert.subject.fabricId.toString()}" !== "${nocCert.subject.fabricId.toString()}"`,
+                            `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${icac.cert.subject.fabricId.toString()}" !== "${noc.cert.subject.fabricId.toString()}"`,
                         );
                     });
                 } else {
                     it("verify operational certificate via ROOT only", async () => {
-                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                        await cm.verifyNodeOperationalCertificate(nocCert, rootCert);
+                        const root = Rcac.fromTlv(certs.ROOT.TLV);
+                        const noc = Noc.fromTlv(certs.NOC.TLV);
+                        await noc.verify(crypto, root);
                     });
                 }
             });
@@ -226,21 +214,19 @@ describe("CertificateManager", () => {
                     "3fcd56cf81d769100934b32f6a8b07afddfbf6c32f01e97385f251b8c71bc631a876c56fac76dd3c81449b71a0a450d28d9eaf314ccd3a166b61cddd965829f1",
                 ),
             };
-            const NOC_ASN1 = cm.nodeOperationalCertToAsn1(NOC_JSON);
-            const NOC_TLV = TlvOperationalCertificate.encode(NOC_JSON);
+            const NOC_ASN1 = new Noc(NOC_JSON).asUnsignedAsn1();
+            const NOC_TLV = new Noc(NOC_JSON).asSignedTlv();
 
-            const unTlv = TlvOperationalCertificate.decode(NOC_TLV);
-            const unAsn1 = cm.nodeOperationalCertToAsn1(unTlv);
+            const unTlv = Noc.fromTlv(NOC_TLV);
+            const unAsn1 = unTlv.asUnsignedAsn1();
 
-            expect(unTlv).to.deep.equal(NOC_JSON);
-            expect(Object.keys(unTlv.subject)).to.deep.equal(Object.keys(NOC_JSON.subject));
+            expect(unTlv.cert).to.deep.equal(NOC_JSON);
+            expect(Object.keys(unTlv.cert.subject)).to.deep.equal(Object.keys(NOC_JSON.subject));
             expect(Bytes.toHex(unAsn1)).to.deep.equal(Bytes.toHex(NOC_ASN1));
         });
 
         it("generates the correct ASN1 bytes with three different CASE Authenticated Tags", () => {
-            const TEST_NOC_CERT_TLV = TlvOperationalCertificate.decode(
-                CERTIFICATE_SETS["General Test Certificates"].NOC.TLV,
-            );
+            const TEST_NOC_CERT_TLV = Noc.fromTlv(CERTIFICATE_SETS["General Test Certificates"].NOC.TLV).cert;
             const nocWithCat = {
                 ...TEST_NOC_CERT_TLV,
                 subject: {
@@ -252,15 +238,13 @@ describe("CertificateManager", () => {
                     ],
                 },
             };
-            const result = cm.nodeOperationalCertToAsn1(nocWithCat);
+            const result = new Noc(nocWithCat).asUnsignedAsn1();
 
             expect(Bytes.toHex(result)).equal(Bytes.toHex(TEST_NOC_CERT_CAT_ASN1));
         });
 
         it("throws error if more then 3 tags are provided", () => {
-            const TEST_NOC_CERT_TLV = TlvOperationalCertificate.decode(
-                CERTIFICATE_SETS["General Test Certificates"].NOC.TLV,
-            );
+            const TEST_NOC_CERT_TLV = Noc.fromTlv(CERTIFICATE_SETS["General Test Certificates"].NOC.TLV).cert;
             const nocWithCat = {
                 ...TEST_NOC_CERT_TLV,
                 subject: {
@@ -273,16 +257,14 @@ describe("CertificateManager", () => {
                     ],
                 },
             };
-            expect(() => cm.nodeOperationalCertToAsn1(nocWithCat)).to.throw(
+            expect(() => new Noc(nocWithCat).asUnsignedAsn1()).to.throw(
                 ValidationOutOfBoundsError,
                 "Too many CaseAuthenticatedTags (4).",
             );
         });
 
         it("throws error if tags contain duplicate identifier values", () => {
-            const TEST_NOC_CERT_TLV = TlvOperationalCertificate.decode(
-                CERTIFICATE_SETS["General Test Certificates"].NOC.TLV,
-            );
+            const TEST_NOC_CERT_TLV = Noc.fromTlv(CERTIFICATE_SETS["General Test Certificates"].NOC.TLV).cert;
             const nocWithCat = {
                 ...TEST_NOC_CERT_TLV,
                 subject: {
@@ -294,19 +276,17 @@ describe("CertificateManager", () => {
                     ],
                 },
             };
-            expect(() => cm.nodeOperationalCertToAsn1(nocWithCat)).to.throw(
+            expect(() => new Noc(nocWithCat).asUnsignedAsn1()).to.throw(
                 ValidationOutOfBoundsError,
                 "CASEAuthenticatedTags field contains duplicate identifier values.",
             );
         });
     });
 
-    describe("decodeIcacCertificate", () => {
+    describe("decodeicacificate", () => {
         it("decodes a correct ICAC cert", () => {
-            const specsIcacCertTlv = TlvIntermediateCertificate.decode(
-                CERTIFICATE_SETS["Matter 1.2 Specification Certificates"].ICAC.TLV,
-            );
-            expect(specsIcacCertTlv).deep.equal({
+            const specsicacTlv = Icac.fromTlv(CERTIFICATE_SETS["Matter 1.2 Specification Certificates"].ICAC.TLV).cert;
+            expect(specsicacTlv).deep.equal({
                 serialNumber: new Uint8Array([45, 180, 68, 133, 86, 65, 174, 223]),
                 signatureAlgorithm: 1,
                 issuer: { rcacId: BigInt("14612714909889200129") },
@@ -351,7 +331,8 @@ describe("CertificateManager", () => {
 
     describe("createCertificateSigningRequest", () => {
         it("generates a valid CSR", async () => {
-            const result = await cm.createCertificateSigningRequest(
+            const result = await X509Base.createCertificateSigningRequest(
+                crypto,
                 PrivateKey(TEST_PRIVATE_KEY, { publicKey: TEST_PUBLIC_KEY }),
             );
 
@@ -361,7 +342,7 @@ describe("CertificateManager", () => {
             expect(DerCodec.encode(signatureAlgorithmNode)).deep.equal(DerCodec.encode(X962.EcdsaWithSHA256));
             const requestBytes = DerCodec.encode(requestNode);
             expect(requestBytes).deep.equal(TEST_CSR_REQUEST_ASN1);
-            cm.crypto.verifyEcdsa(
+            crypto.verifyEcdsa(
                 PublicKey(TEST_PUBLIC_KEY),
                 DerCodec.encode(requestNode),
                 signatureNode[DerKey.Bytes],
@@ -372,11 +353,12 @@ describe("CertificateManager", () => {
 
     describe("getPublicKeyFromCsr", () => {
         it("get the public key from the CSR", async () => {
-            const csr = await cm.createCertificateSigningRequest(
+            const csr = await X509Base.createCertificateSigningRequest(
+                crypto,
                 PrivateKey(TEST_PRIVATE_KEY, { publicKey: TEST_PUBLIC_KEY }),
             );
 
-            const result = await cm.getPublicKeyFromCsr(csr);
+            const result = await X509Base.getPublicKeyFromCsr(crypto, csr);
 
             expect(result).deep.equal(TEST_PUBLIC_KEY);
         });

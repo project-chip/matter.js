@@ -35,7 +35,7 @@ import { OfflineContext } from "#index.js";
 import { AccessLevel, BasicInformation, ElementTag, FeatureMap } from "#model";
 import { ServerEnvironment } from "#node/server/ServerEnvironment.js";
 import { ServerNode } from "#node/ServerNode.js";
-import { AttestationCertificateManager, CertificationDeclarationManager, Val } from "#protocol";
+import { AttestationCertificateManager, CertificationDeclaration, Val } from "#protocol";
 import { FabricIndex, VendorId } from "#types";
 import { OccurrenceManager } from "@matter/protocol";
 import { MockServerNode } from "./mock-server-node.js";
@@ -256,11 +256,7 @@ describe("ServerNode", () => {
                     certification: async () => {
                         const paa = await AttestationCertificateManager.create(MockCrypto(), vendorId);
                         const { keyPair: dacKeyPair, dac } = await paa.getDACert(productId);
-                        const declaration = await CertificationDeclarationManager.generate(
-                            MockCrypto(),
-                            vendorId,
-                            productId,
-                        );
+                        const declaration = await CertificationDeclaration.generate(MockCrypto(), vendorId, productId);
 
                         commissioningServer2CertificateProviderCalled = true;
                         return {
