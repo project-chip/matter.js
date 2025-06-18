@@ -342,7 +342,7 @@ describe("Certificates", () => {
             expect(DerCodec.encode(signatureAlgorithmNode)).deep.equal(DerCodec.encode(X962.EcdsaWithSHA256));
             const requestBytes = DerCodec.encode(requestNode);
             expect(requestBytes).deep.equal(TEST_CSR_REQUEST_ASN1);
-            crypto.verifyEcdsa(
+            await crypto.verifyEcdsa(
                 PublicKey(TEST_PUBLIC_KEY),
                 DerCodec.encode(requestNode),
                 signatureNode[DerKey.Bytes],
