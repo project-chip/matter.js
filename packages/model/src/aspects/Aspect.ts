@@ -11,12 +11,7 @@ const empty = new Map<new (definition?: any) => Aspect, Aspect>();
 
 // Aspects are immutable, there are not many permutations, and their definitions are largely normalized strings.  So we
 // cache them to keep the object count down
-const aspectCache: Record<string, Record<string, Aspect>> = {
-    Access: {},
-    Conformance: {},
-    Constraint: {},
-    Quality: {},
-};
+const aspectCache = new Map<new (definition?: any) => Aspect, Record<string, Aspect>>();
 
 /**
  * An "aspect" is metadata about a Matter element that affects implementation behavior.  Aspects are mostly "qualities"
@@ -83,7 +78,11 @@ export abstract class Aspect<D = any> {
         }
 
         if (typeof definition === "string") {
-            const slot = aspectCache[this.name];
+            let slot = aspectCache.get(this);
+            if (slot === undefined) {
+                slot = {};
+                aspectCache.set(this, slot);
+            }
 
             let some = slot[definition];
             if (some) {

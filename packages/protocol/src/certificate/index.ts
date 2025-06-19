@@ -6,7 +6,12 @@
 
 export * from "./AttestationCertificateManager.js";
 export * from "./CertificateAuthority.js";
-export * from "./CertificateManager.js";
-export * from "./CertificationDeclarationManager.js";
 export * from "./ChipPAAuthorities.js";
 export * from "./DeviceCertification.js";
+export * from "./kinds/AttestationCertificates.js";
+export * from "./kinds/CertificationDeclaration.js";
+export { CertificateError } from "./kinds/common.js";
+export * from "./kinds/Icac.js";
+export * from "./kinds/Noc.js";
+export * from "./kinds/Rcac.js";
+export * from "./kinds/X509Base.js";

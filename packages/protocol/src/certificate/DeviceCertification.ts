@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { CertificationDeclaration } from "#certificate/kinds/CertificationDeclaration.js";
 import { Construction, Crypto, ImplementationError, InternalError, PrivateKey } from "#general";
 import { NodeSession } from "#session/NodeSession.js";
 import { ProductDescription } from "#types";
 import { AttestationCertificateManager } from "./AttestationCertificateManager.js";
-import { CertificationDeclarationManager } from "./CertificationDeclarationManager.js";
 
 /**
  * Device certification used by the OperationalCredentials cluster.
@@ -57,11 +57,7 @@ export class DeviceCertification {
                     privateKey: PrivateKey(dacKeyPair.privateKey),
                     certificate: dac,
                     intermediateCertificate: await paa.getPAICert(),
-                    declaration: await CertificationDeclarationManager.generate(
-                        crypto,
-                        product.vendorId,
-                        product.productId,
-                    ),
+                    declaration: await CertificationDeclaration.generate(crypto, product.vendorId, product.productId),
                 };
             };
         }
