@@ -32,7 +32,7 @@ import {
 } from "./conformance-util.js";
 import { ValidationLocation } from "./location.js";
 
-/** A no-op function used to mark that a conformance expression is valid. */
+/** A no-op function used for valid enum values that have no specific conformance requirements. */
 const enumValueOk: EnumMemberValidator = () => {};
 
 /**

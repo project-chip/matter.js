@@ -24,6 +24,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Finalizes behavior event `interactionEnd` to fire at the end of an interaction when all logic is done and executed
     - Enhancement: Finalizes behavior event `stateChanged` to fire when an interaction changed the state of the behavior. It fires at the end after all concrete `$Changed` events are sent out
     - Fix: Ensures to remove all Fabric scoped data when a fabric is being removed
+    - Fix: Streamline value conformance checks to cause a ConstraintError instead of an InvalidAction error in all cases
 
 -   @matter/protocol
     - Enhancement: Exposed reading cached ClusterClient attributes via `get*AttributeFromCache()` method
