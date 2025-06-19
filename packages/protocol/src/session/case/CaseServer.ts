@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Noc } from "#certificate/index.js";
 import { Bytes, Crypto, CryptoDecryptError, Logger, PublicKey, UnexpectedDataError } from "#general";
 import { TlvSessionParameters } from "#session/pase/PaseMessages.js";
 import { ResumptionRecord, SessionManager } from "#session/SessionManager.js";
 import { NodeId, ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID, TypeFromSchema } from "#types";
-import { TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
 import { FabricManager, FabricNotFoundError } from "../../fabric/FabricManager.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
@@ -248,7 +248,7 @@ export class CaseServer implements ProtocolHandler {
         const {
             ellipticCurvePublicKey: peerPublicKey,
             subject: { fabricId: peerFabricId, nodeId: peerNodeId, caseAuthenticatedTags },
-        } = TlvOperationalCertificate.decode(peerNewOpCert);
+        } = Noc.fromTlv(peerNewOpCert).cert;
 
         if (fabric.fabricId !== peerFabricId) {
             throw new UnexpectedDataError(`Fabric ID mismatch: ${fabric.fabricId} !== ${peerFabricId}`);

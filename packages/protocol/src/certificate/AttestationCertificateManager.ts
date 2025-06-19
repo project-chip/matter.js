@@ -6,12 +6,13 @@
 
 import { Bytes, Crypto, PrivateKey, Time, toHex } from "#general";
 import { VendorId } from "#types";
-import { CertificateManager, jsToMatterDate } from "./CertificateManager.js";
 import {
     TestCert_PAA_NoVID_PrivateKey,
     TestCert_PAA_NoVID_PublicKey,
     TestCert_PAA_NoVID_SKID,
 } from "./ChipPAAuthorities.js";
+import { Dac, Paa, Pai } from "./kinds/AttestationCertificates.js";
+import { jsToMatterDate } from "./kinds/definitions/asn.js";
 
 function getPaiCommonName(vendorId: VendorId, productId?: number) {
     return `node-matter Dev PAI 0x${vendorId.toString(16).toUpperCase()} ${
@@ -36,7 +37,7 @@ export class AttestationCertificateManager {
     readonly #paaKeyPair = PrivateKey(TestCert_PAA_NoVID_PrivateKey, {
         publicKey: TestCert_PAA_NoVID_PublicKey,
     });
-    readonly #certs: CertificateManager;
+    readonly #crypto: Crypto;
     readonly #vendorId: VendorId;
     readonly #paiKeyPair: PrivateKey;
     readonly #paiKeyIdentifier: Uint8Array;
@@ -46,7 +47,7 @@ export class AttestationCertificateManager {
     #nextCertificateId = 2;
 
     constructor(crypto: Crypto, vendorId: VendorId, paiKeyPair: PrivateKey, paiKeyIdentifier: Uint8Array) {
-        this.#certs = new CertificateManager(crypto);
+        this.#crypto = crypto;
         this.#vendorId = vendorId;
         this.#paiKeyPair = paiKeyPair;
         this.#paiKeyIdentifier = paiKeyIdentifier;
@@ -64,7 +65,7 @@ export class AttestationCertificateManager {
     }
 
     async getDACert(productId: number) {
-        const dacKeyPair = await this.#certs.crypto.createKeyPair();
+        const dacKeyPair = await this.#crypto.createKeyPair();
         return {
             keyPair: dacKeyPair,
             dac: await this.generateDaCert(dacKeyPair.publicKey, this.#vendorId, productId),
@@ -74,9 +75,9 @@ export class AttestationCertificateManager {
     // Method unused for now because we use the official Matter Test PAA, but is functional
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    private generatePAACert(vendorId?: VendorId) {
+    private async generatePAACert(vendorId?: VendorId) {
         const now = Time.get().now();
-        const unsignedCertificate = {
+        const cert = new Paa({
             serialNumber: Bytes.fromHex(toHex(this.paaCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
@@ -104,13 +105,14 @@ export class AttestationCertificateManager {
                 subjectKeyIdentifier: this.#paaKeyIdentifier,
                 authorityKeyIdentifier: this.#paaKeyIdentifier,
             },
-        };
-        return this.#certs.productAttestationAuthorityCertToAsn1(unsignedCertificate, this.#paaKeyPair);
+        });
+        await cert.sign(this.#crypto, this.#paaKeyPair);
+        return cert.asSignedAsn1();
     }
 
-    private generatePAICert(vendorId: VendorId, productId?: number) {
+    private async generatePAICert(vendorId: VendorId, productId?: number) {
         const now = Time.get().now();
-        const unsignedCertificate = {
+        const cert = new Pai({
             serialNumber: Bytes.fromHex(toHex(this.#paiCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
@@ -138,14 +140,15 @@ export class AttestationCertificateManager {
                 subjectKeyIdentifier: this.#paiKeyIdentifier,
                 authorityKeyIdentifier: this.#paaKeyIdentifier,
             },
-        };
-        return this.#certs.productAttestationIntermediateCertToAsn1(unsignedCertificate, this.#paaKeyPair);
+        });
+        await cert.sign(this.#crypto, this.#paaKeyPair);
+        return cert.asSignedAsn1();
     }
 
     async generateDaCert(publicKey: Uint8Array, vendorId: VendorId, productId: number) {
         const now = Time.get().now();
         const certId = this.#nextCertificateId++;
-        const unsignedCertificate = {
+        const cert = new Dac({
             serialNumber: Bytes.fromHex(toHex(certId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
@@ -169,10 +172,11 @@ export class AttestationCertificateManager {
                 keyUsage: {
                     digitalSignature: true,
                 },
-                subjectKeyIdentifier: (await this.#certs.crypto.computeSha256(publicKey)).slice(0, 20),
+                subjectKeyIdentifier: (await this.#crypto.computeSha256(publicKey)).slice(0, 20),
                 authorityKeyIdentifier: this.#paiKeyIdentifier,
             },
-        };
-        return this.#certs.deviceAttestationCertToAsn1(unsignedCertificate, this.#paiKeyPair);
+        });
+        await cert.sign(this.#crypto, this.#paiKeyPair);
+        return cert.asSignedAsn1();
     }
 }
