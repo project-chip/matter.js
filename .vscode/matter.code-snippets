@@ -1,0 +1,31 @@
+{
+	"license": {
+		"scope": "javascript,typescript",
+		"prefix": "@license",
+		"body": [
+			"/**",
+			" * @license",
+			" * Copyright 2022-2025 Matter.js Authors",
+			" * SPDX-License-Identifier: Apache-2.0",
+			" */",
+			"",
+			""
+		]
+	},
+
+	"core": {
+		"scope": "javascript,typescript",
+		"prefix": "@core",
+		"body": [
+			"@see {@link MatterSpecification.v141.Core} § "
+		]
+	},
+
+    "cluster": {
+        "scope": "javascript,typescript",
+        "prefix": "@cluster",
+        "body": [
+            "@see {@link MatterSpecification.v141.Cluster} § "
+        ]
+    }
+}
