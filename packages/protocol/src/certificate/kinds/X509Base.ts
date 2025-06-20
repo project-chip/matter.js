@@ -340,34 +340,70 @@ export abstract class X509Base<CT extends X509Certificate> {
     /**
      * Extract the public key from a Certificate Signing Request (CSR) in ASN.1 DER format.
      */
-    static async getPublicKeyFromCsr(crypto: Crypto, csr: Uint8Array) {
-        const { [DerKey.Elements]: rootElements } = DerCodec.decode(csr);
-        if (rootElements?.length !== 3) throw new CertificateError("Invalid CSR data");
+    static async getPublicKeyFromCsr(crypto: Crypto, encodedCsr: Uint8Array) {
+        const { [DerKey.Elements]: rootElements } = DerCodec.decode(encodedCsr);
+        if (rootElements?.length !== 3) {
+            throw new CertificateError("Invalid CSR data");
+        }
         const [requestNode, signAlgorithmNode, signatureNode] = rootElements;
 
         // Extract the public key
         const { [DerKey.Elements]: requestElements } = requestNode;
-        if (requestElements?.length !== 4) throw new CertificateError("Invalid CSR data");
-        const [versionNode, _subjectNode, publicKeyNode] = requestElements;
-        const requestVersion = versionNode[DerKey.Bytes][0];
-        if (requestVersion !== 0) throw new CertificateError(`Unsupported request version ${requestVersion}`);
-        // TODO: verify subject = { OrganisationName: "CSR" }
+        if (requestElements?.length !== 4) {
+            throw new CertificateError("Invalid CSR data");
+        }
+        const [versionNode, subjectNode, publicKeyNode] = requestElements;
+        const requestVersionBytes = versionNode[DerKey.Bytes];
+        if (requestVersionBytes.length !== 1 || requestVersionBytes[0] !== 0) {
+            throw new CertificateError(`Unsupported CSR version ${requestVersionBytes[0]}`);
+        }
+
+        // Verify the subject, according to spec can be "any value", so just check that it exists
+        if (!subjectNode[DerKey.Elements]?.length) {
+            throw new CertificateError("Missing subject in CSR data");
+        }
 
         const { [DerKey.Elements]: publicKeyElements } = publicKeyNode;
-        if (publicKeyElements?.length !== 2) throw new CertificateError("Invalid CSR data");
-        const [_publicKeyTypeNode, publicKeyBytesNode] = publicKeyElements;
-        // TODO: verify publicKey algorithm
+        if (publicKeyElements?.length !== 2) {
+            throw new CertificateError("Invalid CSR data");
+        }
+        const [publicKeyTypeNode, publicKeyBytesNode] = publicKeyElements;
+
+        // Verify Public Key Algorithm Type
+        const { [DerKey.Elements]: publicKeyTypeNodeElements } = publicKeyTypeNode;
+        if (publicKeyTypeNodeElements?.length !== 2) {
+            throw new CertificateError("Invalid public key type in CSR");
+        }
+        if (
+            !Bytes.areEqual(
+                publicKeyTypeNodeElements[0][DerKey.Bytes],
+                X962.PublicKeyAlgorithmEcPublicKey[DerKey.Bytes],
+            )
+        ) {
+            throw new CertificateError("Unsupported public key algorithm in CSR");
+        }
+        // Verify Public Key Curve Type (Parameter to Algorithm)
+        if (
+            !Bytes.areEqual(
+                publicKeyTypeNodeElements[1][DerKey.Bytes],
+                X962.PublicKeyAlgorithmEcPublicKeyP256[DerKey.Bytes],
+            )
+        ) {
+            throw new CertificateError("Unsupported public key curve in CSR");
+        }
+
         const publicKey = publicKeyBytesNode[DerKey.Bytes];
 
-        // Verify the CSR signature
+        // Verify the CSR signature algorithm
+        const signatureAlgorithmBytes = signAlgorithmNode[DerKey.Elements]?.[0]?.[DerKey.Bytes];
         if (
-            signAlgorithmNode[DerKey.Elements]?.[0]?.[DerKey.Bytes] === undefined ||
-            !Bytes.areEqual(
-                X962.EcdsaWithSHA256[DerKey.ObjectId][DerKey.Bytes],
-                signAlgorithmNode[DerKey.Elements]?.[0]?.[DerKey.Bytes],
-            )
-        )
-            throw new CertificateError("Unsupported signature type");
+            signatureAlgorithmBytes === undefined ||
+            !Bytes.areEqual(X962.EcdsaWithSHA256[DerKey.ObjectId][DerKey.Bytes], signatureAlgorithmBytes)
+        ) {
+            throw new CertificateError("Unsupported signature algorithm in CSR");
+        }
+
+        // Verify the CSR signature
         await crypto.verifyEcdsa(
             PublicKey(publicKey),
             DerCodec.encode(requestNode),
