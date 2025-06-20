@@ -10,6 +10,7 @@ export * from "./certificate/index.js";
 export * from "./cluster/index.js";
 export * from "./codec/index.js";
 export * from "./common/index.js";
+export * from "./dcl/index.js";
 export * from "./events/index.js";
 export * from "./fabric/index.js";
 export * from "./groups/index.js";
