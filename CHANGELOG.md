@@ -28,6 +28,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/protocol
     - Enhancement: Exposed reading cached ClusterClient attributes via `get*AttributeFromCache()` method
+    - Enhancement: Enhances CSR content validation
 
 -   @matter/nodejs
     - Enhancement: New variables `nodejs.crypto`, `nodejs.network` and `nodejs.storage` allow users to enable/disable the implementation of these features that use Node.js APIs
