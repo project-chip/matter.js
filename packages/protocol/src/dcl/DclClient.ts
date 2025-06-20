@@ -35,7 +35,7 @@ export class DclClient {
         this.#baseUrl = this.production ? DCL_PRODUCTION_URL : DCL_TEST_URL;
     }
 
-    async #fetchJson<Response>(path: string): Promise<Response> {
+    async #fetchJson<ResponseT>(path: string): Promise<ResponseT> {
         const url = new URL(path, this.#baseUrl);
         try {
             const response = await fetch(url.toString(), {
