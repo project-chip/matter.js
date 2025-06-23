@@ -97,7 +97,6 @@ groups:
             users:
               - lauckhart
               - Apollon77
-              - vves
             teams:
               - matter-js-reviewers
         labels:
