@@ -38,11 +38,11 @@ describe("CADMIN", () => {
     before(() => chip.testFor("CADMIN/1.19").edit(edit.sed("s/0x0000000B/0x00000587/")));
 
     // For CADMIN/1.24 we reduce window timeout (see equivalent in SC/4.1)
-    before(() => chip.testFor("CADMIN/1.24").edit(edit.sed("s/180/1/")));
+    before(() => chip.testFor("CADMIN/1.22").edit(edit.sed("s/180/1/")));
 
     // Since our timeout is artificially low (1 s.) we need to reduce the timeout in the "discovery window too short"
     // test (see equivalent in Discovery.test.ts)
-    before(() => chip.testFor("CADMIN/1.24").edit(edit.sed("s/timeout=179/timeout=0/")));
+    before(() => chip.testFor("CADMIN/1.22").edit(edit.sed("s/timeout=179/timeout=0/")));
 
     chip("CADMIN/1.5");
     // chip("CADMIN/*").exclude(
