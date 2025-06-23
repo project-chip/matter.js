@@ -6,9 +6,9 @@
 
 import { AsyncObservable, Channel, Environment, Environmental, Logger, MatterError } from "#general";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
-import { NodeSession } from "../session/NodeSession.js";
-import { Session } from "../session/Session.js";
-import { MessageChannel } from "./ExchangeManager.js";
+import { MessageChannel } from "#protocol/MessageChannel.js";
+import { NodeSession } from "#session/NodeSession.js";
+import { Session } from "#session/Session.js";
 
 const logger = Logger.get("ChannelManager");
 

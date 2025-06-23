@@ -22,6 +22,7 @@ import {
     ServerAddress,
     serverAddressToString,
 } from "#general";
+import { InteractionClient, InteractionClientProvider } from "#interaction/InteractionClient.js";
 import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import {
     CommissioningError,
@@ -30,13 +31,13 @@ import {
     NodeIdConflictError,
 } from "#peer/ControllerCommissioningFlow.js";
 import { ControllerDiscovery, PairRetransmissionLimitReachedError } from "#peer/ControllerDiscovery.js";
+import { ExchangeManager } from "#protocol/ExchangeManager.js";
+import { DedicatedChannelExchangeProvider } from "#protocol/ExchangeProvider.js";
+import { MessageChannel } from "#protocol/MessageChannel.js";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { PaseClient } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { DiscoveryCapabilitiesBitmap, NodeId, SECURE_CHANNEL_PROTOCOL_ID, TypeFromPartialBitSchema } from "#types";
-import { InteractionClient, InteractionClientProvider } from "../interaction/InteractionClient.js";
-import { ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
-import { DedicatedChannelExchangeProvider } from "../protocol/ExchangeProvider.js";
 import { PeerAddress } from "./PeerAddress.js";
 import { NodeDiscoveryType, PeerSet } from "./PeerSet.js";
 
