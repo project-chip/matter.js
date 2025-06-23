@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Message, MessageCodec, PacketHeader, SessionType } from "#codec/MessageCodec.js";
 import {
     AsyncObservable,
+    createPromise,
     CRYPTO_AEAD_MIC_LENGTH_BYTES,
     DataReadQueue,
     Diagnostic,
@@ -16,9 +18,16 @@ import {
     NoResponseTimeoutError,
     Time,
     Timer,
-    createPromise,
 } from "#general";
-import { GroupSession } from "#session/index.js";
+import { MessageChannel, MRP_MAX_TRANSMISSIONS, MRP_STANDALONE_ACK_TIMEOUT_MS } from "#protocol/MessageChannel.js";
+import { SecureChannelProtocol } from "#securechannel/SecureChannelProtocol.js";
+import { GroupSession } from "#session/GroupSession.js";
+import {
+    SESSION_ACTIVE_INTERVAL_MS,
+    SESSION_ACTIVE_THRESHOLD_MS,
+    SESSION_IDLE_INTERVAL_MS,
+    SessionParameters,
+} from "#session/Session.js";
 import {
     GroupId,
     NodeId,
@@ -27,15 +36,7 @@ import {
     StatusCode,
     StatusResponseError,
 } from "#types";
-import { Message, MessageCodec, PacketHeader, SessionType } from "../codec/MessageCodec.js";
-import { SecureChannelProtocol } from "../securechannel/SecureChannelProtocol.js";
-import {
-    SESSION_ACTIVE_INTERVAL_MS,
-    SESSION_ACTIVE_THRESHOLD_MS,
-    SESSION_IDLE_INTERVAL_MS,
-    SessionParameters,
-} from "../session/Session.js";
-import { ChannelNotConnectedError, MessageChannel } from "./ExchangeManager.js";
+import { ChannelNotConnectedError } from "./ExchangeManager.js";
 
 const logger = Logger.get("MessageExchange");
 
@@ -87,38 +88,11 @@ export type ExchangeSendOptions = {
 };
 
 /**
- * The maximum number of transmission attempts for a given reliable message. The sender MAY choose this value as it
- * sees fit.
- */
-const MRP_MAX_TRANSMISSIONS = 5;
-
-/** The base number for the exponential backoff equation. */
-const MRP_BACKOFF_BASE = 1.6;
-
-/** The scaler for random jitter in the backoff equation. */
-const MRP_BACKOFF_JITTER = 0.25;
-
-/** The scaler margin increase to backoff over the peer sleepy interval. */
-const MRP_BACKOFF_MARGIN = 1.1;
-
-/** The number of retransmissions before transitioning from linear to exponential backoff. */
-const MRP_BACKOFF_THRESHOLD = 1;
-
-/** @see {@link MatterSpecification.v12.Core}, section 4.11.8 */
-const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
-
-/**
  * Default expected processing time for a messages in milliseconds. The value is derived from kExpectedIMProcessingTime
  * from chip implementation. This is basically the default used with different names, also kExpectedLowProcessingTime or
  * kExpectedSigma1ProcessingTime.
  */
 export const DEFAULT_EXPECTED_PROCESSING_TIME_MS = 2_000;
-
-/**
- * The buffer time in milliseconds to add to the peer response time to also consider network delays and other factors.
- * TODO: This is a pure guess and should be adjusted in the future.
- */
-const PEER_RESPONSE_TIME_BUFFER_MS = 5_000;
 
 /**
  * Message size overhead of a Matter message:
@@ -173,7 +147,6 @@ export class MessageExchange {
     readonly #activeIntervalMs: number;
     readonly #idleIntervalMs: number;
     readonly #activeThresholdMs: number;
-    readonly #maxTransmissions: number;
     readonly #messagesQueue = new DataReadQueue<Message>();
     #receivedMessageToAck: Message | undefined;
     #receivedMessageAckTimer = Time.getTimer("Ack receipt timeout", MRP_STANDALONE_ACK_TIMEOUT_MS, () => {
@@ -203,7 +176,6 @@ export class MessageExchange {
     readonly #protocolId: number;
     readonly #closed = AsyncObservable<[]>();
     readonly #closing = AsyncObservable<[]>();
-    readonly #useMRP: boolean;
 
     constructor(
         readonly context: MessageExchangeContext,
@@ -227,10 +199,7 @@ export class MessageExchange {
         this.#activeIntervalMs = activeIntervalMs ?? SESSION_ACTIVE_INTERVAL_MS;
         this.#idleIntervalMs = idleIntervalMs ?? SESSION_IDLE_INTERVAL_MS;
         this.#activeThresholdMs = activeThresholdMs ?? SESSION_ACTIVE_THRESHOLD_MS;
-        this.#maxTransmissions = MRP_MAX_TRANSMISSIONS;
 
-        // When the session is supporting MRP and the channel is not reliable, use MRP handling
-        this.#useMRP = session.supportsMRP && !channel.isReliable;
         this.#used = !isInitiator; // If we are the initiator then exchange was not used yet, so track it
 
         logger.debug(
@@ -244,9 +213,9 @@ export class MessageExchange {
                 SAT: this.#activeThresholdMs,
                 SAI: this.#activeIntervalMs,
                 SII: this.#idleIntervalMs,
-                maxTrans: this.#maxTransmissions,
+                maxTrans: MRP_MAX_TRANSMISSIONS,
                 exchangeFlags: Diagnostic.asFlags({
-                    MRP: this.#useMRP,
+                    MRP: this.channel.usesMrp,
                     I: this.isInitiator,
                 }),
             }),
@@ -297,7 +266,7 @@ export class MessageExchange {
             packetHeader: { messageId },
             payloadHeader: { requiresAck },
         } = message;
-        if (!requiresAck || !this.#useMRP) return;
+        if (!requiresAck || !this.channel.usesMrp) return;
 
         await this.send(SecureMessageType.StandaloneAck, new Uint8Array(0), { includeAcknowledgeMessageId: messageId });
     }
@@ -306,7 +275,7 @@ export class MessageExchange {
         logger.debug("Message «", MessageCodec.messageDiagnostics(message, { duplicate }));
 
         // Adjust the incoming message when ack was required, but this exchange does not use it to skip all relevant logic
-        if (message.payloadHeader.requiresAck && !this.#useMRP) {
+        if (message.payloadHeader.requiresAck && !this.channel.usesMrp) {
             logger.debug("Ignoring ack-required flag because MRP is not used for this exchange");
             message.payloadHeader.requiresAck = false;
         }
@@ -384,7 +353,7 @@ export class MessageExchange {
     }
 
     async send(messageType: number, payload: Uint8Array, options?: ExchangeSendOptions) {
-        if (options?.requiresAck && !this.#useMRP) {
+        if (options?.requiresAck && !this.channel.usesMrp) {
             options.requiresAck = false;
         }
 
@@ -396,11 +365,11 @@ export class MessageExchange {
             includeAcknowledgeMessageId,
             logContext,
         } = options ?? {};
-        if (!this.#useMRP && includeAcknowledgeMessageId !== undefined) {
+        if (!this.channel.usesMrp && includeAcknowledgeMessageId !== undefined) {
             throw new InternalError("Cannot include an acknowledge message ID when MRP is not used");
         }
         if (messageType === SecureMessageType.StandaloneAck) {
-            if (!this.#useMRP) {
+            if (!this.channel.usesMrp) {
                 return;
             }
             if (requiresAck) {
@@ -414,7 +383,7 @@ export class MessageExchange {
         this.session.notifyActivity(false);
 
         let ackedMessageId = includeAcknowledgeMessageId;
-        if (ackedMessageId === undefined && this.#useMRP) {
+        if (ackedMessageId === undefined && this.channel.usesMrp) {
             ackedMessageId = this.#receivedMessageToAck?.packetHeader.messageId;
             if (ackedMessageId !== undefined) {
                 this.#receivedMessageAckTimer.stop();
@@ -465,7 +434,7 @@ export class MessageExchange {
                     messageType === SecureMessageType.StandaloneAck ? SECURE_CHANNEL_PROTOCOL_ID : this.#protocolId,
                 messageType,
                 isInitiatorMessage: this.isInitiator,
-                requiresAck: requiresAck ?? (this.#useMRP && messageType !== SecureMessageType.StandaloneAck),
+                requiresAck: requiresAck ?? (this.channel.usesMrp && messageType !== SecureMessageType.StandaloneAck),
                 ackedMessageId,
                 hasSecuredExtension: false,
             },
@@ -473,11 +442,11 @@ export class MessageExchange {
         };
 
         let ackPromise: Promise<Message> | undefined;
-        if (this.#useMRP && message.payloadHeader.requiresAck && !disableMrpLogic) {
+        if (this.channel.usesMrp && message.payloadHeader.requiresAck && !disableMrpLogic) {
             this.#sentMessageToAck = message;
             this.#retransmissionTimer = Time.getTimer(
                 `Message retransmission ${message.packetHeader.messageId}`,
-                this.#getResubmissionBackOffTime(0),
+                this.channel.getMrpResubmissionBackOffTime(0),
                 () => this.#retransmitMessage(message, expectedProcessingTimeMs),
             );
             const { promise, resolver, rejecter } = createPromise<Message>();
@@ -512,81 +481,33 @@ export class MessageExchange {
         } else if (this.#messagesQueue.size > 0) {
             timeout = 0; // If we have messages in the queue, we can return them immediately
         } else {
-            switch (this.channel.type) {
-                case "tcp":
-                    // TCP uses 30s timeout according to chip sdk implementation, so do the same
-                    timeout = 30_000;
-                    break;
-                case "udp":
-                    // UDP normally uses MRP, if not we have Group communication which normally have no responses
-                    if (!this.#useMRP) {
-                        throw new MatterFlowError(
-                            "No response expected for this message exchange because UDP and no MRP.",
-                        );
-                    }
-                    const { expectedProcessingTimeMs } = options ?? {};
-                    timeout = this.calculateMaximumPeerResponseTime(expectedProcessingTimeMs);
-                    break;
-                case "ble":
-                    // chip sdk uses BTP_ACK_TIMEOUT_MS which is wrong in my eyes, so we use static 30s as like TCP here
-                    timeout = 30_000;
-                    break;
-                default:
-                    throw new MatterFlowError(
-                        `Can not calculate expected timeout for unknown channel type: ${this.channel.type}`,
-                    );
-            }
-            timeout += PEER_RESPONSE_TIME_BUFFER_MS;
+            timeout = this.channel.calculateMaximumPeerResponseTimeMs(
+                this.context.localSessionParameters,
+                options?.expectedProcessingTimeMs,
+            );
         }
         return this.#messagesQueue.read(timeout);
     }
 
-    /**
-     * Calculates the backoff time for a resubmission based on the current retransmission count.
-     * If no session parameters are provided, the parameters of the current session are used.
-     * If session parameters are provided, the method can be used to calculate the maximum backoff time for the other
-     * side of the exchange.
-     *
-     * @see {@link MatterSpecification.v10.Core}, section 4.11.2.1
-     */
-    #getResubmissionBackOffTime(retransmissionCount: number, sessionParameters?: SessionParameters) {
-        const { activeIntervalMs, idleIntervalMs } = sessionParameters ?? {
-            activeIntervalMs: this.#activeIntervalMs,
-            idleIntervalMs: this.#idleIntervalMs,
-        };
-        const baseInterval =
-            sessionParameters !== undefined || this.session.isPeerActive() ? activeIntervalMs : idleIntervalMs;
-        return Math.floor(
-            MRP_BACKOFF_MARGIN *
-                baseInterval *
-                Math.pow(MRP_BACKOFF_BASE, Math.max(0, retransmissionCount - MRP_BACKOFF_THRESHOLD)) *
-                (1 + (sessionParameters !== undefined ? 1 : Math.random()) * MRP_BACKOFF_JITTER),
+    calculateMaximumPeerResponseTimeMs(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS) {
+        return this.channel.calculateMaximumPeerResponseTimeMs(
+            this.context.localSessionParameters,
+            expectedProcessingTimeMs,
         );
-    }
-
-    calculateMaximumPeerResponseTime(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS) {
-        // We use the expected processing time and deduct the time we already waited since last resubmission
-        let finalWaitTime = expectedProcessingTimeMs;
-
-        // and then add the time the other side needs for a full resubmission cycle under the assumption we are active
-        for (let i = 0; i < this.#maxTransmissions; i++) {
-            finalWaitTime += this.#getResubmissionBackOffTime(i, this.context.localSessionParameters);
-        }
-
-        // TODO: Also add any network latency buffer, for now lets consider it's included in the processing time already
-        return finalWaitTime;
     }
 
     #retransmitMessage(message: Message, expectedProcessingTimeMs?: number) {
         this.#retransmissionCounter++;
-        if (this.#retransmissionCounter >= this.#maxTransmissions) {
+        if (this.#retransmissionCounter >= MRP_MAX_TRANSMISSIONS) {
             // Ok all 4 resubmissions are done, but we need to wait a bit longer because of processing time and
             // the resubmissions from the other side
             if (expectedProcessingTimeMs !== undefined) {
                 // We already have waited after the last message was sent, so deduct this time from the final wait time
                 const finalWaitTime =
-                    this.calculateMaximumPeerResponseTime(expectedProcessingTimeMs) -
-                    (this.#retransmissionTimer?.intervalMs ?? 0);
+                    this.channel.calculateMaximumPeerResponseTimeMs(
+                        this.context.localSessionParameters,
+                        expectedProcessingTimeMs,
+                    ) - (this.#retransmissionTimer?.intervalMs ?? 0);
                 if (finalWaitTime > 0) {
                     this.#retransmissionCounter--; // We will not resubmit the message again
                     logger.debug(
@@ -620,7 +541,7 @@ export class MessageExchange {
         if (this.#retransmissionCounter === 1) {
             this.context.resubmissionStarted();
         }
-        const resubmissionBackoffTime = this.#getResubmissionBackOffTime(this.#retransmissionCounter);
+        const resubmissionBackoffTime = this.channel.getMrpResubmissionBackOffTime(this.#retransmissionCounter);
         logger.debug(
             `Resubmit message ${message.packetHeader.messageId} (retransmission attempt ${this.#retransmissionCounter}, backoff time ${resubmissionBackoffTime}ms))`,
         );
@@ -742,8 +663,8 @@ export class MessageExchange {
         // We might wait a bit longer then needed but because this is mainly a failsafe mechanism it is acceptable.
         // in normal case this timer is cancelled before it triggers when all retries are done.
         let maxResubmissionTime = 0;
-        for (let i = this.#retransmissionCounter; i <= this.#maxTransmissions; i++) {
-            maxResubmissionTime += this.#getResubmissionBackOffTime(i);
+        for (let i = this.#retransmissionCounter; i <= MRP_MAX_TRANSMISSIONS; i++) {
+            maxResubmissionTime += this.channel.getMrpResubmissionBackOffTime(i);
         }
         this.#closeTimer = Time.getTimer(
             `Message exchange cleanup ${this.session.name} / ${this.#exchangeId}`,

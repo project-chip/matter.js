@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { DecodedMessage, MessageCodec, SessionType } from "#codec/MessageCodec.js";
 import {
     Channel,
     Crypto,
@@ -22,15 +23,15 @@ import {
     UnexpectedDataError,
 } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
+import { MessageChannel } from "#protocol/MessageChannel.js";
+import { SecureChannelMessenger } from "#securechannel/SecureChannelMessenger.js";
+import { SecureChannelProtocol } from "#securechannel/SecureChannelProtocol.js";
+import { NodeSession } from "#session/NodeSession.js";
+import { Session } from "#session/Session.js";
+import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "#session/SessionManager.js";
 import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
-import { DecodedMessage, Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
-import { SecureChannelMessenger } from "../securechannel/SecureChannelMessenger.js";
-import { SecureChannelProtocol } from "../securechannel/SecureChannelProtocol.js";
-import { NodeSession } from "../session/NodeSession.js";
-import { Session } from "../session/Session.js";
-import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
 import { ChannelManager } from "./ChannelManager.js";
-import { ExchangeLogContext, MessageExchange, MessageExchangeContext } from "./MessageExchange.js";
+import { DEFAULT_EXPECTED_PROCESSING_TIME_MS, MessageExchange, MessageExchangeContext } from "./MessageExchange.js";
 import { DuplicateMessageError } from "./MessageReceptionState.js";
 import { ProtocolHandler } from "./ProtocolHandler.js";
 
@@ -39,66 +40,6 @@ const logger = Logger.get("ExchangeManager");
 const MAXIMUM_CONCURRENT_EXCHANGES_PER_SESSION = 5;
 
 export class ChannelNotConnectedError extends MatterError {}
-
-export class MessageChannel implements Channel<Message> {
-    public closed = false;
-    #closeCallback?: () => Promise<void>;
-
-    constructor(
-        readonly channel: Channel<Uint8Array>,
-        readonly session: Session,
-        closeCallback?: () => Promise<void>,
-    ) {
-        this.#closeCallback = closeCallback;
-    }
-
-    set closeCallback(callback: () => Promise<void>) {
-        this.#closeCallback = callback;
-    }
-
-    /** Is the underlying transport reliable? */
-    get isReliable() {
-        return this.channel.isReliable;
-    }
-
-    get type() {
-        return this.channel.type;
-    }
-
-    /**
-     * Max Payload size of the exchange which bases on the maximum payload size of the channel. The full encoded matter
-     * message payload sent here can be as huge as allowed by the channel.
-     */
-    get maxPayloadSize() {
-        return this.channel.maxPayloadSize;
-    }
-
-    async send(message: Message, logContext?: ExchangeLogContext) {
-        logger.debug("Message »", MessageCodec.messageDiagnostics(message, logContext));
-        const packet = this.session.encode(message);
-        const bytes = MessageCodec.encodePacket(packet);
-        if (bytes.length > this.maxPayloadSize) {
-            logger.warn(
-                `Matter message to send to ${this.name} is ${bytes.length}bytes long, which is larger than the maximum allowed size of ${this.maxPayloadSize}. This only works if both nodes support it.`,
-            );
-        }
-
-        return await this.channel.send(bytes);
-    }
-
-    get name() {
-        return `${this.channel.name} on session ${this.session.name}`;
-    }
-
-    async close() {
-        const wasAlreadyClosed = this.closed;
-        this.closed = true;
-        await this.channel.close();
-        if (!wasAlreadyClosed) {
-            await this.#closeCallback?.();
-        }
-    }
-}
 
 /**
  * Interfaces {@link ExchangeManager} with other components.
@@ -463,6 +404,16 @@ export class ExchangeManager {
         const exchangeToClose = sessionExchanges[0];
         logger.debug(`Closing oldest exchange ${exchangeToClose.id} for session ${sessionId}`);
         exchangeToClose.close().catch(error => logger.error("Error closing exchange", error)); // TODO Promise??
+    }
+
+    calculateMaximumPeerResponseTimeMsFor(
+        channel: MessageChannel,
+        expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS,
+    ) {
+        return channel.calculateMaximumPeerResponseTimeMs(
+            this.#sessionManager.sessionParameters,
+            expectedProcessingTimeMs,
+        );
     }
 
     #messageExchangeContextFor(channel: MessageChannel): MessageExchangeContext {
