@@ -66,6 +66,12 @@ export type SignatureFromCommandSpec<C extends Command<any, any, any>> = (
         timedRequestTimeoutMs?: number;
 
         /**
+         * Expected processing time on the device side for this command.
+         * useExtendedFailSafeMessageResponseTimeout is ignored if this value is set.
+         */
+        expectedProcessingTimeMs?: number;
+
+        /**
          * Use the extended fail-safe message response timeout of 30 seconds. Use this for all commands
          * executed during an activated FailSafe context!
          */
@@ -81,6 +87,12 @@ export type SignatureFromCommandSpecWithoutResponse<C extends Command<any, any, 
 
         /** Override the request timeout when the command is sent as times request. Default are 10s. */
         timedRequestTimeoutMs?: number;
+
+        /**
+         * Expected processing time on the device side for this command.
+         * useExtendedFailSafeMessageResponseTimeout is ignored if this value is set.
+         */
+        expectedProcessingTimeMs?: number;
 
         /**
          * Use the extended fail-safe message response timeout of 30 seconds. Use this for all commands

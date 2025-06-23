@@ -1148,6 +1148,12 @@ export class InteractionClient {
         /** Use this timeout and send the request as Timed Request. If this is specified the above parameter is implied. */
         timedRequestTimeoutMs?: number;
 
+        /**
+         * Expected processing time on the device side for this command.
+         * useExtendedFailSafeMessageResponseTimeout is ignored if this value is set.
+         */
+        expectedProcessingTimeMs?: number;
+
         /** Use an extended Message Response Timeout as defined for FailSafe cases which is 30s. */
         useExtendedFailSafeMessageResponseTimeout?: boolean;
 
@@ -1165,6 +1171,7 @@ export class InteractionClient {
             command: { requestId, requestSchema, responseId, responseSchema, optional, timed },
             asTimedRequest,
             timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
+            expectedProcessingTimeMs,
             useExtendedFailSafeMessageResponseTimeout = false,
             skipValidation,
         } = options;
@@ -1218,9 +1225,10 @@ export class InteractionClient {
                     suppressResponse: false,
                     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                 },
-                useExtendedFailSafeMessageResponseTimeout
-                    ? DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE_MS
-                    : undefined,
+                expectedProcessingTimeMs ??
+                    (useExtendedFailSafeMessageResponseTimeout
+                        ? DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE_MS
+                        : undefined),
             );
             if (response === undefined) {
                 throw new MatterFlowError("No response received from invoke interaction but expected.");
