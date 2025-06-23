@@ -14,7 +14,7 @@ const logger = Logger.get("SubscriptionClient");
 
 export interface RegisteredSubscription {
     id: number;
-    maximumPeerResponseTime: number;
+    maximumPeerResponseTimeMs: number;
     maxIntervalS: number;
     onData: (dataReport: DataReport) => MaybePromise<void>;
     onTimeout?: () => void;
@@ -53,7 +53,7 @@ export class SubscriptionClient implements ProtocolHandler {
                 this.#timeouts.delete(id);
             }
 
-            const maxIntervalMs = subscription.maxIntervalS * 1000 + subscription.maximumPeerResponseTime;
+            const maxIntervalMs = subscription.maxIntervalS * 1000 + subscription.maximumPeerResponseTimeMs;
 
             timer = Time.getTimer("Subscription timeout", maxIntervalMs, () => {
                 logger.info(`Subscription ${id} timed out after ${maxIntervalMs}ms`);

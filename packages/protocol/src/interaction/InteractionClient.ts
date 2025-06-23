@@ -203,6 +203,11 @@ export class InteractionClient {
         throw new ImplementationError("ExchangeProvider does not support channelUpdated");
     }
 
+    /** Calculates the current maximum response time for a message use in additional logic like timers. */
+    maximumPeerResponseTimeMs(expectedProcessingTimeMs?: number) {
+        return this.#exchangeProvider.maximumPeerResponseTimeMs(expectedProcessingTimeMs);
+    }
+
     removeSubscription(subscriptionId: number) {
         this.#ownSubscriptionIds.delete(subscriptionId);
         this.#subscriptionClient.delete(subscriptionId);
@@ -741,11 +746,11 @@ export class InteractionClient {
         const {
             subscribeResponse: { subscriptionId, maxInterval },
             report,
-            maximumPeerResponseTime,
+            maximumPeerResponseTimeMs,
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTime: number;
+            maximumPeerResponseTimeMs: number;
         }>(async messenger => {
             const { subscribeResponse, report } = await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -762,7 +767,7 @@ export class InteractionClient {
             return {
                 subscribeResponse,
                 report,
-                maximumPeerResponseTime: messenger.calculateMaximumPeerResponseTime(),
+                maximumPeerResponseTimeMs: this.maximumPeerResponseTimeMs(),
             };
         }, executeQueued);
 
@@ -793,7 +798,7 @@ export class InteractionClient {
         await this.#registerSubscription(
             {
                 id: subscriptionId,
-                maximumPeerResponseTime,
+                maximumPeerResponseTimeMs,
                 maxIntervalS: maxInterval,
                 onData: subscriptionListener,
                 onTimeout: updateTimeoutHandler,
@@ -852,11 +857,11 @@ export class InteractionClient {
         const {
             report,
             subscribeResponse: { subscriptionId, maxInterval },
-            maximumPeerResponseTime,
+            maximumPeerResponseTimeMs,
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTime: number;
+            maximumPeerResponseTimeMs: number;
         }>(async messenger => {
             const { subscribeResponse, report } = await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -870,7 +875,7 @@ export class InteractionClient {
             return {
                 subscribeResponse,
                 report,
-                maximumPeerResponseTime: messenger.calculateMaximumPeerResponseTime(),
+                maximumPeerResponseTimeMs: this.maximumPeerResponseTimeMs(),
             };
         }, executeQueued);
 
@@ -898,7 +903,7 @@ export class InteractionClient {
         await this.#registerSubscription(
             {
                 id: subscriptionId,
-                maximumPeerResponseTime,
+                maximumPeerResponseTimeMs,
                 maxIntervalS: maxInterval,
                 onData: subscriptionListener,
                 onTimeout: updateTimeoutHandler,
@@ -1019,11 +1024,11 @@ export class InteractionClient {
         const {
             report,
             subscribeResponse: { subscriptionId, maxInterval },
-            maximumPeerResponseTime,
+            maximumPeerResponseTimeMs,
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTime: number;
+            maximumPeerResponseTimeMs: number;
         }>(async messenger => {
             const { subscribeResponse, report } = await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -1042,7 +1047,7 @@ export class InteractionClient {
             return {
                 subscribeResponse,
                 report,
-                maximumPeerResponseTime: messenger.calculateMaximumPeerResponseTime(),
+                maximumPeerResponseTimeMs: this.maximumPeerResponseTimeMs(),
             };
         }, executeQueued);
 
@@ -1116,7 +1121,7 @@ export class InteractionClient {
         await this.#registerSubscription(
             {
                 id: subscriptionId,
-                maximumPeerResponseTime,
+                maximumPeerResponseTimeMs,
                 maxIntervalS: maxInterval,
 
                 onData: dataReport => subscriptionListener(DecodedDataReport(dataReport)),

@@ -32,6 +32,7 @@ export abstract class ExchangeProvider {
         this.exchangeManager.addProtocolHandler(handler);
     }
 
+    abstract maximumPeerResponseTimeMs(expectedProcessingTimeMs?: number): number;
     abstract initiateExchange(): Promise<MessageExchange>;
     abstract reconnectChannel(): Promise<boolean>;
     abstract session: Session;
@@ -64,6 +65,10 @@ export class DedicatedChannelExchangeProvider extends ExchangeProvider {
 
     get channelType() {
         return this.#channel.type;
+    }
+
+    maximumPeerResponseTimeMs(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS) {
+        return this.exchangeManager.calculateMaximumPeerResponseTimeMsFor(this.#channel, expectedProcessingTimeMs);
     }
 }
 
@@ -124,5 +129,13 @@ export class ReconnectableExchangeProvider extends ExchangeProvider {
             throw new ChannelNotConnectedError("Channel not connected");
         }
         return this.channelManager.getChannel(this.#address).type;
+    }
+
+    maximumPeerResponseTimeMs(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS) {
+        const channel = this.channelManager.getChannel(this.#address);
+        if (!channel) {
+            throw new ChannelNotConnectedError("Channel not connected");
+        }
+        return this.exchangeManager.calculateMaximumPeerResponseTimeMsFor(channel, expectedProcessingTimeMs);
     }
 }
