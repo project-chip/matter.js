@@ -35,7 +35,7 @@ import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { CaseClient, SecureSession, Session } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
-import { GroupId, NodeId, ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "#types";
+import { GroupId, NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureChannelStatusCode } from "#types";
 import { ChannelManager } from "../protocol/ChannelManager.js";
 import { ChannelNotConnectedError, ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
 import { DedicatedChannelExchangeProvider, ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
@@ -738,7 +738,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
 
             if (
                 error instanceof ChannelStatusResponseError &&
-                error.protocolStatusCode === ProtocolStatusCode.NoSharedTrustRoots
+                error.protocolStatusCode === SecureChannelStatusCode.NoSharedTrustRoots
             ) {
                 // It seems the stored resumption record is outdated; we need to retry pairing without resumption
                 if (await this.#sessions.deleteResumptionRecord(fabric.addressOf(address.nodeId))) {
