@@ -278,4 +278,50 @@ describe("DnsCodec", () => {
             });
         }
     });
+
+    describe("encode and decode AAAA records", () => {
+        it("encodes and decodes AAAA fe80 record", () => {
+            const encoded = DnsCodec.encodeAaaaRecord("fe80::9580:b733:6f54:9f43");
+            expect(Bytes.toHex(encoded)).equal("fe800000000000009580b7336f549f43");
+            expect(encoded.length).equal(16);
+            const decoded = DnsCodec.decodeAaaaRecord(encoded);
+            expect(decoded).equal("fe80::9580:b733:6f54:9f43");
+            const reEncoded = DnsCodec.encodeAaaaRecord(decoded);
+            expect(Bytes.toHex(reEncoded)).equal("fe800000000000009580b7336f549f43");
+            expect(reEncoded.length).equal(16);
+        });
+
+        it("encodes and decodes AAAA record ::1", () => {
+            const encoded = DnsCodec.encodeAaaaRecord("::1");
+            expect(Bytes.toHex(encoded)).equal("00000000000000000000000000000001");
+            expect(encoded.length).equal(16);
+            const decoded = DnsCodec.decodeAaaaRecord(encoded);
+            expect(decoded).equal("::1");
+            const reEncoded = DnsCodec.encodeAaaaRecord(decoded);
+            expect(Bytes.toHex(reEncoded)).equal("00000000000000000000000000000001");
+            expect(reEncoded.length).equal(16);
+        });
+
+        it("encodes and decodes AAAA record ::", () => {
+            const encoded = DnsCodec.encodeAaaaRecord("::");
+            expect(Bytes.toHex(encoded)).equal("00000000000000000000000000000000");
+            expect(encoded.length).equal(16);
+            const decoded = DnsCodec.decodeAaaaRecord(encoded);
+            expect(decoded).equal("::");
+            const reEncoded = DnsCodec.encodeAaaaRecord(decoded);
+            expect(Bytes.toHex(reEncoded)).equal("00000000000000000000000000000000");
+            expect(reEncoded.length).equal(16);
+        });
+
+        it("encodes and decodes AAAA record with more cutted 0s", () => {
+            const encoded = DnsCodec.encodeAaaaRecord("fe80::1");
+            expect(Bytes.toHex(encoded)).equal("fe800000000000000000000000000001");
+            expect(encoded.length).equal(16);
+            const decoded = DnsCodec.decodeAaaaRecord(encoded);
+            expect(decoded).equal("fe80::1");
+            const reEncoded = DnsCodec.encodeAaaaRecord(decoded);
+            expect(Bytes.toHex(reEncoded)).equal("fe800000000000000000000000000001");
+            expect(reEncoded.length).equal(16);
+        });
+    });
 });
