@@ -8,7 +8,7 @@ import { Noc } from "#certificate/index.js";
 import { Bytes, Crypto, CryptoDecryptError, Logger, PublicKey, UnexpectedDataError } from "#general";
 import { TlvSessionParameters } from "#session/pase/PaseMessages.js";
 import { ResumptionRecord, SessionManager } from "#session/SessionManager.js";
-import { NodeId, ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID, TypeFromSchema } from "#types";
+import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureChannelStatusCode, TypeFromSchema } from "#types";
 import { FabricManager, FabricNotFoundError } from "../../fabric/FabricManager.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
@@ -51,11 +51,11 @@ export class CaseServer implements ProtocolHandler {
             logger.error("An error occurred during the commissioning", error);
 
             if (error instanceof FabricNotFoundError) {
-                await messenger.sendError(ProtocolStatusCode.NoSharedTrustRoots);
+                await messenger.sendError(SecureChannelStatusCode.NoSharedTrustRoots);
             }
             // If we received a ChannelStatusResponseError we do not need to send one back, so just cancel pairing
             else if (!(error instanceof ChannelStatusResponseError)) {
-                await messenger.sendError(ProtocolStatusCode.InvalidParam);
+                await messenger.sendError(SecureChannelStatusCode.InvalidParam);
             }
         } finally {
             // Destroy the unsecure session used to establish the secure Case session

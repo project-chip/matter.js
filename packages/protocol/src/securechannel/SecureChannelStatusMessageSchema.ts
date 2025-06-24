@@ -4,37 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataReader, DataWriter, Endian } from "#general";
-import { GeneralStatusCode, ProtocolStatusCode, Schema } from "#types";
+import { ProtocolStatusMessage, ProtocolStatusMessageSchema } from "#protocol/ProtocolStatusMessage.js";
+import { SECURE_CHANNEL_PROTOCOL_ID, SecureChannelStatusCode } from "#types";
 
-export type StatusMessage = {
-    generalStatus: GeneralStatusCode;
-    protocolId: number;
-    protocolStatus: ProtocolStatusCode;
-    protocolData?: Uint8Array;
-};
+export type SecureChannelStatusMessage = ProtocolStatusMessage<SecureChannelStatusCode>;
 
-export class SecureChannelStatusMessageSchema extends Schema<StatusMessage, Uint8Array> {
-    encodeInternal({ generalStatus, protocolId, protocolStatus, protocolData }: StatusMessage) {
-        const writer = new DataWriter(Endian.Little);
-        writer.writeUInt16(generalStatus);
-        writer.writeUInt32(protocolId);
-        writer.writeUInt16(protocolStatus);
-        if (protocolData !== undefined && protocolData.length > 0) {
-            writer.writeByteArray(protocolData);
-        }
-        return writer.toByteArray();
-    }
+export class SecureChannelStatusMessageSchema extends ProtocolStatusMessageSchema<SecureChannelStatusMessage> {}
 
-    decodeInternal(bytes: Uint8Array) {
-        const reader = new DataReader(bytes, Endian.Little);
-        const generalStatus = reader.readUInt16();
-        const protocolId = reader.readUInt32();
-        const protocolStatus = reader.readUInt16();
-        const remainingBytes = reader.remainingBytesCount > 0 ? reader.remainingBytes : undefined;
-
-        return { generalStatus, protocolId, protocolStatus, remainingBytes };
-    }
-}
-
-export const TlvSecureChannelStatusMessage = new SecureChannelStatusMessageSchema();
+export const TlvSecureChannelStatusMessage = new SecureChannelStatusMessageSchema(SECURE_CHANNEL_PROTOCOL_ID);
