@@ -8,7 +8,7 @@ import { InternalError, NotImplementedError, UnexpectedDataError } from "../Matt
 import { Bytes, Endian } from "../util/Bytes.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { isIPv4, isIPv6 } from "../util/Ip.js";
+import { ipv4BytesToString, ipv4ToBytes, ipv6BytesToString, ipv6ToBytes, isIPv4, isIPv6 } from "../util/Ip.js";
 
 /**
  * The maximum MDNS message size to usually fit into one UDP network MTU packet. Data are split into multiple messages
@@ -265,37 +265,12 @@ export class DnsCodec {
 
     static decodeAaaaRecord(valueBytes: Uint8Array): string {
         const reader = new DataReader(valueBytes);
-        const ipItems = new Array<string>();
-        for (let i = 0; i < 8; i++) {
-            ipItems.push(reader.readUInt16().toString(16));
-        }
-        // Compress 0 sequences
-        const zeroSequences = new Array<{ start: number; length: number }>();
-        for (let i = 0; i < 8; i++) {
-            if (ipItems[i] !== "0") continue;
-            const start = i;
-            i++;
-            while (i < 8 && ipItems[i] === "0") {
-                i++;
-            }
-            zeroSequences.push({ start, length: i - start });
-        }
-        if (zeroSequences.length > 0) {
-            zeroSequences.sort((a, b) => a.length - b.length);
-            const { start, length } = zeroSequences[0];
-            ipItems[start] = "";
-            ipItems.splice(start + 1, length - 1);
-        }
-        return ipItems.join(":");
+        return ipv6BytesToString(reader.readByteArray(16));
     }
 
     static decodeARecord(valueBytes: Uint8Array): string {
         const reader = new DataReader(valueBytes);
-        const ipItems = new Array<string>();
-        for (let i = 0; i < 4; i++) {
-            ipItems.push(reader.readUInt8().toString());
-        }
-        return ipItems.join(".");
+        return ipv4BytesToString(reader.readByteArray(4));
     }
 
     static encode({
@@ -367,27 +342,12 @@ export class DnsCodec {
 
     static encodeARecord(ip: string) {
         if (!isIPv4(ip)) throw new UnexpectedDataError(`Invalid A Record value: ${ip}`);
-        const writer = new DataWriter();
-        ip.split(".").forEach(part => {
-            writer.writeUInt8(parseInt(part));
-        });
-        return writer.toByteArray();
+        return ipv4ToBytes(ip);
     }
 
     static encodeAaaaRecord(ip: string) {
         if (!isIPv6(ip)) throw new UnexpectedDataError(`Invalid AAAA Record value: ${ip}`);
-        const writer = new DataWriter();
-        const parts = ip.split(":");
-        parts.forEach(part => {
-            if (part === "") {
-                const compressedParts = 8 - parts.length;
-                for (let i = 0; i < compressedParts; i++) {
-                    writer.writeUInt16(0);
-                }
-            }
-            writer.writeUInt16(parseInt(part, 16));
-        });
-        return writer.toByteArray();
+        return ipv6ToBytes(ip);
     }
 
     static encodeTxtRecord(entries: string[]) {
