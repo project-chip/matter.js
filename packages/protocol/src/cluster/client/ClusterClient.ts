@@ -388,10 +388,16 @@ export function ClusterClient<const T extends ClusterType>(
             options: {
                 asTimedRequest?: boolean;
                 timedRequestTimeoutMs?: number;
+                expectedProcessingTimeMs?: number;
                 useExtendedFailSafeMessageResponseTimeout?: boolean;
             } = {},
         ) => {
-            const { asTimedRequest, timedRequestTimeoutMs, useExtendedFailSafeMessageResponseTimeout } = options;
+            const {
+                asTimedRequest,
+                timedRequestTimeoutMs,
+                useExtendedFailSafeMessageResponseTimeout,
+                expectedProcessingTimeMs,
+            } = options;
             if (isGroupAddress) {
                 return interactionClient.invokeWithSuppressedResponse<Command<RequestT, ResponseT, any>>({
                     clusterId,
@@ -408,6 +414,7 @@ export function ClusterClient<const T extends ClusterType>(
                 request,
                 asTimedRequest,
                 timedRequestTimeoutMs,
+                expectedProcessingTimeMs,
                 useExtendedFailSafeMessageResponseTimeout,
             });
         };

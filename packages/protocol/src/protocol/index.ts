@@ -9,6 +9,7 @@ export * from "./DeviceAdvertiser.js";
 export * from "./DeviceCommissioner.js";
 export * from "./ExchangeManager.js";
 export * from "./ExchangeProvider.js";
+export * from "./MessageChannel.js";
 export * from "./MessageCounter.js";
 export * from "./MessageExchange.js";
 export * from "./MessageReceptionState.js";
