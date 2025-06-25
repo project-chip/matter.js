@@ -19,7 +19,7 @@ import {
     Time,
     Timer,
 } from "#general";
-import { MessageChannel, MRP_MAX_TRANSMISSIONS, MRP_STANDALONE_ACK_TIMEOUT_MS } from "#protocol/MessageChannel.js";
+import { MessageChannel, MRP } from "#protocol/MessageChannel.js";
 import { SecureChannelProtocol } from "#securechannel/SecureChannelProtocol.js";
 import { GroupSession } from "#session/GroupSession.js";
 import {
@@ -149,7 +149,7 @@ export class MessageExchange {
     readonly #activeThresholdMs: number;
     readonly #messagesQueue = new DataReadQueue<Message>();
     #receivedMessageToAck: Message | undefined;
-    #receivedMessageAckTimer = Time.getTimer("Ack receipt timeout", MRP_STANDALONE_ACK_TIMEOUT_MS, () => {
+    #receivedMessageAckTimer = Time.getTimer("Ack receipt timeout", MRP.STANDALONE_ACK_TIMEOUT_MS, () => {
         if (this.#receivedMessageToAck !== undefined) {
             const messageToAck = this.#receivedMessageToAck;
             this.#receivedMessageToAck = undefined;
@@ -213,7 +213,7 @@ export class MessageExchange {
                 SAT: this.#activeThresholdMs,
                 SAI: this.#activeIntervalMs,
                 SII: this.#idleIntervalMs,
-                maxTrans: MRP_MAX_TRANSMISSIONS,
+                maxTrans: MRP.MAX_TRANSMISSIONS,
                 exchangeFlags: Diagnostic.asFlags({
                     MRP: this.channel.usesMrp,
                     I: this.isInitiator,
@@ -498,7 +498,7 @@ export class MessageExchange {
 
     #retransmitMessage(message: Message, expectedProcessingTimeMs?: number) {
         this.#retransmissionCounter++;
-        if (this.#retransmissionCounter >= MRP_MAX_TRANSMISSIONS) {
+        if (this.#retransmissionCounter >= MRP.MAX_TRANSMISSIONS) {
             // Ok all 4 resubmissions are done, but we need to wait a bit longer because of processing time and
             // the resubmissions from the other side
             if (expectedProcessingTimeMs !== undefined) {
@@ -663,7 +663,7 @@ export class MessageExchange {
         // We might wait a bit longer then needed but because this is mainly a failsafe mechanism it is acceptable.
         // in normal case this timer is cancelled before it triggers when all retries are done.
         let maxResubmissionTime = 0;
-        for (let i = this.#retransmissionCounter; i <= MRP_MAX_TRANSMISSIONS; i++) {
+        for (let i = this.#retransmissionCounter; i <= MRP.MAX_TRANSMISSIONS; i++) {
             maxResubmissionTime += this.channel.getMrpResubmissionBackOffTime(i);
         }
         this.#closeTimer = Time.getTimer(

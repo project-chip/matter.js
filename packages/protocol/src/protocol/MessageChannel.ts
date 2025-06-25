@@ -11,26 +11,28 @@ const logger = new Logger("MessageChannel");
  */
 const PEER_RESPONSE_TIME_BUFFER_MS = 5_000;
 
-/**
- * The maximum number of transmission attempts for a given reliable message. The sender MAY choose this value as it
- * sees fit.
- */
-export const MRP_MAX_TRANSMISSIONS = 5;
+export namespace MRP {
+    /**
+     * The maximum number of transmission attempts for a given reliable message. The sender MAY choose this value as it
+     * sees fit.
+     */
+    export const MAX_TRANSMISSIONS = 5;
 
-/** The base number for the exponential backoff equation. */
-const MRP_BACKOFF_BASE = 1.6;
+    /** The base number for the exponential backoff equation. */
+    export const BACKOFF_BASE = 1.6;
 
-/** The scaler for random jitter in the backoff equation. */
-const MRP_BACKOFF_JITTER = 0.25;
+    /** The scaler for random jitter in the backoff equation. */
+    export const BACKOFF_JITTER = 0.25;
 
-/** The scaler margin increase to backoff over the peer sleepy interval. */
-const MRP_BACKOFF_MARGIN = 1.1;
+    /** The scaler margin increase to backoff over the peer sleepy interval. */
+    export const BACKOFF_MARGIN = 1.1;
 
-/** The number of retransmissions before transitioning from linear to exponential backoff. */
-const MRP_BACKOFF_THRESHOLD = 1;
+    /** The number of retransmissions before transitioning from linear to exponential backoff. */
+    export const BACKOFF_THRESHOLD = 1;
 
-/** @see {@link MatterSpecification.v12.Core}, section 4.11.8 */
-export const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
+    /** @see {@link MatterSpecification.v12.Core}, section 4.11.8 */
+    export const STANDALONE_ACK_TIMEOUT_MS = 200;
+}
 
 export class MessageChannel implements Channel<Message> {
     public closed = false;
@@ -136,10 +138,10 @@ export class MessageChannel implements Channel<Message> {
         const baseInterval =
             sessionParameters !== undefined || this.session.isPeerActive() ? activeIntervalMs : idleIntervalMs;
         return Math.floor(
-            MRP_BACKOFF_MARGIN *
+            MRP.BACKOFF_MARGIN *
                 baseInterval *
-                Math.pow(MRP_BACKOFF_BASE, Math.max(0, retransmissionCount - MRP_BACKOFF_THRESHOLD)) *
-                (1 + (sessionParameters !== undefined ? 1 : Math.random()) * MRP_BACKOFF_JITTER),
+                Math.pow(MRP.BACKOFF_BASE, Math.max(0, retransmissionCount - MRP.BACKOFF_THRESHOLD)) *
+                (1 + (sessionParameters !== undefined ? 1 : Math.random()) * MRP.BACKOFF_JITTER),
         );
     }
 
@@ -151,7 +153,7 @@ export class MessageChannel implements Channel<Message> {
         let finalWaitTime = expectedProcessingTimeMs;
 
         // and then add the time the other side needs for a full resubmission cycle under the assumption we are active
-        for (let i = 0; i < MRP_MAX_TRANSMISSIONS; i++) {
+        for (let i = 0; i < MRP.MAX_TRANSMISSIONS; i++) {
             finalWaitTime += this.getMrpResubmissionBackOffTime(i, sessionParameters);
         }
 
