@@ -98,10 +98,6 @@ const DATA_REPORT_MIN_AVAILABLE_BYTES_BEFORE_SENDING = 40;
 class InteractionMessenger {
     constructor(protected exchange: MessageExchange) {}
 
-    calculateMaximumPeerResponseTime(expectedProcessingTimeMs?: number) {
-        return this.exchange.calculateMaximumPeerResponseTime(expectedProcessingTimeMs);
-    }
-
     send(messageType: number, payload: Uint8Array, options?: ExchangeSendOptions) {
         return this.exchange.send(messageType, payload, options);
     }

@@ -161,7 +161,7 @@ describe("ListManager", () => {
             async ref => {
                 const list = ref.list as string[];
 
-                (list[0] = "hi"), (list[1] = "there");
+                ((list[0] = "hi"), (list[1] = "there"));
                 list[2] = "aaaaand goodbye";
 
                 const list2 = Array<string>();

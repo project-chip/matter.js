@@ -50,8 +50,8 @@ import {
     resolveCommandName,
     resolveEventName,
 } from "#types";
-import { MessageChannel } from "../protocol/ExchangeManager.js";
 import { ExchangeProvider, ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
+import { MessageChannel } from "../protocol/MessageChannel.js";
 import { DecodedAttributeReportStatus, DecodedAttributeReportValue } from "./AttributeDataDecoder.js";
 import { DecodedDataReport } from "./DecodedDataReport.js";
 import { DecodedEventData, DecodedEventReportStatus, DecodedEventReportValue } from "./EventDataDecoder.js";
@@ -201,6 +201,11 @@ export class InteractionClient {
             return this.#exchangeProvider.channelUpdated;
         }
         throw new ImplementationError("ExchangeProvider does not support channelUpdated");
+    }
+
+    /** Calculates the current maximum response time for a message use in additional logic like timers. */
+    maximumPeerResponseTimeMs(expectedProcessingTimeMs?: number) {
+        return this.#exchangeProvider.maximumPeerResponseTimeMs(expectedProcessingTimeMs);
     }
 
     removeSubscription(subscriptionId: number) {
@@ -741,11 +746,11 @@ export class InteractionClient {
         const {
             subscribeResponse: { subscriptionId, maxInterval },
             report,
-            maximumPeerResponseTime,
+            maximumPeerResponseTimeMs,
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTime: number;
+            maximumPeerResponseTimeMs: number;
         }>(async messenger => {
             const { subscribeResponse, report } = await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -762,7 +767,7 @@ export class InteractionClient {
             return {
                 subscribeResponse,
                 report,
-                maximumPeerResponseTime: messenger.calculateMaximumPeerResponseTime(),
+                maximumPeerResponseTimeMs: this.maximumPeerResponseTimeMs(),
             };
         }, executeQueued);
 
@@ -793,7 +798,7 @@ export class InteractionClient {
         await this.#registerSubscription(
             {
                 id: subscriptionId,
-                maximumPeerResponseTime,
+                maximumPeerResponseTimeMs,
                 maxIntervalS: maxInterval,
                 onData: subscriptionListener,
                 onTimeout: updateTimeoutHandler,
@@ -852,11 +857,11 @@ export class InteractionClient {
         const {
             report,
             subscribeResponse: { subscriptionId, maxInterval },
-            maximumPeerResponseTime,
+            maximumPeerResponseTimeMs,
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTime: number;
+            maximumPeerResponseTimeMs: number;
         }>(async messenger => {
             const { subscribeResponse, report } = await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -870,7 +875,7 @@ export class InteractionClient {
             return {
                 subscribeResponse,
                 report,
-                maximumPeerResponseTime: messenger.calculateMaximumPeerResponseTime(),
+                maximumPeerResponseTimeMs: this.maximumPeerResponseTimeMs(),
             };
         }, executeQueued);
 
@@ -898,7 +903,7 @@ export class InteractionClient {
         await this.#registerSubscription(
             {
                 id: subscriptionId,
-                maximumPeerResponseTime,
+                maximumPeerResponseTimeMs,
                 maxIntervalS: maxInterval,
                 onData: subscriptionListener,
                 onTimeout: updateTimeoutHandler,
@@ -1019,11 +1024,11 @@ export class InteractionClient {
         const {
             report,
             subscribeResponse: { subscriptionId, maxInterval },
-            maximumPeerResponseTime,
+            maximumPeerResponseTimeMs,
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTime: number;
+            maximumPeerResponseTimeMs: number;
         }>(async messenger => {
             const { subscribeResponse, report } = await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -1042,7 +1047,7 @@ export class InteractionClient {
             return {
                 subscribeResponse,
                 report,
-                maximumPeerResponseTime: messenger.calculateMaximumPeerResponseTime(),
+                maximumPeerResponseTimeMs: this.maximumPeerResponseTimeMs(),
             };
         }, executeQueued);
 
@@ -1116,7 +1121,7 @@ export class InteractionClient {
         await this.#registerSubscription(
             {
                 id: subscriptionId,
-                maximumPeerResponseTime,
+                maximumPeerResponseTimeMs,
                 maxIntervalS: maxInterval,
 
                 onData: dataReport => subscriptionListener(DecodedDataReport(dataReport)),
@@ -1148,6 +1153,12 @@ export class InteractionClient {
         /** Use this timeout and send the request as Timed Request. If this is specified the above parameter is implied. */
         timedRequestTimeoutMs?: number;
 
+        /**
+         * Expected processing time on the device side for this command.
+         * useExtendedFailSafeMessageResponseTimeout is ignored if this value is set.
+         */
+        expectedProcessingTimeMs?: number;
+
         /** Use an extended Message Response Timeout as defined for FailSafe cases which is 30s. */
         useExtendedFailSafeMessageResponseTimeout?: boolean;
 
@@ -1165,6 +1176,7 @@ export class InteractionClient {
             command: { requestId, requestSchema, responseId, responseSchema, optional, timed },
             asTimedRequest,
             timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
+            expectedProcessingTimeMs,
             useExtendedFailSafeMessageResponseTimeout = false,
             skipValidation,
         } = options;
@@ -1218,9 +1230,10 @@ export class InteractionClient {
                     suppressResponse: false,
                     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                 },
-                useExtendedFailSafeMessageResponseTimeout
-                    ? DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE_MS
-                    : undefined,
+                expectedProcessingTimeMs ??
+                    (useExtendedFailSafeMessageResponseTimeout
+                        ? DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE_MS
+                        : undefined),
             );
             if (response === undefined) {
                 throw new MatterFlowError("No response received from invoke interaction but expected.");

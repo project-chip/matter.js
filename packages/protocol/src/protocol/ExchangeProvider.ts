@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { ChannelType, Observable } from "#general";
+import { PeerAddress } from "#peer/PeerAddress.js";
+import { ChannelManager } from "#protocol/ChannelManager.js";
+import { ChannelNotConnectedError, ExchangeManager } from "#protocol/ExchangeManager.js";
+import { MessageChannel } from "#protocol/MessageChannel.js";
+import { DEFAULT_EXPECTED_PROCESSING_TIME_MS, MessageExchange } from "#protocol/MessageExchange.js";
+import { ProtocolHandler } from "#protocol/ProtocolHandler.js";
+import { Session } from "#session/Session.js";
 import { INTERACTION_PROTOCOL_ID } from "#types";
-import { PeerAddress } from "../peer/PeerAddress.js";
-import { ChannelManager } from "../protocol/ChannelManager.js";
-import { ChannelNotConnectedError, ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
-import { MessageExchange } from "../protocol/MessageExchange.js";
-import { ProtocolHandler } from "../protocol/ProtocolHandler.js";
-import { Session } from "../session/Session.js";
 
 /**
  * Interface for obtaining an exchange with a specific peer.
@@ -32,6 +33,7 @@ export abstract class ExchangeProvider {
         this.exchangeManager.addProtocolHandler(handler);
     }
 
+    abstract maximumPeerResponseTimeMs(expectedProcessingTimeMs?: number): number;
     abstract initiateExchange(): Promise<MessageExchange>;
     abstract reconnectChannel(): Promise<boolean>;
     abstract session: Session;
@@ -64,6 +66,10 @@ export class DedicatedChannelExchangeProvider extends ExchangeProvider {
 
     get channelType() {
         return this.#channel.type;
+    }
+
+    maximumPeerResponseTimeMs(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS) {
+        return this.exchangeManager.calculateMaximumPeerResponseTimeMsFor(this.#channel, expectedProcessingTimeMs);
     }
 }
 
@@ -124,5 +130,13 @@ export class ReconnectableExchangeProvider extends ExchangeProvider {
             throw new ChannelNotConnectedError("Channel not connected");
         }
         return this.channelManager.getChannel(this.#address).type;
+    }
+
+    maximumPeerResponseTimeMs(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS) {
+        const channel = this.channelManager.getChannel(this.#address);
+        if (!channel) {
+            throw new ChannelNotConnectedError("Channel not connected");
+        }
+        return this.exchangeManager.calculateMaximumPeerResponseTimeMsFor(channel, expectedProcessingTimeMs);
     }
 }

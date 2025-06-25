@@ -18,25 +18,30 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: The `Network.get()` singleton is removed
     - Breaking: The Crypto interface has changed; `Crypto.get()` singleton is removed, the API is modernized, methods are renamed for clarity, and the ecdh* methods are replaced with generateDhSecret
     - Feature: Adds a crypto implementation that should function in any modern JS VM
+    - Enhancement: Adjust Dynamic class buolding approach to not use eval anymore to enable running in more environments
     - Fix: Fixes encoding of special IPv6 addresses in DNS-SD records
 
+- @matter/model
+    - (@FlyingNebulae) Fix: Allow aspectCache to also work when source got transpiled without keeping variable names
+
 -   @matter/node
-    - Enhancement: Finalizes behavior event `interactionBegin` to fire at the begin of an interaction as soon as the datasource is about to be changed on a behavior
-    - Enhancement: Finalizes behavior event `interactionEnd` to fire at the end of an interaction when all logic is done and executed
-    - Enhancement: Finalizes behavior event `stateChanged` to fire when an interaction changed the state of the behavior. It fires at the end after all concrete `$Changed` events are sent out
+    - Enhancement: Ensures behavior event `interactionBegin` to fire at the begin of an interaction as soon as the datasource is about to be changed on a behavior
+    - Enhancement: Ensures behavior event `interactionEnd` to fire at the end of an interaction when all logic is done and executed
+    - Enhancement: Ensures behavior event `stateChanged` to fire when an interaction changed the state of the behavior. It fires at the end after all concrete `$Changed` events are sent out
     - Fix: Ensures to remove all Fabric scoped data when a fabric is being removed
     - Fix: Streamline value conformance checks to cause a ConstraintError instead of an InvalidAction error in all cases
 
 -   @matter/protocol
     - Enhancement: Exposed reading cached ClusterClient attributes via `get*AttributeFromCache()` method
     - Enhancement: Enhances CSR content validation
+    - Fix: Correctly handles Non-Concurrent Commissioning flows by skipping scanning for networks and use proper wait times for scan and connect calls for networks
 
 -   @matter/nodejs
     - Enhancement: New variables `nodejs.crypto`, `nodejs.network` and `nodejs.storage` allow users to enable/disable the implementation of these features that use Node.js APIs
 
 -   @matter/nodejs-ble
     - Fix: Removes Windows-specific workaround needed in older versions of Noble
-    - Fix: Adjusts BLEScanner to also be cancelable to allow cancellation of discovery processes
+    - Fix: Adjusts BLEScanner to allow cancellation of discovery processes when BLE is included
 
 ## 0.14.0 (2025-06-04)
 
