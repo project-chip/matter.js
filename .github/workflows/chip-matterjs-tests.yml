@@ -3,7 +3,7 @@ name: Matter.js Controller vs Chip Device Tests
 
 on:
   schedule:
-    - cron: 0 4 * * * # Every day at 04:00 (chip-tool-test should have finished by then and rebuild is done)
+    - cron: 30 4 * * * # Every day at 04:30 (chip-tool-test should have finished by then and rebuild is done)
   workflow_dispatch: # Manually on demand
   push:
     branches: [ "main" ]
