@@ -17,7 +17,7 @@ import {
     UnexpectedDataError,
 } from "#general";
 import { SessionManager } from "#session/SessionManager.js";
-import { NodeId, ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "#types";
+import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureChannelStatusCode } from "#types";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { ChannelStatusResponseError } from "../../securechannel/SecureChannelMessenger.js";
@@ -186,7 +186,7 @@ export class PaseServer implements ProtocolHandler {
         this.#pairingTimer = undefined;
 
         if (sendError) {
-            await messenger.sendError(ProtocolStatusCode.InvalidParam);
+            await messenger.sendError(SecureChannelStatusCode.InvalidParam);
         }
         await messenger.close();
     }

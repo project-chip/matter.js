@@ -10,8 +10,8 @@ import { ExchangeManager } from "#protocol/ExchangeManager.js";
 import { SessionManager } from "#session/SessionManager.js";
 import {
     GeneralStatusCode,
-    ProtocolStatusCode,
     SECURE_CHANNEL_PROTOCOL_ID,
+    SecureChannelStatusCode,
     SecureMessageType,
     StatusCode,
     StatusResponseError,
@@ -70,7 +70,7 @@ export class StatusReportOnlySecureChannelProtocol implements ProtocolHandler {
                 protocolStatus,
             );
         }
-        if (protocolStatus !== ProtocolStatusCode.CloseSession) {
+        if (protocolStatus !== SecureChannelStatusCode.CloseSession) {
             throw new ChannelStatusResponseError(
                 `Received general success status, but protocol status is not CloseSession`,
                 generalStatus,
@@ -131,7 +131,7 @@ export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol
                     // Cleaner to return an error (ok for chip-tool as it seems)?
                     // Formally we should not respond at all which leads to retries and such
                     const messenger = new SecureChannelMessenger(exchange);
-                    await messenger.sendError(ProtocolStatusCode.InvalidParam);
+                    await messenger.sendError(SecureChannelStatusCode.InvalidParam);
                     await messenger.close(); // also closes exchange
                     return;
                 }

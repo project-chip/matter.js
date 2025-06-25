@@ -18,6 +18,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: The `Network.get()` singleton is removed
     - Breaking: The Crypto interface has changed; `Crypto.get()` singleton is removed, the API is modernized, methods are renamed for clarity, and the ecdh* methods are replaced with generateDhSecret
     - Feature: Adds a crypto implementation that should function in any modern JS VM
+    - Fix: Fixes encoding of special IPv6 addresses in DNS-SD records
 
 -   @matter/node
     - Enhancement: Finalizes behavior event `interactionBegin` to fire at the begin of an interaction as soon as the datasource is about to be changed on a behavior

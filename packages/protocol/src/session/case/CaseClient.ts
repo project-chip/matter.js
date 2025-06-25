@@ -8,7 +8,7 @@ import { Icac, Noc } from "#certificate/index.js";
 import { Bytes, Logger, PublicKey, UnexpectedDataError } from "#general";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { SessionManager } from "#session/SessionManager.js";
-import { NodeId, ProtocolStatusCode } from "#types";
+import { NodeId, SecureChannelStatusCode } from "#types";
 import { Fabric } from "../../fabric/Fabric.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import {
@@ -42,7 +42,7 @@ export class CaseClient {
             return await this.#doPair(messenger, exchange, fabric, peerNodeId);
         } catch (error) {
             if (!(error instanceof ChannelStatusResponseError)) {
-                await messenger.sendError(ProtocolStatusCode.InvalidParam);
+                await messenger.sendError(SecureChannelStatusCode.InvalidParam);
             }
             throw error;
         }

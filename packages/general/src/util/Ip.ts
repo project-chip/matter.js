@@ -3,6 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { UnexpectedDataError } from "#MatterError.js";
 import { Bytes } from "./Bytes.js";
 
 export function isIPv4(ip: string) {
@@ -46,9 +47,16 @@ export function ipv6ToBytes(ip: string) {
     return Uint8Array.from(Array.from(ipv6ToArray(ip)).flatMap(value => [value >> 8, value & 0xff]));
 }
 
+export function ipv4BytesToString(bytes: Uint8Array): string {
+    if (bytes.length !== 4) {
+        throw new UnexpectedDataError("IPv4 address must be 4 bytes");
+    }
+    return bytes.join(".");
+}
+
 export function ipv6BytesToString(bytes: Uint8Array): string {
     if (bytes.length !== 16) {
-        throw new Error("IPv6 address must be 16 bytes");
+        throw new UnexpectedDataError("IPv6 address must be 16 bytes");
     }
 
     // Divide into 8 blocks of 2 bytes (16 bits) each

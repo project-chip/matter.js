@@ -5,13 +5,7 @@
  */
 
 import { Diagnostic, MatterError, UnexpectedDataError } from "#general";
-import {
-    GeneralStatusCode,
-    ProtocolStatusCode,
-    SECURE_CHANNEL_PROTOCOL_ID,
-    SecureMessageType,
-    TlvSchema,
-} from "#types";
+import { GeneralStatusCode, SecureChannelStatusCode, SecureMessageType, TlvSchema } from "#types";
 import { Message } from "../codec/MessageCodec.js";
 import { ExchangeSendOptions, MessageExchange } from "../protocol/MessageExchange.js";
 import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema.js";
@@ -21,10 +15,10 @@ export class ChannelStatusResponseError extends MatterError {
     public constructor(
         message: string,
         public readonly generalStatusCode: GeneralStatusCode,
-        public readonly protocolStatusCode: ProtocolStatusCode,
+        public readonly protocolStatusCode: SecureChannelStatusCode,
     ) {
         super(
-            `(${GeneralStatusCode[generalStatusCode]} (${generalStatusCode}) / ${ProtocolStatusCode[protocolStatusCode]} (${protocolStatusCode})) ${message}`,
+            `(${GeneralStatusCode[generalStatusCode]} (${generalStatusCode}) / ${SecureChannelStatusCode[protocolStatusCode]} (${protocolStatusCode})) ${message}`,
         );
     }
 }
@@ -125,16 +119,16 @@ export class SecureChannelMessenger {
         return payload;
     }
 
-    sendError(code: ProtocolStatusCode) {
-        return this.sendStatusReport(GeneralStatusCode.Failure, code);
+    sendError(code: SecureChannelStatusCode) {
+        return this.#sendStatusReport(GeneralStatusCode.Failure, code);
     }
 
     sendSuccess() {
-        return this.sendStatusReport(GeneralStatusCode.Success, ProtocolStatusCode.Success);
+        return this.#sendStatusReport(GeneralStatusCode.Success, SecureChannelStatusCode.Success);
     }
 
     sendCloseSession() {
-        return this.sendStatusReport(GeneralStatusCode.Success, ProtocolStatusCode.CloseSession, false);
+        return this.#sendStatusReport(GeneralStatusCode.Success, SecureChannelStatusCode.CloseSession, false);
     }
 
     getChannelName() {
@@ -145,23 +139,22 @@ export class SecureChannelMessenger {
         await this.exchange.close();
     }
 
-    private async sendStatusReport(
+    async #sendStatusReport(
         generalStatus: GeneralStatusCode,
-        protocolStatus: ProtocolStatusCode,
+        protocolStatus: SecureChannelStatusCode,
         requiresAck?: boolean,
     ) {
         await this.exchange.send(
             SecureMessageType.StatusReport,
             TlvSecureChannelStatusMessage.encode({
                 generalStatus,
-                protocolId: SECURE_CHANNEL_PROTOCOL_ID,
                 protocolStatus,
             }),
             {
                 requiresAck,
                 logContext: {
                     generalStatus: GeneralStatusCode[generalStatus] ?? Diagnostic.hex(generalStatus),
-                    protocolStatus: ProtocolStatusCode[protocolStatus] ?? Diagnostic.hex(protocolStatus),
+                    protocolStatus: SecureChannelStatusCode[protocolStatus] ?? Diagnostic.hex(protocolStatus),
                 },
             },
         );
@@ -182,7 +175,7 @@ export class SecureChannelMessenger {
                 protocolStatus,
             );
         }
-        if (protocolStatus !== ProtocolStatusCode.Success) {
+        if (protocolStatus !== SecureChannelStatusCode.Success) {
             throw new ChannelStatusResponseError(
                 `Received general success status, but protocol status is not Success${logHint ? ` (${logHint})` : ""}`,
                 generalStatus,
