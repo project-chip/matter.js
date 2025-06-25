@@ -26,7 +26,7 @@ name: CHIP Image - Build and Test
 
 on:
   schedule:
-    - cron: 0 4 * * * # Every day at 04:00
+    - cron: 0 1 * * * # Every day at 01:00
   workflow_dispatch: # Manually on demand
   push:
     branches: [ "main" ]
