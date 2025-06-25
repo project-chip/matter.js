@@ -14,13 +14,13 @@ The controller currently is not discovering the device to pair, but directly con
 To run from the build files:
 
 ```bash
-matter-controller --pairingcode=12345678901
+matter-controller --pairingcode 12345678901
 ```
 
 To run directly from Typescript files with on the fly compilation:
 
 ```bash
-npm run matter-controller -- --pairingcode=12345678901
+npm run matter-controller -- --pairingcode 12345678901
 ```
 
 This will commission a MatterServer device (for debugging/capability showing purpose only for now).

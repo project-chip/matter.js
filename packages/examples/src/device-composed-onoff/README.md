@@ -11,13 +11,13 @@ For general documentation about the CLI parameters or environment variables that
 The parameters are like with the bridge but with an added "-type light/socket" parameter to define the type of the composed device itself.
 
 ```bash
-matter-composeddevice --type=socket --num=2 --on1="echo 255 > /sys/class/leds/led1/brightness" --off1="echo 0 > /sys/class/leds/led1/brightness" --type2=socket --on2="echo 255 > /sys/class/leds/led2/brightness" --off2="echo 0 > /sys/class/leds/led2/brightness"
+matter-composeddevice --type socket --num 2 --on1 "echo 255 > /sys/class/leds/led1/brightness" --off1 "echo 0 > /sys/class/leds/led1/brightness" --type2 socket --on2 "echo 255 > /sys/class/leds/led2/brightness" --off2 "echo 0 > /sys/class/leds/led2/brightness"
 ```
 
 or when starting from TS files:
 
 ```bash
-npm run matter-composeddevice -- --type=socket --num=2 --on1="echo 255 > /sys/class/leds/led1/brightness" --off1="echo 0 > /sys/class/leds/led1/brightness" --type2=socket --on2="echo 255 > /sys/class/leds/led2/brightness" --off2="echo 0 > /sys/class/leds/led2/brightness"
+npm run matter-composeddevice -- --type socket --num 2 --on1 "echo 255 > /sys/class/leds/led1/brightness" --off1 "echo 0 > /sys/class/leds/led1/brightness" --type2 socket --on2 "echo 255 > /sys/class/leds/led2/brightness" --off2 "echo 0 > /sys/class/leds/led2/brightness"
 ```
 (Please note the "--" to separate commandline parameters between the npm run and the executed script.
 

@@ -45,11 +45,11 @@ Then after `cd packages/examples` you can use `npm run matter-device` to run the
 ### General CLI information
 Some command line parameters, for example those used to set the level of logging or the MDNS interface are now included in the new environment processing. These can be set by generic command line arguments or by using environment variables. These parameters are processed automatically so are no longer handled by the new example code directly. These are:
 
-* `--log-level=...` or environment variable `MATTER_LOG_LEVEL` or in code `environment.vars.set('log.level', Level.DEBUG)`. Allowed values are: Level.FATAL ("fatal"), Level.ERROR ("error"), Level.WARN ("warn"), Level.NOTICE ("notice"), Level.INFO ("info"), Level.DEBUG ("debug")
-* `--log-format=...` or environment variable `MATTER_LOG_FORMAT` or `environment.vars.set('log.format', Format.PLAIN)`. Allowed values are: Format.PLAIN ("plain"), Format.HTML ("html"), Format.ANSI ("ansi")
-* `--storage-path=...` or environment variable `MATTER_STORAGE_PATH` or `environment.vars.set('storage.path', "...")` allows to set the storage location. By default, it will be stored in the users home directory in `.matter/...`. If specified, the given path will be used relative to the current working directory.
+* `--log-level ...` or environment variable `MATTER_LOG_LEVEL` or in code `environment.vars.set('log.level', Level.DEBUG)`. Allowed values are: Level.FATAL ("fatal"), Level.ERROR ("error"), Level.WARN ("warn"), Level.NOTICE ("notice"), Level.INFO ("info"), Level.DEBUG ("debug")
+* `--log-format ...` or environment variable `MATTER_LOG_FORMAT` or `environment.vars.set('log.format', Format.PLAIN)`. Allowed values are: Format.PLAIN ("plain"), Format.HTML ("html"), Format.ANSI ("ansi")
+* `--storage-path ...` or environment variable `MATTER_STORAGE_PATH` or `environment.vars.set('storage.path', "...")` allows to set the storage location. By default, it will be stored in the users home directory in `.matter/...`. If specified, the given path will be used relative to the current working directory.
 * `--storage-clear` or environment variable `MATTER_STORAGE_CLEAR=1` or `environment.vars.set('storage.clear', true)` allows to define if the storage is reset on startup.
-* `--mdns-networkinterface=...` or environment variable `MATTER_MDNS_NETWORKINTERFACE` or `environment.vars.set('mdns.networkInterface', "...")` allows to limit the DNS announcements and scanning to one network interface. By default, all available interfaces are used.
+* `--mdns-networkinterface ...` or environment variable `MATTER_MDNS_NETWORKINTERFACE` or `environment.vars.set('mdns.networkInterface', "...")` allows to limit the DNS announcements and scanning to one network interface. By default, all available interfaces are used.
   Additionally, all command line parameters now require to start with two dashes!
 
 (if using `npm run ...` to run examples then an additional "--" if needed to separate commandline parameters between the npm run and the executed script. Please see the relevant examples README too.)

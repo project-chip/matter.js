@@ -25,13 +25,13 @@ You can use -on and -off parameter to run a script to control something.
 For instance, on a Raspberry Pi, this will turn on / off the red LED:
 
 ```bash
-matter-device --type socket --on="echo 255 > /sys/class/leds/led1/brightness" --off="echo 0 > /sys/class/leds/led1/brightness"
+matter-device --type socket --on "echo 255 > /sys/class/leds/led1/brightness" --off "echo 0 > /sys/class/leds/led1/brightness"
 ```
 
 or when starting from TS files:
 
 ```bash
-npm run matter-device -- --type socket --on="echo 255 > /sys/class/leds/led1/brightness" --off="echo 0 > /sys/class/leds/led1/brightness"
+npm run matter-device -- --type socket --on "echo 255 > /sys/class/leds/led1/brightness" --off "echo 0 > /sys/class/leds/led1/brightness"
 ```
 (Please note the "--" to separate commandline parameters between the npm run and the executed script.)
 
