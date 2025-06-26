@@ -5,26 +5,67 @@
  */
 
 import { Behavior } from "#behavior/Behavior.js";
+import { GlobalAttributeState } from "#behavior/cluster/ClusterState.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { SupportedElements } from "#endpoint/properties/Behaviors.js";
-import { EndpointStore } from "#endpoint/storage/EndpointStore.js";
-import { NotImplementedError } from "#general";
+import { camelize } from "#general";
+import { ClusterModel } from "#model";
+import { AttributeId, CommandId } from "#types";
 import { BehaviorBacking } from "./BehaviorBacking.js";
 
 /**
  * This class backs the client implementation of a behavior.
  */
 export class ClientBehaviorBacking extends BehaviorBacking {
-    protected override store: Datasource.Store | undefined;
+    protected override store: Datasource.ExternallyMutableStore;
+    #elements?: SupportedElements;
 
-    constructor(endpoint: Endpoint, behavior: Behavior.Type, endpointStore: EndpointStore, options?: Behavior.Options) {
+    constructor(
+        endpoint: Endpoint,
+        behavior: Behavior.Type,
+        store: Datasource.ExternallyMutableStore,
+        options?: Behavior.Options,
+    ) {
         super(endpoint, behavior, options);
 
-        this.store = endpointStore.storeForBehavior(behavior.id);
+        this.store = store;
     }
 
     get elements(): SupportedElements | undefined {
-        throw new NotImplementedError();
+        if (this.#elements) {
+            return this.#elements;
+        }
+
+        const { attributeList, acceptedCommandList } = this.endpoint.stateOf(this.type) as GlobalAttributeState;
+        const schema = this.type.schema as ClusterModel;
+
+        const attributes = new Set<string>();
+        const attributeIds = new Set(attributeList);
+        for (const attr of schema.attributes) {
+            if (attributeIds.has(attr.id as AttributeId)) {
+                attributes.add(camelize(attr.name));
+            }
+        }
+
+        const commands = new Set<string>();
+        const commandIds = new Set(acceptedCommandList);
+        for (const cmd of schema.commands) {
+            if (cmd.isRequest && commandIds.has(cmd.id as CommandId)) {
+                commands.add(camelize(cmd.name));
+            }
+        }
+
+        return (this.#elements = {
+            attributes,
+            commands,
+            events: new Set(),
+        });
+    }
+
+    protected override get datasourceOptions() {
+        const options = super.datasourceOptions;
+        options.primaryKey = "id";
+        return options;
     }
 }

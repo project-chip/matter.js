@@ -9,6 +9,7 @@
 import { EthernetNetworkDiagnostics } from "#clusters/ethernet-network-diagnostics";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { EthernetNetworkDiagnosticsInterface } from "./EthernetNetworkDiagnosticsInterface.js";
+import { Identity } from "#general";
 
 /**
  * EthernetNetworkDiagnosticsBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { EthernetNetworkDiagnosticsInterface } from "./EthernetNetworkDiagnostic
  * This class does not have optional features of EthernetNetworkDiagnostics.Cluster enabled. You can enable additional
  * features using EthernetNetworkDiagnosticsBehavior.with.
  */
-export const EthernetNetworkDiagnosticsBehavior = ClusterBehavior
+export const EthernetNetworkDiagnosticsBehaviorConstructor = ClusterBehavior
     .withInterface<EthernetNetworkDiagnosticsInterface>()
     .for(EthernetNetworkDiagnostics.Cluster);
 
-type EthernetNetworkDiagnosticsBehaviorType = InstanceType<typeof EthernetNetworkDiagnosticsBehavior>;
-export interface EthernetNetworkDiagnosticsBehavior extends EthernetNetworkDiagnosticsBehaviorType {}
-type StateType = InstanceType<typeof EthernetNetworkDiagnosticsBehavior.State>;
-export namespace EthernetNetworkDiagnosticsBehavior { export interface State extends StateType {} }
+export interface EthernetNetworkDiagnosticsBehaviorConstructor extends Identity<typeof EthernetNetworkDiagnosticsBehaviorConstructor> {}
+export const EthernetNetworkDiagnosticsBehavior: EthernetNetworkDiagnosticsBehaviorConstructor = EthernetNetworkDiagnosticsBehaviorConstructor;
+export interface EthernetNetworkDiagnosticsBehavior extends InstanceType<EthernetNetworkDiagnosticsBehaviorConstructor> {}
+export namespace EthernetNetworkDiagnosticsBehavior {
+    export interface State extends InstanceType<typeof EthernetNetworkDiagnosticsBehavior.State> {}
+}

@@ -19,7 +19,6 @@ import { Agent } from "#endpoint/Agent.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import { RootEndpoint } from "#endpoints/root";
-import { MockNode } from "../node/mock-node.js";
 import { MockServerNode } from "../node/mock-server-node.js";
 
 const WindowCoveringLiftDevice = WindowCoveringDevice.with(
@@ -46,7 +45,7 @@ describe("Endpoint", () => {
     describe("constructor", () => {
         it("accepts bare endpoint type", async () => {
             const endpoint = new Endpoint(WindowCoveringLiftDevice);
-            const node = new MockNode();
+            const node = new MockServerNode();
             node.parts.add(endpoint);
             await endpoint.construction;
             expect(endpoint.state.windowCovering.endProductType).equals(0);
@@ -54,7 +53,7 @@ describe("Endpoint", () => {
 
         it("accepts endpoint type with options", async () => {
             const endpoint = new Endpoint(WindowCoveringLiftDevice, {
-                owner: new MockNode(),
+                owner: new MockServerNode(),
                 windowCovering: { physicalClosedLimitLift: 100 },
             });
             await endpoint.construction;
@@ -64,7 +63,7 @@ describe("Endpoint", () => {
         it("accepts configuration", async () => {
             const endpoint = new Endpoint({
                 type: WindowCoveringLiftDevice,
-                owner: new MockNode(),
+                owner: new MockServerNode(),
                 windowCovering: { physicalClosedLimitLift: 200 },
             });
             await endpoint.construction;
@@ -74,7 +73,7 @@ describe("Endpoint", () => {
 
     describe("set", () => {
         it("sets", async () => {
-            const node = new MockNode();
+            const node = new MockServerNode();
             const sensor = await node.add(TemperatureSensorDevice);
 
             await sensor.set({
@@ -87,7 +86,7 @@ describe("Endpoint", () => {
         });
 
         it("deep sets object", async () => {
-            const node = new MockNode();
+            const node = new MockServerNode();
             await node.construction;
 
             await node.set({
@@ -119,7 +118,7 @@ describe("Endpoint", () => {
         });
 
         it("deep sets array", async () => {
-            const node = new MockNode();
+            const node = new MockServerNode();
             await node.construction;
 
             await node.set({
@@ -175,7 +174,7 @@ describe("Endpoint", () => {
         });
 
         it("replaces array when shorter", async () => {
-            const node = new MockNode();
+            const node = new MockServerNode();
             await node.construction;
 
             await node.set({
@@ -225,7 +224,7 @@ describe("Endpoint", () => {
         });
 
         it("replaces array to empty", async () => {
-            const node = new MockNode();
+            const node = new MockServerNode();
             await node.construction;
 
             await node.set({

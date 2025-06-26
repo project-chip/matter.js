@@ -9,3 +9,4 @@
 export * from "./AccountLoginInterface.js";
 export * from "./AccountLoginBehavior.js";
 export * from "./AccountLoginServer.js";
+export * from "./AccountLoginClient.js";

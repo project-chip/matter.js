@@ -8,13 +8,14 @@
 
 import { FixedLabel } from "#clusters/fixed-label";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * FixedLabelBehavior is the base class for objects that support interaction with {@link FixedLabel.Cluster}.
  */
-export const FixedLabelBehavior = ClusterBehavior.for(FixedLabel.Cluster);
+export const FixedLabelBehaviorConstructor = ClusterBehavior.for(FixedLabel.Cluster);
 
-type FixedLabelBehaviorType = InstanceType<typeof FixedLabelBehavior>;
-export interface FixedLabelBehavior extends FixedLabelBehaviorType {}
-type StateType = InstanceType<typeof FixedLabelBehavior.State>;
-export namespace FixedLabelBehavior { export interface State extends StateType {} }
+export interface FixedLabelBehaviorConstructor extends Identity<typeof FixedLabelBehaviorConstructor> {}
+export const FixedLabelBehavior: FixedLabelBehaviorConstructor = FixedLabelBehaviorConstructor;
+export interface FixedLabelBehavior extends InstanceType<FixedLabelBehaviorConstructor> {}
+export namespace FixedLabelBehavior { export interface State extends InstanceType<typeof FixedLabelBehavior.State> {} }

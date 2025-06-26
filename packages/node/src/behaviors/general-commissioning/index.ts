@@ -9,3 +9,4 @@
 export * from "./GeneralCommissioningInterface.js";
 export * from "./GeneralCommissioningBehavior.js";
 export * from "./GeneralCommissioningServer.js";
+export * from "./GeneralCommissioningClient.js";

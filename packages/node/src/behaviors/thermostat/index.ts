@@ -9,3 +9,4 @@
 export * from "./ThermostatInterface.js";
 export * from "./ThermostatBehavior.js";
 export * from "./ThermostatServer.js";
+export * from "./ThermostatClient.js";

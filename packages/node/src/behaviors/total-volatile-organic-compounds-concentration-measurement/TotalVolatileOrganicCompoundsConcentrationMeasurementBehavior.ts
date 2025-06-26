@@ -11,6 +11,7 @@ import {
 } from "#clusters/total-volatile-organic-compounds-concentration-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior is the base class for objects that support interaction
@@ -19,12 +20,12 @@ import { ClusterType } from "#types";
  * TotalVolatileOrganicCompoundsConcentrationMeasurement.Cluster requires you to enable one or more optional features.
  * You can do so using {@link TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior.with}.
  */
-export const TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior = ClusterBehavior
+export const TotalVolatileOrganicCompoundsConcentrationMeasurementBehaviorConstructor = ClusterBehavior
     .for(ClusterType(TotalVolatileOrganicCompoundsConcentrationMeasurement.Base));
 
-type TotalVolatileOrganicCompoundsConcentrationMeasurementBehaviorType = InstanceType<typeof TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior>;
-export interface TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior extends TotalVolatileOrganicCompoundsConcentrationMeasurementBehaviorType {}
-type StateType = InstanceType<typeof TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior.State>;
+export interface TotalVolatileOrganicCompoundsConcentrationMeasurementBehaviorConstructor extends Identity<typeof TotalVolatileOrganicCompoundsConcentrationMeasurementBehaviorConstructor> {}
+export const TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior: TotalVolatileOrganicCompoundsConcentrationMeasurementBehaviorConstructor = TotalVolatileOrganicCompoundsConcentrationMeasurementBehaviorConstructor;
+export interface TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior extends InstanceType<TotalVolatileOrganicCompoundsConcentrationMeasurementBehaviorConstructor> {}
 export namespace TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior {
-    export interface State extends StateType {}
+    export interface State extends InstanceType<typeof TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior.State> {}
 }

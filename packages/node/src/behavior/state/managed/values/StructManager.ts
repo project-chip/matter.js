@@ -191,14 +191,22 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
             access.authorizeWrite(this[Internal.session], this[Internal.reference].location);
 
             // We allow attribute/field name or id as key.  If name is present id is ignored
-            let storedKey =
-                name in this[Internal.reference].value
-                    ? name
-                    : id !== undefined && id in this[Internal.reference]
-                      ? id
-                      : name;
+            const pk = this[Internal.reference].primaryKey;
+            let key = pk === "id" ? (id ?? name) : name;
+            let storedKey: undefined | number | string;
+            if (key in this[Internal.reference].value) {
+                storedKey = key;
+            } else if (pk === "id") {
+                if (name in this[Internal.reference].value) {
+                    storedKey = name;
+                }
+            } else if (id !== undefined) {
+                if (id in this[Internal.reference].value) {
+                    storedKey = id;
+                }
+            }
 
-            const oldValue = this[Internal.reference].value[storedKey];
+            const oldValue = storedKey === undefined ? undefined : this[Internal.reference].value[storedKey];
 
             const self = this;
 
@@ -213,7 +221,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                         this[Internal.session],
                     );
                     if (name in properties) {
-                        storedKey = name;
+                        key = storedKey = name;
                         target = properties;
                     } else {
                         target = struct;
@@ -228,7 +236,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                 }
 
                 // Modify the value
-                if (fabricScopedList && Array.isArray(value) && Array.isArray(target[storedKey])) {
+                if (fabricScopedList && Array.isArray(value) && Array.isArray(oldValue)) {
                     // In the case of fabric-scoped write to established list we use the managed proxy to perform update
                     // as it will sort through values and only modify those with correct fabricIndex
                     const proxy = self[name] as Val.List;
@@ -238,7 +246,10 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                     proxy.length = value.length;
                 } else {
                     // Direct assignment
-                    target[storedKey] = value;
+                    target[key] = value;
+                    if (storedKey !== undefined && storedKey !== key) {
+                        delete target[storedKey];
+                    }
                 }
 
                 if (!this[Internal.session].acceptInvalid && validate) {
@@ -258,7 +269,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                     } catch (e) {
                         // Undo our change on error.  Rollback will take care of this when transactional but this
                         // handles the cases of 1.) no transaction, and 2.) error is caught within transaction
-                        target[storedKey] = oldValue;
+                        target[key] = oldValue;
 
                         throw e;
                     }
@@ -285,12 +296,17 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                     }
                 }
 
-                const value = struct[name];
-                if (value !== undefined || id === undefined) {
-                    return value;
+                const key = this[Internal.reference].primaryKey === "id" ? (id ?? name) : name;
+                if (key in struct) {
+                    return struct[key];
                 }
 
-                return struct[id];
+                const key2 = this[Internal.reference].primaryKey === "id" ? name : id;
+                if (key2 !== undefined && key2 in struct) {
+                    return struct[key2];
+                }
+
+                return undefined;
             }
         };
     } else {
@@ -321,8 +337,10 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
         descriptor.get = function (this: Struct) {
             let value;
 
-            // Obtain the value.  Normally just struct[name] except in the case of Val.Dynamic
+            // Obtain the value.  Normally just struct[key] except in the case of Val.Dynamic
+            const pk = this[Internal.reference].primaryKey;
             const struct = this[Internal.reference].value;
+            const key = pk === "id" ? (id ?? name) : name;
             if ((struct as Val.Dynamic)[Val.properties]) {
                 const properties = (struct as Val.Dynamic)[Val.properties](
                     this[Internal.reference].rootOwner,
@@ -334,9 +352,13 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                     value = struct[name];
                 }
             } else {
-                value = struct[name];
-                if (value === undefined && id !== undefined) {
-                    value = struct[id];
+                if (key in struct) {
+                    value = struct[key];
+                } else {
+                    const key2 = pk === "id" ? id : name;
+                    if (key2 !== undefined && key2 in struct) {
+                        value = struct[key2];
+                    }
                 }
             }
 
@@ -372,7 +394,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
             };
 
             // Clone the container before write
-            const ref = ManagedReference(this[Internal.reference], name, assertWriteOk, cloneContainer);
+            const ref = ManagedReference(this[Internal.reference], pk, name, id, assertWriteOk, cloneContainer);
 
             ref.owner = manage(ref, this[Internal.session]);
 

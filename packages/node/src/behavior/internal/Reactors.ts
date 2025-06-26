@@ -311,7 +311,7 @@ class ReactorBacking<T extends any[], R> {
             // construction and destruction
             //
             // Also, do not inject activity here.  No reason to have both the reactor and the context registered
-            let result: MaybePromise<Awaited<R> | undefined> = OfflineContext.act(this.toString(), undefined, reactor, {
+            let result: MaybePromise<Awaited<R> | undefined> = OfflineContext.act(this.toString(), reactor, {
                 command,
             });
 

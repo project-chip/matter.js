@@ -1,4 +1,4 @@
-import { OnlineContext } from "#behavior/index.js";
+import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { NotImplementedError } from "#general";
 import {
     Interactable,

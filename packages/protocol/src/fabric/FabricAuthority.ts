@@ -5,7 +5,16 @@
  */
 
 import { CertificateAuthority } from "#certificate/CertificateAuthority.js";
-import { Bytes, CRYPTO_SYMMETRIC_KEY_LENGTH, Environment, Environmental, ImplementationError, Logger } from "#general";
+import {
+    Bytes,
+    Construction,
+    CRYPTO_SYMMETRIC_KEY_LENGTH,
+    Environment,
+    Environmental,
+    ImplementationError,
+    Logger,
+    Observable,
+} from "#general";
 import { CaseAuthenticatedTag, FabricId, FabricIndex, NodeId, VendorId } from "#types";
 import { Fabric, FabricBuilder } from "./Fabric.js";
 import { FabricManager } from "./FabricManager.js";
@@ -48,14 +57,25 @@ export const DEFAULT_FABRIC_ID = FabricId(1);
  * Manages fabrics controlled locally associated with a specific CA.
  */
 export class FabricAuthority {
+    #construction: Construction<FabricAuthority>;
     #ca: CertificateAuthority;
     #fabrics: FabricManager;
     #config: FabricAuthorityConfiguration;
+    #fabricAdded = new Observable<[Fabric]>();
 
     constructor({ ca, fabrics, config }: FabricAuthorityContext) {
         this.#ca = ca;
         this.#fabrics = fabrics;
         this.#config = config;
+
+        this.#construction = Construction(this, async () => {
+            await this.#ca.construction;
+            await this.#fabrics.construction;
+        });
+    }
+
+    get construction() {
+        return this.#construction;
     }
 
     /**
@@ -87,6 +107,13 @@ export class FabricAuthority {
      */
     get fabrics() {
         return Array.from(this.#fabrics).filter(this.hasControlOf.bind(this));
+    }
+
+    /**
+     * Emits after creating a new fabric.
+     */
+    get fabricAdded() {
+        return this.#fabricAdded;
     }
 
     /**
@@ -137,6 +164,7 @@ export class FabricAuthority {
         this.#fabrics.addFabric(fabric);
 
         logger.debug(`Created new controller fabric ${index}`);
+        this.#fabricAdded.emit(fabric);
 
         return fabric;
     }

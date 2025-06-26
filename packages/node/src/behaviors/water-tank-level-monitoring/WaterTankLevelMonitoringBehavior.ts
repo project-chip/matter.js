@@ -9,6 +9,7 @@
 import { WaterTankLevelMonitoring } from "#clusters/water-tank-level-monitoring";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ResourceMonitoringInterface } from "../resource-monitoring/ResourceMonitoringInterface.js";
+import { Identity } from "#general";
 
 /**
  * WaterTankLevelMonitoringBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { ResourceMonitoringInterface } from "../resource-monitoring/ResourceMoni
  * This class does not have optional features of WaterTankLevelMonitoring.Cluster enabled. You can enable additional
  * features using WaterTankLevelMonitoringBehavior.with.
  */
-export const WaterTankLevelMonitoringBehavior = ClusterBehavior
+export const WaterTankLevelMonitoringBehaviorConstructor = ClusterBehavior
     .withInterface<ResourceMonitoringInterface>()
     .for(WaterTankLevelMonitoring.Cluster);
 
-type WaterTankLevelMonitoringBehaviorType = InstanceType<typeof WaterTankLevelMonitoringBehavior>;
-export interface WaterTankLevelMonitoringBehavior extends WaterTankLevelMonitoringBehaviorType {}
-type StateType = InstanceType<typeof WaterTankLevelMonitoringBehavior.State>;
-export namespace WaterTankLevelMonitoringBehavior { export interface State extends StateType {} }
+export interface WaterTankLevelMonitoringBehaviorConstructor extends Identity<typeof WaterTankLevelMonitoringBehaviorConstructor> {}
+export const WaterTankLevelMonitoringBehavior: WaterTankLevelMonitoringBehaviorConstructor = WaterTankLevelMonitoringBehaviorConstructor;
+export interface WaterTankLevelMonitoringBehavior extends InstanceType<WaterTankLevelMonitoringBehaviorConstructor> {}
+export namespace WaterTankLevelMonitoringBehavior {
+    export interface State extends InstanceType<typeof WaterTankLevelMonitoringBehavior.State> {}
+}

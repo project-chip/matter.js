@@ -8,3 +8,4 @@
 
 export * from "./ThermostatUserInterfaceConfigurationBehavior.js";
 export * from "./ThermostatUserInterfaceConfigurationServer.js";
+export * from "./ThermostatUserInterfaceConfigurationClient.js";

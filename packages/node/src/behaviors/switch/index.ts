@@ -8,3 +8,4 @@
 
 export * from "./SwitchBehavior.js";
 export * from "./SwitchServer.js";
+export * from "./SwitchClient.js";

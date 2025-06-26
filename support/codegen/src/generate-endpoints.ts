@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ClientFile } from "#endpoints/ClientFile.js";
 import { decamelize } from "#general";
 import { ClusterModel, ClusterVariance, CommandModel, MatterModel } from "#model";
 import "@matter/model/resources";
@@ -22,16 +23,17 @@ const args = await yargs(hideBin(process.argv))
     .option("interfaces", { type: "boolean", describe: "generate interface files" })
     .option("behaviors", { type: "boolean", describe: "generate behavior files" })
     .option("servers", { type: "boolean", describe: "generate server files" })
+    .option("clients", { type: "boolean", describe: "generate client files" })
     .option("endpoints", { type: "boolean", describe: "generate endpoint type files" })
     .option("tags", { type: "boolean", describe: "generate semantic tag files" })
     .option("save", { type: "boolean", default: true, describe: "writes the generated model to disk" })
     .strict().argv;
 
 if (!args.interfaces && !args.behaviors && !args.server && !args.endpoints && !args.tags) {
-    args.interfaces = args.behaviors = args.servers = args.endpoints = args.tags = true;
+    args.interfaces = args.behaviors = args.servers = args.clients = args.endpoints = args.tags = true;
 }
 
-if (args.behaviors) {
+if (args.behaviors || args.interfaces || args.clients || args.servers) {
     const index = new TsFile(`!behaviors/index`);
 
     for (const cluster of MatterModel.standard.clusters) {
@@ -45,12 +47,21 @@ if (args.behaviors) {
 
         const exports = new TsFile(`${dir}/index`, true);
         if (!isAlias && cluster.all(CommandModel).length) {
-            generateClusterFile(dir, InterfaceFile, cluster, exports, variance);
+            if (args.interfaces) {
+                generateClusterFile(dir, InterfaceFile, cluster, exports, variance);
+            }
         }
 
         if (!isAbstract) {
-            generateClusterFile(dir, BehaviorFile, cluster, exports, variance);
-            generateClusterFile(dir, ServerFile, cluster, exports, variance);
+            if (args.behaviors) {
+                generateClusterFile(dir, BehaviorFile, cluster, exports, variance);
+            }
+            if (args.servers) {
+                generateClusterFile(dir, ServerFile, cluster, exports, variance);
+            }
+            if (args.clients) {
+                generateClusterFile(dir, ClientFile, cluster, exports, variance);
+            }
         }
 
         save(exports);

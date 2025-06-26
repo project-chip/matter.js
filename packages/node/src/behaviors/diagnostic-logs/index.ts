@@ -9,3 +9,4 @@
 export * from "./DiagnosticLogsInterface.js";
 export * from "./DiagnosticLogsBehavior.js";
 export * from "./DiagnosticLogsServer.js";
+export * from "./DiagnosticLogsClient.js";

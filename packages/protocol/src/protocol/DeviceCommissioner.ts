@@ -162,9 +162,7 @@ export class DeviceCommissioner {
         );
     }
 
-    async beginTimed(failsafeContext: FailsafeContext) {
-        await failsafeContext.construction;
-
+    beginTimed(failsafeContext: FailsafeContext) {
         this.#failsafeContext = failsafeContext;
 
         this.#context.fabrics.events.added.on(fabric => {
@@ -246,10 +244,7 @@ export class DeviceCommissioner {
         this.#activeDiscriminator = discriminator;
 
         // MDNS is sent in parallel
-        // TODO - untracked promise
-        this.#enterCommissioningMode(windowStatus, discriminator).catch(error =>
-            logger.warn("Error sending announcement:", error),
-        );
+        await this.#enterCommissioningMode(windowStatus, discriminator);
     }
 
     async endCommissioning() {

@@ -16,7 +16,13 @@ export class CommissioningDiscovery extends InstanceDiscovery {
     #options: CommissioningDiscovery.Options;
 
     constructor(owner: ServerNode, options: CommissioningDiscovery.Options) {
+        const { discriminator } = options;
+        if (discriminator !== undefined) {
+            options = { ...options, longDiscriminator: discriminator };
+        }
+
         super(owner, options);
+
         this.#options = options;
     }
 

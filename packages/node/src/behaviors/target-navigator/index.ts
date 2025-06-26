@@ -9,3 +9,4 @@
 export * from "./TargetNavigatorInterface.js";
 export * from "./TargetNavigatorBehavior.js";
 export * from "./TargetNavigatorServer.js";
+export * from "./TargetNavigatorClient.js";

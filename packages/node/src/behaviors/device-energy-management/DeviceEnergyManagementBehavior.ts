@@ -10,6 +10,7 @@ import { DeviceEnergyManagement } from "#clusters/device-energy-management";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { DeviceEnergyManagementInterface } from "./DeviceEnergyManagementInterface.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * DeviceEnergyManagementBehavior is the base class for objects that support interaction with
@@ -18,11 +19,13 @@ import { ClusterType } from "#types";
  * DeviceEnergyManagement.Cluster requires you to enable one or more optional features. You can do so using
  * {@link DeviceEnergyManagementBehavior.with}.
  */
-export const DeviceEnergyManagementBehavior = ClusterBehavior
+export const DeviceEnergyManagementBehaviorConstructor = ClusterBehavior
     .withInterface<DeviceEnergyManagementInterface>()
     .for(ClusterType(DeviceEnergyManagement.Base));
 
-type DeviceEnergyManagementBehaviorType = InstanceType<typeof DeviceEnergyManagementBehavior>;
-export interface DeviceEnergyManagementBehavior extends DeviceEnergyManagementBehaviorType {}
-type StateType = InstanceType<typeof DeviceEnergyManagementBehavior.State>;
-export namespace DeviceEnergyManagementBehavior { export interface State extends StateType {} }
+export interface DeviceEnergyManagementBehaviorConstructor extends Identity<typeof DeviceEnergyManagementBehaviorConstructor> {}
+export const DeviceEnergyManagementBehavior: DeviceEnergyManagementBehaviorConstructor = DeviceEnergyManagementBehaviorConstructor;
+export interface DeviceEnergyManagementBehavior extends InstanceType<DeviceEnergyManagementBehaviorConstructor> {}
+export namespace DeviceEnergyManagementBehavior {
+    export interface State extends InstanceType<typeof DeviceEnergyManagementBehavior.State> {}
+}

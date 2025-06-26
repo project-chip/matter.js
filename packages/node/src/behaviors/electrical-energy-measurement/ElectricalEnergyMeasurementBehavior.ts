@@ -9,6 +9,7 @@
 import { ElectricalEnergyMeasurement } from "#clusters/electrical-energy-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * ElectricalEnergyMeasurementBehavior is the base class for objects that support interaction with
@@ -17,9 +18,12 @@ import { ClusterType } from "#types";
  * ElectricalEnergyMeasurement.Cluster requires you to enable one or more optional features. You can do so using
  * {@link ElectricalEnergyMeasurementBehavior.with}.
  */
-export const ElectricalEnergyMeasurementBehavior = ClusterBehavior.for(ClusterType(ElectricalEnergyMeasurement.Base));
+export const ElectricalEnergyMeasurementBehaviorConstructor = ClusterBehavior
+    .for(ClusterType(ElectricalEnergyMeasurement.Base));
 
-type ElectricalEnergyMeasurementBehaviorType = InstanceType<typeof ElectricalEnergyMeasurementBehavior>;
-export interface ElectricalEnergyMeasurementBehavior extends ElectricalEnergyMeasurementBehaviorType {}
-type StateType = InstanceType<typeof ElectricalEnergyMeasurementBehavior.State>;
-export namespace ElectricalEnergyMeasurementBehavior { export interface State extends StateType {} }
+export interface ElectricalEnergyMeasurementBehaviorConstructor extends Identity<typeof ElectricalEnergyMeasurementBehaviorConstructor> {}
+export const ElectricalEnergyMeasurementBehavior: ElectricalEnergyMeasurementBehaviorConstructor = ElectricalEnergyMeasurementBehaviorConstructor;
+export interface ElectricalEnergyMeasurementBehavior extends InstanceType<ElectricalEnergyMeasurementBehaviorConstructor> {}
+export namespace ElectricalEnergyMeasurementBehavior {
+    export interface State extends InstanceType<typeof ElectricalEnergyMeasurementBehavior.State> {}
+}

@@ -9,3 +9,4 @@
 export * from "./DeviceEnergyManagementInterface.js";
 export * from "./DeviceEnergyManagementBehavior.js";
 export * from "./DeviceEnergyManagementServer.js";
+export * from "./DeviceEnergyManagementClient.js";

@@ -25,7 +25,6 @@ import { InteractionServer } from "#node/server/InteractionServer.js";
 import {
     Ble,
     ChannelManager,
-    CommissioningConfigProvider,
     DeviceAdvertiser,
     DeviceCommissioner,
     ExchangeManager,
@@ -38,7 +37,6 @@ import {
     SecureChannelProtocol,
     SessionManager,
 } from "#protocol";
-import { CommissioningOptions } from "#types";
 import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { ProductDescriptionServer } from "../product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
@@ -108,18 +106,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             }
         }
         return interfaceDetails;
-    }
-
-    async openAdvertisementWindow() {
-        if (!this.#formerSubscriptionsHandled) {
-            await this.#reestablishFormerSubscriptions();
-        }
-
-        await this.owner.env.get(DeviceAdvertiser).startAdvertising();
-    }
-
-    advertiseNow() {
-        return this.owner.env.get(DeviceAdvertiser).advertise(true);
     }
 
     /**
@@ -260,10 +246,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.owner.state.operationalCredentials.commissionedFabrics;
     }
 
-    endCommissioning() {
-        return this.owner.env.get(DeviceCommissioner).endCommissioning();
-    }
-
     protected override async start() {
         const { owner } = this;
         const { env } = owner;
@@ -295,6 +277,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         env.set(InteractionServer, interactionServer);
         env.get(ExchangeManager).addProtocolHandler(interactionServer);
 
+        // Ensure SecureChannelProtocol is installed
+        env.get(SecureChannelProtocol);
+
         await this.owner.act("load-sessions", agent => agent.load(SessionsBehavior));
 
         // Monitor CommissioningServer to end "uncommissioned" mode when we are commissioned
@@ -302,38 +287,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         // Monitor DeviceAdvertiser to enable MDNS broadcasting when the first Fabric is added
         this.#observers.on(advertiser.operationalModeEnabled, this.enableMdnsBroadcasting);
-
-        // When first going online, enable commissioning by controllers unless we ourselves are configured as a
-        // controller
-        if (owner.state.commissioning.enabled === undefined) {
-            await owner.set({
-                commissioning: { enabled: true },
-            });
-        }
-
-        // Ensure the environment will convey the commissioning configuration to the DeviceCommissioner
-        if (!env.has(CommissioningConfigProvider)) {
-            // Configure the DeviceCommissioner
-            env.set(
-                CommissioningConfigProvider,
-                new (class extends CommissioningConfigProvider {
-                    get values() {
-                        const config = {
-                            ...owner.state.commissioning,
-                            productDescription: owner.state.productDescription,
-                            ble: !!owner.state.network.ble,
-                        };
-
-                        return config as CommissioningOptions.Configuration;
-                    }
-                })(),
-            );
-        }
-
-        // Ensure there is a device commissioner if (but only if) commissioning is enabled
-        await this.configureCommissioning();
-
-        this.#observers.on(this.owner.eventsOf(CommissioningServer).enabled$Changed, this.configureCommissioning);
     }
 
     override async [Construction.construct]() {
@@ -344,7 +297,12 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         this.owner.env.set(PeerAddressStore, new NodePeerAddressStore(this.owner));
         await this.owner.env.load(PeerSet);
 
-        await this.openAdvertisementWindow();
+        // Restore previous subscriptions
+        //
+        // TODO - move to SubscriptionsBehavior, and rename to SubscriptionsServer?
+        if (!this.#formerSubscriptionsHandled) {
+            await this.#reestablishFormerSubscriptions();
+        }
     }
 
     protected override async stop() {
@@ -378,16 +336,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
     protected override blockNewActivity() {
         this.owner.env.maybeGet(InteractionServer)?.blockNewActivity();
-    }
-
-    protected async configureCommissioning() {
-        if (this.owner.state.commissioning.enabled) {
-            // Ensure a DeviceCommissioner is active
-            this.owner.env.get(DeviceCommissioner);
-        } else if (this.owner.env.has(DeviceCommissioner)) {
-            // Ensure no DeviceCommissioner is active
-            await this.owner.env.close(DeviceCommissioner);
-        }
     }
 
     async #reestablishFormerSubscriptions() {

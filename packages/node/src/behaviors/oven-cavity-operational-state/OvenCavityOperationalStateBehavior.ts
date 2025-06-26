@@ -9,16 +9,19 @@
 import { OvenCavityOperationalState } from "#clusters/oven-cavity-operational-state";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { OvenCavityOperationalStateInterface } from "./OvenCavityOperationalStateInterface.js";
+import { Identity } from "#general";
 
 /**
  * OvenCavityOperationalStateBehavior is the base class for objects that support interaction with
  * {@link OvenCavityOperationalState.Cluster}.
  */
-export const OvenCavityOperationalStateBehavior = ClusterBehavior
+export const OvenCavityOperationalStateBehaviorConstructor = ClusterBehavior
     .withInterface<OvenCavityOperationalStateInterface>()
     .for(OvenCavityOperationalState.Cluster);
 
-type OvenCavityOperationalStateBehaviorType = InstanceType<typeof OvenCavityOperationalStateBehavior>;
-export interface OvenCavityOperationalStateBehavior extends OvenCavityOperationalStateBehaviorType {}
-type StateType = InstanceType<typeof OvenCavityOperationalStateBehavior.State>;
-export namespace OvenCavityOperationalStateBehavior { export interface State extends StateType {} }
+export interface OvenCavityOperationalStateBehaviorConstructor extends Identity<typeof OvenCavityOperationalStateBehaviorConstructor> {}
+export const OvenCavityOperationalStateBehavior: OvenCavityOperationalStateBehaviorConstructor = OvenCavityOperationalStateBehaviorConstructor;
+export interface OvenCavityOperationalStateBehavior extends InstanceType<OvenCavityOperationalStateBehaviorConstructor> {}
+export namespace OvenCavityOperationalStateBehavior {
+    export interface State extends InstanceType<typeof OvenCavityOperationalStateBehavior.State> {}
+}

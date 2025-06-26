@@ -9,16 +9,19 @@
 import { OperationalState } from "#clusters/operational-state";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { OperationalStateInterface } from "./OperationalStateInterface.js";
+import { Identity } from "#general";
 
 /**
  * OperationalStateBehavior is the base class for objects that support interaction with
  * {@link OperationalState.Cluster}.
  */
-export const OperationalStateBehavior = ClusterBehavior
+export const OperationalStateBehaviorConstructor = ClusterBehavior
     .withInterface<OperationalStateInterface>()
     .for(OperationalState.Cluster);
 
-type OperationalStateBehaviorType = InstanceType<typeof OperationalStateBehavior>;
-export interface OperationalStateBehavior extends OperationalStateBehaviorType {}
-type StateType = InstanceType<typeof OperationalStateBehavior.State>;
-export namespace OperationalStateBehavior { export interface State extends StateType {} }
+export interface OperationalStateBehaviorConstructor extends Identity<typeof OperationalStateBehaviorConstructor> {}
+export const OperationalStateBehavior: OperationalStateBehaviorConstructor = OperationalStateBehaviorConstructor;
+export interface OperationalStateBehavior extends InstanceType<OperationalStateBehaviorConstructor> {}
+export namespace OperationalStateBehavior {
+    export interface State extends InstanceType<typeof OperationalStateBehavior.State> {}
+}

@@ -9,3 +9,4 @@
 export * from "./ValveConfigurationAndControlInterface.js";
 export * from "./ValveConfigurationAndControlBehavior.js";
 export * from "./ValveConfigurationAndControlServer.js";
+export * from "./ValveConfigurationAndControlClient.js";

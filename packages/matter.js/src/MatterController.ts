@@ -12,6 +12,7 @@
 
 import { GeneralCommissioning } from "#clusters";
 import { NodeCommissioningOptions } from "#CommissioningController.js";
+import { ControllerStoreInterface } from "#ControllerStore.js";
 import { CachedClientNodeStore } from "#device/CachedClientNodeStore.js";
 import { DeviceInformationData } from "#device/DeviceInformation.js";
 import {
@@ -74,7 +75,6 @@ import {
     VendorId,
 } from "#types";
 import { ClassExtends } from "@matter/general";
-import { ControllerStoreInterface } from "@matter/node";
 import { ControllerCommissioningFlow, MessageChannel } from "@matter/protocol";
 
 export type CommissionedNodeDetails = {

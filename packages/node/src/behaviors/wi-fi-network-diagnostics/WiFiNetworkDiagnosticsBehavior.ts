@@ -9,6 +9,7 @@
 import { WiFiNetworkDiagnostics } from "#clusters/wi-fi-network-diagnostics";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { WiFiNetworkDiagnosticsInterface } from "./WiFiNetworkDiagnosticsInterface.js";
+import { Identity } from "#general";
 
 /**
  * WiFiNetworkDiagnosticsBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { WiFiNetworkDiagnosticsInterface } from "./WiFiNetworkDiagnosticsInterfa
  * This class does not have optional features of WiFiNetworkDiagnostics.Cluster enabled. You can enable additional
  * features using WiFiNetworkDiagnosticsBehavior.with.
  */
-export const WiFiNetworkDiagnosticsBehavior = ClusterBehavior
+export const WiFiNetworkDiagnosticsBehaviorConstructor = ClusterBehavior
     .withInterface<WiFiNetworkDiagnosticsInterface>()
     .for(WiFiNetworkDiagnostics.Cluster);
 
-type WiFiNetworkDiagnosticsBehaviorType = InstanceType<typeof WiFiNetworkDiagnosticsBehavior>;
-export interface WiFiNetworkDiagnosticsBehavior extends WiFiNetworkDiagnosticsBehaviorType {}
-type StateType = InstanceType<typeof WiFiNetworkDiagnosticsBehavior.State>;
-export namespace WiFiNetworkDiagnosticsBehavior { export interface State extends StateType {} }
+export interface WiFiNetworkDiagnosticsBehaviorConstructor extends Identity<typeof WiFiNetworkDiagnosticsBehaviorConstructor> {}
+export const WiFiNetworkDiagnosticsBehavior: WiFiNetworkDiagnosticsBehaviorConstructor = WiFiNetworkDiagnosticsBehaviorConstructor;
+export interface WiFiNetworkDiagnosticsBehavior extends InstanceType<WiFiNetworkDiagnosticsBehaviorConstructor> {}
+export namespace WiFiNetworkDiagnosticsBehavior {
+    export interface State extends InstanceType<typeof WiFiNetworkDiagnosticsBehavior.State> {}
+}

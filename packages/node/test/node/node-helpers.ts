@@ -44,7 +44,7 @@ export async function testFactoryReset(mode: "online" | "offline-after-commissio
     if (mode !== "offline") {
         ({ node } = await CommissioningHelper().commission());
     } else {
-        node = await MockServerNode.createOnline({ online: false });
+        node = await MockServerNode.createOnline(undefined, { online: false });
     }
 
     if (mode === "offline-after-commission") {

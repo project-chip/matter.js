@@ -9,15 +9,16 @@
 import { Messages } from "#clusters/messages";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { MessagesInterface } from "./MessagesInterface.js";
+import { Identity } from "#general";
 
 /**
  * MessagesBehavior is the base class for objects that support interaction with {@link Messages.Cluster}.
  */
-export const MessagesBehavior = ClusterBehavior
+export const MessagesBehaviorConstructor = ClusterBehavior
     .withInterface<MessagesInterface>()
     .for(Messages.Cluster);
 
-type MessagesBehaviorType = InstanceType<typeof MessagesBehavior>;
-export interface MessagesBehavior extends MessagesBehaviorType {}
-type StateType = InstanceType<typeof MessagesBehavior.State>;
-export namespace MessagesBehavior { export interface State extends StateType {} }
+export interface MessagesBehaviorConstructor extends Identity<typeof MessagesBehaviorConstructor> {}
+export const MessagesBehavior: MessagesBehaviorConstructor = MessagesBehaviorConstructor;
+export interface MessagesBehavior extends InstanceType<MessagesBehaviorConstructor> {}
+export namespace MessagesBehavior { export interface State extends InstanceType<typeof MessagesBehavior.State> {} }

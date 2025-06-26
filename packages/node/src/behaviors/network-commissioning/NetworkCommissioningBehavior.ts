@@ -10,6 +10,7 @@ import { NetworkCommissioning } from "#clusters/network-commissioning";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { NetworkCommissioningInterface } from "./NetworkCommissioningInterface.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * NetworkCommissioningBehavior is the base class for objects that support interaction with
@@ -18,11 +19,13 @@ import { ClusterType } from "#types";
  * NetworkCommissioning.Cluster requires you to enable one or more optional features. You can do so using
  * {@link NetworkCommissioningBehavior.with}.
  */
-export const NetworkCommissioningBehavior = ClusterBehavior
+export const NetworkCommissioningBehaviorConstructor = ClusterBehavior
     .withInterface<NetworkCommissioningInterface>()
     .for(ClusterType(NetworkCommissioning.Base));
 
-type NetworkCommissioningBehaviorType = InstanceType<typeof NetworkCommissioningBehavior>;
-export interface NetworkCommissioningBehavior extends NetworkCommissioningBehaviorType {}
-type StateType = InstanceType<typeof NetworkCommissioningBehavior.State>;
-export namespace NetworkCommissioningBehavior { export interface State extends StateType {} }
+export interface NetworkCommissioningBehaviorConstructor extends Identity<typeof NetworkCommissioningBehaviorConstructor> {}
+export const NetworkCommissioningBehavior: NetworkCommissioningBehaviorConstructor = NetworkCommissioningBehaviorConstructor;
+export interface NetworkCommissioningBehavior extends InstanceType<NetworkCommissioningBehaviorConstructor> {}
+export namespace NetworkCommissioningBehavior {
+    export interface State extends InstanceType<typeof NetworkCommissioningBehavior.State> {}
+}

@@ -9,3 +9,4 @@
 export * from "./OvenCavityOperationalStateInterface.js";
 export * from "./OvenCavityOperationalStateBehavior.js";
 export * from "./OvenCavityOperationalStateServer.js";
+export * from "./OvenCavityOperationalStateClient.js";

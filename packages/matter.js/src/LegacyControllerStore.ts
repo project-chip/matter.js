@@ -5,7 +5,7 @@
  */
 
 import { StorageContext } from "#general";
-import { ControllerStoreInterface } from "@matter/node";
+import { ControllerStoreInterface } from "./ControllerStore.js";
 
 /**
  * Non-volatile state management for a {@link ControllerNode}.

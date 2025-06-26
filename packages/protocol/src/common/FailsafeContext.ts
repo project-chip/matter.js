@@ -183,7 +183,6 @@ export abstract class FailsafeContext {
     }
 
     async close() {
-        await this.#construction;
         await this.#construction.close(async () => {
             if (this.#failsafe) {
                 await this.#failsafe.close();

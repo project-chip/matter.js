@@ -54,7 +54,7 @@ describe("ColorControlServer", () => {
             { kind: "hue", value: 171, ms: 1000 },
 
             // Transition complete
-            { kind: "hue", value: 129, ms: 930 },
+            { kind: "hue", value: 129, ms: 920 },
             { kind: "time", value: 0, ms: 0 },
         ]);
     });
@@ -95,7 +95,7 @@ async function setup() {
 }
 
 async function initializeDimmableHueLight() {
-    const node = await MockServerNode.createOnline({
+    const node = await MockServerNode.createOnline(undefined, {
         device: undefined,
     });
 

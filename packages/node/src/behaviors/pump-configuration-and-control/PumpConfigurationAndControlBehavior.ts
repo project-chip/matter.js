@@ -9,6 +9,7 @@
 import { PumpConfigurationAndControl } from "#clusters/pump-configuration-and-control";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * PumpConfigurationAndControlBehavior is the base class for objects that support interaction with
@@ -17,9 +18,12 @@ import { ClusterType } from "#types";
  * PumpConfigurationAndControl.Cluster requires you to enable one or more optional features. You can do so using
  * {@link PumpConfigurationAndControlBehavior.with}.
  */
-export const PumpConfigurationAndControlBehavior = ClusterBehavior.for(ClusterType(PumpConfigurationAndControl.Base));
+export const PumpConfigurationAndControlBehaviorConstructor = ClusterBehavior
+    .for(ClusterType(PumpConfigurationAndControl.Base));
 
-type PumpConfigurationAndControlBehaviorType = InstanceType<typeof PumpConfigurationAndControlBehavior>;
-export interface PumpConfigurationAndControlBehavior extends PumpConfigurationAndControlBehaviorType {}
-type StateType = InstanceType<typeof PumpConfigurationAndControlBehavior.State>;
-export namespace PumpConfigurationAndControlBehavior { export interface State extends StateType {} }
+export interface PumpConfigurationAndControlBehaviorConstructor extends Identity<typeof PumpConfigurationAndControlBehaviorConstructor> {}
+export const PumpConfigurationAndControlBehavior: PumpConfigurationAndControlBehaviorConstructor = PumpConfigurationAndControlBehaviorConstructor;
+export interface PumpConfigurationAndControlBehavior extends InstanceType<PumpConfigurationAndControlBehaviorConstructor> {}
+export namespace PumpConfigurationAndControlBehavior {
+    export interface State extends InstanceType<typeof PumpConfigurationAndControlBehavior.State> {}
+}

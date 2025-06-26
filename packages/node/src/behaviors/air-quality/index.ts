@@ -8,3 +8,4 @@
 
 export * from "./AirQualityBehavior.js";
 export * from "./AirQualityServer.js";
+export * from "./AirQualityClient.js";

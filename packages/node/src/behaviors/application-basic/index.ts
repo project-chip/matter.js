@@ -8,3 +8,4 @@
 
 export * from "./ApplicationBasicBehavior.js";
 export * from "./ApplicationBasicServer.js";
+export * from "./ApplicationBasicClient.js";

@@ -5,9 +5,7 @@
  */
 
 export * from "./Channel.js";
-export * from "./mock/MockNetwork.js";
-export * from "./mock/MockUdpChannel.js";
-export * from "./mock/NetworkSimulator.js";
+export * from "./mock/index.js";
 export * from "./NetInterface.js";
 export * from "./Network.js";
 export * from "./ServerAddress.js";

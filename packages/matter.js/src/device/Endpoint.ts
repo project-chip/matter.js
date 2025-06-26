@@ -313,23 +313,6 @@ export class Endpoint {
         return Array.from(this.clusterClients.values());
     }
 
-    updatePartsList() {
-        const newPartsList = new Array<EndpointNumber>();
-
-        for (const child of this.childEndpoints) {
-            const childPartsList = child.updatePartsList();
-
-            if (child.number === undefined) {
-                throw new InternalError(`Child endpoint has no id, cannot add to parts list`);
-            }
-
-            newPartsList.push(EndpointNumber(child.number));
-            newPartsList.push(...childPartsList);
-        }
-
-        return newPartsList;
-    }
-
     /**
      * Hierarchical diagnostics of endpoint and children.
      */

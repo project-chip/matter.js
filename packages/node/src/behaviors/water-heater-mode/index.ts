@@ -8,3 +8,4 @@
 
 export * from "./WaterHeaterModeBehavior.js";
 export * from "./WaterHeaterModeServer.js";
+export * from "./WaterHeaterModeClient.js";

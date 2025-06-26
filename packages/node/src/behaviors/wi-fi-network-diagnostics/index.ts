@@ -9,3 +9,4 @@
 export * from "./WiFiNetworkDiagnosticsInterface.js";
 export * from "./WiFiNetworkDiagnosticsBehavior.js";
 export * from "./WiFiNetworkDiagnosticsServer.js";
+export * from "./WiFiNetworkDiagnosticsClient.js";

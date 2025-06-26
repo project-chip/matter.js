@@ -9,16 +9,19 @@
 import { ContentAppObserver } from "#clusters/content-app-observer";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ContentAppObserverInterface } from "./ContentAppObserverInterface.js";
+import { Identity } from "#general";
 
 /**
  * ContentAppObserverBehavior is the base class for objects that support interaction with
  * {@link ContentAppObserver.Cluster}.
  */
-export const ContentAppObserverBehavior = ClusterBehavior
+export const ContentAppObserverBehaviorConstructor = ClusterBehavior
     .withInterface<ContentAppObserverInterface>()
     .for(ContentAppObserver.Cluster);
 
-type ContentAppObserverBehaviorType = InstanceType<typeof ContentAppObserverBehavior>;
-export interface ContentAppObserverBehavior extends ContentAppObserverBehaviorType {}
-type StateType = InstanceType<typeof ContentAppObserverBehavior.State>;
-export namespace ContentAppObserverBehavior { export interface State extends StateType {} }
+export interface ContentAppObserverBehaviorConstructor extends Identity<typeof ContentAppObserverBehaviorConstructor> {}
+export const ContentAppObserverBehavior: ContentAppObserverBehaviorConstructor = ContentAppObserverBehaviorConstructor;
+export interface ContentAppObserverBehavior extends InstanceType<ContentAppObserverBehaviorConstructor> {}
+export namespace ContentAppObserverBehavior {
+    export interface State extends InstanceType<typeof ContentAppObserverBehavior.State> {}
+}

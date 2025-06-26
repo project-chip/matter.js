@@ -8,3 +8,4 @@
 
 export * from "./BindingBehavior.js";
 export * from "./BindingServer.js";
+export * from "./BindingClient.js";

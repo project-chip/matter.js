@@ -72,7 +72,7 @@ describe("EventReadResponse", () => {
 
     it("reads non-existent concrete endpoint", async () => {
         const response = await readEv(
-            await MockServerNode.createOnline(),
+            await MockServerNode.createOnline(undefined, { device: undefined }),
             Read.Event({
                 endpoint: new Endpoint(OnOffLightDevice, { id: "test", number: 1 }),
                 cluster: BasicInformationCluster,

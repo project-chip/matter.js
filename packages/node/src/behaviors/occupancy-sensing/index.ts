@@ -8,3 +8,4 @@
 
 export * from "./OccupancySensingBehavior.js";
 export * from "./OccupancySensingServer.js";
+export * from "./OccupancySensingClient.js";

@@ -9,3 +9,4 @@
 export * from "./ScenesManagementInterface.js";
 export * from "./ScenesManagementBehavior.js";
 export * from "./ScenesManagementServer.js";
+export * from "./ScenesManagementClient.js";

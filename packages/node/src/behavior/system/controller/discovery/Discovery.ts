@@ -4,24 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CancelablePromise, MatterAggregateError, MatterError, MaybePromise } from "#general";
+import { CancelablePromise, Diagnostic, Logger, MaybePromise, withTimeout } from "#general";
 import { ClientNodeFactory } from "#node/client/ClientNodeFactory.js";
 import type { ClientNode } from "#node/ClientNode.js";
 import type { ServerNode } from "#node/ServerNode.js";
 import { CommissionableDeviceIdentifiers, ScannerSet } from "#protocol";
 import { ControllerBehavior } from "../ControllerBehavior.js";
 import { ActiveDiscoveries } from "./ActiveDiscoveries.js";
+import { DiscoveryAggregateError } from "./DiscoveryError.js";
 
-export class DiscoveryError extends MatterError {
-    static override [Symbol.hasInstance](instance: unknown) {
-        if (instance instanceof DiscoveryAggregateError) {
-            return true;
-        }
-        return super[Symbol.hasInstance](instance);
-    }
-}
-
-export class DiscoveryAggregateError extends MatterAggregateError {}
+const logger = Logger.get("Logger");
 
 /**
  * Discovery of commissionable devices.
@@ -29,12 +21,15 @@ export class DiscoveryAggregateError extends MatterAggregateError {}
  * This is a cancelable promise; use cancel() to terminate discovery.
  */
 export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
-    #isCanceled = false;
-    #cancel?: () => void;
+    #abortReason?: Error;
+    #isStopped = false;
+    #stopDiscovery?: () => void;
     #owner: ServerNode;
     #options: Discovery.Options;
-    #resolve!: (value: T) => void;
-    #reject!: (cause?: any) => void;
+    #resolve: (value: T) => void;
+    #reject: (cause?: any) => void;
+    #settled?: Promise<void>;
+    #resolveSettled?: () => void;
 
     constructor(owner: ServerNode, options: Discovery.Options | undefined) {
         let resolve: (value: T) => void, reject: (cause?: any) => void;
@@ -42,8 +37,19 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
             resolve = resolver;
             reject = rejecter;
         });
-        this.#resolve = resolve!;
-        this.#reject = reject!;
+
+        this.#resolve = result => {
+            this.#isStopped = true;
+            this.#owner.env.get(ActiveDiscoveries).delete(this);
+            resolve!(result);
+            this.#resolveSettled?.();
+        };
+        this.#reject = cause => {
+            this.#isStopped = true;
+            this.#owner.env.get(ActiveDiscoveries).delete(this);
+            reject!(cause);
+            this.#resolveSettled?.();
+        };
 
         owner.env.get(ActiveDiscoveries).add(this);
 
@@ -51,6 +57,13 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
         this.#options = options ?? {};
 
         queueMicrotask(this.#initializeController.bind(this));
+    }
+
+    get settled() {
+        if (this.#settled === undefined) {
+            this.#settled = new Promise(resolve => (this.#resolveSettled = resolve));
+        }
+        return this.#settled;
     }
 
     protected abstract onDiscovered(node: ClientNode): void;
@@ -61,45 +74,60 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
      *
      * This will not abort node initialization but it will terminate any active discoveries.  The discovery result will
      * be the same as if the discovery had timed out.
+     *
+     * To abort the operation due to error use {@link cancel}.
      */
-    override cancel() {
-        if (this.#isCanceled) {
+    stop() {
+        if (this.#isStopped) {
             return;
         }
 
-        this.#isCanceled = true;
-        this.#cancel?.();
+        this.#isStopped = true;
+        this.#stopDiscovery?.();
     }
 
     override toString() {
+        const description = this.#description;
+        if (description === undefined) {
+            return "node discovery";
+        }
+        return `discovery of ${description}`;
+    }
+
+    get #description() {
         if ("instanceId" in this.#options) {
-            return `Discovery of node instance ${this.#options.instanceId}`;
+            return `node instance ${this.#options.instanceId}`;
         }
 
         if ("longDiscriminator" in this.#options) {
-            return `Discovery of node with discriminator ${this.#options.longDiscriminator}`;
+            return `node with discriminator ${this.#options.longDiscriminator}`;
         }
 
         if ("shortDiscriminator" in this.#options) {
-            return `Discovery of node with discriminator ${this.#options.shortDiscriminator}`;
+            return `node with discriminator ${this.#options.shortDiscriminator}`;
         }
 
         if ("productId" in this.#options && this.#options.productId !== undefined) {
             if ("vendorId" in this.#options) {
-                return `Discovery of product ${this.#options.productId} from vendor ${this.#options.vendorId}`;
+                return `product ${this.#options.productId} from vendor ${this.#options.vendorId}`;
             }
-            return `Discovery of product ${this.#options.productId}`;
+            return `product ${this.#options.productId}`;
         }
 
         if ("vendorId" in this.#options) {
-            return `Discovery of node from vendor ${this.#options.vendorId}`;
+            return `node from vendor ${this.#options.vendorId}`;
         }
 
         if ("deviceType" in this.#options) {
-            return `Discovery of node with device type ${this.#options.deviceType}`;
+            return `node with device type ${this.#options.deviceType}`;
         }
 
-        return "Node discovery";
+        return "node discovery";
+    }
+
+    protected override onCancel(reason: Error) {
+        this.#abortReason = reason;
+        this.stop();
     }
 
     /**
@@ -127,8 +155,8 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
      * Step 2 - ensure node is online
      */
     #startNode() {
-        if (this.#isCanceled) {
-            this.#invokeCompleter();
+        if (this.#isStopped) {
+            this.#afterDiscovery();
             return;
         }
 
@@ -144,16 +172,23 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
      * Step 3 - perform actual discovery
      */
     #performDiscovery() {
-        if (this.#isCanceled) {
-            this.#invokeCompleter();
+        if (this.#isStopped) {
+            this.#afterDiscovery();
             return;
+        }
+
+        const description = this.#description;
+        if (description === undefined) {
+            logger.info("Initiating", Diagnostic.strong("node discovery"));
+        } else {
+            logger.info("Initiating discovery of", Diagnostic.strong(description));
         }
 
         const scanners = this.#owner.env.get(ScannerSet);
 
         const factory = this.#owner.env.get(ClientNodeFactory);
         const promises = new Array<PromiseLike<unknown>>();
-        const cancelSignal = new Promise<void>(resolve => (this.#cancel = resolve));
+        const cancelSignal = new Promise<void>(resolve => (this.#stopDiscovery = resolve));
         for (const scanner of scanners) {
             promises.push(
                 scanner.findCommissionableDevicesContinuously(
@@ -180,22 +215,32 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
 
                         this.onDiscovered(node);
                     },
-                    this.#options.timeoutSeconds,
+                    undefined,
                     cancelSignal,
                 ),
             );
         }
 
-        DiscoveryAggregateError.allSettled(promises, `${this} failed`)
-            .then(() => this.#invokeCompleter())
-            .catch(this.#reject);
+        let promise = DiscoveryAggregateError.allSettled(promises, `${this} failed`);
+
+        if (this.#options.timeoutSeconds !== undefined) {
+            promise = withTimeout(this.#options.timeoutSeconds * 1_000, promise, this.stop.bind(this));
+        }
+
+        promise.then(this.#afterDiscovery.bind(this)).catch(this.#reject);
     }
 
     /**
      * Step 4 - invoke completion callback
      */
-    #invokeCompleter() {
+    #afterDiscovery() {
         let result: MaybePromise<T>;
+
+        if (this.#abortReason) {
+            this.#reject(this.#abortReason);
+            return;
+        }
+
         try {
             result = this.onComplete();
         } catch (e) {
@@ -204,18 +249,10 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
         }
 
         if (MaybePromise.is(result)) {
-            result.then(this.#finish.bind(this), this.#reject);
+            result.then(this.#resolve.bind(this), this.#reject);
             return;
         }
 
-        this.#finish(result);
-    }
-
-    /**
-     * Step 5 - deregister from environment and resolve
-     */
-    #finish(result: T) {
-        this.#owner.env.get(ActiveDiscoveries).delete(this);
         this.#resolve(result);
     }
 }

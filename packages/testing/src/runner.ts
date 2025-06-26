@@ -17,6 +17,8 @@ import { Reporter } from "./reporter.js";
 import { listSupportFiles } from "./util/files.js";
 import { testWeb } from "./web.js";
 
+const HARNESS_CONFIG_FILE = "build/esm/test/test.harness.js";
+
 export class TestRunner {
     static #current?: TestRunner;
 
@@ -29,7 +31,14 @@ export class TestRunner {
     }
 
     readonly reporter: Reporter;
-    private spec = Array<string>();
+    #spec = Array<string>();
+    #configured = false;
+
+    /**
+     * If present the web runner will run this preprocessor on its entrypoint file.  You can modify {@link lines} to
+     * add or change entrypoint logic.
+     */
+    entrypointPreprocessor?: (this: unknown, lines: string[]) => void;
 
     constructor(
         readonly pkg: Package,
@@ -52,11 +61,11 @@ export class TestRunner {
         })();
 
         if (options.spec === undefined) {
-            this.spec = ["test/**/*Test.ts"];
+            this.#spec = ["test/**/*Test.ts"];
         } else if (Array.isArray(options.spec)) {
-            this.spec = options.spec;
+            this.#spec = options.spec;
         } else {
-            this.spec = [options.spec];
+            this.#spec = [options.spec];
         }
 
         if (options.debug) {
@@ -65,16 +74,32 @@ export class TestRunner {
     }
 
     async runNode(format: "esm" | "cjs" = "esm") {
+        await this.#configure();
+
         return await this.#run(this.progress, () => testNodejs(this, format));
     }
 
     async runWeb(manual = false) {
+        await this.#configure();
+
         await this.#run(this.progress, () => testWeb(this, manual));
+    }
+
+    async #configure() {
+        if (this.#configured) {
+            return;
+        }
+
+        if (this.pkg.hasFile(HARNESS_CONFIG_FILE)) {
+            await import(this.pkg.resolve(HARNESS_CONFIG_FILE));
+        }
+
+        this.#configured = true;
     }
 
     async loadFiles(format: "esm" | "cjs") {
         const tests = Array<string>();
-        for (let spec of this.spec) {
+        for (let spec of this.#spec) {
             spec = spec.replace(/\.ts$/, ".js");
             spec = relative(this.pkg.path, spec);
             if (!spec.startsWith(".") && !spec.startsWith("build/") && !spec.startsWith("dist/")) {
@@ -94,7 +119,7 @@ export class TestRunner {
         }
 
         if (!tests.length) {
-            fatal(`No files match ${this.spec.join(", ")}`);
+            fatal(`No files match ${this.#spec.join(", ")}`);
         }
 
         return [...listSupportFiles(format), ...tests];

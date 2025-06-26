@@ -8,3 +8,4 @@
 
 export * from "./FixedLabelBehavior.js";
 export * from "./FixedLabelServer.js";
+export * from "./FixedLabelClient.js";

@@ -29,7 +29,6 @@ import { FeatureSet } from "#model";
 import { ProtocolService } from "#node/server/ProtocolService.js";
 import { ClusterTypeProtocol, FabricManager, Val } from "#protocol";
 import { ClusterType, VoidSchema } from "#types";
-import { DescriptorServer } from "../../behaviors/descriptor/DescriptorServer.js";
 import type { Agent } from "../Agent.js";
 import type { Endpoint } from "../Endpoint.js";
 import { EndpointVariableService } from "../EndpointVariableService.js";
@@ -160,11 +159,6 @@ export class Behaviors {
         this.#supported = type.behaviors;
         this.#options = options;
 
-        // DescriptorBehavior is unequivocally mandatory
-        if (!this.#supported.descriptor) {
-            this.#supported.descriptor = DescriptorServer;
-        }
-
         for (const id in this.#supported) {
             const type = this.#supported[id];
             if (!(type.prototype instanceof Behavior)) {
@@ -239,7 +233,7 @@ export class Behaviors {
         const activity = this.#endpoint.env.get(NodeActivity);
 
         // Perform initialization
-        let promise = OfflineContext.act(`initialize<${this.#endpoint}>`, activity, initializeBehaviors);
+        let promise = OfflineContext.act(`initialize<${this.#endpoint}>`, initializeBehaviors, { activity });
 
         // Once behaviors are ready the endpoint we consider the endpoint "ready"
         const onReady = () => {
@@ -266,10 +260,6 @@ export class Behaviors {
      * Add behavior support dynamically at runtime.  Typically called via {@link Agent.require}.
      */
     require<T extends Behavior.Type>(type: T, options?: Behavior.Options<T>) {
-        if (options) {
-            this.#options[type.id] = options;
-        }
-
         if (this.#supported[type.id]) {
             if (!this.has(type)) {
                 throw new ImplementationError(
@@ -279,12 +269,7 @@ export class Behaviors {
             return;
         }
 
-        if (this.#supported === this.#endpoint.type.behaviors) {
-            this.#supported = { ...this.#supported };
-        }
-        this.#supported[type.id] = type;
-
-        this.#augmentEndpoint(type);
+        this.inject(type, options);
 
         this.#endpoint.lifecycle.change(EndpointLifecycle.Change.ServersChanged);
 
@@ -429,7 +414,25 @@ export class Behaviors {
             }
         };
 
-        await OfflineContext.act(`close<${this.#endpoint}>`, this.#endpoint.env.get(NodeActivity), dispose);
+        await OfflineContext.act(`close<${this.#endpoint}>`, dispose, {
+            activity: this.#endpoint.env.get(NodeActivity),
+        });
+    }
+
+    /**
+     * Add support for an additional behavior statically.  Should only be invoked prior to initialization.
+     */
+    inject(type: Behavior.Type, options?: Behavior.Options) {
+        if (options) {
+            this.#options[type.id] = options;
+        }
+
+        if (this.#supported === this.#endpoint.type.behaviors) {
+            this.#supported = { ...this.#supported };
+        }
+        this.#supported[type.id] = type;
+
+        this.#augmentEndpoint(type);
     }
 
     /**
@@ -553,13 +556,17 @@ export class Behaviors {
     }
 
     #activateLate(type: Behavior.Type) {
-        const result = OfflineContext.act("behavior-late-activation", this.#endpoint.env.get(NodeActivity), context => {
-            this.activate(type, context.agentFor(this.#endpoint));
+        const result = OfflineContext.act(
+            "behavior-late-activation",
+            context => {
+                this.activate(type, context.agentFor(this.#endpoint));
 
-            // Agent must remain active until backing is initialized
-            const backing = this.#backingFor(type);
-            return backing.construction.ready;
-        });
+                // Agent must remain active until backing is initialized
+                const backing = this.#backingFor(type);
+                return backing.construction.ready;
+            },
+            { activity: this.#endpoint.env.get(NodeActivity) },
+        );
 
         if (MaybePromise.is(result)) {
             result.then(undefined, error => {
@@ -645,16 +652,10 @@ export class Behaviors {
      * Updates endpoint "state" and "events" properties to include properties for a supported behavior.
      */
     #augmentEndpoint(type: Behavior.Type) {
-        const stateDescriptor = {
-            get: () => {
-                return this.#backingFor(type).stateView;
-            },
-
-            enumerable: true,
-        };
-        Object.defineProperty(this.#endpoint.state, type.id, stateDescriptor);
+        const get = () => this.#backingFor(type).stateView;
+        Object.defineProperty(this.#endpoint.state, type.id, { get, enumerable: true });
         if (type.schema?.id !== undefined) {
-            Object.defineProperty(this.#endpoint.state, type.schema.id, stateDescriptor);
+            Object.defineProperty(this.#endpoint.state, type.schema.id, { get });
         }
 
         let events: undefined | EventEmitter;

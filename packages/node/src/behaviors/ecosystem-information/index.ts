@@ -8,3 +8,4 @@
 
 export * from "./EcosystemInformationBehavior.js";
 export * from "./EcosystemInformationServer.js";
+export * from "./EcosystemInformationClient.js";

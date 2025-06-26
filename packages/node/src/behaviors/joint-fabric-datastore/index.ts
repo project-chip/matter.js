@@ -9,3 +9,4 @@
 export * from "./JointFabricDatastoreInterface.js";
 export * from "./JointFabricDatastoreBehavior.js";
 export * from "./JointFabricDatastoreServer.js";
+export * from "./JointFabricDatastoreClient.js";

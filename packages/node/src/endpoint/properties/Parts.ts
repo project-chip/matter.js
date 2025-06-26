@@ -42,7 +42,7 @@ export class Parts extends EndpointContainer implements MutableSet<Endpoint, End
         }
 
         // Insertion validation is only possible in a fully configured node. If we are not yet installed then an
-        // ancestor will handle validation when we installed
+        // ancestor will handle validation when we install
         if (this.owner.lifecycle.isReady) {
             this.#validateInsertion(endpoint, endpoint);
         }

@@ -9,3 +9,4 @@
 export * from "./MicrowaveOvenControlInterface.js";
 export * from "./MicrowaveOvenControlBehavior.js";
 export * from "./MicrowaveOvenControlServer.js";
+export * from "./MicrowaveOvenControlClient.js";

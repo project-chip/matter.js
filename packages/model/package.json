@@ -12,9 +12,7 @@
     "author": "matter.js authors",
     "contributors": [
         "Greg Lauckhart <greg@lauckhart.com>",
-        "Ingo Fischer <github@fischer-ka.de>",
-        "Martin Turon <mturon@google.com>",
-        "Marco Fucci di Napoli <mfucci@gmail.com>"
+        "Ingo Fischer <github@fischer-ka.de>"
     ],
     "bugs": {
         "url": "https://github.com/project-chip/matter.js/issues"

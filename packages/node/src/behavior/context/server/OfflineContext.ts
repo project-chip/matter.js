@@ -7,7 +7,7 @@
 import type { Agent } from "#endpoint/Agent.js";
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import type { EndpointType } from "#endpoint/type/EndpointType.js";
-import { Diagnostic, MaybePromise, Transaction } from "#general";
+import { Diagnostic, InternalError, MaybePromise, Transaction } from "#general";
 import { AccessLevel } from "#model";
 import { AccessControl } from "#protocol";
 import type { ActionContext } from "../ActionContext.js";
@@ -16,6 +16,8 @@ import type { NodeActivity } from "../NodeActivity.js";
 import { ContextAgents } from "./ContextAgents.js";
 
 export let nextInternalId = 1;
+
+let ReadOnly: ActionContext | undefined;
 
 /**
  * {@link OfflineContext.act} gives you access to the {@link Agent} API outside of user interaction.
@@ -37,41 +39,90 @@ export const OfflineContext = {
      */
     act<T>(
         purpose: string,
-        activity: NodeActivity | undefined,
         actor: (context: ActionContext) => MaybePromise<T>,
         options?: OfflineContext.Options,
     ): MaybePromise<T> {
+        const context = this.open(purpose, options);
+
+        let result;
+        try {
+            result = actor(context);
+        } catch (e) {
+            return context.reject(e);
+        }
+
+        return context.resolve(result);
+    },
+
+    /**
+     * Create an offline context.
+     *
+     * This context operates with a {@link Transaction} created via {@link Transaction.open} and the same rules
+     * apply for lifecycle management using {@link Transaction.Finalization}.
+     */
+    open(purpose: string, options?: OfflineContext.Options): ActionContext & Transaction.Finalization {
         const id = nextInternalId;
         nextInternalId = (nextInternalId + 1) % 65535;
         const via = Diagnostic.via(`${purpose}#${id.toString(16)}`);
 
-        let context: ActionContext | undefined;
         let frame: NodeActivity.Activity | undefined;
+        let transaction: (Transaction & Transaction.Finalization) | undefined;
 
-        const actOffline = (transaction: Transaction) => {
-            context = createOfflineContext(transaction, frame, options);
-            return actor(context);
-        };
-
-        let isAsync = false;
         try {
-            frame = activity?.begin(via);
+            frame = options?.activity?.begin(via);
+            let agents: undefined | ContextAgents;
 
-            const result = Transaction.act(via, actOffline);
+            transaction = Transaction.open(via, options?.isolation);
 
-            if (MaybePromise.is(result)) {
-                isAsync = true;
-                return Promise.resolve(result).finally(() => {
-                    frame?.[Symbol.dispose]();
-                }) as T;
+            if (frame) {
+                transaction.onClose(frame.close.bind(frame));
             }
 
-            return result;
-        } finally {
-            if (!isAsync) {
-                frame?.[Symbol.dispose]();
+            const context = Object.freeze({
+                ...options,
+
+                // Disable access level enforcement
+                offline: true,
+
+                transaction,
+                activity: frame,
+
+                authorityAt(desiredAccessLevel: AccessLevel) {
+                    // Be as restrictive as possible.  The offline flag should make this irrelevant
+                    return desiredAccessLevel === AccessLevel.View
+                        ? AccessControl.Authority.Granted
+                        : AccessControl.Authority.Unauthorized;
+                },
+
+                agentFor<const T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T> {
+                    if (!agents) {
+                        agents = ContextAgents(context);
+                    }
+                    return agents?.agentFor(endpoint);
+                },
+
+                get [Contextual.context]() {
+                    return this;
+                },
+
+                [Symbol.toStringTag]: "OfflineContext",
+
+                resolve: transaction.resolve.bind(transaction),
+                reject: transaction.reject.bind(transaction),
+            });
+
+            return context;
+        } catch (e) {
+            if (transaction) {
+                transaction.reject(e);
+            } else {
+                frame?.close();
+                throw e;
             }
         }
+
+        // Should not get here because we should either return context or throw synchronously
+        throw new InternalError("Unexpected end of open");
     },
 
     /**
@@ -81,7 +132,12 @@ export const OfflineContext = {
      *
      * Write operations will throw an error with this context.
      */
-    ReadOnly: createOfflineContext(Transaction.open("read-only", "ro")),
+    get ReadOnly() {
+        if (ReadOnly === undefined) {
+            ReadOnly = OfflineContext.open("read-only", { isolation: "ro" });
+        }
+        return ReadOnly;
+    },
 
     [Symbol.toStringTag]: "OfflineContext",
 };
@@ -92,45 +148,7 @@ export namespace OfflineContext {
      */
     export interface Options {
         command?: boolean;
+        activity?: NodeActivity;
+        isolation?: Transaction.IsolationLevel;
     }
-}
-
-function createOfflineContext(
-    transaction: Transaction,
-    activity?: NodeActivity.Activity,
-    options?: OfflineContext.Options,
-) {
-    let agents: undefined | ContextAgents;
-
-    const context = Object.freeze({
-        ...options,
-
-        // Disable access level enforcement
-        offline: true,
-
-        transaction,
-        activity,
-
-        authorityAt(desiredAccessLevel: AccessLevel) {
-            // Be as restrictive as possible.  The offline flag should make this irrelevant
-            return desiredAccessLevel === AccessLevel.View
-                ? AccessControl.Authority.Granted
-                : AccessControl.Authority.Unauthorized;
-        },
-
-        agentFor<const T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T> {
-            if (!agents) {
-                agents = ContextAgents(context);
-            }
-            return agents?.agentFor(endpoint);
-        },
-
-        get [Contextual.context]() {
-            return this;
-        },
-
-        [Symbol.toStringTag]: "OfflineContext",
-    });
-
-    return context;
 }

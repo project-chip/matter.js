@@ -9,3 +9,4 @@
 export * from "./AdministratorCommissioningInterface.js";
 export * from "./AdministratorCommissioningBehavior.js";
 export * from "./AdministratorCommissioningServer.js";
+export * from "./AdministratorCommissioningClient.js";

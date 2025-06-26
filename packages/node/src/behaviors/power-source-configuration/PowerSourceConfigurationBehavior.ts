@@ -8,14 +8,17 @@
 
 import { PowerSourceConfiguration } from "#clusters/power-source-configuration";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * PowerSourceConfigurationBehavior is the base class for objects that support interaction with
  * {@link PowerSourceConfiguration.Cluster}.
  */
-export const PowerSourceConfigurationBehavior = ClusterBehavior.for(PowerSourceConfiguration.Cluster);
+export const PowerSourceConfigurationBehaviorConstructor = ClusterBehavior.for(PowerSourceConfiguration.Cluster);
 
-type PowerSourceConfigurationBehaviorType = InstanceType<typeof PowerSourceConfigurationBehavior>;
-export interface PowerSourceConfigurationBehavior extends PowerSourceConfigurationBehaviorType {}
-type StateType = InstanceType<typeof PowerSourceConfigurationBehavior.State>;
-export namespace PowerSourceConfigurationBehavior { export interface State extends StateType {} }
+export interface PowerSourceConfigurationBehaviorConstructor extends Identity<typeof PowerSourceConfigurationBehaviorConstructor> {}
+export const PowerSourceConfigurationBehavior: PowerSourceConfigurationBehaviorConstructor = PowerSourceConfigurationBehaviorConstructor;
+export interface PowerSourceConfigurationBehavior extends InstanceType<PowerSourceConfigurationBehaviorConstructor> {}
+export namespace PowerSourceConfigurationBehavior {
+    export interface State extends InstanceType<typeof PowerSourceConfigurationBehavior.State> {}
+}

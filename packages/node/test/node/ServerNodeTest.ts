@@ -154,21 +154,19 @@ describe("ServerNode", () => {
 
         const scannerChannel = new MockUdpChannel(simulator.addHost(2), {
             listeningPort: 5353,
-            listeningAddress: "ff02::fb",
             type: "udp6",
         });
+        scannerChannel.addMembership("ff02::fb");
 
         const advertisementReceived = new Promise<Uint8Array>(resolve =>
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolve(data)),
         );
 
         const node = await MockServerNode.createOnline({
-            config: {
-                type: ServerNode.RootEndpoint,
-                network: { port: 0 },
-                commissioning: { discriminator: 2002 },
-                basicInformation: { vendorId: 65501 },
-            },
+            type: ServerNode.RootEndpoint,
+            network: { port: 0 },
+            commissioning: { discriminator: 2002 },
+            basicInformation: { vendorId: 65501 },
             simulator,
         });
 
@@ -202,8 +200,8 @@ describe("ServerNode", () => {
         expect(answer("_T")).equals("256");
         expect(answer("_CM")).equals("");
 
-        expect(additional(DnsRecordType.AAAA)).equals("1111:2222:3333:4444:5555:6666:7777:8801");
-        expect(additional(DnsRecordType.A)).equals("10.10.10.1");
+        expect(additional(DnsRecordType.AAAA)).equals("1111:2222:3333:4444:5555:6666:7777:8880");
+        expect(additional(DnsRecordType.A)).equals("10.10.10.128");
         expect(additional(DnsRecordType.SRV)?.port).equals(operationalPort);
 
         const expirationReceived = new Promise<Uint8Array>(resolve =>
@@ -250,22 +248,20 @@ describe("ServerNode", () => {
         const productId = 0x8000;
         let commissioningServer2CertificateProviderCalled = false;
         const node = await MockServerNode.createOnline({
-            config: {
-                type: ServerNode.RootEndpoint,
-                operationalCredentials: {
-                    certification: async () => {
-                        const paa = await AttestationCertificateManager.create(MockCrypto(), vendorId);
-                        const { keyPair: dacKeyPair, dac } = await paa.getDACert(productId);
-                        const declaration = await CertificationDeclaration.generate(MockCrypto(), vendorId, productId);
+            type: ServerNode.RootEndpoint,
+            operationalCredentials: {
+                certification: async () => {
+                    const paa = await AttestationCertificateManager.create(MockCrypto(), vendorId);
+                    const { keyPair: dacKeyPair, dac } = await paa.getDACert(productId);
+                    const declaration = await CertificationDeclaration.generate(MockCrypto(), vendorId, productId);
 
-                        commissioningServer2CertificateProviderCalled = true;
-                        return {
-                            privateKey: dacKeyPair.privateKey,
-                            certificate: dac,
-                            intermediateCertificate: await paa.getPAICert(),
-                            declaration,
-                        };
-                    },
+                    commissioningServer2CertificateProviderCalled = true;
+                    return {
+                        privateKey: dacKeyPair.privateKey,
+                        certificate: dac,
+                        intermediateCertificate: await paa.getPAICert(),
+                        declaration,
+                    };
                 },
             },
         });
@@ -447,7 +443,7 @@ describe("ServerNode", () => {
             { owner: aggregator },
         );
 
-        const node = await MockServerNode.createOnline({ device: aggregator });
+        const node = await MockServerNode.createOnline(undefined, { device: aggregator });
 
         await commissioning.commission(node);
 
@@ -493,7 +489,8 @@ describe("ServerNode", () => {
             it("from root behavior error", async () => {
                 await expect(
                     MockServerNode.createOnline({
-                        config: { type: MockServerNode.RootEndpoint, environment: badNodeEnv },
+                        type: MockServerNode.RootEndpoint,
+                        environment: badNodeEnv,
                         device: undefined,
                     }),
                 ).rejectedWith(EndpointBehaviorsError, 'Cannot convert "not a number" to an integer');
@@ -502,7 +499,9 @@ describe("ServerNode", () => {
             it("from behavior error on child during startup", async () => {
                 await expect(
                     MockServerNode.createOnline({
-                        config: { type: MockServerNode.RootEndpoint, environment: badEndpointEnv, id: "foo" },
+                        type: MockServerNode.RootEndpoint,
+                        environment: badEndpointEnv,
+                        id: "foo",
                         device: LightSensorDevice,
                     }),
                 ).rejectedWith(EndpointBehaviorsError, 'Property "diet" is unsupported');
@@ -510,7 +509,8 @@ describe("ServerNode", () => {
 
             it("from behavior error on child added after startup", async () => {
                 const node = await MockServerNode.createOnline({
-                    config: { type: MockServerNode.RootEndpoint, environment: badEndpointEnv },
+                    type: MockServerNode.RootEndpoint,
+                    environment: badEndpointEnv,
                     device: undefined,
                 });
                 await expect(node.add(LightSensorDevice)).rejectedWith(

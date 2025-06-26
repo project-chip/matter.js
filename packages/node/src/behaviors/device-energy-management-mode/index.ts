@@ -8,3 +8,4 @@
 
 export * from "./DeviceEnergyManagementModeBehavior.js";
 export * from "./DeviceEnergyManagementModeServer.js";
+export * from "./DeviceEnergyManagementModeClient.js";

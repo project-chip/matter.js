@@ -9,3 +9,4 @@
 export * from "./IdentifyInterface.js";
 export * from "./IdentifyBehavior.js";
 export * from "./IdentifyServer.js";
+export * from "./IdentifyClient.js";

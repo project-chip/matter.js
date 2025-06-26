@@ -9,3 +9,4 @@
 export * from "./TemperatureControlInterface.js";
 export * from "./TemperatureControlBehavior.js";
 export * from "./TemperatureControlServer.js";
+export * from "./TemperatureControlClient.js";
