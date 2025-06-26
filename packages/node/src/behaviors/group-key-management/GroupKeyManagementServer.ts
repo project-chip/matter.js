@@ -431,8 +431,8 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
             this.state.groupTable[existingGroupIndex].groupName = groupName;
         } else {
             if (
-                this.state.groupTable.filter(({ fabricIndex: entryFabricIndex }) => entryFabricIndex === fabricIndex).length >=
-                this.state.maxGroupsPerFabric
+                this.state.groupTable.filter(({ fabricIndex: entryFabricIndex }) => entryFabricIndex === fabricIndex)
+                    .length >= this.state.maxGroupsPerFabric
             ) {
                 throw new StatusResponseError(
                     `Too many groups for fabric ${fabricIndex}, maximum is ${this.state.maxGroupsPerFabric}`,
