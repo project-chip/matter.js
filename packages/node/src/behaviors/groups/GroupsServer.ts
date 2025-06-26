@@ -9,7 +9,7 @@ import { IdentifyBehavior } from "#behaviors/identify";
 import { Groups } from "#clusters/groups";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { RootEndpoint } from "#endpoints/root";
-import { Logger } from "#general";
+import { InternalError, Logger } from "#general";
 import { AccessLevel } from "#model";
 import {
     Command,
@@ -21,13 +21,9 @@ import {
     TlvObject,
     TlvString,
 } from "#types";
-import { InternalError } from "@matter/general";
 import { GroupsBehavior } from "./GroupsBehavior.js";
 
 const logger = Logger.get("GroupsServer");
-
-// We enable group names by default
-const GroupsBase = GroupsBehavior.with(Groups.Feature.GroupNames);
 
 /**
  * Monkey patching Tlv Structure of addGroup* commands to prevent data validation of the groupName field to be
@@ -57,6 +53,9 @@ Groups.Cluster.commands = {
         { invokeAcl: AccessLevel.Manage },
     ),
 };
+
+// We enable group names by default
+const GroupsBase = GroupsBehavior.with(Groups.Feature.GroupNames);
 
 /**
  * This is the default server implementation of {@link GroupsBehavior}.
