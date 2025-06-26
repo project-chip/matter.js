@@ -430,6 +430,16 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
             }
             this.state.groupTable[existingGroupIndex].groupName = groupName;
         } else {
+            if (
+                this.state.groupTable.filter(({ fabricIndex }) => fabricIndex === fabricIndex).length >=
+                this.state.maxGroupsPerFabric
+            ) {
+                throw new StatusResponseError(
+                    `Too many groups for fabric ${fabricIndex}, maximum is ${this.state.maxGroupsPerFabric}`,
+                    StatusCode.ResourceExhausted,
+                );
+            }
+
             // Create a new group entry
             this.state.groupTable.push({
                 groupId,
@@ -454,7 +464,8 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
         const fabricIndex = fabric.fabricIndex;
 
         // Remove the endpoint from all groups
-        for (const entry of groupTable) {
+        for (let i = groupTable.length - 1; i >= 0; i--) {
+            const entry = groupTable[i];
             if (entry.fabricIndex !== fabricIndex || (groupId !== undefined && entry.groupId !== groupId)) {
                 continue;
             }
@@ -463,8 +474,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
                 if (entry.endpoints.length === 1 && entry.endpoints[0] === endpointId) {
                     const groupId = entry.groupId;
                     // If no endpoints left, remove the group entry
-                    const index = groupTable.indexOf(entry);
-                    groupTable.splice(index, 1);
+                    groupTable.splice(i, 1);
                     fabric.groups.endpoints.delete(groupId);
                 } else {
                     entry.endpoints = entry.endpoints.filter(id => id !== endpointId);
