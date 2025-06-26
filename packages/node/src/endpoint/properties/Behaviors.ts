@@ -226,8 +226,8 @@ export class Behaviors {
                 const fabricIndices = this.#endpoint.env.get(FabricManager).fabrics.map(fabric => fabric.fabricIndex);
                 if (fabricIndices.length > 0) {
                     // Make sure the state on startup only includes allowed Fabric scoped data
-                    return limitEndpointAttributeDataToAllowedFabrics(this.#endpoint, fabricIndices).then(
-                        () => promise,
+                    return MaybePromise.then(promise, () =>
+                        limitEndpointAttributeDataToAllowedFabrics(this.#endpoint, fabricIndices),
                     );
                 }
             }
