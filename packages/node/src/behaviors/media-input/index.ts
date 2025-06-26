@@ -9,3 +9,4 @@
 export * from "./MediaInputInterface.js";
 export * from "./MediaInputBehavior.js";
 export * from "./MediaInputServer.js";
+export * from "./MediaInputClient.js";

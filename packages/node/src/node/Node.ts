@@ -93,6 +93,10 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
      * Bring the node online.
      */
     async start() {
+        if (this.lifecycle.isOnline) {
+            return;
+        }
+
         await this.lifecycle.mutex.produce(this.startWithMutex.bind(this));
     }
 
@@ -110,6 +114,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
 
             this.#runtime = this.createRuntime();
             this.#runtime.construction.start();
+            this.#environment.set(NetworkRuntime, this.#runtime);
             await this.#runtime.construction.ready;
         } catch (e) {
             this.env.runtime.delete(this);
@@ -147,6 +152,9 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         }
 
         await this.act(agent => this.lifecycle.goingOffline.emit(agent.context));
+        if (this.#runtime) {
+            this.#environment.delete(NetworkRuntime, this.#runtime);
+        }
         await this.#runtime?.close();
         this.#runtime = undefined;
     }
@@ -222,21 +230,21 @@ export namespace Node {
         environment?: Environment;
     }
 
-    export type Options<T extends Node.CommonRootEndpoint = Node.CommonRootEndpoint> = Endpoint.Options<T, NodeOptions>;
+    export type Options<
+        T extends Node.CommonRootEndpoint = Node.CommonRootEndpoint,
+        O extends NodeOptions = NodeOptions,
+    > = Endpoint.Options<T, O>;
 
-    export type Configuration<T extends Node.CommonRootEndpoint = Node.CommonRootEndpoint> = Endpoint.Configuration<
-        T,
-        NodeOptions
-    >;
+    export type Configuration<
+        T extends Node.CommonRootEndpoint = Node.CommonRootEndpoint,
+        O extends NodeOptions = NodeOptions,
+    > = Endpoint.Configuration<T, O>;
 
-    export function nodeConfigFor<T extends RootEndpoint>(
+    export function nodeConfigFor<T extends RootEndpoint, O extends NodeOptions>(
         defaultType: T,
         configuration: undefined | T | Configuration<T>,
-        options?: Options<T>,
-    ): Node.Configuration<T> {
-        if (!options) {
-            options = {};
-        }
+        options: Options<T, O>,
+    ): Node.Configuration<T, O> {
         if (configuration === undefined) {
             return {
                 type: defaultType,
@@ -252,7 +260,7 @@ export namespace Node {
         return {
             type: defaultType,
             ...configuration,
-        } as Endpoint.Configuration<T>;
+        } as Node.Configuration<T, O>;
     }
 
     export function forEndpoint(endpoint: Endpoint): Node {

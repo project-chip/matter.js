@@ -8,3 +8,4 @@
 
 export * from "./BallastConfigurationBehavior.js";
 export * from "./BallastConfigurationServer.js";
+export * from "./BallastConfigurationClient.js";

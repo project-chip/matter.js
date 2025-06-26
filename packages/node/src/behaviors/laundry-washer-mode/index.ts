@@ -8,3 +8,4 @@
 
 export * from "./LaundryWasherModeBehavior.js";
 export * from "./LaundryWasherModeServer.js";
+export * from "./LaundryWasherModeClient.js";

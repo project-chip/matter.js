@@ -9,3 +9,4 @@
 export * from "./NetworkCommissioningInterface.js";
 export * from "./NetworkCommissioningBehavior.js";
 export * from "./NetworkCommissioningServer.js";
+export * from "./NetworkCommissioningClient.js";

@@ -9,6 +9,7 @@
 import { MediaPlayback } from "#clusters/media-playback";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { MediaPlaybackInterface } from "./MediaPlaybackInterface.js";
+import { Identity } from "#general";
 
 /**
  * MediaPlaybackBehavior is the base class for objects that support interaction with {@link MediaPlayback.Cluster}.
@@ -16,11 +17,13 @@ import { MediaPlaybackInterface } from "./MediaPlaybackInterface.js";
  * This class does not have optional features of MediaPlayback.Cluster enabled. You can enable additional features using
  * MediaPlaybackBehavior.with.
  */
-export const MediaPlaybackBehavior = ClusterBehavior
+export const MediaPlaybackBehaviorConstructor = ClusterBehavior
     .withInterface<MediaPlaybackInterface>()
     .for(MediaPlayback.Cluster);
 
-type MediaPlaybackBehaviorType = InstanceType<typeof MediaPlaybackBehavior>;
-export interface MediaPlaybackBehavior extends MediaPlaybackBehaviorType {}
-type StateType = InstanceType<typeof MediaPlaybackBehavior.State>;
-export namespace MediaPlaybackBehavior { export interface State extends StateType {} }
+export interface MediaPlaybackBehaviorConstructor extends Identity<typeof MediaPlaybackBehaviorConstructor> {}
+export const MediaPlaybackBehavior: MediaPlaybackBehaviorConstructor = MediaPlaybackBehaviorConstructor;
+export interface MediaPlaybackBehavior extends InstanceType<MediaPlaybackBehaviorConstructor> {}
+export namespace MediaPlaybackBehavior {
+    export interface State extends InstanceType<typeof MediaPlaybackBehavior.State> {}
+}

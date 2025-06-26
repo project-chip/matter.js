@@ -9,6 +9,7 @@
 import { ApplicationLauncher } from "#clusters/application-launcher";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ApplicationLauncherInterface } from "./ApplicationLauncherInterface.js";
+import { Identity } from "#general";
 
 /**
  * ApplicationLauncherBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { ApplicationLauncherInterface } from "./ApplicationLauncherInterface.js"
  * This class does not have optional features of ApplicationLauncher.Cluster enabled. You can enable additional features
  * using ApplicationLauncherBehavior.with.
  */
-export const ApplicationLauncherBehavior = ClusterBehavior
+export const ApplicationLauncherBehaviorConstructor = ClusterBehavior
     .withInterface<ApplicationLauncherInterface>()
     .for(ApplicationLauncher.Cluster);
 
-type ApplicationLauncherBehaviorType = InstanceType<typeof ApplicationLauncherBehavior>;
-export interface ApplicationLauncherBehavior extends ApplicationLauncherBehaviorType {}
-type StateType = InstanceType<typeof ApplicationLauncherBehavior.State>;
-export namespace ApplicationLauncherBehavior { export interface State extends StateType {} }
+export interface ApplicationLauncherBehaviorConstructor extends Identity<typeof ApplicationLauncherBehaviorConstructor> {}
+export const ApplicationLauncherBehavior: ApplicationLauncherBehaviorConstructor = ApplicationLauncherBehaviorConstructor;
+export interface ApplicationLauncherBehavior extends InstanceType<ApplicationLauncherBehaviorConstructor> {}
+export namespace ApplicationLauncherBehavior {
+    export interface State extends InstanceType<typeof ApplicationLauncherBehavior.State> {}
+}

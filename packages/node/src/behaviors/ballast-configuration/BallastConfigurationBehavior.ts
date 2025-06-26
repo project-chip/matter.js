@@ -8,14 +8,17 @@
 
 import { BallastConfiguration } from "#clusters/ballast-configuration";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * BallastConfigurationBehavior is the base class for objects that support interaction with
  * {@link BallastConfiguration.Cluster}.
  */
-export const BallastConfigurationBehavior = ClusterBehavior.for(BallastConfiguration.Cluster);
+export const BallastConfigurationBehaviorConstructor = ClusterBehavior.for(BallastConfiguration.Cluster);
 
-type BallastConfigurationBehaviorType = InstanceType<typeof BallastConfigurationBehavior>;
-export interface BallastConfigurationBehavior extends BallastConfigurationBehaviorType {}
-type StateType = InstanceType<typeof BallastConfigurationBehavior.State>;
-export namespace BallastConfigurationBehavior { export interface State extends StateType {} }
+export interface BallastConfigurationBehaviorConstructor extends Identity<typeof BallastConfigurationBehaviorConstructor> {}
+export const BallastConfigurationBehavior: BallastConfigurationBehaviorConstructor = BallastConfigurationBehaviorConstructor;
+export interface BallastConfigurationBehavior extends InstanceType<BallastConfigurationBehaviorConstructor> {}
+export namespace BallastConfigurationBehavior {
+    export interface State extends InstanceType<typeof BallastConfigurationBehavior.State> {}
+}

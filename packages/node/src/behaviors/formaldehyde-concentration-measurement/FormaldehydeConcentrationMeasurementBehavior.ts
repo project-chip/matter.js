@@ -9,6 +9,7 @@
 import { FormaldehydeConcentrationMeasurement } from "#clusters/formaldehyde-concentration-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * FormaldehydeConcentrationMeasurementBehavior is the base class for objects that support interaction with
@@ -17,10 +18,12 @@ import { ClusterType } from "#types";
  * FormaldehydeConcentrationMeasurement.Cluster requires you to enable one or more optional features. You can do so
  * using {@link FormaldehydeConcentrationMeasurementBehavior.with}.
  */
-export const FormaldehydeConcentrationMeasurementBehavior = ClusterBehavior
+export const FormaldehydeConcentrationMeasurementBehaviorConstructor = ClusterBehavior
     .for(ClusterType(FormaldehydeConcentrationMeasurement.Base));
 
-type FormaldehydeConcentrationMeasurementBehaviorType = InstanceType<typeof FormaldehydeConcentrationMeasurementBehavior>;
-export interface FormaldehydeConcentrationMeasurementBehavior extends FormaldehydeConcentrationMeasurementBehaviorType {}
-type StateType = InstanceType<typeof FormaldehydeConcentrationMeasurementBehavior.State>;
-export namespace FormaldehydeConcentrationMeasurementBehavior { export interface State extends StateType {} }
+export interface FormaldehydeConcentrationMeasurementBehaviorConstructor extends Identity<typeof FormaldehydeConcentrationMeasurementBehaviorConstructor> {}
+export const FormaldehydeConcentrationMeasurementBehavior: FormaldehydeConcentrationMeasurementBehaviorConstructor = FormaldehydeConcentrationMeasurementBehaviorConstructor;
+export interface FormaldehydeConcentrationMeasurementBehavior extends InstanceType<FormaldehydeConcentrationMeasurementBehaviorConstructor> {}
+export namespace FormaldehydeConcentrationMeasurementBehavior {
+    export interface State extends InstanceType<typeof FormaldehydeConcentrationMeasurementBehavior.State> {}
+}

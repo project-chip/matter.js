@@ -6,7 +6,7 @@
 
 import { Behavior } from "#behavior/Behavior.js";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
-import { camelize, decamelize, ImplementationError, MaybePromise } from "#general";
+import { camelize, decamelize, ImportError, MaybePromise } from "#general";
 
 // Must load from public export so node selects the correct format
 import { load } from "@matter/node/load";
@@ -31,6 +31,15 @@ export namespace loader {
         ) as MaybePromise<Behavior.Type>;
     }
 
+    export function server(name: string) {
+        const exportName = `${camelize(name, true)}Server`;
+        return doLoad(
+            `behavior ${name}`,
+            exportName,
+            `../behaviors/${decamelize(name)}/${exportName}.js`,
+        ) as MaybePromise<Behavior.Type>;
+    }
+
     export function device(name: string) {
         const exportName = `${camelize(name, true)}Device`;
         return doLoad(
@@ -48,6 +57,8 @@ export namespace loader {
             `../endpoints/${decamelize(name)}.js`,
         ) as MaybePromise<EndpointType>;
     }
+
+    export const registry = {} as Record<string, Record<string, {} | undefined> | undefined>;
 }
 
 function doLoad(description: string, exportName: string, path: string) {
@@ -74,6 +85,6 @@ function doLoad(description: string, exportName: string, path: string) {
     }
 
     function failure() {
-        throw new ImplementationError(`No implementation available for ${description}`);
+        throw new ImportError(`No implementation available for ${description}`);
     }
 }

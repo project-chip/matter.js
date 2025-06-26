@@ -100,8 +100,9 @@ export class ClusterBehavior extends Behavior {
         this: This,
         cluster: ClusterT,
         schema?: Schema,
+        name?: string,
     ) {
-        return createType(cluster, this, schema) as ClusterBehavior.Type<ClusterT, This>;
+        return createType(cluster, this, schema, name) as ClusterBehavior.Type<ClusterT, This>;
     }
 
     /**
@@ -266,6 +267,7 @@ export namespace ClusterBehavior {
             this: This,
             cluster: ClusterT,
             schema?: Schema,
+            name?: string,
         ): ClusterBehavior.Type<ClusterT, This>;
 
         /**
@@ -380,4 +382,8 @@ export namespace ClusterBehavior {
      * See {@link ClusterInterface} for more details.
      */
     export declare const ExtensionInterface: {};
+
+    export function is(type: Behavior.Type): type is ClusterBehavior.Type {
+        return "cluster" in type;
+    }
 }

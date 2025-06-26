@@ -9,6 +9,7 @@
 import { MediaInput } from "#clusters/media-input";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { MediaInputInterface } from "./MediaInputInterface.js";
+import { Identity } from "#general";
 
 /**
  * MediaInputBehavior is the base class for objects that support interaction with {@link MediaInput.Cluster}.
@@ -16,11 +17,11 @@ import { MediaInputInterface } from "./MediaInputInterface.js";
  * This class does not have optional features of MediaInput.Cluster enabled. You can enable additional features using
  * MediaInputBehavior.with.
  */
-export const MediaInputBehavior = ClusterBehavior
+export const MediaInputBehaviorConstructor = ClusterBehavior
     .withInterface<MediaInputInterface>()
     .for(MediaInput.Cluster);
 
-type MediaInputBehaviorType = InstanceType<typeof MediaInputBehavior>;
-export interface MediaInputBehavior extends MediaInputBehaviorType {}
-type StateType = InstanceType<typeof MediaInputBehavior.State>;
-export namespace MediaInputBehavior { export interface State extends StateType {} }
+export interface MediaInputBehaviorConstructor extends Identity<typeof MediaInputBehaviorConstructor> {}
+export const MediaInputBehavior: MediaInputBehaviorConstructor = MediaInputBehaviorConstructor;
+export interface MediaInputBehavior extends InstanceType<MediaInputBehaviorConstructor> {}
+export namespace MediaInputBehavior { export interface State extends InstanceType<typeof MediaInputBehavior.State> {} }

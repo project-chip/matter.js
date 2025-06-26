@@ -8,3 +8,4 @@
 
 export * from "./ProxyConfigurationBehavior.js";
 export * from "./ProxyConfigurationServer.js";
+export * from "./ProxyConfigurationClient.js";

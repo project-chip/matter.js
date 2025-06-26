@@ -8,3 +8,4 @@
 
 export * from "./NitrogenDioxideConcentrationMeasurementBehavior.js";
 export * from "./NitrogenDioxideConcentrationMeasurementServer.js";
+export * from "./NitrogenDioxideConcentrationMeasurementClient.js";

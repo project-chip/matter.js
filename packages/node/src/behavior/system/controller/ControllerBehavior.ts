@@ -6,32 +6,28 @@
 
 import { Behavior } from "#behavior/Behavior.js";
 import { BasicInformationBehavior } from "#behaviors/basic-information";
-import {
-    ImplementationError,
-    isNetworkInterface,
-    Logger,
-    MatterAggregateError,
-    NetInterfaceSet,
-    TransportInterfaceSet,
-} from "#general";
+import { ImplementationError, isNetworkInterface, NetInterfaceSet, TransportInterfaceSet } from "#general";
 import { Node } from "#node/Node.js";
 import { InteractionServer } from "#node/server/InteractionServer.js";
 import {
     Ble,
+    ClientSubscriptionHandler,
+    ClientSubscriptions,
+    Fabric,
     FabricAuthority,
     FabricAuthorityConfigurationProvider,
     FabricManager,
+    MdnsScanner,
+    MdnsScannerTargetCriteria,
     MdnsService,
+    Scanner,
     ScannerSet,
-    SubscriptionClient,
 } from "#protocol";
 import type { CommissioningClient } from "../commissioning/CommissioningClient.js";
 import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { NetworkServer } from "../network/NetworkServer.js";
 import { ActiveDiscoveries } from "./discovery/ActiveDiscoveries.js";
 import type { Discovery } from "./discovery/Discovery.js";
-
-const logger = Logger.get("ControllerBehavior");
 
 /**
  * Node controller functionality.
@@ -44,10 +40,11 @@ const logger = Logger.get("ControllerBehavior");
 export class ControllerBehavior extends Behavior {
     static override readonly id = "controller";
 
+    declare internal: ControllerBehavior.Internal;
     declare state: ControllerBehavior.State;
 
     override async initialize() {
-        if (this.state.adminFabricLabel === undefined) {
+        if (this.state.adminFabricLabel === undefined || this.state.adminFabricLabel === "") {
             throw new ImplementationError("adminFabricLabel must be set for ControllerBehavior.");
         }
         const adminFabricLabel = this.state.adminFabricLabel;
@@ -84,12 +81,15 @@ export class ControllerBehavior extends Behavior {
             );
         }
 
+        // Ensure the fabric authority is fully initialized
+        await this.env.load(FabricAuthority);
+
         // "Automatic" controller mode - disable commissioning if node is not otherwise configured as a commissionable
         // device
         const commissioning = this.agent.get(CommissioningServer);
         if (commissioning.state.enabled === undefined) {
-            const controlledFabrics = this.env.get(FabricAuthority).fabrics.length;
             const totalFabrics = this.env.get(FabricManager).length;
+            const controlledFabrics = this.env.get(FabricAuthority).fabrics.length;
             if (controlledFabrics === totalFabrics) {
                 commissioning.state.enabled = false;
             }
@@ -103,17 +103,7 @@ export class ControllerBehavior extends Behavior {
     }
 
     override async [Symbol.asyncDispose]() {
-        const discoveries = this.env.get(ActiveDiscoveries);
-        while (discoveries.size) {
-            for (const discovery of discoveries) {
-                discovery.cancel();
-            }
-
-            await MatterAggregateError.allSettled([...discoveries], "Error while cancelling discoveries").catch(error =>
-                logger.error(error),
-            );
-        }
-
+        await this.env.close(ActiveDiscoveries);
         this.env.delete(FabricAuthority);
         this.env.delete(ScannerSet);
     }
@@ -131,15 +121,33 @@ export class ControllerBehavior extends Behavior {
             netInterfaces.add(Ble.get().getBleCentralInterface());
         }
 
-        // This is necessary to receive data reports for subscriptions
-        this.env.get(InteractionServer).clientHandler = this.env.get(SubscriptionClient);
+        // Install handler to receive data reports for subscriptions
+        const subscriptions = this.env.get(ClientSubscriptions);
+        const interactionServer = this.env.get(InteractionServer);
+        interactionServer.clientHandler = new ClientSubscriptionHandler(subscriptions);
 
         // Clean up as the node goes offline
         const node = Node.forEndpoint(this.endpoint);
         this.reactTo(node.lifecycle.goingOffline, this.#nodeGoingOffline);
+
+        // Add each pre-existing fabric to discovery criteria
+        const authority = this.env.get(FabricAuthority);
+        for (const fabric of authority.fabrics) {
+            this.#enableScanningForFabric(fabric);
+        }
+        this.reactTo(authority.fabricAdded, this.#enableScanningForFabric);
+
+        // Configure each MDNS scanner with criteria
+        const scanners = this.env.get(ScannerSet);
+        for (const scanner of scanners) {
+            this.#enableScanningForScanner(scanner);
+        }
+        this.reactTo(scanners.added, this.#enableScanningForScanner);
     }
 
     async #nodeGoingOffline() {
+        await this.env.close(ClientSubscriptions);
+
         const netInterfaces = this.env.get(NetInterfaceSet);
         const netTransports = this.env.get(TransportInterfaceSet);
 
@@ -152,9 +160,30 @@ export class ControllerBehavior extends Behavior {
 
         await this.env.close(NetInterfaceSet);
     }
+
+    #enableScanningForFabric(fabric: Fabric) {
+        this.internal.mdnsTargetCriteria.operationalTargets.push({ operationalId: fabric.operationalId });
+    }
+
+    #enableScanningForScanner(scanner: Scanner) {
+        if (!(scanner instanceof MdnsScanner)) {
+            return;
+        }
+        scanner.targetCriteriaProviders.add(this.internal.mdnsTargetCriteria);
+    }
 }
 
 export namespace ControllerBehavior {
+    export class Internal {
+        /**
+         * MDNS scanner criteria for each controlled fabric (keyed by operational ID).
+         */
+        mdnsTargetCriteria: MdnsScannerTargetCriteria = {
+            commissionable: true,
+            operationalTargets: [],
+        };
+    }
+
     export class State {
         /**
          * Set to false to disable scanning on BLE.
@@ -173,6 +202,6 @@ export namespace ControllerBehavior {
         /**
          * Contains the label of the admin fabric which is set for all commissioned devices
          */
-        adminFabricLabel!: string;
+        adminFabricLabel = "matter.js";
     }
 }

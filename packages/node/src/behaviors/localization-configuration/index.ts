@@ -8,3 +8,4 @@
 
 export * from "./LocalizationConfigurationBehavior.js";
 export * from "./LocalizationConfigurationServer.js";
+export * from "./LocalizationConfigurationClient.js";

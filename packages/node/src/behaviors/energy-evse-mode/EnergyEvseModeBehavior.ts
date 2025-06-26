@@ -9,15 +9,18 @@
 import { EnergyEvseMode } from "#clusters/energy-evse-mode";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { EnergyEvseModeInterface } from "./EnergyEvseModeInterface.js";
+import { Identity } from "#general";
 
 /**
  * EnergyEvseModeBehavior is the base class for objects that support interaction with {@link EnergyEvseMode.Cluster}.
  */
-export const EnergyEvseModeBehavior = ClusterBehavior
+export const EnergyEvseModeBehaviorConstructor = ClusterBehavior
     .withInterface<EnergyEvseModeInterface>()
     .for(EnergyEvseMode.Cluster);
 
-type EnergyEvseModeBehaviorType = InstanceType<typeof EnergyEvseModeBehavior>;
-export interface EnergyEvseModeBehavior extends EnergyEvseModeBehaviorType {}
-type StateType = InstanceType<typeof EnergyEvseModeBehavior.State>;
-export namespace EnergyEvseModeBehavior { export interface State extends StateType {} }
+export interface EnergyEvseModeBehaviorConstructor extends Identity<typeof EnergyEvseModeBehaviorConstructor> {}
+export const EnergyEvseModeBehavior: EnergyEvseModeBehaviorConstructor = EnergyEvseModeBehaviorConstructor;
+export interface EnergyEvseModeBehavior extends InstanceType<EnergyEvseModeBehaviorConstructor> {}
+export namespace EnergyEvseModeBehavior {
+    export interface State extends InstanceType<typeof EnergyEvseModeBehavior.State> {}
+}

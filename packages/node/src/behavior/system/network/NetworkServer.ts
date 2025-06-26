@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, Logger } from "#general";
+import { Logger } from "#general";
 import { ServerSubscriptionConfig } from "#node/server/ServerSubscription.js";
 import { Ble } from "#protocol";
 import { DiscoveryCapabilitiesBitmap, TypeFromPartialBitSchema } from "#types";
@@ -17,7 +17,7 @@ const logger = Logger.get("NetworkingServer");
 /**
  * Server implementation of {@link NetworkBehavior}.
  *
- * This behavior mostly deals with configuration and events.  {@link NetworkServer} provides the actual network
+ * This behavior mostly deals with configuration and events.  {@link ServerNetworkRuntime} provides the actual network
  * implementation.
  */
 export class NetworkServer extends NetworkBehavior {
@@ -52,35 +52,6 @@ export class NetworkServer extends NetworkBehavior {
         this.reactTo(this.agent.get(CommissioningServer).events.commissioned, this.#endUncommissionedMode);
 
         return super.initialize();
-    }
-
-    /**
-     * Advertise and continue advertising at regular intervals until timeout per Matter specification.  If already
-     * advertising, the advertisement timeout resets.
-     *
-     * If the node is uncommissioned and commissioning is enabled, announces as commissionable on all available
-     * transports. Commissioned devices only advertise for operational discovery via DNS-SD.
-     *
-     * Advertisement begins at startup.
-     */
-    openAdvertisementWindow() {
-        if (!this.internal.runtime) {
-            throw new ImplementationError("Cannot advertise offline server");
-        }
-
-        this.internal.runtime
-            .openAdvertisementWindow()
-            .catch(error => logger.error("Failed to open advertisement window", error));
-    }
-
-    /**
-     * Immediately broadcast presence to the network regardless of whether the advertisement window is open.
-     */
-    advertiseNow() {
-        if (!this.internal.runtime) {
-            throw new ImplementationError("Cannot advertise offline server");
-        }
-        this.env.runtime.add(this.internal.runtime.advertiseNow());
     }
 
     #endUncommissionedMode() {

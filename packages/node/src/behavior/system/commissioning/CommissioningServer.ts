@@ -14,13 +14,24 @@ import {
     Lifecycle,
     Logger,
     MatterFlowError,
+    Mutex,
     Observable,
 } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import type { Node } from "#node/Node.js";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import type { ServerNode } from "#node/ServerNode.js";
-import { ExposedFabricInformation, FabricAction, FabricManager, FailsafeContext, PaseClient, Val } from "#protocol";
+import {
+    CommissioningConfigProvider,
+    DeviceAdvertiser,
+    DeviceCommissioner,
+    ExposedFabricInformation,
+    FabricAction,
+    FabricManager,
+    FailsafeContext,
+    PaseClient,
+    Val,
+} from "#protocol";
 import {
     CommissioningFlowType,
     CommissioningOptions,
@@ -35,6 +46,7 @@ import { OperationalCredentialsBehavior } from "../../../behaviors/operational-c
 import { Behavior } from "../../Behavior.js";
 import { ActionContext } from "../../context/ActionContext.js";
 import { NetworkServer } from "../network/NetworkServer.js";
+import { ProductDescriptionServer } from "../product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 
 const logger = Logger.get("Commissioning");
@@ -54,6 +66,9 @@ export class CommissioningServer extends Behavior {
     static override early = true;
 
     override initialize() {
+        // This provides a name for the mutex error handler
+        this.internal.name = this.toString();
+
         if (this.state.passcode === -1) {
             this.state.passcode = PaseClient.generateRandomPasscode(this.env.get(Crypto));
         } else if (CommissioningOptions.FORBIDDEN_PASSCODES.includes(this.state.passcode)) {
@@ -64,13 +79,28 @@ export class CommissioningServer extends Behavior {
             this.state.discriminator = PaseClient.generateRandomDiscriminator(this.env.get(Crypto));
         }
 
-        this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline);
-
         this.reactTo((this.endpoint as Node).lifecycle.partsReady, this.#initializeNode);
+
+        // Ensure the environment conveys commissioning configuration to the DeviceCommissioner
+        if (!this.env.has(CommissioningConfigProvider)) {
+            // Configure the DeviceCommissioner
+            this.env.set(
+                CommissioningConfigProvider,
+                new CommissioningServerConfigProvider(this.endpoint as ServerNode),
+            );
+        }
+
+        this.reactTo((this.endpoint as Node).lifecycle.online, this.#enterOnlineMode);
+
+        this.reactTo((this.endpoint as Node).lifecycle.goingOffline, this.#enterOfflineMode);
     }
 
-    override [Symbol.asyncDispose]() {
-        this.internal.unregisterFailsafeListener?.();
+    override async [Symbol.asyncDispose]() {
+        // Ensure dependencies are cleaned up
+        this.#enterOfflineMode();
+
+        // Wait for cleanup to finish
+        await this.internal.mutex;
     }
 
     handleFabricChange(fabricIndex: FabricIndex, fabricAction: FabricAction) {
@@ -166,15 +196,79 @@ export class CommissioningServer extends Behavior {
         failsafe.construction.change.on(listener);
     }
 
+    #enterOnlineMode() {
+        // If already commissioned, trigger operational announcement
+        if ((this.endpoint.lifecycle as NodeLifecycle).isCommissioned) {
+            this.enterOperationalMode();
+            return;
+        }
+
+        // Skip auto commissioning if disabled
+        if (this.state.enabled === false) {
+            return;
+        }
+
+        // ...or if node is commissioned
+        if (this.env.get(FabricManager).fabrics.length) {
+            return;
+        }
+
+        // ...or the node has no advertisable device type
+        if (!this.#hasAdvertisableDeviceType) {
+            return;
+        }
+
+        // Advertise as commissionable
+        this.enterCommissionableMode();
+    }
+
+    #enterOfflineMode() {
+        this.internal.mutex.run(async () => {
+            await this.env.close(DeviceCommissioner);
+            this.env.delete(CommissioningConfigProvider);
+            this.internal.unregisterFailsafeListener?.();
+            await this.env.close(FailsafeContext);
+        });
+    }
+
     /**
-     * The server invokes this method when the node is active but not yet commissioned unless you set
-     * {@link CommissioningServer.State#enabled} to false.
-     *
      * An uncommissioned node is not yet associated with fabrics.  It cannot be used until commissioned by a controller.
+     *
+     * The server normally invokes this method when the node starts and is not yet commissioned.  You can disable by
+     * setting {@link CommissioningServer.State#enabled} to false.  Then you must invoke yourself.
+     */
+    enterCommissionableMode() {
+        if (!this.#hasAdvertisableDeviceType) {
+            throw new ImplementationError(
+                `Node ${this.endpoint} has no endpoints with advertisable device types; you must add an endpoint or set the device type`,
+            );
+        }
+
+        // Ensure a device commissioner is loaded
+        //
+        // TODO - DeviceCommissioner/DeviceAdvertiser API is convoluted; refactor to allow directly moving to the
+        // desired mode
+        this.env.get(DeviceCommissioner);
+
+        this.beginAdvertising();
+
+        this.initiateCommissioning();
+    }
+
+    /**
+     * The server invokes this method when the node starts and is already commissioned, or immediately after
+     * commissioning.
+     */
+    protected enterOperationalMode() {
+        this.beginAdvertising();
+    }
+
+    /**
+     * Display instructions on commissioning the device.
      *
      * The default implementation logs the QR code and credentials.
      */
-    initiateCommissioning() {
+    protected initiateCommissioning() {
         const { passcode, discriminator } = this.state;
 
         const { qrPairingCode, manualPairingCode } = this.state.pairingCodes;
@@ -236,15 +330,30 @@ export class CommissioningServer extends Behavior {
         ],
     });
 
-    #nodeOnline() {
-        if (this.state.enabled && !this.env.get(FabricManager).fabrics.length) {
-            this.initiateCommissioning();
+    /**
+     * Advertise and continue advertising at regular intervals until timeout per Matter specification.  If already
+     * advertising, the advertisement timeout resets.
+     */
+    beginAdvertising() {
+        if (!(this.endpoint.lifecycle as NodeLifecycle).isOnline) {
+            throw new ImplementationError("Cannot advertise offline server");
         }
+
+        this.env
+            .get(DeviceAdvertiser)
+            .startAdvertising()
+            .catch(error => logger.error("Failed to open advertisement window", error));
     }
 
     #initializeNode() {
         this.state.commissioned = !!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics;
         (this.endpoint.lifecycle as NodeLifecycle).initialized.emit(this.state.commissioned);
+    }
+
+    get #hasAdvertisableDeviceType() {
+        return (
+            this.agent.get(ProductDescriptionServer).state.deviceType !== ProductDescriptionServer.UNKNOWN_DEVICE_TYPE
+        );
     }
 }
 
@@ -256,6 +365,19 @@ export namespace CommissioningServer {
 
     export class Internal {
         unregisterFailsafeListener?: () => void = undefined;
+
+        /**
+         * We use this to synchronize internal state transitions that would otherwise have race conditions due to the
+         * large number of asynchronous calls.
+         */
+        mutex = new Mutex({
+            toString: () => this.name,
+        });
+
+        /**
+         * Passed to the mutex for error handling purposes
+         */
+        name = "?";
     }
 
     export class State {
@@ -293,5 +415,30 @@ export namespace CommissioningServer {
         decommissioned = Observable<[context: ActionContext]>();
         fabricsChanged = Observable<[fabricIndex: FabricIndex, action: FabricAction]>();
         enabled$Changed = AsyncObservable<[context: ActionContext]>();
+    }
+}
+
+/**
+ * Conveys configuration information to {@link DeviceCommissioner}.
+ */
+class CommissioningServerConfigProvider extends CommissioningConfigProvider {
+    #node: ServerNode;
+
+    constructor(node: ServerNode) {
+        super();
+
+        this.#node = node;
+    }
+
+    override get values() {
+        const { commissioning, productDescription, network } = this.#node.state;
+
+        const config = {
+            ...commissioning,
+            productDescription,
+            ble: !!network.ble,
+        };
+
+        return config as CommissioningOptions.Configuration;
     }
 }

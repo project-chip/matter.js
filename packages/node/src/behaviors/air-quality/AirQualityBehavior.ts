@@ -8,13 +8,14 @@
 
 import { AirQuality } from "#clusters/air-quality";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * AirQualityBehavior is the base class for objects that support interaction with {@link AirQuality.Cluster}.
  */
-export const AirQualityBehavior = ClusterBehavior.for(AirQuality.Cluster);
+export const AirQualityBehaviorConstructor = ClusterBehavior.for(AirQuality.Cluster);
 
-type AirQualityBehaviorType = InstanceType<typeof AirQualityBehavior>;
-export interface AirQualityBehavior extends AirQualityBehaviorType {}
-type StateType = InstanceType<typeof AirQualityBehavior.State>;
-export namespace AirQualityBehavior { export interface State extends StateType {} }
+export interface AirQualityBehaviorConstructor extends Identity<typeof AirQualityBehaviorConstructor> {}
+export const AirQualityBehavior: AirQualityBehaviorConstructor = AirQualityBehaviorConstructor;
+export interface AirQualityBehavior extends InstanceType<AirQualityBehaviorConstructor> {}
+export namespace AirQualityBehavior { export interface State extends InstanceType<typeof AirQualityBehavior.State> {} }

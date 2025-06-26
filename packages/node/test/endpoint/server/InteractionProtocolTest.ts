@@ -1016,29 +1016,27 @@ describe("InteractionProtocol", () => {
 
     async function createNode(maxPathsPerInvoke = 100) {
         node = await MockServerNode.createOnline({
-            config: {
-                type: ServerNode.RootEndpoint.with(AdministratorCommissioningServer.with("Basic")),
-                basicInformation: {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    uniqueId: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 100,
-                        subscriptionsPerFabric: 100,
-                    },
-                    specificationVersion: Specification.SPECIFICATION_VERSION,
-                    maxPathsPerInvoke,
+            type: ServerNode.RootEndpoint.with(AdministratorCommissioningServer.with("Basic")),
+            basicInformation: {
+                dataModelRevision: 1,
+                vendorName: "vendor",
+                vendorId: VendorId(1),
+                productName: "product",
+                productId: 2,
+                nodeLabel: "",
+                uniqueId: "",
+                hardwareVersion: 0,
+                hardwareVersionString: "0",
+                location: "US",
+                localConfigDisabled: false,
+                softwareVersion: 1,
+                softwareVersionString: "v1",
+                capabilityMinima: {
+                    caseSessionsPerFabric: 100,
+                    subscriptionsPerFabric: 100,
                 },
+                specificationVersion: Specification.SPECIFICATION_VERSION,
+                maxPathsPerInvoke,
             },
             device: undefined,
         });

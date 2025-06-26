@@ -10,6 +10,7 @@ import { SmokeCoAlarm } from "#clusters/smoke-co-alarm";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { SmokeCoAlarmInterface } from "./SmokeCoAlarmInterface.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * SmokeCoAlarmBehavior is the base class for objects that support interaction with {@link SmokeCoAlarm.Cluster}.
@@ -17,11 +18,11 @@ import { ClusterType } from "#types";
  * SmokeCoAlarm.Cluster requires you to enable one or more optional features. You can do so using
  * {@link SmokeCoAlarmBehavior.with}.
  */
-export const SmokeCoAlarmBehavior = ClusterBehavior
+export const SmokeCoAlarmBehaviorConstructor = ClusterBehavior
     .withInterface<SmokeCoAlarmInterface>()
     .for(ClusterType(SmokeCoAlarm.Base));
 
-type SmokeCoAlarmBehaviorType = InstanceType<typeof SmokeCoAlarmBehavior>;
-export interface SmokeCoAlarmBehavior extends SmokeCoAlarmBehaviorType {}
-type StateType = InstanceType<typeof SmokeCoAlarmBehavior.State>;
-export namespace SmokeCoAlarmBehavior { export interface State extends StateType {} }
+export interface SmokeCoAlarmBehaviorConstructor extends Identity<typeof SmokeCoAlarmBehaviorConstructor> {}
+export const SmokeCoAlarmBehavior: SmokeCoAlarmBehaviorConstructor = SmokeCoAlarmBehaviorConstructor;
+export interface SmokeCoAlarmBehavior extends InstanceType<SmokeCoAlarmBehaviorConstructor> {}
+export namespace SmokeCoAlarmBehavior { export interface State extends InstanceType<typeof SmokeCoAlarmBehavior.State> {} }

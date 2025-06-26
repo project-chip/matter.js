@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { Logger, MatterError, NetworkError, NoResponseTimeoutError, ObserverGroup, Time, Timer } from "#general";
 import { Specification } from "#model";
@@ -31,7 +32,6 @@ import {
     StatusCode,
     StatusResponseError,
 } from "#types";
-import { WithActivity, activityKey } from "./InteractionServer.js";
 
 const logger = Logger.get("ServerSubscription");
 
@@ -614,7 +614,7 @@ export class ServerSubscription extends Subscription {
         };
 
         const session = OnlineContext({
-            activity: (exchange as WithActivity)[activityKey],
+            activity: (exchange as NodeActivity.WithActivity)[NodeActivity.activityKey],
             fabricFiltered: request.isFabricFiltered,
             message: {} as Message,
             exchange,

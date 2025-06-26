@@ -9,3 +9,4 @@
 export * from "./SoftwareDiagnosticsInterface.js";
 export * from "./SoftwareDiagnosticsBehavior.js";
 export * from "./SoftwareDiagnosticsServer.js";
+export * from "./SoftwareDiagnosticsClient.js";

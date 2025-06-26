@@ -13,8 +13,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "All tests",
             "args": [
@@ -37,8 +39,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test current file",
             "args": [
@@ -65,8 +69,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run current file",
             "args": [
@@ -90,11 +96,13 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run shell",
-            "cwd": "${workspaceFolder}/packages/nodejs-shell",
+            "cwd": "${workspaceFolder}/support/codegen/packages/nodejs-shell",
             "args": [
                 "--clear",
                 "dist/cjs/app.js"
@@ -117,11 +125,13 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run CLI tool",
-            "cwd": "${workspaceFolder}/packages/cli-tool",
+            "cwd": "${workspaceFolder}/support/codegen/packages/cli-tool",
             "args": [
                 "--clear",
                 "bin/matter.js"
@@ -144,8 +154,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test @matter/testing",
             "cwd": "${workspaceFolder}/packages/testing",
@@ -170,8 +182,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test @matter/general",
             "cwd": "${workspaceFolder}/packages/general",
@@ -196,8 +210,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test @matter/model",
             "cwd": "${workspaceFolder}/packages/model",
@@ -222,8 +238,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test @matter/types",
             "cwd": "${workspaceFolder}/packages/types",
@@ -248,8 +266,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test @matter/protocol",
             "cwd": "${workspaceFolder}/packages/protocol",
@@ -274,8 +294,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test @matter/node",
             "cwd": "${workspaceFolder}/packages/node",
@@ -300,8 +322,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test @matter/nodejs",
             "cwd": "${workspaceFolder}/packages/nodejs",
@@ -326,8 +350,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test @matter/chip-testing",
             "cwd": "${workspaceFolder}/support/chip-testing",
@@ -352,8 +378,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test @matter/integration-tests",
             "cwd": "${workspaceFolder}/support/tests",
@@ -378,8 +406,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test chip:app-cc",
             "cwd": "${workspaceFolder}/support/chip-testing",
@@ -408,8 +438,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test chip:app-fast",
             "cwd": "${workspaceFolder}/support/chip-testing",
@@ -438,8 +470,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test chip:app-slow",
             "cwd": "${workspaceFolder}/support/chip-testing",
@@ -468,8 +502,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Test chip:core",
             "cwd": "${workspaceFolder}/support/chip-testing",
@@ -498,8 +534,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run ControllerNode",
             "args": [
@@ -524,8 +562,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run AirQualitySensorDeviceNode",
             "args": [
@@ -550,8 +590,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run BridgedDevicesNode",
             "args": [
@@ -576,8 +618,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run ComposedDeviceNode",
             "args": [
@@ -602,8 +646,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run IlluminatedRollerShade",
             "args": [
@@ -628,8 +674,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run MeasuredSocketDevice",
             "args": [
@@ -654,8 +702,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run MultiDeviceNode",
             "args": [
@@ -680,8 +730,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run DeviceNode",
             "args": [
@@ -706,8 +758,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run DeviceNodeFull",
             "args": [
@@ -732,8 +786,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run LightDevice",
             "args": [
@@ -758,8 +814,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run RoboticVacuumCleanerDevice",
             "args": [
@@ -784,8 +842,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run RvcDeviceLogic",
             "args": [
@@ -810,8 +870,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run SensorDeviceNode",
             "args": [
@@ -836,8 +898,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Run SmokeCOAlarmDeviceNode",
             "args": [
@@ -862,8 +926,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Generate chip",
             "args": [
@@ -888,8 +954,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Generate clusters",
             "args": [
@@ -914,8 +982,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Generate endpoints",
             "args": [
@@ -940,8 +1010,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Generate forwards",
             "args": [
@@ -966,8 +1038,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Generate model",
             "args": [
@@ -992,8 +1066,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Generate spec",
             "args": [
@@ -1021,8 +1097,10 @@
                 "--enable-source-maps"
             ],
             "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
+                "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+                "${workspaceFolder}/packages/*/build/esm/**/*.js",
+                "${workspaceFolder}/support/*/dist/esm/**/*.js",
+                "${workspaceFolder}/support/*/build/esm/**/*.js"
             ],
             "name": "Generate vscode",
             "args": [

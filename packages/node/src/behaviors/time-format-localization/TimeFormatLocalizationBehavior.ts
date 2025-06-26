@@ -8,6 +8,7 @@
 
 import { TimeFormatLocalization } from "#clusters/time-format-localization";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * TimeFormatLocalizationBehavior is the base class for objects that support interaction with
@@ -16,9 +17,11 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
  * This class does not have optional features of TimeFormatLocalization.Cluster enabled. You can enable additional
  * features using TimeFormatLocalizationBehavior.with.
  */
-export const TimeFormatLocalizationBehavior = ClusterBehavior.for(TimeFormatLocalization.Cluster);
+export const TimeFormatLocalizationBehaviorConstructor = ClusterBehavior.for(TimeFormatLocalization.Cluster);
 
-type TimeFormatLocalizationBehaviorType = InstanceType<typeof TimeFormatLocalizationBehavior>;
-export interface TimeFormatLocalizationBehavior extends TimeFormatLocalizationBehaviorType {}
-type StateType = InstanceType<typeof TimeFormatLocalizationBehavior.State>;
-export namespace TimeFormatLocalizationBehavior { export interface State extends StateType {} }
+export interface TimeFormatLocalizationBehaviorConstructor extends Identity<typeof TimeFormatLocalizationBehaviorConstructor> {}
+export const TimeFormatLocalizationBehavior: TimeFormatLocalizationBehaviorConstructor = TimeFormatLocalizationBehaviorConstructor;
+export interface TimeFormatLocalizationBehavior extends InstanceType<TimeFormatLocalizationBehaviorConstructor> {}
+export namespace TimeFormatLocalizationBehavior {
+    export interface State extends InstanceType<typeof TimeFormatLocalizationBehavior.State> {}
+}

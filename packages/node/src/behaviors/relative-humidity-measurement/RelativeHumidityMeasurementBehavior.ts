@@ -8,14 +8,17 @@
 
 import { RelativeHumidityMeasurement } from "#clusters/relative-humidity-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * RelativeHumidityMeasurementBehavior is the base class for objects that support interaction with
  * {@link RelativeHumidityMeasurement.Cluster}.
  */
-export const RelativeHumidityMeasurementBehavior = ClusterBehavior.for(RelativeHumidityMeasurement.Cluster);
+export const RelativeHumidityMeasurementBehaviorConstructor = ClusterBehavior.for(RelativeHumidityMeasurement.Cluster);
 
-type RelativeHumidityMeasurementBehaviorType = InstanceType<typeof RelativeHumidityMeasurementBehavior>;
-export interface RelativeHumidityMeasurementBehavior extends RelativeHumidityMeasurementBehaviorType {}
-type StateType = InstanceType<typeof RelativeHumidityMeasurementBehavior.State>;
-export namespace RelativeHumidityMeasurementBehavior { export interface State extends StateType {} }
+export interface RelativeHumidityMeasurementBehaviorConstructor extends Identity<typeof RelativeHumidityMeasurementBehaviorConstructor> {}
+export const RelativeHumidityMeasurementBehavior: RelativeHumidityMeasurementBehaviorConstructor = RelativeHumidityMeasurementBehaviorConstructor;
+export interface RelativeHumidityMeasurementBehavior extends InstanceType<RelativeHumidityMeasurementBehaviorConstructor> {}
+export namespace RelativeHumidityMeasurementBehavior {
+    export interface State extends InstanceType<typeof RelativeHumidityMeasurementBehavior.State> {}
+}

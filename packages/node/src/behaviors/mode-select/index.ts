@@ -9,3 +9,4 @@
 export * from "./ModeSelectInterface.js";
 export * from "./ModeSelectBehavior.js";
 export * from "./ModeSelectServer.js";
+export * from "./ModeSelectClient.js";

@@ -144,7 +144,9 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
             if (subref === undefined) {
                 subref = ManagedReference(
                     reference,
-                    index,
+                    "name",
+                    index, // For managed reference's purposes this is our "name"
+                    undefined,
 
                     () => true,
 

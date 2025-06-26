@@ -9,3 +9,4 @@
 export * from "./LowPowerInterface.js";
 export * from "./LowPowerBehavior.js";
 export * from "./LowPowerServer.js";
+export * from "./LowPowerClient.js";

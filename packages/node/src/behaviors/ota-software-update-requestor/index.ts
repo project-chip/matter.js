@@ -9,3 +9,4 @@
 export * from "./OtaSoftwareUpdateRequestorInterface.js";
 export * from "./OtaSoftwareUpdateRequestorBehavior.js";
 export * from "./OtaSoftwareUpdateRequestorServer.js";
+export * from "./OtaSoftwareUpdateRequestorClient.js";

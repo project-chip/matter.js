@@ -9,3 +9,4 @@
 export * from "./ContentLauncherInterface.js";
 export * from "./ContentLauncherBehavior.js";
 export * from "./ContentLauncherServer.js";
+export * from "./ContentLauncherClient.js";

@@ -9,15 +9,16 @@
 import { RvcRunMode } from "#clusters/rvc-run-mode";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { RvcRunModeInterface } from "./RvcRunModeInterface.js";
+import { Identity } from "#general";
 
 /**
  * RvcRunModeBehavior is the base class for objects that support interaction with {@link RvcRunMode.Cluster}.
  */
-export const RvcRunModeBehavior = ClusterBehavior
+export const RvcRunModeBehaviorConstructor = ClusterBehavior
     .withInterface<RvcRunModeInterface>()
     .for(RvcRunMode.Cluster);
 
-type RvcRunModeBehaviorType = InstanceType<typeof RvcRunModeBehavior>;
-export interface RvcRunModeBehavior extends RvcRunModeBehaviorType {}
-type StateType = InstanceType<typeof RvcRunModeBehavior.State>;
-export namespace RvcRunModeBehavior { export interface State extends StateType {} }
+export interface RvcRunModeBehaviorConstructor extends Identity<typeof RvcRunModeBehaviorConstructor> {}
+export const RvcRunModeBehavior: RvcRunModeBehaviorConstructor = RvcRunModeBehaviorConstructor;
+export interface RvcRunModeBehavior extends InstanceType<RvcRunModeBehaviorConstructor> {}
+export namespace RvcRunModeBehavior { export interface State extends InstanceType<typeof RvcRunModeBehavior.State> {} }

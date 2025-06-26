@@ -9,6 +9,7 @@
 import { TimeSynchronization } from "#clusters/time-synchronization";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { TimeSynchronizationInterface } from "./TimeSynchronizationInterface.js";
+import { Identity } from "#general";
 
 /**
  * TimeSynchronizationBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { TimeSynchronizationInterface } from "./TimeSynchronizationInterface.js"
  * This class does not have optional features of TimeSynchronization.Cluster enabled. You can enable additional features
  * using TimeSynchronizationBehavior.with.
  */
-export const TimeSynchronizationBehavior = ClusterBehavior
+export const TimeSynchronizationBehaviorConstructor = ClusterBehavior
     .withInterface<TimeSynchronizationInterface>()
     .for(TimeSynchronization.Cluster);
 
-type TimeSynchronizationBehaviorType = InstanceType<typeof TimeSynchronizationBehavior>;
-export interface TimeSynchronizationBehavior extends TimeSynchronizationBehaviorType {}
-type StateType = InstanceType<typeof TimeSynchronizationBehavior.State>;
-export namespace TimeSynchronizationBehavior { export interface State extends StateType {} }
+export interface TimeSynchronizationBehaviorConstructor extends Identity<typeof TimeSynchronizationBehaviorConstructor> {}
+export const TimeSynchronizationBehavior: TimeSynchronizationBehaviorConstructor = TimeSynchronizationBehaviorConstructor;
+export interface TimeSynchronizationBehavior extends InstanceType<TimeSynchronizationBehaviorConstructor> {}
+export namespace TimeSynchronizationBehavior {
+    export interface State extends InstanceType<typeof TimeSynchronizationBehavior.State> {}
+}

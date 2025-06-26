@@ -9,6 +9,7 @@
 import { DoorLock } from "#clusters/door-lock";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { DoorLockInterface } from "./DoorLockInterface.js";
+import { Identity } from "#general";
 
 /**
  * DoorLockBehavior is the base class for objects that support interaction with {@link DoorLock.Cluster}.
@@ -16,11 +17,11 @@ import { DoorLockInterface } from "./DoorLockInterface.js";
  * This class does not have optional features of DoorLock.Cluster enabled. You can enable additional features using
  * DoorLockBehavior.with.
  */
-export const DoorLockBehavior = ClusterBehavior
+export const DoorLockBehaviorConstructor = ClusterBehavior
     .withInterface<DoorLockInterface>()
     .for(DoorLock.Cluster);
 
-type DoorLockBehaviorType = InstanceType<typeof DoorLockBehavior>;
-export interface DoorLockBehavior extends DoorLockBehaviorType {}
-type StateType = InstanceType<typeof DoorLockBehavior.State>;
-export namespace DoorLockBehavior { export interface State extends StateType {} }
+export interface DoorLockBehaviorConstructor extends Identity<typeof DoorLockBehaviorConstructor> {}
+export const DoorLockBehavior: DoorLockBehaviorConstructor = DoorLockBehaviorConstructor;
+export interface DoorLockBehavior extends InstanceType<DoorLockBehaviorConstructor> {}
+export namespace DoorLockBehavior { export interface State extends InstanceType<typeof DoorLockBehavior.State> {} }

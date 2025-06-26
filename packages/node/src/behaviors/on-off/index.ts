@@ -9,3 +9,4 @@
 export * from "./OnOffInterface.js";
 export * from "./OnOffBehavior.js";
 export * from "./OnOffServer.js";
+export * from "./OnOffClient.js";

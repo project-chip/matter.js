@@ -8,3 +8,4 @@
 
 export * from "./RefrigeratorAndTemperatureControlledCabinetModeBehavior.js";
 export * from "./RefrigeratorAndTemperatureControlledCabinetModeServer.js";
+export * from "./RefrigeratorAndTemperatureControlledCabinetModeClient.js";

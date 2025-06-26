@@ -9,6 +9,7 @@
 import { ThreadBorderRouterManagement } from "#clusters/thread-border-router-management";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ThreadBorderRouterManagementInterface } from "./ThreadBorderRouterManagementInterface.js";
+import { Identity } from "#general";
 
 /**
  * ThreadBorderRouterManagementBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { ThreadBorderRouterManagementInterface } from "./ThreadBorderRouterManag
  * This class does not have optional features of ThreadBorderRouterManagement.Cluster enabled. You can enable additional
  * features using ThreadBorderRouterManagementBehavior.with.
  */
-export const ThreadBorderRouterManagementBehavior = ClusterBehavior
+export const ThreadBorderRouterManagementBehaviorConstructor = ClusterBehavior
     .withInterface<ThreadBorderRouterManagementInterface>()
     .for(ThreadBorderRouterManagement.Cluster);
 
-type ThreadBorderRouterManagementBehaviorType = InstanceType<typeof ThreadBorderRouterManagementBehavior>;
-export interface ThreadBorderRouterManagementBehavior extends ThreadBorderRouterManagementBehaviorType {}
-type StateType = InstanceType<typeof ThreadBorderRouterManagementBehavior.State>;
-export namespace ThreadBorderRouterManagementBehavior { export interface State extends StateType {} }
+export interface ThreadBorderRouterManagementBehaviorConstructor extends Identity<typeof ThreadBorderRouterManagementBehaviorConstructor> {}
+export const ThreadBorderRouterManagementBehavior: ThreadBorderRouterManagementBehaviorConstructor = ThreadBorderRouterManagementBehaviorConstructor;
+export interface ThreadBorderRouterManagementBehavior extends InstanceType<ThreadBorderRouterManagementBehaviorConstructor> {}
+export namespace ThreadBorderRouterManagementBehavior {
+    export interface State extends InstanceType<typeof ThreadBorderRouterManagementBehavior.State> {}
+}

@@ -9,6 +9,7 @@
 import { OnOff } from "#clusters/on-off";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { OnOffInterface } from "./OnOffInterface.js";
+import { Identity } from "#general";
 
 /**
  * OnOffBehavior is the base class for objects that support interaction with {@link OnOff.Cluster}.
@@ -16,11 +17,11 @@ import { OnOffInterface } from "./OnOffInterface.js";
  * This class does not have optional features of OnOff.Cluster enabled. You can enable additional features using
  * OnOffBehavior.with.
  */
-export const OnOffBehavior = ClusterBehavior
+export const OnOffBehaviorConstructor = ClusterBehavior
     .withInterface<OnOffInterface>()
     .for(OnOff.Cluster);
 
-type OnOffBehaviorType = InstanceType<typeof OnOffBehavior>;
-export interface OnOffBehavior extends OnOffBehaviorType {}
-type StateType = InstanceType<typeof OnOffBehavior.State>;
-export namespace OnOffBehavior { export interface State extends StateType {} }
+export interface OnOffBehaviorConstructor extends Identity<typeof OnOffBehaviorConstructor> {}
+export const OnOffBehavior: OnOffBehaviorConstructor = OnOffBehaviorConstructor;
+export interface OnOffBehavior extends InstanceType<OnOffBehaviorConstructor> {}
+export namespace OnOffBehavior { export interface State extends InstanceType<typeof OnOffBehavior.State> {} }

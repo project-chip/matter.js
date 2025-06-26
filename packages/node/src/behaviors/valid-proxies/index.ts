@@ -9,3 +9,4 @@
 export * from "./ValidProxiesInterface.js";
 export * from "./ValidProxiesBehavior.js";
 export * from "./ValidProxiesServer.js";
+export * from "./ValidProxiesClient.js";

@@ -5,7 +5,7 @@
  */
 
 import { Construction, isDeepEqual, StorageContext } from "#general";
-import { EndpointStore } from "#node";
+import { ServerEndpointStore } from "#node";
 import { Val } from "@matter/protocol";
 
 /**
@@ -13,16 +13,17 @@ import { Val } from "@matter/protocol";
  * Most methods from EndpointStore are not meant to be used in this class. Please just use "get" and "set".
  * This class is supposed to be used in legacy code paths for Controller usage.
  */
-export class ClientEndpointStore extends EndpointStore {
-    readonly #construction: Construction<EndpointStore>;
+export class ClientEndpointStore extends ServerEndpointStore {
+    readonly #construction: Construction<ServerEndpointStore>;
     #values: Record<string, Val.Struct> = {};
 
     constructor(storage: StorageContext, load = true) {
-        super(storage, load);
+        super(storage);
 
         this.#construction = Construction(this, async () => {
-            await super.construction;
             if (load) {
+                await this.load();
+
                 // Copy over initial values from the superclass
                 this.#values = this.initialValues;
                 this.initialValues = {};
@@ -30,7 +31,7 @@ export class ClientEndpointStore extends EndpointStore {
         });
     }
 
-    override get construction() {
+    get construction() {
         return this.#construction;
     }
 

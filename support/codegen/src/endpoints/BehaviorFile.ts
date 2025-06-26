@@ -13,15 +13,17 @@ const logger = Logger.get("BehaviorFile");
 export class BehaviorFile extends TsFile {
     static readonly baseName = "Behavior";
     readonly definitionName: string;
+    #variance: ClusterVariance;
 
     constructor(
         name: string,
         public cluster: ClusterModel,
-        private variance: ClusterVariance,
+        variance: ClusterVariance,
     ) {
         super(name);
         this.definitionName = `${cluster.name}Behavior`;
         this.cluster = cluster;
+        this.#variance = variance;
 
         this.generate();
     }
@@ -32,10 +34,12 @@ export class BehaviorFile extends TsFile {
         this.addImport(`#clusters/${decamelize(this.cluster.name)}`, this.cluster.name);
         this.addImport("!node/behavior/cluster/ClusterBehavior.js", "ClusterBehavior");
 
-        const builder = this.builder(`export const ${this.cluster.name}Behavior = ClusterBehavior`);
+        const constructorName = `${this.definitionName}Constructor`;
+
+        const builder = this.builder(`export const ${constructorName} = ClusterBehavior`);
 
         // Install the interface if there are commands
-        const definingCluster = this.variance.cluster;
+        const definingCluster = this.#variance.cluster;
         if (definingCluster.commands.length) {
             const interfaceName = `${definingCluster.name}Interface`;
 
@@ -52,35 +56,38 @@ export class BehaviorFile extends TsFile {
 
         // Inject the cluster and appropriate documentation
         let extraDocs;
-        if (this.variance.requiresFeatures) {
+        if (this.#variance.requiresFeatures) {
             this.addImport(`#types`, "ClusterType");
             builder.atom(`for(ClusterType(${this.cluster.name}.Base))`);
             extraDocs =
                 `${this.cluster.name}.Cluster requires you to enable one or more optional features.  ` +
-                `You can do so using {@link ${this.cluster.name}Behavior.with}.`;
+                `You can do so using {@link ${this.definitionName}.with}.`;
         } else {
             builder.atom(`for(${this.cluster.name}.Cluster)`);
-            if (Object.keys(this.variance.components).length) {
+            if (Object.keys(this.#variance.components).length) {
                 extraDocs =
                     `This class does not have optional features of ${this.cluster.name}.Cluster enabled.  ` +
-                    `You can enable additional features using ${this.cluster.name}Behavior.with.`;
+                    `You can enable additional features using ${this.definitionName}.with.`;
             }
         }
 
         builder.document(
-            `${this.cluster.name}Behavior is the base class for objects that support interaction with {@link ${this.cluster.name}.Cluster}.`,
+            `${this.definitionName} is the base class for objects that support interaction with {@link ${this.cluster.name}.Cluster}.`,
             extraDocs,
         );
 
-        // Behavior is a generated class so we need to define a matching
-        // interface for it to act like a real class in TypeScript
-        this.atom(`type ${this.cluster.name}BehaviorType = InstanceType<typeof ${this.cluster.name}Behavior>`);
-        this.undefine(`${this.cluster.name}Behavior`);
-        this.atom(`export interface ${this.cluster.name}Behavior extends ${this.cluster.name}BehaviorType {}`);
+        // Export the constructor
+        this.file.addImport("#general", "Identity");
+        this.undefine(constructorName);
+        this.atom(`export interface ${constructorName} extends Identity<typeof ${constructorName}> {}`);
+        this.atom(`export const ${this.definitionName}: ${constructorName} = ${constructorName}`);
+
+        // Behavior is a generated class so we need to define types for it to act like a real class in typescript
+        this.undefine(`${this.definitionName}`);
+        this.atom(`export interface ${this.definitionName} extends InstanceType<${constructorName}> {}`);
 
         // We also need to generate an interface for State
-        this.atom(`type StateType = InstanceType<typeof ${this.cluster.name}Behavior.State>`);
-        const ns = this.expressions(`export namespace ${this.cluster.name}Behavior {`, "}");
-        ns.atom("export interface State extends StateType {}");
+        const ns = this.expressions(`export namespace ${this.definitionName} {`, "}");
+        ns.atom(`export interface State extends InstanceType<typeof ${this.definitionName}.State> {}`);
     }
 }

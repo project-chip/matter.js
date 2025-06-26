@@ -6,46 +6,75 @@
 
 import { ChannelType } from "#net/Channel.js";
 import { NetworkError } from "../Network.js";
-import { TransportInterface } from "../TransportInterface.js";
 import { MAX_UDP_MESSAGE_SIZE, UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
 import { MockNetwork } from "./MockNetwork.js";
-import { NetworkSimulator } from "./NetworkSimulator.js";
+import { MockRouter } from "./MockRouter.js";
 
 export class MockUdpChannel implements UdpChannel {
-    readonly #netListeners = new Array<TransportInterface.Listener>();
-    readonly #simulatedNetwork: NetworkSimulator;
-    readonly #listeningAddress?: string;
-    readonly #localAddress: string;
+    readonly #host: MockNetwork;
+    readonly #router = MockRouter();
+    readonly #sendFrom: string;
+    readonly #receiveFrom: Set<string>;
     readonly #listeningPort: number;
     readonly maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
 
     constructor(network: MockNetwork, { listeningAddress, listeningPort, netInterface, type }: UdpChannelOptions) {
         const { ipV4, ipV6 } = network.getIpMac(netInterface ?? "fake0");
-        const localAddress = type === "udp4" ? ipV4[0] : (ipV6[0] ?? ipV4[0]);
-        if (localAddress === undefined) {
-            throw new NetworkError("No matching IP on the specified interface");
+        let addresses = type === "udp4" ? ipV4 : ipV6;
+
+        this.#sendFrom = addresses[0];
+
+        if (listeningAddress !== undefined && listeningAddress !== "*") {
+            addresses = addresses.filter(addr => addr === listeningAddress);
         }
-        this.#localAddress = localAddress;
-        this.#simulatedNetwork = network.simulator;
-        this.#listeningAddress = listeningAddress;
+
+        if (!addresses.length) {
+            throw new NetworkError(`No ${type} IP matches ${listeningAddress ?? "*"} on the specified interface`);
+        }
+
+        this.#host = network;
+        this.#receiveFrom = new Set(addresses);
         this.#listeningPort = listeningPort ?? 1024 + Math.floor(Math.random() * 64511); // Random port 1024-65535
+
+        network.router.add(this.#router);
     }
 
-    onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: Uint8Array) => void) {
-        const netListener = this.#simulatedNetwork.onUdpData(this.#listeningAddress, this.#listeningPort, listener);
-        this.#netListeners.push(netListener);
-        return netListener;
+    onData(listener: UdpChannel.Callback) {
+        const router = (packet: MockRouter.Packet) => {
+            if (packet.kind !== "udp") {
+                return;
+            }
+            if (!this.#receiveFrom.has(packet.destAddress)) {
+                return;
+            }
+            if (packet.destPort !== this.#listeningPort) {
+                return;
+            }
+            listener("fake0", packet.sourceAddress, packet.sourcePort, packet.payload);
+        };
+
+        this.#router.add(router);
+
+        return {
+            close: async () => {
+                this.#router.delete(router);
+            },
+        };
     }
 
-    async send(host: string, port: number, data: Uint8Array) {
-        this.#simulatedNetwork.sendUdp(this.#localAddress, this.#listeningPort, host, port, data);
+    async send(host: string, port: number, payload: Uint8Array) {
+        this.#host.simulator.router({
+            kind: "udp",
+            sourceAddress: this.#sendFrom,
+            sourcePort: this.#listeningPort,
+            destAddress: host,
+            destPort: port,
+            payload,
+        });
     }
 
     async close() {
-        for (const netListener of this.#netListeners) {
-            await netListener.close();
-        }
-        this.#netListeners.length = 0;
+        this.#host.router.delete(this.#router);
     }
 
     async [Symbol.asyncDispose]() {
@@ -60,11 +89,11 @@ export class MockUdpChannel implements UdpChannel {
         return type === ChannelType.UDP;
     }
 
-    addMembership(_address: string): void {
-        // No-op for mock channel
+    addMembership(address: string): void {
+        this.#receiveFrom.add(address);
     }
 
-    dropMembership(_address: string): void {
-        // No-op for mock channel
+    dropMembership(address: string): void {
+        this.#receiveFrom.delete(address);
     }
 }

@@ -9,6 +9,7 @@
 import { ContentControl } from "#clusters/content-control";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ContentControlInterface } from "./ContentControlInterface.js";
+import { Identity } from "#general";
 
 /**
  * ContentControlBehavior is the base class for objects that support interaction with {@link ContentControl.Cluster}.
@@ -16,11 +17,13 @@ import { ContentControlInterface } from "./ContentControlInterface.js";
  * This class does not have optional features of ContentControl.Cluster enabled. You can enable additional features
  * using ContentControlBehavior.with.
  */
-export const ContentControlBehavior = ClusterBehavior
+export const ContentControlBehaviorConstructor = ClusterBehavior
     .withInterface<ContentControlInterface>()
     .for(ContentControl.Cluster);
 
-type ContentControlBehaviorType = InstanceType<typeof ContentControlBehavior>;
-export interface ContentControlBehavior extends ContentControlBehaviorType {}
-type StateType = InstanceType<typeof ContentControlBehavior.State>;
-export namespace ContentControlBehavior { export interface State extends StateType {} }
+export interface ContentControlBehaviorConstructor extends Identity<typeof ContentControlBehaviorConstructor> {}
+export const ContentControlBehavior: ContentControlBehaviorConstructor = ContentControlBehaviorConstructor;
+export interface ContentControlBehavior extends InstanceType<ContentControlBehaviorConstructor> {}
+export namespace ContentControlBehavior {
+    export interface State extends InstanceType<typeof ContentControlBehavior.State> {}
+}

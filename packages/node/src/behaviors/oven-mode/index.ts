@@ -8,3 +8,4 @@
 
 export * from "./OvenModeBehavior.js";
 export * from "./OvenModeServer.js";
+export * from "./OvenModeClient.js";

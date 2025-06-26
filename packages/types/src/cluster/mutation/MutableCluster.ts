@@ -15,7 +15,7 @@ import { ElementModifier } from "./ElementModifier.js";
  * defined by the Matter specification.
  */
 export type MutableCluster<
-    T extends ClusterType.Options,
+    T extends ClusterType.Options = ClusterType.Options,
     C extends ClusterComposer.Component[] = [],
 > = ClusterComposer.WithComponents<ClusterType.Of<T>, C> & MutableCluster.Methods<ClusterType.Of<T>>;
 
@@ -104,7 +104,7 @@ export namespace MutableCluster {
      * We define clusters this way if the Matter specification defines a cluster with a set of features, one of which is
      * required, but none of which is required if others are enabled.
      */
-    export interface ExtensibleOnly<T extends ClusterType.Options> {
+    export interface ExtensibleOnly<T extends ClusterType.Options = ClusterType.Options> {
         id: ClusterId;
         name: string;
 
@@ -114,7 +114,7 @@ export namespace MutableCluster {
     /**
      * Create a factory for clusters that require extension.
      */
-    export function ExtensibleOnly<const T extends ClusterType.Options>(options: T) {
+    export function ExtensibleOnly<const T extends ClusterType.Options = ClusterType.Options>(options: T) {
         return {
             id: options.id,
             name: options.name,

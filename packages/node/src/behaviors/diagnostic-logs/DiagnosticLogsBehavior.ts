@@ -9,15 +9,18 @@
 import { DiagnosticLogs } from "#clusters/diagnostic-logs";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { DiagnosticLogsInterface } from "./DiagnosticLogsInterface.js";
+import { Identity } from "#general";
 
 /**
  * DiagnosticLogsBehavior is the base class for objects that support interaction with {@link DiagnosticLogs.Cluster}.
  */
-export const DiagnosticLogsBehavior = ClusterBehavior
+export const DiagnosticLogsBehaviorConstructor = ClusterBehavior
     .withInterface<DiagnosticLogsInterface>()
     .for(DiagnosticLogs.Cluster);
 
-type DiagnosticLogsBehaviorType = InstanceType<typeof DiagnosticLogsBehavior>;
-export interface DiagnosticLogsBehavior extends DiagnosticLogsBehaviorType {}
-type StateType = InstanceType<typeof DiagnosticLogsBehavior.State>;
-export namespace DiagnosticLogsBehavior { export interface State extends StateType {} }
+export interface DiagnosticLogsBehaviorConstructor extends Identity<typeof DiagnosticLogsBehaviorConstructor> {}
+export const DiagnosticLogsBehavior: DiagnosticLogsBehaviorConstructor = DiagnosticLogsBehaviorConstructor;
+export interface DiagnosticLogsBehavior extends InstanceType<DiagnosticLogsBehaviorConstructor> {}
+export namespace DiagnosticLogsBehavior {
+    export interface State extends InstanceType<typeof DiagnosticLogsBehavior.State> {}
+}

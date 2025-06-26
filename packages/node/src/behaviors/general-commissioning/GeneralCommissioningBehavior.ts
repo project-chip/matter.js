@@ -9,6 +9,7 @@
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { GeneralCommissioningInterface } from "./GeneralCommissioningInterface.js";
+import { Identity } from "#general";
 
 /**
  * GeneralCommissioningBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { GeneralCommissioningInterface } from "./GeneralCommissioningInterface.j
  * This class does not have optional features of GeneralCommissioning.Cluster enabled. You can enable additional
  * features using GeneralCommissioningBehavior.with.
  */
-export const GeneralCommissioningBehavior = ClusterBehavior
+export const GeneralCommissioningBehaviorConstructor = ClusterBehavior
     .withInterface<GeneralCommissioningInterface>()
     .for(GeneralCommissioning.Cluster);
 
-type GeneralCommissioningBehaviorType = InstanceType<typeof GeneralCommissioningBehavior>;
-export interface GeneralCommissioningBehavior extends GeneralCommissioningBehaviorType {}
-type StateType = InstanceType<typeof GeneralCommissioningBehavior.State>;
-export namespace GeneralCommissioningBehavior { export interface State extends StateType {} }
+export interface GeneralCommissioningBehaviorConstructor extends Identity<typeof GeneralCommissioningBehaviorConstructor> {}
+export const GeneralCommissioningBehavior: GeneralCommissioningBehaviorConstructor = GeneralCommissioningBehaviorConstructor;
+export interface GeneralCommissioningBehavior extends InstanceType<GeneralCommissioningBehaviorConstructor> {}
+export namespace GeneralCommissioningBehavior {
+    export interface State extends InstanceType<typeof GeneralCommissioningBehavior.State> {}
+}

@@ -9,15 +9,16 @@
 import { Identify } from "#clusters/identify";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { IdentifyInterface } from "./IdentifyInterface.js";
+import { Identity } from "#general";
 
 /**
  * IdentifyBehavior is the base class for objects that support interaction with {@link Identify.Cluster}.
  */
-export const IdentifyBehavior = ClusterBehavior
+export const IdentifyBehaviorConstructor = ClusterBehavior
     .withInterface<IdentifyInterface>()
     .for(Identify.Cluster);
 
-type IdentifyBehaviorType = InstanceType<typeof IdentifyBehavior>;
-export interface IdentifyBehavior extends IdentifyBehaviorType {}
-type StateType = InstanceType<typeof IdentifyBehavior.State>;
-export namespace IdentifyBehavior { export interface State extends StateType {} }
+export interface IdentifyBehaviorConstructor extends Identity<typeof IdentifyBehaviorConstructor> {}
+export const IdentifyBehavior: IdentifyBehaviorConstructor = IdentifyBehaviorConstructor;
+export interface IdentifyBehavior extends InstanceType<IdentifyBehaviorConstructor> {}
+export namespace IdentifyBehavior { export interface State extends InstanceType<typeof IdentifyBehavior.State> {} }

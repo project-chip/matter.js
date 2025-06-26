@@ -10,6 +10,7 @@ import { MicrowaveOvenControl } from "#clusters/microwave-oven-control";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { MicrowaveOvenControlInterface } from "./MicrowaveOvenControlInterface.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * MicrowaveOvenControlBehavior is the base class for objects that support interaction with
@@ -18,11 +19,13 @@ import { ClusterType } from "#types";
  * MicrowaveOvenControl.Cluster requires you to enable one or more optional features. You can do so using
  * {@link MicrowaveOvenControlBehavior.with}.
  */
-export const MicrowaveOvenControlBehavior = ClusterBehavior
+export const MicrowaveOvenControlBehaviorConstructor = ClusterBehavior
     .withInterface<MicrowaveOvenControlInterface>()
     .for(ClusterType(MicrowaveOvenControl.Base));
 
-type MicrowaveOvenControlBehaviorType = InstanceType<typeof MicrowaveOvenControlBehavior>;
-export interface MicrowaveOvenControlBehavior extends MicrowaveOvenControlBehaviorType {}
-type StateType = InstanceType<typeof MicrowaveOvenControlBehavior.State>;
-export namespace MicrowaveOvenControlBehavior { export interface State extends StateType {} }
+export interface MicrowaveOvenControlBehaviorConstructor extends Identity<typeof MicrowaveOvenControlBehaviorConstructor> {}
+export const MicrowaveOvenControlBehavior: MicrowaveOvenControlBehaviorConstructor = MicrowaveOvenControlBehaviorConstructor;
+export interface MicrowaveOvenControlBehavior extends InstanceType<MicrowaveOvenControlBehaviorConstructor> {}
+export namespace MicrowaveOvenControlBehavior {
+    export interface State extends InstanceType<typeof MicrowaveOvenControlBehavior.State> {}
+}

@@ -8,3 +8,4 @@
 
 export * from "./DescriptorBehavior.js";
 export * from "./DescriptorServer.js";
+export * from "./DescriptorClient.js";

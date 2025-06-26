@@ -8,3 +8,4 @@
 
 export * from "./RvcCleanModeBehavior.js";
 export * from "./RvcCleanModeServer.js";
+export * from "./RvcCleanModeClient.js";

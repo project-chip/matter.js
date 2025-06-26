@@ -9,6 +9,7 @@
 import { HepaFilterMonitoring } from "#clusters/hepa-filter-monitoring";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ResourceMonitoringInterface } from "../resource-monitoring/ResourceMonitoringInterface.js";
+import { Identity } from "#general";
 
 /**
  * HepaFilterMonitoringBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { ResourceMonitoringInterface } from "../resource-monitoring/ResourceMoni
  * This class does not have optional features of HepaFilterMonitoring.Cluster enabled. You can enable additional
  * features using HepaFilterMonitoringBehavior.with.
  */
-export const HepaFilterMonitoringBehavior = ClusterBehavior
+export const HepaFilterMonitoringBehaviorConstructor = ClusterBehavior
     .withInterface<ResourceMonitoringInterface>()
     .for(HepaFilterMonitoring.Cluster);
 
-type HepaFilterMonitoringBehaviorType = InstanceType<typeof HepaFilterMonitoringBehavior>;
-export interface HepaFilterMonitoringBehavior extends HepaFilterMonitoringBehaviorType {}
-type StateType = InstanceType<typeof HepaFilterMonitoringBehavior.State>;
-export namespace HepaFilterMonitoringBehavior { export interface State extends StateType {} }
+export interface HepaFilterMonitoringBehaviorConstructor extends Identity<typeof HepaFilterMonitoringBehaviorConstructor> {}
+export const HepaFilterMonitoringBehavior: HepaFilterMonitoringBehaviorConstructor = HepaFilterMonitoringBehaviorConstructor;
+export interface HepaFilterMonitoringBehavior extends InstanceType<HepaFilterMonitoringBehaviorConstructor> {}
+export namespace HepaFilterMonitoringBehavior {
+    export interface State extends InstanceType<typeof HepaFilterMonitoringBehavior.State> {}
+}

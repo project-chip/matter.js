@@ -9,6 +9,7 @@
 import { ServiceArea } from "#clusters/service-area";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ServiceAreaInterface } from "./ServiceAreaInterface.js";
+import { Identity } from "#general";
 
 /**
  * ServiceAreaBehavior is the base class for objects that support interaction with {@link ServiceArea.Cluster}.
@@ -16,11 +17,11 @@ import { ServiceAreaInterface } from "./ServiceAreaInterface.js";
  * This class does not have optional features of ServiceArea.Cluster enabled. You can enable additional features using
  * ServiceAreaBehavior.with.
  */
-export const ServiceAreaBehavior = ClusterBehavior
+export const ServiceAreaBehaviorConstructor = ClusterBehavior
     .withInterface<ServiceAreaInterface>()
     .for(ServiceArea.Cluster);
 
-type ServiceAreaBehaviorType = InstanceType<typeof ServiceAreaBehavior>;
-export interface ServiceAreaBehavior extends ServiceAreaBehaviorType {}
-type StateType = InstanceType<typeof ServiceAreaBehavior.State>;
-export namespace ServiceAreaBehavior { export interface State extends StateType {} }
+export interface ServiceAreaBehaviorConstructor extends Identity<typeof ServiceAreaBehaviorConstructor> {}
+export const ServiceAreaBehavior: ServiceAreaBehaviorConstructor = ServiceAreaBehaviorConstructor;
+export interface ServiceAreaBehavior extends InstanceType<ServiceAreaBehaviorConstructor> {}
+export namespace ServiceAreaBehavior { export interface State extends InstanceType<typeof ServiceAreaBehavior.State> {} }

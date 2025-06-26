@@ -8,3 +8,4 @@
 
 export * from "./RelativeHumidityMeasurementBehavior.js";
 export * from "./RelativeHumidityMeasurementServer.js";
+export * from "./RelativeHumidityMeasurementClient.js";

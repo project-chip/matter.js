@@ -5,22 +5,25 @@
  */
 
 import { Behavior } from "#behavior/Behavior.js";
+import { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
 import { ClientBehaviorBacking } from "#behavior/internal/ClientBehaviorBacking.js";
+import { ServerBehaviorBacking } from "#behavior/internal/ServerBehaviorBacking.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import type { ClientNode } from "#node/ClientNode.js";
-import { NodeStore } from "#node/storage/NodeStore.js";
-import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
+import { NodeStore } from "#storage/NodeStore.js";
+import { ClientStructure } from "./ClientStructure.js";
 
 export class ClientEndpointInitializer extends EndpointInitializer {
     #node: ClientNode;
     #store: NodeStore;
+    #structure?: ClientStructure;
 
     constructor(node: ClientNode) {
         super();
         this.#node = node;
-        this.#store = node.env.get(ServerNodeStore).clientStores.storeForNode(node);
+        this.#store = node.env.get(NodeStore);
     }
 
     async eraseDescendant(endpoint: Endpoint) {
@@ -33,7 +36,7 @@ export class ClientEndpointInitializer extends EndpointInitializer {
             return;
         }
 
-        const store = this.#store.endpointStores.storeForEndpoint(endpoint);
+        const store = this.#store.storeForEndpoint(endpoint);
         await store.erase();
     }
 
@@ -41,18 +44,19 @@ export class ClientEndpointInitializer extends EndpointInitializer {
         // nothing to do
     }
 
-    get ready() {
-        return this.#store.construction.ready;
+    override createBacking(endpoint: Endpoint, type: Behavior.Type): BehaviorBacking {
+        if ((type as ClusterBehavior.Type).cluster === undefined) {
+            return new ServerBehaviorBacking(endpoint, type, endpoint.behaviors.optionsFor(type));
+        }
+
+        const store = this.structure.storeFor(endpoint, type as ClusterBehavior.Type);
+        return new ClientBehaviorBacking(endpoint, type, store, endpoint.behaviors.optionsFor(type));
     }
 
-    static async create(node: ClientNode) {
-        const instance = new ClientEndpointInitializer(node);
-        await instance.ready;
-        return instance;
-    }
-
-    override createBacking(endpoint: Endpoint, behavior: Behavior.Type): BehaviorBacking {
-        const store = this.#store.endpointStores.storeForEndpoint(endpoint);
-        return new ClientBehaviorBacking(endpoint, behavior, store, endpoint.behaviors.optionsFor(behavior));
+    get structure() {
+        if (this.#structure === undefined) {
+            this.#structure = new ClientStructure(this.#node);
+        }
+        return this.#structure;
     }
 }

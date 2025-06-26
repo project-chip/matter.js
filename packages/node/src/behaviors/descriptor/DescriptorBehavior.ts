@@ -8,6 +8,7 @@
 
 import { Descriptor } from "#clusters/descriptor";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * DescriptorBehavior is the base class for objects that support interaction with {@link Descriptor.Cluster}.
@@ -15,9 +16,9 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
  * This class does not have optional features of Descriptor.Cluster enabled. You can enable additional features using
  * DescriptorBehavior.with.
  */
-export const DescriptorBehavior = ClusterBehavior.for(Descriptor.Cluster);
+export const DescriptorBehaviorConstructor = ClusterBehavior.for(Descriptor.Cluster);
 
-type DescriptorBehaviorType = InstanceType<typeof DescriptorBehavior>;
-export interface DescriptorBehavior extends DescriptorBehaviorType {}
-type StateType = InstanceType<typeof DescriptorBehavior.State>;
-export namespace DescriptorBehavior { export interface State extends StateType {} }
+export interface DescriptorBehaviorConstructor extends Identity<typeof DescriptorBehaviorConstructor> {}
+export const DescriptorBehavior: DescriptorBehaviorConstructor = DescriptorBehaviorConstructor;
+export interface DescriptorBehavior extends InstanceType<DescriptorBehaviorConstructor> {}
+export namespace DescriptorBehavior { export interface State extends InstanceType<typeof DescriptorBehavior.State> {} }

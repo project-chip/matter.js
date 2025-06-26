@@ -8,3 +8,4 @@
 
 export * from "./OzoneConcentrationMeasurementBehavior.js";
 export * from "./OzoneConcentrationMeasurementServer.js";
+export * from "./OzoneConcentrationMeasurementClient.js";

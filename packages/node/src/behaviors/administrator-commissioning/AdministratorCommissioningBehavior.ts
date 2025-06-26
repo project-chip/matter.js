@@ -9,6 +9,7 @@
 import { AdministratorCommissioning } from "#clusters/administrator-commissioning";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { AdministratorCommissioningInterface } from "./AdministratorCommissioningInterface.js";
+import { Identity } from "#general";
 
 /**
  * AdministratorCommissioningBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { AdministratorCommissioningInterface } from "./AdministratorCommissionin
  * This class does not have optional features of AdministratorCommissioning.Cluster enabled. You can enable additional
  * features using AdministratorCommissioningBehavior.with.
  */
-export const AdministratorCommissioningBehavior = ClusterBehavior
+export const AdministratorCommissioningBehaviorConstructor = ClusterBehavior
     .withInterface<AdministratorCommissioningInterface>()
     .for(AdministratorCommissioning.Cluster);
 
-type AdministratorCommissioningBehaviorType = InstanceType<typeof AdministratorCommissioningBehavior>;
-export interface AdministratorCommissioningBehavior extends AdministratorCommissioningBehaviorType {}
-type StateType = InstanceType<typeof AdministratorCommissioningBehavior.State>;
-export namespace AdministratorCommissioningBehavior { export interface State extends StateType {} }
+export interface AdministratorCommissioningBehaviorConstructor extends Identity<typeof AdministratorCommissioningBehaviorConstructor> {}
+export const AdministratorCommissioningBehavior: AdministratorCommissioningBehaviorConstructor = AdministratorCommissioningBehaviorConstructor;
+export interface AdministratorCommissioningBehavior extends InstanceType<AdministratorCommissioningBehaviorConstructor> {}
+export namespace AdministratorCommissioningBehavior {
+    export interface State extends InstanceType<typeof AdministratorCommissioningBehavior.State> {}
+}

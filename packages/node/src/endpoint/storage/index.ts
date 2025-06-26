@@ -4,5 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./DatasourceStore.js";
-export * from "./EndpointStore.js";
+export * from "../../storage/client/DatasourceCache.js";
+export * from "../../storage/server/DatasourceStore.js";
+export * from "../../storage/server/ServerEndpointStore.js";

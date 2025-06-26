@@ -8,13 +8,14 @@
 
 import { Binding } from "#clusters/binding";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * BindingBehavior is the base class for objects that support interaction with {@link Binding.Cluster}.
  */
-export const BindingBehavior = ClusterBehavior.for(Binding.Cluster);
+export const BindingBehaviorConstructor = ClusterBehavior.for(Binding.Cluster);
 
-type BindingBehaviorType = InstanceType<typeof BindingBehavior>;
-export interface BindingBehavior extends BindingBehaviorType {}
-type StateType = InstanceType<typeof BindingBehavior.State>;
-export namespace BindingBehavior { export interface State extends StateType {} }
+export interface BindingBehaviorConstructor extends Identity<typeof BindingBehaviorConstructor> {}
+export const BindingBehavior: BindingBehaviorConstructor = BindingBehaviorConstructor;
+export interface BindingBehavior extends InstanceType<BindingBehaviorConstructor> {}
+export namespace BindingBehavior { export interface State extends InstanceType<typeof BindingBehavior.State> {} }

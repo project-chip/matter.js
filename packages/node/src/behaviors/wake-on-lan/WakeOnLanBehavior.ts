@@ -8,13 +8,14 @@
 
 import { WakeOnLan } from "#clusters/wake-on-lan";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * WakeOnLanBehavior is the base class for objects that support interaction with {@link WakeOnLan.Cluster}.
  */
-export const WakeOnLanBehavior = ClusterBehavior.for(WakeOnLan.Cluster);
+export const WakeOnLanBehaviorConstructor = ClusterBehavior.for(WakeOnLan.Cluster);
 
-type WakeOnLanBehaviorType = InstanceType<typeof WakeOnLanBehavior>;
-export interface WakeOnLanBehavior extends WakeOnLanBehaviorType {}
-type StateType = InstanceType<typeof WakeOnLanBehavior.State>;
-export namespace WakeOnLanBehavior { export interface State extends StateType {} }
+export interface WakeOnLanBehaviorConstructor extends Identity<typeof WakeOnLanBehaviorConstructor> {}
+export const WakeOnLanBehavior: WakeOnLanBehaviorConstructor = WakeOnLanBehaviorConstructor;
+export interface WakeOnLanBehavior extends InstanceType<WakeOnLanBehaviorConstructor> {}
+export namespace WakeOnLanBehavior { export interface State extends InstanceType<typeof WakeOnLanBehavior.State> {} }

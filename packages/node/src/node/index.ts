@@ -9,4 +9,3 @@ export * from "./Node.js";
 export * from "./NodeLifecycle.js";
 export * from "./server/index.js";
 export * from "./ServerNode.js";
-export * from "./storage/index.js";

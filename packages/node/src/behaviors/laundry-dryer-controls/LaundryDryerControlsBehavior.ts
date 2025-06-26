@@ -8,14 +8,17 @@
 
 import { LaundryDryerControls } from "#clusters/laundry-dryer-controls";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * LaundryDryerControlsBehavior is the base class for objects that support interaction with
  * {@link LaundryDryerControls.Cluster}.
  */
-export const LaundryDryerControlsBehavior = ClusterBehavior.for(LaundryDryerControls.Cluster);
+export const LaundryDryerControlsBehaviorConstructor = ClusterBehavior.for(LaundryDryerControls.Cluster);
 
-type LaundryDryerControlsBehaviorType = InstanceType<typeof LaundryDryerControlsBehavior>;
-export interface LaundryDryerControlsBehavior extends LaundryDryerControlsBehaviorType {}
-type StateType = InstanceType<typeof LaundryDryerControlsBehavior.State>;
-export namespace LaundryDryerControlsBehavior { export interface State extends StateType {} }
+export interface LaundryDryerControlsBehaviorConstructor extends Identity<typeof LaundryDryerControlsBehaviorConstructor> {}
+export const LaundryDryerControlsBehavior: LaundryDryerControlsBehaviorConstructor = LaundryDryerControlsBehaviorConstructor;
+export interface LaundryDryerControlsBehavior extends InstanceType<LaundryDryerControlsBehaviorConstructor> {}
+export namespace LaundryDryerControlsBehavior {
+    export interface State extends InstanceType<typeof LaundryDryerControlsBehavior.State> {}
+}

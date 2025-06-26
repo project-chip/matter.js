@@ -9,3 +9,4 @@
 export * from "./ThreadNetworkDiagnosticsInterface.js";
 export * from "./ThreadNetworkDiagnosticsBehavior.js";
 export * from "./ThreadNetworkDiagnosticsServer.js";
+export * from "./ThreadNetworkDiagnosticsClient.js";

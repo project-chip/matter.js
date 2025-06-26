@@ -9,6 +9,7 @@
 import { ModeSelect } from "#clusters/mode-select";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ModeSelectInterface } from "./ModeSelectInterface.js";
+import { Identity } from "#general";
 
 /**
  * ModeSelectBehavior is the base class for objects that support interaction with {@link ModeSelect.Cluster}.
@@ -16,11 +17,11 @@ import { ModeSelectInterface } from "./ModeSelectInterface.js";
  * This class does not have optional features of ModeSelect.Cluster enabled. You can enable additional features using
  * ModeSelectBehavior.with.
  */
-export const ModeSelectBehavior = ClusterBehavior
+export const ModeSelectBehaviorConstructor = ClusterBehavior
     .withInterface<ModeSelectInterface>()
     .for(ModeSelect.Cluster);
 
-type ModeSelectBehaviorType = InstanceType<typeof ModeSelectBehavior>;
-export interface ModeSelectBehavior extends ModeSelectBehaviorType {}
-type StateType = InstanceType<typeof ModeSelectBehavior.State>;
-export namespace ModeSelectBehavior { export interface State extends StateType {} }
+export interface ModeSelectBehaviorConstructor extends Identity<typeof ModeSelectBehaviorConstructor> {}
+export const ModeSelectBehavior: ModeSelectBehaviorConstructor = ModeSelectBehaviorConstructor;
+export interface ModeSelectBehavior extends InstanceType<ModeSelectBehaviorConstructor> {}
+export namespace ModeSelectBehavior { export interface State extends InstanceType<typeof ModeSelectBehavior.State> {} }

@@ -9,3 +9,4 @@
 export * from "./WaterHeaterManagementInterface.js";
 export * from "./WaterHeaterManagementBehavior.js";
 export * from "./WaterHeaterManagementServer.js";
+export * from "./WaterHeaterManagementClient.js";

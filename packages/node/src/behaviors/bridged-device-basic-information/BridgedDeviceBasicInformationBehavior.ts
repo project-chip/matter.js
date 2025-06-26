@@ -9,6 +9,7 @@
 import { BridgedDeviceBasicInformation } from "#clusters/bridged-device-basic-information";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { BridgedDeviceBasicInformationInterface } from "./BridgedDeviceBasicInformationInterface.js";
+import { Identity } from "#general";
 
 /**
  * BridgedDeviceBasicInformationBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { BridgedDeviceBasicInformationInterface } from "./BridgedDeviceBasicInfo
  * This class does not have optional features of BridgedDeviceBasicInformation.Cluster enabled. You can enable
  * additional features using BridgedDeviceBasicInformationBehavior.with.
  */
-export const BridgedDeviceBasicInformationBehavior = ClusterBehavior
+export const BridgedDeviceBasicInformationBehaviorConstructor = ClusterBehavior
     .withInterface<BridgedDeviceBasicInformationInterface>()
     .for(BridgedDeviceBasicInformation.Cluster);
 
-type BridgedDeviceBasicInformationBehaviorType = InstanceType<typeof BridgedDeviceBasicInformationBehavior>;
-export interface BridgedDeviceBasicInformationBehavior extends BridgedDeviceBasicInformationBehaviorType {}
-type StateType = InstanceType<typeof BridgedDeviceBasicInformationBehavior.State>;
-export namespace BridgedDeviceBasicInformationBehavior { export interface State extends StateType {} }
+export interface BridgedDeviceBasicInformationBehaviorConstructor extends Identity<typeof BridgedDeviceBasicInformationBehaviorConstructor> {}
+export const BridgedDeviceBasicInformationBehavior: BridgedDeviceBasicInformationBehaviorConstructor = BridgedDeviceBasicInformationBehaviorConstructor;
+export interface BridgedDeviceBasicInformationBehavior extends InstanceType<BridgedDeviceBasicInformationBehaviorConstructor> {}
+export namespace BridgedDeviceBasicInformationBehavior {
+    export interface State extends InstanceType<typeof BridgedDeviceBasicInformationBehavior.State> {}
+}

@@ -5,6 +5,7 @@
  */
 
 import {
+    camelize,
     Crypto,
     deepCopy,
     ImplementationError,
@@ -79,6 +80,8 @@ export interface Datasource<T extends StateType = StateType> extends Transaction
  */
 export function Datasource<const T extends StateType = StateType>(options: Datasource.Options<T>): Datasource<T> {
     const internals = configure(options);
+
+    configureExternalChanges(internals);
 
     let readOnlyView: undefined | InstanceType<T>;
 
@@ -194,12 +197,20 @@ export namespace Datasource {
         /**
          * Optional storage for non-volatile values.
          */
-        store?: Store;
+        store?: Store | ExternallyMutableStore;
 
         /**
          * The object that owns the datasource.  This is passed as the "owner" parameter to {@link Val.Dynamic}.
          */
         owner?: any;
+
+        /**
+         * The internal key used for storage of attributes and struct properties.  Defaults to name.  If set to ID but
+         * the schema has no ID, uses name instead.
+         *
+         * For structs we also support the other key (id or name) for input, but always write using the preferred key.
+         */
+        primaryKey?: "name" | "id";
     }
 
     /**
@@ -220,6 +231,33 @@ export namespace Datasource {
         set(transaction: Transaction, values: Val.Struct): Promise<void>;
     }
 
+    /**
+     * An extended {@link Store} that represents cached values that may mutate independently from the datasource.
+     */
+    export interface ExternallyMutableStore extends Store {
+        /**
+         * Apply changes from an external source.
+         *
+         * Uses the same semantics as {@link set}.
+         */
+        externalSet(values: Val.Struct): Promise<void>;
+
+        /**
+         * A listener that reacts to data changes.
+         */
+        externalChangeListener?: (changes: Val.Struct) => Promise<void>;
+
+        /**
+         * The current version of the data.
+         */
+        version: number;
+    }
+
+    /**
+     * The version we report until we've recorded a version.
+     */
+    export const UNKNOWN_VERSION = -1;
+
     export interface ValueObserver {
         (value: Val, oldValue: Val, context?: ValueSupervisor.Session): void;
     }
@@ -239,10 +277,13 @@ interface SessionContext {
 interface Internals extends Datasource.Options {
     values: Val.Struct;
     version: number;
+    manageVersion: boolean;
+    primaryKey: "name" | "id";
     sessions?: Map<ValueSupervisor.Session, SessionContext>;
     featuresKey?: string;
     interactionObserver(session?: AccessControl.Session): MaybePromise<void>;
     events: Datasource.InternalEvents;
+    changedEventFor(key: string): undefined | Datasource.Events[any];
 }
 
 /**
@@ -257,6 +298,9 @@ interface CommitChanges {
     changeList: Set<string>;
 }
 
+/**
+ * Initialize the internal version of the datasource.
+ */
 function configure(options: Datasource.Options): Internals {
     const values = new options.type() as Val.Struct;
 
@@ -293,12 +337,16 @@ function configure(options: Datasource.Options): Internals {
     const events = (options.events ?? {}) as Datasource.InternalEvents;
     events[changed] = new Observable();
 
+    let changedEventIndex: undefined | Map<string, undefined | Datasource.InternalEvents[`${string}$Changed`]>;
+
     return {
         ...options,
+        primaryKey: options.primaryKey === "id" ? "id" : "name",
         events,
         version: options.crypto.randomUint32,
-        values: values,
+        values,
         featuresKey,
+        manageVersion: true,
 
         interactionObserver(session?: ValueSupervisor.Session) {
             function handleObserverError(error: any) {
@@ -316,6 +364,107 @@ function configure(options: Datasource.Options): Internals {
                 }
             }
         },
+
+        changedEventFor(key: string) {
+            if (changedEventIndex === undefined) {
+                changedEventIndex = new Map();
+            } else if (changedEventIndex.has(key)) {
+                return changedEventIndex.get(key);
+            }
+
+            const id = Number.parseInt(key);
+            let event;
+            if (Number.isNaN(id)) {
+                event = events[`${key}$Changed`];
+            } else {
+                const field = options.supervisor.schema.member(id);
+                if (field !== undefined) {
+                    event = events[`${camelize(field.name)}$Changed`];
+                }
+            }
+
+            changedEventIndex.set(key, event);
+
+            return event;
+        },
+    };
+}
+
+/**
+ * If the store supports external mutation, add a listener to update internal state and notify observers.
+ *
+ * Currently ignores locks.  This is probably OK because locks should only be held if we're updating the source of
+ * truth.
+ */
+function configureExternalChanges(internals: Internals) {
+    const { store } = internals;
+    if (!store || !("externalSet" in store)) {
+        return;
+    }
+
+    internals.version = store.version;
+    internals.manageVersion = false;
+
+    store.externalChangeListener = async (potentialChanges: Val.Struct) => {
+        const { values } = internals;
+
+        let changes: undefined | Val.Struct;
+        let oldValues: undefined | Val.Struct;
+
+        for (const name in potentialChanges) {
+            if (isDeepEqual(values[name], potentialChanges[name])) {
+                continue;
+            }
+
+            if (changes === undefined) {
+                changes = { [name]: potentialChanges[name] };
+                oldValues = { [name]: values[name] };
+            } else {
+                changes[name] = potentialChanges[name];
+                oldValues![name] = values[name];
+            }
+        }
+
+        internals.version = store.version;
+
+        if (!changes) {
+            return;
+        }
+
+        internals.values = {
+            ...internals.values,
+            ...changes,
+        };
+
+        if (internals.sessions) {
+            for (const context of internals.sessions.values()) {
+                context.onChange(oldValues!);
+            }
+        }
+
+        const iterator = Object.keys(changes)[Symbol.iterator]();
+
+        return emitChanged();
+
+        function emitChanged(): MaybePromise<void> {
+            while (true) {
+                const n = iterator.next();
+                if (n.done) {
+                    return;
+                }
+
+                const name = n.value;
+                const event = internals.changedEventFor(name);
+                if (!event?.isObserved) {
+                    continue;
+                }
+
+                const result = event.emit(changes![name], oldValues![name]);
+                if (MaybePromise.is(result)) {
+                    return Promise.resolve(result).then(emitChanged);
+                }
+            }
+        }
     };
 }
 
@@ -362,6 +511,8 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
 
     // This is the actual reference
     const reference: Val.Reference<Val.Struct> = {
+        primaryKey: internals.primaryKey,
+
         get original() {
             return internals.values;
         },
@@ -501,6 +652,10 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
 
     // Increment data version
     function incrementVersion() {
+        if (!internals.manageVersion) {
+            return;
+        }
+
         // Update version
         internals.version++;
         if (internals.version > 0xffff_ffff) {
@@ -614,7 +769,7 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
                     changes.persistent[name] = values[name];
                 }
 
-                const event = internals.events?.[`${name}$Changed`];
+                const event = internals.changedEventFor(name);
                 if (event?.isObserved) {
                     changes.notifications.push({
                         event,

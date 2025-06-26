@@ -16,6 +16,7 @@ export const TlvSubscribeResponse = TlvObject({
 
     /** The final maximum interval for the subscription in seconds. */
     maxInterval: TlvField(2, TlvUInt16),
+
     interactionModelRevision: TlvField(0xff, TlvUInt8),
 });
 
