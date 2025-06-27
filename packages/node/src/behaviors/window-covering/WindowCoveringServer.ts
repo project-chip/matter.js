@@ -335,12 +335,12 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
      *
      * @protected
      */
-    protected async handleMovement(
+    protected handleMovement(
         type: MovementType,
         reversed: boolean,
         direction: MovementDirection,
         targetPercent100ths?: number,
-    ) {
+    ): MaybePromise {
         if (this.internal.disableOperationalModeHandling) {
             return;
         }
@@ -629,7 +629,7 @@ export namespace WindowCoveringBaseServer {
             reversed: boolean,
             direction: MovementDirection,
             targetPercent100ths?: number,
-        ): Promise<void>;
+        ): MaybePromise;
         handleStopMovement(): MaybePromise;
         executeCalibration(): MaybePromise;
     };
