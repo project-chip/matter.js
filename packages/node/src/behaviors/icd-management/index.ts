@@ -9,3 +9,4 @@
 export * from "./IcdManagementInterface.js";
 export * from "./IcdManagementBehavior.js";
 export * from "./IcdManagementServer.js";
+export * from "./IcdManagementClient.js";

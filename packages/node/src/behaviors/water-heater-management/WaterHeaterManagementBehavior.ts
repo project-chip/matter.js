@@ -9,6 +9,7 @@
 import { WaterHeaterManagement } from "#clusters/water-heater-management";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { WaterHeaterManagementInterface } from "./WaterHeaterManagementInterface.js";
+import { Identity } from "#general";
 
 /**
  * WaterHeaterManagementBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { WaterHeaterManagementInterface } from "./WaterHeaterManagementInterface
  * This class does not have optional features of WaterHeaterManagement.Cluster enabled. You can enable additional
  * features using WaterHeaterManagementBehavior.with.
  */
-export const WaterHeaterManagementBehavior = ClusterBehavior
+export const WaterHeaterManagementBehaviorConstructor = ClusterBehavior
     .withInterface<WaterHeaterManagementInterface>()
     .for(WaterHeaterManagement.Cluster);
 
-type WaterHeaterManagementBehaviorType = InstanceType<typeof WaterHeaterManagementBehavior>;
-export interface WaterHeaterManagementBehavior extends WaterHeaterManagementBehaviorType {}
-type StateType = InstanceType<typeof WaterHeaterManagementBehavior.State>;
-export namespace WaterHeaterManagementBehavior { export interface State extends StateType {} }
+export interface WaterHeaterManagementBehaviorConstructor extends Identity<typeof WaterHeaterManagementBehaviorConstructor> {}
+export const WaterHeaterManagementBehavior: WaterHeaterManagementBehaviorConstructor = WaterHeaterManagementBehaviorConstructor;
+export interface WaterHeaterManagementBehavior extends InstanceType<WaterHeaterManagementBehaviorConstructor> {}
+export namespace WaterHeaterManagementBehavior {
+    export interface State extends InstanceType<typeof WaterHeaterManagementBehavior.State> {}
+}

@@ -9,3 +9,4 @@
 export * from "./DoorLockInterface.js";
 export * from "./DoorLockBehavior.js";
 export * from "./DoorLockServer.js";
+export * from "./DoorLockClient.js";

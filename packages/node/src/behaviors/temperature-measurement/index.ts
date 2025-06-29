@@ -8,3 +8,4 @@
 
 export * from "./TemperatureMeasurementBehavior.js";
 export * from "./TemperatureMeasurementServer.js";
+export * from "./TemperatureMeasurementClient.js";

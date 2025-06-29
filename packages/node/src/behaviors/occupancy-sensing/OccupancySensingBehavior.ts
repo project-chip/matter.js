@@ -9,6 +9,7 @@
 import { OccupancySensing } from "#clusters/occupancy-sensing";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * OccupancySensingBehavior is the base class for objects that support interaction with
@@ -17,9 +18,11 @@ import { ClusterType } from "#types";
  * OccupancySensing.Cluster requires you to enable one or more optional features. You can do so using
  * {@link OccupancySensingBehavior.with}.
  */
-export const OccupancySensingBehavior = ClusterBehavior.for(ClusterType(OccupancySensing.Base));
+export const OccupancySensingBehaviorConstructor = ClusterBehavior.for(ClusterType(OccupancySensing.Base));
 
-type OccupancySensingBehaviorType = InstanceType<typeof OccupancySensingBehavior>;
-export interface OccupancySensingBehavior extends OccupancySensingBehaviorType {}
-type StateType = InstanceType<typeof OccupancySensingBehavior.State>;
-export namespace OccupancySensingBehavior { export interface State extends StateType {} }
+export interface OccupancySensingBehaviorConstructor extends Identity<typeof OccupancySensingBehaviorConstructor> {}
+export const OccupancySensingBehavior: OccupancySensingBehaviorConstructor = OccupancySensingBehaviorConstructor;
+export interface OccupancySensingBehavior extends InstanceType<OccupancySensingBehaviorConstructor> {}
+export namespace OccupancySensingBehavior {
+    export interface State extends InstanceType<typeof OccupancySensingBehavior.State> {}
+}

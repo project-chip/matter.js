@@ -58,7 +58,7 @@ export class StorageBackendMemory extends SyncStorage implements CloneableStorag
     }
 
     get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined {
-        if (!this.initialized) throw new StorageError("Storage is not initialized");
+        this.#assertInitialized();
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty.");
         return this.store[this.createContextKey(contexts)]?.[key];
     }
@@ -77,7 +77,7 @@ export class StorageBackendMemory extends SyncStorage implements CloneableStorag
         keyOrValues: string | Record<string, SupportedStorageTypes>,
         value?: SupportedStorageTypes,
     ) {
-        if (!this.initialized) throw new StorageError("Storage is not initialized");
+        this.#assertInitialized();
         if (typeof keyOrValues === "string") {
             this.#setKey(contexts, keyOrValues, value);
         } else {
@@ -88,13 +88,13 @@ export class StorageBackendMemory extends SyncStorage implements CloneableStorag
     }
 
     delete(contexts: string[], key: string) {
-        if (!this.initialized) throw new StorageError("Storage is not initialized");
+        this.#assertInitialized();
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty.");
         delete this.store[this.createContextKey(contexts)]?.[key];
     }
 
     keys(contexts: string[]) {
-        if (!this.initialized) throw new StorageError("Storage is not initialized");
+        this.#assertInitialized();
         if (!contexts.length) throw new StorageError("Context must not be empty!");
         return Object.keys(this.store[this.createContextKey(contexts)] ?? {});
     }
@@ -109,7 +109,7 @@ export class StorageBackendMemory extends SyncStorage implements CloneableStorag
     }
 
     contexts(contexts: string[]) {
-        if (!this.initialized) throw new StorageError("Storage is not initialized");
+        this.#assertInitialized();
         const contextKey = contexts.length ? this.createContextKey(contexts) : "";
         const startContextKey = contextKey.length ? `${contextKey}.` : "";
         const foundContexts = new Array<string>();
@@ -127,7 +127,7 @@ export class StorageBackendMemory extends SyncStorage implements CloneableStorag
     }
 
     clearAll(contexts: string[]) {
-        if (!this.initialized) throw new StorageError("Storage is not initialized");
+        this.#assertInitialized();
         const contextKey = this.createContextKey(contexts);
         if (contextKey.length) {
             delete this.store[contextKey];
@@ -138,5 +138,13 @@ export class StorageBackendMemory extends SyncStorage implements CloneableStorag
                 delete this.store[key];
             }
         });
+    }
+
+    #assertInitialized() {
+        if (this.initialized) {
+            return;
+        }
+
+        throw new StorageError("Storage is not initialized");
     }
 }

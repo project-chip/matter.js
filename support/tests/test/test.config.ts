@@ -7,9 +7,6 @@
 import "../src/common/test-environment.js";
 import { TestController } from "../src/controller/controller-parent.js";
 
-// We require real time
-MockTime.disable();
-
 // Expose default controller instance as a global
 declare global {
     const controller: TestController;

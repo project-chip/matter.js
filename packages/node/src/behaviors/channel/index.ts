@@ -9,3 +9,4 @@
 export * from "./ChannelInterface.js";
 export * from "./ChannelBehavior.js";
 export * from "./ChannelServer.js";
+export * from "./ChannelClient.js";

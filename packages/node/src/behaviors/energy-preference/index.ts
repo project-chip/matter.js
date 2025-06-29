@@ -8,3 +8,4 @@
 
 export * from "./EnergyPreferenceBehavior.js";
 export * from "./EnergyPreferenceServer.js";
+export * from "./EnergyPreferenceClient.js";

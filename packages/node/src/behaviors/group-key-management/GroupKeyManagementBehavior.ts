@@ -9,16 +9,19 @@
 import { GroupKeyManagement } from "#clusters/group-key-management";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { GroupKeyManagementInterface } from "./GroupKeyManagementInterface.js";
+import { Identity } from "#general";
 
 /**
  * GroupKeyManagementBehavior is the base class for objects that support interaction with
  * {@link GroupKeyManagement.Cluster}.
  */
-export const GroupKeyManagementBehavior = ClusterBehavior
+export const GroupKeyManagementBehaviorConstructor = ClusterBehavior
     .withInterface<GroupKeyManagementInterface>()
     .for(GroupKeyManagement.Cluster);
 
-type GroupKeyManagementBehaviorType = InstanceType<typeof GroupKeyManagementBehavior>;
-export interface GroupKeyManagementBehavior extends GroupKeyManagementBehaviorType {}
-type StateType = InstanceType<typeof GroupKeyManagementBehavior.State>;
-export namespace GroupKeyManagementBehavior { export interface State extends StateType {} }
+export interface GroupKeyManagementBehaviorConstructor extends Identity<typeof GroupKeyManagementBehaviorConstructor> {}
+export const GroupKeyManagementBehavior: GroupKeyManagementBehaviorConstructor = GroupKeyManagementBehaviorConstructor;
+export interface GroupKeyManagementBehavior extends InstanceType<GroupKeyManagementBehaviorConstructor> {}
+export namespace GroupKeyManagementBehavior {
+    export interface State extends InstanceType<typeof GroupKeyManagementBehavior.State> {}
+}

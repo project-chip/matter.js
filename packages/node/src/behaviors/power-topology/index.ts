@@ -8,3 +8,4 @@
 
 export * from "./PowerTopologyBehavior.js";
 export * from "./PowerTopologyServer.js";
+export * from "./PowerTopologyClient.js";

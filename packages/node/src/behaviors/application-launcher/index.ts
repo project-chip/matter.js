@@ -9,3 +9,4 @@
 export * from "./ApplicationLauncherInterface.js";
 export * from "./ApplicationLauncherBehavior.js";
 export * from "./ApplicationLauncherServer.js";
+export * from "./ApplicationLauncherClient.js";

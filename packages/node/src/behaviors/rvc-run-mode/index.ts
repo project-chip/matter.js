@@ -8,3 +8,4 @@
 
 export * from "./RvcRunModeBehavior.js";
 export * from "./RvcRunModeServer.js";
+export * from "./RvcRunModeClient.js";

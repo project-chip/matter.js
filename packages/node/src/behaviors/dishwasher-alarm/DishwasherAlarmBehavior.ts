@@ -9,6 +9,7 @@
 import { DishwasherAlarm } from "#clusters/dishwasher-alarm";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { DishwasherAlarmInterface } from "./DishwasherAlarmInterface.js";
+import { Identity } from "#general";
 
 /**
  * DishwasherAlarmBehavior is the base class for objects that support interaction with {@link DishwasherAlarm.Cluster}.
@@ -16,11 +17,13 @@ import { DishwasherAlarmInterface } from "./DishwasherAlarmInterface.js";
  * This class does not have optional features of DishwasherAlarm.Cluster enabled. You can enable additional features
  * using DishwasherAlarmBehavior.with.
  */
-export const DishwasherAlarmBehavior = ClusterBehavior
+export const DishwasherAlarmBehaviorConstructor = ClusterBehavior
     .withInterface<DishwasherAlarmInterface>()
     .for(DishwasherAlarm.Cluster);
 
-type DishwasherAlarmBehaviorType = InstanceType<typeof DishwasherAlarmBehavior>;
-export interface DishwasherAlarmBehavior extends DishwasherAlarmBehaviorType {}
-type StateType = InstanceType<typeof DishwasherAlarmBehavior.State>;
-export namespace DishwasherAlarmBehavior { export interface State extends StateType {} }
+export interface DishwasherAlarmBehaviorConstructor extends Identity<typeof DishwasherAlarmBehaviorConstructor> {}
+export const DishwasherAlarmBehavior: DishwasherAlarmBehaviorConstructor = DishwasherAlarmBehaviorConstructor;
+export interface DishwasherAlarmBehavior extends InstanceType<DishwasherAlarmBehaviorConstructor> {}
+export namespace DishwasherAlarmBehavior {
+    export interface State extends InstanceType<typeof DishwasherAlarmBehavior.State> {}
+}

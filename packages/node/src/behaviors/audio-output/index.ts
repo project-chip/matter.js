@@ -9,3 +9,4 @@
 export * from "./AudioOutputInterface.js";
 export * from "./AudioOutputBehavior.js";
 export * from "./AudioOutputServer.js";
+export * from "./AudioOutputClient.js";

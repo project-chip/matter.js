@@ -19,7 +19,7 @@ import { WebReporter } from "./web-reporter.js";
 
 export async function testWeb(runner: TestRunner, manual: boolean) {
     const files = await runner.loadFiles("esm");
-    const bundlePath = await bundle(files, runner.pkg);
+    const bundlePath = await bundle(files, runner);
 
     const server = await new Promise<http.Server>((resolve, reject) => {
         try {
@@ -62,6 +62,13 @@ export async function testWeb(runner: TestRunner, manual: boolean) {
         }
     });
 }
+
+/**
+ * You can set this to modify the web entrypoint in your testing configuration.
+ *
+ * Input is the lines of the entrypoint file.  You can modify these lines to add or modify generated code.
+ */
+testWeb.entrypointPreprocessor = undefined as undefined | ((lines: string[]) => void);
 
 async function testInBrowser(url: string, reporter: Reporter, options: TestOptions) {
     async function setup() {
@@ -138,23 +145,23 @@ function buildIndex(bundlePath: string) {
 </html>`;
 }
 
-async function bundle(files: string[], pkg: Package) {
+async function bundle(files: string[], { pkg, entrypointPreprocessor }: TestRunner) {
     const entrypointPath = pkg.resolve("build/esm/test-entrypoint.js");
     const bundlePath = pkg.resolve("build/cjs/test-bundle.js");
 
-    const entrypoint = files
-        .map(path => {
-            path = relative(pkg.resolve("build/esm"), path).replace(/\\/g, "/");
-            if (!path.startsWith(".")) {
-                path = `./${path}`;
-            }
-            return `import ${JSON.stringify(path)}`;
-        })
-        .join("\n");
+    const entrypoint = files.map(path => {
+        path = relative(pkg.resolve("build/esm"), path).replace(/\\/g, "/");
+        if (!path.startsWith(".")) {
+            path = `./${path}`;
+        }
+        return `import ${JSON.stringify(path)}`;
+    });
+
+    entrypointPreprocessor?.(entrypoint);
 
     // I was unable to get esbuild to resolve the entrypoint using the "stdin" and "absWorkingDir" options.  So we just
     // write to disk
-    await writeFile(pkg.resolve("build/esm/test-entrypoint.js"), entrypoint);
+    await writeFile(pkg.resolve("build/esm/test-entrypoint.js"), entrypoint.join("\n"));
 
     await build({
         entryPoints: [entrypointPath],
@@ -163,6 +170,7 @@ async function bundle(files: string[], pkg: Package) {
         outfile: bundlePath,
         external: ["wtfnode"],
         keepNames: true,
+        conditions: ["static-load"],
 
         // This doesn't work...
         // logOverride: {

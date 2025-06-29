@@ -8,3 +8,4 @@
 
 export * from "./UserLabelBehavior.js";
 export * from "./UserLabelServer.js";
+export * from "./UserLabelClient.js";

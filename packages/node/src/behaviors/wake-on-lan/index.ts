@@ -8,3 +8,4 @@
 
 export * from "./WakeOnLanBehavior.js";
 export * from "./WakeOnLanServer.js";
+export * from "./WakeOnLanClient.js";

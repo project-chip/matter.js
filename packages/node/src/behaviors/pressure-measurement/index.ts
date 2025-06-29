@@ -8,3 +8,4 @@
 
 export * from "./PressureMeasurementBehavior.js";
 export * from "./PressureMeasurementServer.js";
+export * from "./PressureMeasurementClient.js";

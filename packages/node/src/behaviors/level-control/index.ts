@@ -9,3 +9,4 @@
 export * from "./LevelControlInterface.js";
 export * from "./LevelControlBehavior.js";
 export * from "./LevelControlServer.js";
+export * from "./LevelControlClient.js";

@@ -24,11 +24,6 @@ import { Specifier } from "./Specifier.js";
 export interface Read extends ReadRequest {}
 
 /**
- * Formulate a read request using Matter numeric IDs.
- */
-export function Read(options: Read.Options): Read;
-
-/**
  * Formulate a read request with extended options and name-based IDs.
  */
 export function Read(options: Read.Options, ...selectors: Read.Selector[]): Read;

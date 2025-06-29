@@ -9,3 +9,4 @@
 export * from "./GroupsInterface.js";
 export * from "./GroupsBehavior.js";
 export * from "./GroupsServer.js";
+export * from "./GroupsClient.js";

@@ -9,3 +9,4 @@
 export * from "./MessagesInterface.js";
 export * from "./MessagesBehavior.js";
 export * from "./MessagesServer.js";
+export * from "./MessagesClient.js";

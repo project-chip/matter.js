@@ -94,7 +94,10 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
     }
 
     override async restoreBreadcrumb() {
-        await this.#node.act(this.restoreBreadcrumb.name, agent => {
+        await this.#node.act(this.restoreBreadcrumb.name, async agent => {
+            const tx = agent.context.transaction;
+            await tx.addResources(agent.generalCommissioning);
+            await tx.begin();
             agent.generalCommissioning.state.breadcrumb = 0;
         });
     }

@@ -7,7 +7,7 @@
  */
 
 import { asError } from "#util/Error.js";
-import { InternalError, MatterError } from "../MatterError.js";
+import { InternalError, TimeoutError } from "../MatterError.js";
 import { Time } from "../time/Time.js";
 
 /**
@@ -67,11 +67,7 @@ export function anyPromise<T>(promises: ((() => Promise<T>) | Promise<T>)[]): Pr
 /**
  * Thrown when a timed promise times out.
  */
-export class PromiseTimeoutError extends MatterError {
-    constructor(message = "Operation timed out") {
-        super(message);
-    }
-}
+export class PromiseTimeoutError extends TimeoutError {}
 
 /**
  * Create a promise with a timeout.
@@ -109,7 +105,6 @@ export async function withTimeout<T>(
                 reject(asError(e));
                 return;
             }
-            reject(new Error("Timer canceled promise, but no error was thrown"));
         });
 
         cancelTimer = () => {

@@ -11,4 +11,5 @@ export * from "./behavior/index.js";
 export * from "./endpoint/index.js";
 export * from "./loader/index.js";
 export * from "./node/index.js";
+export * from "./storage/index.js";
 export * from "./tags/index.js";

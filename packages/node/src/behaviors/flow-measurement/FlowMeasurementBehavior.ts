@@ -8,13 +8,16 @@
 
 import { FlowMeasurement } from "#clusters/flow-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * FlowMeasurementBehavior is the base class for objects that support interaction with {@link FlowMeasurement.Cluster}.
  */
-export const FlowMeasurementBehavior = ClusterBehavior.for(FlowMeasurement.Cluster);
+export const FlowMeasurementBehaviorConstructor = ClusterBehavior.for(FlowMeasurement.Cluster);
 
-type FlowMeasurementBehaviorType = InstanceType<typeof FlowMeasurementBehavior>;
-export interface FlowMeasurementBehavior extends FlowMeasurementBehaviorType {}
-type StateType = InstanceType<typeof FlowMeasurementBehavior.State>;
-export namespace FlowMeasurementBehavior { export interface State extends StateType {} }
+export interface FlowMeasurementBehaviorConstructor extends Identity<typeof FlowMeasurementBehaviorConstructor> {}
+export const FlowMeasurementBehavior: FlowMeasurementBehaviorConstructor = FlowMeasurementBehaviorConstructor;
+export interface FlowMeasurementBehavior extends InstanceType<FlowMeasurementBehaviorConstructor> {}
+export namespace FlowMeasurementBehavior {
+    export interface State extends InstanceType<typeof FlowMeasurementBehavior.State> {}
+}

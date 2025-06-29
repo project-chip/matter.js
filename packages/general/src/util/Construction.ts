@@ -148,6 +148,8 @@ export interface Construction<T> extends Promise<T> {
      *
      *   - Ensures the subject is fully initialized before closing.
      *
+     *   - Guards against closing multiple times; tertiary closes will wait for destruction.
+     *
      *   - Handles and logs errors, ensuring close() always completes successfully.
      *
      *   - Makes destruction observable via {@link change} and {@link closed}.
@@ -437,11 +439,23 @@ export function Construction<const T extends Constructable>(
                 return invokeDestructor();
             }
 
-            if (status === Lifecycle.Status.Initializing) {
-                return this.then(beginDestruction, beginDestruction);
-            }
+            switch (status) {
+                case Lifecycle.Status.Initializing:
+                    // Wait for initialization to complete, then close
+                    return this.then(beginDestruction, beginDestruction);
 
-            return beginDestruction();
+                case Lifecycle.Status.Destroying:
+                    // Wait for previously initiated destruction to complete
+                    return this.closed;
+
+                case Lifecycle.Status.Destroyed:
+                    // Already destroyed
+                    return;
+
+                default:
+                    // Begin destruction
+                    return beginDestruction();
+            }
         },
 
         finally(onfinally: () => void): Promise<T> {

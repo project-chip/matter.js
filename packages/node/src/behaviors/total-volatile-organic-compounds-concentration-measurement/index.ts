@@ -8,3 +8,4 @@
 
 export * from "./TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior.js";
 export * from "./TotalVolatileOrganicCompoundsConcentrationMeasurementServer.js";
+export * from "./TotalVolatileOrganicCompoundsConcentrationMeasurementClient.js";

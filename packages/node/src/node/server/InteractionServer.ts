@@ -60,12 +60,6 @@ import { ServerSubscription, ServerSubscriptionConfig, ServerSubscriptionContext
 
 const logger = Logger.get("InteractionServer");
 
-export const activityKey = Symbol("activity");
-
-export interface WithActivity {
-    [activityKey]?: NodeActivity.Activity;
-}
-
 export interface PeerSubscription {
     subscriptionId: number;
     peerAddress: PeerAddress;
@@ -190,12 +184,12 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         // Activity tracking.  This provides diagnostic information and prevents the server from shutting down whilst
         // the exchange is active
         using activity = this.#activity.begin(`session#${exchange.session.id.toString(16)}`);
-        (exchange as WithActivity)[activityKey] = activity;
+        (exchange as NodeActivity.WithActivity)[NodeActivity.activityKey] = activity;
 
         // Delegate to InteractionServerMessenger
         return new InteractionServerMessenger(exchange)
             .handleRequest(this)
-            .finally(() => delete (exchange as WithActivity)[activityKey]);
+            .finally(() => delete (exchange as NodeActivity.WithActivity)[NodeActivity.activityKey]);
     }
 
     get aclServer() {
@@ -224,7 +218,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         timed = false,
     ): OnlineContext.Options {
         return {
-            activity: (exchange as WithActivity)[activityKey],
+            activity: (exchange as NodeActivity.WithActivity)[NodeActivity.activityKey],
             fabricFiltered,
             timed,
             message,

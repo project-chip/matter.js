@@ -6,7 +6,7 @@
 
 import type { Logger } from "#log/Logger.js";
 import { CanceledError } from "#MatterError.js";
-import { errorOf } from "./Error.js";
+import { asError, errorOf } from "./Error.js";
 import { createPromise, MaybePromise } from "./Promises.js";
 
 /**
@@ -81,13 +81,13 @@ export class CancelablePromise<T = void> implements Promise<T>, Cancelable {
     /**
      * Cancel the operation.
      */
-    cancel(reason: any = new CanceledError()) {
+    cancel(reason: unknown = new CanceledError()) {
         if (this.#isSettled) {
             return;
         }
 
         try {
-            this.onCancel(reason);
+            this.onCancel(asError(reason));
         } catch (e) {
             this.#reject(e);
         }

@@ -9,3 +9,4 @@
 export * from "./MediaPlaybackInterface.js";
 export * from "./MediaPlaybackBehavior.js";
 export * from "./MediaPlaybackServer.js";
+export * from "./MediaPlaybackClient.js";

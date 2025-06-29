@@ -8,3 +8,4 @@
 
 export * from "./BasicInformationBehavior.js";
 export * from "./BasicInformationServer.js";
+export * from "./BasicInformationClient.js";

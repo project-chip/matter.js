@@ -9,3 +9,4 @@
 export * from "./WiFiNetworkManagementInterface.js";
 export * from "./WiFiNetworkManagementBehavior.js";
 export * from "./WiFiNetworkManagementServer.js";
+export * from "./WiFiNetworkManagementClient.js";

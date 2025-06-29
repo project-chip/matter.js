@@ -13,6 +13,7 @@ export interface FailureDetail {
     expected?: string;
     logs?: string;
     cause?: FailureDetail;
+    secondary?: FailureDetail;
     errors?: FailureDetail[];
 }
 
@@ -20,7 +21,7 @@ export interface FailureDetail {
  * Captures all pertinent information about a failed test.
  */
 export function FailureDetail(error: any, id?: string, logs?: string[], parentStack?: string[]) {
-    const { message, stack, stackLines, cause, errors } = parseError(error, parentStack);
+    const { message, stack, stackLines, cause, errors, secondary } = parseError(error, parentStack);
     const result = { message } as FailureDetail;
 
     if (stack) {
@@ -34,6 +35,9 @@ export function FailureDetail(error: any, id?: string, logs?: string[], parentSt
     }
     if (cause) {
         result.cause = cause;
+    }
+    if (secondary) {
+        result.secondary = secondary;
     }
     if (errors) {
         result.errors = errors;
@@ -89,19 +93,25 @@ function messageAndStackFor(
 }
 
 function parseError(error: Error, parentStack?: string[]) {
+    let secondary: FailureDetail | undefined;
+    if ("error" in error && "suppressed" in error) {
+        secondary = FailureDetail(error.error);
+        error = error.suppressed as Error;
+    }
+
     const { message, id, stack, stackLines } = messageAndStackFor(error, parentStack);
 
     let cause: FailureDetail | undefined, errors: FailureDetail[] | undefined;
 
     const errorCause = error.cause;
     if (errorCause) {
-        cause = FailureDetail(errorCause, undefined, stackLines);
+        cause = FailureDetail(errorCause, id, undefined, stackLines);
     }
 
     const errorErrors = (error as AggregateError).errors;
     if (Array.isArray(errorErrors)) {
-        errors = errorErrors.map(e => FailureDetail(e, undefined, stackLines));
+        errors = errorErrors.map(e => FailureDetail(e, id, undefined, stackLines));
     }
 
-    return { message, id, stack, stackLines, cause, errors };
+    return { message, id, stack, stackLines, cause, errors, secondary };
 }

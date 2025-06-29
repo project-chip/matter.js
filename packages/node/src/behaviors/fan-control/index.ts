@@ -9,3 +9,4 @@
 export * from "./FanControlInterface.js";
 export * from "./FanControlBehavior.js";
 export * from "./FanControlServer.js";
+export * from "./FanControlClient.js";

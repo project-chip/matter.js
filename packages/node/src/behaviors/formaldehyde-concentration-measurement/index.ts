@@ -8,3 +8,4 @@
 
 export * from "./FormaldehydeConcentrationMeasurementBehavior.js";
 export * from "./FormaldehydeConcentrationMeasurementServer.js";
+export * from "./FormaldehydeConcentrationMeasurementClient.js";

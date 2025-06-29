@@ -9,6 +9,7 @@
 import { CarbonDioxideConcentrationMeasurement } from "#clusters/carbon-dioxide-concentration-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * CarbonDioxideConcentrationMeasurementBehavior is the base class for objects that support interaction with
@@ -17,10 +18,12 @@ import { ClusterType } from "#types";
  * CarbonDioxideConcentrationMeasurement.Cluster requires you to enable one or more optional features. You can do so
  * using {@link CarbonDioxideConcentrationMeasurementBehavior.with}.
  */
-export const CarbonDioxideConcentrationMeasurementBehavior = ClusterBehavior
+export const CarbonDioxideConcentrationMeasurementBehaviorConstructor = ClusterBehavior
     .for(ClusterType(CarbonDioxideConcentrationMeasurement.Base));
 
-type CarbonDioxideConcentrationMeasurementBehaviorType = InstanceType<typeof CarbonDioxideConcentrationMeasurementBehavior>;
-export interface CarbonDioxideConcentrationMeasurementBehavior extends CarbonDioxideConcentrationMeasurementBehaviorType {}
-type StateType = InstanceType<typeof CarbonDioxideConcentrationMeasurementBehavior.State>;
-export namespace CarbonDioxideConcentrationMeasurementBehavior { export interface State extends StateType {} }
+export interface CarbonDioxideConcentrationMeasurementBehaviorConstructor extends Identity<typeof CarbonDioxideConcentrationMeasurementBehaviorConstructor> {}
+export const CarbonDioxideConcentrationMeasurementBehavior: CarbonDioxideConcentrationMeasurementBehaviorConstructor = CarbonDioxideConcentrationMeasurementBehaviorConstructor;
+export interface CarbonDioxideConcentrationMeasurementBehavior extends InstanceType<CarbonDioxideConcentrationMeasurementBehaviorConstructor> {}
+export namespace CarbonDioxideConcentrationMeasurementBehavior {
+    export interface State extends InstanceType<typeof CarbonDioxideConcentrationMeasurementBehavior.State> {}
+}

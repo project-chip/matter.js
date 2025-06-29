@@ -8,3 +8,4 @@
 
 export * from "./Pm1ConcentrationMeasurementBehavior.js";
 export * from "./Pm1ConcentrationMeasurementServer.js";
+export * from "./Pm1ConcentrationMeasurementClient.js";

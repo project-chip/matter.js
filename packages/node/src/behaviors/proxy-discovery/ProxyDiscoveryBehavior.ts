@@ -9,15 +9,18 @@
 import { ProxyDiscovery } from "#clusters/proxy-discovery";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ProxyDiscoveryInterface } from "./ProxyDiscoveryInterface.js";
+import { Identity } from "#general";
 
 /**
  * ProxyDiscoveryBehavior is the base class for objects that support interaction with {@link ProxyDiscovery.Cluster}.
  */
-export const ProxyDiscoveryBehavior = ClusterBehavior
+export const ProxyDiscoveryBehaviorConstructor = ClusterBehavior
     .withInterface<ProxyDiscoveryInterface>()
     .for(ProxyDiscovery.Cluster);
 
-type ProxyDiscoveryBehaviorType = InstanceType<typeof ProxyDiscoveryBehavior>;
-export interface ProxyDiscoveryBehavior extends ProxyDiscoveryBehaviorType {}
-type StateType = InstanceType<typeof ProxyDiscoveryBehavior.State>;
-export namespace ProxyDiscoveryBehavior { export interface State extends StateType {} }
+export interface ProxyDiscoveryBehaviorConstructor extends Identity<typeof ProxyDiscoveryBehaviorConstructor> {}
+export const ProxyDiscoveryBehavior: ProxyDiscoveryBehaviorConstructor = ProxyDiscoveryBehaviorConstructor;
+export interface ProxyDiscoveryBehavior extends InstanceType<ProxyDiscoveryBehaviorConstructor> {}
+export namespace ProxyDiscoveryBehavior {
+    export interface State extends InstanceType<typeof ProxyDiscoveryBehavior.State> {}
+}

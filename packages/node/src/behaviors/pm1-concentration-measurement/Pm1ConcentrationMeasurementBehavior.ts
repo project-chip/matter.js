@@ -9,6 +9,7 @@
 import { Pm1ConcentrationMeasurement } from "#clusters/pm1-concentration-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * Pm1ConcentrationMeasurementBehavior is the base class for objects that support interaction with
@@ -17,9 +18,12 @@ import { ClusterType } from "#types";
  * Pm1ConcentrationMeasurement.Cluster requires you to enable one or more optional features. You can do so using
  * {@link Pm1ConcentrationMeasurementBehavior.with}.
  */
-export const Pm1ConcentrationMeasurementBehavior = ClusterBehavior.for(ClusterType(Pm1ConcentrationMeasurement.Base));
+export const Pm1ConcentrationMeasurementBehaviorConstructor = ClusterBehavior
+    .for(ClusterType(Pm1ConcentrationMeasurement.Base));
 
-type Pm1ConcentrationMeasurementBehaviorType = InstanceType<typeof Pm1ConcentrationMeasurementBehavior>;
-export interface Pm1ConcentrationMeasurementBehavior extends Pm1ConcentrationMeasurementBehaviorType {}
-type StateType = InstanceType<typeof Pm1ConcentrationMeasurementBehavior.State>;
-export namespace Pm1ConcentrationMeasurementBehavior { export interface State extends StateType {} }
+export interface Pm1ConcentrationMeasurementBehaviorConstructor extends Identity<typeof Pm1ConcentrationMeasurementBehaviorConstructor> {}
+export const Pm1ConcentrationMeasurementBehavior: Pm1ConcentrationMeasurementBehaviorConstructor = Pm1ConcentrationMeasurementBehaviorConstructor;
+export interface Pm1ConcentrationMeasurementBehavior extends InstanceType<Pm1ConcentrationMeasurementBehaviorConstructor> {}
+export namespace Pm1ConcentrationMeasurementBehavior {
+    export interface State extends InstanceType<typeof Pm1ConcentrationMeasurementBehavior.State> {}
+}

@@ -8,14 +8,17 @@
 
 import { TemperatureMeasurement } from "#clusters/temperature-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * TemperatureMeasurementBehavior is the base class for objects that support interaction with
  * {@link TemperatureMeasurement.Cluster}.
  */
-export const TemperatureMeasurementBehavior = ClusterBehavior.for(TemperatureMeasurement.Cluster);
+export const TemperatureMeasurementBehaviorConstructor = ClusterBehavior.for(TemperatureMeasurement.Cluster);
 
-type TemperatureMeasurementBehaviorType = InstanceType<typeof TemperatureMeasurementBehavior>;
-export interface TemperatureMeasurementBehavior extends TemperatureMeasurementBehaviorType {}
-type StateType = InstanceType<typeof TemperatureMeasurementBehavior.State>;
-export namespace TemperatureMeasurementBehavior { export interface State extends StateType {} }
+export interface TemperatureMeasurementBehaviorConstructor extends Identity<typeof TemperatureMeasurementBehaviorConstructor> {}
+export const TemperatureMeasurementBehavior: TemperatureMeasurementBehaviorConstructor = TemperatureMeasurementBehaviorConstructor;
+export interface TemperatureMeasurementBehavior extends InstanceType<TemperatureMeasurementBehaviorConstructor> {}
+export namespace TemperatureMeasurementBehavior {
+    export interface State extends InstanceType<typeof TemperatureMeasurementBehavior.State> {}
+}

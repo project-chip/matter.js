@@ -9,3 +9,4 @@
 export * from "./GeneralDiagnosticsInterface.js";
 export * from "./GeneralDiagnosticsBehavior.js";
 export * from "./GeneralDiagnosticsServer.js";
+export * from "./GeneralDiagnosticsClient.js";

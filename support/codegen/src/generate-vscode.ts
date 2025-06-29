@@ -39,7 +39,12 @@ const CONFIG_TEMPLATE = {
     //sourceMaps: true,
 
     runtimeArgs: ["--enable-source-maps"],
-    outFiles: ["${workspaceFolder}/**/dist/esm/**/*.js", "${workspaceFolder}/**/build/esm/**/*.js"],
+    outFiles: [
+        "${workspaceFolder}/packages/*/dist/esm/**/*.js",
+        "${workspaceFolder}/packages/*/build/esm/**/*.js",
+        "${workspaceFolder}/support/*/dist/esm/**/*.js",
+        "${workspaceFolder}/support/*/build/esm/**/*.js",
+    ],
 
     // This is buggy as of VS Code 1.98.  Sometimes doesn't clear at all, sometimes clears after task completes which is
     // really annoying.  We already clear manually with escape codes so just omit

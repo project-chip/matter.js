@@ -9,3 +9,4 @@
 export * from "./EnergyEvseInterface.js";
 export * from "./EnergyEvseBehavior.js";
 export * from "./EnergyEvseServer.js";
+export * from "./EnergyEvseClient.js";

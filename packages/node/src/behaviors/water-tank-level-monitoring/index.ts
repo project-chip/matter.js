@@ -8,3 +8,4 @@
 
 export * from "./WaterTankLevelMonitoringBehavior.js";
 export * from "./WaterTankLevelMonitoringServer.js";
+export * from "./WaterTankLevelMonitoringClient.js";

@@ -9,3 +9,4 @@
 export * from "./GroupKeyManagementInterface.js";
 export * from "./GroupKeyManagementBehavior.js";
 export * from "./GroupKeyManagementServer.js";
+export * from "./GroupKeyManagementClient.js";

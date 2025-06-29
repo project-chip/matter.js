@@ -9,3 +9,4 @@
 export * from "./TimeSynchronizationInterface.js";
 export * from "./TimeSynchronizationBehavior.js";
 export * from "./TimeSynchronizationServer.js";
+export * from "./TimeSynchronizationClient.js";

@@ -9,3 +9,4 @@
 export * from "./ProxyDiscoveryInterface.js";
 export * from "./ProxyDiscoveryBehavior.js";
 export * from "./ProxyDiscoveryServer.js";
+export * from "./ProxyDiscoveryClient.js";

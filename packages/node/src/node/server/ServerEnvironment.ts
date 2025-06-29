@@ -5,12 +5,13 @@
  */
 
 import { limitNodeDataToAllowedFabrics } from "#behavior/cluster/FabricScopedDataHandler.js";
-import { EndpointInitializer } from "#endpoint/index.js";
-import { ServerEndpointInitializer } from "#endpoint/server/ServerEndpointInitializer.js";
+import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { Crypto, Observable } from "#general";
+import { ServerEndpointInitializer } from "#node/server/ServerEndpointInitializer.js";
 import type { ServerNode } from "#node/ServerNode.js";
-import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
 import { FabricManager, SessionManager } from "#protocol";
+import { NodeStore } from "#storage/NodeStore.js";
+import { ServerNodeStore } from "#storage/server/ServerNodeStore.js";
 import { IdentityService } from "./IdentityService.js";
 
 /**
@@ -24,7 +25,9 @@ export namespace ServerEnvironment {
         const { env } = node;
 
         // Install support services
-        env.set(ServerNodeStore, await ServerNodeStore.create(env, node.id));
+        const store = await ServerNodeStore.create(env, node.id);
+        env.set(NodeStore, store);
+        env.set(ServerNodeStore, store);
         env.set(EndpointInitializer, new ServerEndpointInitializer(env));
         env.set(IdentityService, new IdentityService(node));
 

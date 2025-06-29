@@ -83,8 +83,8 @@ export class Time {
     }
 
     static register(timer: Timer) {
-        timer.elapsed = Diagnostic.elapsed();
         registry.add(timer);
+        timer.elapsed = Diagnostic.elapsed();
     }
 
     static unregister(timer: Timer) {
@@ -137,6 +137,7 @@ export namespace Timer {
 export class StandardTimer implements Timer {
     #timerId: unknown;
     #utility = false;
+    #intervalMs = -1;
     isRunning = false;
 
     get systemId() {
@@ -145,15 +146,29 @@ export class StandardTimer implements Timer {
 
     constructor(
         readonly name: string,
-        readonly intervalMs: number,
+        intervalMs: number,
         private readonly callback: Timer.Callback,
         readonly isPeriodic: boolean,
     ) {
+        this.intervalMs = intervalMs;
+    }
+
+    /**
+     * The timer's interval.
+     *
+     * You can change this value but changes have no effect until the timer restarts.
+     */
+    set intervalMs(intervalMs: number) {
         if (intervalMs < 0 || intervalMs > 2147483647) {
             throw new ImplementationError(
                 `Invalid intervalMs: ${intervalMs}. The value must be between 0 and 32-bit maximum value (2147483647)`,
             );
         }
+        this.#intervalMs = intervalMs;
+    }
+
+    get intervalMs() {
+        return this.#intervalMs;
     }
 
     get utility() {

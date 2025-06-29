@@ -5,6 +5,7 @@
  */
 
 import { OperationalCredentials } from "#clusters";
+import { ControllerStore } from "#ControllerStore.js";
 import {
     ClassExtends,
     Crypto,
@@ -22,7 +23,6 @@ import {
     UnexpectedDataError,
 } from "#general";
 import { LegacyControllerStore } from "#LegacyControllerStore.js";
-import { ControllerStore } from "#node";
 import {
     Ble,
     CommissionableDevice,

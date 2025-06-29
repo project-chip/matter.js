@@ -8,3 +8,4 @@
 
 export * from "./FlowMeasurementBehavior.js";
 export * from "./FlowMeasurementServer.js";
+export * from "./FlowMeasurementClient.js";

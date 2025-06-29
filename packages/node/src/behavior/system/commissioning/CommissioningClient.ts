@@ -20,9 +20,11 @@ import {
     LocatedNodeCommissioningOptions,
     PeerAddress,
     SessionParameters,
+    Subscribe,
 } from "#protocol";
 import { DeviceTypeId, DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema, VendorId } from "#types";
 import { ControllerBehavior } from "../controller/ControllerBehavior.js";
+import { NetworkClient } from "../network/NetworkClient.js";
 import { RemoteDescriptor } from "./RemoteDescriptor.js";
 
 /**
@@ -74,7 +76,7 @@ export class CommissioningClient extends Behavior {
         }
 
         // Ensure controller is initialized
-        await this.endpoint.owner?.act(agent => agent.load(ControllerBehavior));
+        await node.owner?.act(agent => agent.load(ControllerBehavior));
 
         // Obtain the fabric we will commission into
         const fabricAuthority = options.fabricAuthority || this.env.get(FabricAuthority);
@@ -98,9 +100,9 @@ export class CommissioningClient extends Behavior {
             throw new ImplementationError(`Cannot commission ${node} because the node has not been located`);
         }
 
-        const commissioner = this.endpoint.env.get(ControllerCommissioner);
+        const commissioner = node.env.get(ControllerCommissioner);
 
-        const identityService = this.endpoint.env.get(IdentityService);
+        const identityService = node.env.get(IdentityService);
         const address = identityService.assignNodeAddress(node, fabric.fabricIndex, options.nodeId);
 
         const commissioningOptions: LocatedNodeCommissioningOptions = {
@@ -118,11 +120,19 @@ export class CommissioningClient extends Behavior {
         try {
             await commissioner.commission(commissioningOptions);
             this.state.peerAddress = address;
-        } finally {
-            if (this.state.peerAddress !== address) {
-                identityService.releaseNodeAddress(address);
-            }
+        } catch (e) {
+            identityService.releaseNodeAddress(address);
+            throw e;
         }
+
+        await this.context.transaction.commit();
+
+        const network = this.agent.get(NetworkClient);
+        network.state.startupSubscription = options.startupSubscription;
+
+        node.lifecycle.commissioned.emit(this.context);
+
+        await node.start();
 
         return node;
     }
@@ -130,8 +140,8 @@ export class CommissioningClient extends Behavior {
     /**
      * Override to implement CASE commissioning yourself.
      *
-     * If you override, matter.js commissions to the point where over PASE is complete.  You must then complete
-     * commissioning yourself by connecting to the device and invokeint the "CommissioningComplete" command.
+     * If you override, matter.js commissions to the point where commissioning over PASE is complete.  You must then
+     * complete commissioning yourself by connecting to the device and invokeint the "CommissioningComplete" command.
      */
     protected async finalizeCommissioning(_address: PeerAddress, _discoveryData?: DiscoveryData) {
         throw new NotImplementedError();
@@ -230,7 +240,7 @@ export namespace CommissioningClient {
         /**
          * Time at which the device was discovered.
          */
-        discoveredAt: number = Time.nowMs();
+        discoveredAt?: number;
 
         /**
          * Time at which we discovered the device's current operational addresses.
@@ -323,6 +333,11 @@ export namespace CommissioningClient {
         passcode: number;
 
         /**
+         * The device's long discriminator.
+         */
+        discriminator?: number;
+
+        /**
          * The ID to assign the node during commissioning.  By default the node receives the next available ID.
          */
         nodeId?: NodeId;
@@ -344,5 +359,29 @@ export namespace CommissioningClient {
          * is supported for initial commissioning.
          */
         discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>;
+
+        /**
+         * The initial read used to populate node data.
+         *
+         * By default matter.js reads all attributes on the node.  This allows us to efficiently initialize the complete
+         * node structure.
+         *
+         * If you only require a subset of attributes you can replace this with a more discriminative read.  For
+         * example, if you are only interested in interacting with the root endpoint and the On/Off cluster on other
+         * endpoints, you could do:
+         *
+         * ```js
+         * {
+         *     startupSubscription: Read(
+         *         Read.Attribute({ endpoint: 0 }),
+         *         Read.Attribute({ cluster: OnOffCluster })
+         *     )
+         * }
+         * ```
+         *
+         * Note that certain clusters like Descriptor and Basic Information contain critical operational data. If your
+         * read omits them then the node will only be partially functional once initialized.
+         */
+        startupSubscription?: Subscribe | null;
     }
 }

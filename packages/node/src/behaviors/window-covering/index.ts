@@ -9,3 +9,4 @@
 export * from "./WindowCoveringInterface.js";
 export * from "./WindowCoveringBehavior.js";
 export * from "./WindowCoveringServer.js";
+export * from "./WindowCoveringClient.js";

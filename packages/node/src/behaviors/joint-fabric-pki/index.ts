@@ -9,3 +9,4 @@
 export * from "./JointFabricPkiInterface.js";
 export * from "./JointFabricPkiBehavior.js";
 export * from "./JointFabricPkiServer.js";
+export * from "./JointFabricPkiClient.js";

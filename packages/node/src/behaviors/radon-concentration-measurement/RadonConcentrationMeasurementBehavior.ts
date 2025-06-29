@@ -9,6 +9,7 @@
 import { RadonConcentrationMeasurement } from "#clusters/radon-concentration-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * RadonConcentrationMeasurementBehavior is the base class for objects that support interaction with
@@ -17,10 +18,12 @@ import { ClusterType } from "#types";
  * RadonConcentrationMeasurement.Cluster requires you to enable one or more optional features. You can do so using
  * {@link RadonConcentrationMeasurementBehavior.with}.
  */
-export const RadonConcentrationMeasurementBehavior = ClusterBehavior
+export const RadonConcentrationMeasurementBehaviorConstructor = ClusterBehavior
     .for(ClusterType(RadonConcentrationMeasurement.Base));
 
-type RadonConcentrationMeasurementBehaviorType = InstanceType<typeof RadonConcentrationMeasurementBehavior>;
-export interface RadonConcentrationMeasurementBehavior extends RadonConcentrationMeasurementBehaviorType {}
-type StateType = InstanceType<typeof RadonConcentrationMeasurementBehavior.State>;
-export namespace RadonConcentrationMeasurementBehavior { export interface State extends StateType {} }
+export interface RadonConcentrationMeasurementBehaviorConstructor extends Identity<typeof RadonConcentrationMeasurementBehaviorConstructor> {}
+export const RadonConcentrationMeasurementBehavior: RadonConcentrationMeasurementBehaviorConstructor = RadonConcentrationMeasurementBehaviorConstructor;
+export interface RadonConcentrationMeasurementBehavior extends InstanceType<RadonConcentrationMeasurementBehaviorConstructor> {}
+export namespace RadonConcentrationMeasurementBehavior {
+    export interface State extends InstanceType<typeof RadonConcentrationMeasurementBehavior.State> {}
+}

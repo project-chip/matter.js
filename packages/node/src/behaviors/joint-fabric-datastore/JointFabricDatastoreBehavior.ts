@@ -9,16 +9,19 @@
 import { JointFabricDatastore } from "#clusters/joint-fabric-datastore";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { JointFabricDatastoreInterface } from "./JointFabricDatastoreInterface.js";
+import { Identity } from "#general";
 
 /**
  * JointFabricDatastoreBehavior is the base class for objects that support interaction with
  * {@link JointFabricDatastore.Cluster}.
  */
-export const JointFabricDatastoreBehavior = ClusterBehavior
+export const JointFabricDatastoreBehaviorConstructor = ClusterBehavior
     .withInterface<JointFabricDatastoreInterface>()
     .for(JointFabricDatastore.Cluster);
 
-type JointFabricDatastoreBehaviorType = InstanceType<typeof JointFabricDatastoreBehavior>;
-export interface JointFabricDatastoreBehavior extends JointFabricDatastoreBehaviorType {}
-type StateType = InstanceType<typeof JointFabricDatastoreBehavior.State>;
-export namespace JointFabricDatastoreBehavior { export interface State extends StateType {} }
+export interface JointFabricDatastoreBehaviorConstructor extends Identity<typeof JointFabricDatastoreBehaviorConstructor> {}
+export const JointFabricDatastoreBehavior: JointFabricDatastoreBehaviorConstructor = JointFabricDatastoreBehaviorConstructor;
+export interface JointFabricDatastoreBehavior extends InstanceType<JointFabricDatastoreBehaviorConstructor> {}
+export namespace JointFabricDatastoreBehavior {
+    export interface State extends InstanceType<typeof JointFabricDatastoreBehavior.State> {}
+}

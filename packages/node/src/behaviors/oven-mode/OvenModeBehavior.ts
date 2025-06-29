@@ -9,15 +9,16 @@
 import { OvenMode } from "#clusters/oven-mode";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { OvenModeInterface } from "./OvenModeInterface.js";
+import { Identity } from "#general";
 
 /**
  * OvenModeBehavior is the base class for objects that support interaction with {@link OvenMode.Cluster}.
  */
-export const OvenModeBehavior = ClusterBehavior
+export const OvenModeBehaviorConstructor = ClusterBehavior
     .withInterface<OvenModeInterface>()
     .for(OvenMode.Cluster);
 
-type OvenModeBehaviorType = InstanceType<typeof OvenModeBehavior>;
-export interface OvenModeBehavior extends OvenModeBehaviorType {}
-type StateType = InstanceType<typeof OvenModeBehavior.State>;
-export namespace OvenModeBehavior { export interface State extends StateType {} }
+export interface OvenModeBehaviorConstructor extends Identity<typeof OvenModeBehaviorConstructor> {}
+export const OvenModeBehavior: OvenModeBehaviorConstructor = OvenModeBehaviorConstructor;
+export interface OvenModeBehavior extends InstanceType<OvenModeBehaviorConstructor> {}
+export namespace OvenModeBehavior { export interface State extends InstanceType<typeof OvenModeBehavior.State> {} }
