@@ -372,7 +372,7 @@ export namespace CommissioningClient {
          *
          * ```js
          * {
-         *     initialRead: Read(
+         *     startupSubscription: Read(
          *         Read.Attribute({ endpoint: 0 }),
          *         Read.Attribute({ cluster: OnOffCluster })
          *     )

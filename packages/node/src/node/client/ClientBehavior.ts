@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2025 Project CHIP Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -179,6 +179,9 @@ function generateType(analysis: ShapeAnalysis, baseType: Behavior.Type): Cluster
     }
 }
 
+/**
+ * Create a compact string that uniquely identifies a shape for matching purposes.
+ */
 function createFingerprint(analysis: ShapeAnalysis) {
     const fingerprint = [analysis.shape.id] as (number | string)[];
 
@@ -192,6 +195,15 @@ function createFingerprint(analysis: ShapeAnalysis) {
 
     return fingerprint.join(";");
 
+    /**
+     * Create a fingerprint for a specific type of ACE element.
+     *
+     * For elements we divide create series of bitmaps, one for each range of BIT_BLOCK_SIZE unique integers with an
+     * ID present.  Note that these bitmaps may not be consecutive due to gaps in IDs.  We then serialize all bitmaps
+     * present as "<block index>:<bitmap value>" and concatenate to create a unique fingerprint.
+     *
+     * The goal is to efficiently create a compact unique identifier.
+     */
     function createElementFingerprint(ids: Iterable<number>) {
         const blocks = {} as Record<number, number>;
 
