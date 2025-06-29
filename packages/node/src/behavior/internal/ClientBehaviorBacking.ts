@@ -59,6 +59,8 @@ export class ClientBehaviorBacking extends BehaviorBacking {
         return (this.#elements = {
             attributes,
             commands,
+
+            // TODO
             events: new Set(),
         });
     }

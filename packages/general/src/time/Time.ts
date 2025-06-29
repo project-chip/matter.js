@@ -153,6 +153,11 @@ export class StandardTimer implements Timer {
         this.intervalMs = intervalMs;
     }
 
+    /**
+     * The timer's interval.
+     *
+     * You can change this value but changes have no effect until the timer restarts.
+     */
     set intervalMs(intervalMs: number) {
         if (intervalMs < 0 || intervalMs > 2147483647) {
             throw new ImplementationError(

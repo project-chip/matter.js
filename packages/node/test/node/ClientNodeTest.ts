@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2025 Project CHIP Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -126,6 +126,22 @@ describe("ClientNode", () => {
         // *** UPDATE ***
 
         await MockTime.resolve(receivedUpdate);
+    });
+
+    it("decommissions", () => {
+        // TODO
+    });
+
+    it("writes attributes on commit", () => {
+        // TODO
+    });
+
+    it("reconnects and updates connection status", () => {
+        // TODO
+    });
+
+    it("emits events", () => {
+        // TODO
     });
 });
 

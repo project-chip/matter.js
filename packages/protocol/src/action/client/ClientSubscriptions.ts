@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2025 Project CHIP Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -156,6 +156,7 @@ export class ClientSubscriptions {
             Diagnostic.strong(`${timeoutFor(registration)}ms`),
         );
 
+        // TODO - rather than closing, put into dormant state and resubscribe when connection reestablishes
         this.#closeOne(registration, new TimeoutError());
     }
 }
