@@ -7,13 +7,12 @@
 
 import { DerBigUint, DerCodec, DerError } from "#codec/DerCodec.js";
 import { Environment } from "#environment/Environment.js";
+import { ImplementationError } from "#MatterError.js";
 import { Bytes } from "#util/Bytes.js";
 import { Ccm } from "./aes/Ccm.js";
 import { Crypto, CRYPTO_SYMMETRIC_KEY_LENGTH, CryptoDsaEncoding } from "./Crypto.js";
 import { CryptoVerifyError, KeyInputError } from "./CryptoError.js";
 import { CurveType, Key, KeyType, PrivateKey, PublicKey } from "./Key.js";
-
-const subtle = globalThis.crypto.subtle;
 
 const SIGNATURE_ALGORITHM = <EcdsaParams>{
     name: "ECDSA",
@@ -22,16 +21,29 @@ const SIGNATURE_ALGORITHM = <EcdsaParams>{
 };
 
 /**
- * A {@link Crypto} implementation based on standard "crypto.subtle" with missing portions implemented using JS.
+ * A {@link Crypto} implementation that uses only JS standards.
  *
  * WARNING: This code is unaudited.  Use a trusted native alternative where available.
  *
  * This module is mostly based on  {@link crypto.subtle}.  This should be a reliable native implementation.  However,
- * Web Crypto doesn't support AES-CCM required by Matter so fall back to a JS implementation for that.  See relevant
- * warnings in the "aes" subdirectory.
+ * Web Crypto doesn't support AES-CCM required by Matter so we use a JS implementation for that.  See relevant warnings
+ * in the "aes" subdirectory.
  */
 export class StandardCrypto extends Crypto {
     implementationName = "JS";
+    #subtle: SubtleCrypto;
+
+    constructor(subtle: SubtleCrypto = crypto?.subtle) {
+        if (subtle === undefined) {
+            throw new ImplementationError(
+                "You cannot instantiate StandardCrypto in this runtime because crypto.subtle is not present",
+            );
+        }
+
+        super();
+
+        this.#subtle = subtle;
+    }
 
     static provider() {
         return new StandardCrypto();
@@ -57,12 +69,12 @@ export class StandardCrypto extends Crypto {
         if (Array.isArray(buffer)) {
             buffer = Bytes.concat(...buffer);
         }
-        return new Uint8Array(await subtle.digest("SHA-256", buffer));
+        return new Uint8Array(await this.#subtle.digest("SHA-256", buffer));
     }
 
     async createPbkdf2Key(secret: Uint8Array, salt: Uint8Array, iteration: number, keyLength: number) {
-        const key = await importKey("raw", secret, "PBKDF2", false, ["deriveBits"]);
-        const bits = await subtle.deriveBits(
+        const key = await this.#importKey("raw", secret, "PBKDF2", false, ["deriveBits"]);
+        const bits = await this.#subtle.deriveBits(
             {
                 name: "PBKDF2",
                 hash: "SHA-256",
@@ -81,8 +93,8 @@ export class StandardCrypto extends Crypto {
         info: Uint8Array,
         length: number = CRYPTO_SYMMETRIC_KEY_LENGTH,
     ) {
-        const key = await importKey("raw", secret, "HKDF", false, ["deriveBits"]);
-        const bits = await subtle.deriveBits(
+        const key = await this.#importKey("raw", secret, "HKDF", false, ["deriveBits"]);
+        const bits = await this.#subtle.deriveBits(
             {
                 name: "HKDF",
                 hash: "SHA-256",
@@ -96,8 +108,8 @@ export class StandardCrypto extends Crypto {
     }
 
     async signHmac(secret: Uint8Array, data: Uint8Array) {
-        const key = await importKey("raw", secret, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-        return new Uint8Array(await subtle.sign("HMAC", key, data));
+        const key = await this.#importKey("raw", secret, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+        return new Uint8Array(await this.#subtle.sign("HMAC", key, data));
     }
 
     async signEcdsa(key: JsonWebKey, data: Uint8Array | Uint8Array[], dsaEncoding?: CryptoDsaEncoding) {
@@ -117,9 +129,9 @@ export class StandardCrypto extends Crypto {
             key_ops: ["sign"],
         };
 
-        const subtleKey = await importKey("jwk", key, SIGNATURE_ALGORITHM, false, ["sign"]);
+        const subtleKey = await this.#importKey("jwk", key, SIGNATURE_ALGORITHM, false, ["sign"]);
 
-        const ieeeP1363 = await subtle.sign(SIGNATURE_ALGORITHM, subtleKey, data);
+        const ieeeP1363 = await this.#subtle.sign(SIGNATURE_ALGORITHM, subtleKey, data);
 
         if (dsaEncoding !== "der") return new Uint8Array(ieeeP1363);
 
@@ -134,7 +146,7 @@ export class StandardCrypto extends Crypto {
     async verifyEcdsa(key: JsonWebKey, data: Uint8Array, signature: Uint8Array, dsaEncoding?: CryptoDsaEncoding) {
         const { crv, kty, x, y } = key;
         key = { crv, kty, x, y };
-        const subtleKey = await importKey("jwk", key, SIGNATURE_ALGORITHM, false, ["verify"]);
+        const subtleKey = await this.#importKey("jwk", key, SIGNATURE_ALGORITHM, false, ["verify"]);
 
         if (dsaEncoding === "der") {
             try {
@@ -151,7 +163,7 @@ export class StandardCrypto extends Crypto {
             }
         }
 
-        const verified = await subtle.verify(SIGNATURE_ALGORITHM, subtleKey, signature, data);
+        const verified = await this.#subtle.verify(SIGNATURE_ALGORITHM, subtleKey, signature, data);
 
         if (!verified) {
             throw new CryptoVerifyError("Signature verification failed");
@@ -159,7 +171,7 @@ export class StandardCrypto extends Crypto {
     }
 
     async createKeyPair() {
-        const subtleKey = await subtle.generateKey(
+        const subtleKey = await this.#subtle.generateKey(
             {
                 // We must specify either ECDH or ECDSA to get an EC key but we may use the key for either (but not for
                 // both)
@@ -173,7 +185,7 @@ export class StandardCrypto extends Crypto {
         );
 
         // Do not export as JWK because we do not want to inherit the algorithm and key_ops
-        const key = await subtle.exportKey("jwk", subtleKey.privateKey);
+        const key = await this.#subtle.exportKey("jwk", subtleKey.privateKey);
 
         // Extract only private and public fields; we do not want key_ops
         return Key({
@@ -186,7 +198,7 @@ export class StandardCrypto extends Crypto {
     }
 
     async generateDhSecret(key: PrivateKey, peerKey: PublicKey) {
-        const subtleKey = await importKey(
+        const subtleKey = await this.#importKey(
             "jwk",
             key,
             {
@@ -197,7 +209,7 @@ export class StandardCrypto extends Crypto {
             ["deriveBits"],
         );
 
-        const subtlePeerKey = await importKey(
+        const subtlePeerKey = await this.#importKey(
             "jwk",
             peerKey,
             {
@@ -208,7 +220,7 @@ export class StandardCrypto extends Crypto {
             [],
         );
 
-        const secret = await subtle.deriveBits(
+        const secret = await this.#subtle.deriveBits(
             {
                 name: "ECDH",
                 public: subtlePeerKey,
@@ -219,30 +231,33 @@ export class StandardCrypto extends Crypto {
 
         return new Uint8Array(secret);
     }
-}
 
-function importKey(
-    format: "jwk",
-    keyData: JsonWebKey,
-    algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm,
-    extractable: boolean,
-    keyUsages: ReadonlyArray<KeyUsage>,
-): Promise<CryptoKey>;
-function importKey(
-    format: Exclude<KeyFormat, "jwk">,
-    keyData: BufferSource,
-    algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm,
-    extractable: boolean,
-    keyUsages: KeyUsage[],
-): Promise<CryptoKey>;
+    #importKey(
+        format: "jwk",
+        keyData: JsonWebKey,
+        algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm,
+        extractable: boolean,
+        keyUsages: ReadonlyArray<KeyUsage>,
+    ): Promise<CryptoKey>;
+    #importKey(
+        format: Exclude<KeyFormat, "jwk">,
+        keyData: BufferSource,
+        algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm,
+        extractable: boolean,
+        keyUsages: KeyUsage[],
+    ): Promise<CryptoKey>;
 
-async function importKey(...params: unknown[]) {
-    try {
-        return await crypto.subtle.importKey(...(params as Parameters<SubtleCrypto["importKey"]>));
-    } catch (cause) {
-        throw new KeyInputError("Invalid key", { cause });
+    async #importKey(...params: unknown[]) {
+        try {
+            return await this.#subtle.importKey(...(params as Parameters<SubtleCrypto["importKey"]>));
+        } catch (cause) {
+            throw new KeyInputError("Invalid key", { cause });
+        }
     }
 }
 
-// Unconditionally add to Environment as it has not been exported yet so there can be no other implementation present
-Environment.default.set(Crypto, new StandardCrypto());
+// If available, unconditionally add to Environment as it has not been exported yet so there can be no other
+// implementation present
+if (crypto?.subtle !== undefined) {
+    Environment.default.set(Crypto, new StandardCrypto(crypto.subtle));
+}
