@@ -5,7 +5,9 @@
  */
 
 import { Behavior } from "#behavior/Behavior.js";
-import { ImplementationError, NotImplementedError, ServerAddress, Time } from "#general";
+import { Events as BaseEvents } from "#behavior/Events.js";
+import { OperationalCredentialsClient } from "#behaviors/operational-credentials";
+import { ImplementationError, NotImplementedError, Observable, ServerAddress, Time } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import type { ClientNode } from "#node/ClientNode.js";
 import type { Node } from "#node/Node.js";
@@ -34,6 +36,7 @@ import { RemoteDescriptor } from "./RemoteDescriptor.js";
  */
 export class CommissioningClient extends Behavior {
     declare state: CommissioningClient.State;
+    declare events: CommissioningClient.Events;
 
     static override readonly early = true;
 
@@ -49,6 +52,7 @@ export class CommissioningClient extends Behavior {
         }
 
         this.reactTo((this.endpoint as Node).lifecycle.partsReady, this.#initializeNode);
+        this.reactTo(this.events.peerAddress$Changed, this.#peerAddressChanged);
     }
 
     commission(passcode: number): Promise<ClientNode>;
@@ -56,6 +60,12 @@ export class CommissioningClient extends Behavior {
     commission(options: CommissioningClient.CommissioningOptions): Promise<ClientNode>;
 
     async commission(options: number | CommissioningClient.CommissioningOptions) {
+        // Commissioning can only happen once
+        const node = this.endpoint as ClientNode;
+        if (this.state.peerAddress !== undefined) {
+            throw new ImplementationError(`${node} is already commissioned`);
+        }
+
         if (typeof options !== "object") {
             options = { passcode: options };
         }
@@ -67,12 +77,6 @@ export class CommissioningClient extends Behavior {
             if (Number.isNaN(passcode)) {
                 throw new ImplementationError(`You must provide the numeric passcode to commission a node`);
             }
-        }
-
-        // Commissioning can only happen once
-        const node = this.endpoint as ClientNode;
-        if (this.state.peerAddress !== undefined) {
-            throw new ImplementationError(`${node} is already commissioned`);
         }
 
         // Ensure controller is initialized
@@ -137,6 +141,20 @@ export class CommissioningClient extends Behavior {
         return node;
     }
 
+    async decommission() {
+        const { peerAddress } = this.state;
+
+        if (peerAddress === undefined) {
+            throw new ImplementationError("Cannot decommission node that is not commissioned");
+        }
+
+        const opcreds = this.agent.get(OperationalCredentialsClient);
+
+        await opcreds.removeFabric({ fabricIndex: opcreds.state.currentFabricIndex });
+
+        this.state.peerAddress = undefined;
+    }
+
     /**
      * Override to implement CASE commissioning yourself.
      *
@@ -158,6 +176,16 @@ export class CommissioningClient extends Behavior {
     #initializeNode() {
         const endpoint = this.endpoint as ClientNode;
         endpoint.lifecycle.initialized.emit(this.state.peerAddress !== undefined);
+    }
+
+    #peerAddressChanged(addr?: PeerAddress) {
+        const node = this.endpoint as ClientNode;
+
+        if (addr) {
+            node.lifecycle.commissioned.emit(this.context);
+        } else {
+            node.lifecycle.decommissioned.emit(this.context);
+        }
     }
 
     /**
@@ -323,6 +351,10 @@ export namespace CommissioningClient {
         longIdleTimeOperatingMode?: boolean;
     }
 
+    export class Events extends BaseEvents {
+        peerAddress$Changed = new Observable<[value: PeerAddress | undefined, oldValue: PeerAddress | undefined]>();
+    }
+
     /**
      * Options that control commissioning.
      */
@@ -343,7 +375,7 @@ export namespace CommissioningClient {
         nodeId?: NodeId;
 
         /**
-         * The fabric the joins upon commissioning.  Defaults to the default fabric of the assigned
+         * The fabric the node joins upon commissioning.  Defaults to the default fabric of the assigned
          * {@link FabricAuthority}.
          */
         fabric?: Fabric;

@@ -77,8 +77,39 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         super.owner = owner;
     }
 
+    /**
+     * Add this node to a fabric.
+     */
     async commission(options: CommissioningClient.CommissioningOptions) {
         await this.act("commission", agent => agent.commissioning.commission(options));
+    }
+
+    /**
+     * Remove this node from the fabric.
+     */
+    async decommission() {
+        if (!this.lifecycle.isCommissioned) {
+            return;
+        }
+
+        this.statusUpdate("decommissioning");
+
+        await this.act("decommission", agent => agent.commissioning.decommission());
+    }
+
+    override async erase() {
+        await this.lifecycle.mutex.produce(this.eraseWithMutex.bind(this));
+    }
+
+    protected async eraseWithMutex() {
+        // First decommission if node is commissioned
+        await this.decommission();
+
+        // Then ensure we're offline
+        await this.cancelWithMutex();
+
+        // Reset in-memory state
+        await this.resetWithMutex();
     }
 
     protected createRuntime(): NetworkRuntime {

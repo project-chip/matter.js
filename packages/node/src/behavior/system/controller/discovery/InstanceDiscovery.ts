@@ -18,7 +18,7 @@ import { DiscoveryError } from "./DiscoveryError.js";
 export class InstanceDiscovery extends Discovery<ClientNode> {
     #result?: ClientNode;
 
-    constructor(owner: ServerNode, options?: Discovery.Options) {
+    constructor(owner: ServerNode, options?: Discovery.InstanceOptions) {
         super(owner, options);
     }
 

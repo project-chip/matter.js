@@ -259,9 +259,6 @@ export namespace Progress {
             if (time.startsWith("0.")) {
                 time = time.slice(1);
             }
-            while (time.endsWith("0")) {
-                time = time.slice(0, time.length - 1);
-            }
             if (time.endsWith(".")) {
                 if (time.length === 1) {
                     time = "0";
