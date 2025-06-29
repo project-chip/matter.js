@@ -37,5 +37,5 @@ export class CommissioningDiscovery extends InstanceDiscovery {
 }
 
 export namespace CommissioningDiscovery {
-    export type Options = Discovery.Options & CommissioningClient.CommissioningOptions;
+    export type Options = Discovery.InstanceOptions & CommissioningClient.CommissioningOptions;
 }

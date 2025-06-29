@@ -208,6 +208,7 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
                         } else {
                             // This node is new to us
                             node = factory.create({
+                                id: (this.#options as Discovery.InstanceOptions).id,
                                 environment: this.#owner.env,
                                 commissioning: { descriptor },
                             });
@@ -260,5 +261,15 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
 export namespace Discovery {
     export type Options = CommissionableDeviceIdentifiers & {
         timeoutSeconds?: number;
+    };
+
+    export type InstanceOptions = Options & {
+        /**
+         * The local ID to assign the node if newly discovered.  This is the stable identifier used for the node's "id"
+         * property.
+         *
+         * By default matter.js assigns an ID of the form "nodeN".
+         */
+        id?: string;
     };
 }

@@ -414,9 +414,15 @@ export class Behaviors {
             }
         };
 
-        await OfflineContext.act(`close<${this.#endpoint}>`, dispose, {
-            activity: this.#endpoint.env.get(NodeActivity),
-        });
+        await OfflineContext.act(
+            `close<${this.#endpoint}>`,
+            dispose,
+
+            // Note - do not close in an activity because this can cause deadlock
+            //, {
+            //    activity: this.#endpoint.env.get(NodeActivity),
+            //},
+        );
     }
 
     /**

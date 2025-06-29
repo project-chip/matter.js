@@ -5,7 +5,7 @@
  */
 
 import { FALLBACK_INTERACTIONMODEL_REVISION } from "#session/Session.js";
-import { ClusterType, CommandData, InvokeRequest, TlvSchema, TypeFromSchema } from "#types";
+import { ClusterType, CommandData, InvokeRequest, TlvSchema, TlvStream, TypeFromSchema } from "#types";
 import { MalformedRequestError } from "./MalformedRequestError.js";
 import { Specifier } from "./Specifier.js";
 
@@ -72,11 +72,20 @@ export namespace Invoke {
     }
 
     export function Command<const C extends ClusterType>(request: Invoke.CommandRequest<C>): CommandData {
+        const command = Invoke.commandOf(request);
+
+        let commandFields: TlvStream | undefined;
+
+        if ("fields" in request) {
+            commandFields = command.requestSchema.encodeTlv(request.fields, { forWriteInteraction: true });
+        }
+
         const result: CommandData = {
             commandPath: {
                 clusterId: Specifier.clusterFor(request.cluster).id,
-                commandId: Invoke.commandOf(request).requestId,
+                commandId: command.requestId,
             },
+            commandFields,
         };
 
         const endpointId = Specifier.endpointIdOf(request);

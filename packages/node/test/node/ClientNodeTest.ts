@@ -128,8 +128,21 @@ describe("ClientNode", () => {
         await MockTime.resolve(receivedUpdate);
     });
 
-    it("decommissions", () => {
-        // TODO
+    it("decommissions", async () => {
+        // *** SETUP ***
+
+        await using site = new MockSite();
+        const { controller, device } = await site.addCommissionedPair();
+
+        expect(controller.nodes.size).equals(1);
+        expect(device.lifecycle.isCommissioned).is.true;
+
+        // *** DECOMMISSION ***
+
+        await Promise.resolve(controller.nodes.get("peer1")!.delete());
+
+        expect(controller.nodes.size).equals(0);
+        expect(device.lifecycle.isCommissioned).is.false;
     });
 
     it("writes attributes on commit", () => {
