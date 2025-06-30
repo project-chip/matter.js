@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Icac, Noc } from "#certificate/index.js";
+import { Icac } from "#certificate/kinds/Icac.js";
+import { Noc } from "#certificate/kinds/Noc.js";
 import { Bytes, Logger, PublicKey, UnexpectedDataError } from "#general";
-import { ChannelStatusResponseError } from "#securechannel/index.js";
+import { ChannelStatusResponseError } from "#securechannel/SecureChannelMessenger.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId, SecureChannelStatusCode } from "#types";
 import { Fabric } from "../../fabric/Fabric.js";

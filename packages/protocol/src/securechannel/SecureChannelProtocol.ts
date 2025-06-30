@@ -150,8 +150,4 @@ export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol
                 await super.onNewExchange(exchange, message);
         }
     }
-
-    static isStandaloneAck(protocolId: number, messageType: number) {
-        return protocolId === SECURE_CHANNEL_PROTOCOL_ID && messageType === SecureMessageType.StandaloneAck;
-    }
 }

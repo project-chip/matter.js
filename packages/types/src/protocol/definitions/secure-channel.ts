@@ -83,3 +83,9 @@ export enum SecureChannelStatusCode {
      */
     GeneralError = 0xffff,
 }
+
+export namespace SecureMessageType {
+    export function isStandaloneAck(protocolId: number, messageType: number) {
+        return protocolId === SECURE_CHANNEL_PROTOCOL_ID && messageType === SecureMessageType.StandaloneAck;
+    }
+}

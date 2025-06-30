@@ -4,7 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CertificateError, Icac, Noc, Rcac, X509Base } from "#certificate/index.js";
+import { CertificateError } from "#certificate/kinds/common.js";
+import { Icac } from "#certificate/kinds/Icac.js";
+import { Noc } from "#certificate/kinds/Noc.js";
+import { Rcac } from "#certificate/kinds/Rcac.js";
+import { X509Base } from "#certificate/kinds/X509Base.js";
 import { Bytes, DerCodec, DerKey, DerNode, PrivateKey, PublicKey, StandardCrypto, X962 } from "#general";
 import { CaseAuthenticatedTag, FabricId, NodeId, ValidationOutOfBoundsError } from "#types";
 import {

@@ -5,7 +5,7 @@
  */
 
 import { Construction, MaybePromise } from "#general";
-import { DecodedAttributeReportValue } from "#interaction/index.js";
+import { DecodedAttributeReportValue } from "#interaction/AttributeDataDecoder.js";
 import { AttributeId, ClusterId, EndpointNumber, EventNumber } from "#types";
 import { OperationalPeer } from "./OperationalPeer.js";
 import { PeerAddress } from "./PeerAddress.js";

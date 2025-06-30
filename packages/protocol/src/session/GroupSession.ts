@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { Subject } from "#action/server/Subject.js";
-import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet, SessionType } from "#codec/index.js";
+import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet, SessionType } from "#codec/MessageCodec.js";
 import { Fabric } from "#fabric/Fabric.js";
 import { FabricManager } from "#fabric/FabricManager.js";
 import {

@@ -34,8 +34,8 @@ import { ControllerDiscovery, PairRetransmissionLimitReachedError } from "#peer/
 import { ExchangeManager } from "#protocol/ExchangeManager.js";
 import { DedicatedChannelExchangeProvider } from "#protocol/ExchangeProvider.js";
 import { MessageChannel } from "#protocol/MessageChannel.js";
-import { ChannelStatusResponseError } from "#securechannel/index.js";
-import { PaseClient } from "#session/index.js";
+import { ChannelStatusResponseError } from "#securechannel/SecureChannelMessenger.js";
+import { PaseClient } from "#session/pase/PaseClient.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { DiscoveryCapabilitiesBitmap, NodeId, SECURE_CHANNEL_PROTOCOL_ID, TypeFromPartialBitSchema } from "#types";
 import { PeerAddress } from "./PeerAddress.js";

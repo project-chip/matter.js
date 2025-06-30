@@ -1,9 +1,24 @@
-import { Message, MessageCodec } from "#codec/index.js";
-import { Channel, Logger, MatterFlowError } from "#general";
-import { DEFAULT_EXPECTED_PROCESSING_TIME_MS, ExchangeLogContext } from "#protocol/MessageExchange.js";
-import { Session, SessionParameters } from "#session/index.js";
+/**
+ * @license
+ * Copyright 2022-2025 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { Message, MessageCodec } from "#codec/MessageCodec.js";
+import { Channel, Logger, MatterError, MatterFlowError } from "#general";
+import type { ExchangeLogContext } from "#protocol/MessageExchange.js";
+import { Session, SessionParameters } from "#session/Session.js";
 
 const logger = new Logger("MessageChannel");
+
+export class ChannelNotConnectedError extends MatterError {}
+
+/**
+ * Default expected processing time for a messages in milliseconds. The value is derived from kExpectedIMProcessingTime
+ * from chip implementation. This is basically the default used with different names, also kExpectedLowProcessingTime or
+ * kExpectedSigma1ProcessingTime.
+ */
+export const DEFAULT_EXPECTED_PROCESSING_TIME_MS = 2000;
 
 /**
  * The buffer time in milliseconds to add to the peer response time to also consider network delays and other factors.

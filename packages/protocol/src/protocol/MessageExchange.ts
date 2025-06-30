@@ -19,8 +19,12 @@ import {
     Time,
     Timer,
 } from "#general";
-import { MessageChannel, MRP } from "#protocol/MessageChannel.js";
-import { SecureChannelProtocol } from "#securechannel/SecureChannelProtocol.js";
+import {
+    ChannelNotConnectedError,
+    DEFAULT_EXPECTED_PROCESSING_TIME_MS,
+    MessageChannel,
+    MRP,
+} from "#protocol/MessageChannel.js";
 import { GroupSession } from "#session/GroupSession.js";
 import {
     SESSION_ACTIVE_INTERVAL_MS,
@@ -36,7 +40,6 @@ import {
     StatusCode,
     StatusResponseError,
 } from "#types";
-import { ChannelNotConnectedError } from "./ExchangeManager.js";
 
 const logger = Logger.get("MessageExchange");
 
@@ -86,13 +89,6 @@ export type ExchangeSendOptions = {
     /** Additional context information for logging to be included at the beginning of the Message log. */
     logContext?: ExchangeLogContext;
 };
-
-/**
- * Default expected processing time for a messages in milliseconds. The value is derived from kExpectedIMProcessingTime
- * from chip implementation. This is basically the default used with different names, also kExpectedLowProcessingTime or
- * kExpectedSigma1ProcessingTime.
- */
-export const DEFAULT_EXPECTED_PROCESSING_TIME_MS = 2_000;
 
 /**
  * Message size overhead of a Matter message:
@@ -285,7 +281,7 @@ export class MessageExchange {
             payloadHeader: { requiresAck, ackedMessageId, protocolId, messageType },
         } = message;
 
-        const isStandaloneAck = SecureChannelProtocol.isStandaloneAck(protocolId, messageType);
+        const isStandaloneAck = SecureMessageType.isStandaloneAck(protocolId, messageType);
         if (protocolId !== this.#protocolId && !isStandaloneAck) {
             throw new MatterFlowError(
                 `Drop received a message for an unexpected protocol. Expected: ${this.#protocolId}, received: ${protocolId}`,
@@ -468,7 +464,7 @@ export class MessageExchange {
             const {
                 payloadHeader: { protocolId, messageType },
             } = responseMessage;
-            if (expectAckOnly && !SecureChannelProtocol.isStandaloneAck(protocolId, messageType)) {
+            if (expectAckOnly && !SecureMessageType.isStandaloneAck(protocolId, messageType)) {
                 throw new UnexpectedMessageError("Expected ack only", responseMessage);
             }
         }

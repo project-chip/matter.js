@@ -3,7 +3,8 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { InteractionSession } from "#action/index.js";
+
+import { InteractionSession } from "#action/Interactable.js";
 import { AttributeTypeProtocol, ClusterProtocol, EndpointProtocol, NodeProtocol } from "#action/protocols.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { InternalError } from "#general";

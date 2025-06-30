@@ -23,23 +23,25 @@ import {
     UnexpectedDataError,
 } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
-import { MessageChannel } from "#protocol/MessageChannel.js";
+import {
+    ChannelNotConnectedError,
+    DEFAULT_EXPECTED_PROCESSING_TIME_MS,
+    MessageChannel,
+} from "#protocol/MessageChannel.js";
 import { SecureChannelMessenger } from "#securechannel/SecureChannelMessenger.js";
-import { SecureChannelProtocol } from "#securechannel/SecureChannelProtocol.js";
+import { UNICAST_UNSECURE_SESSION_ID } from "#session/InsecureSession.js";
 import { NodeSession } from "#session/NodeSession.js";
 import { Session } from "#session/Session.js";
-import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "#session/SessionManager.js";
+import { SessionManager } from "#session/SessionManager.js";
 import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
 import { ChannelManager } from "./ChannelManager.js";
-import { DEFAULT_EXPECTED_PROCESSING_TIME_MS, MessageExchange, MessageExchangeContext } from "./MessageExchange.js";
+import { MessageExchange, MessageExchangeContext } from "./MessageExchange.js";
 import { DuplicateMessageError } from "./MessageReceptionState.js";
 import { ProtocolHandler } from "./ProtocolHandler.js";
 
 const logger = Logger.get("ExchangeManager");
 
 const MAXIMUM_CONCURRENT_EXCHANGES_PER_SESSION = 5;
-
-export class ChannelNotConnectedError extends MatterError {}
 
 /**
  * Interfaces {@link ExchangeManager} with other components.
@@ -217,7 +219,7 @@ export class ExchangeManager {
             exchange = undefined;
         }
 
-        const isStandaloneAck = SecureChannelProtocol.isStandaloneAck(
+        const isStandaloneAck = SecureMessageType.isStandaloneAck(
             message.payloadHeader.protocolId,
             message.payloadHeader.messageType,
         );

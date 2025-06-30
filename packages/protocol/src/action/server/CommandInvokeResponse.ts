@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommandInvokeHandler, Invoke, InvokeResult, Subject } from "#action/index.js";
 import { InteractionSession } from "#action/Interactable.js";
-import { CommandTypeProtocol, EndpointProtocol, NodeProtocol } from "#action/protocols.js";
+import { CommandInvokeHandler, CommandTypeProtocol, EndpointProtocol, NodeProtocol } from "#action/protocols.js";
+import { Invoke } from "#action/request/Invoke.js";
+import { InvokeResult } from "#action/response/InvokeResult.js";
 import { AccessControl } from "#action/server/AccessControl.js";
 import { DataResponse, FallbackLimits } from "#action/server/DataResponse.js";
 import { Diagnostic, InternalError, Logger } from "#general";
@@ -22,6 +23,7 @@ import {
     TlvStream,
     ValidationError,
 } from "#types";
+import { Subject } from "./Subject.js";
 
 const logger = Logger.get("CommandInvokeResponse");
 
