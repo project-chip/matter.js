@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FabricIndex, NodeId } from "#types";
+import { FabricIndex, GroupId, NodeId } from "#types";
 
 /**
  * This is the "logical" address of a peer node consisting of a fabric and node ID.
@@ -66,7 +66,7 @@ export namespace PeerAddress {
     }
 
     export function isGroup(address: PeerAddress): boolean {
-        return NodeId.isGroupNodeId(address.nodeId);
+        return GroupId.isGroupNodeId(address.nodeId);
     }
 }
 
