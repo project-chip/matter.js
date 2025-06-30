@@ -115,13 +115,13 @@ target "app" {
             {
                 name: "energy-gateway",
                 target: "energy-gateway",
-                bin: "matter-energy-gateway-app",
+                bin: "chip-energy-gateway-app",
             },
 
             {
                 name: "energy-management",
                 target: "energy-management",
-                bin: "matter-energy-management-app",
+                bin: "chip-energy-management-app",
             },
         ]
     }
