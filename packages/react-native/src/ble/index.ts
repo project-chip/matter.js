@@ -6,3 +6,5 @@
 
 export * from "./BleReactNative.js";
 export * from "./BleScanner.js";
+export * from "./ReactNativeBleChannel.js";
+export * from "./ReactNativeBleClient.js";
