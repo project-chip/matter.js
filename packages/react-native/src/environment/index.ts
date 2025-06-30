@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import "./net/register.js";
+import "./register.js";
 
-import "./crypto/register.js";
-
-import "./environment/register.js";
+export * from "./ReactNativeEnvironment.js";
