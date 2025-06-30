@@ -33,7 +33,7 @@
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "devDependencies": {
         "@matter/tools": "0.0.0-git",
-        "@types/node": "^24.0.3",
+        "@types/node": "^24.0.7",
         "@types/tar-stream": "^3.1.4"
     },
     "publishConfig": {
