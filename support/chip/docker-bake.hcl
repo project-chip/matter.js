@@ -111,6 +111,18 @@ target "app" {
                 target: "network-manager",
                 bin: "matter-network-manager-app",
             },
+
+            {
+                name: "energy-gateway",
+                target: "energy-gateway",
+                bin: "chip-energy-gateway-app",
+            },
+
+            {
+                name: "energy-management",
+                target: "energy-management",
+                bin: "chip-energy-management-app",
+            },
         ]
     }
 
