@@ -117,6 +117,8 @@ jobs:
               --microwave-oven-app ../bin/chip-microwave-oven-app \
               --rvc-app ../bin/chip-rvc-app \
               --network-manager-app ../bin/matter-network-manager-app \
+              --energy-gateway-app ../bin/chip-energy-gateway-app \
+              --energy-management-app ../bin/chip-energy-management-app \
             '
       - name: Verify that Matter.js controller was used
         shell: bash
