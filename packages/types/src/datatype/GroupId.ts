@@ -8,7 +8,7 @@ import { Branded, InternalError, UnexpectedDataError } from "#general";
 import { ValidationOutOfBoundsError, validatorOf } from "../common/ValidationError.js";
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { NodeId } from "./NodeId.js";
+import type { NodeId } from "./NodeId.js";
 
 /**
  * A Group Identifier (Group ID or GID) is a 16-bit number that identifies a set of Nodes across a
@@ -58,7 +58,7 @@ export namespace GroupId {
     }
 
     export function fromNodeId(nodeId: NodeId): GroupId {
-        if (!NodeId.isGroupNodeId(nodeId)) {
+        if (!isGroupNodeId(nodeId)) {
             throw new InternalError(`NodeId ${nodeId} is not a Group NodeId`);
         }
         // NodeId is a 64-bit value, where the lower 16 bits represent the GroupId
@@ -66,6 +66,12 @@ export namespace GroupId {
         // TODO Check if 0 is allowed??
         return GroupId(groupId);
     }
+
+    /** A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the lower half of the Node ID. */
+    export const isGroupNodeId = (nodeId: NodeId): boolean => {
+        const nodeIdHex = nodeId.toString(16);
+        return nodeIdHex.startsWith("ffffffffffff") && nodeIdHex.length === 16;
+    };
 }
 
 /** Tlv Schema for a Group Id. */

@@ -13,6 +13,7 @@ import {
     decamelize,
     EventId,
     EventNumber,
+    GroupId,
     isObject,
     LogFormat,
     NodeId,
@@ -793,7 +794,7 @@ export class ChipToolWebSocketHandler {
         try {
             await handler.handleWriteAttributeById({
                 nodeId,
-                endpointId: NodeId.isGroupNodeId(nodeId) ? undefined : EndpointNumber(parseInt(endpointId)),
+                endpointId: GroupId.isGroupNodeId(nodeId) ? undefined : EndpointNumber(parseInt(endpointId)),
                 clusterId: ClusterId(parseInt(clusterId)),
                 attributeId: AttributeId(parseInt(attributeId)),
                 value: parsedValue,
@@ -1159,7 +1160,7 @@ export class ChipToolWebSocketHandler {
         try {
             await handler.handleWriteAttribute({
                 nodeId,
-                endpointId: NodeId.isGroupNodeId(nodeId) ? undefined : EndpointNumber(parseInt(endpointId)),
+                endpointId: GroupId.isGroupNodeId(nodeId) ? undefined : EndpointNumber(parseInt(endpointId)),
                 clusterId: clusterData.clusterId,
                 attributeName: camelize(attributeModel.name),
                 value: matterValue,
@@ -1196,7 +1197,7 @@ export class ChipToolWebSocketHandler {
         const commandName = camelize(command);
         const commandModel = clusterData.commands[commandName.toLowerCase()];
         const nodeId = NodeId(parseNumber(destinationId));
-        const isGroupNode = NodeId.isGroupNodeId(nodeId);
+        const isGroupNode = GroupId.isGroupNodeId(nodeId);
         try {
             const result = await handler.handleInvoke({
                 nodeId,

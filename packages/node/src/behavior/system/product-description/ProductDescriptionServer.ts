@@ -5,13 +5,10 @@
  */
 
 import { Agent } from "#endpoint/Agent.js";
-import { DeviceClassification } from "#model";
+import { AggregatorDt, BridgedNodeDt, DeviceClassification, RootNodeDt } from "#model";
 import { DeviceTypeId, ProductDescription, VendorId } from "#types";
 import { BasicInformationBehavior } from "../../../behaviors/basic-information/BasicInformationBehavior.js";
 import { DescriptorBehavior } from "../../../behaviors/descriptor/DescriptorBehavior.js";
-import { AggregatorEndpoint } from "../../../endpoints/aggregator.js";
-import { BridgedNodeEndpoint } from "../../../endpoints/bridged-node.js";
-import { RootEndpoint } from "../../../endpoints/root.js";
 import { Behavior } from "../../Behavior.js";
 
 /**
@@ -99,9 +96,11 @@ function inferDeviceType(agent: Agent): DeviceTypeId | undefined {
     let recurse = false;
     for (const dt of agent.get(DescriptorBehavior).state.deviceTypeList) {
         switch (dt.deviceType) {
-            case RootEndpoint.deviceType:
-            case BridgedNodeEndpoint.deviceType:
-            case AggregatorEndpoint.deviceType:
+            // Note - retrieve IDs from the model rather than the endpoint files because referencing the endpoints will
+            // create a big wad of circular deps
+            case RootNodeDt.id:
+            case BridgedNodeDt.id:
+            case AggregatorDt.id:
                 recurse = true;
                 break;
 
