@@ -5,7 +5,7 @@
  */
 import { Subject } from "#action/server/Subject.js";
 import { AccessControl } from "#clusters/access-control";
-import { Fabric } from "#fabric/Fabric.js";
+import type { Fabric } from "#fabric/Fabric.js";
 import { InternalError, Logger, MatterFlowError } from "#general";
 import { AccessLevel } from "#model";
 import {

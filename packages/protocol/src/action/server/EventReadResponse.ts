@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InteractionSession } from "#action/index.js";
+import { InteractionSession } from "#action/Interactable.js";
 import { ClusterProtocol, EndpointProtocol, EventTypeProtocol, NodeProtocol } from "#action/protocols.js";
 import { Read } from "#action/request/Read.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { AccessControl } from "#action/server/AccessControl.js";
 import { DataResponse, FallbackLimits } from "#action/server/DataResponse.js";
-import { NumberedOccurrence } from "#events/index.js";
+import { NumberedOccurrence } from "#events/Occurrence.js";
 import { InternalError, isObject, Logger } from "#general";
 import { DataModelPath, ElementTag, EventModel } from "#model";
 import {

@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Fabric } from "#fabric/Fabric.js";
+import type { Fabric } from "#fabric/Fabric.js";
 import { BasicMap, Bytes, InternalError, MatterFlowError, StorageContext } from "#general";
 import { GroupKeySet, KeySets, OperationalKeySet } from "#groups/KeySets.js";
 import { MessagingState } from "#groups/MessagingState.js";

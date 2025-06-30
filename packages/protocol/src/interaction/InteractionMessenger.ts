@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ReadResult } from "#action/index.js";
+import { ReadResult } from "#action/response/ReadResult.js";
 import {
     Diagnostic,
     InternalError,
@@ -14,6 +14,7 @@ import {
     UnexpectedDataError,
 } from "#general";
 import { Specification } from "#model";
+import { ChannelNotConnectedError } from "#protocol/MessageChannel.js";
 import {
     ReceivedStatusResponseError,
     Status,
@@ -37,7 +38,6 @@ import {
     TypeFromSchema,
 } from "#types";
 import { Message, SessionType } from "../codec/MessageCodec.js";
-import { ChannelNotConnectedError } from "../protocol/ExchangeManager.js";
 import { ExchangeProvider } from "../protocol/ExchangeProvider.js";
 import {
     ExchangeSendOptions,

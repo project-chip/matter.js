@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DecodedPacket } from "#codec/index.js";
+import { DecodedPacket } from "#codec/MessageCodec.js";
 import { FabricManager } from "#fabric/FabricManager.js";
 import {
     BasicSet,
@@ -61,8 +61,6 @@ const DEFAULT_SESSION_PARAMETERS = {
     supportedTransports: {},
     maxTcpMessageSize: FALLBACK_MAX_TCP_MESSAGE_SIZE,
 };
-
-export const UNICAST_UNSECURE_SESSION_ID = 0x0000;
 
 export interface ResumptionRecord {
     sharedSecret: Uint8Array;

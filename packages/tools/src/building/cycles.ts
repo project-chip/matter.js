@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+const MAX_CYCLES = 1000;
+
 import { readFile } from "node:fs/promises";
 import { Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
@@ -35,6 +37,9 @@ async function identifyCycles(pkg: Package, progress: Progress) {
     const cycles = [] as string[][];
     for (const filename in deps) {
         visit(filename, []);
+        if (cycles.length === MAX_CYCLES) {
+            break;
+        }
     }
 
     function visit(filename: string, breadcrumb: string[]) {
@@ -74,6 +79,9 @@ async function identifyCycles(pkg: Package, progress: Progress) {
         breadcrumb = [...breadcrumb, filename];
         for (const dep of fileDeps) {
             visit(dep, breadcrumb);
+            if (cycles.length > MAX_CYCLES) {
+                break;
+            }
         }
     }
 
@@ -85,6 +93,9 @@ function printCycles(pkg: Package, cycles: string[][]) {
     const src = pkg.resolve("src");
     for (const cycle of cycles) {
         std.out("  ", cycle.map(name => ansi.bright.blue(relative(src, name))).join(" → "), " ↩\n");
+    }
+    if (cycles.length >= MAX_CYCLES) {
+        std.out(`\n${ansi.red(`Stopping search after max ${MAX_CYCLES} cycles`)}\n`);
     }
 }
 

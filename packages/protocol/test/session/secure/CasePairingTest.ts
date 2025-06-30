@@ -5,7 +5,7 @@
  */
 
 import { b$, Bytes, PublicKey, StandardCrypto } from "#general";
-import { TlvEncryptedDataSigma2, TlvEncryptedDataSigma3, TlvSignedData } from "#session/index.js";
+import { TlvEncryptedDataSigma2, TlvEncryptedDataSigma3, TlvSignedData } from "#session/case/CaseMessages.js";
 
 describe("CasePairing", () => {
     const crypto = new StandardCrypto();

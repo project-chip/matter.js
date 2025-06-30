@@ -20,7 +20,8 @@ import {
     ObserverGroup,
 } from "#general";
 import { SecureChannelProtocol } from "#securechannel/SecureChannelProtocol.js";
-import { PaseServer, SessionManager } from "#session/index.js";
+import { PaseServer } from "#session/pase/PaseServer.js";
+import { SessionManager } from "#session/SessionManager.js";
 import { CommissioningOptions, StatusCode, StatusResponseError } from "#types";
 import type { ControllerCommissioner } from "../peer/ControllerCommissioner.js";
 import { DeviceAdvertiser } from "./DeviceAdvertiser.js";

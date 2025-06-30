@@ -4,15 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AsyncObservable, Channel, Environment, Environmental, Logger, MatterError } from "#general";
+import { AsyncObservable, Channel, Environment, Environmental, Logger } from "#general";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { MessageChannel } from "#protocol/MessageChannel.js";
-import { NodeSession } from "#session/NodeSession.js";
+import { NoChannelError, NodeSession } from "#session/NodeSession.js";
 import { Session } from "#session/Session.js";
 
 const logger = Logger.get("ChannelManager");
-
-export class NoChannelError extends MatterError {}
 
 export class ChannelManager {
     readonly #channels = new PeerAddressMap<MessageChannel[]>();

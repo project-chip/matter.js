@@ -12,9 +12,11 @@ import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateUnencryptedWithRollover } from "../protocol/MessageReceptionState.js";
 import { NoAssociatedFabricError } from "./NodeSession.js";
 import { Session, SessionParameterOptions } from "./Session.js";
-import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
+import type { SessionManager } from "./SessionManager.js";
 
 const logger = Logger.get("InsecureSession");
+
+export const UNICAST_UNSECURE_SESSION_ID = 0x0000;
 
 export class InsecureSession extends Session {
     readonly #initiatorNodeId: NodeId;

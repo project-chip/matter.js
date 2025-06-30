@@ -7,21 +7,31 @@
 import { Subject } from "#action/server/Subject.js";
 import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet, SessionType } from "#codec/MessageCodec.js";
 import { Fabric } from "#fabric/Fabric.js";
-import { BasicSet, Bytes, CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto, Diagnostic, Logger, MatterFlowError } from "#general";
-import { Subscription } from "#interaction/Subscription.js";
+import {
+    BasicSet,
+    Bytes,
+    CRYPTO_SYMMETRIC_KEY_LENGTH,
+    Crypto,
+    Diagnostic,
+    Logger,
+    MatterError,
+    MatterFlowError,
+} from "#general";
+import type { Subscription } from "#interaction/Subscription.js";
 import { PeerAddress } from "#peer/PeerAddress.js";
-import { NoChannelError } from "#protocol/ChannelManager.js";
 import { MessageCounter } from "#protocol/MessageCounter.js";
 import { MessageReceptionStateEncryptedWithoutRollover } from "#protocol/MessageReceptionState.js";
 import { CaseAuthenticatedTag, FabricIndex, NodeId, StatusCode, StatusResponseError } from "#types";
 import { SecureSession } from "./SecureSession.js";
 import { Session, SessionParameterOptions } from "./Session.js";
-import { type SessionManager } from "./SessionManager.js";
+import type { SessionManager } from "./SessionManager.js";
 
 const logger = Logger.get("SecureSession");
 
 const SESSION_KEYS_INFO = Bytes.fromString("SessionKeys");
 const SESSION_RESUMPTION_KEYS_INFO = Bytes.fromString("SessionResumptionKeys");
+
+export class NoChannelError extends MatterError {}
 
 export class NoAssociatedFabricError extends StatusResponseError {
     constructor(message: string) {

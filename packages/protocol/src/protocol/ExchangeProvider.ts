@@ -6,9 +6,13 @@
 import { ChannelType, Observable } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { ChannelManager } from "#protocol/ChannelManager.js";
-import { ChannelNotConnectedError, ExchangeManager } from "#protocol/ExchangeManager.js";
-import { MessageChannel } from "#protocol/MessageChannel.js";
-import { DEFAULT_EXPECTED_PROCESSING_TIME_MS, MessageExchange } from "#protocol/MessageExchange.js";
+import { ExchangeManager } from "#protocol/ExchangeManager.js";
+import {
+    ChannelNotConnectedError,
+    DEFAULT_EXPECTED_PROCESSING_TIME_MS,
+    MessageChannel,
+} from "#protocol/MessageChannel.js";
+import { MessageExchange } from "#protocol/MessageExchange.js";
 import { ProtocolHandler } from "#protocol/ProtocolHandler.js";
 import { Session } from "#session/Session.js";
 import { INTERACTION_PROTOCOL_ID } from "#types";

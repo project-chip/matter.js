@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { X509Base } from "#certificate/index.js";
+import { X509Base } from "#certificate/kinds/X509Base.js";
 import { BasicInformation } from "#clusters/basic-information";
 import { Descriptor } from "#clusters/descriptor";
 import { GeneralCommissioning } from "#clusters/general-commissioning";

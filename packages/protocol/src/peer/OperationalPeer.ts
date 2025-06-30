@@ -6,7 +6,7 @@
 
 import { DiscoveryData } from "#common/Scanner.js";
 import { ServerAddressIp } from "#general";
-import { PeerDataStore } from "#peer/PeerAddressStore.js";
+import type { PeerDataStore } from "#peer/PeerAddressStore.js";
 import { SessionParameters } from "#session/Session.js";
 import { PeerAddress } from "./PeerAddress.js";
 

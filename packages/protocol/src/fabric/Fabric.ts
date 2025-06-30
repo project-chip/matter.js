@@ -4,7 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Icac, Noc, Rcac, X509Base } from "#certificate/index.js";
+import { Icac } from "#certificate/kinds/Icac.js";
+import { Noc } from "#certificate/kinds/Noc.js";
+import { Rcac } from "#certificate/kinds/Rcac.js";
+import { X509Base } from "#certificate/kinds/X509Base.js";
 import {
     BinaryKeyPair,
     Bytes,
