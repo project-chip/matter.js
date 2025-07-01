@@ -89,6 +89,8 @@ export function generalSetup(mocha: Mocha) {
 }
 
 export function extendApi(Mocha: typeof MochaType) {
+    (Mocha.reporters.Base as any).maxDiffSize = 0xffff;
+
     const descriptors = new WeakMap<Mocha.Suite | Mocha.Test, TestDescriptor>();
 
     Object.defineProperty(Mocha.Suite.prototype, "descriptor", {

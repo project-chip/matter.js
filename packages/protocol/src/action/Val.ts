@@ -77,6 +77,11 @@ export namespace Val {
         refresh(): void;
 
         /**
+         * The key used for storage of attributes and struct properties.
+         */
+        primaryKey: "id" | "name";
+
+        /**
          * The managed value that owns the reference.
          */
         owner?: T;

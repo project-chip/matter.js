@@ -5,4 +5,5 @@
  */
 
 export * from "./CommissioningController.js";
+export * from "./ControllerStore.js";
 export * from "./PaseCommissioner.js";

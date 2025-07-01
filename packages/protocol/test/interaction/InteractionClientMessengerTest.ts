@@ -96,6 +96,7 @@ describe("InteractionClientMessenger", () => {
         } as ReadRequest;
 
         await messenger.sendReadRequest(requestData);
+        await messenger.readAggregateDataReport();
 
         expect(request).to.deep.equal(requestData);
     });
@@ -127,6 +128,7 @@ describe("InteractionClientMessenger", () => {
         } as ReadRequest;
 
         await messenger.sendReadRequest(requestData);
+        await messenger.readAggregateDataReport();
 
         expect(request).to.exist;
         expect((request! as SubscribeRequest).dataVersionFilters?.length).to.equal(68);
@@ -168,6 +170,7 @@ describe("InteractionClientMessenger", () => {
         } as SubscribeRequest;
 
         await messenger.sendSubscribeRequest(requestData);
+        await messenger.readAggregateSubscribeResponse();
 
         expect(request).to.deep.equal(requestData);
         expect(subscriptionFinalized).to.be.true;
@@ -215,6 +218,7 @@ describe("InteractionClientMessenger", () => {
         } as SubscribeRequest;
 
         await messenger.sendSubscribeRequest(requestData);
+        await messenger.readAggregateSubscribeResponse();
 
         expect(request).to.exist;
         expect((request as unknown as SubscribeRequest).dataVersionFilters?.length).to.equal(67);

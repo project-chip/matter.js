@@ -8,3 +8,4 @@
 
 export * from "./EnergyEvseModeBehavior.js";
 export * from "./EnergyEvseModeServer.js";
+export * from "./EnergyEvseModeClient.js";

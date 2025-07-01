@@ -13,7 +13,7 @@ import { MockServerNode } from "./mock-server-node.js";
 describe("CommandInvokeResponse", () => {
     it("invoke concrete command", async () => {
         const device = new Endpoint(OnOffLightDevice);
-        const node = await MockServerNode.createOnline({ device });
+        const node = await MockServerNode.createOnline(undefined, { device });
         const response = await invokeCmd(
             node,
             Invoke.Command({
@@ -37,7 +37,7 @@ describe("CommandInvokeResponse", () => {
 
     it("invokes existing endpoint wildcard commands", async () => {
         const device = new Endpoint(OnOffLightDevice);
-        const node = await MockServerNode.createOnline({ device });
+        const node = await MockServerNode.createOnline(undefined, { device });
         await node.add(new Endpoint(OnOffLightDevice));
         const response = await invokeCmd(
             node,
@@ -68,7 +68,7 @@ describe("CommandInvokeResponse", () => {
 
     it("invokes existing endpoint wildcard commands with suppressed response", async () => {
         const device = new Endpoint(OnOffLightDevice);
-        const node = await MockServerNode.createOnline({ device });
+        const node = await MockServerNode.createOnline(undefined, { device });
         await node.add(new Endpoint(OnOffLightDevice));
         const response = await invokeCmdRaw(node, {
             suppressResponse: true,
@@ -85,7 +85,7 @@ describe("CommandInvokeResponse", () => {
     });
 
     it("invokes non-existing endpoint wildcard command", async () => {
-        const node = await MockServerNode.createOnline();
+        const node = await MockServerNode.createOnline(undefined, { device: undefined });
         const response = await invokeCmd(
             node,
             Invoke.Command({
@@ -99,7 +99,7 @@ describe("CommandInvokeResponse", () => {
     });
 
     it("invoke non existing concrete command", async () => {
-        const node = await MockServerNode.createOnline();
+        const node = await MockServerNode.createOnline(undefined, { device: undefined });
         const response = await invokeCmd(
             node,
             Invoke.Command({

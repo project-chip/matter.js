@@ -9,6 +9,7 @@
 import { NitrogenDioxideConcentrationMeasurement } from "#clusters/nitrogen-dioxide-concentration-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * NitrogenDioxideConcentrationMeasurementBehavior is the base class for objects that support interaction with
@@ -17,10 +18,12 @@ import { ClusterType } from "#types";
  * NitrogenDioxideConcentrationMeasurement.Cluster requires you to enable one or more optional features. You can do so
  * using {@link NitrogenDioxideConcentrationMeasurementBehavior.with}.
  */
-export const NitrogenDioxideConcentrationMeasurementBehavior = ClusterBehavior
+export const NitrogenDioxideConcentrationMeasurementBehaviorConstructor = ClusterBehavior
     .for(ClusterType(NitrogenDioxideConcentrationMeasurement.Base));
 
-type NitrogenDioxideConcentrationMeasurementBehaviorType = InstanceType<typeof NitrogenDioxideConcentrationMeasurementBehavior>;
-export interface NitrogenDioxideConcentrationMeasurementBehavior extends NitrogenDioxideConcentrationMeasurementBehaviorType {}
-type StateType = InstanceType<typeof NitrogenDioxideConcentrationMeasurementBehavior.State>;
-export namespace NitrogenDioxideConcentrationMeasurementBehavior { export interface State extends StateType {} }
+export interface NitrogenDioxideConcentrationMeasurementBehaviorConstructor extends Identity<typeof NitrogenDioxideConcentrationMeasurementBehaviorConstructor> {}
+export const NitrogenDioxideConcentrationMeasurementBehavior: NitrogenDioxideConcentrationMeasurementBehaviorConstructor = NitrogenDioxideConcentrationMeasurementBehaviorConstructor;
+export interface NitrogenDioxideConcentrationMeasurementBehavior extends InstanceType<NitrogenDioxideConcentrationMeasurementBehaviorConstructor> {}
+export namespace NitrogenDioxideConcentrationMeasurementBehavior {
+    export interface State extends InstanceType<typeof NitrogenDioxideConcentrationMeasurementBehavior.State> {}
+}

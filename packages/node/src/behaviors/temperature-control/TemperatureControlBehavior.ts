@@ -10,6 +10,7 @@ import { TemperatureControl } from "#clusters/temperature-control";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { TemperatureControlInterface } from "./TemperatureControlInterface.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * TemperatureControlBehavior is the base class for objects that support interaction with
@@ -18,11 +19,13 @@ import { ClusterType } from "#types";
  * TemperatureControl.Cluster requires you to enable one or more optional features. You can do so using
  * {@link TemperatureControlBehavior.with}.
  */
-export const TemperatureControlBehavior = ClusterBehavior
+export const TemperatureControlBehaviorConstructor = ClusterBehavior
     .withInterface<TemperatureControlInterface>()
     .for(ClusterType(TemperatureControl.Base));
 
-type TemperatureControlBehaviorType = InstanceType<typeof TemperatureControlBehavior>;
-export interface TemperatureControlBehavior extends TemperatureControlBehaviorType {}
-type StateType = InstanceType<typeof TemperatureControlBehavior.State>;
-export namespace TemperatureControlBehavior { export interface State extends StateType {} }
+export interface TemperatureControlBehaviorConstructor extends Identity<typeof TemperatureControlBehaviorConstructor> {}
+export const TemperatureControlBehavior: TemperatureControlBehaviorConstructor = TemperatureControlBehaviorConstructor;
+export interface TemperatureControlBehavior extends InstanceType<TemperatureControlBehaviorConstructor> {}
+export namespace TemperatureControlBehavior {
+    export interface State extends InstanceType<typeof TemperatureControlBehavior.State> {}
+}

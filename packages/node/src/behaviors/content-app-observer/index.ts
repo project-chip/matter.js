@@ -9,3 +9,4 @@
 export * from "./ContentAppObserverInterface.js";
 export * from "./ContentAppObserverBehavior.js";
 export * from "./ContentAppObserverServer.js";
+export * from "./ContentAppObserverClient.js";

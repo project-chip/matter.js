@@ -8,3 +8,4 @@
 
 export * from "./ElectricalEnergyMeasurementBehavior.js";
 export * from "./ElectricalEnergyMeasurementServer.js";
+export * from "./ElectricalEnergyMeasurementClient.js";

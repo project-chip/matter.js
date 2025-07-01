@@ -9,3 +9,4 @@
 export * from "./RvcOperationalStateInterface.js";
 export * from "./RvcOperationalStateBehavior.js";
 export * from "./RvcOperationalStateServer.js";
+export * from "./RvcOperationalStateClient.js";

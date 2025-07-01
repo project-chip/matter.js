@@ -6,8 +6,7 @@
 
 import { InternalError, Logger } from "@matter/general";
 import { Environment, NodeId, StorageService } from "@matter/main";
-import { ControllerStore } from "@matter/node";
-import { CommissioningController } from "@project-chip/matter.js";
+import { CommissioningController, ControllerStore } from "@project-chip/matter.js";
 import { mkdirSync } from "node:fs";
 import { ChipToolWebSocketHandler } from "./ChipToolWebSocketHandler.js";
 import {

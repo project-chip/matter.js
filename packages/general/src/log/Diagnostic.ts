@@ -569,8 +569,12 @@ function formatError(error: any, options: { messagePrefix?: string; parentStack?
         Diagnostic(Diagnostic.Presentation.Error, Diagnostic.squash(...messageDiagnostic)),
     );
 
-    let cause, errors;
+    let cause, errors, secondary;
     if (typeof error === "object" && error !== null) {
+        if ("error" in error && "suppressed" in error) {
+            secondary = error.error;
+            error = error.suppressed;
+        }
         ({ cause, errors } = error);
     }
 
@@ -616,6 +620,11 @@ function formatError(error: any, options: { messagePrefix?: string; parentStack?
                 errors.map(e => formatError(e, { messagePrefix: `Cause #${cause++}:`, parentStack: stackLines })),
             ),
         );
+    }
+
+    // We also render secondary errors from suppressed errors as subordinate to the parent.
+    if (secondary) {
+        list.push(Diagnostic.list([formatError(secondary, { messagePrefix: "Secondary error during disposal:" })]));
     }
 
     return list as Diagnostic;

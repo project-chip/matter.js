@@ -8,3 +8,4 @@
 
 export * from "./HepaFilterMonitoringBehavior.js";
 export * from "./HepaFilterMonitoringServer.js";
+export * from "./HepaFilterMonitoringClient.js";

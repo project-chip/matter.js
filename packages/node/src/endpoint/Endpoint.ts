@@ -26,6 +26,7 @@ import { EndpointNumber } from "#types";
 import { RootEndpoint } from "../endpoints/root.js";
 import { Agent } from "./Agent.js";
 import { Behaviors } from "./properties/Behaviors.js";
+import { Commands } from "./properties/Commands.js";
 import { EndpointContainer } from "./properties/EndpointContainer.js";
 import { EndpointInitializer } from "./properties/EndpointInitializer.js";
 import { EndpointLifecycle } from "./properties/EndpointLifecycle.js";
@@ -56,6 +57,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     #construction: Construction<Endpoint<T>>;
     #stateView = {} as Immutable<SupportedBehaviors.StateOf<T["behaviors"]>>;
     #events = {} as SupportedBehaviors.EventsOf<T["behaviors"]>;
+    #commands?: Commands<T>;
     #activity?: NodeActivity;
 
     /**
@@ -243,6 +245,26 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
+     * Commands for all behaviors keyed by behavior ID.
+     */
+    get commands() {
+        if (this.#commands === undefined) {
+            this.#commands = Commands(this);
+        }
+        return this.#commands;
+    }
+
+    /**
+     * Commands for a specific behavior.
+     */
+    commandsOf<T extends Behavior.Type>(type: T) {
+        if (!this.behaviors.has(type)) {
+            throw new ImplementationError(`Behavior ${type.id} is not supported by this endpoint`);
+        }
+        return this.commands[type.id] as unknown as Commands.OfBehavior<T>;
+    }
+
+    /**
      * Events for all behaviors keyed by behavior ID.
      */
     get events() {
@@ -386,20 +408,19 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             return;
         }
         if (this.#owner) {
-            throw new ImplementationError("Endpoint owner cannot be reassigned");
-        }
-        if (owner === undefined) {
-            throw new ImplementationError("Endpoint owner must be defined");
+            this.#container.delete(this);
         }
 
         this.#owner = owner;
 
-        try {
-            this.#container.add(this);
-        } catch (e) {
-            this.#container.delete(this);
-            this.#owner = undefined;
-            throw e;
+        if (owner) {
+            try {
+                this.#container.add(this);
+            } catch (e) {
+                this.#container.delete(this);
+                this.#owner = undefined;
+                throw e;
+            }
         }
     }
 
@@ -563,9 +584,13 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             this.#activity = this.env.get(NodeActivity);
         }
 
-        return OfflineContext.act(purpose, this.#activity, context => {
-            return actor(context.agentFor(this));
-        });
+        return OfflineContext.act(
+            purpose,
+            context => {
+                return actor(context.agentFor(this));
+            },
+            { activity: this.#activity },
+        );
     }
 
     /**

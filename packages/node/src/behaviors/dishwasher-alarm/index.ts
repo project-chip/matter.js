@@ -8,3 +8,4 @@
 
 export * from "./DishwasherAlarmBehavior.js";
 export * from "./DishwasherAlarmServer.js";
+export * from "./DishwasherAlarmClient.js";

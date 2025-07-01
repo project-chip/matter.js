@@ -9,6 +9,7 @@
 import { EnergyPreference } from "#clusters/energy-preference";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * EnergyPreferenceBehavior is the base class for objects that support interaction with
@@ -17,9 +18,11 @@ import { ClusterType } from "#types";
  * EnergyPreference.Cluster requires you to enable one or more optional features. You can do so using
  * {@link EnergyPreferenceBehavior.with}.
  */
-export const EnergyPreferenceBehavior = ClusterBehavior.for(ClusterType(EnergyPreference.Base));
+export const EnergyPreferenceBehaviorConstructor = ClusterBehavior.for(ClusterType(EnergyPreference.Base));
 
-type EnergyPreferenceBehaviorType = InstanceType<typeof EnergyPreferenceBehavior>;
-export interface EnergyPreferenceBehavior extends EnergyPreferenceBehaviorType {}
-type StateType = InstanceType<typeof EnergyPreferenceBehavior.State>;
-export namespace EnergyPreferenceBehavior { export interface State extends StateType {} }
+export interface EnergyPreferenceBehaviorConstructor extends Identity<typeof EnergyPreferenceBehaviorConstructor> {}
+export const EnergyPreferenceBehavior: EnergyPreferenceBehaviorConstructor = EnergyPreferenceBehaviorConstructor;
+export interface EnergyPreferenceBehavior extends InstanceType<EnergyPreferenceBehaviorConstructor> {}
+export namespace EnergyPreferenceBehavior {
+    export interface State extends InstanceType<typeof EnergyPreferenceBehavior.State> {}
+}

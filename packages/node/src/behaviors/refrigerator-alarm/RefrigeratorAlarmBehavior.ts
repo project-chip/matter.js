@@ -9,6 +9,7 @@
 import { RefrigeratorAlarm } from "#clusters/refrigerator-alarm";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { RefrigeratorAlarmInterface } from "./RefrigeratorAlarmInterface.js";
+import { Identity } from "#general";
 
 /**
  * RefrigeratorAlarmBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { RefrigeratorAlarmInterface } from "./RefrigeratorAlarmInterface.js";
  * This class does not have optional features of RefrigeratorAlarm.Cluster enabled. You can enable additional features
  * using RefrigeratorAlarmBehavior.with.
  */
-export const RefrigeratorAlarmBehavior = ClusterBehavior
+export const RefrigeratorAlarmBehaviorConstructor = ClusterBehavior
     .withInterface<RefrigeratorAlarmInterface>()
     .for(RefrigeratorAlarm.Cluster);
 
-type RefrigeratorAlarmBehaviorType = InstanceType<typeof RefrigeratorAlarmBehavior>;
-export interface RefrigeratorAlarmBehavior extends RefrigeratorAlarmBehaviorType {}
-type StateType = InstanceType<typeof RefrigeratorAlarmBehavior.State>;
-export namespace RefrigeratorAlarmBehavior { export interface State extends StateType {} }
+export interface RefrigeratorAlarmBehaviorConstructor extends Identity<typeof RefrigeratorAlarmBehaviorConstructor> {}
+export const RefrigeratorAlarmBehavior: RefrigeratorAlarmBehaviorConstructor = RefrigeratorAlarmBehaviorConstructor;
+export interface RefrigeratorAlarmBehavior extends InstanceType<RefrigeratorAlarmBehaviorConstructor> {}
+export namespace RefrigeratorAlarmBehavior {
+    export interface State extends InstanceType<typeof RefrigeratorAlarmBehavior.State> {}
+}

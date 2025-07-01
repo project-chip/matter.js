@@ -9,16 +9,19 @@
 import { RvcOperationalState } from "#clusters/rvc-operational-state";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { RvcOperationalStateInterface } from "./RvcOperationalStateInterface.js";
+import { Identity } from "#general";
 
 /**
  * RvcOperationalStateBehavior is the base class for objects that support interaction with
  * {@link RvcOperationalState.Cluster}.
  */
-export const RvcOperationalStateBehavior = ClusterBehavior
+export const RvcOperationalStateBehaviorConstructor = ClusterBehavior
     .withInterface<RvcOperationalStateInterface>()
     .for(RvcOperationalState.Cluster);
 
-type RvcOperationalStateBehaviorType = InstanceType<typeof RvcOperationalStateBehavior>;
-export interface RvcOperationalStateBehavior extends RvcOperationalStateBehaviorType {}
-type StateType = InstanceType<typeof RvcOperationalStateBehavior.State>;
-export namespace RvcOperationalStateBehavior { export interface State extends StateType {} }
+export interface RvcOperationalStateBehaviorConstructor extends Identity<typeof RvcOperationalStateBehaviorConstructor> {}
+export const RvcOperationalStateBehavior: RvcOperationalStateBehaviorConstructor = RvcOperationalStateBehaviorConstructor;
+export interface RvcOperationalStateBehavior extends InstanceType<RvcOperationalStateBehaviorConstructor> {}
+export namespace RvcOperationalStateBehavior {
+    export interface State extends InstanceType<typeof RvcOperationalStateBehavior.State> {}
+}

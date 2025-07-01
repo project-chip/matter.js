@@ -9,6 +9,7 @@
 import { ValveConfigurationAndControl } from "#clusters/valve-configuration-and-control";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ValveConfigurationAndControlInterface } from "./ValveConfigurationAndControlInterface.js";
+import { Identity } from "#general";
 
 /**
  * ValveConfigurationAndControlBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { ValveConfigurationAndControlInterface } from "./ValveConfigurationAndCo
  * This class does not have optional features of ValveConfigurationAndControl.Cluster enabled. You can enable additional
  * features using ValveConfigurationAndControlBehavior.with.
  */
-export const ValveConfigurationAndControlBehavior = ClusterBehavior
+export const ValveConfigurationAndControlBehaviorConstructor = ClusterBehavior
     .withInterface<ValveConfigurationAndControlInterface>()
     .for(ValveConfigurationAndControl.Cluster);
 
-type ValveConfigurationAndControlBehaviorType = InstanceType<typeof ValveConfigurationAndControlBehavior>;
-export interface ValveConfigurationAndControlBehavior extends ValveConfigurationAndControlBehaviorType {}
-type StateType = InstanceType<typeof ValveConfigurationAndControlBehavior.State>;
-export namespace ValveConfigurationAndControlBehavior { export interface State extends StateType {} }
+export interface ValveConfigurationAndControlBehaviorConstructor extends Identity<typeof ValveConfigurationAndControlBehaviorConstructor> {}
+export const ValveConfigurationAndControlBehavior: ValveConfigurationAndControlBehaviorConstructor = ValveConfigurationAndControlBehaviorConstructor;
+export interface ValveConfigurationAndControlBehavior extends InstanceType<ValveConfigurationAndControlBehaviorConstructor> {}
+export namespace ValveConfigurationAndControlBehavior {
+    export interface State extends InstanceType<typeof ValveConfigurationAndControlBehavior.State> {}
+}

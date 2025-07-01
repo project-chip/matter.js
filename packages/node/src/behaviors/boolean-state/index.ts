@@ -8,3 +8,4 @@
 
 export * from "./BooleanStateBehavior.js";
 export * from "./BooleanStateServer.js";
+export * from "./BooleanStateClient.js";

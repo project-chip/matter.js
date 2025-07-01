@@ -72,6 +72,10 @@
             }
         },
         "./load": {
+            "static-load": {
+                "types": "./dist/esm/loader/load.d.ts",
+                "default": "./dist/esm/loader/static.js"
+            },
             "import": {
                 "types": "./dist/esm/loader/load.d.ts",
                 "default": "./dist/esm/loader/load.mjs"

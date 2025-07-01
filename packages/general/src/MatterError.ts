@@ -171,6 +171,11 @@ export class UnexpectedDataError extends MatterError {}
 export class ImplementationError extends MatterError {}
 
 /**
+ * Thrown when a dynamic component cannot be loaded.
+ */
+export class ImportError extends MatterError {}
+
+/**
  * Thrown for write attempts against immutable data.
  */
 export class ReadOnlyError extends ImplementationError {

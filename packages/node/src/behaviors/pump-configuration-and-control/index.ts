@@ -8,3 +8,4 @@
 
 export * from "./PumpConfigurationAndControlBehavior.js";
 export * from "./PumpConfigurationAndControlServer.js";
+export * from "./PumpConfigurationAndControlClient.js";

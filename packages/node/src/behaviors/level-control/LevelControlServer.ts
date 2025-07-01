@@ -13,7 +13,7 @@ import { OnOffServer } from "#behaviors/on-off";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { LevelControl } from "#clusters/level-control";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { AsyncObservable, Logger, MaybePromise } from "#general";
+import { AsyncObservable, Identity, Logger, MaybePromise } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
 import { Val } from "#protocol";
 import { ClusterType, StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
@@ -683,3 +683,5 @@ function asIntOrNull(value: number | null) {
 
     return Math.round(value);
 }
+
+export interface LevelControlServerConstructor extends Identity<typeof LevelControlServer> {}

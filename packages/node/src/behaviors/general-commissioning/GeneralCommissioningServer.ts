@@ -75,25 +75,32 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                     AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen &&
                 !session.isPase
             ) {
+                // TODO - should this set status to Status.BusyWithOtherAdmin?
                 throw new MatterFlowError("Failed to arm failsafe using CASE while commissioning window is opened.");
             }
 
             if (commissioner.isFailsafeArmed) {
                 await commissioner.failsafeContext.extend(session.fabric, expiryLengthSeconds);
             } else {
-                // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
-                // to a success response with no side effect against the fail-safe context.
+                // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL
+                // lead to a success response with no side effect against the fail-safe context.
                 if (expiryLengthSeconds === 0) return SuccessResponse;
 
-                await commissioner.beginTimed(
-                    new ServerNodeFailsafeContext(this.endpoint as ServerNode, {
-                        fabrics: this.env.get(FabricManager),
-                        sessions: this.env.get(SessionManager),
-                        expiryLengthSeconds,
-                        maxCumulativeFailsafeSeconds: this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
-                        associatedFabric: session.fabric,
-                    }),
-                );
+                const failsafe = new ServerNodeFailsafeContext(this.endpoint as ServerNode, {
+                    fabrics: this.env.get(FabricManager),
+                    sessions: this.env.get(SessionManager),
+                    expiryLengthSeconds,
+                    maxCumulativeFailsafeSeconds: this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
+                    associatedFabric: session.fabric,
+                });
+
+                // Note - this used to be async and wait for construction internally.  However that leads to race
+                // conditions because commissioner.isFailsafeArmed would return false if the promise had not yet
+                // resolved. Probably only a real-world issue for tests but we instead wait for construction after
+                // installing into the commissioner
+                commissioner.beginTimed(failsafe);
+
+                await failsafe.construction;
             }
 
             if (commissioner.isFailsafeArmed) {

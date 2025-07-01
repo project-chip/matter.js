@@ -13,16 +13,19 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import {
     RefrigeratorAndTemperatureControlledCabinetModeInterface
 } from "./RefrigeratorAndTemperatureControlledCabinetModeInterface.js";
+import { Identity } from "#general";
 
 /**
  * RefrigeratorAndTemperatureControlledCabinetModeBehavior is the base class for objects that support interaction with
  * {@link RefrigeratorAndTemperatureControlledCabinetMode.Cluster}.
  */
-export const RefrigeratorAndTemperatureControlledCabinetModeBehavior = ClusterBehavior
+export const RefrigeratorAndTemperatureControlledCabinetModeBehaviorConstructor = ClusterBehavior
     .withInterface<RefrigeratorAndTemperatureControlledCabinetModeInterface>()
     .for(RefrigeratorAndTemperatureControlledCabinetMode.Cluster);
 
-type RefrigeratorAndTemperatureControlledCabinetModeBehaviorType = InstanceType<typeof RefrigeratorAndTemperatureControlledCabinetModeBehavior>;
-export interface RefrigeratorAndTemperatureControlledCabinetModeBehavior extends RefrigeratorAndTemperatureControlledCabinetModeBehaviorType {}
-type StateType = InstanceType<typeof RefrigeratorAndTemperatureControlledCabinetModeBehavior.State>;
-export namespace RefrigeratorAndTemperatureControlledCabinetModeBehavior { export interface State extends StateType {} }
+export interface RefrigeratorAndTemperatureControlledCabinetModeBehaviorConstructor extends Identity<typeof RefrigeratorAndTemperatureControlledCabinetModeBehaviorConstructor> {}
+export const RefrigeratorAndTemperatureControlledCabinetModeBehavior: RefrigeratorAndTemperatureControlledCabinetModeBehaviorConstructor = RefrigeratorAndTemperatureControlledCabinetModeBehaviorConstructor;
+export interface RefrigeratorAndTemperatureControlledCabinetModeBehavior extends InstanceType<RefrigeratorAndTemperatureControlledCabinetModeBehaviorConstructor> {}
+export namespace RefrigeratorAndTemperatureControlledCabinetModeBehavior {
+    export interface State extends InstanceType<typeof RefrigeratorAndTemperatureControlledCabinetModeBehavior.State> {}
+}

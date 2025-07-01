@@ -11,7 +11,7 @@ import { QuietEvent } from "#behavior/Events.js";
 import type { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
-import { DescriptorBehavior } from "#behaviors/descriptor";
+import type { DescriptorBehavior } from "#behaviors/descriptor";
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import {
     camelize,
@@ -230,7 +230,7 @@ class EndpointState {
         const cluster = new ClusterState(type, backing);
 
         // When descriptor behavior initializes, sync device types
-        if (backing.type.id === DescriptorBehavior.id) {
+        if (backing.type.id === "descriptor") {
             this.#updateDeviceTypes(backing.endpoint.state.descriptor.deviceTypeList);
             (backing.events as DescriptorBehavior["events"]).deviceTypeList$Changed.on(
                 this.#updateDeviceTypes.bind(this),

@@ -8,14 +8,17 @@
 
 import { EcosystemInformation } from "#clusters/ecosystem-information";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * EcosystemInformationBehavior is the base class for objects that support interaction with
  * {@link EcosystemInformation.Cluster}.
  */
-export const EcosystemInformationBehavior = ClusterBehavior.for(EcosystemInformation.Cluster);
+export const EcosystemInformationBehaviorConstructor = ClusterBehavior.for(EcosystemInformation.Cluster);
 
-type EcosystemInformationBehaviorType = InstanceType<typeof EcosystemInformationBehavior>;
-export interface EcosystemInformationBehavior extends EcosystemInformationBehaviorType {}
-type StateType = InstanceType<typeof EcosystemInformationBehavior.State>;
-export namespace EcosystemInformationBehavior { export interface State extends StateType {} }
+export interface EcosystemInformationBehaviorConstructor extends Identity<typeof EcosystemInformationBehaviorConstructor> {}
+export const EcosystemInformationBehavior: EcosystemInformationBehaviorConstructor = EcosystemInformationBehaviorConstructor;
+export interface EcosystemInformationBehavior extends InstanceType<EcosystemInformationBehaviorConstructor> {}
+export namespace EcosystemInformationBehavior {
+    export interface State extends InstanceType<typeof EcosystemInformationBehavior.State> {}
+}

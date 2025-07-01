@@ -8,14 +8,17 @@
 
 import { BasicInformation } from "#clusters/basic-information";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * BasicInformationBehavior is the base class for objects that support interaction with
  * {@link BasicInformation.Cluster}.
  */
-export const BasicInformationBehavior = ClusterBehavior.for(BasicInformation.Cluster);
+export const BasicInformationBehaviorConstructor = ClusterBehavior.for(BasicInformation.Cluster);
 
-type BasicInformationBehaviorType = InstanceType<typeof BasicInformationBehavior>;
-export interface BasicInformationBehavior extends BasicInformationBehaviorType {}
-type StateType = InstanceType<typeof BasicInformationBehavior.State>;
-export namespace BasicInformationBehavior { export interface State extends StateType {} }
+export interface BasicInformationBehaviorConstructor extends Identity<typeof BasicInformationBehaviorConstructor> {}
+export const BasicInformationBehavior: BasicInformationBehaviorConstructor = BasicInformationBehaviorConstructor;
+export interface BasicInformationBehavior extends InstanceType<BasicInformationBehaviorConstructor> {}
+export namespace BasicInformationBehavior {
+    export interface State extends InstanceType<typeof BasicInformationBehavior.State> {}
+}

@@ -13,15 +13,17 @@ const logger = Logger.get("BehaviorServerFile");
 export class ServerFile extends TsFile {
     static readonly baseName = "Server";
     readonly definitionName: string;
+    #variance: ClusterVariance;
 
     constructor(
         name: string,
         public cluster: ClusterModel,
-        private variance: ClusterVariance,
+        variance: ClusterVariance,
     ) {
         super(name, true);
         this.definitionName = `${cluster.name}Server`;
         this.cluster = cluster;
+        this.#variance = variance;
 
         this.generate();
     }
@@ -33,7 +35,7 @@ export class ServerFile extends TsFile {
 
         let extraDoc;
 
-        if (this.variance.requiresFeatures) {
+        if (this.#variance.requiresFeatures) {
             extraDoc =
                 `The Matter specification requires the ${this.cluster.name} cluster to support features we do not ` +
                 `enable by default.  You should use {@link ${this.cluster.name}Server.with} to specialize the class ` +

@@ -9,3 +9,4 @@
 export * from "./BooleanStateConfigurationInterface.js";
 export * from "./BooleanStateConfigurationBehavior.js";
 export * from "./BooleanStateConfigurationServer.js";
+export * from "./BooleanStateConfigurationClient.js";

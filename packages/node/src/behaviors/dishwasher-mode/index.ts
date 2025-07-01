@@ -8,3 +8,4 @@
 
 export * from "./DishwasherModeBehavior.js";
 export * from "./DishwasherModeServer.js";
+export * from "./DishwasherModeClient.js";

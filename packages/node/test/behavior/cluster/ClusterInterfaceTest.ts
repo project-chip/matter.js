@@ -93,15 +93,16 @@ describe("ClusterInterface", () => {
     describe("MappedMethodsOf", () => {
         type Mmo = ClusterInterface.MappedMethodsOf<ClusterType.CommandsOf<MyCluster>>;
 
-        it("requires mandatory", () => {
+        it("supports mandatory", () => {
             ({}) as Mmo satisfies {
                 reqCmd(request: string, state: any, context?: ActionContext): MaybePromise<string>;
             };
         });
 
-        it("allowsOptional", () => {
-            undefined satisfies Mmo["optCmd"];
-            ((_request: boolean) => true) satisfies Mmo["optCmd"];
+        it("supports optional", () => {
+            ({}) as Mmo satisfies {
+                optCmd(request: boolean, state: any, context?: ActionContext): MaybePromise<boolean>;
+            };
         });
     });
 });

@@ -8,3 +8,4 @@
 
 export * from "./ActivatedCarbonFilterMonitoringBehavior.js";
 export * from "./ActivatedCarbonFilterMonitoringServer.js";
+export * from "./ActivatedCarbonFilterMonitoringClient.js";

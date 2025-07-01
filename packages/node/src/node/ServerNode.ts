@@ -17,11 +17,11 @@ import { Endpoint } from "#endpoint/Endpoint.js";
 import type { Environment } from "#general";
 import { asyncNew, Construction, DiagnosticSource, errorOf, Identity, MatterError } from "#general";
 import { FabricManager, Interactable, OccurrenceManager, ServerInteraction, SessionManager } from "#protocol";
+import { NodeStore } from "#storage/NodeStore.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoints/root.js";
 import { Node } from "./Node.js";
 import { ClientNodes } from "./client/ClientNodes.js";
 import { ServerEnvironment } from "./server/ServerEnvironment.js";
-import { ServerNodeStore } from "./storage/ServerNodeStore.js";
 
 /**
  * Thrown when there is an error during factory reset.
@@ -62,8 +62,9 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     constructor(config: Partial<Node.Configuration<T>>);
 
     constructor(definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
-        super(Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options));
+        super(Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options ?? ({} as Node.Options<T>)));
 
+        this.env.set(Node, this);
         this.env.set(ServerNode, this);
 
         DiagnosticSource.add(this);
@@ -173,10 +174,6 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         return this.#interaction;
     }
 
-    async advertiseNow() {
-        await this.act(`advertiseNow<${this}>`, agent => agent.get(NetworkServer).advertiseNow());
-    }
-
     protected override async initialize() {
         await ServerEnvironment.initialize(this);
 
@@ -195,7 +192,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         await this.env.get(SessionManager).clear();
         await this.env.get(FabricManager).clear();
         await this.env.get(OccurrenceManager).clear();
-        await this.env.get(ServerNodeStore).erase();
+        await this.env.get(NodeStore).erase();
     }
 
     /**

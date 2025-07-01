@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { RemoteDescriptor } from "#behavior/system/commissioning/RemoteDescriptor.js";
-import { ImmutableSet } from "#general";
+import type { RemoteDescriptor } from "#behavior/system/commissioning/RemoteDescriptor.js";
+import type { ImmutableSet } from "#general";
 import type { ClientNode } from "#node/ClientNode.js";
 
 /**

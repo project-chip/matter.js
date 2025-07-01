@@ -9,6 +9,7 @@
 import { ThreadNetworkDiagnostics } from "#clusters/thread-network-diagnostics";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ThreadNetworkDiagnosticsInterface } from "./ThreadNetworkDiagnosticsInterface.js";
+import { Identity } from "#general";
 
 /**
  * ThreadNetworkDiagnosticsBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { ThreadNetworkDiagnosticsInterface } from "./ThreadNetworkDiagnosticsInt
  * This class does not have optional features of ThreadNetworkDiagnostics.Cluster enabled. You can enable additional
  * features using ThreadNetworkDiagnosticsBehavior.with.
  */
-export const ThreadNetworkDiagnosticsBehavior = ClusterBehavior
+export const ThreadNetworkDiagnosticsBehaviorConstructor = ClusterBehavior
     .withInterface<ThreadNetworkDiagnosticsInterface>()
     .for(ThreadNetworkDiagnostics.Cluster);
 
-type ThreadNetworkDiagnosticsBehaviorType = InstanceType<typeof ThreadNetworkDiagnosticsBehavior>;
-export interface ThreadNetworkDiagnosticsBehavior extends ThreadNetworkDiagnosticsBehaviorType {}
-type StateType = InstanceType<typeof ThreadNetworkDiagnosticsBehavior.State>;
-export namespace ThreadNetworkDiagnosticsBehavior { export interface State extends StateType {} }
+export interface ThreadNetworkDiagnosticsBehaviorConstructor extends Identity<typeof ThreadNetworkDiagnosticsBehaviorConstructor> {}
+export const ThreadNetworkDiagnosticsBehavior: ThreadNetworkDiagnosticsBehaviorConstructor = ThreadNetworkDiagnosticsBehaviorConstructor;
+export interface ThreadNetworkDiagnosticsBehavior extends InstanceType<ThreadNetworkDiagnosticsBehaviorConstructor> {}
+export namespace ThreadNetworkDiagnosticsBehavior {
+    export interface State extends InstanceType<typeof ThreadNetworkDiagnosticsBehavior.State> {}
+}

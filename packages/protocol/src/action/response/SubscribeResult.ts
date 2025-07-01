@@ -5,10 +5,9 @@
  */
 
 import { SubscribeResponse } from "#types";
-import { ReadResult } from "./ReadResult.js";
 
-export interface SubscribeResult extends AsyncIterator<SubscribeResult.Chunk> {}
+export type SubscribeResult = Promise<ActiveSubscription>;
 
-export namespace SubscribeResult {
-    export type Chunk = ReadResult.Chunk | SubscribeResponse;
+export interface ActiveSubscription extends SubscribeResponse {
+    close(): void;
 }

@@ -9,15 +9,18 @@
 import { JointFabricPki } from "#clusters/joint-fabric-pki";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { JointFabricPkiInterface } from "./JointFabricPkiInterface.js";
+import { Identity } from "#general";
 
 /**
  * JointFabricPkiBehavior is the base class for objects that support interaction with {@link JointFabricPki.Cluster}.
  */
-export const JointFabricPkiBehavior = ClusterBehavior
+export const JointFabricPkiBehaviorConstructor = ClusterBehavior
     .withInterface<JointFabricPkiInterface>()
     .for(JointFabricPki.Cluster);
 
-type JointFabricPkiBehaviorType = InstanceType<typeof JointFabricPkiBehavior>;
-export interface JointFabricPkiBehavior extends JointFabricPkiBehaviorType {}
-type StateType = InstanceType<typeof JointFabricPkiBehavior.State>;
-export namespace JointFabricPkiBehavior { export interface State extends StateType {} }
+export interface JointFabricPkiBehaviorConstructor extends Identity<typeof JointFabricPkiBehaviorConstructor> {}
+export const JointFabricPkiBehavior: JointFabricPkiBehaviorConstructor = JointFabricPkiBehaviorConstructor;
+export interface JointFabricPkiBehavior extends InstanceType<JointFabricPkiBehaviorConstructor> {}
+export namespace JointFabricPkiBehavior {
+    export interface State extends InstanceType<typeof JointFabricPkiBehavior.State> {}
+}

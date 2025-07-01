@@ -8,3 +8,4 @@
 
 export * from "./IlluminanceMeasurementBehavior.js";
 export * from "./IlluminanceMeasurementServer.js";
+export * from "./IlluminanceMeasurementClient.js";

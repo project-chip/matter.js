@@ -9,3 +9,4 @@
 export * from "./RefrigeratorAlarmInterface.js";
 export * from "./RefrigeratorAlarmBehavior.js";
 export * from "./RefrigeratorAlarmServer.js";
+export * from "./RefrigeratorAlarmClient.js";

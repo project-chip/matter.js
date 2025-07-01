@@ -9,6 +9,7 @@
 import { SoftwareDiagnostics } from "#clusters/software-diagnostics";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { SoftwareDiagnosticsInterface } from "./SoftwareDiagnosticsInterface.js";
+import { Identity } from "#general";
 
 /**
  * SoftwareDiagnosticsBehavior is the base class for objects that support interaction with
@@ -17,11 +18,13 @@ import { SoftwareDiagnosticsInterface } from "./SoftwareDiagnosticsInterface.js"
  * This class does not have optional features of SoftwareDiagnostics.Cluster enabled. You can enable additional features
  * using SoftwareDiagnosticsBehavior.with.
  */
-export const SoftwareDiagnosticsBehavior = ClusterBehavior
+export const SoftwareDiagnosticsBehaviorConstructor = ClusterBehavior
     .withInterface<SoftwareDiagnosticsInterface>()
     .for(SoftwareDiagnostics.Cluster);
 
-type SoftwareDiagnosticsBehaviorType = InstanceType<typeof SoftwareDiagnosticsBehavior>;
-export interface SoftwareDiagnosticsBehavior extends SoftwareDiagnosticsBehaviorType {}
-type StateType = InstanceType<typeof SoftwareDiagnosticsBehavior.State>;
-export namespace SoftwareDiagnosticsBehavior { export interface State extends StateType {} }
+export interface SoftwareDiagnosticsBehaviorConstructor extends Identity<typeof SoftwareDiagnosticsBehaviorConstructor> {}
+export const SoftwareDiagnosticsBehavior: SoftwareDiagnosticsBehaviorConstructor = SoftwareDiagnosticsBehaviorConstructor;
+export interface SoftwareDiagnosticsBehavior extends InstanceType<SoftwareDiagnosticsBehaviorConstructor> {}
+export namespace SoftwareDiagnosticsBehavior {
+    export interface State extends InstanceType<typeof SoftwareDiagnosticsBehavior.State> {}
+}

@@ -8,6 +8,7 @@
 
 import { PressureMeasurement } from "#clusters/pressure-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * PressureMeasurementBehavior is the base class for objects that support interaction with
@@ -16,9 +17,11 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
  * This class does not have optional features of PressureMeasurement.Cluster enabled. You can enable additional features
  * using PressureMeasurementBehavior.with.
  */
-export const PressureMeasurementBehavior = ClusterBehavior.for(PressureMeasurement.Cluster);
+export const PressureMeasurementBehaviorConstructor = ClusterBehavior.for(PressureMeasurement.Cluster);
 
-type PressureMeasurementBehaviorType = InstanceType<typeof PressureMeasurementBehavior>;
-export interface PressureMeasurementBehavior extends PressureMeasurementBehaviorType {}
-type StateType = InstanceType<typeof PressureMeasurementBehavior.State>;
-export namespace PressureMeasurementBehavior { export interface State extends StateType {} }
+export interface PressureMeasurementBehaviorConstructor extends Identity<typeof PressureMeasurementBehaviorConstructor> {}
+export const PressureMeasurementBehavior: PressureMeasurementBehaviorConstructor = PressureMeasurementBehaviorConstructor;
+export interface PressureMeasurementBehavior extends InstanceType<PressureMeasurementBehaviorConstructor> {}
+export namespace PressureMeasurementBehavior {
+    export interface State extends InstanceType<typeof PressureMeasurementBehavior.State> {}
+}

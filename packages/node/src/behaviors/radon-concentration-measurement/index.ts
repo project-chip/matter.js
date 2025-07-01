@@ -8,3 +8,4 @@
 
 export * from "./RadonConcentrationMeasurementBehavior.js";
 export * from "./RadonConcentrationMeasurementServer.js";
+export * from "./RadonConcentrationMeasurementClient.js";

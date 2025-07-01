@@ -8,3 +8,4 @@
 
 export * from "./CarbonMonoxideConcentrationMeasurementBehavior.js";
 export * from "./CarbonMonoxideConcentrationMeasurementServer.js";
+export * from "./CarbonMonoxideConcentrationMeasurementClient.js";

@@ -9,3 +9,4 @@
 export * from "./AccessControlInterface.js";
 export * from "./AccessControlBehavior.js";
 export * from "./AccessControlServer.js";
+export * from "./AccessControlClient.js";

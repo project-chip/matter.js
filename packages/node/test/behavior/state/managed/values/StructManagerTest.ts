@@ -84,7 +84,7 @@ async function testDuality(life: boolean, actor: (struct: { alive?: boolean }) =
         location: { endpoint: EndpointNumber(1), path: DataModelPath(0) },
     });
 
-    await OfflineContext.act("test", undefined, cx => {
+    await OfflineContext.act("test", cx => {
         actor(datasource.reference(cx));
     });
 }

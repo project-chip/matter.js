@@ -8,3 +8,4 @@
 
 export * from "./PowerSourceConfigurationBehavior.js";
 export * from "./PowerSourceConfigurationServer.js";
+export * from "./PowerSourceConfigurationClient.js";

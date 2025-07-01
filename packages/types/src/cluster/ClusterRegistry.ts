@@ -9,8 +9,7 @@ import { ClusterType } from "./ClusterType.js";
 const registered = {} as { [id: number]: ClusterType };
 
 /**
- * The formal definitions of clusters in Matter.js are generated
- * programmatically.
+ * The formal definitions of clusters in Matter.js are generated programmatically.
  *
  * This singleton acts as a registry for generated {@link ClusterType}s.
  */

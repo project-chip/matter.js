@@ -9,6 +9,7 @@
 import { PowerSource } from "#clusters/power-source";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
+import { Identity } from "#general";
 
 /**
  * PowerSourceBehavior is the base class for objects that support interaction with {@link PowerSource.Cluster}.
@@ -16,9 +17,9 @@ import { ClusterType } from "#types";
  * PowerSource.Cluster requires you to enable one or more optional features. You can do so using
  * {@link PowerSourceBehavior.with}.
  */
-export const PowerSourceBehavior = ClusterBehavior.for(ClusterType(PowerSource.Base));
+export const PowerSourceBehaviorConstructor = ClusterBehavior.for(ClusterType(PowerSource.Base));
 
-type PowerSourceBehaviorType = InstanceType<typeof PowerSourceBehavior>;
-export interface PowerSourceBehavior extends PowerSourceBehaviorType {}
-type StateType = InstanceType<typeof PowerSourceBehavior.State>;
-export namespace PowerSourceBehavior { export interface State extends StateType {} }
+export interface PowerSourceBehaviorConstructor extends Identity<typeof PowerSourceBehaviorConstructor> {}
+export const PowerSourceBehavior: PowerSourceBehaviorConstructor = PowerSourceBehaviorConstructor;
+export interface PowerSourceBehavior extends InstanceType<PowerSourceBehaviorConstructor> {}
+export namespace PowerSourceBehavior { export interface State extends InstanceType<typeof PowerSourceBehavior.State> {} }

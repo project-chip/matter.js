@@ -5,7 +5,6 @@
  */
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
-import { GroupsBehavior } from "#behaviors/groups";
 import { GroupKeyManagement } from "#clusters/group-key-management";
 import { deepCopy, ImplementationError, Logger, MaybePromise } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
@@ -65,7 +64,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
             // We assume unchanged defaults
             let groupsFound = false;
             this.endpoint.visit(endpoint => {
-                if (!groupsFound && endpoint.behaviors.has(GroupsBehavior)) {
+                if (!groupsFound && "groups" in endpoint.behaviors.supported) {
                     groupsFound = true;
                 }
             });

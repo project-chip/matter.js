@@ -8,14 +8,17 @@
 
 import { ProxyConfiguration } from "#clusters/proxy-configuration";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * ProxyConfigurationBehavior is the base class for objects that support interaction with
  * {@link ProxyConfiguration.Cluster}.
  */
-export const ProxyConfigurationBehavior = ClusterBehavior.for(ProxyConfiguration.Cluster);
+export const ProxyConfigurationBehaviorConstructor = ClusterBehavior.for(ProxyConfiguration.Cluster);
 
-type ProxyConfigurationBehaviorType = InstanceType<typeof ProxyConfigurationBehavior>;
-export interface ProxyConfigurationBehavior extends ProxyConfigurationBehaviorType {}
-type StateType = InstanceType<typeof ProxyConfigurationBehavior.State>;
-export namespace ProxyConfigurationBehavior { export interface State extends StateType {} }
+export interface ProxyConfigurationBehaviorConstructor extends Identity<typeof ProxyConfigurationBehaviorConstructor> {}
+export const ProxyConfigurationBehavior: ProxyConfigurationBehaviorConstructor = ProxyConfigurationBehaviorConstructor;
+export interface ProxyConfigurationBehavior extends InstanceType<ProxyConfigurationBehaviorConstructor> {}
+export namespace ProxyConfigurationBehavior {
+    export interface State extends InstanceType<typeof ProxyConfigurationBehavior.State> {}
+}

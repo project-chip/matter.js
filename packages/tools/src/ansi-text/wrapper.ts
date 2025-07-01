@@ -136,6 +136,7 @@ export class Wrapper implements Consumer {
                         break;
 
                     case "word":
+                    case "space":
                         if (this.#preserveSpace) {
                             this.#enqueue(token);
                         }

@@ -8,14 +8,17 @@
 
 import { IlluminanceMeasurement } from "#clusters/illuminance-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * IlluminanceMeasurementBehavior is the base class for objects that support interaction with
  * {@link IlluminanceMeasurement.Cluster}.
  */
-export const IlluminanceMeasurementBehavior = ClusterBehavior.for(IlluminanceMeasurement.Cluster);
+export const IlluminanceMeasurementBehaviorConstructor = ClusterBehavior.for(IlluminanceMeasurement.Cluster);
 
-type IlluminanceMeasurementBehaviorType = InstanceType<typeof IlluminanceMeasurementBehavior>;
-export interface IlluminanceMeasurementBehavior extends IlluminanceMeasurementBehaviorType {}
-type StateType = InstanceType<typeof IlluminanceMeasurementBehavior.State>;
-export namespace IlluminanceMeasurementBehavior { export interface State extends StateType {} }
+export interface IlluminanceMeasurementBehaviorConstructor extends Identity<typeof IlluminanceMeasurementBehaviorConstructor> {}
+export const IlluminanceMeasurementBehavior: IlluminanceMeasurementBehaviorConstructor = IlluminanceMeasurementBehaviorConstructor;
+export interface IlluminanceMeasurementBehavior extends InstanceType<IlluminanceMeasurementBehaviorConstructor> {}
+export namespace IlluminanceMeasurementBehavior {
+    export interface State extends InstanceType<typeof IlluminanceMeasurementBehavior.State> {}
+}

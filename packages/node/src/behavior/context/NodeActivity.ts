@@ -102,4 +102,10 @@ export namespace NodeActivity {
         frame(description: unknown): Disposable;
         close(): void;
     }
+
+    export const activityKey = Symbol("activity");
+
+    export interface WithActivity {
+        [activityKey]?: NodeActivity.Activity;
+    }
 }

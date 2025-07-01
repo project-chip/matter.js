@@ -21,7 +21,14 @@ const featureSelectionCache = new WeakMap<ClusterType, Record<string, WeakRef<Cl
  * A "cluster composer" manages cluster configuration based on feature selection.
  */
 export class ClusterComposer<const T extends ClusterType> {
-    constructor(public cluster: T) {}
+    #allowInvalidFeatureCombinations: boolean;
+
+    constructor(
+        public cluster: T,
+        allowInvalidFeatures = false,
+    ) {
+        this.#allowInvalidFeatureCombinations = allowInvalidFeatures;
+    }
 
     /**
      * Build a cluster using selected feature flags.
@@ -30,7 +37,7 @@ export class ClusterComposer<const T extends ClusterType> {
      * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
      */
     compose<const SelectionT extends ClusterComposer.FeatureSelection<T>>(selection: SelectionT) {
-        this.validateFeatureSelection(selection);
+        this.#validateFeatureSelection(selection);
 
         const extensions = this.cluster.extensions;
         let cluster: ClusterType | undefined;
@@ -77,7 +84,7 @@ export class ClusterComposer<const T extends ClusterType> {
 
             for (const selector of extensions) {
                 if (selector.component) {
-                    this.accept(cluster, selector.component, this.cluster, selector.flags);
+                    this.#accept(cluster, selector.component, this.cluster, selector.flags);
                 } else {
                     this.reject(cluster, selector.flags);
                 }
@@ -106,7 +113,9 @@ export class ClusterComposer<const T extends ClusterType> {
     /**
      * Validates a set of feature flags against the features supported by a cluster.
      */
-    private validateFeatureSelection(features: ClusterComposer.FeatureSelection<any>) {
+    #validateFeatureSelection(features: ClusterComposer.FeatureSelection<any>) {
+        // Note that if features are defined they must exist; #ignoreInvalidFeatureCombinations does NOT apply here
+
         for (const f of features) {
             if (!this.cluster.features[camelize(f)]) {
                 throw new IllegalClusterError(`"${f}" is not a valid feature identifier`);
@@ -119,7 +128,7 @@ export class ClusterComposer<const T extends ClusterType> {
      * "original" if present.  This allows for component insertion without overwrite of other changes to the named
      * element.
      */
-    private accept(
+    #accept(
         definition: ClusterComposer.WritableDefinition,
         component: Partial<ClusterType.Elements>,
         original: Partial<ClusterType> | undefined,
@@ -172,6 +181,10 @@ export class ClusterComposer<const T extends ClusterType> {
      * Throws an error if a feature combination is illegal per the Matter specification.
      */
     private reject(definition: ClusterType, flags: ClusterComposer.FeatureFlags) {
+        if (this.#allowInvalidFeatureCombinations) {
+            return;
+        }
+
         for (const k in flags) {
             if (!!definition.supportedFeatures[k] !== !!flags[k]) {
                 return;

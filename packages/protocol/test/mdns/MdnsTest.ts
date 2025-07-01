@@ -39,7 +39,7 @@ const NODE_ID = NodeId(BigInt(1));
     { serverHasIpv4Addresses: false, testIpv4Enabled: false },
 ].forEach(({ serverHasIpv4Addresses, testIpv4Enabled }) => {
     const serverIps = serverHasIpv4Addresses ? [SERVER_IPv4, SERVER_IPv6] : [SERVER_IPv6];
-    const clientIps = testIpv4Enabled ? [CLIENT_IPv4] : [CLIENT_IPv6];
+    const clientIps = testIpv4Enabled ? [CLIENT_IPv4, CLIENT_IPv6] : [CLIENT_IPv6];
     const simulator = new NetworkSimulator();
     const serverNetwork = new MockNetwork(simulator, SERVER_MAC, serverIps);
     const clientNetwork = new MockNetwork(simulator, CLIENT_MAC, clientIps);
@@ -80,36 +80,53 @@ const NODE_ID = NodeId(BigInt(1));
 
         let broadcaster: MdnsBroadcaster;
         let scanner: MdnsScanner;
-        let scannerChannel: UdpChannel;
-        let broadcasterChannel: UdpChannel;
+        let scanListener: UdpChannel;
+        let broadcastListener: UdpChannel;
 
         beforeEach(async () => {
+            let multicastIp, type: "udp4" | "udp6";
+            if (testIpv4Enabled) {
+                multicastIp = "224.0.0.251";
+                type = "udp4";
+            } else {
+                multicastIp = "ff02::fb";
+                type = "udp6";
+            }
+
             scanner = await MdnsScanner.create(clientNetwork, {
                 enableIpv4: testIpv4Enabled,
                 netInterface: "fake0",
-            });
-            scannerChannel = new MockUdpChannel(serverNetwork, {
-                listeningPort: 5353,
-                listeningAddress: testIpv4Enabled ? "224.0.0.251" : "ff02::fb",
-                type: testIpv4Enabled ? "udp4" : "udp6",
             });
 
             broadcaster = await MdnsBroadcaster.create(crypto, serverNetwork, {
                 enableIpv4: testIpv4Enabled,
                 multicastInterface: "fake0",
             });
-            broadcasterChannel = new MockUdpChannel(clientNetwork, {
+
+            // Add an additional listener on the broadcaster to detect scans
+            scanListener = new MockUdpChannel(serverNetwork, {
                 listeningPort: 5353,
-                listeningAddress: testIpv4Enabled ? "224.0.0.251" : "ff02::fb",
-                type: testIpv4Enabled ? "udp4" : "udp6",
+                listeningAddress: testIpv4Enabled ? SERVER_IPv4 : SERVER_IPv6,
+                type,
             });
+            (scanListener as any).foo = "scannerChannel";
+            scanListener.addMembership(multicastIp);
+
+            // Add an additional listener on the scanner to detect broadcaster announcements
+            broadcastListener = new MockUdpChannel(clientNetwork, {
+                listeningPort: 5353,
+                listeningAddress: testIpv4Enabled ? CLIENT_IPv4 : CLIENT_IPv6,
+                type,
+            });
+            (broadcastListener as any).foo = "broadcasterChannel";
+            broadcastListener.addMembership(multicastIp);
         });
 
         afterEach(async () => {
             await broadcaster.close();
             await scanner.close();
-            await scannerChannel.close();
-            await broadcasterChannel.close();
+            await scanListener.close();
+            await broadcastListener.close();
         });
 
         const processRecordExpiry = async (port: number) => {
@@ -135,9 +152,7 @@ const NODE_ID = NodeId(BigInt(1));
 
             it("it broadcasts the device fabric on one port and expires", async () => {
                 const { promise, resolver } = createPromise<Uint8Array>();
-                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
-                    resolver(data),
-                );
+                const listener = scanListener.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
                 await broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], {
                     sessionIdleInterval: 100,
@@ -209,7 +224,7 @@ const NODE_ID = NodeId(BigInt(1));
                 await listener.close();
 
                 const { promise: expiryPromise, resolver: expiryResolver } = createPromise<Uint8Array>();
-                const expiryListener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
+                const expiryListener = scanListener.onData((_netInterface, _peerAddress, _peerPort, data) =>
                     expiryResolver(data),
                 );
 
@@ -283,9 +298,7 @@ const NODE_ID = NodeId(BigInt(1));
 
             it("it broadcasts the device commissionable info on one port", async () => {
                 const { promise, resolver } = createPromise<Uint8Array>();
-                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
-                    resolver(data),
-                );
+                const listener = scanListener.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
                 await broadcaster.setCommissionMode(PORT, 1, {
                     name: "Test Device",
@@ -441,9 +454,7 @@ const NODE_ID = NodeId(BigInt(1));
 
             it("it broadcasts the controller commissioner on one port", async () => {
                 const { promise, resolver } = createPromise<Uint8Array>();
-                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
-                    resolver(data),
-                );
+                const listener = scanListener.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
                 await broadcaster.setCommissionerInfo(PORT, {
                     deviceName: "Test Commissioner",
@@ -532,7 +543,7 @@ const NODE_ID = NodeId(BigInt(1));
             it("it allows announcements of multiple devices on different ports", async () => {
                 const { promise, resolver } = createPromise<void>();
                 const dataArr: Uint8Array[] = [];
-                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
+                const listener = scanListener.onData((_netInterface, _peerAddress, _peerPort, data) => {
                     dataArr.push(data);
                     if (dataArr.length === 3) resolver();
                 });
@@ -948,7 +959,7 @@ const NODE_ID = NodeId(BigInt(1));
             it("the client directly returns server record if it has been announced before and records are removed on cancel", async () => {
                 let queryReceived = false;
                 let dataWereSent = false;
-                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
+                const listener = scanListener.onData((_netInterface, _peerAddress, _peerPort, data) => {
                     dataWereSent = true;
                     const dataDecoded = DnsCodec.decode(data);
                     if (dataDecoded?.messageType === DnsMessageType.Query) {
@@ -989,7 +1000,7 @@ const NODE_ID = NodeId(BigInt(1));
 
             it("the client queries the server record if it has not been announced before", async () => {
                 const sentData = new Array<Uint8Array>();
-                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
+                const listener = scanListener.onData((_netInterface, _peerAddress, _peerPort, data) =>
                     sentData.push(data),
                 );
 
@@ -1039,7 +1050,7 @@ const NODE_ID = NodeId(BigInt(1));
 
             it("the client queries the server record and get correct response also with multiple announced instances", async () => {
                 const netData = new Array<Uint8Array>();
-                const listener = broadcasterChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
+                const listener = broadcastListener.onData((_netInterface, _peerAddress, _peerPort, data) => {
                     netData.push(data);
                 });
 
@@ -1203,7 +1214,7 @@ const NODE_ID = NodeId(BigInt(1));
             it("the client queries the server record and get correct response when announced before", async () => {
                 let dataWereSent = false;
                 let queryReceived = false;
-                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
+                const listener = scanListener.onData((_netInterface, _peerAddress, _peerPort, data) => {
                     dataWereSent = true;
                     const dataDecoded = DnsCodec.decode(data);
                     if (dataDecoded?.messageType === DnsMessageType.Query) {

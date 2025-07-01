@@ -4,15 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
-import { NetworkServer } from "#behavior/system/network/NetworkServer.js";
+import type { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
+import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
+import type { ServerNetworkRuntime } from "#behavior/system/network/ServerNetworkRuntime.js";
 import { NetworkCommissioningServer } from "#behaviors/network-commissioning";
 import { TimeSynchronizationBehavior } from "#behaviors/time-synchronization";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
-import { Endpoint } from "#endpoint/Endpoint.js";
+import type { Endpoint } from "#endpoint/Endpoint.js";
 import { Bytes, ImplementationError, ipv4ToBytes, Logger, MaybePromise, Time, Timer } from "#general";
 import { FieldElement, Specification } from "#model";
-import { NodeLifecycle } from "#node/NodeLifecycle.js";
+import type { NodeLifecycle } from "#node/NodeLifecycle.js";
 import { MdnsService, Val } from "#protocol";
 import { CommandId, StatusCode, StatusResponseError, TlvInvokeResponse } from "#types";
 import { GeneralDiagnosticsBehavior } from "./GeneralDiagnosticsBehavior.js";
@@ -317,7 +318,7 @@ export class GeneralDiagnosticsServer extends Base {
         const mdnsService = this.env.get(MdnsService);
         const mdnsLimitedToNetworkInterfaces = mdnsService.limitedToNetInterface;
 
-        const networkRuntime = this.endpoint.behaviors.internalsOf(NetworkServer).runtime;
+        const networkRuntime = this.env.get(NetworkRuntime) as ServerNetworkRuntime;
         const systemNetworkInterfaces = await networkRuntime.getNetworkInterfaces();
 
         // Determine the network type for all interfaces based on the Network Commissioning Server on the root endpoint

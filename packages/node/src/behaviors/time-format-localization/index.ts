@@ -8,3 +8,4 @@
 
 export * from "./TimeFormatLocalizationBehavior.js";
 export * from "./TimeFormatLocalizationServer.js";
+export * from "./TimeFormatLocalizationClient.js";

@@ -96,13 +96,12 @@ const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
 /**
  * Interface to add criteria for MDNS discovery a node is interested in
  *
- * This interface is used to define criteria for mDNS scanner targets.
- * It includes the information if commissionable devices are relevant for the target
- * and a list of operational targets. Operational targets can consist of operational IDs
- * and optional node IDs.
+ * This interface is used to define criteria for mDNS scanner targets. It includes the information if commissionable
+ * devices are relevant for the target and a list of operational targets. Operational targets can consist of operational
+ * IDs and optional node IDs.
  *
- * When no commissionable devices are relevant and no operational targets are defined, it is
- * not required to add a criteria to the scanner.
+ * When no commissionable devices are relevant and no operational targets are defined, it is not required to add a
+ * criteria to the scanner.
  */
 export interface MdnsScannerTargetCriteria {
     /** Are commissionable MDNS records relevant? */

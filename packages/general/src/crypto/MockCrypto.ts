@@ -24,6 +24,11 @@ export interface MockCrypto extends Crypto {
      * The index of the random space.  May be modified to adjust computations going forward.
      */
     index: number;
+
+    /**
+     * Control whether the implementation supplies normal randomness (false by default).
+     */
+    entropic: boolean;
 }
 
 export function MockCrypto(index: number = 0x80, implementation: new () => Crypto = StandardCrypto) {
@@ -33,32 +38,55 @@ export function MockCrypto(index: number = 0x80, implementation: new () => Crypt
 
     const crypto = new implementation();
 
-    // Create random data consisting of index repeated
-    crypto.randomBytes = function getRandomDataNONENTROPIC(length) {
-        const result = new Uint8Array(length);
-        result.fill(index);
-        return result;
-    };
+    const { randomBytes, createKeyPair } = crypto;
 
-    // Ensure EC key generation uses our own "entropy" source rather than the platform's
-    crypto.createKeyPair = function getRandomDataNONENTROPIC() {
-        const privateBits = ec.mapHashToField(new Uint8Array(crypto.randomBytes(48)), ec.p256.CURVE.n);
-        return Key({
-            kty: KeyType.EC,
-            crv: CurveType.p256,
-            privateBits,
-        }) as PrivateKey;
-    };
+    Object.defineProperties(crypto, {
+        index: {
+            get() {
+                return index;
+            },
 
-    Object.defineProperty(crypto, "index", {
-        get() {
-            return index;
+            set(newIndex: number) {
+                index = newIndex % 256;
+            },
         },
 
-        set(newIndex: number) {
-            index = newIndex % 256;
+        entropic: {
+            get() {
+                return crypto.randomBytes === randomBytes;
+            },
+
+            set(entropic: boolean) {
+                if (entropic) {
+                    crypto.randomBytes = randomBytes;
+                    crypto.createKeyPair = createKeyPair;
+                } else {
+                    disableEntropy();
+                }
+            },
         },
     });
 
+    disableEntropy();
+
     return crypto as MockCrypto;
+
+    function disableEntropy() {
+        // Create random data consisting of index repeated
+        crypto.randomBytes = function getRandomDataNONENTROPIC(length) {
+            const result = new Uint8Array(length);
+            result.fill(index);
+            return result;
+        };
+
+        // Ensure EC key generation uses our own "entropy" source rather than the platform's
+        crypto.createKeyPair = function getRandomDataNONENTROPIC() {
+            const privateBits = ec.mapHashToField(new Uint8Array(crypto.randomBytes(48)), ec.p256.CURVE.n);
+            return Key({
+                kty: KeyType.EC,
+                crv: CurveType.p256,
+                privateBits,
+            }) as PrivateKey;
+        };
+    }
 }

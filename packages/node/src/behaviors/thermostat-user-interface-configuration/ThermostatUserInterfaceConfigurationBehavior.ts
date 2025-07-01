@@ -8,15 +8,18 @@
 
 import { ThermostatUserInterfaceConfiguration } from "#clusters/thermostat-user-interface-configuration";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { Identity } from "#general";
 
 /**
  * ThermostatUserInterfaceConfigurationBehavior is the base class for objects that support interaction with
  * {@link ThermostatUserInterfaceConfiguration.Cluster}.
  */
-export const ThermostatUserInterfaceConfigurationBehavior = ClusterBehavior
+export const ThermostatUserInterfaceConfigurationBehaviorConstructor = ClusterBehavior
     .for(ThermostatUserInterfaceConfiguration.Cluster);
 
-type ThermostatUserInterfaceConfigurationBehaviorType = InstanceType<typeof ThermostatUserInterfaceConfigurationBehavior>;
-export interface ThermostatUserInterfaceConfigurationBehavior extends ThermostatUserInterfaceConfigurationBehaviorType {}
-type StateType = InstanceType<typeof ThermostatUserInterfaceConfigurationBehavior.State>;
-export namespace ThermostatUserInterfaceConfigurationBehavior { export interface State extends StateType {} }
+export interface ThermostatUserInterfaceConfigurationBehaviorConstructor extends Identity<typeof ThermostatUserInterfaceConfigurationBehaviorConstructor> {}
+export const ThermostatUserInterfaceConfigurationBehavior: ThermostatUserInterfaceConfigurationBehaviorConstructor = ThermostatUserInterfaceConfigurationBehaviorConstructor;
+export interface ThermostatUserInterfaceConfigurationBehavior extends InstanceType<ThermostatUserInterfaceConfigurationBehaviorConstructor> {}
+export namespace ThermostatUserInterfaceConfigurationBehavior {
+    export interface State extends InstanceType<typeof ThermostatUserInterfaceConfigurationBehavior.State> {}
+}

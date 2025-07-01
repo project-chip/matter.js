@@ -84,6 +84,7 @@ let callbacks = new Array<{ atMs: number; callback: TimerCallback }>();
 let nowMs = 0;
 let real = undefined as unknown;
 let enabled = false;
+let defaultToMacrotasks = false;
 
 /**
  * An arbitrary start for our mock timeline.  Starting at zero causes problems with Matter dates that cannot encode back
@@ -121,6 +122,7 @@ export const MockTime = {
     reset(time: ConstructorParameters<typeof Date>[0] = epoch) {
         callbacks = [];
         nowMs = new Date(time).getTime();
+        defaultToMacrotasks = false;
         MockTime.enable();
     },
 
@@ -131,6 +133,16 @@ export const MockTime = {
         if (!enabled) {
             MockTime.enable();
         }
+    },
+
+    /**
+     * Enable macrotasks (true) or microtasks (false) for mock time incrementation.
+     *
+     * Microtasks are the default and are more efficient.  Macrotasks are required for e.g. most of node's crypto.subtle
+     * methods to resolve.
+     */
+    set macrotasks(value: boolean) {
+        defaultToMacrotasks = value;
     },
 
     atTime<T>(time: number | Date, actor: () => T): T {
@@ -196,7 +208,7 @@ export const MockTime = {
             // if you only yield via microtask.  It seems to require yielding via macrotask.  So we optionally use
             // setTimeout here. Probably related to entropy collection but I think it's safe to classify as a Node bug.
             // Tested on version 20.11.0
-            if (macrotasks) {
+            if (macrotasks ?? defaultToMacrotasks) {
                 await new Promise<void>(resolve => setTimeout(() => resolve(), 0));
             } else {
                 await MockTime.yield();
@@ -215,11 +227,13 @@ export const MockTime = {
 
             if (stepMs) {
                 await this.advance(stepMs);
+                timeAdvanced += stepMs;
             } else {
                 // Advance time exponentially, trying for granularity but also OK performance.  Note that we are not only
                 // advancing time but also yielding event loop.  So it's possible if we run out of time it's just because
                 // there were too few yields in one virtual hour.  As designed currently it's 360 macrotasks and 360
                 // microtasks (360 loops w/ 1 macro- and 1 micro-yield)
+                // TODO - this isn't exponential, fix comment or fix code
                 await this.advance(1000);
                 timeAdvanced += 1000;
             }
