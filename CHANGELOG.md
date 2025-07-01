@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.15.1 (2025-07-01)
 
 -   @matter/general
     - Fix: Do not install standard crypto implementation if the global crypto.subtle is unavailable
