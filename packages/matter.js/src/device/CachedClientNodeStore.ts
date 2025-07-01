@@ -84,7 +84,7 @@ export class CachedClientNodeStore extends PeerDataStore {
         attributeId: AttributeId,
     ): DecodedAttributeReportValue<any> | undefined {
         const store = this.#storeForEndpoint(endpointId);
-        const clusterValues = store.get[clusterId];
+        const clusterValues = store.get.get(clusterId.toString());
         if (clusterValues === undefined) {
             return undefined;
         }
@@ -112,7 +112,7 @@ export class CachedClientNodeStore extends PeerDataStore {
 
     retrieveAttributes(endpointId: EndpointNumber, clusterId: ClusterId): DecodedAttributeReportValue<any>[] {
         const store = this.#storeForEndpoint(endpointId);
-        const clusterValues = store.get[clusterId];
+        const clusterValues = store.get.get(clusterId.toString());
         if (clusterValues === undefined) {
             return [];
         }
@@ -166,7 +166,7 @@ export class CachedClientNodeStore extends PeerDataStore {
 
     getClusterDataVersion(endpointId: EndpointNumber, clusterId: ClusterId): number | undefined {
         const store = this.#storeForEndpoint(endpointId);
-        const clusterValues = store.get[clusterId];
+        const clusterValues = store.get.get(clusterId.toString());
         return clusterValues?.[VERSION_KEY] as number | undefined;
     }
 
@@ -185,7 +185,7 @@ export class CachedClientNodeStore extends PeerDataStore {
                 if (filterClusterIdStr !== undefined && clusterId !== filterClusterIdStr) {
                     continue;
                 }
-                const version = endpointData[clusterId][VERSION_KEY];
+                const version = endpointData.get(clusterId.toString())![VERSION_KEY];
                 if (typeof version === "number") {
                     versions.push({ endpointId, clusterId: ClusterId(parseInt(clusterId)), dataVersion: version });
                 }

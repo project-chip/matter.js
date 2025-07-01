@@ -210,6 +210,17 @@ export class MatterAggregateError extends AggregateError {
         return MatterError.idFor(this);
     }
 
+    /**
+     * Add causes without stack traces.
+     *
+     * This is useful to create a compact representation if all child errors originate externally or from the same
+     * logical location as the parent error.
+     */
+    addStackless(error: Error) {
+        error.stack = undefined;
+        this.errors.push(error);
+    }
+
     // TODO - see comment on MatterError.  If that one is correct this is incorrect
     static override [Symbol.hasInstance](instance: unknown) {
         if (instance instanceof MatterError) {

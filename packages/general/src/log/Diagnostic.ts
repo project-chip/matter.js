@@ -31,6 +31,21 @@ export function Diagnostic(presentation: Diagnostic.Presentation | Lifecycle.Sta
     };
 }
 
+/**
+ * An extension of {@link Error} with additional diagnostic fields.
+ */
+export interface DiagnosticError extends Error {
+    /**
+     * The string used to tag formatted messages.
+     */
+    id?: string;
+
+    /**
+     * The origin of the error.
+     */
+    path?: Diagnostic;
+}
+
 export namespace Diagnostic {
     export enum Presentation {
         /**
@@ -416,28 +431,29 @@ export namespace Diagnostic {
      * Extract message and stack diagnostic details.
      */
     export function messageAndStackFor(
-        error: any,
+        error: unknown,
         parentStack?: string[],
-    ): { message: string; id?: string; stack?: unknown[]; stackLines?: string[] } {
+    ): { message: string; id?: string; path?: unknown; stack?: unknown[]; stackLines?: string[] } {
         let message: string | undefined;
         let rawStack: string | undefined;
         let id: string | undefined;
+        let path: unknown | undefined;
+
         if (error !== undefined && error !== null) {
             if (typeof error === "string" || typeof error === "number") {
                 return { message: `${error}` };
             }
 
-            if ("message" in error) {
-                ({ message, stack: rawStack } = error);
-            } else if (error.message) {
-                message = typeof error.message === "string" ? message : error.toString();
+            ({ message, stack: rawStack, id, path } = error as DiagnosticError);
+            if (message === undefined) {
+                message = error.toString();
             }
 
-            id = error.id;
             if (typeof id !== "string") {
                 id = undefined;
             }
         }
+
         if (message === undefined || message === null || message === "") {
             if (error !== undefined && error !== null) {
                 message = error.constructor.name;
@@ -448,8 +464,9 @@ export namespace Diagnostic {
                 message = "(unknown error)";
             }
         }
+
         if (!rawStack) {
-            return { message, id };
+            return { message, id, path };
         }
 
         rawStack = rawStack.toString();
@@ -542,16 +559,16 @@ export namespace Diagnostic {
             stack.push(Diagnostic.weak("(see parent frames)"));
         }
 
-        return { message, id, stack, stackLines };
+        return { message, id, path, stack, stackLines };
     }
 }
 
-function formatError(error: any, options: { messagePrefix?: string; parentStack?: string[] } = {}) {
+function formatError(error: unknown, options: { messagePrefix?: string; parentStack?: string[] } = {}) {
     const { messagePrefix, parentStack } = options;
 
     const messageAndStack = Diagnostic.messageAndStackFor(error, parentStack);
     let { stack, stackLines } = messageAndStack;
-    const { id } = messageAndStack;
+    const { id, path } = messageAndStack;
 
     let { message } = messageAndStack;
 
@@ -561,6 +578,9 @@ function formatError(error: any, options: { messagePrefix?: string; parentStack?
     }
     if (id) {
         messageDiagnostic.push("[", Diagnostic.strong(id), "] ");
+    }
+    if (path) {
+        messageDiagnostic.push(" ", path, ": ");
     }
     messageDiagnostic.push(message);
 
@@ -575,11 +595,11 @@ function formatError(error: any, options: { messagePrefix?: string; parentStack?
             secondary = error.error;
             error = error.suppressed;
         }
-        ({ cause, errors } = error);
+        ({ cause, errors } = error as AggregateError);
     }
 
     // Report the error to context.  If return value is true, stack is already reported in this context so omit
-    if (errorCollector?.(error)) {
+    if (error && errorCollector?.(error)) {
         stack = stackLines = undefined;
     }
 
@@ -597,7 +617,7 @@ function formatError(error: any, options: { messagePrefix?: string; parentStack?
 
     // We render chained causes at the same level as the parent.  They are displayed atomically and there can be
     // only one so this is not ambiguous.  If we did not do this we would end up with a lot of indent levels
-    for (; typeof cause === "object" && cause !== null; cause = cause.cause) {
+    for (; typeof cause === "object" && cause !== null; cause = (cause as Error).cause) {
         let formatted = formatError(cause, { messagePrefix: "Caused by:", parentStack: stackLines });
         if ((formatted as Diagnostic)[Diagnostic.presentation] === Diagnostic.Presentation.List) {
             formatted = (formatted as Diagnostic)[Diagnostic.value] ?? formatted;

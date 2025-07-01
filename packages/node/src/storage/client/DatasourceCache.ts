@@ -5,10 +5,10 @@
  */
 
 import { Datasource } from "#behavior/state/managed/Datasource.js";
-import { InternalError } from "#general";
+import { InternalError, Transaction } from "#general";
 import { Val } from "#protocol";
-import { EndpointStore } from "#storage/EndpointStore.js";
-import { DatasourceStore } from "../server/DatasourceStore.js";
+import type { ClientEndpointStore } from "./ClientEndpointStore.js";
+import type { RemoteWriteParticipant } from "./RemoteWriteParticipant.js";
 
 /**
  * Factory function for the default implementation of {@link Datasource.ExternallyMutableStore}.
@@ -16,7 +16,7 @@ import { DatasourceStore } from "../server/DatasourceStore.js";
  * This implements storage for attribute values for a single cluster loaded from remote nodes.
  */
 export function DatasourceCache(
-    store: EndpointStore,
+    store: ClientEndpointStore,
     behaviorId: string,
     initialValues: Val.Struct | undefined,
 ): Datasource.ExternallyMutableStore {
@@ -26,7 +26,12 @@ export function DatasourceCache(
     }
 
     return {
-        ...DatasourceStore(store, behaviorId, initialValues),
+        initialValues,
+
+        async set(transaction: Transaction, values: Val.Struct) {
+            const participant = store.participantFor(transaction) as RemoteWriteParticipant;
+            participant.set(store.number, behaviorId, values);
+        },
 
         async externalSet(values: Val.Struct) {
             if (typeof values[DatasourceCache.VERSION_KEY] === "number") {
@@ -56,8 +61,6 @@ export function DatasourceCache(
         },
     };
 }
-
-DatasourceCache satisfies DatasourceStore.Type;
 
 export namespace DatasourceCache {
     /**

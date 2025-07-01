@@ -17,7 +17,7 @@ import { Endpoint } from "#endpoint/Endpoint.js";
 import type { Environment } from "#general";
 import { asyncNew, Construction, DiagnosticSource, errorOf, Identity, MatterError } from "#general";
 import { FabricManager, Interactable, OccurrenceManager, ServerInteraction, SessionManager } from "#protocol";
-import { NodeStore } from "#storage/NodeStore.js";
+import { ServerNodeStore } from "#storage/server/ServerNodeStore.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoints/root.js";
 import { Node } from "./Node.js";
 import { ClientNodes } from "./client/ClientNodes.js";
@@ -192,7 +192,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         await this.env.get(SessionManager).clear();
         await this.env.get(FabricManager).clear();
         await this.env.get(OccurrenceManager).clear();
-        await this.env.get(NodeStore).erase();
+        await this.env.get(ServerNodeStore).erase();
     }
 
     /**

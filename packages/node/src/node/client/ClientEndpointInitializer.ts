@@ -12,6 +12,7 @@ import { ServerBehaviorBacking } from "#behavior/internal/ServerBehaviorBacking.
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import type { ClientNode } from "#node/ClientNode.js";
+import { ClientNodeStore } from "#storage/client/ClientNodeStore.js";
 import { NodeStore } from "#storage/NodeStore.js";
 import { ClientStructure } from "./ClientStructure.js";
 
@@ -23,7 +24,7 @@ export class ClientEndpointInitializer extends EndpointInitializer {
     constructor(node: ClientNode) {
         super();
         this.#node = node;
-        this.#store = node.env.get(NodeStore);
+        this.#store = node.env.get(ClientNodeStore);
     }
 
     async eraseDescendant(endpoint: Endpoint) {
@@ -45,11 +46,14 @@ export class ClientEndpointInitializer extends EndpointInitializer {
     }
 
     override createBacking(endpoint: Endpoint, type: Behavior.Type): BehaviorBacking {
+        // Non-cluster behaviors are local operation the same server behaviors
         if ((type as ClusterBehavior.Type).cluster === undefined) {
-            return new ServerBehaviorBacking(endpoint, type, endpoint.behaviors.optionsFor(type));
+            const store = this.structure.storeForLocal(endpoint, type);
+            return new ServerBehaviorBacking(endpoint, type, store, endpoint.behaviors.optionsFor(type));
         }
 
-        const store = this.structure.storeFor(endpoint, type as ClusterBehavior.Type);
+        // Cluster behaviors are clients to a remote cluster
+        const store = this.structure.storeForRemote(endpoint, type as ClusterBehavior.Type);
         return new ClientBehaviorBacking(endpoint, type, store, endpoint.behaviors.optionsFor(type));
     }
 

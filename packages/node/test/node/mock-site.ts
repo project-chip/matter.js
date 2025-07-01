@@ -82,20 +82,24 @@ export class MockSite {
         return node;
     }
 
-    async addUncommissionedPair() {
+    async addUncommissionedPair(options?: MockSite.PairOptions) {
+        options ??= {};
+
         const controller = await this.addNode(undefined, {
             online: false,
-            commissioning: { enabled: false },
+            ...options.controller,
+            commissioning: { enabled: false, ...options.controller?.commissioning },
         });
         const device = await this.addNode(undefined, {
+            ...options.device,
             device: OnOffLightDevice,
         });
 
         return { controller, device };
     }
 
-    async addCommissionedPair() {
-        const { controller, device } = await this.addUncommissionedPair();
+    async addCommissionedPair(options?: MockSite.PairOptions) {
+        const { controller, device } = await this.addUncommissionedPair(options);
 
         const controllerCrypto = controller.env.get(Crypto) as MockCrypto;
         const deviceCrypto = device.env.get(Crypto) as MockCrypto;
@@ -142,5 +146,12 @@ export class MockSite {
 
     async [Symbol.asyncDispose]() {
         await this.close();
+    }
+}
+
+export namespace MockSite {
+    export interface PairOptions {
+        controller?: MockServerNode.Configuration<any>;
+        device?: MockServerNode.Configuration<any>;
     }
 }
