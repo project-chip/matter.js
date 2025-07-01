@@ -284,6 +284,7 @@ interface Internals extends Datasource.Options {
     interactionObserver(session?: AccessControl.Session): MaybePromise<void>;
     events: Datasource.InternalEvents;
     changedEventFor(key: string): undefined | Datasource.Events[any];
+    persistentFields: Set<string>;
 }
 
 /**
@@ -339,6 +340,8 @@ function configure(options: Datasource.Options): Internals {
 
     let changedEventIndex: undefined | Map<string, undefined | Datasource.InternalEvents[`${string}$Changed`]>;
 
+    const persistentFields = options.supervisor.persistentKeys(options.primaryKey);
+
     return {
         ...options,
         primaryKey: options.primaryKey === "id" ? "id" : "name",
@@ -347,6 +350,7 @@ function configure(options: Datasource.Options): Internals {
         values,
         featuresKey,
         manageVersion: true,
+        persistentFields,
 
         interactionObserver(session?: ValueSupervisor.Session) {
             function handleObserverError(error: any) {
@@ -390,6 +394,10 @@ function configure(options: Datasource.Options): Internals {
     };
 }
 
+function isExternal(store?: Datasource.Store): store is Datasource.ExternallyMutableStore {
+    return !!store && "externalSet" in store;
+}
+
 /**
  * If the store supports external mutation, add a listener to update internal state and notify observers.
  *
@@ -398,7 +406,7 @@ function configure(options: Datasource.Options): Internals {
  */
 function configureExternalChanges(internals: Internals) {
     const { store } = internals;
-    if (!store || !("externalSet" in store)) {
+    if (!isExternal(store)) {
         return;
     }
 
@@ -507,7 +515,6 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
     });
 
     const fields = internals.supervisor.memberNames;
-    const persistentFields = internals.supervisor.persistentNames;
 
     // This is the actual reference
     const reference: Val.Reference<Val.Struct> = {
@@ -762,7 +769,7 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
                 }
                 changes.changeList.add(name);
 
-                if (persistentFields.has(name)) {
+                if (internals.persistentFields.has(name)) {
                     if (changes.persistent === undefined) {
                         changes.persistent = {};
                     }

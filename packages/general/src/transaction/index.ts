@@ -5,4 +5,5 @@
  */
 
 export * from "./errors.js";
+export * from "./Participant.js";
 export * from "./Transaction.js";

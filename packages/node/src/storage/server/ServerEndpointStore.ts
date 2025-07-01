@@ -7,6 +7,7 @@
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { ImplementationError, StorageContext } from "#general";
 import { EndpointStore } from "#storage/EndpointStore.js";
+import { DatasourceStore } from "./DatasourceStore.js";
 
 const NUMBER_KEY = "__number__";
 
@@ -35,6 +36,14 @@ export class ServerEndpointStore extends EndpointStore {
         super(storage);
 
         this.#childStorage = storage.createContext("parts");
+    }
+
+    /**
+     * Create a {@link Datasource.Store} for a behavior.
+     */
+    createStoreForBehavior(behaviorId: string) {
+        const initialValues = this.consumeInitialValues(behaviorId);
+        return DatasourceStore(this, behaviorId, initialValues);
     }
 
     /**

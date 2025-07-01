@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Behavior } from "#behavior/Behavior.js";
 import { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { DescriptorCluster } from "#clusters/descriptor";
@@ -14,7 +15,7 @@ import type { ClientNode } from "#node/ClientNode.js";
 import { ReadScope, type Read, type ReadResult } from "#protocol";
 import { DatasourceCache } from "#storage/client/DatasourceCache.js";
 import { ClientNodeStore } from "#storage/index.js";
-import type { AttributeId, ClusterId, CommandId, DeviceTypeId, EndpointNumber } from "#types";
+import type { AttributeId, ClusterId, ClusterType, CommandId, DeviceTypeId, EndpointNumber } from "#types";
 import { ClientBehavior } from "./ClientBehavior.js";
 
 const DEVICE_TYPE_LIST_ATTR_ID = DescriptorCluster.attributes.deviceTypeList.id;
@@ -65,13 +66,22 @@ export class ClientStructure {
     }
 
     /**
-     * Obtain the store for a behavior.
+     * Obtain the store for a remote cluster.
      */
-    storeFor(endpoint: Endpoint, type: ClusterBehavior.Type) {
+    storeForRemote(endpoint: Endpoint, type: ClusterBehavior.Type) {
         const endpointStructure = this.#endpointFor(endpoint.number);
         const clusterStructure = this.#clusterFor(endpointStructure, type.cluster.id);
 
         return clusterStructure.store;
+    }
+
+    /**
+     *
+     * @param request
+     * @returns
+     */
+    storeForLocal(endpoint: Endpoint, type: Behavior.Type) {
+        return this.#nodeStore.storeForEndpoint(endpoint).createStoreForLocalBehavior(type.id);
     }
 
     /**
@@ -164,6 +174,18 @@ export class ClientStructure {
         if (currentUpdates) {
             await this.#updateCluster(currentUpdates);
         }
+    }
+
+    /**
+     * Obtain the {@link ClusterType} for an endpoint number and cluster ID.
+     */
+    clusterFor(endpoint: EndpointNumber, cluster: ClusterId) {
+        const ep = this.#endpointFor(endpoint);
+        if (!ep) {
+            return;
+        }
+
+        return this.#clusterFor(ep, cluster)?.behavior?.cluster;
     }
 
     /**
@@ -309,9 +331,7 @@ export class ClientStructure {
 
         cluster = {
             id,
-            store: this.#nodeStore
-                .storeForEndpoint(endpoint.endpoint)
-                .createStoreForBehavior(id.toString(), DatasourceCache),
+            store: this.#nodeStore.storeForEndpoint(endpoint.endpoint).createStoreForBehavior(id.toString()),
         };
         endpoint.clusters[id] = cluster;
 

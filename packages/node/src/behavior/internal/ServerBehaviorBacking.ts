@@ -11,11 +11,8 @@ import type { SupportedElements } from "#endpoint/properties/Behaviors.js";
 import { camelize } from "#general";
 import { FieldValue } from "#model";
 import { Val } from "#protocol";
-import { NodeStore } from "#storage/NodeStore.js";
-import { DatasourceStore } from "#storage/server/DatasourceStore.js";
 import { ClusterType, TlvNoResponse } from "#types";
 import { Behavior } from "../Behavior.js";
-import { Datasource } from "../state/managed/Datasource.js";
 import { BehaviorBacking } from "./BehaviorBacking.js";
 
 const NoElements = new Set<string>();
@@ -24,19 +21,7 @@ const NoElements = new Set<string>();
  * This class backs the server implementation of a behavior.
  */
 export class ServerBehaviorBacking extends BehaviorBacking {
-    #store?: Datasource.Store;
     #elements?: SupportedElements;
-
-    override get store() {
-        if (!this.#store) {
-            this.#store = this.createStore();
-        }
-        return this.#store;
-    }
-
-    protected createStore() {
-        return this.#nodeStore.storeForEndpoint(this.endpoint).createStoreForBehavior(this.type.id, DatasourceStore);
-    }
 
     get elements() {
         return this.#elements;
@@ -68,10 +53,6 @@ export class ServerBehaviorBacking extends BehaviorBacking {
         }
 
         finalizeState();
-    }
-
-    get #nodeStore() {
-        return this.endpoint.env.get(NodeStore);
     }
 
     /**
