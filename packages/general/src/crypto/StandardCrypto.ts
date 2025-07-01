@@ -9,6 +9,7 @@ import { DerBigUint, DerCodec, DerError } from "#codec/DerCodec.js";
 import { Environment } from "#environment/Environment.js";
 import { ImplementationError } from "#MatterError.js";
 import { Bytes } from "#util/Bytes.js";
+import { describeList } from "#util/String.js";
 import { Ccm } from "./aes/Ccm.js";
 import { Crypto, CRYPTO_SYMMETRIC_KEY_LENGTH, CryptoDsaEncoding } from "./Crypto.js";
 import { CryptoVerifyError, KeyInputError } from "./CryptoError.js";
@@ -19,6 +20,16 @@ const SIGNATURE_ALGORITHM = <EcdsaParams>{
     namedCurve: "P-256",
     hash: { name: "SHA-256" },
 };
+
+const requiredSubtleMethods: Array<keyof SubtleCrypto> = [
+    "digest",
+    "deriveBits",
+    "sign",
+    "verify",
+    "generateKey",
+    "exportKey",
+    "importKey",
+];
 
 /**
  * A {@link Crypto} implementation that uses only JS standards.
@@ -33,10 +44,17 @@ export class StandardCrypto extends Crypto {
     implementationName = "JS";
     #subtle: SubtleCrypto;
 
-    constructor(subtle: SubtleCrypto = crypto?.subtle) {
-        if (subtle === undefined) {
+    constructor(subtle: SubtleCrypto = globalThis.crypto?.subtle) {
+        if (typeof subtle !== "object" || subtle === null) {
             throw new ImplementationError(
                 "You cannot instantiate StandardCrypto in this runtime because crypto.subtle is not present",
+            );
+        }
+
+        const missingMethods = requiredSubtleMethods.filter(name => typeof subtle[name] !== "function");
+        if (missingMethods.length) {
+            throw new ImplementationError(
+                `SubtleCrypto implementation is missing required method${missingMethods.length === 1 ? "" : "s"} ${describeList("and", ...missingMethods)}`,
             );
         }
 
@@ -258,6 +276,6 @@ export class StandardCrypto extends Crypto {
 
 // If available, unconditionally add to Environment as it has not been exported yet so there can be no other
 // implementation present
-if (crypto?.subtle !== undefined) {
-    Environment.default.set(Crypto, new StandardCrypto(crypto.subtle));
+if ("crypto" in globalThis && globalThis.crypto?.subtle) {
+    Environment.default.set(Crypto, new StandardCrypto(globalThis.crypto.subtle));
 }
