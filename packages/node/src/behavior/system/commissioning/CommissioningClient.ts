@@ -24,7 +24,14 @@ import {
     SessionParameters,
     Subscribe,
 } from "#protocol";
-import { DeviceTypeId, DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema, VendorId } from "#types";
+import {
+    DeviceTypeId,
+    DiscoveryCapabilitiesBitmap,
+    ManualPairingCodeCodec,
+    NodeId,
+    TypeFromPartialBitSchema,
+    VendorId,
+} from "#types";
 import { ControllerBehavior } from "../controller/ControllerBehavior.js";
 import { NetworkClient } from "../network/NetworkClient.js";
 import { RemoteDescriptor } from "./RemoteDescriptor.js";
@@ -59,19 +66,22 @@ export class CommissioningClient extends Behavior {
 
     commission(options: CommissioningClient.CommissioningOptions): Promise<ClientNode>;
 
-    async commission(options: number | CommissioningClient.CommissioningOptions) {
+    async commission(options: number | string | CommissioningClient.CommissioningOptions) {
         // Commissioning can only happen once
         const node = this.endpoint as ClientNode;
         if (this.state.peerAddress !== undefined) {
             throw new ImplementationError(`${node} is already commissioned`);
         }
 
-        if (typeof options !== "object") {
+        if (typeof options === "number") {
             options = { passcode: options };
+        } else if (typeof options === "string") {
+            options = { pairingCode: options };
         }
+        const opts = CommissioningClient.PasscodeOptions(options) as CommissioningClient.PasscodeOptions;
 
         // Validate passcode
-        let { passcode } = options;
+        let { passcode } = opts;
         if (typeof passcode !== "number" || Number.isNaN(passcode)) {
             passcode = Number.parseInt(passcode as unknown as string);
             if (Number.isNaN(passcode)) {
@@ -83,8 +93,8 @@ export class CommissioningClient extends Behavior {
         await node.owner?.act(agent => agent.load(ControllerBehavior));
 
         // Obtain the fabric we will commission into
-        const fabricAuthority = options.fabricAuthority || this.env.get(FabricAuthority);
-        let { fabric } = options;
+        const fabricAuthority = opts.fabricAuthority || this.env.get(FabricAuthority);
+        let { fabric } = opts;
         if (fabric === undefined) {
             if (this.context.fabric === undefined) {
                 fabric = await fabricAuthority.defaultFabric();
@@ -107,7 +117,7 @@ export class CommissioningClient extends Behavior {
         const commissioner = node.env.get(ControllerCommissioner);
 
         const identityService = node.env.get(IdentityService);
-        const address = identityService.assignNodeAddress(node, fabric.fabricIndex, options.nodeId);
+        const address = identityService.assignNodeAddress(node, fabric.fabricIndex, opts.nodeId);
 
         const commissioningOptions: LocatedNodeCommissioningOptions = {
             addresses,
@@ -132,7 +142,7 @@ export class CommissioningClient extends Behavior {
         await this.context.transaction.commit();
 
         const network = this.agent.get(NetworkClient);
-        network.state.startupSubscription = options.startupSubscription;
+        network.state.startupSubscription = opts.startupSubscription;
 
         node.lifecycle.commissioned.emit(this.context);
 
@@ -141,6 +151,14 @@ export class CommissioningClient extends Behavior {
         return node;
     }
 
+    /**
+     * Remove this node from the fabric.
+     *
+     * After removal the {@link ClientNode} remains intact.  You can use {@link ClientNode#delete} to remove the node
+     * permanently.
+     *
+     * Only legal if this node controls the peer's fabric.
+     */
     async decommission() {
         const { peerAddress } = this.state;
 
@@ -358,17 +376,7 @@ export namespace CommissioningClient {
     /**
      * Options that control commissioning.
      */
-    export interface CommissioningOptions {
-        /**
-         * The device's passcode.
-         */
-        passcode: number;
-
-        /**
-         * The device's long discriminator.
-         */
-        discriminator?: number;
-
+    export interface BaseCommissioningOptions {
         /**
          * The ID to assign the node during commissioning.  By default the node receives the next available ID.
          */
@@ -415,5 +423,50 @@ export namespace CommissioningClient {
          * read omits them then the node will only be partially functional once initialized.
          */
         startupSubscription?: Subscribe | null;
+    }
+
+    export interface PasscodeOptions extends BaseCommissioningOptions {
+        /**
+         * The device's passcode.
+         */
+        passcode: number;
+
+        /**
+         * The device's long discriminator.
+         */
+        discriminator?: number;
+    }
+
+    export interface PairingCodeOptions extends BaseCommissioningOptions {
+        /**
+         * The device's pairing code.
+         */
+        pairingCode: string;
+    }
+
+    export type CommissioningOptions = PasscodeOptions | PairingCodeOptions;
+
+    export function PasscodeOptions<T extends CommissioningOptions>(options: T) {
+        let opts: T & PasscodeOptions;
+
+        if ("pairingCode" in options) {
+            const decoded = ManualPairingCodeCodec.decode(options.pairingCode);
+            opts = {
+                ...options,
+                ...decoded,
+            };
+        } else {
+            opts = options as T & PasscodeOptions;
+        }
+
+        let { passcode } = opts;
+        if (typeof passcode !== "number" || Number.isNaN(passcode)) {
+            passcode = Number.parseInt(passcode as unknown as string);
+            if (Number.isNaN(passcode)) {
+                throw new ImplementationError("You must provide a pairing code or passcode to pair a node");
+            }
+        }
+
+        return opts;
     }
 }

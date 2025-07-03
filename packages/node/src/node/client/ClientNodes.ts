@@ -87,8 +87,8 @@ export class ClientNodes extends EndpointContainer<ClientNode> {
         return new CommissioningDiscovery(this.owner, options);
     }
 
-    override get(id: string | PeerAddress) {
-        if (typeof id !== "string") {
+    override get(id: number | string | PeerAddress) {
+        if (typeof id !== "string" && typeof id !== "number") {
             const address = PeerAddress(id);
             for (const node of this) {
                 const nodeAddress = node.state.commissioning.peerAddress;

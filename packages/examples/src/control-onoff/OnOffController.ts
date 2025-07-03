@@ -24,29 +24,34 @@ switch (command) {
         if (controller.nodes.get("device")) {
             die("There is already a device commissioned");
         }
-
-        // Process arguments
-        const passcode = Number.parseInt(args[0]);
-        const discriminator = Number.parseInt(args[1]);
-        if (process.argv.length !== 4 || Number.isNaN(passcode) || Number.isNaN(discriminator)) {
+        if (args.length !== 1) {
             die(`Usage: ${process.argv[0]} commission <passcode> <discriminator>`);
         }
+        const [pairingCode] = args;
 
         // This is the actual commissioning
-        await controller.nodes.commission({ id: "device", passcode, discriminator });
+        await controller.nodes.commission({ id: "device", pairingCode });
 
         break;
 
     case "toggle":
         {
             // Validation
+            const endpointNo = Number.parseInt(args[0]);
+            if (args.length !== 1 || Number.isNaN(endpointNo)) {
+                die(`Usage: ${process.argv[0]} toggle <endpoint number>`);
+            }
             const node = controller.nodes.get("device");
             if (node === undefined) {
                 die("Cannot toggle because there is no commissioned device");
             }
+            const endpoint = node.parts.get(endpointNo);
+            if (endpoint === undefined) {
+                die(`Cannot toggle because endpoint ${endpointNo} does not exist`);
+            }
 
             // Invocation
-            await node.commandsOf(OnOffClient).toggle();
+            await endpoint.commandsOf(OnOffClient).toggle();
         }
 
         break;
