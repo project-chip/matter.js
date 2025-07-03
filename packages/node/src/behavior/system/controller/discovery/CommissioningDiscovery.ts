@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { CommissioningClient } from "#behavior/system/commissioning/CommissioningClient.js";
+import { CommissioningClient } from "#behavior/system/commissioning/CommissioningClient.js";
 import type { ServerNode } from "#node/ServerNode.js";
 import type { Discovery } from "./Discovery.js";
 import { InstanceDiscovery } from "./InstanceDiscovery.js";
@@ -16,7 +16,9 @@ export class CommissioningDiscovery extends InstanceDiscovery {
     #options: CommissioningDiscovery.Options;
 
     constructor(owner: ServerNode, options: CommissioningDiscovery.Options) {
-        const { discriminator } = options;
+        const opts = CommissioningClient.PasscodeOptions(options);
+
+        const { discriminator } = opts;
         if (discriminator !== undefined) {
             options = { ...options, longDiscriminator: discriminator };
         }

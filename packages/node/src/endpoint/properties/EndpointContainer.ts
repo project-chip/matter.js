@@ -21,10 +21,18 @@ export class EndpointContainer<T extends Endpoint = Endpoint>
         this.#owner = endpoint;
     }
 
-    get(id: string) {
-        for (const child of this) {
-            if (child.maybeId === id) {
-                return child;
+    get(id: string | number) {
+        if (typeof id === "number") {
+            for (const child of this) {
+                if (child.maybeNumber === id) {
+                    return child;
+                }
+            }
+        } else {
+            for (const child of this) {
+                if (child.maybeId === id) {
+                    return child;
+                }
             }
         }
     }
