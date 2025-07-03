@@ -85,30 +85,32 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
     }
 
     /**
-     * Remove this node from the fabric.
+     * Remove this node from the fabric (if commissioned) and locally.
      */
-    async decommission() {
-        if (!this.lifecycle.isCommissioned) {
-            return;
+    override async delete() {
+        if (this.lifecycle.isCommissioned) {
+            this.statusUpdate("decommissioning");
+
+            await this.act("decommission", agent => agent.commissioning.decommission());
         }
 
-        this.statusUpdate("decommissioning");
-
-        await this.act("decommission", agent => agent.commissioning.decommission());
+        await super.delete();
     }
 
+    /**
+     * Force-remove the node without first decommissioning.
+     *
+     * If the node is still available you should use {@link delete} to remove it from the fabric.
+     */
     override async erase() {
         await this.lifecycle.mutex.produce(this.eraseWithMutex.bind(this));
     }
 
     protected async eraseWithMutex() {
-        // First decommission if node is commissioned
-        await this.decommission();
-
-        // Then ensure we're offline
+        // First ensure we're offline
         await this.cancelWithMutex();
 
-        // Reset in-memory state
+        // Then reset
         await this.resetWithMutex();
     }
 
