@@ -78,7 +78,7 @@ export default function App() {
             <div className="col">
               <h2>WiFi Network Settings</h2>
               <div className="mb-3">
-                <label htmlFor="threadNetworkName" className="form-label">SSID</label>
+                <label htmlFor="wifiSSID" className="form-label">SSID</label>
                 <input
                   type="text"
                   id="wifiSSID"
@@ -90,7 +90,7 @@ export default function App() {
                   />
               </div>
               <div className="mb-3">
-                <label htmlFor="threadOperationalDataset" className="form-label">Credential</label>
+                <label htmlFor="wifiCredential" className="form-label">Credential</label>
                 <input
                   type="password"
                   id="wifiCredential"

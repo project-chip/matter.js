@@ -72,20 +72,17 @@ export class ControllerNode {
         // const port = (await controllerStorage.has("port"))
         //     ? await controllerStorage.get<number>("port")
         //     : environment.vars.number("port");
-        // const uniqueId = (await controllerStorage.has("uniqueid"))
-        //     ? await controllerStorage.get<string>("uniqueid")
-        //     : (environment.vars.string("uniqueid") ?? Time.nowMs().toString());
-        // await controllerStorage.set("uniqueid", uniqueId);
-        // const adminFabricLabel = (await controllerStorage.has("fabriclabel"))
-        //     ? await controllerStorage.get<string>("fabriclabel")
-        //     : (environment.vars.string("fabriclabel") ?? "matter.js Controller");
-        // await controllerStorage.set("fabriclabel", adminFabricLabel);
+        const uniqueId = (await controllerStorage.has("uniqueid"))
+            ? await controllerStorage.get<string>("uniqueid")
+            : (environment.vars.string("uniqueid") ?? Time.nowMs().toString());
+        await controllerStorage.set("uniqueid", uniqueId);
+        const adminFabricLabel = (await controllerStorage.has("fabriclabel"))
+            ? await controllerStorage.get<string>("fabriclabel")
+            : (environment.vars.string("fabriclabel") ?? "matter.js Controller");
+        await controllerStorage.set("fabriclabel", adminFabricLabel);
 
         const ip = undefined;
         const port = undefined;
-
-        const uniqueId = "unique-but-not-unique"; // Time.nowMs().toString();
-        const adminFabricLabel ="matter.js Controller";
 
         const shortDiscriminator = undefined;
 
@@ -312,8 +309,8 @@ export class ControllerNode {
                 }
             }
         } finally {
-            //await matterServer.close(); // Comment out when subscribes are used, else the connection will be closed
-            setTimeout(() => process.exit(0), 1000000);
+            // await matterServer.close(); // Comment out when subscribes are used, else the connection will be closed
+            // setTimeout(() => process.exit(0), 1000000);
         }
     }
 }
