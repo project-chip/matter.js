@@ -25,7 +25,7 @@ switch (command) {
             die("There is already a device commissioned");
         }
         if (args.length !== 1) {
-            die(`Usage: ${process.argv[0]} commission <passcode> <discriminator>`);
+            die(`Usage: ${process.argv[0]} commission <pairingcode>`);
         }
         const [pairingCode] = args;
 
