@@ -66,7 +66,7 @@ export class CommissioningClient extends Behavior {
 
     commission(options: CommissioningClient.CommissioningOptions): Promise<ClientNode>;
 
-    async commission(options: number | string | CommissioningClient.CommissioningOptions) {
+    async commission(options: number | CommissioningClient.CommissioningOptions) {
         // Commissioning can only happen once
         const node = this.endpoint as ClientNode;
         if (this.state.peerAddress !== undefined) {
@@ -74,9 +74,13 @@ export class CommissioningClient extends Behavior {
         }
 
         if (typeof options === "number") {
-            options = { passcode: options };
-        } else if (typeof options === "string") {
-            options = { pairingCode: options };
+            if (options > 0 && options <= 99999999) {
+                options = { passcode: options };
+            } else if (options > 99999999) {
+                options = { pairingCode: options };
+            } else {
+                throw new ImplementationError(`You must provide the numeric passcode or pairingcode to commission a node`);
+            }
         }
         const opts = CommissioningClient.PasscodeOptions(options) as CommissioningClient.PasscodeOptions;
 
