@@ -273,6 +273,8 @@ jobs:
               --all-clusters-app ../support/chip-testing/dist/esm/AllClustersTestApp.js \
               --bridge-app ../support/chip-testing/dist/esm/BridgeTestApp.js \
               --tv-app ../support/chip-testing/dist/esm/TvTestApp.js \
+              --energy-gateway-app ../support/chip-testing/dist/esm/AllClustersTestApp.js \
+              --energy-management-app ../support/chip-testing/dist/esm/AllClustersTestApp.js \
             '
 
   # Execute the slower (because simulated) application cluster tests
