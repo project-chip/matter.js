@@ -104,7 +104,7 @@ function consoleHandler(reporter: Reporter) {
             case "debug":
             case "info":
             case "error":
-            case "warn":
+            case "warning":
             case "trace":
                 break;
 
@@ -116,7 +116,7 @@ function consoleHandler(reporter: Reporter) {
 
         // If it's not an encoded reporter update, write to normal console
         if (type !== "log" || !text.startsWith(WebReporter.FLAG)) {
-            console[type](text);
+            console[type === "warning" ? "warn" : type](text);
             return;
         }
 
