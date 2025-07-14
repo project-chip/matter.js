@@ -104,7 +104,7 @@ function consoleHandler(reporter: Reporter) {
             case "debug":
             case "info":
             case "error":
-            case "warn":
+            case "warning":
             case "trace":
                 break;
 
