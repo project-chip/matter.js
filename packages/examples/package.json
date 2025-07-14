@@ -59,7 +59,7 @@
         "@matter/nodejs": "*",
         "@matter/tools": "*",
         "@project-chip/matter.js": "*",
-        "esbuild": "^0.25.2"
+        "esbuild": "^0.25.6"
     },
     "optionalDependencies": {
         "@matter/nodejs-ble": "*"
