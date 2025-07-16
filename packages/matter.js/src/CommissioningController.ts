@@ -241,6 +241,8 @@ export class CommissioningController {
             caseAuthenticatedTags,
             adminFabricLabel,
             rootNodeId,
+            rootCertificateAuthority,
+            rootFabric,
         } = this.#options;
 
         if (environment === undefined && storage === undefined) {
@@ -278,6 +280,8 @@ export class CommissioningController {
             caseAuthenticatedTags,
             adminFabricLabel,
             rootNodeId,
+            rootCertificateAuthority,
+            rootFabric,
         });
         if (this.#mdnsBroadcaster) {
             controller.addBroadcaster(this.#mdnsBroadcaster.createInstanceBroadcaster(port));
