@@ -616,8 +616,8 @@ export abstract class Model<E extends BaseElement = BaseElement, C extends Model
         const base = this.operationalBase ?? (this.operationalBase = this.base ?? null);
         const shadow = this.operationalShadow ?? (this.operationalShadow = this.shadow ?? null);
         this.#frozen = true;
-        Object.freeze(this);
         (this.children as InternalChildren<C>).freeze();
+        Object.freeze(this);
         base?.freeze();
         shadow?.freeze();
     }

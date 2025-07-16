@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   @project-chip/matter.js
+    - (ArtemisMucaj) Fix: Correctly pass a custom "rootCertificateAuthority" and "rootFabric" from CommissioningController options internally
+
 ## 0.15.1 (2025-07-01)
 
 -   @matter/general
@@ -23,7 +28,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: The `Network.get()` singleton is removed
     - Breaking: The Crypto interface has changed; `Crypto.get()` singleton is removed, the API is modernized, methods are renamed for clarity, and the ecdh* methods are replaced with generateDhSecret
     - Feature: Adds a crypto implementation that should function in any modern JS VM
-    - Enhancement: Adjust Dynamic class buolding approach to not use eval anymore to enable running in more environments
+    - Enhancement: Adjust Dynamic class building approach to not use eval anymore to enable running in more environments
     - Fix: Fixes encoding of special IPv6 addresses in DNS-SD records
 
 - @matter/model
