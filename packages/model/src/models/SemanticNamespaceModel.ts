@@ -15,7 +15,7 @@ export class SemanticNamespaceModel
     override tag: SemanticNamespaceElement.Tag = SemanticNamespaceElement.Tag;
     mfgCode?: number;
 
-    get endpoints() {
+    get tags() {
         return this.children;
     }
 
