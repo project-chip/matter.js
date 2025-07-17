@@ -20,5 +20,14 @@ LocalMatter.children.push({
                 { tag: "field", name: "Value", id: 0x1, type: "uint16" },
             ],
         },
+
+        // Spec defines as an enum but does not define values.  We could special case to generate an enum from the
+        // standard namespaces but for now we just set as an integer
+        {
+            tag: "attribute",
+            name: "StandardNamespace",
+            id: 0x1,
+            type: "uint16",
+        },
     ],
 });
