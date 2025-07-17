@@ -42,7 +42,7 @@ const TestRvcDevice = RoboticVacuumCleanerDevice.with(
     TestRvcOperationalStateServer,
     TestRvcRunModeServer,
     TestRvcCleanModeServer,
-    TestServiceAreaServer,
+    TestServiceAreaServer.enable({ attributes: { estimatedEndTime: true } }),
 );
 
 export class RvcTestInstance extends NodeTestInstance {
