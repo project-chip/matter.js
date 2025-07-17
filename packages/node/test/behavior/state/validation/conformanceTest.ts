@@ -542,6 +542,66 @@ const AllTests = Tests({
             },
         ),
 
+        "optional field dependency": Tests(
+            Fields(
+                {
+                    name: "CurrentArea",
+                    type: "uint32",
+                    quality: "X",
+                    conformance: "desc",
+                },
+                {
+                    name: "EstimatedEndTime",
+                    type: "epoch-s",
+                    quality: "X",
+                    conformance: "[CurrentArea]",
+                },
+            ),
+            {
+                "accepts neither": {
+                    record: {},
+                },
+
+                "accepts CurrentArea without EstimatedEndTime": {
+                    record: {
+                        currentArea: 4,
+                    },
+                },
+
+                "accepts CurrentArea as null without EstimatedEndTime": {
+                    record: {
+                        currentArea: null,
+                    },
+                },
+
+                "rejects EstimatedEndTime without CurrentArea": {
+                    record: {
+                        estimatedEndTime: 4,
+                    },
+
+                    error: {
+                        type: ConformanceError,
+                        message:
+                            'Validating Test.estimatedEndTime: Conformance "[CurrentArea]": Matter does not allow you to set this attribute',
+                    },
+                },
+
+                "accepts EstimatedEndTime with CurrentArea": {
+                    record: {
+                        currentArea: 1,
+                        estimatedEndTime: 4,
+                    },
+                },
+
+                "accepts EstimatedEndTime with null CurrentArea": {
+                    record: {
+                        currentArea: null,
+                        estimatedEndTime: 4,
+                    },
+                },
+            },
+        ),
+
         "hairy real-world": Tests(
             Features({
                 PIR: "PIR",
