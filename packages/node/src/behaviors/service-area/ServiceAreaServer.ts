@@ -71,44 +71,49 @@ export class ServiceAreaBaseServer extends ServiceAreaBase {
     #assertSupportedAreas(areas: ServiceArea.Area[]) {
         // Each entry in this list SHALL have a unique value for the AreaID field.
         const areaIds = new Set<number>();
-        for (const area of areas) {
-            const areaId = area.areaId;
-            if (areaIds.has(areaId)) {
-                throw new ValidationError(`AreaID ${area.areaId} is not unique`);
-            }
-            const { locationInfo, landmarkInfo } = area.areaInfo;
-            if (locationInfo === null && landmarkInfo === null) {
-                throw new ValidationError(`Area ${areaId} has no location or landmark info`);
-            }
-            if (locationInfo !== null) {
-                const { locationName, floorNumber, areaType } = locationInfo;
-                if (locationName === "" && floorNumber === null && areaType === null && landmarkInfo === null) {
-                    throw new ValidationError(`Area ${areaId} has no location info`);
-                }
-            }
-            areaIds.add(areaId);
-        }
 
         if (areas.length > 0) {
+            // Validate the areas and collect the areaIds for easy access.
+            for (const { areaId, areaInfo } of areas) {
+                if (areaIds.has(areaId)) {
+                    throw new ValidationError(`AreaID ${areaId} is not unique`);
+                }
+                const { locationInfo, landmarkInfo } = areaInfo;
+                if (locationInfo === null && landmarkInfo === null) {
+                    throw new ValidationError(`Area ${areaId} has no location or landmark info`);
+                }
+                if (locationInfo !== null) {
+                    const { locationName, floorNumber, areaType } = locationInfo;
+                    if (locationName === "" && floorNumber === null && areaType === null && landmarkInfo === null) {
+                        throw new ValidationError(`Area ${areaId} has no location info`);
+                    }
+                }
+                areaIds.add(areaId);
+            }
+
+            // Collect and validate the mapIds and details
             const mapIds = new Set<number | null>();
             for (let i = 0; i < areas.length; i++) {
-                const area = areas[i];
-                mapIds.add(area.mapId);
+                const { areaId, mapId, areaInfo } = areas[i];
+                mapIds.add(mapId);
+                // Check for unique MapId and AreaInfo combination
                 for (let j = i + 1; j < areas.length; j++) {
                     const otherArea = areas[j];
-                    if (isDeepEqual(area.areaInfo, otherArea.areaInfo)) {
+                    if (otherArea.mapId !== mapId) {
+                        // Different mapId is different combination
+                        continue;
+                    }
+                    if (isDeepEqual(areaInfo, otherArea.areaInfo)) {
                         throw new ValidationError(
-                            `Areas must have a unique AreaInfo field, but area ${area.areaId} and area ${otherArea.areaId} are equal`,
+                            `Areas must have a unique AreaInfo field, but area ${areaId} and area ${otherArea.areaId} are equal`,
                         );
                     }
                 }
             }
+
             if (this.state.supportedMaps !== undefined && this.state.supportedMaps.length > 0) {
                 if (mapIds.has(null)) {
                     throw new ValidationError(`Areas must not have a null mapId when supportedMaps is defined`);
-                }
-                if (mapIds.size !== areas.length) {
-                    throw new ValidationError(`Areas must have a unique mapId`);
                 }
             } else {
                 if (!mapIds.has(null) || mapIds.size > 1) {
