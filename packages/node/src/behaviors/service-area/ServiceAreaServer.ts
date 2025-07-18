@@ -36,6 +36,8 @@ export class ServiceAreaBaseServer extends ServiceAreaBase {
     override initialize(): MaybePromise {
         this.#assertSupportedAreas(this.state.supportedAreas);
         this.reactTo(this.events.supportedAreas$Changing, this.#assertSupportedAreas);
+        this.#assertSupportedMaps(this.state.supportedMaps);
+        this.reactTo(this.events.supportedMaps$Changing, this.#assertSupportedMaps);
         this.#assertSelectedAreas(this.state.selectedAreas);
         this.reactTo(this.events.selectedAreas$Changing, this.#assertSelectedAreas);
         if (this.state.currentArea !== undefined && this.events.currentArea$Changing !== undefined) {
@@ -65,6 +67,25 @@ export class ServiceAreaBaseServer extends ServiceAreaBase {
                         : true;
                 };
             }
+        }
+    }
+
+    #assertSupportedMaps(maps: ServiceArea.Map[]) {
+        if (maps.length === 0) {
+            return;
+        }
+
+        const mapIds = new Set<number>();
+        const mapNames = new Set<string>();
+        for (const { mapId, name } of maps) {
+            if (mapIds.has(mapId)) {
+                throw new ValidationError(`MapID ${mapId} is not unique`);
+            }
+            if (mapNames.has(name)) {
+                throw new ValidationError(`MapName "${name}" is not unique`);
+            }
+            mapIds.add(mapId);
+            mapNames.add(name);
         }
     }
 
