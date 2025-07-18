@@ -9,6 +9,7 @@ import { RvcOperationalState } from "#clusters/rvc-operational-state";
 import { RvcRunMode } from "#clusters/rvc-run-mode";
 import { RoboticVacuumCleanerDevice } from "#devices/robotic-vacuum-cleaner";
 import { Endpoint } from "#endpoint/Endpoint.js";
+import { AreaNamespaceTag } from "#tags/index.js";
 import { MockServerNode } from "../../node/mock-server-node.js";
 
 const DeviceType = RoboticVacuumCleanerDevice.with(ServiceAreaServer.with("Maps", "SelectWhileRunning"));
@@ -60,5 +61,143 @@ describe("ServiceAreaServer", () => {
 
     it("allows empty estimatedEndTime", async () => {
         await createNode();
+    });
+
+    it("correctly validate supportedAreas", async () => {
+        await createNode({
+            serviceArea: {
+                supportedMaps: [
+                    {
+                        mapId: 1,
+                        name: "Ground floor",
+                    },
+                    {
+                        mapId: 2,
+                        name: "First floor",
+                    },
+                ],
+
+                supportedAreas: [
+                    {
+                        areaId: 1,
+                        mapId: 1,
+                        areaInfo: {
+                            locationInfo: {
+                                locationName: "Living",
+                                floorNumber: 0,
+                                areaType: AreaNamespaceTag.LivingRoom.tag,
+                            },
+                            landmarkInfo: null,
+                        },
+                    },
+                    {
+                        areaId: 2,
+                        mapId: 3,
+                        areaInfo: {
+                            locationInfo: {
+                                locationName: "Kitchen",
+                                floorNumber: 0,
+                                areaType: AreaNamespaceTag.Kitchen.tag,
+                            },
+                            landmarkInfo: null,
+                        },
+                    },
+                    {
+                        areaId: 3,
+                        mapId: 2,
+                        areaInfo: {
+                            locationInfo: {
+                                locationName: "Bedroom",
+                                floorNumber: 1,
+                                areaType: AreaNamespaceTag.Bedroom.tag,
+                            },
+                            landmarkInfo: null,
+                        },
+                    },
+                    {
+                        areaId: 4,
+                        mapId: 2,
+                        areaInfo: {
+                            locationInfo: {
+                                locationName: "Bathroom",
+                                floorNumber: 1,
+                                areaType: AreaNamespaceTag.Bathroom.tag,
+                            },
+                            landmarkInfo: null,
+                        },
+                    },
+                ],
+            },
+        });
+    });
+
+    it("rejects with invalid supportedAreas", async () => {
+        await expect(
+            createNode({
+                serviceArea: {
+                    supportedMaps: [
+                        {
+                            mapId: 1,
+                            name: "Ground floor",
+                        },
+                        {
+                            mapId: 2,
+                            name: "First floor",
+                        },
+                    ],
+
+                    supportedAreas: [
+                        {
+                            areaId: 1,
+                            mapId: 1,
+                            areaInfo: {
+                                locationInfo: {
+                                    locationName: "Living",
+                                    floorNumber: 0,
+                                    areaType: AreaNamespaceTag.LivingRoom.tag,
+                                },
+                                landmarkInfo: null,
+                            },
+                        },
+                        {
+                            areaId: 2,
+                            mapId: 3,
+                            areaInfo: {
+                                locationInfo: {
+                                    locationName: "Kitchen",
+                                    floorNumber: 0,
+                                    areaType: AreaNamespaceTag.Kitchen.tag,
+                                },
+                                landmarkInfo: null,
+                            },
+                        },
+                        {
+                            areaId: 3,
+                            mapId: 2,
+                            areaInfo: {
+                                locationInfo: {
+                                    locationName: "Bedroom",
+                                    floorNumber: 1,
+                                    areaType: AreaNamespaceTag.Bedroom.tag,
+                                },
+                                landmarkInfo: null,
+                            },
+                        },
+                        {
+                            areaId: 4,
+                            mapId: 2,
+                            areaInfo: {
+                                locationInfo: {
+                                    locationName: "Bedroom",
+                                    floorNumber: 1,
+                                    areaType: AreaNamespaceTag.Bedroom.tag,
+                                },
+                                landmarkInfo: null,
+                            },
+                        },
+                    ],
+                },
+            }),
+        ).rejectedWith("Behaviors have errors");
     });
 });
