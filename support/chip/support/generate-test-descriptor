@@ -131,15 +131,16 @@ def load_yaml():
 
 def parse_command_line(str: str):
     # Some scripts have strings with spaces.  Currently only use single quotes but try to handle both that and double
-    args = re.findall(r"((?:'[^']+'|\"(?:\\\"|[^\"]+)\"|\S)+)", str)
+    args = re.findall(r"((?:(?<!\\)'.*?(?<!\\)'|(?<!\\)\".*?(?<!\\)\"|\S)+)", str)
     for i in range(len(args)):
         arg = args[i]
-
+ 
         # If quoted, implement rudimentary unescaping
-        parts = re.findall(r"([^'\"\\]+|'[^']*'|\"(?:\\\"|[^\"]+)\")", arg)
+        parts = re.findall(r"((?:[^'\"\\]|\\'|\\\")+|(?<!\\)'.*?(?<!\\)'(?<!\\)|\".*?(?<!\\)\")", arg)
         if len(parts) > 1:
             for j in range(len(parts)):
                 part = parts[j]
+                print(">>> FOUND ONE " + arg + " --- " + part, file=sys.stderr)
                 if part.startswith("'") or part.startswith('"'):
                     part = part[1:-1]
                     parts[j] = bytes(part, "utf-8").decode("unicode_escape")
