@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, serialize, UnexpectedDataError } from "#general";
+import { ImplementationError, serialize, UnexpectedDataError } from "#general";
 import { ValidationDatatypeMismatchError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
@@ -24,13 +24,15 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     constructor(
         readonly type: T,
         readonly minLength: number = 0,
+        // Formally, Matter Spec defines 2^64-1 as length limit, but we want to protect against memory overflow as default
         readonly maxLength: number = 1024,
     ) {
         super();
 
-        if (minLength < 0) throw new InternalError("Minimum length should be a positive number.");
-        if (maxLength < 0) throw new InternalError("Maximum length should be a positive number.");
-        if (minLength > maxLength) throw new InternalError("Minimum length should be smaller than maximum length.");
+        if (minLength < 0) throw new ImplementationError("Minimum length should be a positive number.");
+        if (maxLength < 0) throw new ImplementationError("Maximum length should be a positive number.");
+        if (minLength > maxLength)
+            throw new ImplementationError("Minimum length should be smaller than maximum length.");
     }
 
     override encodeTlvInternal(writer: TlvWriter, value: TlvToPrimitive[T], tag?: TlvTag): void {
