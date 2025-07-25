@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, maxValue, minValue, serialize, UnexpectedDataError } from "#general";
+import { InternalError, serialize, UnexpectedDataError } from "#general";
 import { ValidationDatatypeMismatchError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
@@ -29,6 +29,8 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
         super();
 
         if (minLength < 0) throw new InternalError("Minimum length should be a positive number.");
+        if (maxLength < 0) throw new InternalError("Maximum length should be a positive number.");
+        if (minLength > maxLength) throw new InternalError("Minimum length should be smaller than maximum length.");
     }
 
     override encodeTlvInternal(writer: TlvWriter, value: TlvToPrimitive[T], tag?: TlvTag): void {
@@ -60,8 +62,8 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     bound({ minLength, maxLength, length }: LengthConstraints) {
         return new StringSchema(
             this.type,
-            length ?? maxValue(this.minLength, minLength),
-            length ?? minValue(this.maxLength, maxLength),
+            length ?? minLength ?? this.minLength,
+            length ?? maxLength ?? this.maxLength,
         );
     }
 }
