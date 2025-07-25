@@ -166,7 +166,7 @@ describe("StorageBackendMemory", () => {
         storage.set(CONTEXTx2, "blobkey", data);
 
         const size = storage.blobSize(CONTEXTx2, "blobkey");
-        expect(size).equal(BigInt(3));
+        expect(size).equal(3);
     });
 
     it("readBlob returns empty stream for missing key", async () => {
