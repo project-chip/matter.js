@@ -43,7 +43,8 @@ matter.js has successfully passed certification already, but there are still thi
 
 ## JavaScript/Node.js compatibility
 * At least ES2022 needs to be used as build target for your project!
-* This Supports Node.js 18+
+* The published packages are supports all LTS Node.js versions starting with 18.x
+* When cloning the repository and participating on the development you need to use at least Mode.js 20.x because some build tools require this.
 Please also see the additional [TypeScript notes](./packages/main/README.md#typescript-note).
 
 ## How to use matter.js

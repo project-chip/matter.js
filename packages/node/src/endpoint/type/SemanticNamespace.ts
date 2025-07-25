@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Semtag, VendorId } from "#types";
+import { Namespace, Semtag, VendorId } from "#types";
 
 /**
  * A Matter "semantic namespace" is a discrete set of {@link Semtag} definitions.
@@ -37,7 +37,7 @@ export function SemanticNamespace<const T extends SemanticNamespace.Definition>(
 
 export namespace SemanticNamespace {
     export interface Definition {
-        id: number;
+        id: Namespace;
         mfgCode?: number;
         tags: {
             [name: string]: { id: number; label: string };

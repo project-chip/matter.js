@@ -13,7 +13,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/node
     - Fix: Fixes validation of ServiceArea cluster SupportedAreas attribute
-    
+
+-   @matter/model
+    - Fix: Adds a Namespace enum with all values from Specification
+
 -   @project-chip/matter.js
     - (ArtemisMucaj) Fix: Correctly pass a custom "rootCertificateAuthority" and "rootFabric" from CommissioningController options internally
 
