@@ -280,7 +280,7 @@ function generateAttributeWriteHandler(
                 })
                 .options({
                     force: {
-                        describe: "ignore verification if device exists on device",
+                        describe: "ignore verification if attribute exists on device",
                         default: false,
                         type: "boolean",
                     },
