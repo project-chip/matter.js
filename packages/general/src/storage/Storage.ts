@@ -3,6 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { BlobStorageContext } from "#storage/StorageContext.js";
 import { ImplementationError, MatterError } from "../MatterError.js";
 import { MaybePromise } from "../util/Promises.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
@@ -12,18 +13,58 @@ export class StorageError extends MatterError {}
 /**
  * Matter.js uses this key/value API to manage persistent state.
  */
-export interface Storage {
-    readonly initialized: boolean;
-    initialize(): MaybePromise<void>;
-    close(): MaybePromise<void>;
-    get(contexts: string[], key: string): MaybePromise<SupportedStorageTypes | undefined>;
-    set(contexts: string[], values: Record<string, SupportedStorageTypes>): MaybePromise<void>;
-    set(contexts: string[], key: string, value: SupportedStorageTypes): MaybePromise<void>;
-    delete(contexts: string[], key: string): MaybePromise<void>;
-    keys(contexts: string[]): MaybePromise<string[]>;
-    values(contexts: string[]): MaybePromise<Record<string, SupportedStorageTypes>>;
-    contexts(contexts: string[]): MaybePromise<string[]>;
-    clearAll(contexts: string[]): MaybePromise<void>;
+export abstract class Storage {
+    abstract readonly initialized: boolean;
+    abstract initialize(): MaybePromise<void>;
+    abstract close(): MaybePromise<void>;
+    abstract get(contexts: string[], key: string): MaybePromise<SupportedStorageTypes | undefined>;
+    abstract set(contexts: string[], values: Record<string, SupportedStorageTypes>): MaybePromise<void>;
+    abstract set(contexts: string[], key: string, value: SupportedStorageTypes): MaybePromise<void>;
+    abstract delete(contexts: string[], key: string): MaybePromise<void>;
+    abstract keys(contexts: string[]): MaybePromise<string[]>;
+    abstract values(contexts: string[]): MaybePromise<Record<string, SupportedStorageTypes>>;
+    abstract contexts(contexts: string[]): MaybePromise<string[]>;
+    abstract clearAll(contexts: string[]): MaybePromise<void>;
+
+    /**
+     * Checks if a key exists in the storage for the given contexts.
+     * Important Note: This default implementation just reads the value for the key and checks if it is undefined.
+     * Please implement this method in your storage implementation if you want to optimize it.
+     */
+    has(contexts: string[], key: string): MaybePromise<boolean> {
+        const value = this.get(contexts, key);
+        if (MaybePromise.is(value)) {
+            return MaybePromise.then(value, v => v !== undefined);
+        }
+        return value !== undefined;
+    }
+
+    abstract readBlob(
+        contexts: string[],
+        key: string,
+        options?: BlobStorageContext.Options,
+    ): MaybePromise<ReadableStream<Uint8Array>>;
+    abstract writeBlob(contexts: string[], key: string, stream: ReadableStream<Uint8Array>): MaybePromise<void>;
+
+    /**
+     * Returns the byte size of the value stored under the given key in the specified contexts.
+     * This is only supported for Uint8Array values.
+     */
+    blobSize(contexts: string[], key: string): MaybePromise<number | bigint> {
+        const value = this.get(contexts, key);
+        if (MaybePromise.is(value)) {
+            return MaybePromise.then(value, v => {
+                if (ArrayBuffer.isView(v)) {
+                    return BigInt(v.byteLength);
+                }
+                throw new StorageError(`ByteSize determination is only supported for Uint8Array, got ${typeof v}`);
+            });
+        }
+        if (ArrayBuffer.isView(value)) {
+            return BigInt(value.byteLength);
+        }
+        throw new StorageError(`ByteSize determination is only supported for Uint8Array, got ${typeof value}`);
+    }
 }
 
 /**
@@ -44,37 +85,3 @@ export namespace CloneableStorage {
         }
     }
 }
-
-// This extra class is needed because of https://github.com/microsoft/TypeScript/issues/57905 in order
-// to have the generics typing support on the "get" method and can be removed when the TS issue is fixed
-// or we remove the legacy API.
-export abstract class MaybeAsyncStorage implements Storage {
-    abstract initialized: boolean;
-    abstract initialize(): MaybePromise<void>;
-    abstract close(): MaybePromise<void>;
-    abstract get<T extends SupportedStorageTypes>(contexts: string[], key: string): MaybePromise<T | undefined>;
-    abstract set(contexts: string[], values: Record<string, SupportedStorageTypes>): MaybePromise<void>;
-    abstract set(contexts: string[], key: string, value: SupportedStorageTypes): MaybePromise<void>;
-    abstract delete(contexts: string[], key: string): MaybePromise<void>;
-    abstract keys(contexts: string[]): MaybePromise<string[]>;
-    abstract values(contexts: string[]): MaybePromise<Record<string, SupportedStorageTypes>>;
-    abstract contexts(contexts: string[]): MaybePromise<string[]>;
-    abstract clearAll(contexts: string[]): MaybePromise<void>;
-}
-
-// This can be removed once we remove the legacy API
-export abstract class SyncStorage implements Storage {
-    abstract initialized: boolean;
-    abstract initialize(): MaybePromise<void>;
-    abstract close(): MaybePromise<void>;
-    abstract get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined;
-    abstract set(contexts: string[], values: Record<string, SupportedStorageTypes>): void;
-    abstract set(contexts: string[], key: string, value: SupportedStorageTypes): void;
-    abstract delete(contexts: string[], key: string): void;
-    abstract keys(contexts: string[]): string[];
-    abstract values(contexts: string[]): Record<string, SupportedStorageTypes>;
-    abstract contexts(contexts: string[]): string[];
-    abstract clearAll(contexts: string[]): void;
-}
-
-export type StorageOperationResult<S extends Storage, T = void> = S extends SyncStorage ? T : Promise<T>;

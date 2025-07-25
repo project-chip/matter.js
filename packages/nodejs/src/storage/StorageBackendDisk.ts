@@ -5,20 +5,75 @@
  */
 
 import {
+    BlobStorageContext,
     fromJson,
     Logger,
     MatterAggregateError,
-    MaybeAsyncStorage,
+    Storage,
     StorageError,
     SupportedStorageTypes,
     toJson,
 } from "#general";
-import { mkdir, open, readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { mkdir, open, readdir, readFile, rename, rm, stat } from "node:fs/promises";
 import { join } from "node:path";
+import { Readable } from "node:stream";
 
 const logger = new Logger("StorageBackendDisk");
 
-export class StorageBackendDisk extends MaybeAsyncStorage {
+/**
+ * Create a Web API default `ReadableStream<Uint8Array>` from a Node.js `stream.Readable`.
+ */
+export function defaultReadableStreamFromNodeReadable(
+    nodeReadable: Readable,
+    queueingStrategy?: QueuingStrategy,
+): ReadableStream<Uint8Array> {
+    let closed = false;
+    function close(controller: ReadableStreamDefaultController) {
+        if (!closed) {
+            closed = true;
+            controller.close();
+        }
+    }
+
+    return new ReadableStream<Uint8Array>(
+        {
+            start(controller: ReadableStreamDefaultController) {
+                nodeReadable.on("data", chunk => {
+                    if (closed) {
+                        return;
+                    }
+
+                    controller.enqueue(chunk);
+
+                    if (controller.desiredSize !== null && controller.desiredSize <= 0) {
+                        // Apply backpressure if needed.
+                        nodeReadable.pause();
+                    }
+                });
+
+                nodeReadable.once("end", () => {
+                    close(controller); // Signal EOF
+                });
+
+                nodeReadable.once("error", err => {
+                    controller.error(err);
+                });
+            },
+            pull(_controller: ReadableStreamDefaultController) {
+                if (nodeReadable.isPaused()) {
+                    nodeReadable.resume();
+                }
+            },
+            cancel(reason) {
+                closed = true; // Avoid controller is closed twice
+                nodeReadable.destroy(reason);
+            },
+        },
+        queueingStrategy,
+    );
+}
+
+export class StorageBackendDisk extends Storage {
     readonly #path: string;
     readonly #clear: boolean;
     protected isInitialized = false;
@@ -44,16 +99,21 @@ export class StorageBackendDisk extends MaybeAsyncStorage {
 
     async #finishAllWrites(filename?: string) {
         // Let's try max up to 10 times to finish all writes out there, otherwise something is strange
-        for (let i = 0; i < 10; i++) {
-            await MatterAggregateError.allSettled(
-                filename !== undefined ? [this.#writeFileBlocker.get(filename)] : this.#writeFileBlocker.values(),
-                "Error on finishing all file system writes to storage",
-            );
-            if (!this.#writeFileBlocker.size) {
-                return;
+        if (
+            (filename !== undefined && this.#writeFileBlocker.has(filename)) ||
+            (filename === undefined && this.#writeFileBlocker.size > 0)
+        ) {
+            for (let i = 0; i < 10; i++) {
+                await MatterAggregateError.allSettled(
+                    filename !== undefined ? [this.#writeFileBlocker.get(filename)] : this.#writeFileBlocker.values(),
+                    "Error on finishing all file system writes to storage",
+                );
+                if (!this.#writeFileBlocker.size) {
+                    return;
+                }
             }
+            await this.#fsyncStorageDir();
         }
-        await this.#fsyncStorageDir();
     }
 
     async close() {
@@ -94,10 +154,28 @@ export class StorageBackendDisk extends MaybeAsyncStorage {
             .replace(/\*/g, "%2A");
     }
 
+    override async has(contexts: string[], key: string): Promise<boolean> {
+        const fileName = this.filePath(this.buildStorageKey(contexts, key));
+        if (this.#writeFileBlocker.has(fileName)) {
+            // We are writing that key right now, so yes it exists
+            return true;
+        }
+        try {
+            const stats = await stat(fileName);
+            return stats.isFile();
+        } catch (error: any) {
+            if (error.code === "ENOENT") return false;
+            throw error;
+        }
+    }
+
     async get<T extends SupportedStorageTypes>(contexts: string[], key: string): Promise<T | undefined> {
+        const fileName = this.filePath(this.buildStorageKey(contexts, key));
+        await this.#finishAllWrites(fileName);
+
         let value: string;
         try {
-            value = await readFile(this.filePath(this.buildStorageKey(contexts, key)), "utf8");
+            value = await readFile(fileName, "utf8");
         } catch (error: any) {
             if (error.code === "ENOENT") return undefined;
             throw error;
@@ -107,6 +185,44 @@ export class StorageBackendDisk extends MaybeAsyncStorage {
         } catch (error) {
             logger.error(`Failed to parse storage value for key ${key} in context ${contexts.join(".")}`);
         }
+    }
+
+    async readBlob(
+        contexts: string[],
+        key: string,
+        options?: BlobStorageContext.Options,
+    ): Promise<ReadableStream<Uint8Array>> {
+        const fileName = this.filePath(this.buildStorageKey(contexts, key));
+        await this.#finishAllWrites(fileName);
+        try {
+            const handle = await open(fileName, "r");
+            const reader = handle.createReadStream({ encoding: null, ...options });
+            return defaultReadableStreamFromNodeReadable(reader);
+        } catch (error: any) {
+            if (error.code === "ENOENT") {
+                return new ReadableStream<Uint8Array>({
+                    start(controller) {
+                        controller.close();
+                    },
+                });
+            }
+            throw error;
+        }
+    }
+
+    writeBlob(contexts: string[], key: string, stream: ReadableStream<Uint8Array>) {
+        return this.#writeFile(this.buildStorageKey(contexts, key), stream);
+    }
+
+    override async blobSize(contexts: string[], key: string) {
+        const fileName = this.filePath(this.buildStorageKey(contexts, key));
+        const blocker = this.#writeFileBlocker.get(fileName);
+        if (blocker !== undefined) {
+            await blocker;
+        }
+
+        const stats = await stat(fileName);
+        return stats.size;
     }
 
     set(contexts: string[], key: string, value: SupportedStorageTypes): Promise<void>;
@@ -128,15 +244,14 @@ export class StorageBackendDisk extends MaybeAsyncStorage {
     }
 
     /** According to Node.js documentation, writeFile is not atomic. This method ensures atomicity. */
-    async #writeFile(fileName: string, value: string): Promise<void> {
+    async #writeFile(fileName: string, valueOrStream: string | ReadableStream<Uint8Array>): Promise<void> {
         const blocker = this.#writeFileBlocker.get(fileName);
         if (blocker !== undefined) {
             await blocker;
-            return this.#writeFile(fileName, value);
+            return this.#writeFile(fileName, valueOrStream);
         }
 
-        // TODO write temp, fsync, move
-        const promise = this.#writeAndMoveFile(this.filePath(fileName), value).finally(() => {
+        const promise = this.#writeAndMoveFile(this.filePath(fileName), valueOrStream).finally(() => {
             this.#writeFileBlocker.delete(fileName);
         });
         this.#writeFileBlocker.set(fileName, promise);
@@ -144,9 +259,28 @@ export class StorageBackendDisk extends MaybeAsyncStorage {
         return promise;
     }
 
-    async #writeAndMoveFile(filepath: string, value: string): Promise<void> {
+    async #writeAndMoveFile(filepath: string, valueOrStream: string | ReadableStream<Uint8Array>): Promise<void> {
         const tmpName = `${filepath}.tmp`;
-        await writeFile(tmpName, value, { encoding: "utf8", flush: true }); // flush does fsync after write
+        const handle = await open(tmpName, "w");
+        const isStream = valueOrStream instanceof ReadableStream;
+        const writer = handle.createWriteStream({ encoding: isStream ? null : "utf8", flush: true });
+        if (isStream) {
+            const reader = valueOrStream.getReader();
+            while (true) {
+                const { value: chunk, done } = await reader.read();
+                if (chunk) {
+                    writer.write(chunk);
+                }
+                if (done) {
+                    break;
+                }
+            }
+        } else {
+            writer.write(valueOrStream);
+        }
+        writer.close();
+        await handle.close();
+
         await rename(tmpName, filepath);
     }
 

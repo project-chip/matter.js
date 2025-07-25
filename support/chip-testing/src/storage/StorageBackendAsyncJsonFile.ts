@@ -6,7 +6,7 @@
 
 import {
     InternalError,
-    MaybeAsyncStorage,
+    Storage,
     StorageBackendMemory,
     SupportedStorageTypes,
     Time,
@@ -16,7 +16,7 @@ import {
 } from "@matter/general";
 import { readFile, rename, writeFile } from "node:fs/promises";
 
-export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
+export class StorageBackendAsyncJsonFile extends Storage {
     /** We store changes after a value was set to the storage, but not more often than this setting (in ms). */
     private closed = false;
     private store?: StorageBackendMemory;
@@ -27,7 +27,7 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
         super();
     }
 
-    override async initialize() {
+    async initialize() {
         let data: any = {};
         try {
             data = this.fromJson(await readFile(this.path, "utf8"));
@@ -47,16 +47,45 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
         return this.store?.initialized ?? false;
     }
 
-    override async get<T extends SupportedStorageTypes>(contexts: string[], key: string): Promise<T | undefined> {
+    override async has(contexts: string[], key: string): Promise<boolean> {
         if (this.store === undefined) {
             throw new InternalError("Storage not initialized.");
         }
-        return this.store.get<T>(contexts, key);
+        return this.store.has(contexts, key);
     }
 
-    override async set(contexts: string[], key: string, value: SupportedStorageTypes): Promise<void>;
-    override async set(contexts: string[], values: Record<string, SupportedStorageTypes>): Promise<void>;
-    override async set(
+    override async get(contexts: string[], key: string): Promise<SupportedStorageTypes | undefined> {
+        if (this.store === undefined) {
+            throw new InternalError("Storage not initialized.");
+        }
+        return this.store.get(contexts, key);
+    }
+
+    async readBlob(contexts: string[], key: string): Promise<ReadableStream<Uint8Array>> {
+        if (this.store === undefined) {
+            throw new InternalError("Storage not initialized.");
+        }
+        return this.store.readBlob(contexts, key);
+    }
+
+    async writeBlob(contexts: string[], key: string, stream: ReadableStream<Uint8Array>) {
+        if (this.store === undefined) {
+            throw new InternalError("Storage not initialized.");
+        }
+        this.store.writeBlob(contexts, key, stream);
+        await this.commit();
+    }
+
+    override async blobSize(contexts: string[], key: string): Promise<number | bigint> {
+        if (this.store === undefined) {
+            throw new InternalError("Storage not initialized.");
+        }
+        return this.store.blobSize(contexts, key);
+    }
+
+    set(contexts: string[], key: string, value: SupportedStorageTypes): Promise<void>;
+    set(contexts: string[], values: Record<string, SupportedStorageTypes>): Promise<void>;
+    async set(
         contexts: string[],
         keyOrValues: string | Record<string, SupportedStorageTypes>,
         value?: SupportedStorageTypes,

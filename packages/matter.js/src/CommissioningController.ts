@@ -18,7 +18,6 @@ import {
     NoAddressAvailableError,
     NoProviderError,
     StorageContext,
-    SyncStorage,
     UdpInterface,
     UnexpectedDataError,
 } from "#general";
@@ -492,17 +491,6 @@ export class CommissioningController {
      */
     setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
         this.#mdnsBroadcaster = mdnsBroadcaster;
-    }
-
-    /**
-     * Set the Storage instance. Should be only used internally
-     *
-     * @param storage storage context to use
-     * @private
-     */
-    setStorage(storage: StorageContext<SyncStorage>) {
-        this.#storage = storage;
-        this.#environment = undefined;
     }
 
     /** Returns true if t least one node is commissioned/paired with this controller instance. */

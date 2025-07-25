@@ -5,16 +5,7 @@
  */
 
 import { Endpoint } from "#device/Endpoint.js";
-import {
-    ImplementationError,
-    InternalError,
-    isObject,
-    MatterAggregateError,
-    MaybePromise,
-    Storage,
-    StorageOperationResult,
-    Time,
-} from "#general";
+import { ImplementationError, InternalError, isObject, MatterAggregateError, MaybePromise, Time } from "#general";
 import { AccessLevel, ClusterModel, EventModel, MatterModel } from "#model";
 import { Message, NumberedOccurrence, Occurrence, OccurrenceManager, SecureSession, Session } from "#protocol";
 import {
@@ -34,7 +25,7 @@ import {
     TypeFromSchema,
 } from "#types";
 
-export type AnyEventServer<T = any, S extends Storage = any> = EventServer<T, S> | FabricSensitiveEventServer<T, S>;
+export type AnyEventServer<T = any> = EventServer<T> | FabricSensitiveEventServer<T>;
 
 export function createEventServer<
     T,
@@ -43,7 +34,6 @@ export function createEventServer<
     A extends Attributes,
     C extends Commands,
     E extends Events,
-    S extends Storage,
 >(
     clusterDef: Cluster<F, SF, A, C, E>,
     eventDef: Event<T, F>,
@@ -51,7 +41,7 @@ export function createEventServer<
     schema: TlvSchema<T>,
     priority: EventPriority,
     readAcl: AccessLevel | undefined,
-): EventServer<T, S> {
+): EventServer<T> {
     let fabricSensitive = false;
     const clusterFromModel = MatterModel.standard.get(ClusterModel, clusterDef.id);
     if (clusterFromModel !== undefined) {
@@ -66,7 +56,7 @@ export function createEventServer<
     return new EventServer(eventDef.id, clusterDef.id, eventName, schema, priority, readAcl);
 }
 
-export class EventServer<T = any, S extends Storage = any> {
+export class EventServer<T = any> {
     private eventList = new Array<Occurrence>();
     private readonly listeners = new Array<(event: NumberedOccurrence) => void>();
     protected endpoint?: Endpoint;
@@ -111,9 +101,9 @@ export class EventServer<T = any, S extends Storage = any> {
         if (promises.length > 0) {
             return MatterAggregateError.allSettled(promises, "Error binding events to the event handlers").then(
                 () => {},
-            ) as StorageOperationResult<S>;
+            );
         }
-        return undefined as StorageOperationResult<S>;
+        return undefined;
     }
 
     triggerEvent(data: T) {
@@ -135,9 +125,9 @@ export class EventServer<T = any, S extends Storage = any> {
             const finalEvent = this.eventHandler.add(occurrence);
             return MaybePromise.then(finalEvent, e => {
                 this.listeners.forEach(listener => listener(e));
-            }) as StorageOperationResult<S>;
+            });
         }
-        return undefined as StorageOperationResult<S>;
+        return undefined;
     }
 
     addListener(listener: (event: NumberedOccurrence) => void) {
@@ -173,7 +163,7 @@ export class EventServer<T = any, S extends Storage = any> {
     }
 }
 
-export class FabricSensitiveEventServer<T, S extends Storage> extends EventServer<T, S> {
+export class FabricSensitiveEventServer<T> extends EventServer<T> {
     override hasFabricSensitiveData = true;
 
     override get(

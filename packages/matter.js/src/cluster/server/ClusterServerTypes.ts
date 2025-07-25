@@ -236,8 +236,8 @@ type ServerAttributeSubscribers<A extends Attributes> = {
 };
 
 export type EventServers<E extends Events = Events> = Merge<
-    { [P in MandatoryEventNames<E>]: AnyEventServer<EventType<E[P]>, any> },
-    { [P in OptionalEventNames<E>]?: AnyEventServer<EventType<E[P]>, any> }
+    { [P in MandatoryEventNames<E>]: AnyEventServer<EventType<E[P]>> },
+    { [P in OptionalEventNames<E>]?: AnyEventServer<EventType<E[P]>> }
 >;
 type ServerEventTriggers<E extends Events> = {
     [P in MandatoryEventNames<E> as `trigger${Capitalize<string & P>}Event`]: (event: EventType<E[P]>) => void;

@@ -5,10 +5,10 @@
  */
 
 import { deepCopy } from "#util/DeepCopy.js";
-import { CloneableStorage, StorageError, SyncStorage } from "./Storage.js";
+import { CloneableStorage, Storage, StorageError } from "./Storage.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
 
-export class StorageBackendMemory extends SyncStorage implements CloneableStorage {
+export class StorageBackendMemory extends Storage implements CloneableStorage {
     protected isInitialized = false;
 
     constructor(protected store: any = {}) {
@@ -57,10 +57,55 @@ export class StorageBackendMemory extends SyncStorage implements CloneableStorag
         return this.store;
     }
 
-    get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined {
+    get(contexts: string[], key: string): SupportedStorageTypes | undefined {
         this.#assertInitialized();
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty.");
         return this.store[this.createContextKey(contexts)]?.[key];
+    }
+
+    readBlob(contexts: string[], key: string): ReadableStream<Uint8Array> {
+        const value = this.get(contexts, key);
+        if (value === undefined) {
+            return new ReadableStream<Uint8Array>({
+                start(controller) {
+                    controller.close();
+                },
+            });
+        }
+        if (!ArrayBuffer.isView(value)) {
+            throw new StorageError("Value must be an ArrayBuffer or a typed array to read as stream.");
+        }
+        return new ReadableStream<Uint8Array>({
+            start(controller) {
+                controller.enqueue(value);
+                controller.close();
+            },
+        });
+    }
+
+    async writeBlob(contexts: string[], key: string, stream: ReadableStream<Uint8Array>): Promise<void> {
+        this.#assertInitialized();
+        const reader = stream.getReader();
+        const chunks: Uint8Array[] = [];
+
+        try {
+            let length = 0;
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                chunks.push(value);
+                length += value.length;
+            }
+            const combined = new Uint8Array(length);
+            let offset = 0;
+            for (const chunk of chunks) {
+                combined.set(chunk, offset);
+                offset += chunk.length;
+            }
+            this.#setKey(contexts, key, combined);
+        } catch (error: any) {
+            throw new StorageError(`Error reading stream: ${error.message}`);
+        }
     }
 
     #setKey(contexts: string[], key: string, value: SupportedStorageTypes) {

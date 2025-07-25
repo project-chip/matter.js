@@ -210,6 +210,49 @@ describe("StorageBackendDiskAsync", () => {
         );
     });
 
+    it("writeBlob and readBlob success", async () => {
+        const data = new Uint8Array([5, 6, 7, 8]);
+        const stream = new ReadableStream<Uint8Array>({
+            start(controller) {
+                controller.enqueue(data);
+                controller.close();
+            },
+        });
+
+        await storage.writeBlob(CONTEXTx1, "blobkey", stream);
+
+        const readStream = await storage.readBlob(CONTEXTx1, "blobkey");
+        const reader = readStream.getReader();
+        const chunks: Uint8Array[] = [];
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+        }
+        assert.deepEqual(chunks[0], data);
+    });
+
+    it("blobSize returns correct size", async () => {
+        const data = new Uint8Array([9, 10, 11]);
+        const stream = new ReadableStream<Uint8Array>({
+            start(controller) {
+                controller.enqueue(data);
+                controller.close();
+            },
+        });
+        await storage.writeBlob(CONTEXTx2, "blobkey", stream);
+
+        const size = await storage.blobSize(CONTEXTx2, "blobkey");
+        assert.equal(Number(size), 3);
+    });
+
+    it("readBlob returns empty stream for missing key", async () => {
+        const readStream = await storage.readBlob(CONTEXTx1, "missingkey");
+        const reader = readStream.getReader();
+        const { done } = await reader.read();
+        assert.equal(done, true);
+    });
+
     after(async () => {
         await rm(TEST_STORAGE_LOCATION, { recursive: true, force: true });
     });
