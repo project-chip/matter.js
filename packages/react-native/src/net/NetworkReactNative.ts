@@ -42,7 +42,7 @@ import {
 import { fetch as fetchNetworkInfo } from "@react-native-community/netinfo";
 import { UdpChannelReactNative } from "./UdpChannelReactNative.js";
 
-const logger = Logger.get("NetworkNode");
+const logger = Logger.get("NetworkReactNative");
 
 type NetworkInterfaceInfo = {
     address: string;

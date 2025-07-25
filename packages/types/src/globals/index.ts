@@ -14,6 +14,7 @@ export * from "./MeasurementType.js";
 export * from "./SoftwareVersionCertificationStatus.js";
 export * from "./WildcardPathFlags.js";
 export * from "./Locationdesc.js";
+export * from "./Namespace.js";
 export * from "./Priority.js";
 export * from "./Semtag.js";
 export * from "./Status.js";

@@ -15,10 +15,11 @@ import {
     Command,
     TlvNoResponse
 } from "../cluster/Cluster.js";
-import { TlvUInt8, TlvUInt16 } from "../tlv/TlvNumber.js";
+import { TlvUInt8, TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvString } from "../tlv/TlvString.js";
+import { Namespace } from "../globals/Namespace.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
@@ -197,7 +198,7 @@ export namespace ModeSelect {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.9.6.2
              */
-            standardNamespace: FixedAttribute(0x1, TlvNullable(TlvUInt16), { default: null }),
+            standardNamespace: FixedAttribute(0x1, TlvNullable(TlvEnum<Namespace>()), { default: null }),
 
             /**
              * This attribute is the list of supported modes that may be selected for the CurrentMode attribute. Each

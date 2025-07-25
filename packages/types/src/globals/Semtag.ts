@@ -9,7 +9,8 @@
 import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvUInt8 } from "../tlv/TlvNumber.js";
+import { Namespace } from "./Namespace.js";
+import { TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 
@@ -43,7 +44,7 @@ export const TlvSemtag = TlvObject({
      *
      * @see {@link MatterSpecification.v141.Core} § 7.19.2.42.2
      */
-    namespaceId: TlvField(1, TlvUInt8),
+    namespaceId: TlvField(1, TlvEnum<Namespace>()),
 
     /**
      * The Tag field shall be the ID of a semantic tag located within the namespace indicated by NamespaceID.
