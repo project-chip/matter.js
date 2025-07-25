@@ -111,7 +111,7 @@ npm run codegen:clusters # Generate cluster definitions
 - PascalCase for classes, interfaces, types
 - camelCase for functions, variables, properties
 - SCREAMING_SNAKE_CASE for constants
-- kebab-case for file names (when multiple words)
+- PascalCase for files containing a major class, otherwise kebab-case
 
 ### Import Patterns
 ```typescript
