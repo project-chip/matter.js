@@ -786,7 +786,7 @@ export namespace ServiceArea {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.17.6.5
              */
-            estimatedEndTime: Attribute(0x4, TlvNullable(TlvEpochS), { default: null })
+            estimatedEndTime: OptionalAttribute(0x4, TlvNullable(TlvEpochS), { default: null })
         },
 
         commands: {

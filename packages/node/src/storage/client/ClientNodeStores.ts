@@ -7,7 +7,6 @@
 import { Construction, MatterAggregateError, StorageContext } from "#general";
 import type { ClientNode } from "#node/ClientNode.js";
 import type { Node } from "#node/Node.js";
-import { NodeStore } from "../NodeStore.js";
 import { ClientNodeStore } from "./ClientNodeStore.js";
 
 const CLIENT_ID_PREFIX = "peer";
@@ -17,7 +16,7 @@ const CLIENT_ID_PREFIX = "peer";
  */
 export class ClientNodeStores {
     #storage: StorageContext;
-    #stores = {} as Record<string, NodeStore>;
+    #stores = {} as Record<string, ClientNodeStore>;
     #construction: Construction<ClientNodeStores>;
     #nextAutomaticId = 1;
 
@@ -72,7 +71,7 @@ export class ClientNodeStores {
      *
      * These stores are cached internally by ID.
      */
-    storeForNode(node: ClientNode): NodeStore {
+    storeForNode(node: ClientNode): ClientNodeStore {
         this.#construction.assert();
 
         const store = this.#stores[node.id];
@@ -97,7 +96,7 @@ export class ClientNodeStores {
     }
 
     #createNodeStore(id: string) {
-        const store = new ClientNodeStore(this.#storage.createContext(id));
+        const store = new ClientNodeStore(id, this.#storage.createContext(id));
         store.construction.start();
         this.#stores[id] = store;
         return store;

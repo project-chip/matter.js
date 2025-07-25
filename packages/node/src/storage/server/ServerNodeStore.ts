@@ -15,6 +15,7 @@ import {
     StorageManager,
     StorageService,
 } from "#general";
+import type { ServerNode } from "#node/ServerNode.js";
 import { NodeStore } from "../NodeStore.js";
 import { ClientNodeStores } from "../client/ClientNodeStores.js";
 import { ServerEndpointStores } from "./ServerEndpointStores.js";
@@ -22,8 +23,9 @@ import { ServerEndpointStores } from "./ServerEndpointStores.js";
 const logger = Logger.get("ServerNodeStore");
 
 /**
- * The "server" node store is a {@link NodeStore} with storage for components shared by the server node and client
- * nodes.
+ * {@link ServerNode} persistence.
+ *
+ * Each {@link ServerNode} has an instance of this store.
  */
 export class ServerNodeStore extends NodeStore implements Destructable {
     #env: Environment;

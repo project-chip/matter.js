@@ -46,9 +46,10 @@ export abstract class BehaviorBacking {
         return this.#construction;
     }
 
-    constructor(endpoint: Endpoint, type: Behavior.Type, options?: Behavior.Options) {
+    constructor(endpoint: Endpoint, type: Behavior.Type, store: Datasource.Store, options?: Behavior.Options) {
         this.#endpoint = endpoint;
         this.#type = type;
+        this.store = store;
         this.#options = options;
 
         this.#construction = Construction(this);
@@ -201,7 +202,7 @@ export abstract class BehaviorBacking {
     /**
      * The data provider for {@link datasource}.
      */
-    protected abstract readonly store?: Datasource.Store;
+    protected readonly store: Datasource.Store;
 
     /**
      * Obtain internal state for a behavior instance.

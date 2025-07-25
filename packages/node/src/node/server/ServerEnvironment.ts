@@ -10,7 +10,6 @@ import { Crypto, Observable } from "#general";
 import { ServerEndpointInitializer } from "#node/server/ServerEndpointInitializer.js";
 import type { ServerNode } from "#node/ServerNode.js";
 import { FabricManager, SessionManager } from "#protocol";
-import { NodeStore } from "#storage/NodeStore.js";
 import { ServerNodeStore } from "#storage/server/ServerNodeStore.js";
 import { IdentityService } from "./IdentityService.js";
 
@@ -26,7 +25,6 @@ export namespace ServerEnvironment {
 
         // Install support services
         const store = await ServerNodeStore.create(env, node.id);
-        env.set(NodeStore, store);
         env.set(ServerNodeStore, store);
         env.set(EndpointInitializer, new ServerEndpointInitializer(env));
         env.set(IdentityService, new IdentityService(node));

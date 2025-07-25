@@ -59,7 +59,6 @@ export class RootSupervisor implements ValueSupervisor {
     #rootSchema: Schema;
     #root: ValueSupervisor;
     #memberNames?: Set<string>;
-    #persistentNames?: Set<string>;
     #attributeNamesToIds?: Map<string, AttributeId>; // Whenever we need more than Attributes and Fields, we need to generalize
 
     /**
@@ -144,23 +143,27 @@ export class RootSupervisor implements ValueSupervisor {
     }
 
     /**
-     * Names of fields configured as non-volatile.
+     * Retrieve names or IDs of fields configured as non-volatile.
      */
-    get persistentNames() {
-        let persistent = this.#persistentNames;
-        if (!persistent) {
-            persistent = new Set();
-            for (const member of this.#members) {
-                // TODO: We should handle writable/fabric scoped being non-volatile already in the conformance interpreter
-                if (
-                    member.effectiveQuality.nonvolatile ||
-                    member.effectiveAccess.writable ||
-                    member.effectiveAccess.fabricScoped
-                ) {
-                    persistent.add(camelize(member.name));
+    persistentKeys(key: "id" | "name" = "name") {
+        const persistent = new Set<string>();
+
+        for (const member of this.#members) {
+            // TODO: We should handle writable/fabric scoped being non-volatile already in the conformance interpreter
+            if (
+                member.effectiveQuality.nonvolatile ||
+                member.effectiveAccess.writable ||
+                member.effectiveAccess.fabricScoped
+            ) {
+                if (key === "id") {
+                    const id = member.effectiveId;
+                    if (id !== undefined) {
+                        persistent.add(id.toString());
+                        continue;
+                    }
                 }
+                persistent.add(camelize(member.name));
             }
-            this.#persistentNames = persistent;
         }
         return persistent;
     }

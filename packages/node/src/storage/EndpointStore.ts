@@ -7,13 +7,12 @@
 import type { Datasource } from "#behavior/state/managed/Datasource.js";
 import { StorageContext, SupportedStorageTypes } from "#general";
 import { Val } from "#protocol";
-import { DatasourceStore } from "./server/DatasourceStore.js";
 
 /**
  * Persistence for state values associated with a specific endpoint.
  */
 export class EndpointStore {
-    protected initialValues = {} as Record<string, Val.Struct>;
+    protected initialValues = new Map<string, Val.Struct>();
 
     #storage: StorageContext;
 
@@ -31,15 +30,15 @@ export class EndpointStore {
     }
 
     /**
-     * Create a {@link Datasource.Store} for a behavior.
+     * Extract initial values for a behavior.  Derivatives invoke this when instantiating a store.  The values are then
+     * owned by the store.
      */
-    createStoreForBehavior<T extends DatasourceStore.Type>(behaviorId: string, factory: T): ReturnType<T> {
-        const initialValues = this.initialValues[behaviorId];
+    protected consumeInitialValues(behaviorId: string) {
+        const initialValues = this.initialValues.get(behaviorId);
         if (initialValues !== undefined) {
-            delete this.initialValues[behaviorId];
+            this.initialValues.delete(behaviorId);
         }
-
-        return factory(this, behaviorId, initialValues) as ReturnType<T>;
+        return initialValues;
     }
 
     /**
@@ -102,7 +101,8 @@ export class EndpointStore {
         this.#knownBehaviors = new Set(await this.storage.contexts());
 
         for (const behaviorId of this.#knownBehaviors) {
-            const behaviorValues = (this.initialValues[behaviorId] = {} as Val.Struct);
+            const behaviorValues = {} as Val.Struct;
+            this.initialValues.set(behaviorId, behaviorValues);
             const behaviorStorage = this.storage.createContext(behaviorId);
 
             const storedValues = await behaviorStorage.values();

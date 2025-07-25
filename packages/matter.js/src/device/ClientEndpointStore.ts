@@ -15,7 +15,7 @@ import { Val } from "@matter/protocol";
  */
 export class ClientEndpointStore extends ServerEndpointStore {
     readonly #construction: Construction<ServerEndpointStore>;
-    #values: Record<string, Val.Struct> = {};
+    #values = new Map<string, Val.Struct>();
 
     constructor(storage: StorageContext, load = true) {
         super(storage);
@@ -26,7 +26,7 @@ export class ClientEndpointStore extends ServerEndpointStore {
 
                 // Copy over initial values from the superclass
                 this.#values = this.initialValues;
-                this.initialValues = {};
+                this.initialValues = new Map();
             }
         });
     }
@@ -46,19 +46,20 @@ export class ClientEndpointStore extends ServerEndpointStore {
         for (const behaviorId in values) {
             const behaviorValues = values[behaviorId];
             if (behaviorValues === undefined) {
-                delete this.#values[behaviorId];
+                this.#values.delete(behaviorId);
             } else {
                 for (const key in behaviorValues) {
                     const value = behaviorValues[key];
                     if (value === undefined) {
-                        delete this.#values[behaviorId][key];
+                        delete this.#values.get(behaviorId)?.[key];
                     } else {
-                        if (!this.#values[behaviorId]) {
-                            this.#values[behaviorId] = {};
-                        } else if (isDeepEqual(this.#values[behaviorId][key], value)) {
+                        let vals = this.#values.get(behaviorId);
+                        if (!vals) {
+                            this.#values.set(behaviorId, (vals = {}));
+                        } else if (isDeepEqual(vals[key], value)) {
                             delete behaviorValues[key];
                         }
-                        this.#values[behaviorId][key] = value;
+                        vals[key] = value;
                     }
                 }
             }

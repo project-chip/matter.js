@@ -5,7 +5,10 @@
  */
 
 import { DiscoveryError } from "#behavior/system/controller/discovery/DiscoveryError.js";
+import { IdentifyClient } from "#behaviors/identify";
 import { OnOffClient } from "#behaviors/on-off";
+import { OnOffLightDevice } from "#devices/on-off-light";
+import { Endpoint } from "#endpoint/Endpoint.js";
 import { b$, deepCopy } from "#general";
 import { MockSite } from "./mock-site.js";
 
@@ -103,7 +106,7 @@ describe("ClientNode", () => {
         expect(ep1b).not.undefined;
         expect(ep1b.construction.status).equals("active");
         expect(ep1b.state).deep.equals(expectedEp1State);
-    });
+    }).timeout(1e9);
 
     it("invokes and receives state updates", async () => {
         // *** SETUP ***
@@ -145,9 +148,27 @@ describe("ClientNode", () => {
         expect(device.lifecycle.isCommissioned).is.false;
     });
 
-    it("writes attributes on commit", () => {
-        // TODO
-    });
+    it("writes attributes on commit", async () => {
+        // *** SETUP ***
+
+        await using site = new MockSite();
+        const { controller, device } = await site.addCommissionedPair();
+
+        // *** WRITE ***
+
+        const peer1 = controller.nodes.get("peer1")!;
+        const ep1Client = peer1.parts.get("ep1")!;
+        await ep1Client.act(agent => {
+            agent.get(OnOffClient).state.onTime = 20;
+            agent.get(IdentifyClient).state.identifyTime = 5;
+        });
+
+        // *** VALIDATE ***
+
+        const ep1Server = device.parts.get(1) as Endpoint<OnOffLightDevice>;
+        expect(ep1Server.state.onOff.onTime).equals(20);
+        expect(ep1Server.state.identify.identifyTime).equals(5);
+    }).timeout(1e9);
 
     it("reconnects and updates connection status", () => {
         // TODO

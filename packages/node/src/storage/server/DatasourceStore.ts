@@ -67,8 +67,7 @@ function participantFor(transaction: Transaction, endpointStore: EndpointStore) 
         },
 
         commit1(): MaybePromise {
-            // Persistence serves phase one commit; values are added directly to
-            // the journal so nothing necessary here
+            // Persistence serves phase one commit; values are added directly to the journal so nothing necessary here
         },
 
         async commit2() {
@@ -85,8 +84,4 @@ function participantFor(transaction: Transaction, endpointStore: EndpointStore) 
     transaction.addParticipants(participant);
 
     return participant;
-}
-
-export namespace DatasourceStore {
-    export type Type = typeof DatasourceStore;
 }

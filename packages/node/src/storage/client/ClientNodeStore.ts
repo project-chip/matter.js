@@ -5,14 +5,46 @@
  */
 
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { InternalError, StorageContext } from "#general";
-import { EndpointStore } from "#storage/EndpointStore.js";
+import { InternalError, StorageContext, StorageContextFactory } from "#general";
+import type { ClientNode } from "#node/ClientNode.js";
 import { EndpointNumber } from "#types";
 import { NodeStore } from "../NodeStore.js";
+import { ClientEndpointStore } from "./ClientEndpointStore.js";
+import type { RemoteWriter } from "./RemoteWriter.js";
 
+/**
+ * {@link ClientNode} persistence.
+ */
 export class ClientNodeStore extends NodeStore {
+    #id: string;
     #storage?: StorageContext;
-    #stores = new Map<EndpointNumber, EndpointStore>();
+    #stores = new Map<EndpointNumber, ClientEndpointStore>();
+    #write?: RemoteWriter;
+
+    constructor(id: string, storage: StorageContextFactory) {
+        super(storage);
+        this.#id = id;
+    }
+
+    override toString() {
+        return `client-node-store#${this.#id}`;
+    }
+
+    get id() {
+        return this.#id;
+    }
+
+    get write() {
+        if (this.#write === undefined) {
+            throw new InternalError("Write attempt on ClientNodeStore without writer installed");
+        }
+
+        return this.#write;
+    }
+
+    set write(write: RemoteWriter) {
+        this.#write = write;
+    }
 
     get endpointStores() {
         return this.#stores.values();
@@ -23,7 +55,7 @@ export class ClientNodeStore extends NodeStore {
         return this.#storage?.clearAll();
     }
 
-    override storeForEndpoint(endpoint: Endpoint): EndpointStore {
+    override storeForEndpoint(endpoint: Endpoint) {
         const { number } = endpoint;
 
         if (this.#storage === undefined) {
@@ -32,7 +64,7 @@ export class ClientNodeStore extends NodeStore {
 
         let store = this.#stores.get(number);
         if (store === undefined) {
-            store = new EndpointStore(this.#storage.createContext(number.toString()));
+            store = new ClientEndpointStore(this, number, this.#storage.createContext(number.toString()));
             this.#stores.set(number, store);
         }
 
@@ -47,7 +79,7 @@ export class ClientNodeStore extends NodeStore {
                 continue;
             }
 
-            const store = new EndpointStore(this.#storage.createContext(id));
+            const store = new ClientEndpointStore(this, number, this.#storage.createContext(id));
             await store.load();
             this.#stores.set(number, store);
         }

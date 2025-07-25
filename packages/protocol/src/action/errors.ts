@@ -5,7 +5,7 @@
  */
 
 import { Schema, SchemaErrorPath, ValueModel } from "#model";
-import { StatusCode, StatusResponseError } from "#types";
+import { Status, StatusResponseError } from "#types";
 
 export { SchemaImplementationError } from "#model";
 
@@ -13,7 +13,7 @@ export { SchemaImplementationError } from "#model";
  * Thrown due operational schema violations.
  */
 export class SchemaViolationError extends StatusResponseError {
-    constructor(prefix: string, path: SchemaErrorPath, message: string, code: StatusCode) {
+    constructor(prefix: string, path: SchemaErrorPath, message: string, code: Status) {
         const text = `${prefix} ${path.path ?? path}: ${message} (${code})`;
         super(text, code);
 
@@ -26,8 +26,8 @@ export class SchemaViolationError extends StatusResponseError {
  * Thrown for invalid reads.
  */
 export class ReadError extends SchemaViolationError {
-    constructor(path: SchemaErrorPath, message: string, code?: StatusCode) {
-        super("Reading", path, message, code ?? StatusCode.UnsupportedRead);
+    constructor(path: SchemaErrorPath, message: string, code?: Status) {
+        super("Reading", path, message, code ?? Status.UnsupportedRead);
     }
 }
 
@@ -35,8 +35,8 @@ export class ReadError extends SchemaViolationError {
  * Thrown for invalid writes.
  */
 export class WriteError extends SchemaViolationError {
-    constructor(path: SchemaErrorPath, message: string, code?: StatusCode) {
-        super("Writing", path, message, code ?? StatusCode.UnsupportedWrite);
+    constructor(path: SchemaErrorPath, message: string, code?: Status) {
+        super("Writing", path, message, code ?? Status.UnsupportedWrite);
     }
 }
 
@@ -44,8 +44,8 @@ export class WriteError extends SchemaViolationError {
  * Thrown for invalid invokes.
  */
 export class InvokeError extends SchemaViolationError {
-    constructor(path: SchemaErrorPath, message: string, code?: StatusCode) {
-        super("Invoking", path, message, code ?? StatusCode.UnsupportedAccess);
+    constructor(path: SchemaErrorPath, message: string, code?: Status) {
+        super("Invoking", path, message, code ?? Status.UnsupportedAccess);
     }
 }
 
@@ -53,8 +53,8 @@ export class InvokeError extends SchemaViolationError {
  * Thrown when validation fails.
  */
 export class ValidateError extends SchemaViolationError {
-    constructor(path: SchemaErrorPath, message: string, code?: StatusCode) {
-        super("Validating", path, message, code ?? StatusCode.InvalidDataType);
+    constructor(path: SchemaErrorPath, message: string, code?: Status) {
+        super("Validating", path, message, code ?? Status.InvalidDataType);
     }
 }
 
@@ -62,7 +62,7 @@ export class ValidateError extends SchemaViolationError {
  * Thrown when a value is of the wrong datatype.
  */
 export class DatatypeError extends ValidateError {
-    constructor(path: SchemaErrorPath, type: string, value: unknown, code?: StatusCode) {
+    constructor(path: SchemaErrorPath, type: string, value: unknown, code?: Status) {
         let str = `${value}`;
         if (str.length > 60) {
             str = `${str.substring(60)}…`;
@@ -76,7 +76,7 @@ export class DatatypeError extends ValidateError {
  */
 export class ConstraintError extends ValidateError {
     constructor(schema: Schema, path: SchemaErrorPath, message: string) {
-        super(path, `Constraint "${(schema as ValueModel).constraint}": ${message}`, StatusCode.ConstraintError);
+        super(path, `Constraint "${(schema as ValueModel).constraint}": ${message}`, Status.ConstraintError);
     }
 }
 
@@ -85,7 +85,7 @@ export class ConstraintError extends ValidateError {
  */
 export class UnknownEnumValueError extends ValidateError {
     constructor(path: SchemaErrorPath, message: string) {
-        super(path, message, StatusCode.ConstraintError);
+        super(path, message, Status.ConstraintError);
     }
 }
 
@@ -100,7 +100,7 @@ export class ConformanceError extends ValidateError {
         } else {
             prefix = `Conformance "${(schema as ValueModel).conformance}"`;
         }
-        super(path, `${prefix}: ${message}`, StatusCode.ConstraintError);
+        super(path, `${prefix}: ${message}`, Status.ConstraintError);
     }
 }
 
@@ -118,12 +118,7 @@ export class EnumValueConformanceError extends ConformanceError {
  */
 export class ExpiredReferenceError extends SchemaViolationError {
     constructor(path: SchemaErrorPath) {
-        super(
-            "Referencing",
-            path,
-            "This value is no longer available because its context has exited",
-            StatusCode.Failure,
-        );
+        super("Referencing", path, "This value is no longer available because its context has exited", Status.Failure);
     }
 }
 
@@ -132,6 +127,6 @@ export class ExpiredReferenceError extends SchemaViolationError {
  */
 export class PhantomReferenceError extends SchemaViolationError {
     constructor(path: SchemaErrorPath) {
-        super("Referencing", path, "Container was removed", StatusCode.Failure);
+        super("Referencing", path, "Container was removed", Status.Failure);
     }
 }

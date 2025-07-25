@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Observable, ObserverGroup } from "#util/Observable.js";
+import { AsyncObservable, Observable, ObserverGroup } from "#util/Observable.js";
 
 // Observable deserves proper unit tests but is tested heavily via other modules.  Currently this file just tests a
 // few spot cases
@@ -50,5 +50,41 @@ describe("ObservableGroup", () => {
         observers.close();
 
         expect(observable.isObserved).false;
+    });
+});
+
+describe("AsyncObservable", () => {
+    it("emits", async () => {
+        const observable = AsyncObservable<[foo: string]>();
+
+        let observedFoo;
+
+        observable.on(async foo => {
+            observedFoo = foo;
+        });
+
+        await observable.emit("what I expect");
+
+        expect(observedFoo).equals("what I expect");
+    });
+
+    it("emits with mix of observers", async () => {
+        const observable = AsyncObservable<[foo: string]>();
+
+        const observedFoos = Array<string>();
+
+        for (let i = 0; i < 3; i++) {
+            observable.on(async foo => {
+                observedFoos.push(foo);
+            });
+
+            observable.on(foo => {
+                observedFoos.push(foo);
+            });
+        }
+
+        await observable.emit("asdf");
+
+        expect(observedFoos).deep.equals(["asdf", "asdf", "asdf", "asdf", "asdf", "asdf"]);
     });
 });

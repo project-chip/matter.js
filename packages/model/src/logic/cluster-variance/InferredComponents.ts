@@ -109,7 +109,7 @@ const VarianceMatchers: VarianceMatcher[] = [
     {
         pattern: pattern("[", FIELD, "]"),
         processor(add) {
-            add(false);
+            add(true);
         },
     },
 

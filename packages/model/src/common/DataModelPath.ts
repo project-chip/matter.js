@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic } from "#general";
+
 /**
  * Utility for tracking location in the Matter data model.  This location is used for diagnostics.
  *
  * The path consists of a sequence of IDs, optionally with type information.
  */
-export interface DataModelPath {
+export interface DataModelPath extends Diagnostic {
     parent?: DataModelPath;
 
     id: string | number;
@@ -21,6 +23,8 @@ export interface DataModelPath {
     toString(includeType?: boolean): string;
 
     toArray(): (string | number)[];
+
+    [Diagnostic.value]: Diagnostic;
 }
 
 /**
@@ -48,6 +52,17 @@ export function DataModelPath(id: string | number, type?: string): DataModelPath
         return [this.id];
     }
 
+    function asDiagnostic(this: DataModelPath) {
+        const result = Array<unknown>();
+        for (const segment of this.toArray()) {
+            if (result.length) {
+                result.push(".");
+            }
+            result.push(Diagnostic.strong(segment));
+        }
+        return Diagnostic.squash(result);
+    }
+
     function at(this: DataModelPath, id: string | number, type?: string): DataModelPath {
         return {
             parent: this,
@@ -56,6 +71,9 @@ export function DataModelPath(id: string | number, type?: string): DataModelPath
             at,
             toString,
             toArray,
+            get [Diagnostic.value]() {
+                return asDiagnostic.apply(this);
+            },
         };
     }
 
@@ -65,6 +83,9 @@ export function DataModelPath(id: string | number, type?: string): DataModelPath
         at,
         toString,
         toArray,
+        get [Diagnostic.value]() {
+            return asDiagnostic.apply(this);
+        },
     };
 }
 

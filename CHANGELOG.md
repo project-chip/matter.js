@@ -11,6 +11,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/node
+    - Fix: Fixes validation of ServiceArea cluster SupportedAreas attribute
+    
 -   @project-chip/matter.js
     - (ArtemisMucaj) Fix: Correctly pass a custom "rootCertificateAuthority" and "rootFabric" from CommissioningController options internally
 

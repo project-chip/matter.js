@@ -59,7 +59,9 @@ export class ServerEndpointInitializer extends EndpointInitializer {
      * initializes.
      */
     createBacking(endpoint: Endpoint, type: Behavior.Type): BehaviorBacking {
-        return new ServerBehaviorBacking(endpoint, type, endpoint.behaviors.optionsFor(type));
+        const store = this.#store.storeForEndpoint(endpoint).createStoreForBehavior(type.id);
+
+        return new ServerBehaviorBacking(endpoint, type, store, endpoint.behaviors.optionsFor(type));
     }
 
     /**
