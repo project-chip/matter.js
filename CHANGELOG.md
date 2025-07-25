@@ -11,6 +11,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/examples
+    - Fix: Initializes default attributes for ElectricalEnergyMeasurement cluster to enable them in MeasuredSocketDevice example
+
 -   @matter/node
     - Fix: Fixes validation of ServiceArea cluster SupportedAreas attribute
     
