@@ -45,6 +45,10 @@ const fakedAccuracyDetails = {
 const measuredSocketEndpoint = new Endpoint(MeasuredSocket, {
     id: "socket",
     electricalPowerMeasurement: {
+        activePower: 0,
+        activeCurrent: 0,
+        voltage: 0,
+        frequency: 0,
         powerMode: ElectricalPowerMeasurement.PowerMode.Ac,
         // We simulate that we can measure the following values.
         accuracy: [
