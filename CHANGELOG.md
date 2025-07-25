@@ -14,6 +14,14 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/examples
     - Fix: Initializes default attributes for ElectricalEnergyMeasurement cluster to enable them in MeasuredSocketDevice example
 
+-   @matter/general
+    - Fix: Fixes regression for transactions with async post-commit
+
+-   @matter/model
+    - Enhancement: Convert the Namespace type into an Enum for more convenient usage. ALso adjusted all relevant usages 
+    - Fix: Optimizes Model object freeze order
+    - Fix: Fix attribute generation for [Field] conformance
+
 -   @matter/node
     - Fix: Fixes validation of ServiceArea cluster SupportedAreas attribute
 
@@ -21,8 +29,11 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Always query the node when reading attributes from remote, ignores internal checks for attribute existence
     - Enhancement: Allows ignoring internal checks for attribute existence on write interactions using new --force parameter
 
+- @matter/types
+    - Fix: (ArtemisMucaj) Fixes StringSchema validation to allow longer content than 1024 octets
+
 -   @project-chip/matter.js
-    - (ArtemisMucaj) Fix: Correctly pass a custom "rootCertificateAuthority" and "rootFabric" from CommissioningController options internally
+    - Fix: (ArtemisMucaj) Correctly pass a custom "rootCertificateAuthority" and "rootFabric" from CommissioningController options internally
 
 ## 0.15.1 (2025-07-01)
 
