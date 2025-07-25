@@ -1,4 +1,5 @@
 packages/model/src/standard/elements/*.ts linguist-generated=true
+packages/model/src/standard/resources/*.ts linguist-generated=true
 packages/types/src/clusters/* linguist-generated=true
 packages/types/src/globals/* linguist-generated=true
 packages/node/src/tags/* linguist-generated=true
