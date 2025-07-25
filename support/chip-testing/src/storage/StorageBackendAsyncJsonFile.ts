@@ -72,11 +72,11 @@ export class StorageBackendAsyncJsonFile extends Storage {
         if (this.store === undefined) {
             throw new InternalError("Storage not initialized.");
         }
-        this.store.writeBlob(contexts, key, stream);
+        await this.store.writeBlob(contexts, key, stream);
         await this.commit();
     }
 
-    override async blobSize(contexts: string[], key: string): Promise<number | bigint> {
+    override async blobSize(contexts: string[], key: string): Promise<number> {
         if (this.store === undefined) {
             throw new InternalError("Storage not initialized.");
         }

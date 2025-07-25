@@ -46,24 +46,23 @@ export abstract class Storage {
     ): MaybePromise<ReadableStream<Uint8Array>>;
     abstract writeBlob(contexts: string[], key: string, stream: ReadableStream<Uint8Array>): MaybePromise<void>;
 
+    #getArrayByteLength(v: SupportedStorageTypes | undefined) {
+        if (ArrayBuffer.isView(v)) {
+            return v.byteLength;
+        }
+        throw new StorageError(`ByteSize determination is only supported for Uint8Array, got ${typeof v}`);
+    }
+
     /**
      * Returns the byte size of the value stored under the given key in the specified contexts.
      * This is only supported for Uint8Array values.
      */
-    blobSize(contexts: string[], key: string): MaybePromise<number | bigint> {
+    blobSize(contexts: string[], key: string): MaybePromise<number> {
         const value = this.get(contexts, key);
         if (MaybePromise.is(value)) {
-            return MaybePromise.then(value, v => {
-                if (ArrayBuffer.isView(v)) {
-                    return BigInt(v.byteLength);
-                }
-                throw new StorageError(`ByteSize determination is only supported for Uint8Array, got ${typeof v}`);
-            });
+            return MaybePromise.then(value, v => this.#getArrayByteLength(v));
         }
-        if (ArrayBuffer.isView(value)) {
-            return BigInt(value.byteLength);
-        }
-        throw new StorageError(`ByteSize determination is only supported for Uint8Array, got ${typeof value}`);
+        return this.#getArrayByteLength(value);
     }
 }
 

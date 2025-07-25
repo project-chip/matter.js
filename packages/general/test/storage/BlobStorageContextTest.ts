@@ -38,7 +38,7 @@ describe("BlobStorageContext", () => {
 
     it("should return correct blob size", async () => {
         const data = new Uint8Array([5, 6, 7]);
-        await storage.set(CONTEXT, KEY, data);
+        storage.set(CONTEXT, KEY, data);
 
         const size = blobContext.blobSize(KEY);
         expect(size).equal(BigInt(3));
@@ -52,13 +52,13 @@ describe("BlobStorageContext", () => {
     });
 
     it("should throw error for non-Uint8Array value in blobSize", async () => {
-        await storage.set(CONTEXT, "notblob", "stringvalue");
+        storage.set(CONTEXT, "notblob", "stringvalue");
         expect(() => blobContext.blobSize("notblob")).throws(StorageError);
     });
 
     it("should accept BlobStorageContext.Options", async () => {
         const data = new Uint8Array([10, 20, 30, 40]);
-        await storage.set(CONTEXT, KEY, data);
+        storage.set(CONTEXT, KEY, data);
 
         // Options are currently not used in StorageBackendMemory, but should not throw
         const options: BlobStorageContext.Options = { highWaterMark: 1024 };

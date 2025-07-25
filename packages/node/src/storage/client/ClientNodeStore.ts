@@ -5,7 +5,7 @@
  */
 
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { InternalError, StorageContext, StorageContextFactory } from "#general";
+import { BlobStorageContext, InternalError, StorageContext, StorageContextFactory } from "#general";
 import type { ClientNode } from "#node/ClientNode.js";
 import { EndpointNumber } from "#types";
 import { NodeStore } from "../NodeStore.js";
@@ -20,6 +20,7 @@ export class ClientNodeStore extends NodeStore {
     #storage?: StorageContext;
     #stores = new Map<EndpointNumber, ClientEndpointStore>();
     #write?: RemoteWriter;
+    #bdxStorageContext?: BlobStorageContext;
 
     constructor(id: string, storage: StorageContextFactory) {
         super(storage);
@@ -48,6 +49,13 @@ export class ClientNodeStore extends NodeStore {
 
     get endpointStores() {
         return this.#stores.values();
+    }
+
+    get bdxStore() {
+        if (this.#bdxStorageContext === undefined) {
+            this.#bdxStorageContext = this.createBlobStorageContext("bdx");
+        }
+        return this.#bdxStorageContext;
     }
 
     override erase() {

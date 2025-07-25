@@ -6,6 +6,7 @@
 
 import {
     BlobStorageContext,
+    createPromise,
     fromJson,
     Logger,
     MatterAggregateError,
@@ -264,22 +265,32 @@ export class StorageBackendDisk extends Storage {
         const handle = await open(tmpName, "w");
         const isStream = valueOrStream instanceof ReadableStream;
         const writer = handle.createWriteStream({ encoding: isStream ? null : "utf8", flush: true });
-        if (isStream) {
-            const reader = valueOrStream.getReader();
-            while (true) {
-                const { value: chunk, done } = await reader.read();
-                if (chunk) {
-                    writer.write(chunk);
+
+        const { resolver, rejecter, promise: writePromise } = createPromise<void>();
+        writer.on("finish", resolver);
+        writer.on("error", rejecter);
+
+        try {
+            if (isStream) {
+                const reader = valueOrStream.getReader();
+                while (true) {
+                    const { value: chunk, done } = await reader.read();
+                    if (chunk) {
+                        writer.write(chunk);
+                    }
+                    if (done) {
+                        break;
+                    }
                 }
-                if (done) {
-                    break;
-                }
+            } else {
+                writer.write(valueOrStream);
             }
-        } else {
-            writer.write(valueOrStream);
+            writer.end();
+
+            await writePromise;
+        } finally {
+            await handle.close();
         }
-        writer.close();
-        await handle.close();
 
         await rename(tmpName, filepath);
     }
