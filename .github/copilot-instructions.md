@@ -27,7 +27,7 @@ matter.js is a comprehensive TypeScript implementation of the Matter/Thread smar
 ### Development Tools
 - `packages/tools` - Build system, documentation generation, project management
 - `support/codegen` - Code generation from Matter specifications
-- `support/chip` - Integration with Project CHIP/connectedhomeip
+- `support/chip-testing` - Integration with Project CHIP/connectedhomeip for testing
 
 ## Code Generation System
 
