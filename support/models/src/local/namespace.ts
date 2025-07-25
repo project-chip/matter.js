@@ -5,9 +5,10 @@
  */
 import { LocalMatter } from "../local.js";
 
-// Namespace is a standard or device specific Enum ID, so lets handle as normal uint8 number for now
+// Namespace is a standard or device-specific Enum ID, children will be added in finalize-model.ts step
 LocalMatter.children.push({
     tag: "datatype",
     name: "namespace",
-    type: "uint8",
+    type: "enum8",
+    children: [],
 });

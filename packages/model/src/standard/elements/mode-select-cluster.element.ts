@@ -27,7 +27,7 @@ export const ModeSelect = Cluster(
         quality: "F"
     }),
     Attribute({
-        name: "StandardNamespace", id: 0x1, type: "uint16", access: "R V", conformance: "M",
+        name: "StandardNamespace", id: 0x1, type: "namespace", access: "R V", conformance: "M",
         constraint: "desc", default: null, quality: "X F"
     }),
 

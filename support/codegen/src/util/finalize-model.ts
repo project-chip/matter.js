@@ -16,6 +16,7 @@ import {
     MatterModel,
     Metatype,
     Model,
+    SemanticNamespaceModel,
     status as statusType,
     ValidateModel,
     ValueModel,
@@ -29,15 +30,20 @@ const logger = Logger.get("create-model");
 export function finalizeModel(matter: MatterModel) {
     const scopedDatatypes = collectScopedDatatypes(matter);
 
+    const semanticNamespaces = new Array<SemanticNamespaceModel>();
+
     for (const child of matter.children) {
         if (child instanceof ClusterModel) {
             patchIllegalCrossClusterReferences(child, scopedDatatypes);
             patchClusterTypes(child);
             patchOptionsTypes(child);
             patchStatusTypes(child);
+        } else if (child instanceof SemanticNamespaceModel) {
+            semanticNamespaces.push(child);
         }
     }
 
+    updateSemanticNamespaces(semanticNamespaces, matter);
     ejectZigbee(matter);
     deleteRedundantXrefs(matter);
 
@@ -49,6 +55,25 @@ export function finalizeModel(matter: MatterModel) {
 }
 
 export type ScopedDatatypes = Record<string, Model | undefined>;
+
+function updateSemanticNamespaces(semanticNamespaces: SemanticNamespaceModel[], matter: MatterModel) {
+    const namespace = matter.get(DatatypeModel, "namespace");
+    if (!namespace) {
+        throw new Error("Namespace datatype not found in model. This should never happen");
+    }
+
+    namespace.children = semanticNamespaces
+        .map(
+            ns =>
+                new FieldModel({
+                    id: ns.id,
+                    name: ns.name,
+                    details: ns.details,
+                }),
+        )
+        .filter(({ id }) => id !== undefined)
+        .sort((a, b) => a.id! - b.id!);
+}
 
 function collectScopedDatatypes(matter: MatterModel) {
     const scopedDatatypes = {} as ScopedDatatypes;

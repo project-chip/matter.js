@@ -18,7 +18,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Fixes regression for transactions with async post-commit
 
 -   @matter/model
-    - Enhancement: Convert the Namespace type into an Enum for more convenient usage. ALso adjusted all relevant usages 
+    - Enhancement: Convert the Namespace type into an Enum for more convenient usage and fill with all values from Specification. Also adjusted all relevant usages 
     - Fix: Optimizes Model object freeze order
     - Fix: Fix attribute generation for [Field] conformance
 
