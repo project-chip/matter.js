@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, maxValue, minValue, serialize, UnexpectedDataError } from "#general";
+import { InternalError, serialize, UnexpectedDataError } from "#general";
 import { ValidationDatatypeMismatchError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
@@ -60,8 +60,8 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     bound({ minLength, maxLength, length }: LengthConstraints) {
         return new StringSchema(
             this.type,
-            length ?? maxValue(this.minLength, minLength),
-            length ?? minValue(this.maxLength, maxLength),
+            length ?? minLength ?? this.minLength,
+            length ?? maxLength ?? this.maxLength,
         );
     }
 }
