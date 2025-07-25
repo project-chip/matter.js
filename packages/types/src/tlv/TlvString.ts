@@ -29,6 +29,8 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
         super();
 
         if (minLength < 0) throw new InternalError("Minimum length should be a positive number.");
+        if (maxLength < 0) throw new InternalError("Maximum length should be a positive number.");
+        if (minLength > maxLength) throw new InternalError("Minimum length should be smaller than maximum length.");
     }
 
     override encodeTlvInternal(writer: TlvWriter, value: TlvToPrimitive[T], tag?: TlvTag): void {
