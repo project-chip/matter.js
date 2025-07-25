@@ -111,7 +111,8 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                                 })
                                 .options({
                                     remote: {
-                                        describe: "request value always remote",
+                                        describe:
+                                            "request value always remote. Also ignores information about attribute existence on device",
                                         default: false,
                                         type: "boolean",
                                     },
@@ -138,7 +139,7 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                             for (const attribute of cluster.attributes) {
                                 const attributeName = camelize(attribute.name);
                                 const attributeClient = clusterClient.attributes[attributeName];
-                                if (!(attributeClient instanceof SupportedAttributeClient)) {
+                                if (!remote && !(attributeClient instanceof SupportedAttributeClient)) {
                                     continue;
                                 }
                                 console.log(
@@ -212,7 +213,8 @@ function generateAttributeReadHandler(
                 })
                 .options({
                     remote: {
-                        describe: "request value always remote",
+                        describe:
+                            "request value always remote. Also ignores information about attribute existence on device",
                         default: false,
                         type: "boolean",
                     },
@@ -228,9 +230,9 @@ function generateAttributeReadHandler(
                 return;
             }
             const attributeClient = clusterClient.attributes[attributeName];
-            if (!(attributeClient instanceof SupportedAttributeClient)) {
+            if (!remote && !(attributeClient instanceof SupportedAttributeClient)) {
                 console.log(
-                    `ERROR: Attribute ${node.nodeId.toString()}/${endpointId}/${clusterId}/${attribute.id} not supported.`,
+                    `ERROR: Attribute ${node.nodeId.toString()}/${endpointId}/${clusterId}/${attribute.id} not supported by the device.`,
                 );
                 return;
             }
@@ -275,9 +277,16 @@ function generateAttributeWriteHandler(
                     describe: "endpoint id to write to",
                     type: "number",
                     demandOption: true,
+                })
+                .options({
+                    force: {
+                        describe: "ignore verification if device exists on device",
+                        default: false,
+                        type: "boolean",
+                    },
                 }),
         async argv => {
-            const { nodeId, endpointId, value } = argv;
+            const { nodeId, endpointId, value, force } = argv;
 
             let parsedValue: any;
             try {
@@ -299,9 +308,9 @@ function generateAttributeWriteHandler(
                 return;
             }
             const attributeClient = clusterClient.attributes[attributeName];
-            if (!(attributeClient instanceof SupportedAttributeClient)) {
+            if (!force && !(attributeClient instanceof SupportedAttributeClient)) {
                 console.log(
-                    `ERROR: Attribute ${node.nodeId.toString()}/${endpointId}/${clusterId}/${attribute.id} not supported.`,
+                    `ERROR: Attribute ${node.nodeId.toString()}/${endpointId}/${clusterId}/${attribute.id} not supported by the device.`,
                 );
                 return;
             }

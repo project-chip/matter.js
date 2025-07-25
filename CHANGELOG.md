@@ -16,7 +16,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/node
     - Fix: Fixes validation of ServiceArea cluster SupportedAreas attribute
-    
+
+-   @matter/nodejs-shell
+    - Enhancement: Always query the node when reading attributes from remote, ignores internal checks for attribute existence
+    - Enhancement: Allows ignoring internal checks for attribute existence on write interactions using new --force parameter
+
 -   @project-chip/matter.js
     - (ArtemisMucaj) Fix: Correctly pass a custom "rootCertificateAuthority" and "rootFabric" from CommissioningController options internally
 
