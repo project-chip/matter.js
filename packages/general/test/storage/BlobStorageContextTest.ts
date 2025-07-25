@@ -41,7 +41,7 @@ describe("BlobStorageContext", () => {
         storage.set(CONTEXT, KEY, data);
 
         const size = blobContext.blobSize(KEY);
-        expect(size).equal(BigInt(3));
+        expect(size).equal(3);
     });
 
     it("should return empty stream for missing key", async () => {
