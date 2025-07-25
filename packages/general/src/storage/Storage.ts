@@ -56,6 +56,8 @@ export abstract class Storage {
     /**
      * Returns the byte size of the value stored under the given key in the specified contexts.
      * This is only supported for Uint8Array values.
+     * Important Note: This default implementation just reads the value for the key and checks if it is undefined.
+     * Please implement this method in your storage implementation if you want to optimize it.
      */
     blobSize(contexts: string[], key: string): MaybePromise<number> {
         const value = this.get(contexts, key);
