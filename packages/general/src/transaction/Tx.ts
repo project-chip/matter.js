@@ -688,6 +688,7 @@ class Tx implements Transaction, Transaction.Finalization {
                     const promise = participant.postCommit?.();
 
                     if (MaybePromise.is(promise)) {
+                        i++;
                         return Promise.resolve(promise).then(executePostCommit, e => {
                             reportParticipantError(e);
                             executePostCommit();
