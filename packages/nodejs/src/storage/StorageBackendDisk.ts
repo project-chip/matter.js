@@ -276,7 +276,10 @@ export class StorageBackendDisk extends Storage {
                 while (true) {
                     const { value: chunk, done } = await reader.read();
                     if (chunk) {
-                        writer.write(chunk);
+                        if (!writer.write(chunk)) {
+                            // Backpressure: wait for the buffer to drain.
+                            await new Promise<void>(resolve => writer.once("drain", resolve));
+                        }
                     }
                     if (done) {
                         break;

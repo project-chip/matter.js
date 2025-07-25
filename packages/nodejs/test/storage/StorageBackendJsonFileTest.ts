@@ -162,8 +162,8 @@ describe("Storage in JSON File", () => {
         const data = new Uint8Array([31, 32]);
         storage.set(["context"], "blobkey", data);
 
-        const size = storage.blobSize(["context"], "blobkey");
-        assert.equal(size, BigInt(2));
+        const size = await storage.blobSize(["context"], "blobkey");
+        assert.equal(size, 2);
     });
 
     it("readBlob returns empty stream for missing key", async () => {
