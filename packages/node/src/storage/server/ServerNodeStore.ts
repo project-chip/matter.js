@@ -7,6 +7,7 @@
 import { Endpoint } from "#endpoint/Endpoint.js";
 import {
     asyncNew,
+    BlobStorageContext,
     Destructable,
     Diagnostic,
     Environment,
@@ -34,6 +35,7 @@ export class ServerNodeStore extends NodeStore implements Destructable {
     #endpointStores: ServerEndpointStores;
     #storageManager?: StorageManager;
     #clientStores?: ClientNodeStores;
+    #bdxStorageContext?: BlobStorageContext;
 
     constructor(environment: Environment, nodeId: string) {
         super({
@@ -44,6 +46,15 @@ export class ServerNodeStore extends NodeStore implements Destructable {
                     );
                 }
                 return this.#storageManager.createContext(name);
+            },
+
+            createBlobContext: (name: string) => {
+                if (!this.#storageManager) {
+                    throw new ImplementationError(
+                        `Cannot create storage context ${name} because store is not initialized`,
+                    );
+                }
+                return this.#storageManager.createBlobContext(name);
             },
         });
 
@@ -80,6 +91,14 @@ export class ServerNodeStore extends NodeStore implements Destructable {
      */
     get clientStores() {
         return this.construction.assert("client stores", this.#clientStores);
+    }
+
+    get bdxStore() {
+        this.construction.assert("BDX storage context");
+        if (this.#bdxStorageContext === undefined) {
+            this.#bdxStorageContext = this.createBlobStorageContext("bdx");
+        }
+        return this.#bdxStorageContext;
     }
 
     #logChange(what: "Opened" | "Closed") {

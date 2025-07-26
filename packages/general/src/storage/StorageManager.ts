@@ -6,12 +6,12 @@
 
 import { MaybePromise } from "../util/Promises.js";
 import { Storage, StorageError } from "./Storage.js";
-import { StorageContext, StorageContextFactory } from "./StorageContext.js";
+import { BlobStorageContext, StorageContext, StorageContextFactory } from "./StorageContext.js";
 
-export class StorageManager<S extends Storage = any> implements StorageContextFactory<S> {
+export class StorageManager implements StorageContextFactory {
     private initialized = false;
 
-    constructor(private storage: S) {}
+    constructor(private storage: Storage) {}
 
     initialize(): MaybePromise<void> {
         if (!this.storage.initialized) {
@@ -30,10 +30,17 @@ export class StorageManager<S extends Storage = any> implements StorageContextFa
         return this.storage.close();
     }
 
-    createContext(context: string): StorageContext<S> {
+    createContext(context: string): StorageContext {
         if (!this.initialized) throw new StorageError("The storage needs to be initialized first!");
         if (!context.length) throw new StorageError("Context must not be an empty string!");
         if (context.includes(".")) throw new StorageError("Context must not contain dots!");
         return new StorageContext(this.storage, [context]);
+    }
+
+    createBlobContext(context: string): BlobStorageContext {
+        if (!this.initialized) throw new StorageError("The storage needs to be initialized first!");
+        if (!context.length) throw new StorageError("Context must not be an empty string!");
+        if (context.includes(".")) throw new StorageError("Context must not contain dots!");
+        return new BlobStorageContext(this.storage, [context, "blob"]);
     }
 }
