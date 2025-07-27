@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.15.2 (2025-07-27)
 
 -   @matter/examples
     - Fix: Initializes default attributes for ElectricalEnergyMeasurement cluster to enable them in MeasuredSocketDevice example
