@@ -33,7 +33,7 @@ const THEME_OPTIONS = {
     themeColor: "#cb9820",
 
     // TODO - add service links
-    //   GitHub: "https://github.com/project-chip/matter.js",
+    //   GitHub: "https://github.com/matter-js/matter",
     //   Discord: "https://discord.gg/ujmRNrhDuW",
     //   NPM: "https://www.npmjs.com/package/@project-chip/matter.js",
 };
