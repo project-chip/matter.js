@@ -28,7 +28,7 @@
     ],
     "license": "Apache-2.0",
     "bugs": {
-        "url": "https://github.com/matter-js/matterissues"
+        "url": "https://github.com/matter-js/matter/issues"
     },
     "homepage": "https://github.com/matter-js/matter#readme",
     "devDependencies": {
