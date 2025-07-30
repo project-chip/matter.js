@@ -1,7 +1,7 @@
 pull_request_rules:
   - name: Automatic merge dependabot when tested and approved
     conditions:
-      - author="dependabot[bot]"         # merge dependabot PRs automatically, but let dependabot update the branch
+      - "author=dependabot[bot]"         # merge dependabot PRs automatically, but let dependabot update the branch
       - "#approved-reviews-by>=1"
       - "#check-failure=0"               # Don't auto merge with a failure
       - "#check-pending=0"               # Don't auto merge with anything pending
@@ -10,7 +10,7 @@ pull_request_rules:
         method: squash
   - name: Automatic merge non-dependabot PRs when approved and tested
     conditions:
-      - author!="dependabot[bot]"          # dependabot PRs are handled above
+      - "author!=dependabot[bot]"          # dependabot PRs are handled above
       - label!="automated-npm-release"     # Don't auto merge automated PRs, other processes do this
       - label!="automated-docker-release"  # Don't auto merge automated PRs, other processes do this
       - "#approved-reviews-by>=1"
