@@ -65,7 +65,7 @@
         "minimatch": "^10.0.3",
         "typescript": "~5.8.3",
         "type-fest": "^4.40.1",
-        "typedoc": "^0.28.7",
+        "typedoc": "^0.28.8",
         "typedoc-github-theme": "^0.3.0"
     },
     "optionalDependencies": {
@@ -74,7 +74,7 @@
     "devDependencies": {
         "@types/madge": "^5.0.3",
         "@types/minimatch": "^6.0.0",
-        "@types/node": "^24.0.15",
+        "@types/node": "^24.1.0",
         "detective-typescript": "^14.0.0"
     },
     "publishConfig": {
