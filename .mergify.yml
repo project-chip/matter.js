@@ -1,26 +1,24 @@
 pull_request_rules:
-  - name: Automatic merge on PullApprove
+  - name: Automatic merge dependabot when tested and approved
     conditions:
-      - or:
-        - "check-success=pullapprove"
-        - label="fast track"
-      - or:
-        - "check-success=pullapprove"
-        - label="hotfix"
+      - "author=dependabot[bot]"         # merge dependabot PRs automatically, but let dependabot update the branch
+      - "#approved-reviews-by>=1"
+      - "#check-failure=0"               # Don't auto merge with a failure
+      - "#check-pending=0"               # Don't auto merge with anything pending
+    actions:
+      merge:
+        method: squash
+  - name: Automatic merge non-dependabot PRs when approved and tested
+    conditions:
+      - "author!=dependabot[bot]"          # dependabot PRs are handled above
+      - label!="automated-npm-release"     # Don't auto merge automated PRs, other processes do this
+      - label!="automated-docker-release"  # Don't auto merge automated PRs, other processes do this
       - "#approved-reviews-by>=1"
       - "#review-threads-unresolved=0"
       - "-draft"
-      - "#check-failure=0"               # Don't auto merge with a failure
-      - "#check-pending=0"               # Don't auto merge with anything pending
-      - or:
-        - "check-success=pullapprove"
-        - "check-skipped=pullapprove"
-        - "check-neutral=pullapprove"
-      - label!="automated-npm-release"             # Don't auto merge automated PRs, other processes do this
-      - label!="automated-docker-release"             # Don't auto merge automated PRs, other processes do this
-      - or:
-        - "author=dependabot[bot]"        # merge dependabot PRs automatically
-        - "label=automerge"               # merge PRs with the automerge label
+      - "#check-failure=0"                 # Don't auto merge with a failure
+      - "#check-pending=0"                 # Don't auto merge with anything pending
+      - "label=automerge"                  # merge PRs with the automerge label
     actions:
       update:
       merge:
