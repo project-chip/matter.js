@@ -23,7 +23,7 @@ on:
         type: boolean
 jobs:
   publish-config:
-    if: github.repository == 'project-chip/matter.js'
+    if: github.repository == 'matter-js/matter'
     runs-on: ubuntu-latest
 
     steps:

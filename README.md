@@ -1,6 +1,6 @@
 # JavaScript/TypeScript based Matter Implementation
 
-[![license](https://img.shields.io/badge/license-Apache2-green.svg)](https://raw.githubusercontent.com/project-chip/matter.js/master/LICENSE)
+[![license](https://img.shields.io/badge/license-Apache2-green.svg)](https://raw.githubusercontent.com/matter-js/matter/master/LICENSE)
 
 ## What is Matter?
 
@@ -89,7 +89,7 @@ Please refer to the Examples readme for information regarding their usage: [@mat
 We welcome contributions!  If you have Node.js installed, prepare your development environment as follows:
 
 ```bash
-git clone https://github.com/project-chip/matter.js
+git clone https://github.com/matter-js/matter
 cd matter.js
 npm install
 ```
@@ -101,7 +101,7 @@ On Non-Windows platforms and having Python 3.12+ installed please also make sure
 
 ## Connecting with the community
 
-If you have issues please use the GitHub "[Issues](https://github.com/project-chip/matter.js/issues)" of this repository. For questions or idea discussions please use the "[Discussions](https://github.com/project-chip/matter.js/discussions)" in this GitHub repository.
+If you have issues please use the GitHub "[Issues](https://github.com/matter-js/matter/issues)" of this repository. For questions or idea discussions please use the "[Discussions](https://github.com/matter-js/matter/discussions)" in this GitHub repository.
 
 Additionally, our "Matter Integrators" Discord server is a great place to discuss matter.js, the Matter protocol and how to implement Matter in various environments -- not just JavaScript/TypeScript! You can join it here: https://discord.gg/ujmRNrhDuW .
 
