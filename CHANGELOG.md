@@ -15,7 +15,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Update Dataversions in attribute data cache also when data are all the same to make sure Dataversion filters work correctly
 
 -   @project-chip/matter.js
-    - Fix: Makes sure to set the initialized states before emitting the Connected event to ürevent edge cases
+    - Fix: Makes sure to set the initialized states before emitting the Connected event to prevent edge cases
     - Fix: Fixes an issue that prevented cached attribute data to be used for node connections
 
 ## 0.15.2 (2025-07-27)
