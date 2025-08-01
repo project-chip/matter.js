@@ -702,13 +702,13 @@ export class PairedNode {
                 }
             }
             this.#reconnectErrorCount = 0;
-            this.#setConnectionState(NodeStates.Connected);
+            this.#remoteInitializationDone = true;
             await this.events.initializedFromRemote.emit(this.#nodeDetails.toStorageData());
             if (!this.#localInitializationDone) {
-                await this.events.initialized.emit(this.#nodeDetails.toStorageData());
                 this.#localInitializationDone = true;
+                await this.events.initialized.emit(this.#nodeDetails.toStorageData());
             }
-            this.#remoteInitializationDone = true;
+            this.#setConnectionState(NodeStates.Connected);
         } finally {
             this.#remoteInitializationInProgress = false;
         }
