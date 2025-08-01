@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.15.3 (2025-08-01)
 
 -   @matter/protocol
     - Fix: Update Dataversions in attribute data cache also when data are all the same to make sure Dataversion filters work correctly
