@@ -43,8 +43,8 @@ matter.js has successfully passed certification already, but there are still thi
 
 ## JavaScript/Node.js compatibility
 * At least ES2022 needs to be used as build target for your project!
-* The published packages are supports all LTS Node.js versions starting with 18.x
-* When cloning the repository and participating on the development you need to use at least Mode.js 20.x because some build tools require this.
+* The published packages are supports all LTS Node.js versions starting with 20.x
+
 Please also see the additional [TypeScript notes](./packages/main/README.md#typescript-note).
 
 ## How to use matter.js
@@ -96,8 +96,8 @@ npm install
 
 This will install all dependencies and create symlinks between the packages, so that it can be used locally. It also builds all packages.
 
-On Windows, in order to successfully build all the packages (tested on Windows 11 Pro) make sure to have installed Node.js 18+, the windows-build-tools and node-gyp version 10.
-On Non-Windows platforms and having Python 3.12+ installed please also make sure to use npm 10.2.3+.
+On Windows, in order to successfully build all the packages (tested on Windows 11 Pro) make sure to have installed Node.js 20+, the windows-build-tools and node-gyp version 10.
+On Non-Windows platforms and having Python 3.12+ installed, please also make sure to use npm 10.2.3+.
 
 ## Connecting with the community
 
@@ -225,7 +225,7 @@ If you implement a specific platform, we would be happy with a PR contributing t
 
 ## matter.js-based projects
 
-The following projects are available on any platform with access to Node.js 18+:
+The following projects are available on any platform with access to Node.js 20+:
 
 - [@matter/nodejs](packages/nodejs/README.md): a Matter client / server running on node.js compatible with HA (Android / iOs support in progress)
 - [@matter/nodejs-shell](packages/nodejs-shell/README.md): a Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface

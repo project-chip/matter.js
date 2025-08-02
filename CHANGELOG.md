@@ -9,6 +9,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+-   Breaking: Matter.js now requires node.js 20+
+
+
 ## 0.15.3 (2025-08-01)
 
 -   @matter/protocol

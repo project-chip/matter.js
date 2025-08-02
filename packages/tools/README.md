@@ -2,7 +2,7 @@
 
 This package supports build and execution infrastructure for other matter.js packages.
 
-> Supports all Node.js LTS versions starting with 18.x
+> Supports all Node.js LTS versions starting with 20.x
 
 ## Rational
 
