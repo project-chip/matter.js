@@ -69,7 +69,7 @@ export class StorageBackendMemory extends Storage implements CloneableStorage {
             return new Blob([]);
         }
         if (!(value instanceof Uint8Array)) {
-            throw new StorageError("Value must be an ArrayBuffer or a typed array to read as stream.");
+            throw new StorageError("Value must be an Uint8Array to read as blob stream.");
         }
         return new Blob([value]);
     }
