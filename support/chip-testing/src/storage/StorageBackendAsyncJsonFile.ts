@@ -61,26 +61,19 @@ export class StorageBackendAsyncJsonFile extends Storage {
         return this.store.get(contexts, key);
     }
 
-    async readBlob(contexts: string[], key: string): Promise<ReadableStream<Uint8Array>> {
+    async openBlob(contexts: string[], key: string): Promise<Blob> {
         if (this.store === undefined) {
             throw new InternalError("Storage not initialized.");
         }
-        return this.store.readBlob(contexts, key);
+        return this.store.openBlob(contexts, key);
     }
 
-    async writeBlob(contexts: string[], key: string, stream: ReadableStream<Uint8Array>) {
+    async writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<Uint8Array>) {
         if (this.store === undefined) {
             throw new InternalError("Storage not initialized.");
         }
-        await this.store.writeBlob(contexts, key, stream);
+        await this.store.writeBlobFromStream(contexts, key, stream);
         await this.commit();
-    }
-
-    override async blobSize(contexts: string[], key: string): Promise<number> {
-        if (this.store === undefined) {
-            throw new InternalError("Storage not initialized.");
-        }
-        return this.store.blobSize(contexts, key);
     }
 
     set(contexts: string[], key: string, value: SupportedStorageTypes): Promise<void>;

@@ -5,7 +5,7 @@
  */
 
 import type { Endpoint } from "#endpoint/Endpoint.js";
-import { BlobStorageContext, Construction, MaybePromise, StorageContextFactory } from "#general";
+import { Construction, MaybePromise, StorageContext, StorageContextFactory } from "#general";
 import type { Node } from "../node/Node.js";
 import { EndpointStore } from "./EndpointStore.js";
 
@@ -18,7 +18,15 @@ import { EndpointStore } from "./EndpointStore.js";
 export abstract class NodeStore {
     #storageFactory: StorageContextFactory;
     #construction: Construction<NodeStore>;
-    abstract bdxStore: BlobStorageContext;
+    #bdxStore?: StorageContext;
+
+    get bdxStore(): StorageContext {
+        this.construction.assert("BDX storage context");
+        if (!this.#bdxStore) {
+            this.#bdxStore = this.createStorageContext("bdx");
+        }
+        return this.#bdxStore;
+    }
 
     get construction() {
         return this.#construction;
@@ -45,10 +53,6 @@ export abstract class NodeStore {
 
     protected createStorageContext(name: string) {
         return this.#storageFactory.createContext(name);
-    }
-
-    protected createBlobStorageContext(name: string) {
-        return this.#storageFactory.createBlobContext(name);
     }
 
     protected get storageFactory() {

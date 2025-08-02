@@ -144,10 +144,10 @@ describe("Storage in JSON File", () => {
             },
         });
 
-        await storage.writeBlob(["context"], "blobkey", stream);
+        await storage.writeBlobFromStream(["context"], "blobkey", stream);
 
-        const readStream = storage.readBlob(["context"], "blobkey");
-        const reader = readStream.getReader();
+        const blob = storage.openBlob(["context"], "blobkey");
+        const reader = blob.stream().getReader();
         const chunks: Uint8Array[] = [];
         while (true) {
             const { value, done } = await reader.read();
@@ -162,14 +162,14 @@ describe("Storage in JSON File", () => {
         const data = new Uint8Array([31, 32]);
         storage.set(["context"], "blobkey", data);
 
-        const size = await storage.blobSize(["context"], "blobkey");
-        assert.equal(size, 2);
+        const blob = storage.openBlob(["context"], "blobkey");
+        assert.equal(blob.size, 2);
     });
 
     it("readBlob returns empty stream for missing key", async () => {
         const storage = await StorageBackendJsonFile.create(TEST_STORAGE_LOCATION);
-        const readStream = storage.readBlob(["context"], "missingkey");
-        const reader = readStream.getReader();
+        const blob = storage.openBlob(["context"], "missingkey");
+        const reader = blob.stream().getReader();
         const { done } = await reader.read();
         assert.equal(done, true);
     });

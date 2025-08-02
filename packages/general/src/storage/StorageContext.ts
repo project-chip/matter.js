@@ -11,17 +11,49 @@ import { SupportedStorageTypes } from "./StringifyTools.js";
 
 export interface StorageContextFactory {
     createContext(context: string): StorageContext;
-    createBlobContext(context: string): BlobStorageContext;
 }
 
-export class BaseStorageContext implements StorageContextFactory {
+export class StorageContext implements StorageContextFactory {
     constructor(
         protected readonly storage: Storage,
         readonly thisContexts: string[],
     ) {}
 
+    get<T extends SupportedStorageTypes>(key: string, defaultValue?: T): MaybePromise<T> {
+        const value = this.storage.get(this.thisContexts, key);
+        if (value !== undefined) {
+            if (MaybePromise.is(value)) {
+                return value.then(v => {
+                    if (v !== undefined) return v;
+                    if (defaultValue === undefined) {
+                        throw new StorageError(
+                            `No value found for key ${key} in context ${this.thisContexts} and no default value specified!`,
+                        );
+                    }
+                    return defaultValue as T;
+                }) as MaybePromise<T>;
+            }
+            return value as T;
+        }
+        if (defaultValue === undefined) {
+            throw new StorageError(
+                `No value found for key ${key} in context ${this.thisContexts} and no default value specified!`,
+            );
+        }
+        return defaultValue;
+    }
+
     has(key: string) {
         return this.storage.has(this.thisContexts, key);
+    }
+
+    set(key: string, value: SupportedStorageTypes): MaybePromise<void>;
+    set(values: Record<string, SupportedStorageTypes>): MaybePromise<void>;
+    set(keyOrValues: string | Record<string, SupportedStorageTypes>, value?: SupportedStorageTypes) {
+        if (typeof keyOrValues === "string") {
+            return this.storage.set(this.thisContexts, keyOrValues, value);
+        }
+        return this.storage.set(this.thisContexts, keyOrValues);
     }
 
     delete(key: string) {
@@ -34,14 +66,12 @@ export class BaseStorageContext implements StorageContextFactory {
         return new StorageContext(this.storage, [...this.thisContexts, context]);
     }
 
-    createBlobContext(context: string): BlobStorageContext {
-        if (context.length === 0) throw new StorageError("Context must not be an empty string");
-        if (context.includes(".")) throw new StorageError("Context must not contain dots!");
-        return new BlobStorageContext(this.storage, [...this.thisContexts, context]);
-    }
-
     keys() {
         return this.storage.keys(this.thisContexts);
+    }
+
+    values() {
+        return this.storage.values(this.thisContexts);
     }
 
     contexts() {
@@ -76,65 +106,12 @@ export class BaseStorageContext implements StorageContextFactory {
     clearAll() {
         return this.storage.clearAll(this.thisContexts);
     }
-}
 
-export class StorageContext extends BaseStorageContext {
-    get<T extends SupportedStorageTypes>(key: string, defaultValue?: T): MaybePromise<T> {
-        const value = this.storage.get(this.thisContexts, key);
-        if (value !== undefined) {
-            if (MaybePromise.is(value)) {
-                return value.then(v => {
-                    if (v !== undefined) return v;
-                    if (defaultValue === undefined) {
-                        throw new StorageError(
-                            `No value found for key ${key} in context ${this.thisContexts} and no default value specified!`,
-                        );
-                    }
-                    return defaultValue as T;
-                }) as MaybePromise<T>;
-            }
-            return value as T;
-        }
-        if (defaultValue === undefined) {
-            throw new StorageError(
-                `No value found for key ${key} in context ${this.thisContexts} and no default value specified!`,
-            );
-        }
-        return defaultValue;
+    openBlob(key: string) {
+        return this.storage.openBlob(this.thisContexts, key);
     }
 
-    set(key: string, value: SupportedStorageTypes): MaybePromise<void>;
-    set(values: Record<string, SupportedStorageTypes>): MaybePromise<void>;
-    set(keyOrValues: string | Record<string, SupportedStorageTypes>, value?: SupportedStorageTypes) {
-        if (typeof keyOrValues === "string") {
-            return this.storage.set(this.thisContexts, keyOrValues, value);
-        }
-        return this.storage.set(this.thisContexts, keyOrValues);
-    }
-
-    values() {
-        return this.storage.values(this.thisContexts);
-    }
-}
-
-export class BlobStorageContext extends BaseStorageContext {
-    readBlob(key: string, options?: BlobStorageContext.Options) {
-        return this.storage.readBlob(this.thisContexts, key, options);
-    }
-
-    writeBlob(key: string, stream: ReadableStream<Uint8Array>) {
-        return this.storage.writeBlob(this.thisContexts, key, stream);
-    }
-
-    blobSize(key: string) {
-        return this.storage.blobSize(this.thisContexts, key);
-    }
-}
-
-export namespace BlobStorageContext {
-    export interface Options {
-        start?: number | undefined;
-        end?: number | undefined;
-        highWaterMark?: number | undefined;
+    writeBlobFromStream(key: string, stream: ReadableStream<Uint8Array>) {
+        return this.storage.writeBlobFromStream(this.thisContexts, key, stream);
     }
 }

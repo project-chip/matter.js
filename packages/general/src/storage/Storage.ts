@@ -3,7 +3,6 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { BlobStorageContext } from "#storage/StorageContext.js";
 import { ImplementationError, MatterError } from "../MatterError.js";
 import { MaybePromise } from "../util/Promises.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
@@ -39,33 +38,12 @@ export abstract class Storage {
         return value !== undefined;
     }
 
-    abstract readBlob(
+    abstract openBlob(contexts: string[], key: string): MaybePromise<Blob>;
+    abstract writeBlobFromStream(
         contexts: string[],
         key: string,
-        options?: BlobStorageContext.Options,
-    ): MaybePromise<ReadableStream<Uint8Array>>;
-    abstract writeBlob(contexts: string[], key: string, stream: ReadableStream<Uint8Array>): MaybePromise<void>;
-
-    #getArrayByteLength(v: SupportedStorageTypes | undefined) {
-        if (ArrayBuffer.isView(v)) {
-            return v.byteLength;
-        }
-        throw new StorageError(`ByteSize determination is only supported for Uint8Array, got ${typeof v}`);
-    }
-
-    /**
-     * Returns the byte size of the value stored under the given key in the specified contexts.
-     * This is only supported for Uint8Array values.
-     * Important Note: This default implementation just reads the value for the key and checks if it is undefined.
-     * Please implement this method in your storage implementation if you want to optimize it.
-     */
-    blobSize(contexts: string[], key: string): MaybePromise<number> {
-        const value = this.get(contexts, key);
-        if (MaybePromise.is(value)) {
-            return MaybePromise.then(value, v => this.#getArrayByteLength(v));
-        }
-        return this.#getArrayByteLength(value);
-    }
+        stream: ReadableStream<Uint8Array>,
+    ): MaybePromise<void>;
 }
 
 /**

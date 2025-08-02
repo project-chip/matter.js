@@ -63,27 +63,18 @@ export class StorageBackendMemory extends Storage implements CloneableStorage {
         return this.store[this.createContextKey(contexts)]?.[key];
     }
 
-    readBlob(contexts: string[], key: string): ReadableStream<Uint8Array> {
+    openBlob(contexts: string[], key: string): Blob {
         const value = this.get(contexts, key);
         if (value === undefined) {
-            return new ReadableStream<Uint8Array>({
-                start(controller) {
-                    controller.close();
-                },
-            });
+            return new Blob([]);
         }
-        if (!ArrayBuffer.isView(value)) {
+        if (!(value instanceof Uint8Array)) {
             throw new StorageError("Value must be an ArrayBuffer or a typed array to read as stream.");
         }
-        return new ReadableStream<Uint8Array>({
-            start(controller) {
-                controller.enqueue(value);
-                controller.close();
-            },
-        });
+        return new Blob([value]);
     }
 
-    async writeBlob(contexts: string[], key: string, stream: ReadableStream<Uint8Array>): Promise<void> {
+    async writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<Uint8Array>): Promise<void> {
         this.#assertInitialized();
         const reader = stream.getReader();
         const chunks: Uint8Array[] = [];

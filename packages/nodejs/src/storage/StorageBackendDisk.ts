@@ -5,7 +5,6 @@
  */
 
 import {
-    BlobStorageContext,
     createPromise,
     fromJson,
     Logger,
@@ -15,64 +14,11 @@ import {
     SupportedStorageTypes,
     toJson,
 } from "#general";
+import { openAsBlob } from "node:fs";
 import { mkdir, open, readdir, readFile, rename, rm, stat } from "node:fs/promises";
 import { join } from "node:path";
-import { Readable } from "node:stream";
 
 const logger = new Logger("StorageBackendDisk");
-
-/**
- * Create a Web API default `ReadableStream<Uint8Array>` from a Node.js `stream.Readable`.
- */
-export function defaultReadableStreamFromNodeReadable(
-    nodeReadable: Readable,
-    queueingStrategy?: QueuingStrategy,
-): ReadableStream<Uint8Array> {
-    let closed = false;
-    function close(controller: ReadableStreamDefaultController) {
-        if (!closed) {
-            closed = true;
-            controller.close();
-        }
-    }
-
-    return new ReadableStream<Uint8Array>(
-        {
-            start(controller: ReadableStreamDefaultController) {
-                nodeReadable.on("data", chunk => {
-                    if (closed) {
-                        return;
-                    }
-
-                    controller.enqueue(chunk);
-
-                    if (controller.desiredSize !== null && controller.desiredSize <= 0) {
-                        // Apply backpressure if needed.
-                        nodeReadable.pause();
-                    }
-                });
-
-                nodeReadable.once("end", () => {
-                    close(controller); // Signal EOF
-                });
-
-                nodeReadable.once("error", err => {
-                    controller.error(err);
-                });
-            },
-            pull(_controller: ReadableStreamDefaultController) {
-                if (nodeReadable.isPaused()) {
-                    nodeReadable.resume();
-                }
-            },
-            cancel(reason) {
-                closed = true; // Avoid controller is closed twice
-                nodeReadable.destroy(reason);
-            },
-        },
-        queueingStrategy,
-    );
-}
 
 export class StorageBackendDisk extends Storage {
     readonly #path: string;
@@ -188,42 +134,18 @@ export class StorageBackendDisk extends Storage {
         }
     }
 
-    async readBlob(
-        contexts: string[],
-        key: string,
-        options?: BlobStorageContext.Options,
-    ): Promise<ReadableStream<Uint8Array>> {
+    async openBlob(contexts: string[], key: string): Promise<Blob> {
         const fileName = this.filePath(this.buildStorageKey(contexts, key));
         await this.#finishAllWrites(fileName);
-        try {
-            const handle = await open(fileName, "r");
-            const reader = handle.createReadStream({ encoding: null, ...options });
-            return defaultReadableStreamFromNodeReadable(reader);
-        } catch (error: any) {
-            if (error.code === "ENOENT") {
-                return new ReadableStream<Uint8Array>({
-                    start(controller) {
-                        controller.close();
-                    },
-                });
-            }
-            throw error;
+        if (await this.has(contexts, key)) {
+            return await openAsBlob(fileName);
+        } else {
+            return new Blob();
         }
     }
 
-    writeBlob(contexts: string[], key: string, stream: ReadableStream<Uint8Array>) {
+    writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<Uint8Array>) {
         return this.#writeFile(this.buildStorageKey(contexts, key), stream);
-    }
-
-    override async blobSize(contexts: string[], key: string) {
-        const fileName = this.filePath(this.buildStorageKey(contexts, key));
-        const blocker = this.#writeFileBlocker.get(fileName);
-        if (blocker !== undefined) {
-            await blocker;
-        }
-
-        const stats = await stat(fileName);
-        return stats.size;
     }
 
     set(contexts: string[], key: string, value: SupportedStorageTypes): Promise<void>;

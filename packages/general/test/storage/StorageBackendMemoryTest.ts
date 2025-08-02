@@ -147,10 +147,10 @@ describe("StorageBackendMemory", () => {
             },
         });
 
-        await storage.writeBlob(CONTEXTx1, "blobkey", stream);
+        await storage.writeBlobFromStream(CONTEXTx1, "blobkey", stream);
 
-        const readStream = storage.readBlob(CONTEXTx1, "blobkey");
-        const reader = readStream.getReader();
+        const blob = storage.openBlob(CONTEXTx1, "blobkey");
+        const reader = blob.stream().getReader();
         const chunks: Uint8Array[] = [];
         while (true) {
             const { value, done } = await reader.read();
@@ -165,14 +165,14 @@ describe("StorageBackendMemory", () => {
         const data = new Uint8Array([10, 20, 30]);
         storage.set(CONTEXTx2, "blobkey", data);
 
-        const size = storage.blobSize(CONTEXTx2, "blobkey");
-        expect(size).equal(3);
+        const blob = storage.openBlob(CONTEXTx2, "blobkey");
+        expect(blob.size).equal(3);
     });
 
     it("readBlob returns empty stream for missing key", async () => {
         const storage = await StorageBackendMemory.create();
-        const readStream = storage.readBlob(CONTEXTx1, "missingkey");
-        const reader = readStream.getReader();
+        const blob = storage.openBlob(CONTEXTx1, "missingkey");
+        const reader = blob.stream().getReader();
         const { done } = await reader.read();
         expect(done).equal(true);
     });
@@ -180,6 +180,6 @@ describe("StorageBackendMemory", () => {
     it("blobSize throws error for non-Uint8Array value", async () => {
         const storage = await StorageBackendMemory.create();
         storage.set(CONTEXTx1, "notblob", "stringvalue");
-        expect(() => storage.blobSize(CONTEXTx1, "notblob")).throws(StorageError);
+        expect(() => storage.openBlob(CONTEXTx1, "notblob")).throws(StorageError);
     });
 });

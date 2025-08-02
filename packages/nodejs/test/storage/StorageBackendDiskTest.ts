@@ -219,10 +219,10 @@ describe("StorageBackendDiskAsync", () => {
             },
         });
 
-        await storage.writeBlob(CONTEXTx1, "blobkey", stream);
+        await storage.writeBlobFromStream(CONTEXTx1, "blobkey", stream);
 
-        const readStream = await storage.readBlob(CONTEXTx1, "blobkey");
-        const reader = readStream.getReader();
+        const blob = await storage.openBlob(CONTEXTx1, "blobkey");
+        const reader = blob.stream().getReader();
         const chunks: Uint8Array[] = [];
         while (true) {
             const { value, done } = await reader.read();
@@ -240,15 +240,15 @@ describe("StorageBackendDiskAsync", () => {
                 controller.close();
             },
         });
-        await storage.writeBlob(CONTEXTx2, "blobkey", stream);
+        await storage.writeBlobFromStream(CONTEXTx2, "blobkey", stream);
 
-        const size = await storage.blobSize(CONTEXTx2, "blobkey");
-        assert.equal(Number(size), 3);
+        const blob = await storage.openBlob(CONTEXTx2, "blobkey");
+        assert.equal(blob.size, 3);
     });
 
     it("readBlob returns empty stream for missing key", async () => {
-        const readStream = await storage.readBlob(CONTEXTx1, "missingkey");
-        const reader = readStream.getReader();
+        const blob = await storage.openBlob(CONTEXTx1, "missingkey");
+        const reader = blob.stream().getReader();
         const { done } = await reader.read();
         assert.equal(done, true);
     });
