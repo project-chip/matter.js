@@ -181,7 +181,7 @@ export class CachedClientNodeStore extends PeerDataStore {
                 continue;
             }
             const endpointData = store.get;
-            for (const clusterId in endpointData) {
+            for (const clusterId of endpointData.keys()) {
                 if (filterClusterIdStr !== undefined && clusterId !== filterClusterIdStr) {
                     continue;
                 }

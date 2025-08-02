@@ -9,6 +9,15 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## 0.15.3 (2025-08-01)
+
+-   @matter/protocol
+    - Fix: Update Dataversions in attribute data cache also when data are all the same to make sure Dataversion filters work correctly
+
+-   @project-chip/matter.js
+    - Fix: Makes sure to set the initialized states before emitting the Connected event to prevent edge cases
+    - Fix: Fixes an issue that prevented cached attribute data to be used for node connections
+
 ## 0.15.2 (2025-07-27)
 
 -   @matter/examples
@@ -29,7 +38,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Always query the node when reading attributes from remote, ignores internal checks for attribute existence
     - Enhancement: Allows ignoring internal checks for attribute existence on write interactions using new --force parameter
 
-- @matter/types
+-   @matter/types
     - Fix: (ArtemisMucaj) Fixes StringSchema validation to allow longer content than 1024 octets
 
 -   @project-chip/matter.js
@@ -52,7 +61,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Adjust Dynamic class building approach to not use eval anymore to enable running in more environments
     - Fix: Fixes encoding of special IPv6 addresses in DNS-SD records
 
-- @matter/model
+-   @matter/model
     - (@FlyingNebulae) Fix: Allow aspectCache to also work when source got transpiled without keeping variable names
 
 -   @matter/node

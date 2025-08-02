@@ -46,7 +46,7 @@
     "types": "dist/esm/index.d.ts",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/project-chip/matter.js.git"
+        "url": "git+https://github.com/matter-js/matter.git"
     },
     "author": "matter.js authors",
     "contributors": [
@@ -54,9 +54,9 @@
     ],
     "license": "Apache-2.0",
     "bugs": {
-        "url": "https://github.com/project-chip/matter.js/issues"
+        "url": "https://github.com/matter-js/matter/issues"
     },
-    "homepage": "https://github.com/project-chip/matter.js#readme",
+    "homepage": "https://github.com/matter-js/matter#readme",
     "dependencies": {
         "@microsoft/tsdoc": "^0.15.1",
         "ansi-colors": "^4.1.3",

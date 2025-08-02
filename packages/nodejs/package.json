@@ -17,12 +17,12 @@
         "Greg Lauckhart <greg@lauckhart.com>"
     ],
     "bugs": {
-        "url": "https://github.com/project-chip/matter.js/issues"
+        "url": "https://github.com/matter-js/matter/issues"
     },
-    "homepage": "https://github.com/project-chip/matter.js",
+    "homepage": "https://github.com/matter-js/matter",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/project-chip/matter.js.git"
+        "url": "git+https://github.com/matter-js/matter.git"
     },
     "engines": {
         "node": ">=18.0.0"

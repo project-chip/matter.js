@@ -1447,10 +1447,17 @@ export class InteractionClient {
             const {
                 path: { endpointId, clusterId, attributeId },
                 value,
+                version,
             } = data;
             if (value === undefined) continue;
-            const { value: oldValue } = this.#nodeStore?.retrieveAttribute(endpointId, clusterId, attributeId) ?? {};
-            const changed = oldValue !== undefined ? !isDeepEqual(oldValue, value) : undefined;
+            const { value: oldValue, version: oldVersion } =
+                this.#nodeStore?.retrieveAttribute(endpointId, clusterId, attributeId) ?? {};
+            const changed =
+                oldVersion !== undefined
+                    ? oldVersion !== version
+                    : oldValue !== undefined
+                      ? !isDeepEqual(oldValue, value)
+                      : undefined;
             if (changed !== false) {
                 await this.#nodeStore?.persistAttributes([data]);
             }
