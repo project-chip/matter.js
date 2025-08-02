@@ -9,6 +9,17 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+-   Breaking: Matter.js now requires node.js 20+
+
+-   @matter/general
+    - Breaking: SyncStorage interface got removed
+    - Breaking: MaybeAsyncStorage got renamed to Storage because it is the only interface from now on
+    - Feature: Adds Blob support to Storage interface
+
+-   @matter/nodejs
+    - Enhancement: Use "stat" to determine storage file existence instead of reading all content
+
 ## 0.15.3 (2025-08-01)
 
 -   @matter/protocol

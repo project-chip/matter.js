@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MaybeAsyncStorage, StorageError, SupportedStorageTypes, fromJson, toJson } from "#general";
+import { Storage, StorageError, SupportedStorageTypes, fromJson, toJson } from "#general";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
+export class StorageBackendAsyncStorage extends Storage {
     #namespace: string;
     protected isInitialized = false;
 
@@ -62,6 +62,14 @@ export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
         const value = await AsyncStorage.getItem(this.buildStorageKey(contexts, key));
         if (value === null) return undefined;
         return fromJson(value) as T;
+    }
+
+    async openBlob(_contexts: string[], _key: string): Promise<Blob> {
+        throw new StorageError("Streams not supported currently in AsyncStorage backend.");
+    }
+
+    async writeBlobFromStream(_contexts: string[], _key: string, _stream: ReadableStream<Uint8Array>): Promise<void> {
+        throw new StorageError("Streams not supported currently in AsyncStorage backend.");
     }
 
     set(contexts: string[], key: string, value: SupportedStorageTypes): Promise<void>;

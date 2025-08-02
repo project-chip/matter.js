@@ -25,6 +25,7 @@ export class CachedClientNodeStore extends PeerDataStore {
     #construction: Construction<CachedClientNodeStore>;
     #endpointStores = new Map<EndpointNumber, ClientEndpointStore>();
     #maxEventNumber: EventNumber = EventNumber(0);
+    #bdxStore?: StorageContext;
 
     get construction() {
         return this.#construction;
@@ -46,6 +47,14 @@ export class CachedClientNodeStore extends PeerDataStore {
                 await this.#loadEndpointStore(partId);
             }
         });
+    }
+
+    get bdxStore(): StorageContext {
+        this.construction.assert("BDX storage context");
+        if (this.#bdxStore === undefined) {
+            this.#bdxStore = this.#storage.createContext("bdx");
+        }
+        return this.#bdxStore;
     }
 
     async #loadEndpointStore(partId: string) {

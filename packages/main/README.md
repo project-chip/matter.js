@@ -5,7 +5,7 @@ Implementation of Matter protocol in typescript with no native dependencies (and
 This is a convenient single-dependency for applications build on matter.js and have automatic registrations for Node.js 
 and react-native as platforms.
 
-> This package supports all Node.js LTS versions starting with 18.x (when Node.js is used).
+> This package supports all Node.js LTS versions starting with 20.x (when Node.js is used).
 
 The following features are abstracted away to allow to be implemented environment specific:
 
