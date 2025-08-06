@@ -41,7 +41,7 @@
     "matter-multidevice": "matter-run packages/examples/src/device-multiple-onoff/MultiDeviceNode.ts",
     "matter-controller": "matter-run packages/examples/src/controller/ControllerNode.ts",
     "shell": "matter-run packages/nodejs-shell/src/app.ts",
-    "relock": "node -e \"fs.rmSync('package-lock.json', { force: true }); fs.rmSync('node_modules', { recursive: true, force: true });\" && npm install"
+    "relock": "node packages/tools/bin/relock.js && npm install"
   },
   "devDependencies": {
     "@eslint/compat": "^1.3.1",
