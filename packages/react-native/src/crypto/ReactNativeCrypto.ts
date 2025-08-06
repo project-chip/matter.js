@@ -209,11 +209,6 @@ export class ReactNativeCrypto extends Crypto {
 
     constructor() {
         const subtle = new ReactNativeCryptoSubtle();
-        if (subtle === undefined) {
-            throw new ImplementationError(
-                "You cannot instantiate StandardCrypto in this runtime because crypto.subtle is not present",
-            );
-        }
         super();
         this.#subtle = subtle;
     }
