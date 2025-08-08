@@ -10,7 +10,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -->
 
 ### __WORK IN PROGRESS__
--   Breaking: Matter.js now requires node.js 20+
+-   Breaking: matter.js now requires node.js 20+
 
 -   @matter/general
     - Breaking: SyncStorage interface got removed
