@@ -17,7 +17,7 @@ export class PythonTest extends BaseTest {
     /**
      * Python commissioning logic is cleverly hidden in:
      *
-     *     connectedhomeip/src/python_testing/chip/testing/matter_testing.py
+     *     connectedhomeip/src/python_testing/matter/testing/matter_testing.py
      */
     async initializeSubject(subject: Subject) {
         const { kind, passcode, discriminator, network } = subject.commissioning;

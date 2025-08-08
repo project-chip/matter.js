@@ -411,10 +411,10 @@ jobs:
           result-encoding: string
           script: |
             const fs = require("fs");
-            let file= fs.readFileSync("./connectedhomeip/src/python_testing/matter_testing_infrastructure/chip/testing/matter_testing.py", "utf8");
+            let file= fs.readFileSync("./connectedhomeip/src/python_testing/matter_testing_infrastructure/matter/testing/matter_testing.py", "utf8");
             // Patch the test runner to execute controller and app on same network interface
             file = file.replaceAll("sleep(0.001)", "sleep(0.05)");
-            fs.writeFileSync("./connectedhomeip/src/python_testing/matter_testing_infrastructure/chip/testing/matter_testing.py", file);
+            fs.writeFileSync("./connectedhomeip/src/python_testing/matter_testing_infrastructure/matter/testing/matter_testing.py", file);
 
       # remove once https://github.com/project-chip/connectedhomeip/issues/33735 is clarified
       - name: Patch ACE 2.2 testcase
