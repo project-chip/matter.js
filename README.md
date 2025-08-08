@@ -119,6 +119,7 @@ Devices created with matter.js/matter-node.js have been tested with:
 - **Samsung SmartThings (Station or Hub v2 and later)**: Fully working
 - **LG ThinQ**: Fully working, beside glitches in LG software sometimes
 - **Home Assistant - Matter integration**: Fully working
+- **OpenHAB - Matter Binding**: Fully working (openHAB Matter Client in openHAB 5.0)
 - **Aqara Hubs**: Fully working with Aqara starting matter.js 0.12.3 and newest Apps and controller firmwares
 - **Yandex Smart Home**: Yandex currently seem to not allow to pair test devices, so matter.js open source devices are not working with Yandex SMart Home. Please contact Yandex and request this feature.
 - **flic**: Fully working
