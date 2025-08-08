@@ -42,28 +42,28 @@ The requirements to become a member of the
 # Bugs
 
 If you find a bug in the source code, you can help us by
-[submitting a GitHub Issue](https://github.com/matter-js/matter/issues/new).
+[submitting a GitHub Issue](https://github.com/matter-js/matter.js/issues/new).
 The best bug reports provide a detailed description of the issue and
 step-by-step instructions for predictably reproducing the issue. Even better,
 you can
-[submit a Pull Request](https://github.com/matter-js/matter/blob/master/CONTRIBUTING.md#submitting-a-pull-request)
+[submit a Pull Request](https://github.com/matter-js/matter.js/blob/master/CONTRIBUTING.md#submitting-a-pull-request)
 with a fix.
 
 # New Features
 
 You can request a new feature by
-[submitting an Idea in Discussions](https://github.com/matter-js/matter/discussions/categories/ideas).
+[submitting an Idea in Discussions](https://github.com/matter-js/matter.js/discussions/categories/ideas).
 If you would like to implement a new feature, please consider the scope of the
 new feature:
 
 -   _Large feature_: first
-    [submit an Idea in Discussions](https://github.com/matter-js/matter/discussions/categories/ideas)
+    [submit an Idea in Discussions](https://github.com/matter-js/matter.js/discussions/categories/ideas)
     and communicate your proposal so that the community can review and provide
     feedback. Getting early feedback will help ensure your implementation work
     is accepted by the community. This will also allow us to better coordinate
     our efforts and minimize duplicated effort.
 -   _Small feature_: can be implemented and directly
-    [submitted as a Pull Request](https://github.com/matter-js/matter/blob/master/CONTRIBUTING.md#submitting-a-pull-request).
+    [submitted as a Pull Request](https://github.com/matter-js/matter.js/blob/master/CONTRIBUTING.md#submitting-a-pull-request).
 
 # Contributing Code
 
@@ -73,7 +73,7 @@ Matter follows the "Fork-and-Pull" model for accepting contributions.
 
 Setup your GitHub fork and continuous-integration services:
 
-1. Fork the [Matter.js repository](https://github.com/matter-js/matter)
+1. Fork the [Matter.js repository](https://github.com/matter-js/matter.js)
    by clicking "Fork" on the web UI.
 
 2. All contributions must pass all checks and reviews to be accepted.
@@ -85,7 +85,7 @@ Setup your local development environment:
 git clone git@github.com:<username>/matter.git
 
 # Configure upstream alias
-git remote add upstream git@github.com:matter-js/matter.git
+git remote add upstream git@github.com:matter-js/matter.js.git
 ```
 
 ### Submitting a Pull Request

@@ -13,8 +13,8 @@ import { createAndValidateDest, install, ProjectError } from "./new-project.js";
 import { git } from "./run.js";
 
 const DEFAULT_DEV_PATH = "./matter.js";
-const DEFAULT_GIT_REPO = "git@github.com:matter-js/matter.git";
-const FORK_LINK = "https://github.com/matter-js/matter/fork";
+const DEFAULT_GIT_REPO = "git@github.com:matter-js/matter.js.git";
+const FORK_LINK = "https://github.com/matter-js/matter.js/fork";
 const MANUAL_INSTRUCTIONS = `You can fork at ${blue(FORK_LINK)}, clone yourself and run ${bold("npm install")}`;
 
 export interface ContributorProject {

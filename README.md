@@ -1,6 +1,6 @@
 # JavaScript/TypeScript based Matter Implementation
 
-[![license](https://img.shields.io/badge/license-Apache2-green.svg)](https://raw.githubusercontent.com/matter-js/matter/master/LICENSE)
+[![license](https://img.shields.io/badge/license-Apache2-green.svg)](https://raw.githubusercontent.com/matter-js/matter.js/master/LICENSE)
 
 ## What is Matter?
 
@@ -89,7 +89,7 @@ Please refer to the Examples readme for information regarding their usage: [@mat
 We welcome contributions!  If you have Node.js installed, prepare your development environment as follows:
 
 ```bash
-git clone https://github.com/matter-js/matter
+git clone https://github.com/matter-js/matter.js
 cd matter.js
 npm install
 ```
@@ -101,7 +101,7 @@ On Non-Windows platforms and having Python 3.12+ installed, please also make sur
 
 ## Connecting with the community
 
-If you have issues please use the GitHub "[Issues](https://github.com/matter-js/matter/issues)" of this repository. For questions or idea discussions please use the "[Discussions](https://github.com/matter-js/matter/discussions)" in this GitHub repository.
+If you have issues please use the GitHub "[Issues](https://github.com/matter-js/matter.js/issues)" of this repository. For questions or idea discussions please use the "[Discussions](https://github.com/matter-js/matter.js/discussions)" in this GitHub repository.
 
 Additionally, our "Matter Integrators" Discord server is a great place to discuss matter.js, the Matter protocol and how to implement Matter in various environments -- not just JavaScript/TypeScript! You can join it here: https://discord.gg/ujmRNrhDuW .
 
@@ -119,6 +119,7 @@ Devices created with matter.js/matter-node.js have been tested with:
 - **Samsung SmartThings (Station or Hub v2 and later)**: Fully working
 - **LG ThinQ**: Fully working, beside glitches in LG software sometimes
 - **Home Assistant - Matter integration**: Fully working
+- **OpenHAB - Matter Binding**: Fully working (openHAB Matter Client in openHAB 5.0)
 - **Aqara Hubs**: Fully working with Aqara starting matter.js 0.12.3 and newest Apps and controller firmwares
 - **Yandex Smart Home**: Yandex currently seem to not allow to pair test devices, so matter.js open source devices are not working with Yandex SMart Home. Please contact Yandex and request this feature.
 - **flic**: Fully working
