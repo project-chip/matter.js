@@ -106,7 +106,7 @@ noipv6rs
 
 ## General Bluetooth Troubleshooting
 
-In general please first refer to the information available at https://github.com/matter-js/matter/blob/main/packages/nodejs-ble/README.md#prerequisites-and-limitations for your operating system.
+In general please first refer to the information available at https://github.com/matter-js/matter.js/blob/main/packages/nodejs-ble/README.md#prerequisites-and-limitations for your operating system.
 
 If you get an error while building matter.js with BLE support erroring because of the absence of "setuptools" python library then you have two options:
 * make sure that nothing refers to a node-gyp version < 10 and check node-gyp version in error message. If you use an old Node.js or npm version, then update to a newer version of npm together with Node.js. (recommended way)
