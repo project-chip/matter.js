@@ -119,9 +119,11 @@ Devices created with matter.js/matter-node.js have been tested with:
 - **Samsung SmartThings (Station or Hub v2 and later)**: Fully working
 - **LG ThinQ**: Fully working, beside glitches in LG software sometimes
 - **Home Assistant - Matter integration**: Fully working
+- **OpenHAB - Matter Binding**: Fully working (openHAB Matter Client in openHAB 5.0)
 - **Aqara Hubs**: Fully working with Aqara starting matter.js 0.12.3 and newest Apps and controller firmwares
 - **Yandex Smart Home**: Yandex currently seem to not allow to pair test devices, so matter.js open source devices are not working with Yandex SMart Home. Please contact Yandex and request this feature.
 - **flic**: Fully working
+- **Zigbee2MQTT - third-party Matterbridge zigbee2mqtt plugin**: Fully working
 
 matter.js based projects show up as "uncertified test devices" in the ecosystems. This is because the devices are not certified by the Connectivity Standards Alliance (CSA) and are not part of the official Matter certification program. However, the devices are fully functional and can be used in the ecosystems. The ecosystems usually inform the user about the uncertified status of the device. Please see [Pairing and Usage Information](./docs/ECOSYSTEMS.md#pairing-and-usage-information) for more details.
 
