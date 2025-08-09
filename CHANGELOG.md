@@ -15,10 +15,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/general
     - Breaking: SyncStorage interface got removed
     - Breaking: MaybeAsyncStorage got renamed to Storage because it is the only interface from now on
-    - Feature: Adds Blob support to Storage interface
+    - Feature: Adds Blob support to the Storage interface
 
 -   @matter/nodejs
-    - Enhancement: Use "stat" to determine storage file existence instead of reading all content
+    - Enhancement: Uses "stat" to determine storage file existence instead of reading all content
+    - Fix: Corrects network interface selection logic for windows 
 
 ## 0.15.3 (2025-08-01)
 
