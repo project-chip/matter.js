@@ -39,13 +39,18 @@ export class NodeJsNetwork extends Network {
             return [undefined];
         } else {
             let networkInterfaceEntries = Object.entries(networkInterfaces());
-            if (netInterface !== undefined) {
-                networkInterfaceEntries = networkInterfaceEntries.filter(([name]) => name === netInterface);
-            }
-            const multicastInterfaces = networkInterfaceEntries.flatMap(([netInterface, netInterfaceInfo]) => {
-                if (netInterfaceInfo === undefined) return [];
-                const zone = this.getNetInterfaceZoneIpv6Internal(netInterface, netInterfaceInfo);
-                return zone === undefined ? [] : [`::%${zone}`];
+            const multicastInterfaces = networkInterfaceEntries.flatMap(([netIf, netIfInfo]) => {
+                if (netIfInfo === undefined) {
+                    return [];
+                }
+                const zone = this.getNetInterfaceZoneIpv6Internal(netIf, netIfInfo);
+                if (zone === undefined) {
+                    return [];
+                }
+                if (netInterface !== undefined && netInterface !== zone) {
+                    return [];
+                }
+                return [`::%${zone}`];
             });
             if (multicastInterfaces.length === 0) {
                 logger.warn(
