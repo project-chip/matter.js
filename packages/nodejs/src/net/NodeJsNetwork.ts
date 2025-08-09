@@ -41,8 +41,7 @@ export class NodeJsNetwork extends Network {
         if (ipv4) {
             return [undefined];
         } else {
-            let networkInterfaceEntries = Object.entries(networkInterfaces());
-            const multicastInterfaces = networkInterfaceEntries.flatMap(([netIf, netIfInfo]) => {
+            const multicastInterfaces = Object.entries(networkInterfaces()).flatMap(([netIf, netIfInfo]) => {
                 if (netIfInfo === undefined) {
                     return [];
                 }
