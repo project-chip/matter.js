@@ -34,7 +34,10 @@ export class NodeJsNetwork extends Network {
         return undefined;
     }
 
-    static getMembershipMulticastInterfaces(netInterface: string | undefined, ipv4: boolean): (string | undefined)[] {
+    static getMembershipMulticastInterfaces(
+        netInterfaceOrZone: string | undefined,
+        ipv4: boolean,
+    ): (string | undefined)[] {
         if (ipv4) {
             return [undefined];
         } else {
@@ -47,7 +50,9 @@ export class NodeJsNetwork extends Network {
                 if (zone === undefined) {
                     return [];
                 }
-                if (netInterface !== undefined && netInterface !== zone) {
+                // zone is either the interface scope id (windows) or the interface name (linux, macos)
+                // The potentially provided interface follows the same logic because it was pre-processed
+                if (netInterfaceOrZone !== undefined && netInterfaceOrZone !== zone) {
                     return [];
                 }
                 return [`::%${zone}`];
@@ -55,7 +60,7 @@ export class NodeJsNetwork extends Network {
             if (multicastInterfaces.length === 0) {
                 logger.warn(
                     `No IPv6 multicast interface found${
-                        netInterface !== undefined ? ` for interface ${netInterface}` : ""
+                        netInterfaceOrZone !== undefined ? ` for interface ${netInterfaceOrZone}` : ""
                     }.`,
                 );
             }
