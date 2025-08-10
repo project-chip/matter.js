@@ -13,7 +13,7 @@ import { KeyInputError } from "./CryptoError.js";
 
 const {
     numberToBytesBE,
-    p256: { ProjectivePoint },
+    p256: { Point, getSharedSecret },
 } = ec;
 
 const JWK_KEYS = [
@@ -211,6 +211,7 @@ export interface PrivateKey extends PublicKey {
     privateKey: Uint8Array;
     keyPair: BinaryKeyPair;
     keyPairBits: BinaryKeyPair;
+    sharedSecretFor(peerKey: PublicKey): Uint8Array;
 }
 
 /**
@@ -535,7 +536,7 @@ export function Key(properties: Partial<Key>) {
         }
 
         // Compute
-        const ecKey = ProjectivePoint.fromPrivateKey(that.privateKey);
+        const ecKey = Point.fromPrivateKey(that.privateKey);
 
         // Install
         that.xBits = numberToBytesBE(ecKey.x, keyLength);
@@ -573,7 +574,8 @@ export function PrivateKey(privateKey: Uint8Array | BinaryKeyPair, options?: Par
         privateKey: priv,
         publicKey: pub,
         ...options,
-    }) as PrivateKey;
+        sharedSecretFor,
+    } as Key) as PrivateKey;
 }
 
 /**
@@ -596,4 +598,13 @@ export function SymmetricKey(privateKey: Uint8Array, options?: Partial<Key>) {
         privateKey: privateKey,
         ...options,
     });
+}
+
+/**
+ * Diffie-Hellman shared secret computation.
+ *
+ * We provide this for platforms without a native implementation.
+ */
+export function sharedSecretFor(this: PrivateKey, peerKey: PublicKey): Uint8Array {
+    return getSharedSecret(this.privateBits, peerKey.publicBits);
 }
