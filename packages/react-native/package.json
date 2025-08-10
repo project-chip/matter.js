@@ -35,6 +35,7 @@
         "#*": "./src/*"
     },
     "dependencies": {
+        "@craftzdog/react-native-buffer": "6.1.0",
         "@matter/general": "*",
         "@matter/nodejs": "*",
         "@matter/protocol": "*",
