@@ -70,7 +70,7 @@ export class MdnsServer {
 
         const { sourceIntf, sourceIp, transactionId, messageType, queries, answers: knownAnswers } = message;
         if (messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery) return;
-        if (queries.length === 0) return; // No queries to answer, can happen in a TruncatedQuery, let's ignore for now
+        if (queries.length === 0) return; // No queries to answer can happen in a TruncatedQuery, let's ignore for now
         for (const portRecords of records.values()) {
             let answers = queries.flatMap(query => this.#queryRecords(query, portRecords));
             if (answers.length === 0) continue;
@@ -118,14 +118,14 @@ export class MdnsServer {
                 uniCastResponse = false;
             }
             if (!uniCastResponse) {
-                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast > 1000);
+                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast > 10);
                 if (answers.length === 0) continue; // Nothing to send
 
                 answers.forEach(answer =>
                     this.#recordLastSentAsMulticastAnswer.set(this.buildDnsRecordKey(answer, sourceIntf), now),
                 );
             } else {
-                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastUniCast > 1000);
+                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastUniCast > 10);
                 if (answers.length === 0) continue; // Nothing to send
 
                 answers.forEach(answer =>
