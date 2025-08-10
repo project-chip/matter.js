@@ -56,6 +56,18 @@ export namespace Bytes {
         return array1.every((value, index) => array2[index] === value);
     }
 
+    export function of(source: BufferSource) {
+        if (source instanceof Uint8Array) {
+            return source;
+        }
+
+        if (ArrayBuffer.isView(source)) {
+            return new Uint8Array(source.buffer, source.byteLength, source.byteOffset);
+        }
+
+        return new Uint8Array(source);
+    }
+
     export function fromHex(hexString: string) {
         if (hexString.length === 0) return new Uint8Array(0);
         if (hexString.length % 2 !== 0) throw new UnexpectedDataError("Hex string should have an even length.");
