@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import QuickCrypto from "react-native-quick-crypto";
-
 import {
     Bytes,
     Crypto,
@@ -16,6 +14,18 @@ import {
     PublicKey,
     StandardCrypto,
 } from "#general";
+import { Buffer } from "@craftzdog/react-native-buffer";
+import QuickCrypto from "react-native-quick-crypto";
+
+// The default export from QuickCrypto should be compatible with the standard `crypto` object but the type system
+// seems confused by CJS exports.  Use a forced cast to correct types.
+const crypto = QuickCrypto as unknown as typeof QuickCrypto.default;
+
+// QuickCrypto's `install()` function is documented as optional but QuickCrypto references it as a global in its subtle
+// implementation so we can't avoid mucking with global scope (as of QuickCrypto 0.7.6)
+if (!("Buffer" in globalThis)) {
+    (globalThis as unknown as { Buffer: typeof Buffer }).Buffer = Buffer;
+}
 
 /**
  * Crypto implementation for React Native.
@@ -30,8 +40,6 @@ export class ReactNativeCrypto extends StandardCrypto {
     /**
      * Quick Crypto doesn't currently support {@link SubtleCrypto#deriveBits}.
      *
-     * TODO - @luxni please confirm above is reason for this implementation
-     *
      * TODO - @luxni it would be good to get attribution for this code
      */
     override async createHkdfKey(
@@ -41,8 +49,7 @@ export class ReactNativeCrypto extends StandardCrypto {
         length: number = CRYPTO_SYMMETRIC_KEY_LENGTH,
     ) {
         const prk = crypto
-            // @ts-expect-error No types but all fine
-            .createHmac("sha256", salt.byteLength ? salt : new Uint8Array(CRYPTO_HASH_LEN_BYTES))
+            .createHmac("SHA-256", salt.byteLength ? salt : new Uint8Array(CRYPTO_HASH_LEN_BYTES))
             .update(secret)
             .digest();
 
@@ -66,8 +73,7 @@ export class ReactNativeCrypto extends StandardCrypto {
 
             T.set(
                 crypto
-                    // @ts-expect-error No types but all fine
-                    .createHmac(digest, prk)
+                    .createHmac("SHA-256", prk)
                     .update(T.subarray(prev, start + info.byteLength + 1))
                     .digest(),
                 start,
@@ -85,8 +91,8 @@ export class ReactNativeCrypto extends StandardCrypto {
      * Quick Crypto apparently appends a "." to the base64 encoded properties.  I'm not aware of a legitimate reason for
      * this, seems likely just a bug.  Regardless it trips us off so strip off.
      */
-    override async createKeyPair() {
-        const key = await super.createKeyPair();
+    override async generateJwk() {
+        const key = await super.generateJwk();
 
         for (const prop of ["d", "x", "y"] as const) {
             if (key[prop]?.endsWith(".")) {
@@ -106,8 +112,6 @@ export class ReactNativeCrypto extends StandardCrypto {
 
     /**
      * Quick Crypto doesn't support import of raw keys so convert to JWK prior to import.
-     *
-     * TODO - @luxni please confirm this is the case
      */
     protected override importKey(
         format: KeyFormat,
@@ -124,4 +128,4 @@ export class ReactNativeCrypto extends StandardCrypto {
     }
 }
 
-Environment.default.set(Crypto, new ReactNativeCrypto(QuickCrypto.default.subtle as unknown as SubtleCrypto));
+Environment.default.set(Crypto, new ReactNativeCrypto(crypto.subtle as unknown as SubtleCrypto));

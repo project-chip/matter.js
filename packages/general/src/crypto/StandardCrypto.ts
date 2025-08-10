@@ -47,7 +47,7 @@ export class StandardCrypto extends Crypto {
     constructor(subtle: SubtleCrypto = globalThis.crypto?.subtle) {
         if (typeof subtle !== "object" || subtle === null) {
             throw new ImplementationError(
-                "You cannot instantiate StandardCrypto in this runtime because crypto.subtle is not present",
+                `The SubtleCrypto implementation passed to StandardCrypto is invalid (received ${typeof subtle})`,
             );
         }
 
@@ -193,6 +193,19 @@ export class StandardCrypto extends Crypto {
     }
 
     async createKeyPair() {
+        const key = await this.generateJwk();
+
+        // Extract only private and public fields; we do not want key_ops
+        return Key({
+            kty: KeyType.EC,
+            crv: CurveType.p256,
+            d: key.d,
+            x: key.x,
+            y: key.y,
+        }) as PrivateKey;
+    }
+
+    protected async generateJwk() {
         const subtleKey = await this.#subtle.generateKey(
             {
                 // We must specify either ECDH or ECDSA to get an EC key but we may use the key for either (but not for
@@ -207,16 +220,7 @@ export class StandardCrypto extends Crypto {
         );
 
         // Do not export as JWK because we do not want to inherit the algorithm and key_ops
-        const key = await this.#subtle.exportKey("jwk", subtleKey.privateKey);
-
-        // Extract only private and public fields; we do not want key_ops
-        return Key({
-            kty: KeyType.EC,
-            crv: CurveType.p256,
-            d: key.d,
-            x: key.x,
-            y: key.y,
-        }) as PrivateKey;
+        return await this.#subtle.exportKey("jwk", subtleKey.privateKey);
     }
 
     async generateDhSecret(key: PrivateKey, peerKey: PublicKey) {
