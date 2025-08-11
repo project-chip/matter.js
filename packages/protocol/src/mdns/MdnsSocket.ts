@@ -99,7 +99,7 @@ export class MdnsSocket {
                     );
                 }
 
-                // New answer do not fit anymore, send out the message
+                // New answer does not fit anymore, send out the message
                 await this.#send(chunk, intf, unicastDest);
 
                 // Reset the message, length counter and included answers to count for next message
@@ -127,6 +127,8 @@ export class MdnsSocket {
             chunk.additionalRecords.push(additionalRecordEncoded);
         }
 
+        logger.info("Sending", message, "chunkSize", chunkSize);
+        logger.info(DnsCodec.encode(message));
         await this.#send(chunk, intf, unicastDest);
     }
 

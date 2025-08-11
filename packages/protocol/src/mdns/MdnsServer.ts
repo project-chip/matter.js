@@ -71,7 +71,7 @@ export class MdnsServer {
         const { sourceIntf, sourceIp, transactionId, messageType, queries, answers: knownAnswers } = message;
         if (messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery) return;
         if (queries.length === 0) return; // No queries to answer can happen in a TruncatedQuery, let's ignore for now
-        logger.info("DNS Query", messageType, queries, knownAnswers);
+        logger.info("DNS Query", sourceIntf, messageType, queries, knownAnswers);
         for (const portRecords of records.values()) {
             let answers = queries.flatMap(query => this.#queryRecords(query, portRecords));
             if (answers.length === 0) continue;
@@ -125,7 +125,7 @@ export class MdnsServer {
                     this.#recordLastSentAsMulticastAnswer.set(this.buildDnsRecordKey(answer, sourceIntf), now),
                 );
             }
-            logger.info("Final answers", answers, "uniCastResponse", uniCastResponse);
+            logger.info("Sending", answers, "uniCastResponse", uniCastResponse, sourceIp, sourceIntf);
 
             this.#socket
                 .send(
