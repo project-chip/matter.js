@@ -737,7 +737,7 @@ describe("MdnsServer", () => {
             netInterface: INTERFACE_NAME,
         };
 
-        it("server responds to an ANY query as multicast if requested by unicast but records were never sent before", async () => {
+        it("server responds to an ANY query as multicast if requested via unicast but records were never sent before", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
             onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
