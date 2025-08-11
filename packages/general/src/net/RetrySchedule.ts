@@ -40,7 +40,7 @@ export class RetrySchedule {
         while ((timeout === undefined || timeSoFar < timeout) && (maximumCount === undefined || maximumCount > count)) {
             count++;
             const maxJitter = jitterFactor * baseInterval;
-            const jitter = Math.floor((2 * maxJitter * this.#crypto.randomUint32) / Math.pow(2, 32) - maxJitter);
+            const jitter = Math.floor((maxJitter * this.#crypto.randomUint32) / Math.pow(2, 32));
             let interval = baseInterval + jitter;
 
             if (timeout !== undefined && timeSoFar + interval > timeout) {
