@@ -5,33 +5,41 @@
  */
 
 import { DataReader, DataWriter, Endian } from "#general";
-import { GeneralStatusCode, Schema } from "#types";
+import { GeneralStatusCode, Schema, VendorId } from "#types";
 
 export type ProtocolStatusMessage<T> = {
     generalStatus: GeneralStatusCode;
     protocolId: number;
+    vendorId: VendorId;
     protocolStatus: T;
     protocolData?: Uint8Array;
 };
 
 export abstract class ProtocolStatusMessageSchema<T extends ProtocolStatusMessage<any>> extends Schema<T, Uint8Array> {
     #protocolId: number;
+    #vendorId: number;
     #protocolSpecificDataAllowed: boolean;
 
-    constructor(protocolId: number, protocolSpecificDataAllowed = true) {
+    constructor(protocol: number | { protocolId: number; vendorId: number }, protocolSpecificDataAllowed = true) {
         super();
-        this.#protocolId = protocolId;
+        if (typeof protocol === "number") {
+            this.#protocolId = protocol;
+            this.#vendorId = 0;
+        } else {
+            this.#protocolId = protocol.protocolId;
+            this.#vendorId = protocol.vendorId;
+        }
         this.#protocolSpecificDataAllowed = protocolSpecificDataAllowed;
     }
 
-    override encode(message: Omit<T, "protocolId">): Uint8Array {
-        return super.encode({ ...message, protocolId: this.#protocolId } as T);
+    override encode(message: Omit<T, "protocolId" | "vendorId">): Uint8Array {
+        return super.encode({ ...message, protocolId: this.#protocolId, vendorId: this.#vendorId } as T);
     }
 
-    encodeInternal({ generalStatus, protocolStatus, protocolId, protocolData }: T) {
+    encodeInternal({ generalStatus, protocolStatus, protocolId, protocolData, vendorId }: T) {
         const writer = new DataWriter(Endian.Little);
         writer.writeUInt16(generalStatus);
-        writer.writeUInt32(protocolId);
+        writer.writeUInt32((vendorId << 16) | protocolId);
         writer.writeUInt16(protocolStatus);
         if (this.#protocolSpecificDataAllowed && protocolData !== undefined && protocolData.length > 0) {
             writer.writeByteArray(protocolData);
@@ -42,10 +50,18 @@ export abstract class ProtocolStatusMessageSchema<T extends ProtocolStatusMessag
     decodeInternal(bytes: Uint8Array) {
         const reader = new DataReader(bytes, Endian.Little);
         const generalStatus = reader.readUInt16();
-        const protocolId = reader.readUInt32();
+        const vendorProtocolId = reader.readUInt32();
         const protocolStatus = reader.readUInt16();
-        const remainingBytes = reader.remainingBytesCount > 0 ? reader.remainingBytes : undefined;
+        const protocolData = reader.remainingBytesCount > 0 ? reader.remainingBytes : undefined;
 
-        return { generalStatus, protocolId, protocolStatus, remainingBytes } as unknown as T;
+        const protocolId = vendorProtocolId & 0xffff;
+        const vendorId = VendorId(vendorProtocolId >>> 16);
+        return {
+            generalStatus,
+            protocolId,
+            protocolStatus,
+            protocolData,
+            vendorId,
+        } as unknown as T;
     }
 }
