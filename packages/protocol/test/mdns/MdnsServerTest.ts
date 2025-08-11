@@ -750,7 +750,7 @@ describe("MdnsServer", () => {
             expect(responses).deep.equal([{ ...RESPONSE, uniCastTarget: undefined }]); // multicast
         });
 
-        it("server responds to an ANY query as multicast if unicast requested and after a unicast query with less than 1/4 of ttl", async () => {
+        it("server responds to an ANY query as multicast when unicast is requested after a previous unicast query with less than 1/4 of TTL remaining", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
             onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
