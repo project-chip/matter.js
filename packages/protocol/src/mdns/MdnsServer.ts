@@ -41,7 +41,6 @@ export class MdnsServer {
         15 * 60 * 1000 /* 15mn - also matches maximum commissioning window time. */,
     );
     readonly #recordLastSentAsMulticastAnswer = new Map<string, number>();
-    readonly #recordLastSentAsUnicastAnswer = new Map<string, number>();
 
     readonly #socket: MdnsSocket;
 
@@ -102,34 +101,23 @@ export class MdnsServer {
             const answersTimeSinceLastSent = answers.map(answer => ({
                 timeSinceLastMultiCast:
                     now - (this.#recordLastSentAsMulticastAnswer.get(this.buildDnsRecordKey(answer, sourceIntf)) ?? 0),
-                timeSinceLastUniCast:
-                    now -
-                    (this.#recordLastSentAsUnicastAnswer.get(this.buildDnsRecordKey(answer, sourceIntf, sourceIp)) ??
-                        0),
-                ttl: answer.ttl,
+                ttl: answer.ttl * 1000,
             }));
             if (
                 uniCastResponse &&
-                answersTimeSinceLastSent.some(
-                    ({ timeSinceLastMultiCast, ttl }) => timeSinceLastMultiCast > (ttl / 4) * 1000,
-                )
+                answersTimeSinceLastSent.some(({ timeSinceLastMultiCast, ttl }) => timeSinceLastMultiCast > ttl / 4)
             ) {
                 // If the query is for unicast response, still send as multicast if they were last sent as multicast longer then 1/4 of their ttl
                 uniCastResponse = false;
             }
             if (!uniCastResponse) {
-                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast > 1000);
+                answers = answers.filter(
+                    (_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast >= 900, // The last time sent as multicast was more than 900 ms ago
+                );
                 if (answers.length === 0) continue; // Nothing to send
 
                 answers.forEach(answer =>
                     this.#recordLastSentAsMulticastAnswer.set(this.buildDnsRecordKey(answer, sourceIntf), now),
-                );
-            } else {
-                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastUniCast > 1000);
-                if (answers.length === 0) continue; // Nothing to send
-
-                answers.forEach(answer =>
-                    this.#recordLastSentAsUnicastAnswer.set(this.buildDnsRecordKey(answer, sourceIntf, sourceIp), now),
                 );
             }
 
@@ -203,29 +191,24 @@ export class MdnsServer {
             }),
             "Error happened when expiring MDNS announcements",
         ).catch(error => logger.error(error));
-        await this.#resetServices(services);
+        await this.#resetServices();
     }
 
     async setRecordsGenerator(service: string, generator: MdnsServer.RecordGenerator) {
         await this.#records.clear();
         this.#recordLastSentAsMulticastAnswer.clear();
-        this.#recordLastSentAsUnicastAnswer.clear();
         this.#recordsGenerator.set(service, generator);
     }
 
-    async #resetServices(services: string[]) {
-        for (const service of services) {
-            await this.#records.delete(service);
-            this.#recordLastSentAsMulticastAnswer.delete(service);
-            this.#recordLastSentAsUnicastAnswer.delete(service);
-        }
+    async #resetServices() {
+        await this.#records.clear();
+        this.#recordLastSentAsMulticastAnswer.clear();
     }
 
     async close() {
         this.#observers.close();
         await this.#records.close();
         this.#recordLastSentAsMulticastAnswer.clear();
-        this.#recordLastSentAsUnicastAnswer.clear();
     }
 
     #getMulticastInterfacesForAnnounce() {
