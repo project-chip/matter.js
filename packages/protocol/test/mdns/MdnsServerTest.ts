@@ -737,7 +737,7 @@ describe("MdnsServer", () => {
             netInterface: INTERFACE_NAME,
         };
 
-        it("server responds to an ANY query as unicast if requested as multicast if query never sent as multicast", async () => {
+        it("server responds to an ANY query as unicast if requested", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
             onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
@@ -747,10 +747,10 @@ describe("MdnsServer", () => {
 
             await MockTime.yield3();
 
-            expect(responses).deep.equal([{ ...RESPONSE, uniCastTarget: undefined }]);
+            expect(responses).deep.equal([{ ...RESPONSE, uniCastTarget: DUMMY_IP }]);
         });
 
-        it("server responds to an ANY query as unicast if requested and after a multicast query with 1/4 of ttl", async () => {
+        it("server responds to an ANY query as unicast if requested and after a unicast query with less than 1/4 of ttl", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
             onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
@@ -766,12 +766,12 @@ describe("MdnsServer", () => {
             await MockTime.yield3();
 
             expect(responses).deep.equal([
-                { ...RESPONSE, uniCastTarget: undefined }, // multicast
+                { ...RESPONSE, uniCastTarget: DUMMY_IP }, // unicast
                 { ...RESPONSE, uniCastTarget: DUMMY_IP }, // unicast
             ]);
         });
 
-        it("server responds to an ANY query as multicast even if requested as unicast and after a multicast query with more than 1/4 of ttl", async () => {
+        it("server responds to an ANY query as unicast even if requested as unicast and after a multicast query with more than 1/4 of ttl but never sent as multicast", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
             onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
@@ -780,7 +780,37 @@ describe("MdnsServer", () => {
             send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
             await MockTime.yield3();
-            await MockTime.advance(31_000); // less than 1/4 of ttl
+            await MockTime.advance(31_000); // more than 1/4 of ttl
+
+            send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
+
+            await MockTime.yield3();
+
+            expect(responses).deep.equal([
+                { ...RESPONSE, uniCastTarget: DUMMY_IP }, // unicast
+                { ...RESPONSE, uniCastTarget: DUMMY_IP }, // multicast
+            ]);
+        });
+
+        it("server responds to an ANY query as multicast even if requested as unicast and after a multicast query with more than 1/4 of ttl when earlier sent as multicast", async () => {
+            const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+                responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
+            };
+
+            // Send as multicast once
+            QUERY.queries[0].uniCastResponse = false;
+            send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
+
+            await MockTime.yield3();
+            await MockTime.advance(20_000); // more than 1/4 of ttl
+
+            // Send as unicast
+            QUERY.queries[0].uniCastResponse = true;
+            send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
+
+            await MockTime.yield3();
+            await MockTime.advance(11_000); // more than 1/4 of ttl
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
@@ -788,6 +818,7 @@ describe("MdnsServer", () => {
 
             expect(responses).deep.equal([
                 { ...RESPONSE, uniCastTarget: undefined }, // multicast
+                { ...RESPONSE, uniCastTarget: DUMMY_IP }, // unicast
                 { ...RESPONSE, uniCastTarget: undefined }, // multicast
             ]);
         });
