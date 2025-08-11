@@ -11,3 +11,4 @@ export * from "./Key.js";
 export * from "./MockCrypto.js";
 export * from "./Spake2p.js";
 export * from "./StandardCrypto.js";
+export * from "./WebCrypto.js";

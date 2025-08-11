@@ -13,6 +13,7 @@ import {
     PrivateKey,
     PublicKey,
     StandardCrypto,
+    WebCrypto,
 } from "#general";
 import { Buffer } from "@craftzdog/react-native-buffer";
 import QuickCrypto from "react-native-quick-crypto";
@@ -124,15 +125,6 @@ export class ReactNativeCrypto extends StandardCrypto {
         }
         return super.importKey(format, keyData, algorithm, extractable, keyUsages);
     }
-
-    /**
-     * getRandomValues is only available in the QuickCrypto implementation, so we need to use this.
-     */
-    override randomBytes(length: number): Uint8Array {
-        const result = new Uint8Array(length);
-        crypto.getRandomValues(result);
-        return result;
-    }
 }
 
-Environment.default.set(Crypto, new ReactNativeCrypto(crypto.subtle as unknown as SubtleCrypto));
+Environment.default.set(Crypto, new ReactNativeCrypto(crypto as unknown as WebCrypto));

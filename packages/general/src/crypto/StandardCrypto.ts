@@ -14,12 +14,18 @@ import { Ccm } from "./aes/Ccm.js";
 import { Crypto, CRYPTO_SYMMETRIC_KEY_LENGTH, CryptoDsaEncoding } from "./Crypto.js";
 import { CryptoVerifyError, KeyInputError } from "./CryptoError.js";
 import { CurveType, Key, KeyType, PrivateKey, PublicKey } from "./Key.js";
+import { WebCrypto } from "./WebCrypto.js";
+
+// Ensure we don't reference global crypto accidentally
+declare const crypto: never;
 
 const SIGNATURE_ALGORITHM = <EcdsaParams>{
     name: "ECDSA",
     namedCurve: "P-256",
     hash: { name: "SHA-256" },
 };
+
+const requiredCryptoMethods: Array<keyof WebCrypto> = ["getRandomValues"];
 
 const requiredSubtleMethods: Array<keyof SubtleCrypto> = [
     "digest",
@@ -42,24 +48,18 @@ const requiredSubtleMethods: Array<keyof SubtleCrypto> = [
  */
 export class StandardCrypto extends Crypto {
     implementationName = "JS";
+    #crypto: WebCrypto;
     #subtle: SubtleCrypto;
 
-    constructor(subtle: SubtleCrypto = globalThis.crypto?.subtle) {
-        if (typeof subtle !== "object" || subtle === null) {
-            throw new ImplementationError(
-                `The SubtleCrypto implementation passed to StandardCrypto is invalid (received ${typeof subtle})`,
-            );
-        }
+    constructor(crypto: WebCrypto = globalThis.crypto) {
+        const { subtle } = crypto;
 
-        const missingMethods = requiredSubtleMethods.filter(name => typeof subtle[name] !== "function");
-        if (missingMethods.length) {
-            throw new ImplementationError(
-                `SubtleCrypto implementation is missing required method${missingMethods.length === 1 ? "" : "s"} ${describeList("and", ...missingMethods)}`,
-            );
-        }
+        assertInterface("crypto", crypto, requiredCryptoMethods);
+        assertInterface("crypto.subtle", subtle, requiredSubtleMethods);
 
         super();
 
+        this.#crypto = crypto;
         this.#subtle = subtle;
     }
 
@@ -73,7 +73,7 @@ export class StandardCrypto extends Crypto {
 
     randomBytes(length: number): Uint8Array {
         const result = new Uint8Array(length);
-        crypto.getRandomValues(result);
+        this.#crypto.getRandomValues(result);
         return result;
     }
 
@@ -273,8 +273,23 @@ export class StandardCrypto extends Crypto {
     }
 }
 
+function assertInterface<T extends {}>(name: string, object: T, requiredMethods: (keyof T & string)[]) {
+    if (typeof object !== "object" || object === null) {
+        throw new ImplementationError(
+            `The ${name} implementation passed to StandardCrypto is invalid (received ${typeof object})`,
+        );
+    }
+
+    const missingMethods = requiredMethods.filter(name => typeof object[name] !== "function");
+    if (missingMethods.length) {
+        throw new ImplementationError(
+            `The ${name} implementation passed to StandardCrypto is missing required method${missingMethods.length === 1 ? "" : "s"} ${describeList("and", ...missingMethods)}`,
+        );
+    }
+}
+
 // If available, unconditionally add to Environment as it has not been exported yet so there can be no other
 // implementation present
 if ("crypto" in globalThis && globalThis.crypto?.subtle) {
-    Environment.default.set(Crypto, new StandardCrypto(globalThis.crypto.subtle));
+    Environment.default.set(Crypto, new StandardCrypto());
 }
