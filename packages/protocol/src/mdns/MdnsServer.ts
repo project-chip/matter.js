@@ -14,7 +14,6 @@ import {
     MatterAggregateError,
     NetworkInterfaceDetails,
     ObserverGroup,
-    SrvRecordValue,
     Time,
 } from "#general";
 import { MdnsSocket } from "./MdnsSocket.js";
@@ -195,26 +194,26 @@ export class MdnsServer {
 
                     // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
                     await this.#announceRecordsForInterface(netInterface, serviceRecords);
-                    this.#recordsGenerator.delete(service);
+                    const existing = this.#recordsGenerator.delete(service);
+                    logger.warn("Removing MDNS Service", service, existing);
                     await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
             "Error happened when expiring MDNS announcements",
         ).catch(error => logger.error(error));
-        await this.#resetServices(services);
+        await this.#resetServices();
     }
 
     async setRecordsGenerator(service: string, generator: MdnsServer.RecordGenerator) {
         await this.#records.clear();
         this.#recordLastSentAsMulticastAnswer.clear();
+        logger.warn("Adding new MDNS Service", service);
         this.#recordsGenerator.set(service, generator);
     }
 
-    async #resetServices(services: string[]) {
-        for (const service of services) {
-            await this.#records.delete(service);
-            this.#recordLastSentAsMulticastAnswer.delete(service);
-        }
+    async #resetServices() {
+        await this.#records.clear();
+        this.#recordLastSentAsMulticastAnswer.clear();
     }
 
     async close() {
@@ -229,27 +228,11 @@ export class MdnsServer {
     }
 
     #queryRecords({ name, recordType }: { name: string; recordType: DnsRecordType }, records: DnsRecord<any>[]) {
-        const result =
-            recordType === DnsRecordType.ANY
-                ? records.filter(record => record.name === name)
-                : records.filter(record => record.name === name && record.recordType === recordType);
-
-        // If we include an SRV record in the response, lets also directly add the IPs of the target host
-        const srvRecord = result.find(record => record.recordType === DnsRecordType.SRV) as
-            | DnsRecord<SrvRecordValue>
-            | undefined;
-        if (srvRecord !== undefined) {
-            const {
-                value: { target },
-            } = srvRecord;
-            result.push(
-                ...records.filter(
-                    ({ name, recordType }) =>
-                        name === target && (recordType === DnsRecordType.A || recordType === DnsRecordType.AAAA),
-                ),
-            );
+        if (recordType === DnsRecordType.ANY) {
+            return records.filter(record => record.name === name);
+        } else {
+            return records.filter(record => record.name === name && record.recordType === recordType);
         }
-        return result;
     }
 }
 
