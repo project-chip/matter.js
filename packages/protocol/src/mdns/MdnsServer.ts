@@ -68,11 +68,13 @@ export class MdnsServer {
         if (records.size === 0) return;
 
         const { sourceIntf, sourceIp, transactionId, messageType, queries, answers: knownAnswers } = message;
+        logger.info("DNS Query", messageType, queries, knownAnswers);
         if (messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery) return;
         if (queries.length === 0) return; // No queries to answer can happen in a TruncatedQuery, let's ignore for now
         for (const portRecords of records.values()) {
             let answers = queries.flatMap(query => this.#queryRecords(query, portRecords));
             if (answers.length === 0) continue;
+            logger.info("Collected answers", answers);
 
             // Only send additional records if the query is not for A or AAAA records
             let additionalRecords =
@@ -112,6 +114,7 @@ export class MdnsServer {
                 // If the query is for unicast response, still send as multicast if they were last sent as multicast longer then 1/4 of their ttl
                 uniCastResponse = false;
             }
+            logger.info("Preparing answers", answers, "uniCastResponse", uniCastResponse);
             if (!uniCastResponse) {
                 answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast >= 900);
                 if (answers.length === 0) continue; // Nothing to send
@@ -120,6 +123,7 @@ export class MdnsServer {
                     this.#recordLastSentAsMulticastAnswer.set(this.buildDnsRecordKey(answer, sourceIntf), now),
                 );
             }
+            logger.info("Final answers", answers);
 
             this.#socket
                 .send(
