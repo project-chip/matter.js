@@ -70,11 +70,9 @@ export class MdnsServer {
         const { sourceIntf, sourceIp, transactionId, messageType, queries, answers: knownAnswers } = message;
         if (messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery) return;
         if (queries.length === 0) return; // No queries to answer can happen in a TruncatedQuery, let's ignore for now
-        logger.info("DNS Query", sourceIntf, messageType, queries, knownAnswers);
         for (const portRecords of records.values()) {
             let answers = queries.flatMap(query => this.#queryRecords(query, portRecords));
             if (answers.length === 0) continue;
-            logger.info("Collected answers", answers);
 
             // Only send additional records if the query is not for A or AAAA records
             let additionalRecords =
@@ -102,25 +100,19 @@ export class MdnsServer {
             let uniCastResponse = queries.filter(query => !query.uniCastResponse).length === 0;
             const answersTimeSinceLastSent = answers.map(answer => ({
                 timeSinceLastMultiCast:
-                    now -
-                    (this.#recordLastSentAsMulticastAnswer.get(this.buildDnsRecordKey(answer, sourceIntf)) ?? now),
-                ttl: answer.ttl,
+                    now - (this.#recordLastSentAsMulticastAnswer.get(this.buildDnsRecordKey(answer, sourceIntf)) ?? 0),
+                ttl: answer.ttl * 1000,
             }));
             if (
                 uniCastResponse &&
-                answersTimeSinceLastSent.some(
-                    ({ timeSinceLastMultiCast, ttl }) => timeSinceLastMultiCast > (ttl / 4) * 1000,
-                )
+                answersTimeSinceLastSent.some(({ timeSinceLastMultiCast, ttl }) => timeSinceLastMultiCast > ttl / 4)
             ) {
                 // If the query is for unicast response, still send as multicast if they were last sent as multicast longer then 1/4 of their ttl
                 uniCastResponse = false;
             }
-            logger.info("Preparing answers", answers, "uniCastResponse", uniCastResponse);
             if (!uniCastResponse) {
                 answers = answers.filter(
-                    (_, index) =>
-                        answersTimeSinceLastSent[index].timeSinceLastMultiCast === 0 || // Never sent as multicast
-                        answersTimeSinceLastSent[index].timeSinceLastMultiCast >= 900, // The last time sent as multicast was more than 900 ms ago
+                    (_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast >= 900, // The last time sent as multicast was more than 900 ms ago
                 );
                 if (answers.length === 0) continue; // Nothing to send
 
@@ -128,7 +120,6 @@ export class MdnsServer {
                     this.#recordLastSentAsMulticastAnswer.set(this.buildDnsRecordKey(answer, sourceIntf), now),
                 );
             }
-            logger.info("Sending", answers, "uniCastResponse", uniCastResponse, sourceIp, sourceIntf);
 
             this.#socket
                 .send(
@@ -194,8 +185,7 @@ export class MdnsServer {
 
                     // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
                     await this.#announceRecordsForInterface(netInterface, serviceRecords);
-                    const existing = this.#recordsGenerator.delete(service);
-                    logger.warn("Removing MDNS Service", service, existing);
+                    this.#recordsGenerator.delete(service);
                     await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
@@ -207,7 +197,6 @@ export class MdnsServer {
     async setRecordsGenerator(service: string, generator: MdnsServer.RecordGenerator) {
         await this.#records.clear();
         this.#recordLastSentAsMulticastAnswer.clear();
-        logger.warn("Adding new MDNS Service", service);
         this.#recordsGenerator.set(service, generator);
     }
 
