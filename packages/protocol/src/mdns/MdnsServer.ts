@@ -41,7 +41,6 @@ export class MdnsServer {
         15 * 60 * 1000 /* 15mn - also matches maximum commissioning window time. */,
     );
     readonly #recordLastSentAsMulticastAnswer = new Map<string, number>();
-    readonly #recordLastSentAsUnicastAnswer = new Map<string, number>();
 
     readonly #socket: MdnsSocket;
 
@@ -102,10 +101,6 @@ export class MdnsServer {
             const answersTimeSinceLastSent = answers.map(answer => ({
                 timeSinceLastMultiCast:
                     now - (this.#recordLastSentAsMulticastAnswer.get(this.buildDnsRecordKey(answer, sourceIntf)) ?? 0),
-                timeSinceLastUniCast:
-                    now -
-                    (this.#recordLastSentAsUnicastAnswer.get(this.buildDnsRecordKey(answer, sourceIntf, sourceIp)) ??
-                        0),
                 ttl: answer.ttl,
             }));
             if (
@@ -118,18 +113,11 @@ export class MdnsServer {
                 uniCastResponse = false;
             }
             if (!uniCastResponse) {
-                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast > 10);
+                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast >= 900);
                 if (answers.length === 0) continue; // Nothing to send
 
                 answers.forEach(answer =>
                     this.#recordLastSentAsMulticastAnswer.set(this.buildDnsRecordKey(answer, sourceIntf), now),
-                );
-            } else {
-                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastUniCast > 10);
-                if (answers.length === 0) continue; // Nothing to send
-
-                answers.forEach(answer =>
-                    this.#recordLastSentAsUnicastAnswer.set(this.buildDnsRecordKey(answer, sourceIntf, sourceIp), now),
                 );
             }
 
@@ -209,7 +197,6 @@ export class MdnsServer {
     async setRecordsGenerator(service: string, generator: MdnsServer.RecordGenerator) {
         await this.#records.clear();
         this.#recordLastSentAsMulticastAnswer.clear();
-        this.#recordLastSentAsUnicastAnswer.clear();
         this.#recordsGenerator.set(service, generator);
     }
 
@@ -217,7 +204,6 @@ export class MdnsServer {
         for (const service of services) {
             await this.#records.delete(service);
             this.#recordLastSentAsMulticastAnswer.delete(service);
-            this.#recordLastSentAsUnicastAnswer.delete(service);
         }
     }
 
@@ -225,7 +211,6 @@ export class MdnsServer {
         this.#observers.close();
         await this.#records.close();
         this.#recordLastSentAsMulticastAnswer.clear();
-        this.#recordLastSentAsUnicastAnswer.clear();
     }
 
     #getMulticastInterfacesForAnnounce() {
