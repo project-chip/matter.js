@@ -127,8 +127,6 @@ export class MdnsSocket {
             chunk.additionalRecords.push(additionalRecordEncoded);
         }
 
-        logger.info("Sending", message, "chunkSize", chunkSize);
-        logger.info(DnsCodec.encode(message));
         await this.#send(chunk, intf, unicastDest);
     }
 

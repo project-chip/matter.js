@@ -14,9 +14,9 @@ import {
     MatterAggregateError,
     NetworkInterfaceDetails,
     ObserverGroup,
+    SrvRecordValue,
     Time,
 } from "#general";
-import { SrvRecordValue } from "@matter/general";
 import { MdnsSocket } from "./MdnsSocket.js";
 
 const logger = Logger.get("MdnsServer");
@@ -118,7 +118,11 @@ export class MdnsServer {
             }
             logger.info("Preparing answers", answers, "uniCastResponse", uniCastResponse);
             if (!uniCastResponse) {
-                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast >= 900);
+                answers = answers.filter(
+                    (_, index) =>
+                        answersTimeSinceLastSent[index].timeSinceLastMultiCast === 0 || // Never sent as multicast
+                        answersTimeSinceLastSent[index].timeSinceLastMultiCast >= 900, // The last time sent as multicast was more than 900 ms ago
+                );
                 if (answers.length === 0) continue; // Nothing to send
 
                 answers.forEach(answer =>
