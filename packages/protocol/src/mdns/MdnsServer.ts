@@ -16,6 +16,7 @@ import {
     ObserverGroup,
     Time,
 } from "#general";
+import { SrvRecordValue } from "@matter/general";
 import { MdnsSocket } from "./MdnsSocket.js";
 
 const logger = Logger.get("MdnsServer");
@@ -68,9 +69,9 @@ export class MdnsServer {
         if (records.size === 0) return;
 
         const { sourceIntf, sourceIp, transactionId, messageType, queries, answers: knownAnswers } = message;
-        logger.info("DNS Query", messageType, queries, knownAnswers);
         if (messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery) return;
         if (queries.length === 0) return; // No queries to answer can happen in a TruncatedQuery, let's ignore for now
+        logger.info("DNS Query", messageType, queries, knownAnswers);
         for (const portRecords of records.values()) {
             let answers = queries.flatMap(query => this.#queryRecords(query, portRecords));
             if (answers.length === 0) continue;
@@ -102,7 +103,8 @@ export class MdnsServer {
             let uniCastResponse = queries.filter(query => !query.uniCastResponse).length === 0;
             const answersTimeSinceLastSent = answers.map(answer => ({
                 timeSinceLastMultiCast:
-                    now - (this.#recordLastSentAsMulticastAnswer.get(this.buildDnsRecordKey(answer, sourceIntf)) ?? 0),
+                    now -
+                    (this.#recordLastSentAsMulticastAnswer.get(this.buildDnsRecordKey(answer, sourceIntf)) ?? now),
                 ttl: answer.ttl,
             }));
             if (
@@ -123,7 +125,7 @@ export class MdnsServer {
                     this.#recordLastSentAsMulticastAnswer.set(this.buildDnsRecordKey(answer, sourceIntf), now),
                 );
             }
-            logger.info("Final answers", answers);
+            logger.info("Final answers", answers, "uniCastResponse", uniCastResponse);
 
             this.#socket
                 .send(
@@ -223,11 +225,27 @@ export class MdnsServer {
     }
 
     #queryRecords({ name, recordType }: { name: string; recordType: DnsRecordType }, records: DnsRecord<any>[]) {
-        if (recordType === DnsRecordType.ANY) {
-            return records.filter(record => record.name === name);
-        } else {
-            return records.filter(record => record.name === name && record.recordType === recordType);
+        const result =
+            recordType === DnsRecordType.ANY
+                ? records.filter(record => record.name === name)
+                : records.filter(record => record.name === name && record.recordType === recordType);
+
+        // If we include an SRV record in the response, lets also directly add the IPs of the target host
+        const srvRecord = result.find(record => record.recordType === DnsRecordType.SRV) as
+            | DnsRecord<SrvRecordValue>
+            | undefined;
+        if (srvRecord !== undefined) {
+            const {
+                value: { target },
+            } = srvRecord;
+            result.push(
+                ...records.filter(
+                    ({ name, recordType }) =>
+                        name === target && (recordType === DnsRecordType.A || recordType === DnsRecordType.AAAA),
+                ),
+            );
         }
+        return result;
     }
 }
 
