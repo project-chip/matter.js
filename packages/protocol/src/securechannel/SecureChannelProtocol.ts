@@ -23,7 +23,7 @@ import { SecureSession } from "../session/SecureSession.js";
 import { CaseServer } from "../session/case/CaseServer.js";
 import { MaximumPasePairingErrorsReachedError, PaseServer } from "../session/pase/PaseServer.js";
 import { ChannelStatusResponseError, SecureChannelMessenger } from "./SecureChannelMessenger.js";
-import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema.js";
+import { SecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema.js";
 
 const logger = Logger.get("SecureChannelProtocol");
 
@@ -62,7 +62,7 @@ export class StatusReportOnlySecureChannelProtocol implements ProtocolHandler {
             );
         }
 
-        const { generalStatus, protocolId, protocolStatus } = TlvSecureChannelStatusMessage.decode(payload);
+        const { generalStatus, protocolId, protocolStatus } = SecureChannelStatusMessage.decode(payload);
         if (generalStatus !== GeneralStatusCode.Success) {
             throw new ChannelStatusResponseError(
                 `Received general error status (${protocolId})`,

@@ -7,8 +7,8 @@
 import { ProtocolStatusMessage, ProtocolStatusMessageSchema } from "#protocol/ProtocolStatusMessage.js";
 import { SECURE_CHANNEL_PROTOCOL_ID, SecureChannelStatusCode } from "#types";
 
-export type SecureChannelStatusMessage = ProtocolStatusMessage<SecureChannelStatusCode>;
+export type SecureChannelStatus = ProtocolStatusMessage<SecureChannelStatusCode>;
 
-export class SecureChannelStatusMessageSchema extends ProtocolStatusMessageSchema<SecureChannelStatusMessage> {}
+export class SecureChannelStatusMessageSchema extends ProtocolStatusMessageSchema<SecureChannelStatus> {}
 
-export const TlvSecureChannelStatusMessage = new SecureChannelStatusMessageSchema(SECURE_CHANNEL_PROTOCOL_ID);
+export const SecureChannelStatusMessage = new SecureChannelStatusMessageSchema(SECURE_CHANNEL_PROTOCOL_ID);

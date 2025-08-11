@@ -8,7 +8,7 @@ import { Diagnostic, MatterError, UnexpectedDataError } from "#general";
 import { GeneralStatusCode, SecureChannelStatusCode, SecureMessageType, TlvSchema } from "#types";
 import { Message } from "../codec/MessageCodec.js";
 import { ExchangeSendOptions, MessageExchange } from "../protocol/MessageExchange.js";
-import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema.js";
+import { SecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema.js";
 
 /** Error base Class for all errors related to the status response messages. */
 export class ChannelStatusResponseError extends MatterError {
@@ -150,7 +150,7 @@ export class SecureChannelMessenger {
     ) {
         await this.exchange.send(
             SecureMessageType.StatusReport,
-            TlvSecureChannelStatusMessage.encode({
+            SecureChannelStatusMessage.encode({
                 generalStatus,
                 protocolStatus,
             }),
@@ -171,7 +171,7 @@ export class SecureChannelMessenger {
         } = message;
         if (messageType !== SecureMessageType.StatusReport) return;
 
-        const { generalStatus, protocolId, protocolStatus } = TlvSecureChannelStatusMessage.decode(payload);
+        const { generalStatus, protocolId, protocolStatus } = SecureChannelStatusMessage.decode(payload);
         if (generalStatus !== GeneralStatusCode.Success) {
             throw new ChannelStatusResponseError(
                 `Received general error status for protocol ${protocolId}${logHint ? ` (${logHint})` : ""}`,
