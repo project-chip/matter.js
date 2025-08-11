@@ -22,7 +22,7 @@ import QuickCrypto from "react-native-quick-crypto";
 const crypto = QuickCrypto as unknown as typeof QuickCrypto.default;
 
 // QuickCrypto's `install()` function is documented as optional but QuickCrypto references it as a global in its subtle
-// implementation so we can't avoid mucking with global scope (as of QuickCrypto 0.7.6)
+// implementation, so we can't avoid mucking with global scope (as of QuickCrypto 0.7.6)
 if (!("Buffer" in globalThis)) {
     (globalThis as unknown as { Buffer: typeof Buffer }).Buffer = Buffer;
 }
@@ -39,8 +39,6 @@ export class ReactNativeCrypto extends StandardCrypto {
 
     /**
      * Quick Crypto doesn't currently support {@link SubtleCrypto#deriveBits}.
-     *
-     * TODO - @luxni it would be good to get attribution for this code
      */
     override async createHkdfKey(
         secret: Uint8Array,
@@ -125,6 +123,12 @@ export class ReactNativeCrypto extends StandardCrypto {
             keyData = PrivateKey(Bytes.of(keyData as BufferSource));
         }
         return super.importKey(format, keyData, algorithm, extractable, keyUsages);
+    }
+
+    override randomBytes(length: number): Uint8Array {
+        const result = new Uint8Array(length);
+        crypto.getRandomValues(result);
+        return result;
     }
 }
 
