@@ -33,6 +33,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/react-native
     - Fix: (Luxni) Update UDP, BLE and Crypto usage to work with React Native
 
+-   Other
+    - Feature: For developers working with the matter.js repository on Macs and Windows, we now offer a devcontainer to facilitate native Linux development
+
 ## 0.15.3 (2025-08-01)
 
 -   @matter/protocol
