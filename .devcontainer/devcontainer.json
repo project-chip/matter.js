@@ -1,0 +1,62 @@
+// @license
+// Copyright 2022-2025 Matter.js Authors
+// SPDX-License-Identifier: Apache-2.0
+
+// Dev container notes for developers:
+//
+// You do not need to use a dev container with matter.js.  Native development should work fine.  Further, due to
+// networking idiosyncrasies, devices running in a dev container may not be discoverable outside the container on macs
+// and windows.
+//
+// For the same reasons as above, the dev container is useful for local testing.  Running matter.js in the container
+// allows it to connect to other components running in docker.
+//
+// Using Docker desktop you must set default containers to be dual IPv4/IPv6.  On macs the options "Use kernel
+// networking for UDP" and "Enable host networking" must be enabled.
+
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "matter.js",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+
+	"postCreateCommand": "npm ci",
+
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"moby": true,
+			"azureDnsAutoDetection": false,
+			"installDockerBuildx": true,
+			"installDockerComposeSwitch": false,
+			"version": "latest",
+			"dockerDashComposeVersion": "v2"
+		}
+	},
+	
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"rioj7.command-variable",
+				"stkb.rewrap",
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode"
+			]
+		}
+	}
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "yarn install",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
