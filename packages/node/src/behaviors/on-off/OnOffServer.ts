@@ -168,7 +168,7 @@ export class OnOffBaseServer extends OnOffLogicBase {
     protected get delayedOffTimer() {
         let timer = this.internal.delayedOffTimer;
         if (timer === undefined) {
-            timer = this.internal.delayedOffTimer = Time.getTimer(
+            timer = this.internal.delayedOffTimer = Time.getPeriodicTimer(
                 "Delayed off",
                 100,
                 this.callback(this.#delayedOffTick, { lock: true }),
