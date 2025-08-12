@@ -17,7 +17,7 @@ describe("OO", () => {
     });
     chip("OO/*").exclude(
         // TODO - we need proper OffWithEffect support for this test to succeed
-        "OO/2.3",
+        //"OO/2.3",
 
         // TODO - requires scenes management features we do not yet offer
         "OO/2.7",
