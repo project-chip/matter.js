@@ -71,7 +71,7 @@ export class OnOffBaseServer extends OnOffLogicBase {
                     this.delayedOffTimer.start();
                 }
             }
-            this.state.onTime = this.state.offWaitTime = 0;
+            this.state.onTime = 0;
         }
     }
 
