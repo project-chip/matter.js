@@ -1,0 +1,20 @@
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+services:
+  devcontainer:
+    image: "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm"
+    volumes:
+      - ..:/matter.js
+      - node-modules:/matter.js/node_modules
+    networks:
+      - "matter"
+    command: "sleep infinity"
+
+volumes:
+  node-modules:
+
+networks:
+  matter:
+    enable_ipv6: true

@@ -14,14 +14,14 @@
 // Using Docker desktop you must set default containers to be dual IPv4/IPv6.  On macs the options "Use kernel
 // networking for UDP" and "Enable host networking" must be enabled.
 
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
 	"name": "matter.js",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
 
-	"postCreateCommand": "npm ci",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "devcontainer",
+	"workspaceFolder": "/matter.js",
+
+	"postCreateCommand": "/bin/bash ./.devcontainer/post-create.sh",
 
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
