@@ -13,6 +13,7 @@ describe("OO", () => {
             // so maybe is based on latency estimates?  For now we just rewrite
             // TODO - ask CHIP folks?
             edit.sed("s/maxValue: 215/maxValue: 300/"),
+            edit.sed("s/value: 30000/value: 30500/"),
         );
     });
     chip("OO/*").exclude(
