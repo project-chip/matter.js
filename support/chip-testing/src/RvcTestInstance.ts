@@ -117,6 +117,13 @@ export class RvcTestInstance extends NodeTestInstance {
                 });
                 break;
             case "docked":
+                await endpoint.act(agent => {
+                    agent.get(TestRvcOperationalStateServer).state.operationalState =
+                        RvcOperationalState.OperationalState.Charging;
+
+                    // TODO - test expects an idle mode.  Should the servers have utilities to change automatically?
+                    agent.get(TestRvcRunModeServer).state.currentMode = 0;
+                });
                 await endpoint.setStateOf(TestRvcOperationalStateServer, {
                     operationalState: RvcOperationalState.OperationalState.Charging,
                 });
