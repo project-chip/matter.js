@@ -77,7 +77,7 @@ export const RawBytes = (bytes: BufferSource) => ({
 export const DerBigUint = (number: BufferSource) => {
     // We don't need bigint support currently, but we can translate here if we ever do
 
-    let numberData = Bytes.of(number);
+    const numberData = Bytes.of(number);
 
     // Ensure value does not encode as negative
     if (numberData[0] & 0x80) {
