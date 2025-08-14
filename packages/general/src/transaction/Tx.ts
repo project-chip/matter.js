@@ -291,7 +291,11 @@ class Tx implements Transaction, Transaction.Finalization {
 
     reject(cause: unknown): MaybePromise<never> {
         if (this.#status === Status.Shared) {
-            this.#reset("released");
+            try {
+                this.#reset("released");
+            } finally {
+                this[Symbol.dispose]();
+            }
             throw cause;
         }
 

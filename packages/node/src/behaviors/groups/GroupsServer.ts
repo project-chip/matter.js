@@ -75,8 +75,12 @@ export class GroupsServer extends GroupsBase {
         return rootEndpoint;
     }
 
-    #actOnGroupKeyManagement(act: (groupKeyManagement: GroupKeyManagementServer) => unknown) {
-        return this.#rootEndpoint().act(agent => act(agent.get(GroupKeyManagementServer)));
+    async #actOnGroupKeyManagement<T>(act: (groupKeyManagement: GroupKeyManagementServer) => T): Promise<T> {
+        const agent = this.context.agentFor(this.#rootEndpoint());
+        const gkm = agent.get(GroupKeyManagementServer);
+        await agent.context.transaction.addResources(gkm);
+        await agent.context.transaction.begin();
+        return act(gkm);
     }
 
     override async addGroup({ groupId, groupName }: Groups.AddGroupRequest): Promise<Groups.AddGroupResponse> {

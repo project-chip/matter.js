@@ -37,13 +37,6 @@ export class RvcRunModeServer extends RvcRunModeBehavior {
             throw new ImplementationError("Provided supportedModes need to include at least one Cleaning mode tag");
         }
         if (
-            !this.state.supportedModes.some(({ modeTags }) =>
-                modeTags.some(({ value }) => value === RvcRunMode.ModeTag.Cleaning),
-            )
-        ) {
-            throw new ImplementationError("Provided supportedModes need to include at least one Cleaning mode tag");
-        }
-        if (
             this.state.supportedModes.some(({ modeTags }) => {
                 let exclusiveModeCounter = 0;
                 exclusiveModeCounter += modeTags.some(({ value }) => value === RvcRunMode.ModeTag.Idle) ? 1 : 0;

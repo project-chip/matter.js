@@ -22,8 +22,8 @@ import inspect
 import importlib
 import re
 import shutil
-from chip.testing.matter_testing import MatterBaseTest, MatterTestConfig
-from chip.testing.runner import generate_mobly_test_config
+from matter.testing.matter_testing import MatterBaseTest, MatterTestConfig
+from matter.testing.runner import generate_mobly_test_config
 
 YAML_DIR = "/src/app/tests/suites"
 PYTHON_DIR = "/src/python_testing"
@@ -131,12 +131,12 @@ def load_yaml():
 
 def parse_command_line(str: str):
     # Some scripts have strings with spaces.  Currently only use single quotes but try to handle both that and double
-    args = re.findall(r"((?:'[^']+'|\"(?:\\\"|[^\"]+)\"|\S)+)", str)
+    args = re.findall(r"((?:(?<!\\)'.*?(?<!\\)'|(?<!\\)\".*?(?<!\\)\"|\S)+)", str)
     for i in range(len(args)):
         arg = args[i]
-
+ 
         # If quoted, implement rudimentary unescaping
-        parts = re.findall(r"([^'\"\\]+|'[^']*'|\"(?:\\\"|[^\"]+)\")", arg)
+        parts = re.findall(r"((?:[^'\"\\]|\\'|\\\")+|(?<!\\)'.*?(?<!\\)'(?<!\\)|\".*?(?<!\\)\")", arg)
         if len(parts) > 1:
             for j in range(len(parts)):
                 part = parts[j]
@@ -178,13 +178,14 @@ def load_python():
         name = os.path.splitext(basename)[0]
         try:
             importlib.import_module(name)
-        except:
-            # Files in this path are sometimes broken so ignore errors.  We could limit to known test case patterns but
-            # there does not appear to be a rigorous naming convention
-            # Example: f78b9cc3de broke test_plan_table_generator.py
-            pass
+        except ModuleNotFoundError as e:
+            # Skip files with whitelisted errors
+            if "No module named 'matter.webrtc'" in str(e):
+                pass
+            else:
+                raise
 
-    for test_class in MatterBaseTest.__subclasses__():
+    def load_class(test_class):
         # Read file and extract YAML header
         path = inspect.getfile(test_class)
         basename = os.path.basename(path)
@@ -335,6 +336,15 @@ def load_python():
                     tests.append(props)
             else:
                 tests.append(props)
+
+        # Recurse into derivatives
+        load_python_classes(test_class)
+
+    def load_python_classes(test_class):
+        for test_class in test_class.__subclasses__():
+            load_class(test_class)
+
+    load_python_classes(MatterBaseTest)
 
 load_yaml()
 load_python()

@@ -450,10 +450,10 @@ async function configureScripts() {
         edit.sed("s/sleep(0.001)/sleep(.02)/"),
 
         // This is the one we actually use
-        "/usr/local/lib/python3.12/dist-packages/chip/testing/matter_testing.py",
+        "/usr/local/lib/python3.12/dist-packages/matter/testing/matter_testing.py",
 
         // Patching here too just for completeness
-        "/src/python_testing/matter_testing_infrastructure/chip/testing/matter_testing.py",
+        "/src/python_testing/matter_testing_infrastructure/matter/testing/matter_testing.py",
     );
 }
 
