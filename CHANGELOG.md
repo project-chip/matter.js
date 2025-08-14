@@ -11,7 +11,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ### __WORK IN PROGRESS__
 -   Breaking: matter.js now requires node.js 20+
--   Breaking: because of the upgrade to TypeScript 5.9 all usage of Uint8Array was adjusted to use BufferSource as base type. 
+-   Breaking: Because of the upgrade to TypeScript 5.9 all usage of Uint8Array was adjusted to use BufferSource
 
 -   @matter/general
     - Breaking: SyncStorage interface got removed
