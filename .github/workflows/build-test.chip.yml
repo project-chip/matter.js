@@ -28,6 +28,12 @@ on:
   schedule:
     - cron: 0 1 * * * # Every day at 01:00
   workflow_dispatch: # Manually on demand
+    inputs:
+      updateChipSha:
+        description: 'Update SHA'
+        required: true
+        default: true
+        type: boolean
   push:
     branches: [ "main" ]
   pull_request:
@@ -76,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       source: ${{ needs.workflow-conditions.outputs.build-needed == 'true' && 'artifact' || 'repository' }}
-      chip-sha: ${{ steps.increment-sha.outputs.chip-sha }}
+      chip-sha: ${{ steps.get-sha.outputs.chip-sha }}
     steps:
       - name: Check out matter.js
         if: needs.workflow-conditions.outputs.build-needed == 'true'
@@ -84,10 +90,16 @@ jobs:
 
       - name: Increment CHIP SHA
         id: increment-sha
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.updateChipSha)
         run: |
           cd support/chip
           ./bin/update-version
+
+      - name: Get CHIP SHA
+        id: get-sha
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          cd support/chip
           echo chip-sha=$(cat sha.txt) >> $GITHUB_OUTPUT
 
       - name: Build chip image
