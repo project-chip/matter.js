@@ -42,7 +42,7 @@ let skipNextConsoleNewline = false;
 Object.defineProperties(memlabCore.info, {
     outStream: {
         value: {
-            write(payload: Uint8Array | string) {
+            write(payload: Uint8Array<ArrayBuffer> | string) {
                 payload = payload.toString();
 
                 // If we set config.isContinuousText we lose color, so don't do that.  But then we need to prevent

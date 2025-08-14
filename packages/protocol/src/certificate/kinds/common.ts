@@ -15,10 +15,10 @@ export class CertificateError extends MatterError {}
 
 export type Unsigned<Type> = { [Property in keyof Type as Exclude<Property, "signature">]: Type[Property] };
 
-export function assertCertificateDerSize(certBytes: Uint8Array) {
-    if (certBytes.length > MAX_DER_CERTIFICATE_SIZE) {
+export function assertCertificateDerSize(certBytes: BufferSource) {
+    if (certBytes.byteLength > MAX_DER_CERTIFICATE_SIZE) {
         throw new ImplementationError(
-            `Certificate to generate is too big: ${certBytes.length} bytes instead of max ${MAX_DER_CERTIFICATE_SIZE} bytes`,
+            `Certificate to generate is too big: ${certBytes.byteLength} bytes instead of max ${MAX_DER_CERTIFICATE_SIZE} bytes`,
         );
     }
 }

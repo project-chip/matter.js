@@ -28,7 +28,11 @@ export abstract class Ble {
 }
 
 export interface BlePeripheralInterface extends TransportInterface {
-    advertise(advertiseData: Uint8Array, additionalAdvertisementData?: Uint8Array, intervalMs?: number): Promise<void>;
+    advertise(
+        advertiseData: BufferSource,
+        additionalAdvertisementData?: BufferSource,
+        intervalMs?: number,
+    ): Promise<void>;
     stopAdvertising(): Promise<void>;
 }
 

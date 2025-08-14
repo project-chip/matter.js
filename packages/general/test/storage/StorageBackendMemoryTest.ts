@@ -140,7 +140,7 @@ describe("StorageBackendMemory", () => {
     it("writeBlob and readBlob success", async () => {
         const storage = await StorageBackendMemory.create();
         const data = new Uint8Array([1, 2, 3, 4]);
-        const stream = new ReadableStream<Uint8Array>({
+        const stream = new ReadableStream<BufferSource>({
             start(controller) {
                 controller.enqueue(data);
                 controller.close();
@@ -151,7 +151,7 @@ describe("StorageBackendMemory", () => {
 
         const blob = storage.openBlob(CONTEXTx1, "blobkey");
         const reader = blob.stream().getReader();
-        const chunks: Uint8Array[] = [];
+        const chunks: BufferSource[] = [];
         while (true) {
             const { value, done } = await reader.read();
             if (done) break;

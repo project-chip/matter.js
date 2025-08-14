@@ -15,11 +15,11 @@ export class BluetoothUnsupportedError extends MatterError {}
 
 export class ReactNativeBleClient {
     private readonly bleManager = new BleManager();
-    private readonly discoveredPeripherals = new Map<string, { peripheral: Device; matterServiceData: Uint8Array }>();
+    private readonly discoveredPeripherals = new Map<string, { peripheral: Device; matterServiceData: BufferSource }>();
     private shouldScan = false;
     private isScanning = false;
     private bleState = BluetoothState.Unknown;
-    private deviceDiscoveredCallback: ((peripheral: Device, manufacturerData: Uint8Array) => void) | undefined;
+    private deviceDiscoveredCallback: ((peripheral: Device, manufacturerData: BufferSource) => void) | undefined;
 
     constructor() {
         // this.bleManager.setLogLevel(LogLevel.Verbose)
@@ -56,7 +56,7 @@ export class ReactNativeBleClient {
         }, true);
     }
 
-    public setDiscoveryCallback(callback: (peripheral: Device, manufacturerData: Uint8Array) => void) {
+    public setDiscoveryCallback(callback: (peripheral: Device, manufacturerData: BufferSource) => void) {
         this.deviceDiscoveredCallback = callback;
         for (const { peripheral, matterServiceData } of this.discoveredPeripherals.values()) {
             this.deviceDiscoveredCallback(peripheral, matterServiceData);
@@ -125,7 +125,7 @@ export class ReactNativeBleClient {
             return;
         }
         const matterServiceData = Bytes.fromBase64(matterServiceDataBase64);
-        if (matterServiceData.length !== 8) {
+        if (matterServiceData.byteLength !== 8) {
             logger.info(`Peripheral ${peripheral.id} does not advertise Matter Service ... ignoring`);
             return;
         }

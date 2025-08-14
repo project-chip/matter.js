@@ -104,7 +104,7 @@ export interface MdnsScannerTargetCriteria {
 
     /** List of operational targets. */
     operationalTargets: {
-        operationalId: Uint8Array;
+        operationalId: BufferSource;
         nodeId?: NodeId;
     }[];
 }
@@ -470,7 +470,7 @@ export class MdnsClient implements Scanner {
         return this.#recordWaiters.has(queryId);
     }
 
-    #createOperationalMatterQName(operationalId: Uint8Array, nodeId: NodeId) {
+    #createOperationalMatterQName(operationalId: BufferSource, nodeId: NodeId) {
         const operationalIdString = Bytes.toHex(operationalId).toUpperCase();
         return getOperationalDeviceQname(operationalIdString, NodeId.toHexString(nodeId));
     }

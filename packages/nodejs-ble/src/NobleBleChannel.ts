@@ -5,6 +5,7 @@
  */
 
 import {
+    Bytes,
     Channel,
     ChannelType,
     Diagnostic,
@@ -74,14 +75,14 @@ export class NobleBleCentralInterface implements NetInterface {
     #connectionsInProgress = new Set<ServerAddress>();
     #connectionGuards = new Set<BleConnectionGuard>();
     #openChannels = new Map<ServerAddress, Peripheral>();
-    #onMatterMessageListener: ((socket: Channel<Uint8Array>, data: Uint8Array) => void) | undefined;
+    #onMatterMessageListener: ((socket: Channel<BufferSource>, data: BufferSource) => void) | undefined;
     #closed = false;
 
     constructor(bleScanner: BleScanner) {
         this.#bleScanner = bleScanner;
     }
 
-    openChannel(address: ServerAddress, tryCount = 1): Promise<Channel<Uint8Array>> {
+    openChannel(address: ServerAddress, tryCount = 1): Promise<Channel<BufferSource>> {
         if (this.#closed) {
             throw new NetworkError("Network interface is closed");
         }
@@ -95,7 +96,7 @@ export class NobleBleCentralInterface implements NetInterface {
                     logger.debug(`Already resolved or rejected, ignore error:`, error);
                 }
             }
-            function resolveOnce(value: Channel<Uint8Array>) {
+            function resolveOnce(value: Channel<BufferSource>) {
                 if (!resolvedOrRejected) {
                     resolvedOrRejected = true;
                     resolve(value);
@@ -263,7 +264,7 @@ export class NobleBleCentralInterface implements NetInterface {
 
                         let characteristicC1ForWrite: Characteristic | undefined;
                         let characteristicC2ForSubscribe: Characteristic | undefined;
-                        let additionalCommissioningRelatedData: Uint8Array | undefined;
+                        let additionalCommissioningRelatedData: BufferSource | undefined;
 
                         for (const characteristic of characteristics) {
                             // Loop through each characteristic and match them to the UUIDs that we know about.
@@ -382,7 +383,7 @@ export class NobleBleCentralInterface implements NetInterface {
         });
     }
 
-    onData(listener: (socket: Channel<Uint8Array>, data: Uint8Array) => void): TransportInterface.Listener {
+    onData(listener: (socket: Channel<BufferSource>, data: BufferSource) => void): TransportInterface.Listener {
         this.#onMatterMessageListener = listener;
         return {
             close: async () => await this.close(),
@@ -410,13 +411,13 @@ export class NobleBleCentralInterface implements NetInterface {
     }
 }
 
-export class NobleBleChannel extends BleChannel<Uint8Array> {
+export class NobleBleChannel extends BleChannel<BufferSource> {
     static async create(
         peripheral: Peripheral,
         characteristicC1ForWrite: Characteristic,
         characteristicC2ForSubscribe: Characteristic,
-        onMatterMessageListener: (socket: Channel<Uint8Array>, data: Uint8Array) => void,
-        _additionalCommissioningRelatedData?: Uint8Array,
+        onMatterMessageListener: (socket: Channel<BufferSource>, data: BufferSource) => void,
+        _additionalCommissioningRelatedData?: BufferSource,
     ): Promise<NobleBleChannel> {
         const { address: peripheralAddress } = peripheral;
         let mtu = peripheral.mtu ?? 0;
@@ -471,7 +472,7 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
         logger.debug(
             `Peripheral ${peripheralAddress}: Sending BTP handshake request: ${Diagnostic.json(btpHandshakeRequest)}`,
         );
-        await characteristicC1ForWrite.writeAsync(Buffer.from(btpHandshakeRequest.buffer), false);
+        await characteristicC1ForWrite.writeAsync(Buffer.from(Bytes.of(btpHandshakeRequest)), false);
 
         characteristicC2ForSubscribe.once("data", handshakeHandler);
 
@@ -483,8 +484,8 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
         const btpSession = await BtpSessionHandler.createAsCentral(
             new Uint8Array(handshakeResponse),
             // callback to write data to characteristic C1
-            async (data: Uint8Array) => {
-                return await characteristicC1ForWrite.writeAsync(Buffer.from(data.buffer), false);
+            async (data: BufferSource) => {
+                return await characteristicC1ForWrite.writeAsync(Buffer.from(Bytes.of(data)), false);
             },
             // callback to disconnect the BLE connection
             async () => {
@@ -501,7 +502,7 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
             },
 
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
-            async (data: Uint8Array) => {
+            async (data: BufferSource) => {
                 if (onMatterMessageListener === undefined) {
                     throw new InternalError(`No listener registered for Matter messages`);
                 }
@@ -544,7 +545,7 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
      *
      * @param data
      */
-    async send(data: Uint8Array) {
+    async send(data: BufferSource) {
         if (!this.connected) {
             logger.debug(
                 `Peripheral ${this.peripheral.address}: Cannot send data because not connected to peripheral.`,
@@ -559,7 +560,7 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
         await this.btpSession.sendMatterMessage(data);
     }
 
-    // Channel<Uint8Array>
+    // Channel<BufferSource>
     get name() {
         return `${this.type}://${this.peripheral.address}`;
     }

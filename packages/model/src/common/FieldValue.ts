@@ -159,8 +159,8 @@ export namespace FieldValue {
         value: string;
     };
 
-    export function Bytes(value: Uint8Array | string): Bytes {
-        return { type: bytes, value: ArrayBuffer.isView(value) ? ByteUtils.toHex(value) : value };
+    export function Bytes(value: BufferSource | Uint8Array | string): Bytes {
+        return { type: bytes, value: typeof value === "string" ? value : ByteUtils.toHex(ByteUtils.of(value)) };
     }
 
     /**
@@ -416,7 +416,7 @@ export namespace FieldValue {
                 if (FieldValue.is(value, FieldValue.bytes)) {
                     return value;
                 }
-                if (typeof value === "string" || value instanceof Uint8Array) {
+                if (typeof value === "string" || ByteUtils.isBufferSource(value)) {
                     return Bytes(value);
                 }
                 break;

@@ -124,7 +124,7 @@ export class ChannelManager {
         this.#channels.set(address, fabricChannels);
     }
 
-    private getOrCreateAsPaseChannel(byteArrayChannel: Channel<Uint8Array>, session: Session) {
+    private getOrCreateAsPaseChannel(byteArrayChannel: Channel<BufferSource>, session: Session) {
         const msgChannel = new MessageChannel(
             byteArrayChannel,
             session,
@@ -138,7 +138,7 @@ export class ChannelManager {
         return msgChannel;
     }
 
-    async getOrCreateChannel(byteArrayChannel: Channel<Uint8Array>, session: Session) {
+    async getOrCreateChannel(byteArrayChannel: Channel<BufferSource>, session: Session) {
         if (!NodeSession.is(session)) {
             return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }

@@ -12,7 +12,7 @@ export class BlenoPeripheralInterface implements BlePeripheralInterface {
     constructor(private readonly blenoServer: BlenoBleServer) {}
 
     // TransportInterface
-    onData(listener: (socket: Channel<Uint8Array>, data: Uint8Array) => void): TransportInterface.Listener {
+    onData(listener: (socket: Channel<BufferSource>, data: BufferSource) => void): TransportInterface.Listener {
         this.blenoServer.setMatterMessageListener(listener);
         return {
             close: async () => await this.close(),
@@ -35,7 +35,7 @@ export class BlenoPeripheralInterface implements BlePeripheralInterface {
         return this.blenoServer.clientAddress === address;
     }
 
-    advertise(advertiseData: Uint8Array, additionalAdvertisementData?: Uint8Array, intervalMs?: number) {
+    advertise(advertiseData: BufferSource, additionalAdvertisementData?: BufferSource, intervalMs?: number) {
         return this.blenoServer.advertise(advertiseData, additionalAdvertisementData, intervalMs);
     }
 

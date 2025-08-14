@@ -13,7 +13,7 @@ import { OperationalBase } from "./OperationalBase.js";
 
 export class Rcac extends OperationalBase<OperationalCertificate.Rcac> {
     /** Construct the class from a Tlv version of the certificate */
-    static fromTlv(tlv: Uint8Array): Rcac {
+    static fromTlv(tlv: BufferSource): Rcac {
         return new Rcac(OperationalCertificate.TlvRcac.decode(tlv));
     }
 
@@ -102,7 +102,7 @@ export class Rcac extends OperationalBase<OperationalCertificate.Rcac> {
         if (subjectKeyIdentifier === undefined) {
             throw new CertificateError(`Root certificate must have subjectKeyIdentifier set.`);
         }
-        if (subjectKeyIdentifier.length !== 20) {
+        if (subjectKeyIdentifier.byteLength !== 20) {
             throw new CertificateError(`Root certificate subjectKeyIdentifier must be 160 bit.`);
         }
 
@@ -110,7 +110,7 @@ export class Rcac extends OperationalBase<OperationalCertificate.Rcac> {
         if (authorityKeyIdentifier === undefined) {
             throw new CertificateError(`Root certificate must have authorityKeyIdentifier set.`);
         }
-        if (authorityKeyIdentifier.length !== 20) {
+        if (authorityKeyIdentifier.byteLength !== 20) {
             throw new CertificateError(`Root certificate authorityKeyIdentifier must be 160 bit.`);
         }
 

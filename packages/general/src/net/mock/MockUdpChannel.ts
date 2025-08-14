@@ -62,7 +62,7 @@ export class MockUdpChannel implements UdpChannel {
         };
     }
 
-    async send(host: string, port: number, payload: Uint8Array) {
+    async send(host: string, port: number, payload: BufferSource) {
         this.#host.simulator.router({
             kind: "udp",
             sourceAddress: this.#sendFrom,

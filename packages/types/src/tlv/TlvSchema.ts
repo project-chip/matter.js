@@ -22,12 +22,12 @@ export type TlvEncodingOptions = {
     allowMissingFieldsForNonFabricFilteredRead?: boolean;
 };
 
-export abstract class TlvSchema<T> extends Schema<T, Uint8Array> implements TlvSchema<T> {
-    override decodeInternal(encoded: Uint8Array): T {
+export abstract class TlvSchema<T> extends Schema<T, BufferSource> implements TlvSchema<T> {
+    override decodeInternal(encoded: BufferSource): T {
         return this.decodeTlvInternal(new TlvByteArrayReader(encoded)).value;
     }
 
-    override encodeInternal(value: T): Uint8Array {
+    override encodeInternal(value: T): BufferSource {
         const writer = new TlvByteArrayWriter();
         this.encodeTlvInternal(writer, value);
         return writer.toByteArray();
@@ -134,7 +134,7 @@ export class TlvByteArrayWriter implements TlvWriter {
 export class TlvByteArrayReader implements TlvReader {
     private readonly reader: DataReader<Endian.Little>;
 
-    constructor(byteArray: Uint8Array) {
+    constructor(byteArray: BufferSource) {
         this.reader = new DataReader(byteArray, Endian.Little);
     }
 

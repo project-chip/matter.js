@@ -344,7 +344,7 @@ export class MessageExchange {
         await this.#messagesQueue.write(message);
     }
 
-    async send(messageType: number, payload: Uint8Array, options?: ExchangeSendOptions) {
+    async send(messageType: number, payload: BufferSource, options?: ExchangeSendOptions) {
         if (options?.requiresAck && !this.channel.usesMrp) {
             options.requiresAck = false;
         }

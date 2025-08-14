@@ -35,7 +35,7 @@ const writeStatus = (() => {
 
     function intercept(stream: NodeJS.WriteStream) {
         const actualWrite = stream.write;
-        stream.write = (payload: Uint8Array | string, ...params: any[]) => {
+        stream.write = (payload: Uint8Array<ArrayBuffer> | string, ...params: any[]) => {
             if (lastStatus) {
                 if (payload[0] !== "\n" && payload[0] !== 0xa && needNewline) {
                     actualWrite.call(stream, "\n");

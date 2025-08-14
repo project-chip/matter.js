@@ -78,7 +78,7 @@ export class BleAdvertisement extends Advertisement<ServiceDescription.Commissio
             discriminator,
             isExtendedAnnouncement ? 0 : vendorId,
             isExtendedAnnouncement ? 0 : productId,
-            !isExtendedAnnouncement && !!this.advertiser.config.aad?.length,
+            !isExtendedAnnouncement && !!this.advertiser.config.aad?.byteLength,
             isExtendedAnnouncement,
         );
     }

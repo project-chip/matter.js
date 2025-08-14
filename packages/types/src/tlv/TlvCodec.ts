@@ -71,7 +71,7 @@ export type TlvToPrimitive = {
     [TlvType.Boolean]: never;
     [TlvType.Float]: number;
     [TlvType.Utf8String]: string;
-    [TlvType.ByteString]: Uint8Array;
+    [TlvType.ByteString]: BufferSource;
     [TlvType.Null]: null;
     [TlvType.Structure]: never;
     [TlvType.Array]: never;
@@ -405,12 +405,12 @@ export class TlvCodec {
             case TlvType.Utf8String: {
                 const string = value as TlvToPrimitive[typeof typeLength.type];
                 const stringData = Bytes.fromString(string);
-                this.writeUInt(writer, typeLength.length, stringData.length);
+                this.writeUInt(writer, typeLength.length, stringData.byteLength);
                 return writer.writeByteArray(stringData);
             }
             case TlvType.ByteString: {
                 const byteArray = value as TlvToPrimitive[typeof typeLength.type];
-                this.writeUInt(writer, typeLength.length, byteArray.length);
+                this.writeUInt(writer, typeLength.length, byteArray.byteLength);
                 return writer.writeByteArray(byteArray);
             }
             case TlvType.Boolean:
@@ -429,11 +429,11 @@ export class TlvCodec {
             case TlvType.Utf8String: {
                 const string = value as TlvToPrimitive[typeof typeLength.type];
                 const stringData = Bytes.fromString(string);
-                return this.getUIntByteLength(typeLength.length) + stringData.length;
+                return this.getUIntByteLength(typeLength.length) + stringData.byteLength;
             }
             case TlvType.ByteString: {
                 const byteArray = value as TlvToPrimitive[typeof typeLength.type];
-                return this.getUIntByteLength(typeLength.length) + byteArray.length;
+                return this.getUIntByteLength(typeLength.length) + byteArray.byteLength;
             }
             case TlvType.Boolean:
                 return 0;

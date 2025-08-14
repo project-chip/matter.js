@@ -11,7 +11,7 @@ describe("ReedSolomon", () => {
     describe("computeErrorCorrection", () => {
         it("computes the correct error correction bytes", () => {
             const result = new ReedSolomon().computeErrorCorrection(
-                Bytes.fromHex("40d2754776173206272696c6c69670ec"),
+                Bytes.of(Bytes.fromHex("40d2754776173206272696c6c69670ec")),
                 10,
             );
 

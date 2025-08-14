@@ -14,7 +14,7 @@ describe("BtpSessionHandler", () => {
     describe("Test Handshake", () => {
         it("handles a correct Handshake", async () => {
             const handshakeRequest = Bytes.fromHex("656c04000000b90006");
-            const { promise: writeBlePromise, resolver } = createPromise<Uint8Array>();
+            const { promise: writeBlePromise, resolver } = createPromise<BufferSource>();
 
             let allowClose = false;
             const btpSession = await BtpSessionHandler.createFromHandshakeRequest(
@@ -41,7 +41,7 @@ describe("BtpSessionHandler", () => {
 
         it("handles a zero attMtu in Handshake", async () => {
             const handshakeRequest = Bytes.fromHex("656c04000000000006");
-            const { promise: writeBlePromise, resolver } = createPromise<Uint8Array>();
+            const { promise: writeBlePromise, resolver } = createPromise<BufferSource>();
 
             let allowClose = false;
             const btpSession = await BtpSessionHandler.createFromHandshakeRequest(
@@ -68,7 +68,7 @@ describe("BtpSessionHandler", () => {
 
         it("handles a undefined maxDataSize in Handshake", async () => {
             const handshakeRequest = Bytes.fromHex("656c04000000000006");
-            const { promise: writeBlePromise, resolver } = createPromise<Uint8Array>();
+            const { promise: writeBlePromise, resolver } = createPromise<BufferSource>();
 
             let allowClose = false;
             const btpSession = await BtpSessionHandler.createFromHandshakeRequest(
@@ -126,7 +126,7 @@ describe("BtpSessionHandler", () => {
     describe("Test Matter Message handling", () => {
         let btpSessionHandler: BtpSessionHandler | undefined;
 
-        let onWriteBleCallback = (_dataToWrite: Uint8Array): Promise<void> => {
+        let onWriteBleCallback = (_dataToWrite: BufferSource): Promise<void> => {
             throw new Error("Should not be called");
         };
 
@@ -134,16 +134,16 @@ describe("BtpSessionHandler", () => {
             throw new Error("Should not be called");
         };
 
-        let onHandleMatterMessageCallback = async (_matterMessage: Uint8Array): Promise<void> => {
+        let onHandleMatterMessageCallback = async (_matterMessage: BufferSource): Promise<void> => {
             throw new Error("Should not be called");
         };
 
         // Each test gets his own btpSessionHandler with a successfully done handshake
         // callback can be overridden
         beforeEach(async () => {
-            const { promise: localWriteBlePromise, resolver: localWriteBleResolver } = createPromise<Uint8Array>();
+            const { promise: localWriteBlePromise, resolver: localWriteBleResolver } = createPromise<BufferSource>();
 
-            onWriteBleCallback = async (dataToWrite: Uint8Array) => {
+            onWriteBleCallback = async (dataToWrite: BufferSource) => {
                 localWriteBleResolver(dataToWrite);
             };
 
@@ -158,7 +158,7 @@ describe("BtpSessionHandler", () => {
                 async () => {
                     await onDisconnectBleCallback();
                 },
-                async (matterMessage: Uint8Array) => {
+                async (matterMessage: BufferSource) => {
                     await onHandleMatterMessageCallback(matterMessage);
                 },
             );
@@ -200,9 +200,9 @@ describe("BtpSessionHandler", () => {
         });
 
         it("handles a correct One segment long Matter Message", async () => {
-            const { promise: writeBlePromise, resolver: writeBleResolver } = createPromise<Uint8Array>();
+            const { promise: writeBlePromise, resolver: writeBleResolver } = createPromise<BufferSource>();
             const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } =
-                createPromise<Uint8Array>();
+                createPromise<BufferSource>();
 
             const segmentPayload = Bytes.fromHex("010203040506070809");
             const matterMessage = BtpCodec.encodeBtpPacket({
@@ -217,17 +217,17 @@ describe("BtpSessionHandler", () => {
                 payload: {
                     ackNumber: 0,
                     sequenceNumber: 0,
-                    messageLength: segmentPayload.length,
+                    messageLength: segmentPayload.byteLength,
                     segmentPayload,
                 },
             });
 
-            onHandleMatterMessageCallback = async (matterMessage: Uint8Array) => {
+            onHandleMatterMessageCallback = async (matterMessage: BufferSource) => {
                 handleMatterMessageResolver(matterMessage);
                 await btpSessionHandler?.sendMatterMessage(Bytes.fromHex("090807060504030201"));
             };
 
-            onWriteBleCallback = async (dataToWrite: Uint8Array) => {
+            onWriteBleCallback = async (dataToWrite: BufferSource) => {
                 writeBleResolver(dataToWrite);
             };
 
@@ -256,7 +256,7 @@ describe("BtpSessionHandler", () => {
                 payload: {
                     ackNumber: 0,
                     sequenceNumber: 0,
-                    messageLength: segmentPayload.length,
+                    messageLength: segmentPayload.byteLength,
                     segmentPayload,
                 },
             });
@@ -282,11 +282,11 @@ describe("BtpSessionHandler", () => {
 
         it("handles a correct two segment long Matter Message", async () => {
             const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } =
-                createPromise<Uint8Array>();
+                createPromise<BufferSource>();
 
             const segmentPayload = Bytes.fromHex("01020304050607080901020304050607");
             const segmentPayload1 = Bytes.fromHex("010203040506070809010203040506");
-            const promiseResolver = new Array<Uint8Array>();
+            const promiseResolver = new Array<BufferSource>();
 
             const matterMessage1 = BtpCodec.encodeBtpPacket({
                 header: {
@@ -300,7 +300,7 @@ describe("BtpSessionHandler", () => {
                 payload: {
                     ackNumber: 0,
                     sequenceNumber: 0,
-                    messageLength: segmentPayload.length,
+                    messageLength: segmentPayload.byteLength,
                     segmentPayload: segmentPayload1,
                 },
             });
@@ -320,12 +320,12 @@ describe("BtpSessionHandler", () => {
                 },
             });
 
-            onHandleMatterMessageCallback = async (matterMessage: Uint8Array) => {
+            onHandleMatterMessageCallback = async (matterMessage: BufferSource) => {
                 handleMatterMessageResolver(matterMessage);
                 await btpSessionHandler?.sendMatterMessage(Bytes.fromHex("030201090807060504030201090807060504"));
             };
 
-            onWriteBleCallback = async (dataToWrite: Uint8Array) => {
+            onWriteBleCallback = async (dataToWrite: BufferSource) => {
                 promiseResolver.push(dataToWrite);
             };
 
@@ -340,9 +340,9 @@ describe("BtpSessionHandler", () => {
         });
 
         it("triggers timeout as did not send ack within 5 sec", async () => {
-            const { promise: writeBlePromise, resolver: writeBleResolver } = createPromise<Uint8Array>();
+            const { promise: writeBlePromise, resolver: writeBleResolver } = createPromise<BufferSource>();
             const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } =
-                createPromise<Uint8Array>();
+                createPromise<BufferSource>();
 
             const segmentPayload = Bytes.fromHex("010203040506070809");
             const matterMessage = BtpCodec.encodeBtpPacket({
@@ -357,19 +357,19 @@ describe("BtpSessionHandler", () => {
                 payload: {
                     ackNumber: 0,
                     sequenceNumber: 0,
-                    messageLength: segmentPayload.length,
+                    messageLength: segmentPayload.byteLength,
                     segmentPayload,
                 },
             });
 
-            onHandleMatterMessageCallback = async (matterMessage: Uint8Array) => {
+            onHandleMatterMessageCallback = async (matterMessage: BufferSource) => {
                 handleMatterMessageResolver(matterMessage);
                 MockTime.getTimer("Mock time", 5000, () =>
                     btpSessionHandler?.sendMatterMessage(Bytes.fromHex("090807060504030201")),
                 );
             };
 
-            onWriteBleCallback = async (dataToWrite: Uint8Array) => {
+            onWriteBleCallback = async (dataToWrite: BufferSource) => {
                 writeBleResolver(dataToWrite);
             };
 
@@ -386,7 +386,7 @@ describe("BtpSessionHandler", () => {
         it("triggers timeout as did not receive ack within 15 sec", async () => {
             const { promise: disconnectBlePromise, resolver: disconnectBleResolver } = createPromise<void>();
             const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } =
-                createPromise<Uint8Array>();
+                createPromise<BufferSource>();
 
             const segmentPayload = Bytes.fromHex("010203040506070809");
             const matterMessage = BtpCodec.encodeBtpPacket({
@@ -401,12 +401,12 @@ describe("BtpSessionHandler", () => {
                 payload: {
                     ackNumber: undefined,
                     sequenceNumber: 0,
-                    messageLength: segmentPayload.length,
+                    messageLength: segmentPayload.byteLength,
                     segmentPayload,
                 },
             });
 
-            onHandleMatterMessageCallback = async (matterMessage: Uint8Array) => {
+            onHandleMatterMessageCallback = async (matterMessage: BufferSource) => {
                 handleMatterMessageResolver(matterMessage);
                 await btpSessionHandler?.sendMatterMessage(Bytes.fromHex("090807060504030201"));
             };
@@ -451,9 +451,9 @@ describe("BtpSessionHandler", () => {
         });
 
         it("handles rounding off sequence numbers", async () => {
-            const { promise: writeBlePromise, resolver: writeBleResolver } = createPromise<Uint8Array>();
+            const { promise: writeBlePromise, resolver: writeBleResolver } = createPromise<BufferSource>();
             const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } =
-                createPromise<Uint8Array>();
+                createPromise<BufferSource>();
 
             for (let i = 0; i < 257; i++) {
                 const segmentPayload = Bytes.fromHex("010203040506070809");
@@ -470,18 +470,18 @@ describe("BtpSessionHandler", () => {
                     payload: {
                         ackNumber: getSequenceNumber(i - 1),
                         sequenceNumber: getSequenceNumber(i - 1),
-                        messageLength: segmentPayload.length,
+                        messageLength: segmentPayload.byteLength,
                         segmentPayload,
                     },
                 };
                 const matterMessage = BtpCodec.encodeBtpPacket(packet);
 
-                onHandleMatterMessageCallback = async (matterMessage: Uint8Array) => {
+                onHandleMatterMessageCallback = async (matterMessage: BufferSource) => {
                     handleMatterMessageResolver(matterMessage);
                     await btpSessionHandler?.sendMatterMessage(Bytes.fromHex("090807060504030201"));
                 };
 
-                onWriteBleCallback = async (dataToWrite: Uint8Array) => {
+                onWriteBleCallback = async (dataToWrite: BufferSource) => {
                     writeBleResolver(dataToWrite);
                 };
 

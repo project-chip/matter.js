@@ -139,13 +139,8 @@ export function serialize(value: any) {
         if (typeof value === "boolean") {
             return value ? "true" : "false";
         }
-        if (ArrayBuffer.isView(value)) {
-            const dv = new DataView(value.buffer, value.byteOffset, value.byteLength);
-            const bytes = Array<string>();
-            for (let i = 0; i < dv.byteLength; i++) {
-                bytes.push(dv.getUint8(i).toString(16).padStart(2, "0"));
-            }
-            return bytes.join("");
+        if (Bytes.isBufferSource(value)) {
+            return Bytes.toHex(value);
         }
 
         // Composite objects after this
@@ -284,7 +279,7 @@ export function serializeToJs(value: unknown) {
         return `new Date(${JSON.stringify(value.toISOString)})`;
     }
 
-    if (value instanceof Uint8Array) {
+    if (Bytes.isBufferSource(value)) {
         return `b$\`${Bytes.toHex(value)}\``;
     }
 

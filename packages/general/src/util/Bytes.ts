@@ -34,41 +34,50 @@ export function b$(strings: TemplateStringsArray, ...values: unknown[]) {
  * Utility functions for manipulating Uint8Array.
  */
 export namespace Bytes {
-    export function toHex(array: Uint8Array) {
+    export function toHex(array: BufferSource) {
         const hexArray = new Array<string>();
-        hexArray.length = array.length;
-        array.forEach(byte => hexArray.push(byte.toString(16).padStart(2, "0")));
+        const data = Bytes.of(array);
+        hexArray.length = data.length;
+        data.forEach(byte => hexArray.push(byte.toString(16).padStart(2, "0")));
         return hexArray.join("");
     }
 
-    export function toBase64(array: Uint8Array) {
+    export function toBase64(array: BufferSource) {
         let result = "";
-        array.forEach(byte => (result += String.fromCharCode(byte)));
+        const data = Bytes.of(array);
+        data.forEach(byte => (result += String.fromCharCode(byte)));
         return btoa(result);
     }
 
-    export function dataViewOf(array: Uint8Array) {
-        return new DataView(array.buffer, array.byteOffset, array.byteLength);
+    export function dataViewOf(array: BufferSource) {
+        const data = Bytes.of(array);
+        return new DataView(data.buffer, data.byteOffset, data.byteLength);
     }
 
-    export function areEqual(array1: Uint8Array, array2: Uint8Array) {
-        if (array1.length !== array2.length) return false;
-        return array1.every((value, index) => array2[index] === value);
+    export function areEqual(array1: BufferSource, array2: BufferSource) {
+        if (array1.byteLength !== array2.byteLength) return false;
+        const data1 = Bytes.of(array1);
+        const data2 = Bytes.of(array2);
+        return data1.every((value, index) => data2[index] === value);
     }
 
-    export function of(source: BufferSource) {
+    export function of(source: BufferSource | Uint8Array): Uint8Array<ArrayBuffer> {
         if (source instanceof Uint8Array) {
-            return source;
+            return source as Uint8Array<ArrayBuffer>;
         }
 
         if (ArrayBuffer.isView(source)) {
-            return new Uint8Array(source.buffer, source.byteLength, source.byteOffset);
+            return new Uint8Array<ArrayBuffer>(source.buffer, source.byteLength, source.byteOffset);
         }
 
-        return new Uint8Array(source);
+        return new Uint8Array<ArrayBuffer>(source);
     }
 
-    export function fromHex(hexString: string) {
+    export function isBufferSource(source: any): source is BufferSource {
+        return source instanceof ArrayBuffer || source instanceof Uint8Array || ArrayBuffer.isView(source);
+    }
+
+    export function fromHex(hexString: string): BufferSource {
         if (hexString.length === 0) return new Uint8Array(0);
         if (hexString.length % 2 !== 0) throw new UnexpectedDataError("Hex string should have an even length.");
         const bytes = hexString.match(/.{1,2}/g)?.map(byteHex => parseInt(byteHex, 16));
@@ -86,27 +95,29 @@ export namespace Bytes {
         return fromHex(result);
     }
 
-    export function fromString(string: string) {
+    export function fromString(string: string): BufferSource {
         return new TextEncoder().encode(string);
     }
 
-    export function concat(...arrays: Uint8Array[]): Uint8Array {
+    export function concat(...arrays: BufferSource[]): BufferSource {
         let length = 0;
-        arrays.forEach(array => (length += array.length));
+        const data = arrays.map(array => Bytes.of(array));
+        data.forEach(array => (length += array.length));
         const result = new Uint8Array(length);
         let offset = 0;
-        arrays.forEach(array => {
+        data.forEach(array => {
             result.set(array, offset);
             offset += array.length;
         });
         return result;
     }
 
-    export function asBigInt(bytes: Uint8Array) {
-        const view = new DataView(bytes.buffer);
+    export function asBigInt(bytes: BufferSource) {
+        const view = Bytes.dataViewOf(bytes);
         let result = 0n;
-        for (let i = 0; i < bytes.length; ) {
-            const remaining = bytes.length - i;
+        const length = view.byteLength;
+        for (let i = 0; i < length; ) {
+            const remaining = length - i;
             if (remaining >= 8) {
                 result = (result << 64n) + view.getBigUint64(i);
                 i += 8;

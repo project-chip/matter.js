@@ -95,8 +95,8 @@ export type DnsMessage = {
 };
 
 export type DnsMessagePartiallyPreEncoded = Omit<DnsMessage, "answers" | "additionalRecords"> & {
-    answers: (DnsRecord<any> | Uint8Array)[];
-    additionalRecords: (DnsRecord<any> | Uint8Array)[];
+    answers: (DnsRecord<any> | BufferSource)[];
+    additionalRecords: (DnsRecord<any> | BufferSource)[];
 };
 
 export enum DnsMessageType {
@@ -122,7 +122,7 @@ export enum DnsRecordClass {
 }
 
 export class DnsCodec {
-    static decode(message: Uint8Array): DnsMessage | undefined {
+    static decode(message: BufferSource): DnsMessage | undefined {
         try {
             const reader = new DataReader(message);
             const transactionId = reader.readUInt16();
@@ -153,7 +153,7 @@ export class DnsCodec {
         }
     }
 
-    static decodeQuery(reader: DataReader<Endian.Big>, message: Uint8Array): DnsQuery {
+    static decodeQuery(reader: DataReader<Endian.Big>, message: BufferSource): DnsQuery {
         const name = this.decodeQName(reader, message);
         const recordType = reader.readUInt16();
         const classInt = reader.readUInt16();
@@ -162,7 +162,7 @@ export class DnsCodec {
         return { name, recordType, recordClass, uniCastResponse };
     }
 
-    static decodeRecord(reader: DataReader<Endian.Big>, message: Uint8Array): DnsRecord<any> {
+    static decodeRecord(reader: DataReader<Endian.Big>, message: BufferSource): DnsRecord<any> {
         const name = this.decodeQName(reader, message);
         const recordType = reader.readUInt16();
         const classInt = reader.readUInt16();
@@ -175,7 +175,7 @@ export class DnsCodec {
         return { name, recordType, recordClass, ttl, value, flushCache };
     }
 
-    static decodeQName(reader: DataReader<Endian.Big>, message: Uint8Array, visited = new Set<number>()): string {
+    static decodeQName(reader: DataReader<Endian.Big>, message: BufferSource, visited = new Set<number>()): string {
         if (visited.has(reader.offset)) {
             throw new UnexpectedDataError(`QNAME pointer loop detected. Index ${reader.offset} visited twice.`);
         }
@@ -192,7 +192,7 @@ export class DnsCodec {
                 }
                 // Compressed Qname
                 const indexInMessage = reader.readUInt8() | ((itemLength & 0x3f) << 8);
-                if (indexInMessage >= message.length) {
+                if (indexInMessage >= messageReader.length) {
                     throw new UnexpectedDataError("Invalid compressed QNAME pointer pointing to out of bounds index.");
                 }
                 messageReader.offset = indexInMessage;
@@ -207,7 +207,7 @@ export class DnsCodec {
         return qNameItems.join(".");
     }
 
-    private static decodeRecordValue(valueBytes: Uint8Array, recordType: DnsRecordType, message: Uint8Array) {
+    private static decodeRecordValue(valueBytes: BufferSource, recordType: DnsRecordType, message: BufferSource) {
         switch (recordType) {
             case DnsRecordType.PTR:
                 return this.decodeQName(new DataReader(valueBytes), message);
@@ -225,7 +225,7 @@ export class DnsCodec {
         }
     }
 
-    static decodeSrvRecord(valueBytes: Uint8Array, message: Uint8Array): SrvRecordValue {
+    static decodeSrvRecord(valueBytes: BufferSource, message: BufferSource): SrvRecordValue {
         const reader = new DataReader(valueBytes);
         const priority = reader.readUInt16();
         const weight = reader.readUInt16();
@@ -234,11 +234,11 @@ export class DnsCodec {
         return { priority, weight, port, target };
     }
 
-    static decodeTxtRecord(valueBytes: Uint8Array): string[] {
+    static decodeTxtRecord(valueBytes: BufferSource): string[] {
         const reader = new DataReader(valueBytes);
         const result = new Array<string>();
         let bytesRead = 0;
-        while (bytesRead < valueBytes.length) {
+        while (bytesRead < valueBytes.byteLength) {
             const length = reader.readUInt8();
             result.push(reader.readUtf8String(length));
             bytesRead += length + 1;
@@ -246,12 +246,12 @@ export class DnsCodec {
         return result;
     }
 
-    static decodeAaaaRecord(valueBytes: Uint8Array): string {
+    static decodeAaaaRecord(valueBytes: BufferSource): string {
         const reader = new DataReader(valueBytes);
         return ipv6BytesToString(reader.readByteArray(16));
     }
 
-    static decodeARecord(valueBytes: Uint8Array): string {
+    static decodeARecord(valueBytes: BufferSource): string {
         const reader = new DataReader(valueBytes);
         return ipv4BytesToString(reader.readByteArray(4));
     }
@@ -263,7 +263,7 @@ export class DnsCodec {
         answers = [],
         authorities = [],
         additionalRecords = [],
-    }: Partial<DnsMessagePartiallyPreEncoded>): Uint8Array {
+    }: Partial<DnsMessagePartiallyPreEncoded>): BufferSource {
         if (messageType === undefined) throw new InternalError("Message type must be specified!");
         if (queries.length > 0 && messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery)
             throw new InternalError("Queries can only be included in query messages!");
@@ -282,7 +282,7 @@ export class DnsCodec {
             writer.writeUInt16(recordClass | (uniCastResponse ? 0x8000 : 0));
         });
         [...answers, ...authorities, ...additionalRecords].forEach(record => {
-            if (record instanceof Uint8Array) {
+            if (Bytes.isBufferSource(record)) {
                 writer.writeByteArray(record);
             } else {
                 writer.writeByteArray(this.encodeRecord(record));
@@ -291,7 +291,7 @@ export class DnsCodec {
         return writer.toByteArray();
     }
 
-    static encodeRecord(record: DnsRecord<any>): Uint8Array {
+    static encodeRecord(record: DnsRecord<any>): BufferSource {
         const { name, recordType, recordClass, ttl, value, flushCache = false } = record;
 
         const writer = new DataWriter();
@@ -300,12 +300,12 @@ export class DnsCodec {
         writer.writeUInt16(recordClass | (flushCache ? 0x8000 : 0));
         writer.writeUInt32(ttl);
         const encodedValue = this.encodeRecordValue(value, recordType);
-        writer.writeUInt16(encodedValue.length);
+        writer.writeUInt16(encodedValue.byteLength);
         writer.writeByteArray(encodedValue);
         return writer.toByteArray();
     }
 
-    private static encodeRecordValue(value: any, recordType: DnsRecordType): Uint8Array {
+    private static encodeRecordValue(value: any, recordType: DnsRecordType): BufferSource {
         switch (recordType) {
             case DnsRecordType.PTR:
                 return this.encodeQName(value as string);
@@ -318,7 +318,7 @@ export class DnsCodec {
             case DnsRecordType.A:
                 return this.encodeARecord(value as string);
             default:
-                if (value instanceof Uint8Array) return value;
+                if (Bytes.isBufferSource(value)) return value;
                 throw new UnexpectedDataError(`Unsupported record type ${recordType}`);
         }
     }
@@ -337,7 +337,7 @@ export class DnsCodec {
         const writer = new DataWriter();
         entries.forEach(entry => {
             const entryData = Bytes.fromString(entry);
-            writer.writeUInt8(entryData.length);
+            writer.writeUInt8(entryData.byteLength);
             writer.writeByteArray(entryData);
         });
         return writer.toByteArray();
@@ -358,7 +358,7 @@ export class DnsCodec {
             // TODO: Implement compression
             qname.split(".").forEach(label => {
                 const labelData = Bytes.fromString(label);
-                writer.writeUInt8(labelData.length);
+                writer.writeUInt8(labelData.byteLength);
                 writer.writeByteArray(labelData);
             });
         }

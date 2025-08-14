@@ -25,7 +25,7 @@ export interface UdpChannel {
     addMembership(address: string): MaybePromise<void>;
     dropMembership(address: string): MaybePromise<void>;
     onData(listener: UdpChannel.Callback): TransportInterface.Listener;
-    send(host: string, port: number, data: Uint8Array): Promise<void>;
+    send(host: string, port: number, data: BufferSource): Promise<void>;
     close(): Promise<void>;
     get port(): number;
     supports(type: ChannelType, address?: string): boolean;
@@ -33,6 +33,6 @@ export interface UdpChannel {
 
 export namespace UdpChannel {
     export interface Callback {
-        (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Uint8Array): void;
+        (netInterface: string | undefined, peerAddress: string, peerPort: number, data: BufferSource): void;
     }
 }

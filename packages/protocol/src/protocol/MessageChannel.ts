@@ -55,7 +55,7 @@ export class MessageChannel implements Channel<Message> {
     // When the session is supporting MRP and the channel is not reliable, use MRP handling
 
     constructor(
-        readonly channel: Channel<Uint8Array>,
+        readonly channel: Channel<BufferSource>,
         readonly session: Session,
         closeCallback?: () => Promise<void>,
     ) {
@@ -91,9 +91,9 @@ export class MessageChannel implements Channel<Message> {
         logger.debug("Message »", MessageCodec.messageDiagnostics(message, logContext));
         const packet = this.session.encode(message);
         const bytes = MessageCodec.encodePacket(packet);
-        if (bytes.length > this.maxPayloadSize) {
+        if (bytes.byteLength > this.maxPayloadSize) {
             logger.warn(
-                `Matter message to send to ${this.name} is ${bytes.length}bytes long, which is larger than the maximum allowed size of ${this.maxPayloadSize}. This only works if both nodes support it.`,
+                `Matter message to send to ${this.name} is ${bytes.byteLength}bytes long, which is larger than the maximum allowed size of ${this.maxPayloadSize}. This only works if both nodes support it.`,
             );
         }
 

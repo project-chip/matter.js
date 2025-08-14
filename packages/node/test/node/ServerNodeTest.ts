@@ -158,7 +158,7 @@ describe("ServerNode", () => {
         });
         scannerChannel.addMembership("ff02::fb");
 
-        const advertisementReceived = new Promise<Uint8Array>(resolve =>
+        const advertisementReceived = new Promise<BufferSource>(resolve =>
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolve(data)),
         );
 
@@ -204,7 +204,7 @@ describe("ServerNode", () => {
         expect(additional(DnsRecordType.A)).equals("10.10.10.128");
         expect(additional(DnsRecordType.SRV)?.port).equals(operationalPort);
 
-        const expirationReceived = new Promise<Uint8Array>(resolve =>
+        const expirationReceived = new Promise<BufferSource>(resolve =>
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolve(data)),
         );
 

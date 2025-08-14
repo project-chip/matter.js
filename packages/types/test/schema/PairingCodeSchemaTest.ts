@@ -118,7 +118,7 @@ describe("QrPairingCodeCodec", () => {
         it("encodes and decodes just serialNumber as string", () => {
             const tlvData = Bytes.fromHex("152C000A3132333435363738393018"); // from Specs
 
-            const decoded = QrPairingCodeCodec.decodeTlvData(tlvData);
+            const decoded = QrPairingCodeCodec.decodeTlvData(Bytes.of(tlvData));
 
             expect(decoded).deep.equal({
                 serialNumber: "1234567890",

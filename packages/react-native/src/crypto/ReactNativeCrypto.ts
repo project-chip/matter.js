@@ -42,14 +42,14 @@ export class ReactNativeCrypto extends StandardCrypto {
      * Quick Crypto doesn't currently support {@link SubtleCrypto#deriveBits}.
      */
     override async createHkdfKey(
-        secret: Uint8Array,
-        salt: Uint8Array,
-        info: Uint8Array,
+        secret: BufferSource,
+        salt: BufferSource,
+        info: BufferSource,
         length: number = CRYPTO_SYMMETRIC_KEY_LENGTH,
     ) {
         const prk = crypto
-            .createHmac("SHA-256", salt.byteLength ? salt : new Uint8Array(CRYPTO_HASH_LEN_BYTES))
-            .update(secret)
+            .createHmac("SHA-256", salt.byteLength ? Bytes.of(salt) : new Uint8Array(CRYPTO_HASH_LEN_BYTES))
+            .update(Bytes.of(secret))
             .digest();
 
         // T(0) = empty
@@ -67,7 +67,7 @@ export class ReactNativeCrypto extends StandardCrypto {
         let prev = 0;
         let start = 0;
         for (let c = 1; c <= N; c++) {
-            T.set(info, start);
+            T.set(Bytes.of(info), start);
             T[start + info.byteLength] = c;
 
             T.set(

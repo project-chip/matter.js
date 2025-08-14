@@ -84,7 +84,7 @@ describe("TlvString", () => {
 describe("TlvByteString", () => {
     describe("encode", () => {
         it("encodes a byte string", () => {
-            const result = TlvByteString.encode(Bytes.fromHex("0001"));
+            const result = TlvByteString.encode(Bytes.of(Bytes.fromHex("0001")));
 
             expect(Bytes.toHex(result)).equal("10020001");
         });
@@ -104,7 +104,7 @@ describe("TlvByteString", () => {
         for (const testName in validateByteStringTestVector) {
             const { input, out: throwException } = validateByteStringTestVector[testName];
             it(testName, () => {
-                const test = () => BoundedInt.validate(Bytes.fromHex(input));
+                const test = () => BoundedInt.validate(Bytes.of(Bytes.fromHex(input)));
                 if (throwException) {
                     expect(test).throw();
                 } else {

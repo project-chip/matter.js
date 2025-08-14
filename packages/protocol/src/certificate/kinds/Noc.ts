@@ -14,7 +14,7 @@ import { Rcac } from "./Rcac.js";
 
 export class Noc extends OperationalBase<OperationalCertificate.Noc> {
     /** Construct the class from a Tlv version of the certificate */
-    static fromTlv(tlv: Uint8Array) {
+    static fromTlv(tlv: BufferSource) {
         return new Noc(OperationalCertificate.TlvNoc.decode(tlv));
     }
 
@@ -136,7 +136,7 @@ export class Noc extends OperationalBase<OperationalCertificate.Noc> {
         if (subjectKeyIdentifier === undefined) {
             throw new CertificateError(`Noc certificate must have subjectKeyIdentifier set.`);
         }
-        if (subjectKeyIdentifier.length !== 20) {
+        if (subjectKeyIdentifier.byteLength !== 20) {
             throw new CertificateError(`Noc certificate subjectKeyIdentifier must be 160 bit.`);
         }
 
@@ -144,7 +144,7 @@ export class Noc extends OperationalBase<OperationalCertificate.Noc> {
         if (authorityKeyIdentifier === undefined) {
             throw new CertificateError(`Noc certificate must have authorityKeyIdentifier set.`);
         }
-        if (authorityKeyIdentifier.length !== 20) {
+        if (authorityKeyIdentifier.byteLength !== 20) {
             throw new CertificateError(`Noc certificate authorityKeyIdentifier must be 160 bit.`);
         }
 

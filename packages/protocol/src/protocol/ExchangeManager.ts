@@ -6,6 +6,7 @@
 
 import { DecodedMessage, MessageCodec, SessionType } from "#codec/MessageCodec.js";
 import {
+    Bytes,
     Channel,
     Crypto,
     Diagnostic,
@@ -146,9 +147,10 @@ export class ExchangeManager {
         this.#exchanges.clear();
     }
 
-    private async onMessage(channel: Channel<Uint8Array>, messageBytes: Uint8Array) {
+    private async onMessage(channel: Channel<BufferSource>, messageBytes: BufferSource) {
         const packet = MessageCodec.decodePacket(messageBytes);
-        const aad = messageBytes.slice(0, messageBytes.length - packet.applicationPayload.length); // Header+Extensions
+        const bytes = Bytes.of(messageBytes);
+        const aad = bytes.slice(0, bytes.length - packet.applicationPayload.byteLength); // Header+Extensions
 
         const messageId = packet.header.messageId;
 
@@ -193,7 +195,7 @@ export class ExchangeManager {
                 throw new UnexpectedDataError("Group session message must include a source NodeId");
             }
 
-            let key: Uint8Array;
+            let key: BufferSource;
             ({ session, message, key } = this.#sessionManager.groupSessionFromPacket(packet, aad));
 
             try {
@@ -431,9 +433,9 @@ export class ExchangeManager {
         this.#listeners.set(
             transportInterface,
             transportInterface.onData((socket, data) => {
-                if (udpInterface && data.length > socket.maxPayloadSize) {
+                if (udpInterface && data.byteLength > socket.maxPayloadSize) {
                     logger.warn(
-                        `Ignoring UDP message on channel ${socket.name} with size ${data.length} from ${socket.name}, which is larger than the maximum allowed size of ${socket.maxPayloadSize}.`,
+                        `Ignoring UDP message on channel ${socket.name} with size ${data.byteLength} from ${socket.name}, which is larger than the maximum allowed size of ${socket.maxPayloadSize}.`,
                     );
                     return;
                 }

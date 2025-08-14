@@ -167,19 +167,19 @@ export type DiscoveryResponse = {
 }[];
 
 export type RootCertificateResponse = {
-    RCAC: Uint8Array;
+    RCAC: BufferSource;
 };
 
 export type IssueNocChainRequest = {
-    elements: Uint8Array;
+    elements: BufferSource;
     nodeId: NodeId;
 };
 
 export type IssueNocChainResponse = {
-    ICAC?: Uint8Array;
-    IPK: Uint8Array;
-    NOC: Uint8Array;
-    RCAC: Uint8Array;
+    ICAC?: BufferSource;
+    IPK: BufferSource;
+    NOC: BufferSource;
+    RCAC: BufferSource;
 };
 
 export abstract class CommandHandler {

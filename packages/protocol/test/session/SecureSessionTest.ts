@@ -57,7 +57,10 @@ describe("SecureSession", () => {
         it("decrypts a message", () => {
             const packet = MessageCodec.decodePacket(ENCRYPTED_MESSAGE);
 
-            const aad = ENCRYPTED_MESSAGE.slice(0, ENCRYPTED_MESSAGE.length - packet.applicationPayload.length);
+            const aad = Bytes.of(ENCRYPTED_MESSAGE).slice(
+                0,
+                ENCRYPTED_MESSAGE.byteLength - packet.applicationPayload.byteLength,
+            );
             const result = secureSession().decode(packet, aad);
             expect(Bytes.toHex(result.payload)).to.equal(Bytes.toHex(DECRYPTED_BYTES));
         });

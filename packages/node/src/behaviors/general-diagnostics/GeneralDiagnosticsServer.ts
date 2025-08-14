@@ -53,7 +53,8 @@ export class GeneralDiagnosticsServer extends Base {
         if (this.state.testEventTriggersEnabled === undefined) {
             this.state.testEventTriggersEnabled = false;
         } else if (this.state.testEventTriggersEnabled) {
-            if (this.state.deviceTestEnableKey.every(byte => byte === 0)) {
+            const enableKey = Bytes.of(this.state.deviceTestEnableKey);
+            if (enableKey.every(byte => byte === 0)) {
                 throw new ImplementationError("Test event triggers are enabled but no deviceTestEnableKey is set.");
             }
             logger.warn("Test event triggers are enabled. Make sure to disable them in production.");
@@ -80,12 +81,14 @@ export class GeneralDiagnosticsServer extends Base {
         }
     }
 
-    #validateTestEnabledKey(enableKey: Uint8Array) {
-        if (enableKey.every(byte => byte === 0)) {
+    #validateTestEnabledKey(enableKey: BufferSource) {
+        const keyData = Bytes.of(enableKey);
+        if (keyData.every(byte => byte === 0)) {
             throw new StatusResponseError("Invalid test enable key, all zeros", StatusCode.ConstraintError);
         }
-        enableKey.forEach((byte, index) => {
-            if (byte !== this.state.deviceTestEnableKey[index]) {
+        const expectedKeyData = Bytes.of(this.state.deviceTestEnableKey);
+        keyData.forEach((byte, index) => {
+            if (byte !== expectedKeyData[index]) {
                 throw new StatusResponseError("Invalid test enable key", StatusCode.ConstraintError);
             }
         });
@@ -154,7 +157,7 @@ export class GeneralDiagnosticsServer extends Base {
                     },
                 },
             ],
-        }).length;
+        }).byteLength;
 
         const exchange = this.context.exchange;
         if (exchange === undefined) {
@@ -390,7 +393,7 @@ export namespace GeneralDiagnosticsServer {
         totalOperationalHoursCounter: number = 0;
 
         /** The TestEnableKey set for this device for the test commands. Default means "not enabled"." */
-        deviceTestEnableKey = new Uint8Array(16).fill(0);
+        deviceTestEnableKey: BufferSource = new Uint8Array(16).fill(0);
 
         [Val.properties](endpoint: Endpoint, _session: ValueSupervisor.Session) {
             return {

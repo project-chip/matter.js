@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MaybePromise } from "#general";
+import { Bytes, MaybePromise } from "#general";
 import { undefinedValue } from "#location.js";
 
 /**
@@ -119,7 +119,7 @@ export namespace Stat {
             typeof definition === "object" &&
             definition !== null &&
             !Array.isArray(definition) &&
-            !ArrayBuffer.isView(definition) &&
+            !Bytes.isBufferSource(definition) &&
             !(definition instanceof Date) &&
             !(definition.constructor.name === "BasicObservable")
         );

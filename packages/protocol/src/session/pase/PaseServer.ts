@@ -46,18 +46,19 @@ export class PaseServer implements ProtocolHandler {
 
     static fromVerificationValue(
         sessions: SessionManager,
-        verificationValue: Uint8Array,
+        verificationValue: BufferSource,
         pbkdfParameters?: PbkdfParameters,
     ) {
-        const w0 = bytesToNumberBE(verificationValue.slice(0, 32));
-        const L = verificationValue.slice(32, 32 + 65);
+        const verificationData = Bytes.of(verificationValue);
+        const w0 = bytesToNumberBE(verificationData.slice(0, 32));
+        const L = verificationData.slice(32, 32 + 65);
         return new PaseServer(sessions, w0, L, pbkdfParameters);
     }
 
     constructor(
         private sessions: SessionManager,
         private readonly w0: bigint,
-        private readonly L: Uint8Array,
+        private readonly L: BufferSource,
         private readonly pbkdfParameters?: PbkdfParameters,
     ) {}
 

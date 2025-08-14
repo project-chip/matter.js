@@ -59,8 +59,8 @@ const DEFAULT_SESSION_PARAMETERS = {
 };
 
 export interface ResumptionRecord {
-    sharedSecret: Uint8Array;
-    resumptionId: Uint8Array;
+    sharedSecret: BufferSource;
+    resumptionId: BufferSource;
     fabric: Fabric;
     peerNodeId: NodeId;
     sessionParameters: SessionParameters;
@@ -69,8 +69,8 @@ export interface ResumptionRecord {
 
 type ResumptionStorageRecord = {
     nodeId: NodeId;
-    sharedSecret: Uint8Array;
-    resumptionId: Uint8Array;
+    sharedSecret: BufferSource;
+    resumptionId: BufferSource;
     fabricId: FabricId;
     peerNodeId: NodeId;
     sessionParameters: {
@@ -265,8 +265,8 @@ export class SessionManager {
         fabric: Fabric | undefined;
         peerNodeId: NodeId;
         peerSessionId: number;
-        sharedSecret: Uint8Array;
-        salt: Uint8Array;
+        sharedSecret: BufferSource;
+        salt: BufferSource;
         isInitiator: boolean;
         isResumption: boolean;
         peerSessionParameters?: SessionParameterOptions;
@@ -408,8 +408,7 @@ export class SessionManager {
         //TODO: It can have multiple sessions for one node ...
         return [...this.#sessions].find(session => {
             if (!session.isSecure) return false;
-            const secureSession = session;
-            return secureSession.peerIs(address);
+            return session.peerIs(address);
         });
     }
 
@@ -471,7 +470,7 @@ export class SessionManager {
      * Creates or Returns the Group session based on an incoming packet.
      * The Session ID is determined by trying to decrypt te packet with possible keys.
      */
-    groupSessionFromPacket(packet: DecodedPacket, aad: Uint8Array) {
+    groupSessionFromPacket(packet: DecodedPacket, aad: BufferSource) {
         const groupId = packet.header.destGroupId;
         if (groupId === undefined) {
             throw new UnexpectedDataError("Group ID is required for GroupSession fromPacket.");
@@ -517,7 +516,7 @@ export class SessionManager {
         }
     }
 
-    findResumptionRecordById(resumptionId: Uint8Array) {
+    findResumptionRecordById(resumptionId: BufferSource) {
         this.#construction.assert();
         return [...this.#resumptionRecords.values()].find(record => Bytes.areEqual(record.resumptionId, resumptionId));
     }

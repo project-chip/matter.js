@@ -26,7 +26,7 @@ export abstract class AttestationBaseCertificate<CT extends X509Certificate> ext
      * Returns the signed certificate in ASN.1 DER format.
      * If the certificate is not signed, it throws a CertificateError.
      */
-    asSignedAsn1(): Uint8Array<ArrayBufferLike> {
+    asSignedAsn1(): BufferSource {
         const certificate = this.genericBuildAsn1Structure(this.cert);
         const certBytes = DerCodec.encode({
             certificate,

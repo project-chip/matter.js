@@ -35,8 +35,8 @@ export class CertificateAuthority {
     #crypto: Crypto;
     #rootCertId = BigInt(0);
     #rootKeyPair?: PrivateKey;
-    #rootKeyIdentifier?: Uint8Array<ArrayBufferLike>;
-    #rootCertBytes?: Uint8Array<ArrayBufferLike>;
+    #rootKeyIdentifier?: BufferSource;
+    #rootCertBytes?: BufferSource;
     #nextCertificateId = BigInt(1);
     #construction: Construction<CertificateAuthority>;
 
@@ -59,14 +59,17 @@ export class CertificateAuthority {
             const certValues = options instanceof StorageContext ? await options.values() : (options ?? {});
 
             this.#rootKeyPair = await this.#crypto.createKeyPair();
-            this.#rootKeyIdentifier = (await this.#crypto.computeSha256(this.#rootKeyPair.publicKey)).slice(0, 20);
+            this.#rootKeyIdentifier = Bytes.of(await this.#crypto.computeSha256(this.#rootKeyPair.publicKey)).slice(
+                0,
+                20,
+            );
             this.#rootCertBytes = await this.#generateRootCert();
 
             if (
                 (typeof certValues.rootCertId === "number" || typeof certValues.rootCertId === "bigint") &&
-                (ArrayBuffer.isView(certValues.rootKeyPair) || typeof certValues.rootKeyPair === "object") &&
-                ArrayBuffer.isView(certValues.rootKeyIdentifier) &&
-                ArrayBuffer.isView(certValues.rootCertBytes) &&
+                (Bytes.isBufferSource(certValues.rootKeyPair) || typeof certValues.rootKeyPair === "object") &&
+                Bytes.isBufferSource(certValues.rootKeyIdentifier) &&
+                Bytes.isBufferSource(certValues.rootCertBytes) &&
                 (typeof certValues.nextCertificateId === "number" || typeof certValues.nextCertificateId === "bigint")
             ) {
                 this.#rootCertId = BigInt(certValues.rootCertId);
@@ -99,7 +102,7 @@ export class CertificateAuthority {
         return instance;
     }
 
-    get rootCert() {
+    get rootCert(): BufferSource {
         return this.#construction.assert("root cert", this.#rootCertBytes);
     }
 
@@ -140,7 +143,7 @@ export class CertificateAuthority {
     }
 
     async generateNoc(
-        publicKey: Uint8Array,
+        publicKey: BufferSource,
         fabricId: FabricId,
         nodeId: NodeId,
         caseAuthenticatedTags?: CaseAuthenticatedTag[],
@@ -163,7 +166,7 @@ export class CertificateAuthority {
                     digitalSignature: true,
                 },
                 extendedKeyUsage: [2, 1],
-                subjectKeyIdentifier: (await this.#crypto.computeSha256(publicKey)).slice(0, 20),
+                subjectKeyIdentifier: Bytes.of(await this.#crypto.computeSha256(publicKey)).slice(0, 20),
                 authorityKeyIdentifier: this.#initializedRootKeyIdentifier,
             },
         });
@@ -190,8 +193,8 @@ export namespace CertificateAuthority {
     export type Configuration = {
         rootCertId: bigint;
         rootKeyPair: BinaryKeyPair;
-        rootKeyIdentifier: Uint8Array;
-        rootCertBytes: Uint8Array;
+        rootKeyIdentifier: BufferSource;
+        rootCertBytes: BufferSource;
         nextCertificateId: bigint;
     };
 }

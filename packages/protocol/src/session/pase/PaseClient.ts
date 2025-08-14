@@ -24,7 +24,7 @@ export class PaseClient {
 
     static async generatePakePasscodeVerifier(crypto: Crypto, setupPinCode: number, pbkdfParameters: PbkdfParameters) {
         const { w0, L } = await Spake2p.computeW0L(crypto, pbkdfParameters, setupPinCode);
-        return Bytes.concat(numberToBytesBE(w0, 32), L);
+        return Bytes.concat(numberToBytesBE(w0, 32) as Uint8Array<ArrayBuffer>, L);
     }
 
     static generateRandomPasscode(crypto: Crypto) {

@@ -10,6 +10,7 @@
  * OpenSSL: https://github.com/openssl/openssl/blob/master/crypto/aes/aes_core.c
  */
 
+import { Bytes } from "#util/Bytes.js";
 import { WordArray } from "./WordArray.js";
 
 /**
@@ -17,7 +18,7 @@ import { WordArray } from "./WordArray.js";
  *
  * WARNING: Unaudited.  Consider platform replacement if available.
  */
-export function Aes(key: Uint8Array) {
+export function Aes(key: BufferSource) {
     const { encryptKey, decryptKey } = expandKey(key);
 
     return {
@@ -164,7 +165,8 @@ function crypt(input: WordArray, output: WordArray, roundKeys: WordArray, tabs: 
  *
  * This generates keys for each round based off of the input key.
  */
-function expandKey(key: Uint8Array) {
+function expandKey(keyData: BufferSource) {
+    const key = Bytes.of(keyData);
     const inputLength = key.length / 4,
         roundsNeeded = inputLength + 7,
         wordsNeeded = roundsNeeded * 4,

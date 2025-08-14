@@ -57,7 +57,7 @@ export class InsecureSession extends Session {
         return MessageCodec.encodePayload(message);
     }
 
-    get attestationChallengeKey(): Uint8Array {
+    get attestationChallengeKey(): BufferSource {
         throw new MatterFlowError("Not supported on an unsecure session");
     }
 

@@ -94,7 +94,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override async attestationRequest({ attestationNonce }: OperationalCredentials.AttestationRequest) {
-        if (attestationNonce.length !== 32) {
+        if (attestationNonce.byteLength !== 32) {
             throw new StatusResponseError("Invalid attestation nonce length", StatusCode.InvalidCommand);
         }
 
@@ -115,7 +115,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override async csrRequest({ csrNonce, isForUpdateNoc }: OperationalCredentials.CsrRequest) {
-        if (csrNonce.length !== 32) {
+        if (csrNonce.byteLength !== 32) {
             throw new StatusResponseError("Invalid csr nonce length", StatusCode.InvalidCommand);
         }
 

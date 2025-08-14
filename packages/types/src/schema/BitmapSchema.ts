@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { capitalize, Merge, UnexpectedDataError } from "#general";
+import { Bytes, capitalize, Merge, UnexpectedDataError } from "#general";
 import { Schema } from "./Schema.js";
 
 const enum BitRangeType {
@@ -106,7 +106,7 @@ export class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBi
     }
 }
 
-export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, Uint8Array> {
+export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, BufferSource> {
     private readonly byteArrayLength: number;
     private readonly maskOffset: MaskOffsetFromBitSchema<T>;
 
@@ -158,7 +158,8 @@ export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<T
         return result;
     }
 
-    override decodeInternal(bitmap: Uint8Array) {
+    override decodeInternal(data: BufferSource) {
+        const bitmap = Bytes.of(data);
         if (bitmap.length !== this.byteArrayLength)
             throw new UnexpectedDataError(`Unexpected length: ${bitmap.length}. Expected ${this.byteArrayLength}`);
         const result = {} as any;

@@ -304,7 +304,7 @@ export class ControllerCommissioner {
         passcode: number,
         device?: DiscoveryData,
     ): Promise<MessageChannel> {
-        let paseChannel: Channel<Uint8Array>;
+        let paseChannel: Channel<BufferSource>;
         if (device !== undefined) {
             logger.info(`Establish PASE to device`, MdnsClient.discoveryDataDiagnostics(device));
         }

@@ -24,7 +24,7 @@ export abstract class OperationalBase<CT extends X509Certificate> extends X509Ba
     protected abstract validateFields(): void;
 
     /** Encodes the signed certificate into the Matter TLV format. */
-    abstract asSignedTlv(signature: Uint8Array<ArrayBufferLike>): Uint8Array;
+    abstract asSignedTlv(signature: BufferSource): BufferSource;
 
     /**
      * Verifies general requirements a Matter certificate fields must fulfill.
@@ -32,9 +32,9 @@ export abstract class OperationalBase<CT extends X509Certificate> extends X509Ba
      */
     generalVerify() {
         const cert = this.cert;
-        if (cert.serialNumber.length > 20)
+        if (cert.serialNumber.byteLength > 20)
             throw new CertificateError(
-                `Serial number must not be longer then 20 octets. Current serial number has ${cert.serialNumber.length} octets.`,
+                `Serial number must not be longer then 20 octets. Current serial number has ${cert.serialNumber.byteLength} octets.`,
             );
 
         if (cert.signatureAlgorithm !== 1) {

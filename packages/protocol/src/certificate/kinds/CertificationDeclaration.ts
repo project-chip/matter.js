@@ -32,8 +32,8 @@ const TestCMS_SignerSubjectKeyIdentifier = Bytes.fromHex("62FA823359ACFAA9963E1C
 
 /** A Matter Certification Declaration */
 export class CertificationDeclaration {
-    #eContent: Uint8Array;
-    #subjectKeyIdentifier: Uint8Array;
+    #eContent: BufferSource;
+    #subjectKeyIdentifier: BufferSource;
 
     /**
      * Generator which is the main usage for the class from outside.
@@ -60,7 +60,7 @@ export class CertificationDeclaration {
 
     constructor(
         content: TypeFromBitmapSchema<typeof CertificationDeclarationDef.TlvDc>,
-        subjectKeyIdentifier: Uint8Array,
+        subjectKeyIdentifier: BufferSource,
     ) {
         this.#eContent = CertificationDeclarationDef.TlvDc.encode(content);
         this.#subjectKeyIdentifier = subjectKeyIdentifier;

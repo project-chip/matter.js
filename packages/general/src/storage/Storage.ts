@@ -42,7 +42,7 @@ export abstract class Storage {
     abstract writeBlobFromStream(
         contexts: string[],
         key: string,
-        stream: ReadableStream<Uint8Array>,
+        stream: ReadableStream<BufferSource>,
     ): MaybePromise<void>;
 }
 

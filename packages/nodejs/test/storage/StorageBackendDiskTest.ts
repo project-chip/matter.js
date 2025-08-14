@@ -212,7 +212,7 @@ describe("StorageBackendDiskAsync", () => {
 
     it("writeBlob and readBlob success", async () => {
         const data = new Uint8Array([5, 6, 7, 8]);
-        const stream = new ReadableStream<Uint8Array>({
+        const stream = new ReadableStream<BufferSource>({
             start(controller) {
                 controller.enqueue(data);
                 controller.close();
@@ -223,7 +223,7 @@ describe("StorageBackendDiskAsync", () => {
 
         const blob = await storage.openBlob(CONTEXTx1, "blobkey");
         const reader = blob.stream().getReader();
-        const chunks: Uint8Array[] = [];
+        const chunks: BufferSource[] = [];
         while (true) {
             const { value, done } = await reader.read();
             if (done) break;
@@ -234,7 +234,7 @@ describe("StorageBackendDiskAsync", () => {
 
     it("blobSize returns correct size", async () => {
         const data = new Uint8Array([9, 10, 11]);
-        const stream = new ReadableStream<Uint8Array>({
+        const stream = new ReadableStream<BufferSource>({
             start(controller) {
                 controller.enqueue(data);
                 controller.close();

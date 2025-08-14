@@ -62,8 +62,8 @@ const CurveLookup = {
 };
 
 export type BinaryKeyPair = {
-    publicKey: Uint8Array;
-    privateKey: Uint8Array;
+    publicKey: BufferSource;
+    privateKey: BufferSource;
 };
 
 /**
@@ -131,40 +131,40 @@ export interface Key extends JsonWebKey {
      * Binary alias to private key field.  Automatically encodes/decodes the
      * base-64 private key.
      */
-    privateBits?: Uint8Array;
+    privateBits?: BufferSource;
 
     /**
      * Binary alias to the x field.  Automatically encodes/decodes the base-64
      * x-point on EC public keys.
      */
-    xBits?: Uint8Array;
+    xBits?: BufferSource;
 
     /**
      * Binary alias to the y field.  Automatically encodes/decodes the base-64
      * y-point on EC public keys.
      */
-    yBits?: Uint8Array;
+    yBits?: BufferSource;
 
     /**
      * Import (write-only) of private keys encoded in SEC1 format.
      */
-    sec1?: Uint8Array;
+    sec1?: BufferSource;
 
     /**
      * Import (write-only) of private keys encoded in PKCS #8 format.
      */
-    pkcs8?: Uint8Array;
+    pkcs8?: BufferSource;
 
     /**
      * Import (write-only) of public keys encoded in SPKI format.
      */
-    spki?: Uint8Array;
+    spki?: BufferSource;
 
     /**
      * Import/export of EC public key in SEC1/SPKI format.  Maps to x & y
      * fields internally.
      */
-    publicBits?: Uint8Array;
+    publicBits?: BufferSource;
 
     /**
      * Import/export of BinaryKeyPair structure used as an alternate
@@ -175,12 +175,12 @@ export interface Key extends JsonWebKey {
     /**
      * Alias for publicBits that throws if no public key is present.
      */
-    publicKey: Uint8Array;
+    publicKey: BufferSource;
 
     /**
      * Alias for privateBits that throws if no private key is present.
      */
-    privateKey: Uint8Array;
+    privateKey: BufferSource;
 
     /**
      * Alias for keyPairBits that throws if a complete key pair is not present.
@@ -196,9 +196,9 @@ export interface PublicKey extends Key {
     curve: CurveType;
     x: string;
     y: string;
-    xBits: Uint8Array;
-    yBits: Uint8Array;
-    publicBits: Uint8Array;
+    xBits: BufferSource;
+    yBits: BufferSource;
+    publicBits: BufferSource;
 }
 
 /**
@@ -207,11 +207,11 @@ export interface PublicKey extends Key {
 export interface PrivateKey extends PublicKey {
     private: string;
     d: string;
-    privateBits: Uint8Array;
-    privateKey: Uint8Array;
+    privateBits: BufferSource;
+    privateKey: BufferSource;
     keyPair: BinaryKeyPair;
     keyPairBits: BinaryKeyPair;
-    sharedSecretFor(peerKey: PublicKey): Uint8Array;
+    sharedSecretFor(peerKey: PublicKey): BufferSource;
 }
 
 /**
@@ -225,7 +225,11 @@ export interface SymmetricKey extends Key {
 
 function checkDerVersion(type: string, node: DerNode | undefined, version: number) {
     const derVersion =
-        node && node._tag === DerType.Integer && node._bytes && node._bytes.length === 1 && node._bytes[0];
+        node &&
+        node._tag === DerType.Integer &&
+        node._bytes &&
+        node._bytes.byteLength === 1 &&
+        Bytes.of(node._bytes)[0];
 
     if (derVersion !== version) {
         throw new KeyInputError(`${type} key version mismatch`);
@@ -233,7 +237,7 @@ function checkDerVersion(type: string, node: DerNode | undefined, version: numbe
 }
 
 function getDerObjectID(type: string, node?: DerNode) {
-    const id = node && node._tag === DerType.ObjectIdentifier && node._bytes?.length > 1 && node._bytes;
+    const id = node && node._tag === DerType.ObjectIdentifier && node._bytes?.byteLength > 1 && node._bytes;
 
     if (id) return id;
 
@@ -248,7 +252,7 @@ function getDerCurve(type: string, node?: DerNode) {
 }
 
 function getDerKey(type: string, node?: DerNode, derType: DerType = DerType.OctetString) {
-    const key = node && node._tag === derType && node._bytes?.length > 1 && node._bytes;
+    const key = node && node._tag === derType && node._bytes?.byteLength > 1 && node._bytes;
 
     if (key) return key;
 
@@ -259,7 +263,7 @@ function getDerKey(type: string, node?: DerNode, derType: DerType = DerType.Octe
 namespace Translators {
     // Import SEC1 private key
     export const sec1 = {
-        set: function (this: Key, input: Uint8Array) {
+        set: function (this: Key, input: BufferSource) {
             const decoded = DerCodec.decode(input);
 
             // Version
@@ -286,7 +290,7 @@ namespace Translators {
 
     // Import PKCS8 private key
     export const pkcs8 = {
-        set: function (this: Key, input: Uint8Array) {
+        set: function (this: Key, input: BufferSource) {
             const outer = DerCodec.decode(input);
 
             // Version
@@ -323,7 +327,7 @@ namespace Translators {
 
     // Import SPKI public key
     export const spki = {
-        set: function (this: Key, input: Uint8Array) {
+        set: function (this: Key, input: BufferSource) {
             const decoded = DerCodec.decode(input);
 
             const algorithmElements = decoded?._elements?.[0]?._elements;
@@ -352,12 +356,13 @@ namespace Translators {
 
     // Import public key bytes in SEC1/SPKI format
     export const publicBits = {
-        set: function (this: Key, input: Uint8Array) {
-            if (!(input.length % 2)) {
+        set: function (this: Key, input: BufferSource) {
+            const data = Bytes.of(input);
+            if (!(data.length % 2)) {
                 throw new KeyInputError("Invalid public key encoding");
             }
 
-            switch (input[0]) {
+            switch (data[0]) {
                 case 2:
                 case 3:
                     throw new KeyInputError("Unsupported public key compression");
@@ -369,13 +374,13 @@ namespace Translators {
                     throw new KeyInputError("Illegal public key format specifier");
             }
 
-            const coordinateLength = (input.length - 1) / 2;
+            const coordinateLength = (data.length - 1) / 2;
 
             inferCurve(this, coordinateLength);
 
             this.type = KeyType.EC;
-            this.xBits = input.slice(1, coordinateLength + 1);
-            this.yBits = input.slice(coordinateLength + 1);
+            this.xBits = data.slice(1, coordinateLength + 1);
+            this.yBits = data.slice(coordinateLength + 1);
         },
 
         get: function (this: Key) {
@@ -383,7 +388,7 @@ namespace Translators {
                 return undefined;
             }
 
-            return new Uint8Array([0x04, ...this.xBits, ...this.yBits]);
+            return Bytes.concat(new Uint8Array([0x04]), this.xBits, this.yBits);
         },
     };
 
@@ -401,8 +406,8 @@ namespace Translators {
                 return;
             }
             return {
-                publicKey: publicBits,
-                privateKey: privateBits,
+                publicKey: Bytes.of(publicBits),
+                privateKey: Bytes.of(privateBits),
             };
         },
     };
@@ -536,18 +541,18 @@ export function Key(properties: Partial<Key>) {
         }
 
         // Compute
-        const ecKey = Point.fromPrivateKey(that.privateKey);
+        const ecKey = Point.fromPrivateKey(Bytes.of(that.privateKey));
 
         // Install
-        that.xBits = numberToBytesBE(ecKey.x, keyLength);
-        that.yBits = numberToBytesBE(ecKey.y, keyLength);
+        that.xBits = numberToBytesBE(ecKey.x, keyLength) as Uint8Array<ArrayBuffer>;
+        that.yBits = numberToBytesBE(ecKey.y, keyLength) as Uint8Array<ArrayBuffer>;
     }
 
     if (that.type === KeyType.EC) {
         if (that.d) {
-            inferCurve(that, that.privateKey.length);
+            inferCurve(that, that.privateKey.byteLength);
         } else if (that.xBits) {
-            inferCurve(that, that.xBits.length);
+            inferCurve(that, that.xBits.byteLength);
         }
 
         if (that.d && (!that.x || !that.y)) {
@@ -561,9 +566,9 @@ export function Key(properties: Partial<Key>) {
 /**
  * EC private key factory.
  */
-export function PrivateKey(privateKey: Uint8Array | BinaryKeyPair, options?: Partial<Key>) {
+export function PrivateKey(privateKey: BufferSource | BinaryKeyPair, options?: Partial<Key>) {
     let priv, pub;
-    if (ArrayBuffer.isView(privateKey)) {
+    if (Bytes.isBufferSource(privateKey)) {
         priv = privateKey;
     } else {
         priv = privateKey.privateKey;
@@ -581,7 +586,7 @@ export function PrivateKey(privateKey: Uint8Array | BinaryKeyPair, options?: Par
 /**
  * EC public key factory.
  */
-export function PublicKey(publicKey: Uint8Array, options?: Partial<Key>) {
+export function PublicKey(publicKey: BufferSource, options?: Partial<Key>) {
     return Key({
         type: KeyType.EC,
         publicKey,
@@ -592,7 +597,7 @@ export function PublicKey(publicKey: Uint8Array, options?: Partial<Key>) {
 /**
  * Symmetric key factory.
  */
-export function SymmetricKey(privateKey: Uint8Array, options?: Partial<Key>) {
+export function SymmetricKey(privateKey: BufferSource, options?: Partial<Key>) {
     return Key({
         type: KeyType.oct,
         privateKey: privateKey,
@@ -605,6 +610,6 @@ export function SymmetricKey(privateKey: Uint8Array, options?: Partial<Key>) {
  *
  * We provide this for platforms without a native implementation.
  */
-export function sharedSecretFor(this: PrivateKey, peerKey: PublicKey): Uint8Array {
-    return getSharedSecret(this.privateBits, peerKey.publicBits);
+export function sharedSecretFor(this: PrivateKey, peerKey: PublicKey): BufferSource {
+    return Bytes.of(getSharedSecret(Bytes.of(this.privateBits), Bytes.of(peerKey.publicBits)));
 }

@@ -11,7 +11,7 @@ import { TlvVoid } from "#tlv/TlvVoid.js";
 describe("TlvVoid", () => {
     describe("encode", () => {
         it("encodes undefined", () => {
-            expect(TlvVoid.encode(undefined).length).equals(0);
+            expect(TlvVoid.encode(undefined).byteLength).equals(0);
         });
     });
 

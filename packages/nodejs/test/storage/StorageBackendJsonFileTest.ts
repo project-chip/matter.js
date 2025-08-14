@@ -137,7 +137,7 @@ describe("Storage in JSON File", () => {
     it("writeBlob and readBlob success", async () => {
         const storage = await StorageBackendJsonFile.create(TEST_STORAGE_LOCATION);
         const data = new Uint8Array([21, 22, 23]);
-        const stream = new ReadableStream<Uint8Array>({
+        const stream = new ReadableStream<BufferSource>({
             start(controller) {
                 controller.enqueue(data);
                 controller.close();
@@ -148,7 +148,7 @@ describe("Storage in JSON File", () => {
 
         const blob = storage.openBlob(["context"], "blobkey");
         const reader = blob.stream().getReader();
-        const chunks: Uint8Array[] = [];
+        const chunks: BufferSource[] = [];
         while (true) {
             const { value, done } = await reader.read();
             if (done) break;

@@ -50,64 +50,64 @@ export abstract class Crypto {
     /**
      * Encrypt using AES-CCM with constants limited to those required by Matter.
      */
-    abstract encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array;
+    abstract encrypt(key: BufferSource, data: BufferSource, nonce: BufferSource, aad?: BufferSource): BufferSource;
 
     /**
      * Decrypt using AES-CCM with constants limited to those required by Matter.
      */
-    abstract decrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array;
+    abstract decrypt(key: BufferSource, data: BufferSource, nonce: BufferSource, aad?: BufferSource): BufferSource;
 
     /**
      * Create a random buffer from the most cryptographically-appropriate source available.
      */
-    abstract randomBytes(length: number): Uint8Array;
+    abstract randomBytes(length: number): BufferSource;
 
     /**
      * Compute the SHA-256 hash of a buffer.
      */
-    abstract computeSha256(data: Uint8Array | Uint8Array[]): MaybePromise<Uint8Array>;
+    abstract computeSha256(data: BufferSource | BufferSource[]): MaybePromise<BufferSource>;
 
     /**
      * Create a key from a secret using PBKDF2.
      */
     abstract createPbkdf2Key(
-        secret: Uint8Array,
-        salt: Uint8Array,
+        secret: BufferSource,
+        salt: BufferSource,
         iteration: number,
         keyLength: number,
-    ): MaybePromise<Uint8Array>;
+    ): MaybePromise<BufferSource>;
 
     /**
      * Create a key from a secret using HKDF.
      */
     abstract createHkdfKey(
-        secret: Uint8Array,
-        salt: Uint8Array,
-        info: Uint8Array,
+        secret: BufferSource,
+        salt: BufferSource,
+        info: BufferSource,
         length?: number,
-    ): MaybePromise<Uint8Array>;
+    ): MaybePromise<BufferSource>;
 
     /**
      * Create an HMAC signature.
      */
-    abstract signHmac(key: Uint8Array, data: Uint8Array): MaybePromise<Uint8Array>;
+    abstract signHmac(key: BufferSource, data: BufferSource): MaybePromise<BufferSource>;
 
     /**
      * Create an ECDSA signature.
      */
     abstract signEcdsa(
         privateKey: JsonWebKey,
-        data: Uint8Array | Uint8Array[],
+        data: BufferSource | BufferSource[],
         dsaEncoding?: CryptoDsaEncoding,
-    ): MaybePromise<Uint8Array>;
+    ): MaybePromise<BufferSource>;
 
     /**
      * Authenticate an ECDSA signature.
      */
     abstract verifyEcdsa(
         publicKey: JsonWebKey,
-        data: Uint8Array,
-        signature: Uint8Array,
+        data: BufferSource,
+        signature: BufferSource,
         dsaEncoding?: CryptoDsaEncoding,
     ): MaybePromise<void>;
 
@@ -119,22 +119,22 @@ export abstract class Crypto {
     /**
      * Compute the shared secret for a Diffie-Hellman exchange.
      */
-    abstract generateDhSecret(key: PrivateKey, peerKey: PublicKey): MaybePromise<Uint8Array>;
+    abstract generateDhSecret(key: PrivateKey, peerKey: PublicKey): MaybePromise<BufferSource>;
 
     get randomUint8() {
-        return this.randomBytes(1)[0];
+        return Bytes.of(this.randomBytes(1))[0];
     }
 
     get randomUint16() {
-        return new DataView(this.randomBytes(2).buffer).getUint16(0);
+        return Bytes.dataViewOf(this.randomBytes(2)).getUint16(0);
     }
 
     get randomUint32() {
-        return new DataView(this.randomBytes(4).buffer).getUint32(0);
+        return Bytes.dataViewOf(this.randomBytes(4)).getUint32(0);
     }
 
     get randomBigUint64() {
-        return new DataView(this.randomBytes(8).buffer).getBigUint64(0);
+        return Bytes.dataViewOf(this.randomBytes(8)).getBigUint64(0);
     }
 
     randomBigInt(size: number, maxValue?: bigint) {

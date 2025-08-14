@@ -17,7 +17,7 @@ import {
 } from "../codec/DerCodec.js";
 
 export namespace X962 {
-    export const PublicKeyEcPrime256v1 = (key: Uint8Array) => ({
+    export const PublicKeyEcPrime256v1 = (key: BufferSource) => ({
         type: {
             algorithm: PublicKeyAlgorithmEcPublicKey /* EC Public Key */,
             curve: PublicKeyAlgorithmEcPublicKeyP256 /* Curve P256_V1 */,
@@ -32,9 +32,9 @@ export namespace X962 {
 export const SHA256_CMS = DerObject("608648016503040201"); // 2.16.840.1.101.3.4.2.1
 
 export namespace X509 {
-    export const SubjectKeyIdentifier = (identifier: Uint8Array) =>
+    export const SubjectKeyIdentifier = (identifier: BufferSource) =>
         DerObject("551d0e", { value: DerCodec.encode(identifier) });
-    export const AuthorityKeyIdentifier = (identifier: Uint8Array) =>
+    export const AuthorityKeyIdentifier = (identifier: BufferSource) =>
         DerObject("551d23", { value: DerCodec.encode({ id: ContextTaggedBytes(0, identifier) }) });
     export const BasicConstraints = (constraints: any) => {
         const toEncode = { ...constraints };

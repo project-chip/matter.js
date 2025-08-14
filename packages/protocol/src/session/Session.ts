@@ -149,7 +149,7 @@ export abstract class Session {
         return this.messageCounter.getIncrementedCounter();
     }
 
-    updateMessageCounter(messageCounter: number, _sourceNodeId?: NodeId, _operationalKey?: Uint8Array) {
+    updateMessageCounter(messageCounter: number, _sourceNodeId?: NodeId, _operationalKey?: BufferSource) {
         if (this.messageReceptionState === undefined) {
             throw new InternalError("MessageReceptionState is not defined for this session");
         }
@@ -200,7 +200,7 @@ export abstract class Session {
     abstract associatedFabric: Fabric;
     abstract supportsMRP: boolean; // TODO: always false for Group Sessions
 
-    abstract decode(packet: DecodedPacket, aad?: Uint8Array): DecodedMessage;
+    abstract decode(packet: DecodedPacket, aad?: BufferSource): DecodedMessage;
     abstract encode(message: Message): Packet;
     abstract end(sendClose: boolean): Promise<void>;
     abstract destroy(sendClose?: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;

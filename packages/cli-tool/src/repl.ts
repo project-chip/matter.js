@@ -466,7 +466,7 @@ function instrumentReplToMaintainPrompt(repl: AugmentedRepl) {
 
     function instrumentStdStream(stream: NodeJS.WriteStream) {
         const actualWrite = stream.write.bind(stream);
-        stream.write = (payload: Uint8Array | string, ...params: any[]) => {
+        stream.write = (payload: Uint8Array<ArrayBuffer> | string, ...params: any[]) => {
             // Doesn't catch cursor movement from ANSI codes but worse case we end up with a blank line
             repl.onNewline = payload[payload.length - 1] === "\n" || payload[payload.length - 1] === "\r";
 

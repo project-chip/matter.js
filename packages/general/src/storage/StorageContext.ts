@@ -111,7 +111,7 @@ export class StorageContext implements StorageContextFactory {
         return this.storage.openBlob(this.thisContexts, key);
     }
 
-    writeBlobFromStream(key: string, stream: ReadableStream<Uint8Array>) {
+    writeBlobFromStream(key: string, stream: ReadableStream<BufferSource>) {
         return this.storage.writeBlobFromStream(this.thisContexts, key, stream);
     }
 }

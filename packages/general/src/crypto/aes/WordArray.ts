@@ -19,7 +19,7 @@ const endianConversionView = new DataView(new ArrayBuffer(4));
 const endianConversionBytes = new Uint8Array(endianConversionView.buffer);
 
 export namespace WordArray {
-    export function fromByteArray(bytes: Uint8Array, alignment = 1) {
+    export function fromByteArray(bytes: Uint8Array<ArrayBuffer>, alignment = 1) {
         return fromByteView(new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength), alignment);
     }
 

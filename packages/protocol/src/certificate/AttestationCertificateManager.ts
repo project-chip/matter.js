@@ -40,13 +40,13 @@ export class AttestationCertificateManager {
     readonly #crypto: Crypto;
     readonly #vendorId: VendorId;
     readonly #paiKeyPair: PrivateKey;
-    readonly #paiKeyIdentifier: Uint8Array;
+    readonly #paiKeyIdentifier: BufferSource;
     readonly #paaKeyIdentifier = TestCert_PAA_NoVID_SKID;
     readonly #paiCertId = BigInt(1);
     readonly #paiCertBytes;
     #nextCertificateId = 2;
 
-    constructor(crypto: Crypto, vendorId: VendorId, paiKeyPair: PrivateKey, paiKeyIdentifier: Uint8Array) {
+    constructor(crypto: Crypto, vendorId: VendorId, paiKeyPair: PrivateKey, paiKeyIdentifier: BufferSource) {
         this.#crypto = crypto;
         this.#vendorId = vendorId;
         this.#paiKeyPair = paiKeyPair;
@@ -56,7 +56,7 @@ export class AttestationCertificateManager {
 
     static async create(crypto: Crypto, vendorId: VendorId) {
         const key = await crypto.createKeyPair();
-        const identifier = await crypto.computeSha256(key.publicKey);
+        const identifier = Bytes.of(await crypto.computeSha256(key.publicKey));
         return new AttestationCertificateManager(crypto, vendorId, key, identifier.slice(0, 20));
     }
 
@@ -145,7 +145,7 @@ export class AttestationCertificateManager {
         return cert.asSignedAsn1();
     }
 
-    async generateDaCert(publicKey: Uint8Array, vendorId: VendorId, productId: number) {
+    async generateDaCert(publicKey: BufferSource, vendorId: VendorId, productId: number) {
         const now = Time.get().now();
         const certId = this.#nextCertificateId++;
         const cert = new Dac({
@@ -172,7 +172,7 @@ export class AttestationCertificateManager {
                 keyUsage: {
                     digitalSignature: true,
                 },
-                subjectKeyIdentifier: (await this.#crypto.computeSha256(publicKey)).slice(0, 20),
+                subjectKeyIdentifier: Bytes.of(await this.#crypto.computeSha256(publicKey)).slice(0, 20),
                 authorityKeyIdentifier: this.#paiKeyIdentifier,
             },
         });

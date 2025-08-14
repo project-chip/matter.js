@@ -60,13 +60,13 @@ describe("NodeJsCrypto", () => {
             const result = cryptoNode.signEcdsa(Key({ sec1: SEC1_KEY }), ENCRYPTED_DATA, "der");
 
             const privateKeyObject = crypto.createPrivateKey({
-                key: Buffer.from(SEC1_KEY),
+                key: Buffer.from(Bytes.of(SEC1_KEY)),
                 format: "der",
                 type: "sec1",
             });
             const publicKey = crypto.createPublicKey(privateKeyObject).export({ format: "der", type: "spki" });
 
-            cryptoNode.verifyEcdsa(Key({ spki: publicKey }), ENCRYPTED_DATA, result, "der");
+            cryptoNode.verifyEcdsa(Key({ spki: Bytes.of(publicKey) }), ENCRYPTED_DATA, result, "der");
         });
     });
 
@@ -75,13 +75,13 @@ describe("NodeJsCrypto", () => {
             const result = cryptoNode.signEcdsa(Key({ sec1: SEC1_KEY }), ENCRYPTED_DATA);
 
             const privateKeyObject = crypto.createPrivateKey({
-                key: Buffer.from(SEC1_KEY),
+                key: Buffer.from(Bytes.of(SEC1_KEY)),
                 format: "der",
                 type: "sec1",
             });
             const publicKey = crypto.createPublicKey(privateKeyObject).export({ format: "der", type: "spki" });
 
-            cryptoNode.verifyEcdsa(Key({ spki: publicKey }), ENCRYPTED_DATA, result);
+            cryptoNode.verifyEcdsa(Key({ spki: Bytes.of(publicKey) }), ENCRYPTED_DATA, result);
         });
     });
 
@@ -137,6 +137,6 @@ describe("NodeJsCrypto", () => {
         const secret2 = cryptoNode.generateDhSecret(key2, PublicKey(key1.publicBits));
 
         expect(secret1).deep.equal(secret2);
-        expect(secret1.length).equals(32);
+        expect(secret1.byteLength).equals(32);
     });
 });

@@ -61,7 +61,7 @@ export namespace BleAdvertiser {
         /**
          * Additional advertisement data.
          */
-        readonly aad?: Uint8Array;
+        readonly aad?: BufferSource;
 
         /**
          * Advertisement timeout.

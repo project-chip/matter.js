@@ -17,7 +17,7 @@ import { Rcac } from "./Rcac.js";
  */
 export class Icac extends OperationalBase<OperationalCertificate.Icac> {
     /** Construct the class from a Tlv version of the certificate */
-    static fromTlv(tlv: Uint8Array): Icac {
+    static fromTlv(tlv: BufferSource): Icac {
         return new Icac(OperationalCertificate.TlvIcac.decode(tlv));
     }
 
@@ -132,7 +132,7 @@ export class Icac extends OperationalBase<OperationalCertificate.Icac> {
         if (subjectKeyIdentifier === undefined) {
             throw new CertificateError(`Ica certificate must have subjectKeyIdentifier set.`);
         }
-        if (subjectKeyIdentifier.length !== 20) {
+        if (subjectKeyIdentifier.byteLength !== 20) {
             throw new CertificateError(`Ica certificate subjectKeyIdentifier must be 160 bit.`);
         }
 
@@ -140,7 +140,7 @@ export class Icac extends OperationalBase<OperationalCertificate.Icac> {
         if (authorityKeyIdentifier === undefined) {
             throw new CertificateError(`Ica certificate must have authorityKeyIdentifier set.`);
         }
-        if (authorityKeyIdentifier.length !== 20) {
+        if (authorityKeyIdentifier.byteLength !== 20) {
             throw new CertificateError(`Ica certificate authorityKeyIdentifier must be 160 bit.`);
         }
 

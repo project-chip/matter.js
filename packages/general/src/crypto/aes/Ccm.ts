@@ -57,11 +57,11 @@ import { WordArray } from "./WordArray.js";
  * * We use {@link DataView} to read/write words where possible.  However, byte buffers may not align to word
  *   boundaries.  We detect this case and manually read/write the last word
  */
-export function Ccm(key: Uint8Array) {
+export function Ccm(key: BufferSource) {
     const aes = Aes(key);
 
     return {
-        encrypt(input: Ccm.EncryptInput): Uint8Array {
+        encrypt(input: Ccm.EncryptInput): BufferSource {
             validateNonceAndAdata(input);
 
             const ptLength = input.pt.length;
@@ -91,7 +91,7 @@ export function Ccm(key: Uint8Array) {
             return ct;
         },
 
-        decrypt(input: Ccm.DecryptInput): Uint8Array {
+        decrypt(input: Ccm.DecryptInput): BufferSource {
             validateNonceAndAdata(input);
 
             if (input.ct.length > MAX_CIPHERTEXT_LENGTH) {
@@ -252,22 +252,22 @@ export function Ccm(key: Uint8Array) {
 
 export namespace Ccm {
     export interface Input {
-        nonce: Uint8Array;
-        adata: Uint8Array | undefined; // Do not use ? to ensure object shape remains stable
+        nonce: Uint8Array<ArrayBuffer>;
+        adata: Uint8Array<ArrayBuffer> | undefined; // Do not use ? to ensure object shape remains stable
     }
 
     export interface EncryptInput extends Input {
         /**
          * Plaintext
          */
-        pt: Uint8Array;
+        pt: Uint8Array<ArrayBuffer>;
     }
 
     export interface DecryptInput extends Input {
         /**
          * Ciphertext + tag
          */
-        ct: Uint8Array;
+        ct: Uint8Array<ArrayBuffer>;
     }
 }
 
@@ -282,7 +282,7 @@ export const MAX_PLAINTEXT_LENGTH = MAX_CIPHERTEXT_LENGTH - CRYPTO_AEAD_MIC_LENG
  */
 class SingletonBuffer {
     #words?: Int32Array;
-    #bytes?: Uint8Array;
+    #bytes?: Uint8Array<ArrayBuffer>;
     #view?: DataView;
 
     get words() {
@@ -294,7 +294,7 @@ class SingletonBuffer {
 
     get bytes() {
         if (this.#bytes === undefined) {
-            this.#bytes = new Uint8Array(this.words.buffer);
+            this.#bytes = new Uint8Array(this.words.buffer) as Uint8Array<ArrayBuffer>;
         }
         return this.#bytes;
     }

@@ -40,7 +40,7 @@ export class MessagingState {
     /**
      * Return the message counter for sending messages to a group with the given operational key.
      */
-    counterFor(operationalKey: Uint8Array) {
+    counterFor(operationalKey: BufferSource) {
         if (!this.#storage) {
             throw new ImplementationError("Group session cannot be created without storage context.");
         }
@@ -53,7 +53,7 @@ export class MessagingState {
         return counter;
     }
 
-    async removeCounter(key: Uint8Array, forDelete = false) {
+    async removeCounter(key: BufferSource, forDelete = false) {
         const operationalKeyHex = Bytes.toHex(key);
         this.#groupDataCounters.delete(operationalKeyHex);
         if (forDelete) {
@@ -65,7 +65,7 @@ export class MessagingState {
     /**
      * Returns the message reception state for a given source node id and operational key.
      */
-    receptionStateFor(sourceNodeId: NodeId, operationalKey: Uint8Array) {
+    receptionStateFor(sourceNodeId: NodeId, operationalKey: BufferSource) {
         const operationalKeyHex = Bytes.toHex(operationalKey);
         let receptionState = this.#messageDataReceptionState.get(operationalKeyHex)?.get(sourceNodeId);
         if (receptionState === undefined) {

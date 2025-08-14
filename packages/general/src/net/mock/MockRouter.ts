@@ -39,7 +39,7 @@ export namespace MockRouter {
         sourcePort: number;
         destAddress: string;
         destPort: number;
-        payload: Uint8Array;
+        payload: BufferSource;
     }
 
     export interface Route {

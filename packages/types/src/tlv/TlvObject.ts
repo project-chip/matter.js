@@ -308,11 +308,11 @@ export class ObjectSchemaWithMaxSize<F extends TlvFields> extends ObjectSchema<F
         super(fieldDefinitions, type, allowProtocolSpecificTags);
     }
 
-    override encode(value: TypeFromFields<F>): Uint8Array {
+    override encode(value: TypeFromFields<F>): BufferSource {
         const encoded = super.encode(value);
-        if (encoded.length > this.maxSize) {
+        if (encoded.byteLength > this.maxSize) {
             throw new ImplementationError(
-                `Encoded TLV object with ${encoded.length} bytes exceeds maximum size of ${this.maxSize} bytes.`,
+                `Encoded TLV object with ${encoded.byteLength} bytes exceeds maximum size of ${this.maxSize} bytes.`,
             );
         }
         return encoded;

@@ -71,30 +71,43 @@ export class StandardCrypto extends Crypto {
         return new StandardCrypto();
     }
 
-    randomBytes(length: number): Uint8Array {
+    randomBytes(length: number): BufferSource {
         const result = new Uint8Array(length);
         this.#crypto.getRandomValues(result);
         return result;
     }
 
-    encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, associatedData?: Uint8Array) {
+    encrypt(key: BufferSource, data: BufferSource, nonce: BufferSource, associatedData?: BufferSource) {
         const ccm = Ccm(key);
-        return ccm.encrypt({ pt: data, nonce, adata: associatedData });
+        return ccm.encrypt({
+            pt: Bytes.of(data),
+            nonce: Bytes.of(nonce),
+            adata: associatedData !== undefined ? Bytes.of(associatedData) : undefined,
+        });
     }
 
-    decrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, associatedData?: Uint8Array) {
+    decrypt(key: BufferSource, data: BufferSource, nonce: BufferSource, associatedData?: BufferSource) {
         const ccm = Ccm(key);
-        return ccm.decrypt({ ct: data, nonce, adata: associatedData });
+        return ccm.decrypt({
+            ct: Bytes.of(data),
+            nonce: Bytes.of(nonce),
+            adata: associatedData !== undefined ? Bytes.of(associatedData) : undefined,
+        });
     }
 
-    async computeSha256(buffer: Uint8Array | Uint8Array[]) {
+    async computeSha256(buffer: BufferSource | BufferSource[]): Promise<BufferSource> {
         if (Array.isArray(buffer)) {
             buffer = Bytes.concat(...buffer);
         }
-        return new Uint8Array(await this.#subtle.digest("SHA-256", buffer));
+        return new Uint8Array(await this.#subtle.digest("SHA-256", Bytes.of(buffer)));
     }
 
-    async createPbkdf2Key(secret: Uint8Array, salt: Uint8Array, iteration: number, keyLength: number) {
+    async createPbkdf2Key(
+        secret: BufferSource,
+        salt: BufferSource,
+        iteration: number,
+        keyLength: number,
+    ): Promise<BufferSource> {
         const key = await this.importKey("raw", secret, "PBKDF2", false, ["deriveBits"]);
         const bits = await this.#subtle.deriveBits(
             {
@@ -110,11 +123,11 @@ export class StandardCrypto extends Crypto {
     }
 
     async createHkdfKey(
-        secret: Uint8Array,
-        salt: Uint8Array,
-        info: Uint8Array,
+        secret: BufferSource,
+        salt: BufferSource,
+        info: BufferSource,
         length: number = CRYPTO_SYMMETRIC_KEY_LENGTH,
-    ) {
+    ): Promise<BufferSource> {
         const key = await this.importKey("raw", secret, "HKDF", false, ["deriveBits"]);
         const bits = await this.#subtle.deriveBits(
             {
@@ -129,12 +142,12 @@ export class StandardCrypto extends Crypto {
         return new Uint8Array(bits);
     }
 
-    async signHmac(secret: Uint8Array, data: Uint8Array) {
+    async signHmac(secret: BufferSource, data: BufferSource): Promise<BufferSource> {
         const key = await this.importKey("raw", secret, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
         return new Uint8Array(await this.#subtle.sign("HMAC", key, data));
     }
 
-    async signEcdsa(key: JsonWebKey, data: Uint8Array | Uint8Array[], dsaEncoding?: CryptoDsaEncoding) {
+    async signEcdsa(key: JsonWebKey, data: BufferSource | BufferSource[], dsaEncoding?: CryptoDsaEncoding) {
         if (Array.isArray(data)) {
             data = Bytes.concat(...data);
         }
@@ -153,9 +166,9 @@ export class StandardCrypto extends Crypto {
 
         const subtleKey = await this.importKey("jwk", key, SIGNATURE_ALGORITHM, false, ["sign"]);
 
-        const ieeeP1363 = await this.#subtle.sign(SIGNATURE_ALGORITHM, subtleKey, data);
+        const ieeeP1363 = Bytes.of(await this.#subtle.sign(SIGNATURE_ALGORITHM, subtleKey, data));
 
-        if (dsaEncoding !== "der") return new Uint8Array(ieeeP1363);
+        if (dsaEncoding !== "der") return ieeeP1363;
 
         const bytesPerComponent = ieeeP1363.byteLength / 2;
 
@@ -165,7 +178,7 @@ export class StandardCrypto extends Crypto {
         });
     }
 
-    async verifyEcdsa(key: JsonWebKey, data: Uint8Array, signature: Uint8Array, dsaEncoding?: CryptoDsaEncoding) {
+    async verifyEcdsa(key: JsonWebKey, data: BufferSource, signature: BufferSource, dsaEncoding?: CryptoDsaEncoding) {
         const { crv, kty, x, y } = key;
         key = { crv, kty, x, y };
         const subtleKey = await this.importKey("jwk", key, SIGNATURE_ALGORITHM, false, ["verify"]);
@@ -223,7 +236,7 @@ export class StandardCrypto extends Crypto {
         return await this.#subtle.exportKey("jwk", subtleKey.privateKey);
     }
 
-    async generateDhSecret(key: PrivateKey, peerKey: PublicKey) {
+    async generateDhSecret(key: PrivateKey, peerKey: PublicKey): Promise<BufferSource> {
         const subtleKey = await this.importKey(
             "jwk",
             key,

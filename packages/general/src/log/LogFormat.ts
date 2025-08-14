@@ -465,7 +465,7 @@ function renderValue(value: unknown, formatter: Formatter, squash: boolean): str
     if (value === null) {
         return formatter.text("null");
     }
-    if (value instanceof Uint8Array) {
+    if (Bytes.isBufferSource(value)) {
         return formatter.text(Bytes.toHex(value));
     }
     if (value instanceof Error) {

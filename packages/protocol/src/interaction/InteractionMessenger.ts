@@ -98,7 +98,7 @@ const DATA_REPORT_MIN_AVAILABLE_BYTES_BEFORE_SENDING = 40;
 class InteractionMessenger {
     constructor(protected exchange: MessageExchange) {}
 
-    send(messageType: number, payload: Uint8Array, options?: ExchangeSendOptions) {
+    send(messageType: number, payload: BufferSource, options?: ExchangeSendOptions) {
         return this.exchange.send(messageType, payload, options);
     }
 
@@ -366,12 +366,12 @@ export class InteractionServerMessenger extends InteractionMessenger {
                 // Empty the dataReport data fields for the next chunk and reset the messageSize
                 delete dataReport.attributeReports;
                 delete dataReport.eventReports;
-                messageSize = emptyDataReportBytes.length;
+                messageSize = emptyDataReportBytes.byteLength;
                 processQueueFirst = true; // After sending a message we first try to process queue
             };
 
             /** Current size of the message */
-            let messageSize = emptyDataReportBytes.length;
+            let messageSize = emptyDataReportBytes.byteLength;
 
             /** Queue of attribute reports to send */
             const attributeReportsToSend = new Array<{
@@ -608,7 +608,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
                             attributeReportsToSend.push(attributeToSend);
                             continue;
                         }
-                        if (encodedSize > this.exchange.maxPayloadSize - emptyDataReportBytes.length - 3) {
+                        if (encodedSize > this.exchange.maxPayloadSize - emptyDataReportBytes.byteLength - 3) {
                             // We sent the message but the current attribute is too big for a message alone so needs to
                             // be chunked, so add it to the queue at the beginning
                             attributeReportsToSend.unshift(attributeToSend);
@@ -657,9 +657,9 @@ export class InteractionServerMessenger extends InteractionMessenger {
             suppressResponse: dataReport.moreChunkedMessages ? false : dataReport.suppressResponse, // always false when moreChunkedMessages is true
         };
         const encodedMessage = TlvDataReportForSend.encode(dataReportToSend);
-        if (encodedMessage.length > this.exchange.maxPayloadSize) {
+        if (encodedMessage.byteLength > this.exchange.maxPayloadSize) {
             throw new MatterFlowError(
-                `DataReport with ${encodedMessage.length}bytes is too long to fit in a single chunk (${this.exchange.maxPayloadSize}bytes), This should not happen! Data: ${Diagnostic.json(
+                `DataReport with ${encodedMessage.byteLength}bytes is too long to fit in a single chunk (${this.exchange.maxPayloadSize}bytes), This should not happen! Data: ${Diagnostic.json(
                     dataReportToSend,
                 )}`,
             );
@@ -915,7 +915,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     }
 
     /** Implements a send method with an automatic reconnection mechanism */
-    override async send(messageType: number, payload: Uint8Array, options?: ExchangeSendOptions) {
+    override async send(messageType: number, payload: BufferSource, options?: ExchangeSendOptions) {
         try {
             if (this.exchange.channel.closed) {
                 throw new ChannelNotConnectedError("The exchange channel is closed. Please connect the device first.");
@@ -950,7 +950,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
 
     #encodeReadingRequest<T extends TlvSchema<any>>(schema: T, request: TypeFromSchema<T>) {
         const encoded = schema.encode(request);
-        if (encoded.length <= this.exchange.maxPayloadSize) {
+        if (encoded.byteLength <= this.exchange.maxPayloadSize) {
             return encoded;
         }
 
@@ -960,7 +960,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             ...request,
             dataVersionFilters: [],
         });
-        if (requestWithoutDataVersionFilters.length > this.exchange.maxPayloadSize) {
+        if (requestWithoutDataVersionFilters.byteLength > this.exchange.maxPayloadSize) {
             throw new MatterFlowError(
                 `Request is too long to fit in a single chunk, This should not happen! Data: ${Diagnostic.json(request)}`,
             );
@@ -970,7 +970,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             ...request,
             dataVersionFilters: this.#shortenDataVersionFilters(
                 originalDataVersionFilters,
-                this.exchange.maxPayloadSize - requestWithoutDataVersionFilters.length,
+                this.exchange.maxPayloadSize - requestWithoutDataVersionFilters.byteLength,
             ),
         });
     }
@@ -987,7 +987,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
                 break;
             }
             const encodedDataVersionFilter = TlvDataVersionFilter.encode(dataVersionFilter);
-            const encodedDataVersionFilterLength = encodedDataVersionFilter.length;
+            const encodedDataVersionFilterLength = encodedDataVersionFilter.byteLength;
             if (encodedDataVersionFilterLength > availableBytes) {
                 originalDataVersionFilters.unshift(dataVersionFilter);
                 break;

@@ -89,7 +89,7 @@ export class UdpMulticastServer {
         return this.serverIpv4 !== undefined;
     }
 
-    onMessage(listener: (message: Uint8Array, peerAddress: string, netInterface: string) => void) {
+    onMessage(listener: (message: BufferSource, peerAddress: string, netInterface: string) => void) {
         this.serverIpv4?.onData((netInterface, peerAddress, _port, message) => {
             if (netInterface === undefined) {
                 // Ignore Network packages not coming over any known interface
@@ -106,7 +106,7 @@ export class UdpMulticastServer {
         });
     }
 
-    async send(message: Uint8Array, netInterface?: string, uniCastTarget?: string) {
+    async send(message: BufferSource, netInterface?: string, uniCastTarget?: string) {
         netInterface = netInterface ?? this.netInterface;
 
         // When we know the network interface and the unicast target, we can send unicast

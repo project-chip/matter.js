@@ -72,7 +72,7 @@ class GaloisField {
 export class ReedSolomon {
     private readonly galoisField = new GaloisField();
 
-    computeErrorCorrection(data: Uint8Array, ecLength: number) {
+    computeErrorCorrection(data: Uint8Array<ArrayBuffer>, ecLength: number) {
         const { length } = data;
         if (length + ecLength > this.galoisField.size) throw new UnexpectedDataError("Message is too long");
 

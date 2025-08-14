@@ -562,7 +562,7 @@ export class MatterController {
         return this.sessionManager.getNextAvailableSessionId();
     }
 
-    getResumptionRecord(resumptionId: Uint8Array) {
+    getResumptionRecord(resumptionId: BufferSource) {
         return this.sessionManager.findResumptionRecordById(resumptionId);
     }
 

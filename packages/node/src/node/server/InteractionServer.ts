@@ -714,7 +714,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             moreChunkedMessages: invokeRequests.length > 1, // Assume for now we have multiple responses when having multiple invokes
         };
         const emptyInvokeResponseBytes = TlvInvokeResponseForSend.encode(invokeResponseMessage);
-        let messageSize = emptyInvokeResponseBytes.length;
+        let messageSize = emptyInvokeResponseBytes.byteLength;
         let invokeResultsProcessed = 0;
 
         // To lower potential latency when we would process all invoke messages and just send responses at the end we
@@ -766,7 +766,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                         },
                     );
                     invokeResponseMessage.invokeResponses = [];
-                    messageSize = emptyInvokeResponseBytes.length;
+                    messageSize = emptyInvokeResponseBytes.byteLength;
                 }
                 if (!lastMessageProcessed) {
                     invokeResultsProcessed--; // Correct counter again because we recall the method

@@ -5,6 +5,7 @@
  */
 
 import { ImplementationError } from "#MatterError.js";
+import { Bytes } from "#util/Bytes.js";
 import { Crypto, ec } from "./Crypto.js";
 import { CurveType, Key, KeyType, PrivateKey } from "./Key.js";
 import { StandardCrypto } from "./StandardCrypto.js";
@@ -81,7 +82,10 @@ export function MockCrypto(index: number = 0x80, implementation: new () => Crypt
 
         // Ensure EC key generation uses our own "entropy" source rather than the platform's
         crypto.createKeyPair = function getRandomDataNONENTROPIC() {
-            const privateBits = ec.mapHashToField(new Uint8Array(crypto.randomBytes(48)), ec.p256.CURVE.n);
+            const privateBits = ec.mapHashToField(
+                Bytes.of(crypto.randomBytes(48)),
+                ec.p256.CURVE.n,
+            ) as Uint8Array<ArrayBuffer>;
             return Key({
                 kty: KeyType.EC,
                 crv: CurveType.p256,

@@ -14,7 +14,7 @@ import { Channel, ChannelType } from "./Channel.js";
  * It cannot open new connections.
  */
 export interface TransportInterface {
-    onData(listener: (socket: Channel<Uint8Array>, data: Uint8Array) => void): TransportInterface.Listener;
+    onData(listener: (socket: Channel<BufferSource>, data: BufferSource) => void): TransportInterface.Listener;
     close(): Promise<void>;
     supports(type: ChannelType, address?: string): boolean;
 }

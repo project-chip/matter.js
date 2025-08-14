@@ -9,7 +9,7 @@ import { Bytes } from "../util/Bytes.js";
 import { isObject } from "../util/Type.js";
 
 /** Supported base types to stringify the data for the storage that can be used as keys and also values. */
-type SupportedStorageBaseTypes = string | number | boolean | bigint | Uint8Array;
+type SupportedStorageBaseTypes = string | number | boolean | bigint | Uint8Array<ArrayBuffer> | BufferSource;
 
 /** Supported combined types to stringify the data for the storage that can be used as values. */
 type SupportedComplexStorageTypes =
@@ -38,7 +38,7 @@ export function toJson(object: SupportedStorageTypes, spaces?: number): string {
             if (typeof value === "bigint") {
                 return `{"${JSON_SPECIAL_KEY_TYPE}":"BigInt","${JSON_SPECIAL_KEY_VALUE}":"${value.toString()}"}`;
             }
-            if (value instanceof Uint8Array) {
+            if (Bytes.isBufferSource(value)) {
                 return `{"${JSON_SPECIAL_KEY_TYPE}":"Uint8Array","${JSON_SPECIAL_KEY_VALUE}":"${Bytes.toHex(value)}"}`;
             }
             //Node.js can sometimes pass in a native Buffer object in place of a Uint8Array, of which it is a subclass of, the Buffer class implements its own toJSON method which breaks our serialization.

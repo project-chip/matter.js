@@ -103,7 +103,7 @@ describe("MessageCodec", () => {
                     hasMessageExtensions: true,
                     securityFlags: 0x20,
                 },
-                applicationPayload: ENCODED.slice(16),
+                applicationPayload: Bytes.of(ENCODED).slice(16),
                 messageExtension: Bytes.fromHex("010203"),
             });
         });
