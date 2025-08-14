@@ -7,7 +7,7 @@
 import type { Behavior } from "#behavior/Behavior.js";
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import type { SupportedElements } from "#endpoint/properties/Behaviors.js";
-import { createPromise, deepCopy, isObject, Logger, MaybePromise, withTimeout } from "#general";
+import { createPromise, deepCopy, isObject, Logger, MaybePromise, Seconds, withTimeout } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
 import { OccurrenceManager, Val } from "#protocol";
 import type { ClusterType, FabricIndex, ObjectSchema } from "#types";
@@ -67,7 +67,7 @@ async function sanitizeAttributeData(
         (endpoint.eventsOf(type) as Behavior.EventsOf<any>).stateChanged?.on(resolver);
         try {
             await endpoint.setStateOf(type, stateUpdate);
-            stateUpdatePromises.push(withTimeout(5_000, promise)); // 5s should be enough for state change
+            stateUpdatePromises.push(withTimeout(Seconds(5), promise)); // 5s should be enough for state change
         } catch (error) {
             logger.warn(
                 `Could not sanitize fabric-scoped attributes for cluster ${cluster.name} on endpoint ${endpoint.id}`,

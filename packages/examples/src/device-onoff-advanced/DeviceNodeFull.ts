@@ -128,7 +128,7 @@ const productId = environment.vars.number("productid") ?? (await deviceStorage.g
 
 const port = environment.vars.number("port") ?? 5540;
 
-const uniqueId = environment.vars.string("uniqueid") ?? (await deviceStorage.get("uniqueid", Time.nowMs().toString()));
+const uniqueId = environment.vars.string("uniqueid") ?? (await deviceStorage.get("uniqueid", Time.nowMs.toString()));
 
 await deviceStorage.set({
     passcode,

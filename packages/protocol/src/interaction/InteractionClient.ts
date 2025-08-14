@@ -10,9 +10,12 @@ import {
     Environment,
     Environmental,
     ImplementationError,
+    Interval,
     Logger,
     MatterFlowError,
+    Minutes,
     PromiseQueue,
+    Seconds,
     ServerAddressIp,
     Timer,
     UnexpectedDataError,
@@ -61,8 +64,8 @@ import { RegisteredSubscription, SubscriptionClient } from "./SubscriptionClient
 const logger = Logger.get("InteractionClient");
 
 const REQUEST_ALL = [{}];
-const DEFAULT_TIMED_REQUEST_TIMEOUT_MS = 10_000; // 10 seconds
-const DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE_MS = 30_000; // 30 seconds
+const DEFAULT_TIMED_REQUEST_TIMEOUT = Seconds(10);
+const DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE = Minutes.half;
 
 const AclClusterId = AccessControl.Complete.id;
 const AclAttributeId = AccessControl.Complete.attributes.acl.id;
@@ -204,8 +207,8 @@ export class InteractionClient {
     }
 
     /** Calculates the current maximum response time for a message use in additional logic like timers. */
-    maximumPeerResponseTimeMs(expectedProcessingTimeMs?: number) {
-        return this.#exchangeProvider.maximumPeerResponseTimeMs(expectedProcessingTimeMs);
+    maximumPeerResponseTime(expectedProcessingTime?: Interval) {
+        return this.#exchangeProvider.maximumPeerResponseTime(expectedProcessingTime);
     }
 
     removeSubscription(subscriptionId: number) {
@@ -544,18 +547,18 @@ export class InteractionClient {
             dataVersion?: number;
         };
         asTimedRequest?: boolean;
-        timedRequestTimeoutMs?: number;
+        timedRequestTimeout?: Interval;
         suppressResponse?: boolean;
         executeQueued?: boolean;
         chunkLists?: boolean;
     }): Promise<void> {
-        const { attributeData, asTimedRequest, timedRequestTimeoutMs, suppressResponse, executeQueued, chunkLists } =
+        const { attributeData, asTimedRequest, timedRequestTimeout, suppressResponse, executeQueued, chunkLists } =
             options;
         const { endpointId, clusterId, attribute, value, dataVersion } = attributeData;
         const response = await this.setMultipleAttributes({
             attributes: [{ endpointId, clusterId, attribute, value, dataVersion }],
             asTimedRequest,
-            timedRequestTimeoutMs,
+            timedRequestTimeout,
             suppressResponse,
             executeQueued,
             chunkLists,
@@ -585,7 +588,7 @@ export class InteractionClient {
             dataVersion?: number;
         }[];
         asTimedRequest?: boolean;
-        timedRequestTimeoutMs?: number;
+        timedRequestTimeout?: Interval;
         suppressResponse?: boolean;
         executeQueued?: boolean;
         chunkLists?: boolean;
@@ -595,7 +598,7 @@ export class InteractionClient {
         const {
             attributes,
             asTimedRequest,
-            timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
+            timedRequestTimeout = DEFAULT_TIMED_REQUEST_TIMEOUT,
             suppressResponse = this.isGroupAddress,
             chunkLists = true, // Should be true currently to stay in sync with chip sdk
         } = options;
@@ -654,7 +657,7 @@ export class InteractionClient {
         const timedRequest =
             attributes.some(({ attribute: { timed } }) => timed) ||
             asTimedRequest === true ||
-            options.timedRequestTimeoutMs !== undefined;
+            options.timedRequestTimeout !== undefined;
         if (this.isGroupAddress && timedRequest) {
             throw new ImplementationError("Timed requests are not supported for group address writes.");
         }
@@ -662,7 +665,7 @@ export class InteractionClient {
         const response = await this.withMessenger<TypeFromSchema<typeof TlvWriteResponse> | undefined>(
             async messenger => {
                 if (timedRequest) {
-                    await messenger.sendTimedRequest(timedRequestTimeoutMs);
+                    await messenger.sendTimedRequest(timedRequestTimeout);
                 }
 
                 return await messenger.sendWriteCommand({
@@ -747,11 +750,11 @@ export class InteractionClient {
         const {
             subscribeResponse: { subscriptionId, maxInterval },
             report,
-            maximumPeerResponseTimeMs,
+            maximumPeerResponseTime,
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTimeMs: number;
+            maximumPeerResponseTime: Interval;
         }>(async messenger => {
             await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -769,7 +772,7 @@ export class InteractionClient {
             return {
                 subscribeResponse,
                 report,
-                maximumPeerResponseTimeMs: this.maximumPeerResponseTimeMs(),
+                maximumPeerResponseTime: this.maximumPeerResponseTime(),
             };
         }, executeQueued);
 
@@ -800,8 +803,8 @@ export class InteractionClient {
         await this.#registerSubscription(
             {
                 id: subscriptionId,
-                maximumPeerResponseTimeMs,
-                maxIntervalS: maxInterval,
+                maximumPeerResponseTime,
+                maxInterval: Seconds(maxInterval),
                 onData: subscriptionListener,
                 onTimeout: updateTimeoutHandler,
             },
@@ -821,8 +824,8 @@ export class InteractionClient {
         endpointId: EndpointNumber;
         clusterId: ClusterId;
         event: E;
-        minIntervalFloorSeconds: number;
-        maxIntervalCeilingSeconds: number;
+        minIntervalFloor: Interval;
+        maxIntervalCeiling: Interval;
         isUrgent?: boolean;
         minimumEventNumber?: EventNumber;
         isFabricFiltered?: boolean;
@@ -840,8 +843,8 @@ export class InteractionClient {
             endpointId,
             clusterId,
             event,
-            minIntervalFloorSeconds,
-            maxIntervalCeilingSeconds,
+            minIntervalFloor,
+            maxIntervalCeiling,
             isUrgent,
             minimumEventNumber,
             isFabricFiltered = true,
@@ -853,32 +856,32 @@ export class InteractionClient {
         const { id: eventId } = event;
 
         logger.debug(
-            `Sending subscribe request for event: ${resolveEventName({ endpointId, clusterId, eventId })} with minInterval=${minIntervalFloorSeconds}s/maxInterval=${maxIntervalCeilingSeconds}s`,
+            `Sending subscribe request for event: ${resolveEventName({ endpointId, clusterId, eventId })} with minInterval=${minIntervalFloor}/maxInterval=${maxIntervalCeiling}`,
         );
 
         const {
             report,
             subscribeResponse: { subscriptionId, maxInterval },
-            maximumPeerResponseTimeMs,
+            maximumPeerResponseTime,
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTimeMs: number;
+            maximumPeerResponseTime: Interval;
         }>(async messenger => {
             await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                 eventRequests: [{ endpointId, clusterId, eventId, isUrgent }],
                 eventFilters: minimumEventNumber !== undefined ? [{ eventMin: minimumEventNumber }] : undefined,
                 keepSubscriptions: true,
-                minIntervalFloorSeconds,
-                maxIntervalCeilingSeconds,
+                minIntervalFloorSeconds: minIntervalFloor.secs,
+                maxIntervalCeilingSeconds: maxIntervalCeiling.secs,
                 isFabricFiltered,
             });
             const { subscribeResponse, report } = await messenger.readAggregateSubscribeResponse();
             return {
                 subscribeResponse,
                 report,
-                maximumPeerResponseTimeMs: this.maximumPeerResponseTimeMs(),
+                maximumPeerResponseTime: this.maximumPeerResponseTime(),
             };
         }, executeQueued);
 
@@ -906,8 +909,8 @@ export class InteractionClient {
         await this.#registerSubscription(
             {
                 id: subscriptionId,
-                maximumPeerResponseTimeMs,
-                maxIntervalS: maxInterval,
+                maximumPeerResponseTime,
+                maxInterval: Seconds(maxInterval),
                 onData: subscriptionListener,
                 onTimeout: updateTimeoutHandler,
             },
@@ -1027,11 +1030,11 @@ export class InteractionClient {
         const {
             report,
             subscribeResponse: { subscriptionId, maxInterval },
-            maximumPeerResponseTimeMs,
+            maximumPeerResponseTime,
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTimeMs: number;
+            maximumPeerResponseTime: Interval;
         }>(async messenger => {
             await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -1051,7 +1054,7 @@ export class InteractionClient {
             return {
                 subscribeResponse,
                 report,
-                maximumPeerResponseTimeMs: this.maximumPeerResponseTimeMs(),
+                maximumPeerResponseTime: this.maximumPeerResponseTime(),
             };
         }, executeQueued);
 
@@ -1125,8 +1128,8 @@ export class InteractionClient {
         await this.#registerSubscription(
             {
                 id: subscriptionId,
-                maximumPeerResponseTimeMs,
-                maxIntervalS: maxInterval,
+                maximumPeerResponseTime,
+                maxInterval: Seconds(maxInterval),
 
                 onData: dataReport => subscriptionListener(DecodedDataReport(dataReport)),
 
@@ -1155,13 +1158,13 @@ export class InteractionClient {
         asTimedRequest?: boolean;
 
         /** Use this timeout and send the request as Timed Request. If this is specified the above parameter is implied. */
-        timedRequestTimeoutMs?: number;
+        timedRequestTimeout?: Interval;
 
         /**
          * Expected processing time on the device side for this command.
          * useExtendedFailSafeMessageResponseTimeout is ignored if this value is set.
          */
-        expectedProcessingTimeMs?: number;
+        expectedProcessingTime?: Interval;
 
         /** Use an extended Message Response Timeout as defined for FailSafe cases which is 30s. */
         useExtendedFailSafeMessageResponseTimeout?: boolean;
@@ -1179,14 +1182,14 @@ export class InteractionClient {
             clusterId,
             command: { requestId, requestSchema, responseId, responseSchema, optional, timed },
             asTimedRequest,
-            timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
-            expectedProcessingTimeMs,
+            timedRequestTimeout: timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT,
+            expectedProcessingTime,
             useExtendedFailSafeMessageResponseTimeout = false,
             skipValidation,
         } = options;
         let { request } = options;
         const timedRequest =
-            (timed && !skipValidation) || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+            (timed && !skipValidation) || asTimedRequest === true || options.timedRequestTimeout !== undefined;
 
         if (this.isGroupAddress) {
             if (endpointId !== undefined) {
@@ -1234,9 +1237,9 @@ export class InteractionClient {
                     suppressResponse: false,
                     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                 },
-                expectedProcessingTimeMs ??
+                expectedProcessingTime ??
                     (useExtendedFailSafeMessageResponseTimeout
-                        ? DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE_MS
+                        ? DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE
                         : undefined),
             );
             if (response === undefined) {
@@ -1301,7 +1304,7 @@ export class InteractionClient {
         request: RequestType<C>;
         command: C;
         asTimedRequest?: boolean;
-        timedRequestTimeoutMs?: number;
+        timedRequestTimeout?: Interval;
         executeQueued?: boolean;
     }): Promise<void> {
         const { executeQueued } = options;
@@ -1312,9 +1315,9 @@ export class InteractionClient {
             request,
             command: { requestId, requestSchema, timed },
             asTimedRequest,
-            timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
+            timedRequestTimeout = DEFAULT_TIMED_REQUEST_TIMEOUT,
         } = options;
-        const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+        const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeout !== undefined;
 
         if (this.isGroupAddress) {
             if (timed) {
@@ -1336,7 +1339,7 @@ export class InteractionClient {
 
         await this.withMessenger<void>(async messenger => {
             if (timedRequest) {
-                await messenger.sendTimedRequest(timedRequestTimeoutMs);
+                await messenger.sendTimedRequest(timedRequestTimeout);
             }
 
             const response = await messenger.sendInvokeCommand({

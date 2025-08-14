@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Instant } from "#time/TimeUnit.js";
 import { MaybePromise } from "#util/Promises.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
@@ -227,7 +228,7 @@ export class Environment {
      * Display tasks that supply diagnostics.
      */
     diagnose() {
-        Time.getTimer("Diagnostics", 0, () => {
+        Time.getTimer("Diagnostics", Instant, () => {
             try {
                 logger.notice("Diagnostics follow", DiagnosticSource);
             } catch (e) {

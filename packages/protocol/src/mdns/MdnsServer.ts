@@ -9,9 +9,12 @@ import {
     DnsMessageType,
     DnsRecord,
     DnsRecordType,
+    Hours,
+    Instant,
     isDeepEqual,
     Logger,
     MatterAggregateError,
+    Millisecs,
     NetworkInterfaceDetails,
     ObserverGroup,
     Time,
@@ -38,7 +41,7 @@ export class MdnsServer {
 
             return serviceRecords;
         },
-        15 * 60 * 1000 /* 15mn - also matches maximum commissioning window time. */,
+        Hours.quarter /* matches maximum standard commissioning window time */,
     );
     readonly #recordLastSentAsMulticastAnswer = new Map<string, number>();
 
@@ -96,23 +99,27 @@ export class MdnsServer {
                 }
             }
 
-            const now = Time.nowMs();
+            const now = Time.nowMs;
             let uniCastResponse = queries.filter(query => !query.uniCastResponse).length === 0;
             const answersTimeSinceLastSent = answers.map(answer => ({
-                timeSinceLastMultiCast:
+                timeSinceLastMultiCast: Millisecs(
                     now - (this.#recordLastSentAsMulticastAnswer.get(this.buildDnsRecordKey(answer, sourceIntf)) ?? 0),
-                ttl: answer.ttl * 1000,
+                ),
+                ttl: answer.ttl,
             }));
             if (
                 uniCastResponse &&
-                answersTimeSinceLastSent.some(({ timeSinceLastMultiCast, ttl }) => timeSinceLastMultiCast > ttl / 4)
+                answersTimeSinceLastSent.some(
+                    ({ timeSinceLastMultiCast, ttl }) => timeSinceLastMultiCast > ttl.dividedBy(4),
+                )
             ) {
                 // If the query is for unicast response, still send as multicast if they were last sent as multicast longer then 1/4 of their ttl
                 uniCastResponse = false;
             }
             if (!uniCastResponse) {
                 answers = answers.filter(
-                    (_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast >= 900, // The last time sent as multicast was more than 900 ms ago
+                    // The last time sent as multicast was more than 900 ms ago
+                    (_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast >= Millisecs(900),
                 );
                 if (answers.length === 0) continue; // Nothing to send
 
@@ -135,7 +142,7 @@ export class MdnsServer {
                 .catch(error => {
                     logger.warn(`Failed to send mDNS response to ${sourceIp}`, error);
                 });
-            await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
+            await Time.sleep("MDNS delay", Millisecs(20 + Math.floor(Math.random() * 100))); // as per DNS-SD spec wait 20-120ms before sending more packets
         }
     }
 
@@ -162,7 +169,7 @@ export class MdnsServer {
 
                     // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
                     await this.#announceRecordsForInterface(netInterface, serviceRecords);
-                    await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
+                    await Time.sleep("MDNS delay", Millisecs(20 + Math.floor(Math.random() * 100))); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
             "Error announcing MDNS messages",
@@ -177,7 +184,7 @@ export class MdnsServer {
                     if (services.length && !services.includes(service)) continue;
                     const instanceSet = new Set<string>();
                     serviceRecords.forEach(record => {
-                        record.ttl = 0;
+                        record.ttl = Instant;
                         if (record.recordType === DnsRecordType.TXT) {
                             instanceSet.add(record.name);
                         }
@@ -186,7 +193,7 @@ export class MdnsServer {
                     // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
                     await this.#announceRecordsForInterface(netInterface, serviceRecords);
                     this.#recordsGenerator.delete(service);
-                    await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
+                    await Time.sleep("MDNS delay", Millisecs(20 + Math.floor(Math.random() * 100))); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
             "Error happened when expiring MDNS announcements",

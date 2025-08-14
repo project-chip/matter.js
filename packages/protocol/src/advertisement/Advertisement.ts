@@ -4,8 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { asError, CancelablePromise, CanceledError, Diagnostic, Logger, MatterAggregateError, Time } from "#general";
-import { STANDARD_COMMISSIONING_TIMEOUT_S } from "#types";
+import {
+    asError,
+    CancelablePromise,
+    CanceledError,
+    Diagnostic,
+    Interval,
+    Logger,
+    MatterAggregateError,
+    Time,
+} from "#general";
+import { STANDARD_COMMISSIONING_TIMEOUT } from "#types";
 import type { Advertiser } from "./Advertiser.js";
 import { ServiceDescription } from "./ServiceDescription.js";
 
@@ -39,7 +48,7 @@ export abstract class Advertisement<T extends ServiceDescription = ServiceDescri
 
     #isBroadcasting = false;
     #closed?: Promise<void>;
-    #startedAt = Time.nowMs();
+    #startedAt = Time.nowMs;
 
     /**
      * Current activity.  This is a promise with helpers for base implementations.
@@ -163,7 +172,7 @@ export abstract class Advertisement<T extends ServiceDescription = ServiceDescri
         }
 
         // Extended announcement
-        if (Time.nowMs() - this.#startedAt >= STANDARD_COMMISSIONING_TIMEOUT_S * 1000) {
+        if (Time.nowMs - this.#startedAt >= STANDARD_COMMISSIONING_TIMEOUT.ms) {
             return true;
         }
 
@@ -210,7 +219,7 @@ export abstract class Advertisement<T extends ServiceDescription = ServiceDescri
      * Total duration so far.
      */
     get duration() {
-        return Time.nowMs() - this.#startedAt;
+        return Time.nowMs - this.#startedAt;
     }
 
     /**
@@ -292,7 +301,7 @@ export namespace Advertisement {
          * Throws {@link CanceledError} if interrupted.  If thrown from {@link run} this will result in the promise
          * resolving.
          */
-        sleep(name: string, intervalMs: number): Promise<void>;
+        sleep(name: string, interval: Interval): Promise<void>;
     }
 }
 
@@ -316,10 +325,10 @@ class ActivityContext extends CancelablePromise implements Advertisement.Activit
         });
     }
 
-    sleep(name: string, intervalMs: number) {
+    sleep(name: string, interval: Interval) {
         this.abortIfCanceled();
 
-        const sleep = Time.sleep(name, intervalMs).finally(() => {
+        const sleep = Time.sleep(name, interval).finally(() => {
             if (this.#sleep === sleep) {
                 this.#sleep = undefined;
             }

@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { fromJson, StorageBackendMemory, StorageError, SupportedStorageTypes, Time, toJson } from "#general";
+import { fromJson, Seconds, StorageBackendMemory, StorageError, SupportedStorageTypes, Time, toJson } from "#general";
 import { readFileSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
 
 export class StorageBackendJsonFile extends StorageBackendMemory {
     /** We store changes after a value was set to the storage, but not more often than this setting (in ms). */
-    static commitDelay = 1000;
+    static commitDelay = Seconds.one;
     committed = Promise.resolve();
 
     private readonly commitTimer = Time.getTimer("Storage commit", StorageBackendJsonFile.commitDelay, () =>

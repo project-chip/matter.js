@@ -5,14 +5,14 @@
  */
 
 import { AdministratorCommissioning } from "#clusters/administrator-commissioning";
-import { InternalError, Logger, Time, Timer } from "#general";
+import { InternalError, Interval, Logger, Seconds, Time, Timer } from "#general";
 import { AccessLevel } from "#model";
 import { DeviceCommissioner, FailsafeContext, PaseServer, SessionManager } from "#protocol";
 import {
     Command,
-    MINIMUM_COMMISSIONING_TIMEOUT_S,
+    MINIMUM_COMMISSIONING_TIMEOUT,
     PAKE_PASSCODE_VERIFIER_LENGTH,
-    STANDARD_COMMISSIONING_TIMEOUT_S,
+    STANDARD_COMMISSIONING_TIMEOUT,
     Status,
     StatusResponseError,
     TlvByteString,
@@ -86,10 +86,12 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 
         const commissioner = this.env.get(DeviceCommissioner);
 
-        this.#assertCommissioningWindowRequirements(commissioningTimeout, commissioner);
+        const timeout = Seconds(commissioningTimeout);
+
+        this.#assertCommissioningWindowRequirements(timeout, commissioner);
 
         this.#initializeCommissioningWindow(
-            commissioningTimeout,
+            timeout,
             AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen,
         );
 
@@ -109,10 +111,12 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     }: AdministratorCommissioning.OpenBasicCommissioningWindowRequest) {
         const commissioner = this.env.get(DeviceCommissioner);
 
-        this.#assertCommissioningWindowRequirements(commissioningTimeout, commissioner);
+        const timeout = Seconds(commissioningTimeout);
+
+        this.#assertCommissioningWindowRequirements(timeout, commissioner);
 
         this.#initializeCommissioningWindow(
-            commissioningTimeout,
+            timeout,
             AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen,
         );
 
@@ -144,7 +148,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      * adjusts the needed attributes.
      */
     #initializeCommissioningWindow(
-        commissioningTimeout: number,
+        commissioningTimeout: Interval,
         windowStatus: AdministratorCommissioning.CommissioningWindowStatus,
     ) {
         if (this.internal.commissioningWindowTimeout !== undefined) {
@@ -156,7 +160,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         );
         this.internal.commissioningWindowTimeout = Time.getTimer(
             "Commissioning timeout",
-            commissioningTimeout * 1000,
+            commissioningTimeout,
             this.callback(this.#commissioningTimeout),
         ).start();
 
@@ -178,21 +182,21 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     /**
      * This method validates if a commissioning window can be opened and throws various exceptions in case of failures.
      */
-    #assertCommissioningWindowRequirements(commissioningTimeout: number, commissioner: DeviceCommissioner) {
+    #assertCommissioningWindowRequirements(commissioningTimeout: Interval, commissioner: DeviceCommissioner) {
         if (this.internal.commissioningWindowTimeout !== undefined) {
             throw new AdministratorCommissioning.BusyError("A commissioning window is already opened");
         }
 
-        if (commissioningTimeout > this.internal.maximumCommissioningTimeoutS) {
+        if (commissioningTimeout > this.internal.maximumCommissioningTimeout) {
             throw new StatusResponseError(
-                `Commissioning timeout must not exceed ${this.internal.maximumCommissioningTimeoutS} seconds.`,
+                `Commissioning timeout must not exceed ${this.internal.maximumCommissioningTimeout} seconds.`,
                 Status.InvalidCommand,
             );
         }
 
-        if (commissioningTimeout < this.internal.minimumCommissioningTimeoutS) {
+        if (commissioningTimeout < this.internal.minimumCommissioningTimeout) {
             throw new StatusResponseError(
-                `Commissioning timeout must not be lower then ${this.internal.minimumCommissioningTimeoutS} seconds.`,
+                `Commissioning timeout must not be lower then ${this.internal.minimumCommissioningTimeout} seconds.`,
                 Status.InvalidCommand,
             );
         }
@@ -261,13 +265,13 @@ export namespace AdministratorCommissioningServer {
         /**
          * Mandated by spec; should only be modified in testing.
          */
-        minimumCommissioningTimeoutS = MINIMUM_COMMISSIONING_TIMEOUT_S;
+        minimumCommissioningTimeout = MINIMUM_COMMISSIONING_TIMEOUT;
 
         /**
          * Commissioning beyond the standard 15-minute window is "extended commissioning" and has limitations on
          * advertisement.  We default to the standard window.
          */
-        maximumCommissioningTimeoutS = STANDARD_COMMISSIONING_TIMEOUT_S;
+        maximumCommissioningTimeout = STANDARD_COMMISSIONING_TIMEOUT;
     }
 
     export class State extends AdministratorCommissioningBehavior.State {

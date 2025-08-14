@@ -7,5 +7,5 @@
 import { Time } from "#general";
 import { uptime } from "node:os";
 
-Time.startup.processMs = Math.floor(Time.nowMs() - process.uptime() * 1000);
-Time.startup.systemMs = Math.floor(Time.nowMs() - uptime());
+Time.startup.processMs = Math.floor(Time.nowMs - process.uptime() * 1000);
+Time.startup.systemMs = Math.floor(Time.nowMs - uptime());

@@ -13,7 +13,7 @@ describe("OO", () => {
             // so maybe is based on latency estimates?  For now we just rewrite
             edit.sed("s/maxValue: 215/maxValue: 300/"),
 
-            // 30s exactly might be a bit too exact, so lets give CI s bit more time
+            // 30s exactly might be a bit too exact, so lets give CI a bit more time
             edit.sed("s/value: 30000/value: 30500/"),
         );
     });

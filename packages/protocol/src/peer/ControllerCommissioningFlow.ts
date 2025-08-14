@@ -15,9 +15,13 @@ import {
     Bytes,
     ChannelType,
     Diagnostic,
+    Instant,
+    Interval,
     Logger,
     MatterError,
+    Minutes,
     repackErrorAs,
+    Seconds,
     Time,
     UnexpectedDataError,
 } from "#general";
@@ -178,7 +182,7 @@ export class OperativeConnectionFailedError extends CommissioningError {}
 /** Error that throws when Commissioning fails but a process can be continued. */
 class RecoverableCommissioningError extends CommissioningError {}
 
-const DEFAULT_FAILSAFE_TIME_S = 60;
+const DEFAULT_FAILSAFE_TIME = Minutes.one;
 
 /**
  * Class to abstract the Device commission flow in a step wise way as defined in Specs. The specs are not 100%
@@ -200,7 +204,7 @@ export class ControllerCommissioningFlow {
     #currentFailSafeEndTime: number | undefined;
     protected lastBreadcrumb = 1;
     protected collectedCommissioningData: CollectedCommissioningData = {};
-    #defaultFailSafeTimeS = DEFAULT_FAILSAFE_TIME_S;
+    #defaultFailSafeTime = DEFAULT_FAILSAFE_TIME;
 
     constructor(
         /** InteractionClient for the initiated PASE session */
@@ -252,7 +256,7 @@ export class ControllerCommissioningFlow {
                 this.#setCommissioningStepResult(step, result);
 
                 if (this.#currentFailSafeEndTime !== undefined) {
-                    if (this.#commissioningExpiryTime !== undefined && Time.nowMs() > this.#commissioningExpiryTime) {
+                    if (this.#commissioningExpiryTime !== undefined && Time.nowMs > this.#commissioningExpiryTime) {
                         logger.error(
                             `Commissioning step ${step.stepNumber}.${step.subStepNumber}: ${step.name} succeeded, but commissioning took too long in general!`,
                         );
@@ -267,8 +271,8 @@ export class ControllerCommissioningFlow {
                      * timeout within 60 seconds of the completion of PASE session establishment, using the ArmFailSafe
                      * command (see Section 11.9.6.2, “ArmFailSafe Command”)
                      */
-                    const timeLeft = Math.floor((this.#currentFailSafeEndTime - Time.nowMs()) / 1000);
-                    if (timeLeft < this.#defaultFailSafeTimeS / 2) {
+                    const timeLeft = Math.floor((this.#currentFailSafeEndTime - Time.nowMs) / 1000);
+                    if (timeLeft < this.#defaultFailSafeTime.dividedBy(2).ms) {
                         logger.info(
                             `After Commissioning step ${step.stepNumber}.${step.subStepNumber}: ${
                                 step.name
@@ -595,45 +599,45 @@ export class ControllerCommissioningFlow {
      * reading BasicCommissioningInfo attribute (see Section 11.10.5.2, “BasicCommissioningInfo
      * Attribute”) prior to invoking the ArmFailSafe command.
      */
-    async #armFailsafe(timeS?: number) {
+    async #armFailsafe(time?: Interval) {
         const client = this.#getClusterClient(GeneralCommissioning.Cluster);
         if (this.collectedCommissioningData.basicCommissioningInfo === undefined) {
             const basicCommissioningInfo = await client.getBasicCommissioningInfoAttribute();
             this.collectedCommissioningData.basicCommissioningInfo = basicCommissioningInfo;
-            this.#defaultFailSafeTimeS = basicCommissioningInfo.failSafeExpiryLengthSeconds;
-            this.#commissioningStartedTime = Time.nowMs();
+            this.#defaultFailSafeTime = Seconds(basicCommissioningInfo.failSafeExpiryLengthSeconds);
+            this.#commissioningStartedTime = Time.nowMs;
             this.#commissioningExpiryTime =
                 this.#commissioningStartedTime + basicCommissioningInfo.maxCumulativeFailsafeSeconds * 1000;
         }
-        const expiryLengthSeconds = timeS ?? this.#defaultFailSafeTimeS;
+        const expiryLength = time ?? this.#defaultFailSafeTime;
         this.#ensureGeneralCommissioningSuccess(
             "armFailSafe",
             await client.armFailSafe({
                 breadcrumb: this.lastBreadcrumb,
-                expiryLengthSeconds,
+                expiryLengthSeconds: Seconds(expiryLength).length,
             }),
         );
-        this.#currentFailSafeEndTime = Time.nowMs() + expiryLengthSeconds * 1000;
+        this.#currentFailSafeEndTime = Time.nowMs + expiryLength.ms;
         return {
             code: CommissioningStepResultCode.Success,
             breadcrumb: this.lastBreadcrumb,
         };
     }
 
-    get #failSafeTimeLeftS() {
+    get #failSafeTimeLeft() {
         if (this.#currentFailSafeEndTime === undefined) {
-            return 0;
+            return Instant;
         }
-        return Math.max(0, Math.ceil((this.#currentFailSafeEndTime - Time.nowMs()) / 1000));
+        return Math.max(0, Math.ceil((this.#currentFailSafeEndTime - Time.nowMs) / 1000));
     }
 
-    async #ensureFailsafeTimerForS(maxProcessingTime: number) {
-        const minFailsafeTimeS = this.interactionClient.maximumPeerResponseTimeMs(maxProcessingTime);
+    async #ensureFailsafeTimerFor(maxProcessingTime: Interval) {
+        const minFailsafeTime = this.interactionClient.maximumPeerResponseTime(maxProcessingTime);
 
-        const timeLeft = this.#failSafeTimeLeftS;
-        if (timeLeft < minFailsafeTimeS) {
-            logger.debug(`Failsafe timer has only ${timeLeft}s left, re-arming for at least ${minFailsafeTimeS}s`);
-            await this.#armFailsafe(Math.max(minFailsafeTimeS, this.#defaultFailSafeTimeS));
+        const timeLeft = this.#failSafeTimeLeft;
+        if (timeLeft < minFailsafeTime) {
+            logger.debug(`Failsafe timer has only ${timeLeft}s left, re-arming for at least ${minFailsafeTime}`);
+            await this.#armFailsafe(Interval.max(minFailsafeTime, this.#defaultFailSafeTime));
         } else {
             logger.debug(`Failsafe timer is already set for at least ${timeLeft}s`);
         }
@@ -1019,8 +1023,8 @@ export class ControllerCommissioningFlow {
 
         // Only Scan when the device supports concurrent connections
         if (this.collectedCommissioningData.supportsConcurrentConnection !== false) {
-            const scanMaxTimeSeconds = await networkCommissioningClusterClient.getScanMaxTimeSecondsAttribute();
-            await this.#ensureFailsafeTimerForS(scanMaxTimeSeconds);
+            const scanMaxTime = Seconds(await networkCommissioningClusterClient.getScanMaxTimeSecondsAttribute());
+            await this.#ensureFailsafeTimerFor(scanMaxTime);
 
             const { networkingStatus, wiFiScanResults, debugText } =
                 await networkCommissioningClusterClient.scanNetworks(
@@ -1028,7 +1032,7 @@ export class ControllerCommissioningFlow {
                         ssid,
                         breadcrumb: this.lastBreadcrumb++,
                     },
-                    { expectedProcessingTimeMs: scanMaxTimeSeconds * 1000 },
+                    { expectedProcessingTime: scanMaxTime },
                 );
             if (networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
                 throw new WifiNetworkSetupFailedError(`Commissionee failed to scan for WiFi networks: ${debugText}`);
@@ -1080,15 +1084,15 @@ export class ControllerCommissioningFlow {
             };
         }
 
-        const connectMaxTimeSeconds = await networkCommissioningClusterClient.getConnectMaxTimeSecondsAttribute();
-        await this.#ensureFailsafeTimerForS(connectMaxTimeSeconds);
+        const connectMaxTime = Seconds(await networkCommissioningClusterClient.getConnectMaxTimeSecondsAttribute());
+        await this.#ensureFailsafeTimerFor(connectMaxTime);
 
         const connectResult = await networkCommissioningClusterClient.connectNetwork(
             {
                 networkId: networkId,
                 breadcrumb: this.lastBreadcrumb++,
             },
-            { expectedProcessingTimeMs: connectMaxTimeSeconds * 1000 },
+            { expectedProcessingTime: connectMaxTime },
         );
 
         if (connectResult.networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
@@ -1164,13 +1168,13 @@ export class ControllerCommissioningFlow {
 
         // Only Scan when the device supports concurrent connections
         if (this.collectedCommissioningData.supportsConcurrentConnection !== false) {
-            const scanMaxTimeSeconds = await networkCommissioningClusterClient.getScanMaxTimeSecondsAttribute();
-            await this.#ensureFailsafeTimerForS(scanMaxTimeSeconds);
+            const scanMaxTime = Seconds(await networkCommissioningClusterClient.getScanMaxTimeSecondsAttribute());
+            await this.#ensureFailsafeTimerFor(scanMaxTime);
 
             const { networkingStatus, threadScanResults, debugText } =
                 await networkCommissioningClusterClient.scanNetworks(
                     { breadcrumb: this.lastBreadcrumb++ },
-                    { expectedProcessingTimeMs: scanMaxTimeSeconds * 1000 },
+                    { expectedProcessingTime: scanMaxTime },
                 );
             if (networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
                 throw new ThreadNetworkSetupFailedError(
@@ -1237,15 +1241,15 @@ export class ControllerCommissioningFlow {
             };
         }
 
-        const connectMaxTimeSeconds = await networkCommissioningClusterClient.getConnectMaxTimeSecondsAttribute();
-        await this.#ensureFailsafeTimerForS(connectMaxTimeSeconds);
+        const connectMaxTime = Seconds(await networkCommissioningClusterClient.getConnectMaxTimeSecondsAttribute());
+        await this.#ensureFailsafeTimerFor(connectMaxTime);
 
         const connectResult = await networkCommissioningClusterClient.connectNetwork(
             {
                 networkId: networkId,
                 breadcrumb: this.lastBreadcrumb++,
             },
-            { expectedProcessingTimeMs: connectMaxTimeSeconds * 1000 },
+            { expectedProcessingTime: connectMaxTime },
         );
 
         if (connectResult.networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
@@ -1284,9 +1288,9 @@ export class ControllerCommissioningFlow {
         // TODO: Check whats needed for non-concurrent commissioning flows (maybe arm initially longer?)
         const reArmFailsafeInterval = Time.getPeriodicTimer(
             "Re-Arm Failsafe during reconnect",
-            (this.#defaultFailSafeTimeS / 2) * 1000,
+            this.#defaultFailSafeTime.dividedBy(2),
             () => {
-                const now = Time.nowMs();
+                const now = Time.nowMs;
                 if (this.#commissioningExpiryTime !== undefined && now < this.#commissioningExpiryTime) {
                     logger.error(
                         `Re-Arm Failsafe Timer during reconnect with device. Time left: ${Math.round((this.#commissioningExpiryTime - now) / 1000)}s`,

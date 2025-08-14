@@ -28,6 +28,7 @@ expect.STRING = createDiffMarker("string");
 (Chai.config as any).deepEqual = (expected: unknown, actual: unknown) => {
     return (Chai.util as any).eql(expected, actual, {
         comparator(expected: unknown, actual: unknown) {
+            // Handle special "type-only" checks
             switch (expected) {
                 case expect.IGNORE:
                     return true;
@@ -44,6 +45,17 @@ expect.STRING = createDiffMarker("string");
                 case expect.BYTES:
                     return actual instanceof Uint8Array;
             }
+
+            // Specialized support for intervals
+            if (typeof actual === "object" && actual?.constructor.name === "Interval" && "ms" in actual) {
+                if (typeof expected === "number") {
+                    return actual.ms === expected;
+                }
+                if (typeof expected === "object" && expected !== null && "ms" in expected) {
+                    return actual.ms === expected.ms;
+                }
+            }
+
             return null;
         },
     });

@@ -10,7 +10,7 @@ import { IdentityService } from "#node/server/IdentityService.js";
 import type { ServerNode } from "#node/ServerNode.js";
 import { OperationalPeer, PeerAddress, PeerAddressMap, PeerAddressStore } from "#protocol";
 import { FabricIndex, NodeId } from "#types";
-import { Crypto } from "@matter/general";
+import { Crypto, ServerAddress, ServerAddressIp } from "@matter/general";
 
 /**
  * This is an adapter for lower-level components in the protocol package.
@@ -61,9 +61,11 @@ export class NodePeerAddressStore extends PeerAddressStore {
 
                 this.#assignedAddresses.set(commissioning.peerAddress, node);
 
+                const addr = commissioning.addresses?.find(addr => addr.type === "udp");
+
                 return {
                     address: commissioning.peerAddress,
-                    operationalAddress: commissioning.addresses?.find(addr => addr.type === "udp"),
+                    operationalAddress: addr && (ServerAddress(addr) as ServerAddressIp),
                     discoveryData: RemoteDescriptor.fromLongForm(commissioning),
                 };
             })

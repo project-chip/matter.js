@@ -8,7 +8,7 @@ import { AdministratorCommissioningServer } from "#behaviors/administrator-commi
 import { BasicInformationServer } from "#behaviors/basic-information";
 import { AdministratorCommissioning } from "#clusters/administrator-commissioning";
 import { GeneralCommissioning } from "#clusters/general-commissioning";
-import { Bytes, Diagnostic, Logger, MatterFlowError, MaybePromise } from "#general";
+import { Bytes, Diagnostic, Logger, MatterFlowError, MaybePromise, Seconds } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
 import { DeviceCommissioner, FabricManager, GroupSession, NodeSession, SecureSession, SessionManager } from "#protocol";
 import { GeneralCommissioningBehavior } from "./GeneralCommissioningBehavior.js";
@@ -80,7 +80,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
             }
 
             if (commissioner.isFailsafeArmed) {
-                await commissioner.failsafeContext.extend(session.fabric, expiryLengthSeconds);
+                await commissioner.failsafeContext.extend(session.fabric, Seconds(expiryLengthSeconds));
             } else {
                 // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL
                 // lead to a success response with no side effect against the fail-safe context.
@@ -89,8 +89,8 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 const failsafe = new ServerNodeFailsafeContext(this.endpoint as ServerNode, {
                     fabrics: this.env.get(FabricManager),
                     sessions: this.env.get(SessionManager),
-                    expiryLengthSeconds,
-                    maxCumulativeFailsafeSeconds: this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
+                    expiryLength: Seconds(expiryLengthSeconds),
+                    maxCumulativeFailsafe: Seconds(this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds),
                     associatedFabric: session.fabric,
                 });
 

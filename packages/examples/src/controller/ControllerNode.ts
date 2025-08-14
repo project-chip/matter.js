@@ -65,7 +65,7 @@ class ControllerNode {
             : environment.vars.number("port");
         const uniqueId = (await controllerStorage.has("uniqueid"))
             ? await controllerStorage.get<string>("uniqueid")
-            : (environment.vars.string("uniqueid") ?? Time.nowMs().toString());
+            : (environment.vars.string("uniqueid") ?? Time.nowMs.toString());
         await controllerStorage.set("uniqueid", uniqueId);
         const adminFabricLabel = (await controllerStorage.has("fabriclabel"))
             ? await controllerStorage.get<string>("fabriclabel")

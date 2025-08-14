@@ -22,6 +22,7 @@ import "./ElectricalPowerMeasurementOverrides.js";
 import "./GroupKeyManagementOverrides.js";
 import "./GroupsOverrides.js";
 import "./IlluminanceMeasurementOverrides.js";
+import "./interval.js";
 import "./LevelControlOverrides.js";
 import "./LocalizationConfigurationOverrides.js";
 import "./ModeBaseOverrides.js";

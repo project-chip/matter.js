@@ -62,10 +62,10 @@ export abstract class OperationalBase<CT extends X509Certificate> extends X509Ba
 
         // notBefore date should be already reached, notAfter is not checked right now
         // TODO: implement real checks when we add "Last known Good UTC time"
-        if (cert.notBefore * 1000 > Time.nowMs()) {
-            logger.warn(`Certificate notBefore date is in the future: ${cert.notBefore * 1000} vs ${Time.nowMs()}`);
+        if (cert.notBefore * 1000 > Time.nowMs) {
+            logger.warn(`Certificate notBefore date is in the future: ${cert.notBefore * 1000} vs ${Time.nowMs}`);
             /*throw new CertificateError(
-                `Certificate notBefore date is in the future: ${cert.notBefore * 1000} vs ${Time.nowMs()}`,
+                `Certificate notBefore date is in the future: ${cert.notBefore * 1000} vs ${Time.nowMs}`,
             );*/
         }
     }

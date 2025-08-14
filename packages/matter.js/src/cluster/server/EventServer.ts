@@ -114,7 +114,7 @@ export class EventServer<T = any> {
             eventId: this.id,
             clusterId: this.clusterId,
             endpointId: this.endpoint.number,
-            epochTimestamp: Time.nowMs(),
+            epochTimestamp: Time.nowMs,
             priority: this.priority,
             payload: data,
         };

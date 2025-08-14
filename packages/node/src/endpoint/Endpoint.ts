@@ -13,6 +13,7 @@ import {
     Environment,
     Immutable,
     ImplementationError,
+    Interval,
     Lifecycle,
     Logger,
     MaybePromise,
@@ -206,8 +207,15 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
                         `State values for ${behaviorId} must be an object, not ${typeof vals}`,
                     );
                 }
+
+                if (vals instanceof Interval || vals instanceof Date) {
+                    throw new ImplementationError(
+                        `State values for ${behaviorId} must be an object, not ${vals.constructor.name}`,
+                    );
+                }
+
                 if (Array.isArray(vals)) {
-                    throw new ImplementationError(`StateValue for ${behaviorId} must be an object, not an array`);
+                    throw new ImplementationError(`State value for ${behaviorId} must be an object, not an array`);
                 }
 
                 patch(vals, behavior.state, this.path);
@@ -235,6 +243,11 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
             if (typeof values !== "object") {
                 throw new ImplementationError(`State values for ${type.id} must be an object, not ${typeof values}`);
+            }
+            if (values instanceof Interval || values instanceof Date) {
+                throw new ImplementationError(
+                    `State values for ${type.id} must be an object, not ${values.constructor.name}`,
+                );
             }
             if (Array.isArray(values)) {
                 throw new ImplementationError(`State values for ${type.id} must be an object, not an array`);

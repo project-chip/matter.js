@@ -14,6 +14,7 @@ import {
     SrvRecord,
     TxtRecord,
 } from "#codec/DnsCodec.js";
+import { Seconds } from "#time/TimeUnit.js";
 import { Bytes } from "#util/Bytes.js";
 import { DataReader } from "#util/index.js";
 
@@ -62,7 +63,7 @@ const DNS_DECODED = {
             name: "_companion-link._tcp.local",
             recordType: 12,
             recordClass: 1,
-            ttl: 4500,
+            ttl: Seconds(4500),
             value: "Kitchen._companion-link._tcp.local",
             flushCache: false,
         },
@@ -70,7 +71,7 @@ const DNS_DECODED = {
             name: "_homekit._tcp.local",
             recordType: 12,
             recordClass: 1,
-            ttl: 4500,
+            ttl: Seconds(4500),
             value: "AB6EC7A1-387B-5253-A854-9DA52635567F._homekit._tcp.local",
             flushCache: false,
         },
@@ -81,7 +82,7 @@ const DNS_DECODED = {
             name: "",
             recordType: 41,
             recordClass: 1440,
-            ttl: 4500,
+            ttl: Seconds(4500),
             value: Bytes.fromHex("0004000e0099929387b033db4275a6a31b2d"),
             flushCache: false,
         },
@@ -101,7 +102,7 @@ const DECODED_WITH_PRIVATE_TYPE = {
             name: "3BE0FCD63F79EEC2._matterc._udp.local",
             recordClass: 1,
             recordType: 16,
-            ttl: 4500,
+            ttl: Seconds(4500),
             value: [
                 "VP=4874+83",
                 "DT=266",
@@ -121,7 +122,7 @@ const DECODED_WITH_PRIVATE_TYPE = {
             name: "3BE0FCD63F79EEC2._matterc._udp.local",
             recordClass: 1,
             recordType: 65323,
-            ttl: 120,
+            ttl: Seconds(120),
             value: Bytes.fromHex("00000000"),
         },
         {
@@ -129,7 +130,7 @@ const DECODED_WITH_PRIVATE_TYPE = {
             name: "3BE0FCD63F79EEC2._matterc._udp.local",
             recordClass: 1,
             recordType: 33,
-            ttl: 120,
+            ttl: Seconds(120),
             value: {
                 port: 5540,
                 priority: 0,
@@ -236,6 +237,9 @@ describe("DnsCodec", () => {
 
     describe("encode", () => {
         it("encodes a message and verify with decoding again", () => {
+            const a = DnsCodec.decode(RESULT);
+            expect(a).deep.equals(DNS_RESPONSE);
+
             const result = DnsCodec.encode(DNS_RESPONSE);
 
             expect(Bytes.toHex(result)).equal(Bytes.toHex(RESULT));

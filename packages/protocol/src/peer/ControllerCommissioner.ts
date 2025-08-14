@@ -16,12 +16,14 @@ import {
     Diagnostic,
     Environment,
     Environmental,
+    Interval,
     isIPv6,
     Logger,
+    Millisecs,
+    Minutes,
     NetInterfaceSet,
     NoResponseTimeoutError,
     ServerAddress,
-    serverAddressToString,
 } from "#general";
 import { InteractionClient, InteractionClientProvider } from "#interaction/InteractionClient.js";
 import { MdnsClient } from "#mdns/MdnsClient.js";
@@ -115,7 +117,7 @@ export interface DiscoveryAndCommissioningOptions extends CommissioningOptions {
         knownAddress?: ServerAddress;
 
         /** Timeout in seconds for the discovery process. Default: 30 seconds */
-        timeoutSeconds?: number;
+        timeout?: Interval;
     };
 }
 
@@ -179,7 +181,7 @@ export class ControllerCommissioner {
                 channel = await this.#initializePaseSecureChannel(address, passcode, discoveryData);
             } catch (e) {
                 NoResponseTimeoutError.accept(e);
-                logger.warn(`Could not connect to ${serverAddressToString(address)}: ${e.message}`);
+                logger.warn(`Could not connect to ${ServerAddress.urlFor(address)}: ${e.message}`);
             }
         }
 
@@ -197,7 +199,7 @@ export class ControllerCommissioner {
         options: DiscoveryAndCommissioningOptions,
     ): Promise<{ paseSecureChannel: MessageChannel; discoveryData?: DiscoveryData }> {
         const {
-            discovery: { timeoutSeconds = 30 },
+            discovery: { timeout = Minutes.half },
             passcode,
         } = options;
 
@@ -256,7 +258,7 @@ export class ControllerCommissioner {
             const discoveredDevices = await ControllerDiscovery.discoverDeviceAddressesByIdentifier(
                 scannersToUse,
                 identifierData,
-                timeoutSeconds,
+                timeout,
             );
 
             const { result } = await ControllerDiscovery.iterateServerAddresses(
@@ -339,9 +341,9 @@ export class ControllerCommissioner {
         const unsecureSession = this.#context.sessions.createInsecureSession({
             // Use the session parameters from MDNS announcements when available and rest is assumed to be fallbacks
             sessionParameters: {
-                idleIntervalMs: device?.SII,
-                activeIntervalMs: device?.SAI,
-                activeThresholdMs: device?.SAT,
+                idleInterval: Millisecs(device?.SII),
+                activeInterval: Millisecs(device?.SAI),
+                activeThreshold: Millisecs(device?.SAT),
             },
             isInitiator: true,
         });
@@ -478,7 +480,7 @@ export class ControllerCommissioner {
                 return await this.#context.clients.connect(address, {
                     discoveryOptions: {
                         discoveryType: NodeDiscoveryType.TimedDiscovery,
-                        timeoutSeconds: 120,
+                        timeout: Minutes(2),
                         discoveryData,
                     },
                     allowUnknownPeer: true,

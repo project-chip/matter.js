@@ -76,7 +76,7 @@ export class AttestationCertificateManager {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     private async generatePAACert(vendorId?: VendorId) {
-        const now = Time.get().now();
+        const now = Time.now;
         const cert = new Paa({
             serialNumber: Bytes.fromHex(toHex(this.paaCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
@@ -111,7 +111,7 @@ export class AttestationCertificateManager {
     }
 
     private async generatePAICert(vendorId: VendorId, productId?: number) {
-        const now = Time.get().now();
+        const now = Time.now;
         const cert = new Pai({
             serialNumber: Bytes.fromHex(toHex(this.#paiCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
@@ -146,7 +146,7 @@ export class AttestationCertificateManager {
     }
 
     async generateDaCert(publicKey: Bytes, vendorId: VendorId, productId: number) {
-        const now = Time.get().now();
+        const now = Time.now;
         const certId = this.#nextCertificateId++;
         const cert = new Dac({
             serialNumber: Bytes.fromHex(toHex(certId)),

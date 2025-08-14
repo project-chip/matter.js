@@ -9,6 +9,8 @@ import { CancelablePromise } from "#util/Cancelable.js";
 import { ImplementationError } from "../MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
+import { Interval } from "./Interval.js";
+import { Instant } from "./TimeUnit.js";
 
 const registry = new Set<Timer>();
 
@@ -19,56 +21,62 @@ const registry = new Set<Timer>();
  * environment.
  */
 export class Time {
-    static get: () => Time;
+    static default: Time;
 
     static startup = {
         systemMs: 0,
         processMs: 0,
     };
 
-    now() {
+    get now() {
         return new Date();
     }
-    static readonly now = (): Date => Time.get().now();
+    static get now() {
+        return Time.default.now;
+    }
 
-    nowMs() {
+    get nowMs() {
         return Date.now();
     }
-    static readonly nowMs = (): number => Time.get().nowMs();
+    static get nowMs() {
+        return Time.default.nowMs;
+    }
 
-    nowUs() {
+    get nowUs() {
         return Math.floor(performance.now() + performance.timeOrigin) * 1000;
     }
-    static readonly nowUs = (): number => Time.get().nowUs();
+    static get nowUs() {
+        return Time.default.nowUs;
+    }
 
     /**
      * Create a timer that will call callback after durationMs has passed.
      */
-    getTimer(name: string, durationMs: number, callback: Timer.Callback): Timer {
-        return new StandardTimer(name, durationMs, callback, false);
+    getTimer(name: string, duration: Interval, callback: Timer.Callback): Timer {
+        return new StandardTimer(name, duration, callback, false);
     }
-    static readonly getTimer = (name: string, durationMs: number, callback: Timer.Callback): Timer =>
-        Time.get().getTimer(name, durationMs, callback);
+    static readonly getTimer = (name: string, duration: Interval, callback: Timer.Callback): Timer =>
+        Time.default.getTimer(name, duration, callback);
 
     /**
      * Create a timer that will periodically call callback at intervalMs intervals.
      */
-    getPeriodicTimer(name: string, intervalMs: number, callback: Timer.Callback): Timer {
-        return new StandardTimer(name, intervalMs, callback, true);
+    getPeriodicTimer(name: string, interval: Interval, callback: Timer.Callback): Timer {
+        return new StandardTimer(name, interval, callback, true);
     }
-    static readonly getPeriodicTimer = (name: string, intervalMs: number, callback: Timer.Callback): Timer =>
-        Time.get().getPeriodicTimer(name, intervalMs, callback);
+    static readonly getPeriodicTimer = (name: string, interval: Interval, callback: Timer.Callback): Timer =>
+        Time.default.getPeriodicTimer(name, interval, callback);
 
     /**
      * Create a promise that resolves after a specific interval or when canceled, whichever comes first.
      */
-    sleep(name: string, durationMs: number): CancelablePromise {
+    sleep(name: string, duration: Interval): CancelablePromise {
         let timer: Timer;
         let resolver: () => void;
         return new CancelablePromise(
             resolve => {
                 resolver = resolve;
-                timer = Time.getTimer(name, durationMs, resolve);
+                timer = Time.getTimer(name, duration, resolve);
                 timer.start();
             },
 
@@ -78,8 +86,8 @@ export class Time {
             },
         );
     }
-    static sleep(name: string, durationMs: number) {
-        return Time.get().sleep(name, durationMs);
+    static sleep(name: string, duration: Interval) {
+        return Time.default.sleep(name, duration);
     }
 
     static register(timer: Timer) {
@@ -98,7 +106,11 @@ export class Time {
 
 // Check if performance API is available and has the required methods. Use lower accuracy fallback if not.
 if (!performance || typeof performance.now !== "function" || typeof performance.timeOrigin !== "number") {
-    Time.prototype.nowUs = () => Time.nowMs() * 1000; // Fallback is a bit less accurate
+    Object.defineProperty(Time.prototype.nowUs, "nowUs", {
+        get() {
+            return Time.nowMs * 1000; // Fallback is a bit less accurate
+        },
+    });
 }
 
 export interface Timer {
@@ -112,7 +124,7 @@ export interface Timer {
     systemId: unknown;
 
     /** Interval (diagnostics) */
-    intervalMs: number;
+    interval: Interval;
 
     /** Is the timer periodic? (diagnostics) */
     isPeriodic: boolean;
@@ -137,7 +149,7 @@ export namespace Timer {
 export class StandardTimer implements Timer {
     #timerId: unknown;
     #utility = false;
-    #intervalMs = -1;
+    #interval = Instant;
     isRunning = false;
 
     get systemId() {
@@ -146,11 +158,11 @@ export class StandardTimer implements Timer {
 
     constructor(
         readonly name: string,
-        intervalMs: number,
+        interval: Interval,
         private readonly callback: Timer.Callback,
         readonly isPeriodic: boolean,
     ) {
-        this.intervalMs = intervalMs;
+        this.interval = interval;
     }
 
     /**
@@ -158,17 +170,17 @@ export class StandardTimer implements Timer {
      *
      * You can change this value but changes have no effect until the timer restarts.
      */
-    set intervalMs(intervalMs: number) {
-        if (intervalMs < 0 || intervalMs > 2147483647) {
+    set interval(interval: Interval) {
+        if (interval.ms < 0 || interval.ms > 2147483647) {
             throw new ImplementationError(
-                `Invalid intervalMs: ${intervalMs}. The value must be between 0 and 32-bit maximum value (2147483647)`,
+                `Invalid intervalMs: ${interval}. The value must be between 0 and 32-bit maximum value (2147483647)`,
             );
         }
-        this.#intervalMs = intervalMs;
+        this.#interval = interval;
     }
 
-    get intervalMs() {
-        return this.#intervalMs;
+    get interval() {
+        return this.#interval;
     }
 
     get utility() {
@@ -203,7 +215,7 @@ export class StandardTimer implements Timer {
                 this.isRunning = false;
             }
             this.callback();
-        }, this.intervalMs);
+        }, this.interval.ms);
         return this;
     }
 
@@ -222,7 +234,7 @@ DiagnosticSource.add({
                 timer.name,
                 Diagnostic.dict({
                     periodic: timer.isPeriodic,
-                    interval: Diagnostic.interval(timer.intervalMs),
+                    interval: timer.interval,
                     system: timer.systemId,
                     elapsed: timer.elapsed,
                 }),
@@ -232,11 +244,9 @@ DiagnosticSource.add({
 });
 
 Boot.init(() => {
-    const time = new Time();
+    Time.default = new Time();
 
-    Time.startup.systemMs = Time.startup.processMs = time.nowMs();
-
-    Time.get = () => time;
+    Time.startup.systemMs = Time.startup.processMs = Time.nowMs;
 
     // Hook for testing frameworks
     if (typeof MatterHooks !== "undefined") {

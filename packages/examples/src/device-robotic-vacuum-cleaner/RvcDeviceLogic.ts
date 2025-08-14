@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Behavior, Logger, Node, Time, Timer } from "@matter/main";
+import { Behavior, Hours, Logger, Minutes, Node, Seconds, Time, Timer } from "@matter/main";
 import { ServiceAreaServer } from "@matter/main/behaviors/service-area";
 import { RvcOperationalState } from "@matter/main/clusters/rvc-operational-state";
 import { CustomRvcCleanModeServer } from "./behaviors/CustomRvcCleanModeServer.js";
@@ -57,7 +57,7 @@ enum DetailOperationalDeviceState {
 }
 
 // We simulate cleaning rounds of 10 minutes
-const CLEANING_MAPPING_ROUND_TIME = 10 * 60_000;
+const CLEANING_MAPPING_ROUND_TIME = Minutes(10);
 
 /**
  * This class implements the Logic of our fictional robotic vacuum cleaner device and should demonstrate how the
@@ -81,9 +81,11 @@ export class RvcDeviceLogic extends Behavior {
         this.internal.mappingTimer = Time.getTimer("MappingTimer", CLEANING_MAPPING_ROUND_TIME, () =>
             this.#handleMappingDone(),
         );
-        this.internal.rechargingTimer = Time.getTimer("RechargingTimer", 2 * 60_000, () => this.#handleRechargeDone());
-        this.internal.autoWaitTimer = Time.getTimer("AutoWaitTimer", 180 * 60_000, () => this.#handleAutoWaitDone());
-        this.internal.seekingChargerTimer = Time.getTimer("SeekingChargerTimer", 30_000, () => this.#handleDocking());
+        this.internal.rechargingTimer = Time.getTimer("RechargingTimer", Minutes(2), () => this.#handleRechargeDone());
+        this.internal.autoWaitTimer = Time.getTimer("AutoWaitTimer", Hours(3), () => this.#handleAutoWaitDone());
+        this.internal.seekingChargerTimer = Time.getTimer("SeekingChargerTimer", Seconds(30), () =>
+            this.#handleDocking(),
+        );
     }
 
     async #initializeNode() {
@@ -368,7 +370,7 @@ export class RvcDeviceLogic extends Behavior {
 
         this.internal.serviceAreaChangeTimer = Time.getPeriodicTimer(
             "ServiceAreaChangeTimer",
-            CLEANING_MAPPING_ROUND_TIME / numberOfAreas + 1000, // Two Areas by default
+            CLEANING_MAPPING_ROUND_TIME.dividedBy(numberOfAreas).plus(Seconds(1)), // Two Areas by default
             () => this.#changeCurrentServiceArea(),
         ).start();
         await this.#changeCurrentServiceArea();

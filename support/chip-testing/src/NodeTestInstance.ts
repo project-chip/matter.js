@@ -11,6 +11,7 @@ import {
     ImplementationError,
     InternalError,
     Node,
+    Seconds,
     StorageService,
     Time,
     type ServerNode,
@@ -85,7 +86,7 @@ export abstract class NodeTestInstance extends DeviceTestInstance implements Sub
             node.lifecycle.ready.on(reduceTimeout);
 
             function reduceTimeout() {
-                node.behaviors.internalsOf(AdministratorCommissioningServer).minimumCommissioningTimeoutS = 1;
+                node.behaviors.internalsOf(AdministratorCommissioningServer).minimumCommissioningTimeout = Seconds.one;
             }
         }
     }
@@ -189,7 +190,7 @@ export abstract class NodeTestInstance extends DeviceTestInstance implements Sub
                 // "Check Instance Name" step.  Restarting Avahi might work but depends on how CHIP handles Avahi
                 // messages and would kill part of the value of the test
                 if (chip.activeTest.name === "Discovery") {
-                    await Time.sleep("wait for MDNS", 3000);
+                    await Time.sleep("wait for MDNS", Seconds(3));
                 }
 
                 break;

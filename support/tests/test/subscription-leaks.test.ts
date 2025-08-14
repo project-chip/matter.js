@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time } from "@matter/main";
+import { Seconds, Time } from "@matter/main";
 import { ServerNode } from "@matter/node";
 import { TemperatureSensorDevice } from "@matter/node/devices/temperature-sensor";
 import { HeapDumpSet } from "@matter/testing";
@@ -28,7 +28,7 @@ describe("subscriptions", () => {
                     measuredValue: i,
                 },
             });
-            await Time.sleep("subscription delay", 1_000);
+            await Time.sleep("subscription delay", Seconds.one);
         }
 
         await dumps.create("baseline");
@@ -39,7 +39,7 @@ describe("subscriptions", () => {
                     measuredValue: i,
                 },
             });
-            await Time.sleep("subscription delay", 1_000);
+            await Time.sleep("subscription delay", Seconds.one);
         }
 
         await dumps.create("target");
@@ -50,7 +50,7 @@ describe("subscriptions", () => {
                     measuredValue: i,
                 },
             });
-            await Time.sleep("subscription delay", 1_000);
+            await Time.sleep("subscription delay", Seconds.one);
         }
 
         await dumps.create("final");

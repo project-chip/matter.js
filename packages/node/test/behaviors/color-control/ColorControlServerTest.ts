@@ -71,16 +71,16 @@ async function setup() {
         ms: number;
     }>();
 
-    let last = Time.nowMs();
+    let last = Time.nowMs;
 
     endpoint.events.colorControl.remainingTime$Changed!.online.on(value => {
-        events.push({ kind: "time", value, ms: Time.nowMs() - last });
-        last = Time.nowMs();
+        events.push({ kind: "time", value, ms: Time.nowMs - last });
+        last = Time.nowMs;
     });
 
     endpoint.events.colorControl.currentHue$Changed.online.on(value => {
-        events.push({ kind: "hue", value, ms: Time.nowMs() - last });
-        last = Time.nowMs();
+        events.push({ kind: "hue", value, ms: Time.nowMs - last });
+        last = Time.nowMs;
     });
 
     const complete = new Promise<void>(resolve =>

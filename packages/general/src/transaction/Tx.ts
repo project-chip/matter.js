@@ -814,7 +814,7 @@ const Monitor = (function () {
     let monitor: Timer | undefined;
 
     function check() {
-        const now = Time.nowMs();
+        const now = Time.nowMs;
         for (const [tx, slowAt] of monitored) {
             if (now > slowAt) {
                 tx.treatAsSlow();
@@ -824,12 +824,12 @@ const Monitor = (function () {
 
     return {
         add(tx: Tx) {
-            const { slowTransactionMs } = Status;
-            if (slowTransactionMs < 0) {
+            const { slowTransactionTime } = Status;
+            if (slowTransactionTime.length < 0) {
                 return;
             }
 
-            if (!slowTransactionMs) {
+            if (!slowTransactionTime.length) {
                 tx.treatAsSlow();
                 return;
             }
@@ -838,9 +838,9 @@ const Monitor = (function () {
                 return;
             }
 
-            monitored.set(tx, Time.nowMs() + slowTransactionMs);
+            monitored.set(tx, Time.nowMs + slowTransactionTime.ms);
             if (monitor === undefined) {
-                monitor = Time.getPeriodicTimer("tx-lock-monitor", slowTransactionMs / 10, check);
+                monitor = Time.getPeriodicTimer("tx-lock-monitor", slowTransactionTime.dividedBy(10), check);
                 monitor.start();
             }
         },

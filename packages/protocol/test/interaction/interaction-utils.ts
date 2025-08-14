@@ -5,7 +5,7 @@
  */
 import { Message, SessionType } from "#codec/MessageCodec.js";
 import { Fabric } from "#fabric/Fabric.js";
-import { Bytes, DataReadQueue, MAX_UDP_MESSAGE_SIZE, PrivateKey, StandardCrypto } from "#general";
+import { Bytes, DataReadQueue, MAX_UDP_MESSAGE_SIZE, PrivateKey, Seconds, StandardCrypto } from "#general";
 import { ExchangeSendOptions, MATTER_MESSAGE_OVERHEAD, MessageExchange } from "#protocol/MessageExchange.js";
 import { NodeSession } from "#session/NodeSession.js";
 import { SecureSession } from "#session/SecureSession.js";
@@ -116,7 +116,7 @@ export async function createDummyMessageExchange(
         salt: Bytes.fromHex("00"),
         isInitiator: false,
         isResumption: false,
-        peerSessionParameters: { idleIntervalMs: 1000, activeIntervalMs: 1000 },
+        peerSessionParameters: { idleInterval: Seconds.one, activeInterval: Seconds.one },
     });
     return new DummyMessageExchange(
         session,

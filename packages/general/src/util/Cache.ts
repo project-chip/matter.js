@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Interval } from "#time/Interval.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Time, Timer } from "../time/Time.js";
 
@@ -17,12 +18,12 @@ class GenericCache<T> {
 
     constructor(
         name: string,
-        private readonly expirationMs: number,
+        private readonly expiration: Interval,
         private readonly expireCallback?: (key: string, value: T) => Promise<void>,
     ) {
         this.periodicTimer = Time.getPeriodicTimer(
             Diagnostic.upgrade(`${name} cache expiration`, [Diagnostic.strong(name), "cache expiration"]),
-            expirationMs,
+            expiration,
             () => this.expire(),
         ).start();
         this.periodicTimer.utility = true;
@@ -56,9 +57,9 @@ class GenericCache<T> {
     }
 
     private async expire() {
-        const now = Time.nowMs();
+        const now = Time.nowMs;
         for (const [key, timestamp] of this.timestamps.entries()) {
-            if (now - timestamp < this.expirationMs) continue;
+            if (now - timestamp < this.expiration.ms) continue;
             await this.delete(key);
         }
     }
@@ -68,10 +69,10 @@ export class Cache<T> extends GenericCache<T> {
     constructor(
         name: string,
         private readonly generator: (...params: any[]) => T,
-        expirationMs: number,
+        expiration: Interval,
         expireCallback?: (key: string, value: T) => Promise<void>,
     ) {
-        super(name, expirationMs, expireCallback);
+        super(name, expiration, expireCallback);
     }
 
     get(...params: any[]) {
@@ -82,7 +83,7 @@ export class Cache<T> extends GenericCache<T> {
             this.values.set(key, value);
             this.knownKeys.add(key);
         }
-        this.timestamps.set(key, Time.nowMs());
+        this.timestamps.set(key, Time.nowMs);
         return value;
     }
 }
@@ -91,10 +92,10 @@ export class AsyncCache<T> extends GenericCache<T> {
     constructor(
         name: string,
         private readonly generator: (...params: any[]) => Promise<T>,
-        expirationMs: number,
+        expiration: Interval,
         expireCallback?: (key: string, value: T) => Promise<void>,
     ) {
-        super(name, expirationMs, expireCallback);
+        super(name, expiration, expireCallback);
     }
 
     async get(...params: any[]) {
@@ -105,7 +106,7 @@ export class AsyncCache<T> extends GenericCache<T> {
             this.values.set(key, value);
             this.knownKeys.add(key);
         }
-        this.timestamps.set(key, Time.nowMs());
+        this.timestamps.set(key, Time.nowMs);
         return value;
     }
 }

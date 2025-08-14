@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Interval } from "@matter/general";
 import { ProductDescription } from "../common/ProductDescription.js";
 import { CommissioningFlowType } from "../schema/PairingCodeSchema.js";
 
@@ -55,6 +56,6 @@ export namespace CommissioningOptions {
          *
          * Defaults to 15 minutes.
          */
-        readonly advertisementWindowS?: number;
+        readonly advertisementWindow?: Interval;
     }
 }

@@ -25,9 +25,10 @@ import {
     ImplementationError,
     Logger,
     MatterError,
+    Minutes,
     NetInterfaceSet,
+    ServerAddress,
     ServerAddressIp,
-    serverAddressToString,
     StorageBackendMemory,
     StorageManager,
 } from "#general";
@@ -477,7 +478,7 @@ export class MatterController {
             peerNodeId,
             {
                 discoveryType: NodeDiscoveryType.TimedDiscovery,
-                timeoutSeconds: 120,
+                timeout: Minutes(2),
                 discoveryData,
             },
             true,
@@ -511,7 +512,7 @@ export class MatterController {
             const { address, operationalAddress, discoveryData, deviceData } = peer as CommissionedPeer;
             return {
                 nodeId: address.nodeId,
-                operationalAddress: operationalAddress ? serverAddressToString(operationalAddress) : undefined,
+                operationalAddress: operationalAddress ? ServerAddress.urlFor(operationalAddress) : undefined,
                 advertisedName: discoveryData?.DN,
                 discoveryData,
                 deviceData,
@@ -527,7 +528,7 @@ export class MatterController {
         const { address, operationalAddress, discoveryData, deviceData } = nodeDetails;
         return {
             nodeId: address.nodeId,
-            operationalAddress: operationalAddress ? serverAddressToString(operationalAddress) : undefined,
+            operationalAddress: operationalAddress ? ServerAddress.urlFor(operationalAddress) : undefined,
             advertisedName: discoveryData?.DN,
             discoveryData,
             deviceData,

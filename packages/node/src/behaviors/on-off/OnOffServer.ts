@@ -7,7 +7,7 @@
 import { GeneralDiagnosticsBehavior } from "#behaviors/general-diagnostics";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { OnOff } from "#clusters/on-off";
-import { MaybePromise, Time, Timer } from "#general";
+import { MaybePromise, Seconds, Time, Timer } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
 import { OnOffBehavior } from "./OnOffBehavior.js";
 
@@ -147,7 +147,7 @@ export class OnOffBaseServer extends OnOffLogicBase {
         if (timer === undefined) {
             timer = this.internal.timedOnTimer = Time.getPeriodicTimer(
                 "Timed on",
-                100,
+                Seconds.tenth,
                 this.callback(this.#timedOnTick, { lock: true }),
             );
         }
@@ -170,7 +170,7 @@ export class OnOffBaseServer extends OnOffLogicBase {
         if (timer === undefined) {
             timer = this.internal.delayedOffTimer = Time.getPeriodicTimer(
                 "Delayed off",
-                100,
+                Seconds.tenth,
                 this.callback(this.#delayedOffTick, { lock: true }),
             );
         }

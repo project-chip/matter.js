@@ -176,9 +176,9 @@ export class NodeSession extends SecureSession {
     parameterDiagnostics() {
         return Diagnostic.dict(
             {
-                SII: this.idleIntervalMs,
-                SAI: this.activeIntervalMs,
-                SAT: this.activeThresholdMs,
+                SII: this.idleInterval,
+                SAI: this.activeInterval,
+                SAT: this.activeThreshold,
                 DMRev: this.dataModelRevision,
                 IMRev: this.interactionModelRevision,
                 spec: Diagnostic.hex(this.specificationVersion),
