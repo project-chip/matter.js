@@ -6,7 +6,7 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { Switch } from "#clusters/switch";
-import { Logger, MaybePromise, Observable, Time, Timer } from "#general";
+import { Instant, Interval, Logger, MaybePromise, Observable, Time, Timer } from "#general";
 import { FieldElement } from "#model";
 import { ClusterType, StatusCode, StatusResponseError } from "#types";
 import { SwitchBehavior } from "./SwitchBehavior.js";
@@ -99,7 +99,7 @@ export class SwitchBaseServer extends SwitchServerBase {
 
     #debounceRawPosition(newPosition: number) {
         // When a debounce delay is set then we debounce the raw position, else we set the current position immediately
-        if (this.state.debounceDelay !== 0) {
+        if (this.state.debounceDelay?.ms) {
             this.internal.debounceTimer?.stop();
 
             this.internal.currentUnstablePosition = newPosition;
@@ -170,7 +170,8 @@ export class SwitchBaseServer extends SwitchServerBase {
                 this.internal.currentLongPressPosition = newPosition;
                 this.internal.longPressTimer = Time.getTimer(
                     "longPress",
-                    this.state.longPressDelay,
+                    // TODO - old behavior is default delay of zero; should we throw an error instead?
+                    this.state.longPressDelay ?? Instant,
                     this.callback(this.#handleLongPress, { lock: true }),
                 ).start();
             }
@@ -226,7 +227,8 @@ export class SwitchBaseServer extends SwitchServerBase {
             if (!pressSequenceFinished) {
                 this.internal.multiPressTimer = Time.getTimer(
                     "multiPress",
-                    this.state.multiPressDelay,
+                    // TODO - old behavior is default delay of zero; should we throw an error instead?
+                    this.state.multiPressDelay ?? Instant,
                     this.callback(this.#handleMultiPressComplete, { lock: true }),
                 ).start();
             }
@@ -318,13 +320,13 @@ export namespace SwitchBaseServer {
          * Debounce Delay to wait until a newly reported raw position is considered stable and written to the
          * currentPosition attribue.
          */
-        debounceDelay: number = 0;
+        debounceDelay?: Interval;
 
         /** Time to wait until a value is considered "long" pressed */
-        longPressDelay: number = 0;
+        longPressDelay?: Interval;
 
         /** Timeframe starting with a stable release to detect multi-presses. */
-        multiPressDelay: number = 0;
+        multiPressDelay?: Interval;
 
         /** Number of the position considered as the neutral position for the momentary switch. */
         momentaryNeutralPosition: number = 0;

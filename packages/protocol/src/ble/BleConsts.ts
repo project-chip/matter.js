@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MAX_UDP_MESSAGE_SIZE } from "#general";
+import { MAX_UDP_MESSAGE_SIZE, Minutes, Seconds } from "#general";
 
 /** @see {@link MatterSpecification.v11.Core} § 4.17.3.2 */
 export const BLE_MATTER_SERVICE_UUID_SHORT = "fff6";
@@ -22,18 +22,18 @@ export const BTP_MAXIMUM_WINDOW_SIZE = 255; // Server maximum window size
  * The maximum amount of time after sending a BTP Session Handshake request to wait for a BTP Session Handshake response
  * before closing the connection.
  */
-export const BTP_CONN_RSP_TIMEOUT_MS = 5_000; // timer starts when receives handshake request & waits for a subscription request on c2
+export const BTP_CONN_RSP_TIMEOUT = Seconds(5); // timer starts when receives handshake request & waits for a subscription request on c2
 
 /** The maximum amount of time after receipt of a segment before a stand-alone ACK must be sent. */
-export const BTP_ACK_TIMEOUT_MS = 15_000; // timer in ms before ack should be sent for a segment
+export const BTP_ACK_TIMEOUT = Minutes.quarter; // timer in ms before ack should be sent for a segment
 
-export const BTP_SEND_ACK_TIMEOUT_MS = BTP_ACK_TIMEOUT_MS / 3; // timer starts when we receive a packet and stops when we sends its ack
+export const BTP_SEND_ACK_TIMEOUT = BTP_ACK_TIMEOUT.dividedBy(3); // timer starts when we receive a packet and stops when we sends its ack
 
 /**
  * The maximum amount of time no unique data has been sent over a BTP session before the Central Device must close the
  * BTP session.
  */
-export const BTP_CONN_IDLE_TIMEOUT = 30_000;
+export const BTP_CONN_IDLE_TIMEOUT = Minutes.half;
 
 /**
  * The maximum message size that can be transported in a Matter message via BTP.

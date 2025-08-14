@@ -9,10 +9,10 @@ import { BtpCodec } from "../codec/BtpCodec.js";
 import {
     BLE_MAXIMUM_BTP_MTU,
     BLE_MINIMUM_ATT_MTU,
-    BTP_ACK_TIMEOUT_MS,
+    BTP_ACK_TIMEOUT,
     BTP_CONN_IDLE_TIMEOUT,
     BTP_MAXIMUM_WINDOW_SIZE,
-    BTP_SEND_ACK_TIMEOUT_MS,
+    BTP_SEND_ACK_TIMEOUT,
 } from "./BleConsts.js";
 
 export class BtpMatterError extends MatterError {}
@@ -29,7 +29,7 @@ export class BtpSessionHandler {
     private currentIncomingSegmentedPayload: Bytes | undefined;
     private prevIncomingSequenceNumber = 255; // Incoming Sequence Number received. Set to 255 to start at 0
     private prevIncomingAckNumber = -1; // Previous ackNumber received
-    private readonly ackReceiveTimer = Time.getTimer("BTP ack timeout", BTP_ACK_TIMEOUT_MS, () =>
+    private readonly ackReceiveTimer = Time.getTimer("BTP ack timeout", BTP_ACK_TIMEOUT, () =>
         this.btpAckTimeoutTriggered(),
     );
 
@@ -37,7 +37,7 @@ export class BtpSessionHandler {
     private prevAckedSequenceNumber = -1; // Previous (outgoing) Acked Sequence Number
     private readonly queuedOutgoingMatterMessages = new Array<DataReader<Endian.Little>>();
     private sendInProgress = false;
-    private readonly sendAckTimer = Time.getTimer("BTP send timeout", BTP_SEND_ACK_TIMEOUT_MS, () =>
+    private readonly sendAckTimer = Time.getTimer("BTP send timeout", BTP_SEND_ACK_TIMEOUT, () =>
         this.btpSendAckTimeoutTriggered(),
     );
     private isActive = true;

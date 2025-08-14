@@ -4,7 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, ChannelType, createPromise, Logger, Time, Timer } from "#general";
+import {
+    Bytes,
+    ChannelType,
+    createPromise,
+    Interval,
+    Logger,
+    Millisecs,
+    Minutes,
+    Seconds,
+    Time,
+    Timer,
+} from "#general";
 import { BleError, BtpCodec, CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "#protocol";
 import { VendorId } from "#types";
 import { Device } from "react-native-ble-plx";
@@ -55,14 +66,12 @@ export class BleScanner implements Scanner {
      * Registers a deferred promise for a specific queryId together with a timeout and return the promise.
      * The promise will be resolved when the timer runs out latest.
      */
-    private async registerWaiterPromise(queryId: string, timeoutSeconds: number, resolveOnUpdatedRecords = true) {
+    private async registerWaiterPromise(queryId: string, timeout: Interval, resolveOnUpdatedRecords = true) {
         const { promise, resolver } = createPromise<void>();
-        const timer = Time.getTimer("BLE query timeout", timeoutSeconds * 1000, () =>
-            this.finishWaiter(queryId, true),
-        ).start();
+        const timer = Time.getTimer("BLE query timeout", timeout, () => this.finishWaiter(queryId, true)).start();
         this.recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords });
         logger.debug(
-            `Registered waiter for query ${queryId} with timeout ${timeoutSeconds} seconds${
+            `Registered waiter for query ${queryId} with timeout ${timeout}${
                 resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"
             }`,
         );
@@ -219,7 +228,7 @@ export class BleScanner implements Scanner {
 
     async findCommissionableDevices(
         identifier: CommissionableDeviceIdentifiers,
-        timeoutSeconds = 10,
+        timeout = Seconds(10),
         ignoreExistingRecords = false,
     ): Promise<CommissionableDevice[]> {
         let storedRecords = this.getCommissionableDevices(identifier);
@@ -234,7 +243,7 @@ export class BleScanner implements Scanner {
             const queryKey = this.buildCommissionableQueryIdentifier(identifier);
 
             await this.bleClient.startScanning();
-            await this.registerWaiterPromise(queryKey, timeoutSeconds);
+            await this.registerWaiterPromise(queryKey, timeout);
 
             storedRecords = this.getCommissionableDevices(identifier);
             await this.bleClient.stopScanning();
@@ -245,11 +254,11 @@ export class BleScanner implements Scanner {
     async findCommissionableDevicesContinuously(
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
-        timeoutSeconds = 60,
+        timeout = Minutes.one,
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
 
-        const discoveryEndTime = Time.nowMs() + timeoutSeconds * 1000;
+        const discoveryEndTime = timeout.after(Time.nowMs);
         const queryKey = this.buildCommissionableQueryIdentifier(identifier);
         await this.bleClient.startScanning();
 
@@ -262,8 +271,8 @@ export class BleScanner implements Scanner {
                 }
             });
 
-            const remainingTime = Math.ceil((discoveryEndTime - Time.nowMs()) / 1000);
-            if (remainingTime <= 0) {
+            const remainingTime = Seconds(Millisecs(discoveryEndTime - Time.nowMs)).ceil;
+            if (remainingTime.ms <= 0) {
                 break;
             }
             await this.registerWaiterPromise(queryKey, remainingTime, false);

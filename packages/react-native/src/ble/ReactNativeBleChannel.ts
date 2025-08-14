@@ -23,7 +23,7 @@ import {
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID,
     BLE_MAXIMUM_BTP_MTU,
-    BTP_CONN_RSP_TIMEOUT_MS,
+    BTP_CONN_RSP_TIMEOUT,
     BTP_MAXIMUM_WINDOW_SIZE,
     BTP_SUPPORTED_VERSIONS,
     Ble,
@@ -183,7 +183,7 @@ export class ReactNativeBleChannel extends BleChannel<Bytes> {
             Bytes.toBase64(btpHandshakeRequest),
         );
 
-        const btpHandshakeTimeout = Time.getTimer("BLE handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, async () => {
+        const btpHandshakeTimeout = Time.getTimer("BLE handshake timeout", BTP_CONN_RSP_TIMEOUT, async () => {
             await peripheral.cancelConnection();
             logger.debug("Handshake Response not received. Disconnected from peripheral");
         }).start();

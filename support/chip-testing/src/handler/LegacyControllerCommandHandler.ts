@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Logger } from "@matter/general";
+import { Bytes, Logger, Seconds } from "@matter/general";
 import { NodeId, Observable, ServerAddressIp } from "@matter/main";
 import { GeneralCommissioning, GroupKeyManagement } from "@matter/main/clusters";
 import {
@@ -330,7 +330,7 @@ export class LegacyControllerCommandHandler extends CommandHandler {
             clusterId,
             commandId,
             data: commandData,
-            timedInteractionTimeoutMs,
+            timedInteractionTimeout,
             suppressResponse,
         } = data;
         let client: InteractionClient;
@@ -374,24 +374,24 @@ export class LegacyControllerCommandHandler extends CommandHandler {
             clusterId,
             command: clusterCommand,
             request: commandData,
-            timedRequestTimeoutMs: timedInteractionTimeoutMs,
+            timedRequestTimeout: timedInteractionTimeout,
             skipValidation: true,
         });
     }
 
     /** InvokeById minimalistic handler because only used for error testing */
     async handleInvokeById(data: InvokeByIdRequest): Promise<void> {
-        const { nodeId, endpointId, clusterId, commandId, data: commandData, timedInteractionTimeoutMs } = data;
+        const { nodeId, endpointId, clusterId, commandId, data: commandData, timedInteractionTimeout } = data;
         const client = await (await this.#controllerInstance.getNode(nodeId)).getInteractionClient();
         await client.invoke<Command<any, any, any>>({
             endpointId,
             clusterId: clusterId,
             command: Command(commandId, TlvAny, 0x00, TlvNoResponse, {
-                timed: timedInteractionTimeoutMs !== undefined,
+                timed: timedInteractionTimeout !== undefined,
             }),
             request: commandData === undefined ? TlvVoid.encodeTlv() : TlvObject({}).encodeTlv(commandData as any),
-            asTimedRequest: timedInteractionTimeoutMs !== undefined,
-            timedRequestTimeoutMs: timedInteractionTimeoutMs,
+            asTimedRequest: timedInteractionTimeout !== undefined,
+            timedRequestTimeout: timedInteractionTimeout,
             skipValidation: true,
         });
     }
@@ -575,7 +575,7 @@ export class LegacyControllerCommandHandler extends CommandHandler {
             findBy,
             { onIpNetwork: true },
             undefined,
-            3, // Just check for 1 sec
+            Seconds(3),
         );
         logger.info("Discovered result", result);
         // Chip is not removing old discoveries when being stopped, so we still have old and new devices in the result

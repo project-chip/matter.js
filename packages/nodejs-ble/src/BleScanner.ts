@@ -4,7 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, ChannelType, createPromise, Diagnostic, Logger, Time, Timer } from "#general";
+import {
+    Bytes,
+    ChannelType,
+    createPromise,
+    Diagnostic,
+    Interval,
+    Logger,
+    Millisecs,
+    Seconds,
+    Time,
+    Timer,
+} from "#general";
 import { BleError, BtpCodec, CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "#protocol";
 import { VendorId } from "#types";
 import type { Peripheral } from "@stoprocent/noble";
@@ -58,21 +69,21 @@ export class BleScanner implements Scanner {
      */
     async #registerWaiterPromise(
         queryId: string,
-        timeoutSeconds?: number,
+        timeout?: Interval,
         resolveOnUpdatedRecords = true,
         cancelResolver?: (value: void) => void,
     ) {
         const { promise, resolver } = createPromise<void>();
         let timer;
-        if (timeoutSeconds !== undefined) {
-            timer = Time.getTimer("BLE query timeout", timeoutSeconds * 1000, () => {
+        if (timeout) {
+            timer = Time.getTimer("BLE query timeout", timeout, () => {
                 cancelResolver?.();
                 this.#finishWaiter(queryId, true);
             }).start();
         }
         this.#recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords, cancelResolver });
         logger.debug(
-            `Registered waiter for query ${queryId} with timeout ${timeoutSeconds} seconds${
+            `Registered waiter for query ${queryId} with timeout ${timeout} ${
                 resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"
             }`,
         );
@@ -234,7 +245,7 @@ export class BleScanner implements Scanner {
 
     async findCommissionableDevices(
         identifier: CommissionableDeviceIdentifiers,
-        timeoutSeconds = 10,
+        timeout = Seconds(10),
         ignoreExistingRecords = false,
     ): Promise<CommissionableDevice[]> {
         let storedRecords = this.#getCommissionableDevices(identifier);
@@ -249,7 +260,7 @@ export class BleScanner implements Scanner {
             const queryKey = this.#buildCommissionableQueryIdentifier(identifier);
 
             await this.#nobleClient.startScanning();
-            await this.#registerWaiterPromise(queryKey, timeoutSeconds);
+            await this.#registerWaiterPromise(queryKey, timeout);
 
             storedRecords = this.#getCommissionableDevices(identifier);
             await this.#nobleClient.stopScanning();
@@ -260,12 +271,12 @@ export class BleScanner implements Scanner {
     async findCommissionableDevicesContinuously(
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
-        timeoutSeconds?: number,
+        timeout?: Interval,
         cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
 
-        const discoveryEndTime = timeoutSeconds ? Time.nowMs() + timeoutSeconds * 1000 : undefined;
+        const discoveryEndTime = timeout ? timeout.after(Time.nowMs) : undefined;
         const queryKey = this.#buildCommissionableQueryIdentifier(identifier);
         await this.#nobleClient.startScanning();
 
@@ -301,8 +312,8 @@ export class BleScanner implements Scanner {
 
             let remainingTime;
             if (discoveryEndTime !== undefined) {
-                remainingTime = Math.ceil((discoveryEndTime - Time.nowMs()) / 1000);
-                if (remainingTime <= 0) {
+                remainingTime = Millisecs(discoveryEndTime - Time.nowMs).ceil;
+                if (remainingTime.ms <= 0) {
                     break;
                 }
             }

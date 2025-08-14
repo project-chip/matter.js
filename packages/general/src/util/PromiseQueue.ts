@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Interval } from "#time/Interval.js";
 import { Time } from "#time/Time.js";
+import { Instant } from "#time/TimeUnit.js";
 import { Logger } from "../log/Logger.js";
 import { createPromise } from "./Promises.js";
 
@@ -14,12 +16,12 @@ const logger = Logger.get("PromiseQueue");
  * A queue that processes promises with a given concurrency and delays after each promise if desired.
  */
 export class PromiseQueue {
-    readonly #delay: number;
+    readonly #delay: Interval;
     readonly #queue = new Array<{ func: () => Promise<any>; rejecter: (reason?: any) => void }>();
     readonly #concurrency: number;
     #runningCount = 0;
 
-    constructor(concurrency = 1, delay = 0) {
+    constructor(concurrency = 1, delay = Instant) {
         this.#concurrency = concurrency;
         this.#delay = delay;
     }
@@ -62,7 +64,7 @@ export class PromiseQueue {
                 }) // already catched internally, but rethrow if it happens to not hide it
                 .finally(() => {
                     logger.debug("Promise processed ... Still running:", this.#runningCount - 1);
-                    if (this.#delay > 0) {
+                    if (this.#delay.length > 0) {
                         // Keep the queue blocked for the delay time
                         Time.sleep("Queue delay", this.#delay)
                             .then(() => this.#runNext())

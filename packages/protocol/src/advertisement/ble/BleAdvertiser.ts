@@ -5,9 +5,9 @@
  */
 
 import { BlePeripheralInterface } from "#ble/Ble.js";
-import { Bytes, ImplementationError } from "#general";
+import { Bytes, ImplementationError, Interval, Millisecs } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
-import { MAXIMUM_COMMISSIONING_TIMEOUT_S } from "#types";
+import { MAXIMUM_COMMISSIONING_TIMEOUT } from "#types";
 import { Advertisement } from "../Advertisement.js";
 import { Advertiser } from "../Advertiser.js";
 import { CommissioningMode } from "../CommissioningMode.js";
@@ -66,38 +66,38 @@ export namespace BleAdvertiser {
         /**
          * Advertisement timeout.
          */
-        readonly timeout: number;
+        readonly timeout: Interval;
 
         /**
          * Transmission interval for first 30 seconds.
          *
          * Per core spec 5.4.2.5.3 should be 20-60ms.
          */
-        readonly earlyInterval: number;
+        readonly earlyInterval: Interval;
 
         /**
          * Transmission interval after first 30 seconds but before 15 minutes.
          *
          * Per core spec 5.4.2.5.3 should be 150-1285ms.
          */
-        readonly lateInterval: number;
+        readonly lateInterval: Interval;
 
         /**
          * Transmission interval after 15 minutes.
          *
          * Per core spec 5.4.2.5.3 should be ~1285ms.
          */
-        readonly extendedInterval: number;
+        readonly extendedInterval: Interval;
     }
 
     export interface Options extends Partial<Configuration> {}
 
     export function Configuration(options?: Options) {
         return {
-            timeout: MAXIMUM_COMMISSIONING_TIMEOUT_S,
-            earlyInterval: 20,
-            lateInterval: 150,
-            extendedInterval: 1285,
+            timeout: MAXIMUM_COMMISSIONING_TIMEOUT,
+            earlyInterval: Millisecs(20),
+            lateInterval: Millisecs(150),
+            extendedInterval: Millisecs(1285),
             ...options,
         };
     }

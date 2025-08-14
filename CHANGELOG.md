@@ -14,6 +14,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   Breaking: Because of the upgrade to TypeScript 5.9 all usages of Uint8Array were changed to use a more convenient own type alias Bytes
 
 -   @matter/general
+    - Breaking: Our time API is upgraded, most notably with proper typing for time intervals.  This makes time handling more consistent and safer but it does change how you convey intervals to matter.js.  For example: `delay: Seconds(1)` rather than `delayMs: 1000`
     - Breaking: SyncStorage interface got removed
     - Breaking: MaybeAsyncStorage got renamed to Storage because it is the only interface from now on
     - Feature: Adds Blob support to the Storage interface

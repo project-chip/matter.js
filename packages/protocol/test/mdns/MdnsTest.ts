@@ -11,11 +11,15 @@ import {
     DnsMessage,
     DnsMessageType,
     DnsRecordType,
+    Instant,
     InternalError,
+    Interval,
+    Millisecs,
     MockCrypto,
     MockNetwork,
     MockUdpChannel,
     NetworkSimulator,
+    Seconds,
     Time,
     TransportInterface,
     UdpChannel,
@@ -73,7 +77,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
             name: "00B0D063C2260000.local",
             recordType: 28,
             recordClass: 1,
-            ttl: 120,
+            ttl: Seconds(120),
             value: "fe80::e777:4f5e:c61e:7314",
         },
     ];
@@ -83,7 +87,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
             name: "00B0D063C2260000.local",
             recordType: 1,
             recordClass: 1,
-            ttl: 120,
+            ttl: Seconds(120),
             value: "192.168.200.1",
         });
     }
@@ -220,7 +224,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
             return waitForMessages({ count: 1 }).then(messages => messages[0]);
         }
 
-        function waitForMessages(config: { count: number } | { seconds: number }) {
+        function waitForMessages(config: { count: number } | Interval) {
             if ("count" in config) {
                 return new Promise<Array<DnsMessage>>((resolve, reject) => {
                     const collector = new MessageCollector(() => {
@@ -234,7 +238,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
             const collector = new MessageCollector();
             return MockTime.resolve(
-                Time.sleep("message collector", config.seconds * 1000)
+                Time.sleep("message collector", config)
                     .then(collector.close.bind(collector))
                     .then(() => collector),
             );
@@ -251,8 +255,8 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 advertise({
                     ...OPERATIONAL_SERVICE,
-                    idleIntervalMs: 100,
-                    activeIntervalMs: 200,
+                    idleInterval: Seconds.tenth,
+                    activeInterval: Millisecs(200),
                 });
 
                 expectMessage(await announcement, {
@@ -265,7 +269,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_matter._tcp.local",
                         },
                         {
@@ -273,7 +277,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_I0000000000000018._sub._matter._tcp.local",
                         },
                         {
@@ -281,7 +285,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "0000000000000018-0000000000000001._matter._tcp.local",
                         },
                         {
@@ -289,7 +293,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_I0000000000000018._sub._matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "0000000000000018-0000000000000001._matter._tcp.local",
                         },
                     ],
@@ -300,7 +304,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 33,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: { priority: 0, weight: 0, port: PORT, target: "00B0D063C2260000.local" },
                         },
                         {
@@ -308,7 +312,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 16,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: ["SII=100", "SAI=200", "SAT=4000"],
                         },
                         ...IPDnsRecords,
@@ -333,7 +337,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 0,
+                            ttl: Instant,
                             value: "_matter._tcp.local",
                         },
                         {
@@ -341,7 +345,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 0,
+                            ttl: Instant,
                             value: "_I0000000000000018._sub._matter._tcp.local",
                         },
                         {
@@ -349,7 +353,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 0,
+                            ttl: Instant,
                             value: "0000000000000018-0000000000000001._matter._tcp.local",
                         },
                         {
@@ -357,7 +361,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_I0000000000000018._sub._matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 0,
+                            ttl: Instant,
                             value: "0000000000000018-0000000000000001._matter._tcp.local",
                         },
                     ],
@@ -368,7 +372,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 33,
                             recordClass: 1,
-                            ttl: 0,
+                            ttl: Instant,
                             value: { priority: 0, weight: 0, port: PORT, target: "00B0D063C2260000.local" },
                         },
                         {
@@ -376,10 +380,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 16,
                             recordClass: 1,
-                            ttl: 0,
+                            ttl: Instant,
                             value: ["SII=100", "SAI=200", "SAT=4000"],
                         },
-                        ...IPDnsRecords.map(record => ({ ...record, ttl: 0 })),
+                        ...IPDnsRecords.map(record => ({ ...record, ttl: Instant })),
                     ],
                 });
             });
@@ -396,7 +400,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "8080808080808080._matterc._udp.local",
                             recordClass: 1,
                             recordType: 33,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: { port: PORT, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
                         },
                         {
@@ -404,7 +408,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "8080808080808080._matterc._udp.local",
                             recordClass: 1,
                             recordType: 16,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: [
                                 "VP=1+32768",
                                 "DT=1",
@@ -425,7 +429,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_matterc._udp.local",
                         },
                         {
@@ -433,7 +437,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_V1._sub._matterc._udp.local",
                         },
                         {
@@ -441,7 +445,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_T1._sub._matterc._udp.local",
                         },
                         {
@@ -449,7 +453,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_S4._sub._matterc._udp.local",
                         },
                         {
@@ -457,7 +461,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_L1234._sub._matterc._udp.local",
                         },
                         {
@@ -465,7 +469,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_CM._sub._matterc._udp.local",
                         },
                         {
@@ -473,7 +477,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                         {
@@ -481,7 +485,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_V1._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                         {
@@ -489,7 +493,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_T1._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                         {
@@ -497,7 +501,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_S4._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                         {
@@ -505,7 +509,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_L1234._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                         {
@@ -513,7 +517,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_CM._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                     ],
@@ -546,7 +550,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "8080808080808080._matterd._udp.local",
                             recordClass: 1,
                             recordType: 33,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: { port: PORT, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
                         },
                         {
@@ -554,7 +558,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "8080808080808080._matterd._udp.local",
                             recordClass: 1,
                             recordType: 16,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: ["VP=1+32768", "DT=1", "DN=Test Commissioner", "SII=500", "SAI=300", "SAT=4000"],
                         },
                         ...IPDnsRecords,
@@ -565,7 +569,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_matterd._udp.local",
                         },
                         {
@@ -573,7 +577,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_V1._sub._matterd._udp.local",
                         },
                         {
@@ -581,7 +585,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_V1._sub._matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterd._udp.local",
                         },
                         {
@@ -589,7 +593,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_T1._sub._matterd._udp.local",
                         },
                         {
@@ -597,7 +601,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_T1._sub._matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterd._udp.local",
                         },
                     ],
@@ -638,7 +642,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_matter._tcp.local",
                         },
                         {
@@ -646,7 +650,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_I0000000000000018._sub._matter._tcp.local",
                         },
                         {
@@ -654,7 +658,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "0000000000000018-0000000000000001._matter._tcp.local",
                         },
                         {
@@ -662,7 +666,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_I0000000000000018._sub._matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "0000000000000018-0000000000000001._matter._tcp.local",
                         },
                     ],
@@ -673,7 +677,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 33,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: { priority: 0, weight: 0, port: PORT, target: "00B0D063C2260000.local" },
                         },
                         {
@@ -681,7 +685,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 16,
                             recordClass: 1,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: ["SII=500", "SAI=300", "SAT=4000"],
                         },
                         ...IPDnsRecords,
@@ -695,7 +699,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "8080808080808080._matterc._udp.local",
                             recordClass: 1,
                             recordType: 33,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: { port: PORT2, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
                         },
                         {
@@ -703,7 +707,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "8080808080808080._matterc._udp.local",
                             recordClass: 1,
                             recordType: 16,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: [
                                 "VP=1+32768",
                                 "DT=1",
@@ -724,7 +728,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_matterc._udp.local",
                         },
                         {
@@ -732,7 +736,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_V1._sub._matterc._udp.local",
                         },
                         {
@@ -740,7 +744,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_T1._sub._matterc._udp.local",
                         },
                         {
@@ -748,7 +752,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_S4._sub._matterc._udp.local",
                         },
                         {
@@ -756,7 +760,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_L1234._sub._matterc._udp.local",
                         },
                         {
@@ -764,7 +768,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_CM._sub._matterc._udp.local",
                         },
                         {
@@ -772,7 +776,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                         {
@@ -780,7 +784,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_V1._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                         {
@@ -788,7 +792,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_T1._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                         {
@@ -796,7 +800,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_S4._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                         {
@@ -804,7 +808,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_L1234._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                         {
@@ -812,7 +816,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_CM._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterc._udp.local",
                         },
                     ],
@@ -829,7 +833,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "8080808080808080._matterd._udp.local",
                             recordClass: 1,
                             recordType: 33,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: { port: PORT3, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
                         },
                         {
@@ -837,7 +841,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "8080808080808080._matterd._udp.local",
                             recordClass: 1,
                             recordType: 16,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: ["VP=1+32768", "DT=1", "DN=Test Commissioner", "SII=500", "SAI=300", "SAT=4000"],
                         },
                         ...IPDnsRecords,
@@ -848,7 +852,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_matterd._udp.local",
                         },
                         {
@@ -856,7 +860,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_V1._sub._matterd._udp.local",
                         },
                         {
@@ -864,7 +868,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_V1._sub._matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterd._udp.local",
                         },
                         {
@@ -872,7 +876,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "_T1._sub._matterd._udp.local",
                         },
                         {
@@ -880,7 +884,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "_T1._sub._matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: "8080808080808080._matterd._udp.local",
                         },
                     ],
@@ -983,7 +987,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
             afterEach(() => client.targetCriteriaProviders.delete(criteria));
 
             it("the client directly returns server record if it has been announced before and records are removed on cancel", async () => {
-                const collection = waitForMessages({ seconds: 10 });
+                const collection = waitForMessages(Seconds(10));
                 advertise(OPERATIONAL_SERVICE);
 
                 const messages = await collection;
@@ -991,7 +995,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                 const result = await client.findOperationalDevice(
                     { operationalId: OPERATIONAL_ID } as unknown as Fabric,
                     NODE_ID,
-                    1,
+                    Seconds.one,
                 );
 
                 // Ensure no queries sent
@@ -1110,7 +1114,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordClass: 1,
                             recordType: 16,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: ["SII=500", "SAI=300", "SAT=4000"],
                         },
                         ...IPDnsRecords,
@@ -1121,7 +1125,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordClass: 1,
                             recordType: 33,
-                            ttl: 120,
+                            ttl: Seconds(120),
                             value: { port: PORT2, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
                         },
                     ],
@@ -1191,10 +1195,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                         DT: 1,
                         P: 32768,
                         PH: 33,
-                        SAI: 300,
+                        SAI: Millisecs(300),
                         SD: 4,
-                        SII: 500,
-                        SAT: 4000,
+                        SII: Millisecs(500),
+                        SAT: Seconds(4),
                         T: 0,
                         ICD: 0,
                         V: 1,
@@ -1222,7 +1226,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
             });
 
             it("the client queries the server record and get correct response when announced before", async () => {
-                const collection = waitForMessages({ seconds: 10 });
+                const collection = waitForMessages(Seconds(10));
 
                 advertise(COMMISSIONABLE_SERVICE);
                 advertise(OPERATIONAL_SERVICE, PORT2);
@@ -1232,7 +1236,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                 const result = await client.findOperationalDevice(
                     { operationalId: OPERATIONAL_ID } as unknown as Fabric,
                     NODE_ID,
-                    10,
+                    Seconds(10),
                 );
 
                 // Ensure no queries sent
@@ -1257,10 +1261,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                         DT: 1,
                         P: 32768,
                         PH: 33,
-                        SAI: 300,
+                        SAI: Millisecs(300),
                         SD: 4,
-                        SII: 500,
-                        SAT: 4000,
+                        SII: Millisecs(500),
+                        SAT: Seconds(4),
                         T: 0,
                         ICD: 0,
                         V: 1,

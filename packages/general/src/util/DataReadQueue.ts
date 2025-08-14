@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Minutes } from "#time/TimeUnit.js";
 import { MatterFlowError } from "../MatterError.js";
 import { Time, Timer } from "../time/Time.js";
 import { createPromise } from "./Promises.js";
@@ -16,7 +17,7 @@ export class DataReadQueue<T> implements Stream<T> {
     #pendingRead?: { resolver: (data: T) => void; rejecter: (reason: any) => void; timeoutTimer?: Timer };
     #closed = false;
 
-    async read(timeoutMs = 60_000): Promise<T> {
+    async read(timeout = Minutes.one): Promise<T> {
         const { promise, resolver, rejecter } = createPromise<T>();
         if (this.#closed) throw new EndOfStreamError();
         const data = this.#queue.shift();
@@ -27,8 +28,8 @@ export class DataReadQueue<T> implements Stream<T> {
         this.#pendingRead = {
             resolver,
             rejecter,
-            timeoutTimer: Time.getTimer("Queue timeout", timeoutMs, () =>
-                rejecter(new NoResponseTimeoutError(`Expected response data missing within timeout of ${timeoutMs}ms`)),
+            timeoutTimer: Time.getTimer("Queue timeout", timeout, () =>
+                rejecter(new NoResponseTimeoutError(`Expected response data missing within timeout of ${timeout}`)),
             ).start(),
         };
         return promise;

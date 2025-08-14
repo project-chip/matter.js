@@ -14,11 +14,18 @@ import {
     DnsRecord,
     DnsRecordClass,
     DnsRecordType,
+    Hours,
     ImplementationError,
+    Instant,
     InternalError,
+    Interval,
     Lifespan,
     Logger,
+    Millisecs,
+    Minutes,
     ObserverGroup,
+    Seconds,
+    ServerAddress,
     ServerAddressIp,
     SrvRecordValue,
     Time,
@@ -86,7 +93,7 @@ type StructuredDnsAnswers = {
 } & StructuredDnsAddressAnswers;
 
 /** The initial number of seconds between two announcements. MDNS specs require 1-2 seconds, so lets use the middle. */
-const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
+const START_ANNOUNCE_INTERVAL = Seconds(1.5);
 
 /**
  * Interface to add criteria for MDNS discovery a node is interested in
@@ -141,7 +148,7 @@ export class MdnsClient implements Scanner {
     >();
 
     #queryTimer?: Timer;
-    #nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS;
+    #nextAnnounceInterval = START_ANNOUNCE_INTERVAL;
     readonly #periodicTimer: Timer;
     #closing = false;
     readonly #socket: MdnsSocket;
@@ -158,7 +165,7 @@ export class MdnsClient implements Scanner {
     constructor(socket: MdnsSocket) {
         this.#socket = socket;
         this.#observers.on(this.#socket.receipt, this.#handleMessage.bind(this));
-        this.#periodicTimer = Time.getPeriodicTimer("Discovered node expiration", 60 * 1000 /* 1 mn */, () =>
+        this.#periodicTimer = Time.getPeriodicTimer("Discovered node expiration", Minutes.one, () =>
             this.#expire(),
         ).start();
 
@@ -230,8 +237,8 @@ export class MdnsClient implements Scanner {
         }
     }
 
-    #effectiveTTL(ttl: number) {
-        return Math.ceil(ttl * MDNS_EXPIRY_GRACE_PERIOD_FACTOR);
+    #effectiveTTL(ttl: Interval) {
+        return ttl.times(MDNS_EXPIRY_GRACE_PERIOD_FACTOR).ceil;
     }
 
     /**
@@ -250,16 +257,16 @@ export class MdnsClient implements Scanner {
             ),
         );
 
-        this.#queryTimer = Time.getTimer("MDNS discovery", this.#nextAnnounceIntervalSeconds * 1000, () =>
+        this.#queryTimer = Time.getTimer("MDNS discovery", this.#nextAnnounceInterval, () =>
             this.#sendQueries(),
         ).start();
 
         logger.debug(
-            `Sending ${queries.length} query records for ${this.#activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${this.#nextAnnounceIntervalSeconds} seconds`,
+            `Sending ${queries.length} query records for ${this.#activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${this.#nextAnnounceInterval}`,
         );
 
-        const nextAnnounceInterval = this.#nextAnnounceIntervalSeconds * 2;
-        this.#nextAnnounceIntervalSeconds = Math.min(nextAnnounceInterval, 60 * 60 /* 1 hour */);
+        const nextAnnounceInterval = this.#nextAnnounceInterval.times(2);
+        this.#nextAnnounceInterval = Interval.min(nextAnnounceInterval, Hours.one);
 
         await this.#socket.send({
             messageType: DnsMessageType.Query,
@@ -298,8 +305,8 @@ export class MdnsClient implements Scanner {
         this.#activeAnnounceQueries.set(queryId, { queries, answers });
         logger.debug(`Set ${queries.length} query records for query ${queryId}: ${Diagnostic.json(queries)}`);
         this.#queryTimer?.stop();
-        this.#nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS; // Reset query interval
-        this.#queryTimer = Time.getTimer("MDNS discovery", 0, () => this.#sendQueries()).start();
+        this.#nextAnnounceInterval = START_ANNOUNCE_INTERVAL; // Reset query interval
+        this.#queryTimer = Time.getTimer("MDNS discovery", Instant, () => this.#sendQueries()).start();
     }
 
     /**
@@ -322,7 +329,7 @@ export class MdnsClient implements Scanner {
         if (this.#activeAnnounceQueries.size === 0) {
             logger.debug(`Removing last query ${queryId} and stopping announce timer`);
             this.#queryTimer?.stop();
-            this.#nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS;
+            this.#nextAnnounceInterval = START_ANNOUNCE_INTERVAL;
         } else {
             logger.debug(`Removing query ${queryId}`);
         }
@@ -395,14 +402,14 @@ export class MdnsClient implements Scanner {
     async #registerWaiterPromise(
         queryId: string,
         commissionable: boolean,
-        timeoutSeconds?: number,
+        timeout?: Interval,
         resolveOnUpdatedRecords = true,
         cancelResolver?: (value: void) => void,
     ) {
         const { promise, resolver } = createPromise<void>();
         const timer =
-            timeoutSeconds !== undefined
-                ? Time.getTimer("MDNS timeout", timeoutSeconds * 1000, () => {
+            timeout !== undefined
+                ? Time.getTimer("MDNS timeout", timeout, () => {
                       cancelResolver?.();
                       this.#finishWaiter(queryId, true);
                   }).start()
@@ -415,7 +422,7 @@ export class MdnsClient implements Scanner {
         }
         logger.debug(
             `Registered waiter for query ${queryId} with ${
-                timeoutSeconds !== undefined ? `timeout ${timeoutSeconds} seconds` : "no timeout"
+                timeout !== undefined ? `timeout ${timeout}` : "no timeout"
             }${resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"}`,
         );
         await promise;
@@ -482,7 +489,7 @@ export class MdnsClient implements Scanner {
     async findOperationalDevice(
         { operationalId }: Fabric,
         nodeId: NodeId,
-        timeoutSeconds?: number,
+        timeout?: Interval,
         ignoreExistingRecords = false,
     ): Promise<OperationalDevice | undefined> {
         if (this.#closing) {
@@ -492,7 +499,7 @@ export class MdnsClient implements Scanner {
 
         let storedDevice = ignoreExistingRecords ? undefined : this.#getOperationalDeviceRecords(deviceMatterQname);
         if (storedDevice === undefined) {
-            const promise = this.#registerWaiterPromise(deviceMatterQname, false, timeoutSeconds);
+            const promise = this.#registerWaiterPromise(deviceMatterQname, false, timeout);
 
             this.#setQueryRecords(deviceMatterQname, [
                 {
@@ -711,7 +718,7 @@ export class MdnsClient implements Scanner {
      */
     async findCommissionableDevices(
         identifier: CommissionableDeviceIdentifiers,
-        timeoutSeconds = 5,
+        timeout = Seconds(5),
         ignoreExistingRecords = false,
     ): Promise<CommissionableDevice[]> {
         let storedRecords = ignoreExistingRecords
@@ -719,7 +726,7 @@ export class MdnsClient implements Scanner {
             : this.#getCommissionableDeviceRecords(identifier).filter(({ addresses }) => addresses.length > 0);
         if (storedRecords.length === 0) {
             const queryId = this.#buildCommissionableQueryIdentifier(identifier);
-            const promise = this.#registerWaiterPromise(queryId, true, timeoutSeconds);
+            const promise = this.#registerWaiterPromise(queryId, true, timeout);
 
             this.#setQueryRecords(queryId, this.#getCommissionableQueryRecords(identifier));
 
@@ -737,12 +744,12 @@ export class MdnsClient implements Scanner {
     async findCommissionableDevicesContinuously(
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
-        timeoutSeconds?: number,
+        timeout?: Interval,
         cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
 
-        const discoveryEndTime = timeoutSeconds ? Time.nowMs() + timeoutSeconds * 1000 : undefined;
+        const discoveryEndTime = timeout ? Time.nowMs + timeout.ms : undefined;
         const queryId = this.#buildCommissionableQueryIdentifier(identifier);
         this.#setQueryRecords(queryId, this.#getCommissionableQueryRecords(identifier));
 
@@ -778,8 +785,8 @@ export class MdnsClient implements Scanner {
 
             let remainingTime;
             if (discoveryEndTime !== undefined) {
-                remainingTime = Math.ceil((discoveryEndTime - Time.nowMs()) / 1000);
-                if (remainingTime <= 0) {
+                remainingTime = Seconds((discoveryEndTime - Time.nowMs) / 1000).ceil;
+                if (remainingTime.length <= 0) {
                     break;
                 }
             }
@@ -810,7 +817,7 @@ export class MdnsClient implements Scanner {
     #structureAnswers(...answersList: DnsRecord<any>[][]): StructuredDnsAnswers {
         const structuredAnswers: StructuredDnsAnswers = {};
 
-        const discoveredAt = Time.nowMs();
+        const discoveredAt = Time.nowMs;
         answersList.forEach(answers =>
             answers.forEach(answer => {
                 const { name, recordType } = answer;
@@ -869,7 +876,7 @@ export class MdnsClient implements Scanner {
                     records.forEach(record => {
                         const existingRecord = combinedAnswers.operational![recordType].get(record.name);
                         if (existingRecord && existingRecord.discoveredAt < record.discoveredAt) {
-                            if (record.ttl === 0) {
+                            if (record.ttl.ms === 0) {
                                 combinedAnswers.operational![recordType].delete(record.name);
                             } else {
                                 combinedAnswers.operational![recordType].set(record.name, record);
@@ -889,7 +896,7 @@ export class MdnsClient implements Scanner {
                     records.forEach(record => {
                         const existingRecord = combinedAnswers.commissionable![recordType].get(record.name);
                         if (existingRecord && existingRecord.discoveredAt < record.discoveredAt) {
-                            if (record.ttl === 0) {
+                            if (record.ttl.ms === 0) {
                                 combinedAnswers.commissionable![recordType].delete(record.name);
                             } else {
                                 combinedAnswers.commissionable![recordType].set(record.name, record);
@@ -1037,7 +1044,7 @@ export class MdnsClient implements Scanner {
         const interfaceRecords = this.#discoveredIpRecords.get(netInterface) ?? {};
         for (const record of ipAddresses) {
             const { recordType, name, value: ip, ttl } = record as DnsRecord<string>;
-            if (ttl === 0) continue; // Skip records with ttl=0
+            if (ttl.ms === 0) continue; // Skip records with ttl=0
             if (recordType === DnsRecordType.AAAA) {
                 interfaceRecords.addressesV6 = interfaceRecords.addressesV6 ?? {};
                 interfaceRecords.addressesV6[name] = interfaceRecords.addressesV6[name] ?? new Map();
@@ -1055,7 +1062,7 @@ export class MdnsClient implements Scanner {
         answers: StructuredDnsAnswers[],
         target: string,
         netInterface: string,
-    ): { value: string; ttl: number }[] {
+    ): { value: string; ttl: Interval }[] {
         const ipRecords = new Array<AnyDnsRecordWithExpiry>();
         answers.forEach(answer => {
             if (answer.addressesV6?.[target]) {
@@ -1073,7 +1080,7 @@ export class MdnsClient implements Scanner {
         this.#registerIpRecords(ipRecords, netInterface); // Register for potential later usage
 
         // If an IP is included multiple times we only keep the latest record
-        const collectedIps = new Map<string, { value: string; ttl: number }>();
+        const collectedIps = new Map<string, { value: string; ttl: Interval }>();
         ipRecords.forEach(record => {
             const { value, ttl } = record as DnsRecord<string>;
             if (value.startsWith("fe80::")) {
@@ -1123,10 +1130,10 @@ export class MdnsClient implements Scanner {
 
     #handleOperationalTxtRecord(record: DnsRecord<any>, netInterface: string) {
         const { name: matterName, value, ttl } = record as DnsRecord<string[]>;
-        const discoveredAt = Time.nowMs();
+        const discoveredAt = Time.nowMs;
 
         // we got an expiry info, so we can remove the record if we know it already and are done
-        if (ttl === 0) {
+        if (ttl.ms === 0) {
             if (this.#operationalDeviceRecords.has(matterName)) {
                 logger.debug(
                     `Removing operational device ${matterName} from cache (interface ${netInterface}) because of ttl=0`,
@@ -1151,19 +1158,16 @@ export class MdnsClient implements Scanner {
             device = {
                 ...device,
                 discoveredAt,
-                ttl: ttl * 1000,
+                ttl,
                 ...txtData,
             };
         } else {
-            logger.debug(
-                `Adding operational device ${matterName} in cache (interface ${netInterface}, ttl=${ttl}) with TXT data:`,
-                MdnsClient.discoveryDataDiagnostics(txtData),
-            );
+            logNewService(matterName, "operational", txtData);
             device = {
                 deviceIdentifier: matterName,
                 addresses: new Map<string, MatterServerRecordWithExpire>(),
                 discoveredAt,
-                ttl: ttl * 1000,
+                ttl,
                 ...txtData,
             };
         }
@@ -1184,7 +1188,7 @@ export class MdnsClient implements Scanner {
         } = record;
 
         // We got device expiry info, so we can remove the record if we know it already and are done
-        if (ttl === 0) {
+        if (ttl.ms === 0) {
             if (this.#operationalDeviceRecords.has(matterName)) {
                 logger.debug(
                     `Removing operational device ${matterName} from cache (interface ${netInterface}) because of ttl=0`,
@@ -1203,18 +1207,18 @@ export class MdnsClient implements Scanner {
             return;
         }
 
-        const discoveredAt = Time.nowMs();
+        const discoveredAt = Time.nowMs;
         const device = this.#operationalDeviceRecords.get(matterName) ?? {
             deviceIdentifier: matterName,
             addresses: new Map<string, MatterServerRecordWithExpire>(),
             discoveredAt,
-            ttl: ttl * 1000,
+            ttl,
         };
         const ipsInitiallyEmpty = device.addresses.size === 0;
         const { addresses } = device;
         if (ips.length > 0) {
             for (const { value: ip, ttl } of ips) {
-                if (ttl === 0) {
+                if (ttl.ms === 0) {
                     logger.debug(
                         `Removing IP ${ip} for operational device ${matterName} from cache (interface ${netInterface}) because of ttl=0`,
                     );
@@ -1223,16 +1227,13 @@ export class MdnsClient implements Scanner {
                 }
                 const address = addresses.get(ip) ?? ({ ip, port, type: "udp" } as MatterServerRecordWithExpire);
                 address.discoveredAt = discoveredAt;
-                address.ttl = ttl * 1000;
+                address.ttl = ttl;
 
                 addresses.set(address.ip, address);
             }
             device.addresses = addresses;
             if (ipsInitiallyEmpty) {
-                logger.debug(
-                    `Added ${addresses.size} IPs for operational device ${matterName} to cache (interface ${netInterface}):`,
-                    ...MdnsClient.deviceAddressDiagnostics(addresses),
-                );
+                logNewAddresses(matterName, "operational", netInterface, addresses);
             }
             this.#operationalDeviceRecords.set(matterName, device);
         }
@@ -1275,7 +1276,7 @@ export class MdnsClient implements Scanner {
         const txtRecords = commissionableRecords[DnsRecordType.TXT] ?? [];
         for (const record of txtRecords) {
             const { name, ttl } = record;
-            if (ttl === 0) {
+            if (ttl.ms === 0) {
                 if (this.#commissionableDeviceRecords.has(name)) {
                     logger.debug(
                         `Removing commissionable device ${name} from cache (interface ${netInterface}) because of ttl=0`,
@@ -1305,10 +1306,7 @@ export class MdnsClient implements Scanner {
             if (storedRecord === undefined) {
                 queryMissingDataForInstances.add(name);
 
-                logger.debug(
-                    `Found commissionable device ${name} with data:`,
-                    MdnsClient.discoveryDataDiagnostics(parsedRecord),
-                );
+                logNewService(name, "commissionable", parsedRecord);
             } else {
                 parsedRecord.addresses = storedRecord.addresses;
             }
@@ -1324,7 +1322,7 @@ export class MdnsClient implements Scanner {
                 value: { target, port },
                 ttl,
             } = record as DnsRecord<SrvRecordValue>;
-            if (ttl === 0) {
+            if (ttl.ms === 0) {
                 logger.debug(
                     `Removing commissionable device ${record.name} from cache (interface ${netInterface}) because of ttl=0`,
                 );
@@ -1337,7 +1335,7 @@ export class MdnsClient implements Scanner {
             const ips = this.#handleIpRecords([formerAnswers, answers], target, netInterface);
             if (ips.length > 0) {
                 for (const { value: ip, ttl } of ips) {
-                    if (ttl === 0) {
+                    if (ttl.ms === 0) {
                         logger.debug(
                             `Removing IP ${ip} for commissionable device ${record.name} from cache (interface ${netInterface}) because of ttl=0`,
                         );
@@ -1346,8 +1344,8 @@ export class MdnsClient implements Scanner {
                     }
                     const matterServer =
                         storedRecord.addresses.get(ip) ?? ({ ip, port, type: "udp" } as MatterServerRecordWithExpire);
-                    matterServer.discoveredAt = Time.nowMs();
-                    matterServer.ttl = ttl * 1000;
+                    matterServer.discoveredAt = Time.nowMs;
+                    matterServer.ttl = ttl;
 
                     storedRecord.addresses.set(ip, matterServer);
                 }
@@ -1366,10 +1364,7 @@ export class MdnsClient implements Scanner {
                 );
                 this.#setQueryRecords(queryId, queries, answers);
             } else if (!recordAddressesKnown) {
-                logger.debug(
-                    `Added ${storedRecord.addresses.size} IPs for commissionable device ${record.name} to cache (interface ${netInterface}):`,
-                    ...MdnsClient.deviceAddressDiagnostics(storedRecord.addresses),
-                );
+                logNewAddresses(record.name, "commissionable", netInterface, storedRecord.addresses);
             }
             if (storedRecord.addresses.size === 0) continue;
 
@@ -1404,12 +1399,17 @@ export class MdnsClient implements Scanner {
             for (const item of value) {
                 const [key, value] = item.split("=");
                 if (key === undefined || value === undefined) continue;
-                if (["SII", "SAI", "SAT", "T", "D", "CM", "DT", "PH", "ICD"].includes(key)) {
+                if (["T", "D", "CM", "DT", "PH", "ICD"].includes(key)) {
                     const intValue = parseInt(value);
                     if (isNaN(intValue)) continue;
                     result[key] = intValue;
                 } else if (["VP", "DN", "RI", "PI"].includes(key)) {
                     result[key] = value;
+                } else if (["SII", "SAI", "SAT"].includes(key)) {
+                    const intValue = parseInt(value);
+                    if (isNaN(intValue)) continue;
+                    result[key] = intValue;
+                    result[key] = Millisecs(intValue);
                 }
             }
         }
@@ -1439,20 +1439,20 @@ export class MdnsClient implements Scanner {
         }
         return {
             addresses: new Map<string, MatterServerRecordWithExpire>(),
-            discoveredAt: Time.nowMs(),
-            ttl: ttl * 1000,
+            discoveredAt: Time.nowMs,
+            ttl,
             ...txtRecord,
         };
     }
 
     #expire() {
-        const now = Time.nowMs();
+        const now = Time.nowMs;
         [...this.#operationalDeviceRecords.entries()].forEach(([recordKey, { addresses, discoveredAt, ttl }]) => {
-            const expires = discoveredAt + this.#effectiveTTL(ttl);
+            const expires = this.#effectiveTTL(ttl).after(discoveredAt);
             if (now <= expires) {
                 // Only check expired IPs if not device itself has expired
                 [...addresses.entries()].forEach(([key, { discoveredAt, ttl }]) => {
-                    if (now < discoveredAt + this.#effectiveTTL(ttl)) return; // not expired yet
+                    if (now < this.#effectiveTTL(ttl).after(discoveredAt)) return; // not expired yet
                     addresses.delete(key);
                 });
             }
@@ -1462,11 +1462,11 @@ export class MdnsClient implements Scanner {
             }
         });
         [...this.#commissionableDeviceRecords.entries()].forEach(([recordKey, { addresses, discoveredAt, ttl }]) => {
-            const expires = discoveredAt + this.#effectiveTTL(ttl);
+            const expires = this.#effectiveTTL(ttl).after(discoveredAt);
             if (now <= expires) {
                 // Only check expired IPs if not device itself has expired
                 [...addresses.entries()].forEach(([key, { discoveredAt, ttl }]) => {
-                    if (now < discoveredAt + this.#effectiveTTL(ttl)) return; // not expired yet
+                    if (now < this.#effectiveTTL(ttl).after(discoveredAt)) return; // not expired yet
                     addresses.delete(key);
                 });
             }
@@ -1486,7 +1486,7 @@ export class MdnsClient implements Scanner {
             Object.keys(data.operational).forEach(recordType => {
                 const type = parseInt(recordType);
                 data.operational![type] = data.operational![type].filter(
-                    ({ discoveredAt, ttl }) => now < discoveredAt + this.#effectiveTTL(ttl * 1000),
+                    ({ discoveredAt, ttl }) => now < this.#effectiveTTL(ttl).after(discoveredAt),
                 );
                 if (data.operational![type].length === 0) {
                     delete data.operational![type];
@@ -1497,7 +1497,7 @@ export class MdnsClient implements Scanner {
             Object.keys(data.commissionable).forEach(recordType => {
                 const type = parseInt(recordType);
                 data.commissionable![type] = data.commissionable![type].filter(
-                    ({ discoveredAt, ttl }) => now < discoveredAt + this.#effectiveTTL(ttl * 1000),
+                    ({ discoveredAt, ttl }) => now < this.#effectiveTTL(ttl).after(discoveredAt),
                 );
                 if (data.commissionable![type].length === 0) {
                     delete data.commissionable![type];
@@ -1507,7 +1507,7 @@ export class MdnsClient implements Scanner {
         if (data.addressesV6) {
             Object.keys(data.addressesV6).forEach(name => {
                 for (const [ip, { discoveredAt, ttl }] of data.addressesV6![name].entries()) {
-                    if (now < discoveredAt + this.#effectiveTTL(ttl * 1000)) continue; // not expired yet
+                    if (now < this.#effectiveTTL(ttl).after(discoveredAt)) continue; // not expired yet
                     data.addressesV6![name].delete(ip);
                 }
                 if (data.addressesV6![name].size === 0) {
@@ -1518,7 +1518,7 @@ export class MdnsClient implements Scanner {
         if (data.addressesV4) {
             Object.keys(data.addressesV4).forEach(name => {
                 for (const [ip, { discoveredAt, ttl }] of data.addressesV4![name].entries()) {
-                    if (now < discoveredAt + this.#effectiveTTL(ttl * 1000)) continue; // not expired yet
+                    if (now < this.#effectiveTTL(ttl).after(discoveredAt)) continue; // not expired yet
                     data.addressesV4![name].delete(ip);
                 }
                 if (data.addressesV4![name].size === 0) {
@@ -1528,32 +1528,54 @@ export class MdnsClient implements Scanner {
         }
     }
 
-    static discoveryDataDiagnostics(data: DiscoveryData) {
-        return Diagnostic.dict(
-            {
-                SII: data.SII,
-                SAI: data.SAI,
-                SAT: data.SAT,
-                T: data.T,
-                DT: data.DT,
-                PH: data.PH,
-                ICD: data.ICD,
-                VP: data.VP,
-                DN: data.DN,
-                RI: data.RI,
-                PI: data.PI,
-            },
-            true,
-        );
+    static discoveryDataDiagnostics(data: DiscoveryData, kind?: string) {
+        return Diagnostic.dict({
+            kind,
+            SII: data.SII,
+            SAI: data.SAI,
+            SAT: data.SAT,
+            T: data.T,
+            DT: data.DT,
+            PH: data.PH,
+            ICD: data.ICD,
+            VP: data.VP,
+            DN: data.DN,
+            RI: data.RI,
+            PI: data.PI,
+        });
     }
 
     static deviceAddressDiagnostics(addresses: Map<string, MatterServerRecordWithExpire>) {
-        return Array.from(addresses.values()).map(address =>
-            Diagnostic.dict({
-                type: address.type,
-                ip: address.ip,
-                port: address.port,
-            }),
-        );
+        const diagnostic = Array<unknown>();
+        for (const address of addresses.values()) {
+            if (diagnostic.length) {
+                diagnostic.push(", ");
+            }
+            diagnostic.push(ServerAddress.diagnosticFor(address));
+        }
+        return Diagnostic.squash(...diagnostic);
     }
+}
+
+function logNewService(service: string, kind: string, data: DiscoveryData) {
+    logger.debug("Found device", Diagnostic.strong(service), MdnsClient.discoveryDataDiagnostics(data, kind));
+}
+
+function logNewAddresses(
+    service: string,
+    kind: string,
+    intf: string,
+    addresses: Map<string, MatterServerRecordWithExpire>,
+) {
+    logger.debug(
+        "Added",
+        addresses.size,
+        "addresses for",
+        Diagnostic.strong(service),
+        Diagnostic.dict({
+            kind,
+            addrs: MdnsClient.deviceAddressDiagnostics(addresses),
+            intf,
+        }),
+    );
 }

@@ -7,7 +7,7 @@
 import { Behavior } from "#behavior/Behavior.js";
 import { Events as BaseEvents } from "#behavior/Events.js";
 import { OperationalCredentialsClient } from "#behaviors/operational-credentials";
-import { ImplementationError, NotImplementedError, Observable, ServerAddress, Time } from "#general";
+import { ImplementationError, Interval, NotImplementedError, Observable, ServerAddress, Time } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import type { ClientNode } from "#node/ClientNode.js";
 import type { Node } from "#node/Node.js";
@@ -55,7 +55,7 @@ export class CommissioningClient extends Behavior {
         }
 
         if (this.state.discoveredAt === undefined) {
-            this.state.discoveredAt = Time.nowMs();
+            this.state.discoveredAt = Time.nowMs;
         }
 
         this.reactTo((this.endpoint as Node).lifecycle.partsReady, this.#initializeNode);
@@ -120,7 +120,7 @@ export class CommissioningClient extends Behavior {
         const address = identityService.assignNodeAddress(node, fabric.fabricIndex, opts.nodeId);
 
         const commissioningOptions: LocatedNodeCommissioningOptions = {
-            addresses,
+            addresses: addresses.map(ServerAddress),
             fabric,
             nodeId: address.nodeId,
             passcode,
@@ -259,9 +259,9 @@ export class CommissioningClient extends Behavior {
                 type: "struct",
                 quality: "N",
                 children: [
-                    FieldElement({ name: "idleIntervalMs", type: "uint32", constraint: "max 3600000" }),
-                    FieldElement({ name: "activeIntervalMs", type: "uint32", constraint: "max 3600000" }),
-                    FieldElement({ name: "activeThresholdMs", type: "uint16" }),
+                    FieldElement({ name: "idleInterval", type: "interval", constraint: "max 3600000" }),
+                    FieldElement({ name: "activeInterval", type: "interval", constraint: "max 3600000" }),
+                    FieldElement({ name: "activeThreshold", type: "interval", constraint: "max 65535" }),
                 ],
             }),
             FieldElement({ name: "tcpSupport", type: "uint8", quality: "N" }),
@@ -281,7 +281,7 @@ export namespace CommissioningClient {
          * Known network addresses for the device.  If this is undefined the node has not been located on any network
          * interface.
          */
-        addresses?: ServerAddress[];
+        addresses?: ServerAddress.Definition[];
 
         /**
          * Time at which the device was discovered.
@@ -299,9 +299,9 @@ export namespace CommissioningClient {
         offlineAt?: number;
 
         /**
-         * The TTL of the discovery record if applicable.
+         * The TTL of the discovery record if applicable (in seconds).
          */
-        ttl?: number;
+        ttl?: Interval;
 
         /**
          * The canonical global ID of the device.

@@ -51,7 +51,7 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
         this.#stopAt = undefined;
         let number = 0;
         for (const retryInterval of this.advertiser.broadcastScheduleFor(this, event)) {
-            if (this.#stopAt !== undefined && this.#stopAt <= Time.nowMs()) {
+            if (this.#stopAt !== undefined && this.#stopAt <= Time.nowMs) {
                 break;
             }
 
@@ -89,12 +89,12 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
             return;
         }
 
-        if (broadcastAfterConnection <= 0) {
+        if (broadcastAfterConnection.length <= 0) {
             this.stop();
             return;
         }
 
-        this.#stopAt = Time.nowMs() + broadcastAfterConnection;
+        this.#stopAt = Time.nowMs + broadcastAfterConnection.ms;
     }
 
     override serviceDisconnected() {
@@ -148,9 +148,9 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
 
     get #txtValues() {
         const values: Record<string, unknown> = {
-            SII: this.description.idleIntervalMs /* Session Idle Interval */,
-            SAI: this.description.activeIntervalMs /* Session Active Interval */,
-            SAT: this.description.activeThresholdMs /* Session Active Threshold */,
+            SII: this.description.idleInterval?.ms /* Session Idle Interval */,
+            SAI: this.description.activeInterval?.ms /* Session Active Interval */,
+            SAT: this.description.activeThreshold?.ms /* Session Active Threshold */,
             ...this.txtValues,
         };
 

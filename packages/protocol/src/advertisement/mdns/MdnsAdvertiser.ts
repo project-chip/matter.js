@@ -6,10 +6,20 @@
 
 import { Advertiser } from "#advertisement/Advertiser.js";
 import { ServiceDescription } from "#advertisement/ServiceDescription.js";
-import { Bytes, Crypto, ImplementationError, InternalError, RetrySchedule, STANDARD_MATTER_PORT } from "#general";
+import {
+    Bytes,
+    Crypto,
+    ImplementationError,
+    Instant,
+    InternalError,
+    Interval,
+    RetrySchedule,
+    Seconds,
+    STANDARD_MATTER_PORT,
+} from "#general";
 import type { MdnsServer } from "#mdns/MdnsServer.js";
 import { DatatypeModel, FieldElement } from "#model";
-import { MAXIMUM_COMMISSIONING_TIMEOUT_S } from "#types";
+import { MAXIMUM_COMMISSIONING_TIMEOUT } from "#types";
 import { CommissionableMdnsAdvertisement } from "./CommissionableMdnsAdvertisement.js";
 import { CommissionerMdnsAdvertisement } from "./CommissionerMdnsAdvertisement.js";
 import type { MdnsAdvertisement } from "./MdnsAdvertisement.js";
@@ -188,7 +198,7 @@ export namespace MdnsAdvertiser {
          * Set to zero to terminate broadcast immediately after connection.  If undefined broadcasts will continue until
          * terminated by {@link timeout} or {@link maximumCount}.
          */
-        readonly broadcastAfterConnection?: number;
+        readonly broadcastAfterConnection?: Interval;
     }
 
     /**
@@ -196,23 +206,23 @@ export namespace MdnsAdvertiser {
      */
     export const DefaultBroadcastSchedule: BroadcastSchedule = {
         // Mandated by MDNS specification
-        initialInterval: 1_000,
+        initialInterval: Seconds.one,
 
         // Maximum commissioning timeout per Matter specification 5.4.2.3.1, although
-        timeout: MAXIMUM_COMMISSIONING_TIMEOUT_S * 1000,
+        timeout: MAXIMUM_COMMISSIONING_TIMEOUT,
 
         // Minimum per MDNS specification
         backoffFactor: 2,
 
         // Technically this may result in us emitting more than 8 packets which is the maximum per the MDNS
         // specification but extra packets will only come every 90 seconds
-        maximumInterval: 90_000,
+        maximumInterval: Seconds(90),
 
         // Not in any specification AFAIK but common sense to reduce thundering herd
         jitterFactor: 0.25,
 
         // Generally operational broadcast is unnecessary once an operational connection is established
-        broadcastAfterConnection: 0,
+        broadcastAfterConnection: Instant,
     };
 
     /**

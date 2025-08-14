@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic } from "#general";
+import { Diagnostic, Seconds } from "#general";
 import { CommissionableDeviceIdentifiers } from "#protocol";
 import { ManualPairingCodeCodec, VendorId } from "#types";
 import type { Argv } from "yargs";
@@ -113,7 +113,7 @@ export default function commands(theNode: MatterNode) {
                                 onIpNetwork: true,
                             },
                             device => console.log(`Discovered device ${Diagnostic.json(device)}`),
-                            timeoutSeconds,
+                            Seconds(timeoutSeconds),
                         );
 
                         console.log(`Discovered ${results.length} devices`, results);

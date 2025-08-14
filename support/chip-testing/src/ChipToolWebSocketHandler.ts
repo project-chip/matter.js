@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Diagnostic, Logger, LogLevel } from "@matter/general";
+import { Bytes, Diagnostic, Logger, LogLevel, Millisecs } from "@matter/general";
 import {
     AttributeId,
     camelize,
@@ -713,8 +713,10 @@ export class ChipToolWebSocketHandler {
                 clusterId: ClusterId(parseInt(clusterId)),
                 commandId: CommandId(parseInt(commandId)),
                 data: Object.keys(commandData).length ? commandData : undefined,
-                timedInteractionTimeoutMs:
-                    timedInteractionTimeoutMs !== undefined ? parseInt(timedInteractionTimeoutMs) : undefined,
+                timedInteractionTimeout:
+                    timedInteractionTimeoutMs !== undefined
+                        ? Millisecs(parseInt(timedInteractionTimeoutMs))
+                        : undefined,
             });
             return { results: [] };
         } catch (error) {
@@ -1208,8 +1210,10 @@ export class ChipToolWebSocketHandler {
                     Object.keys(commandData).length ? commandData : undefined,
                     commandModel,
                 ),
-                timedInteractionTimeoutMs:
-                    timedInteractionTimeoutMs !== undefined ? parseInt(timedInteractionTimeoutMs) : undefined,
+                timedInteractionTimeout:
+                    timedInteractionTimeoutMs !== undefined
+                        ? Millisecs(parseInt(timedInteractionTimeoutMs))
+                        : undefined,
                 suppressResponse: isGroupNode,
             });
             if (result && commandModel.responseModel) {

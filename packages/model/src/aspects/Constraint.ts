@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { camelize } from "#general";
+import { camelize, Interval } from "#general";
 import { Lexer } from "#parser/Lexer.js";
 import { BasicToken } from "#parser/Token.js";
 import { TokenStream } from "#parser/TokenStream.js";
@@ -300,7 +300,13 @@ namespace Serializer {
     }
 
     function serializeValue(value: Constraint.Expression, inExpr = false): string {
-        if (typeof value !== "object" || value === null || Array.isArray(value) || value instanceof Date) {
+        if (
+            typeof value !== "object" ||
+            value === null ||
+            Array.isArray(value) ||
+            value instanceof Date ||
+            value instanceof Interval
+        ) {
             return FieldValue.serialize(value);
         }
 

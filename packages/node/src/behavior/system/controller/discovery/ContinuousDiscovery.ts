@@ -22,7 +22,7 @@ export class ContinuousDiscovery extends Discovery<ClientNode[]> {
 
     constructor(owner: ServerNode, options?: Discovery.Options) {
         super(owner, options);
-        this.#bounded = options?.timeoutSeconds !== undefined;
+        this.#bounded = options?.timeout !== undefined;
     }
 
     /**

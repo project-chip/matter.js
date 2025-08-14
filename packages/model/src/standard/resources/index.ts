@@ -211,6 +211,7 @@ import "./locationdesc.resource.js";
 import "./wildcard-path-flags-bitmap.resource.js";
 import "./software-version-certification-status-enum.resource.js";
 import "./any.resource.js";
+import "./interval.resource.js";
 import "./subject-id.resource.js";
 import "./cluster-revision.resource.js";
 import "./feature-map.resource.js";

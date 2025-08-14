@@ -11,7 +11,7 @@ describe("MockTime", () => {
 
     describe("now", () => {
         it("returns the fake date", () => {
-            const result = MockTime.now();
+            const result = MockTime.now;
 
             expect(result.getTime()).equal(FAKE_TIME);
         });
@@ -19,7 +19,7 @@ describe("MockTime", () => {
 
     describe("nowMs", () => {
         it("returns the fake time", () => {
-            const result = MockTime.nowMs();
+            const result = MockTime.nowMs;
 
             expect(result).equal(FAKE_TIME);
         });
@@ -29,7 +29,7 @@ describe("MockTime", () => {
         it("advances the time by the duration specified", async () => {
             await MockTime.advance(45);
 
-            expect(MockTime.nowMs()).equal(FAKE_TIME + 45);
+            expect(MockTime.nowMs).equal(FAKE_TIME + 45);
         });
     });
 
@@ -37,7 +37,7 @@ describe("MockTime", () => {
         it("returns a periodic timer that will call a callback periodically", async () => {
             let firedTime;
 
-            const result = MockTime.getPeriodicTimer("Test periodic", 30, () => (firedTime = MockTime.nowMs()));
+            const result = MockTime.getPeriodicTimer("Test periodic", { ms: 30 }, () => (firedTime = MockTime.nowMs));
             expect(result.isRunning).equal(false);
 
             result.start();
@@ -62,7 +62,7 @@ describe("MockTime", () => {
         it("returns a periodic timer that can be stopped", async () => {
             let firedTime;
 
-            const result = MockTime.getPeriodicTimer("Test periodic", 30, () => (firedTime = MockTime.nowMs()));
+            const result = MockTime.getPeriodicTimer("Test periodic", { ms: 30 }, () => (firedTime = MockTime.nowMs));
             result.start();
             result.stop();
 
@@ -79,7 +79,7 @@ describe("MockTime", () => {
         it("returns a timer that will call a callback in the future", async () => {
             let firedTime;
 
-            const result = MockTime.getTimer("Test", 30, () => (firedTime = MockTime.nowMs()));
+            const result = MockTime.getTimer("Test", { ms: 30 }, () => (firedTime = MockTime.nowMs));
             expect(result.isRunning).equal(false);
             result.start();
             expect(result.isRunning).equal(true);
@@ -95,7 +95,7 @@ describe("MockTime", () => {
         it("returns a timer that can be stopped", async () => {
             let firedTime;
 
-            const result = MockTime.getTimer("Test", 30, () => (firedTime = MockTime.nowMs()));
+            const result = MockTime.getTimer("Test", { ms: 30 }, () => (firedTime = MockTime.nowMs));
             expect(result.isRunning).equal(false);
             result.start();
             expect(result.isRunning).equal(true);

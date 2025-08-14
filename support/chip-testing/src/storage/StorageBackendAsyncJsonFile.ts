@@ -41,7 +41,7 @@ export class StorageBackendAsyncJsonFile extends Storage {
         }
         this.store = new StorageBackendMemory(data);
         this.store.initialize();
-        this.lastStoredTime = Time.nowMs();
+        this.lastStoredTime = Time.nowMs;
     }
 
     get initialized() {
@@ -127,7 +127,7 @@ export class StorageBackendAsyncJsonFile extends Storage {
             throw new InternalError("Storage not initialized.");
         }
         if (this.closed) return;
-        if (!forced && this.lastStoredTime < Time.nowMs() - 1000) {
+        if (!forced && this.lastStoredTime < Time.nowMs - 1000) {
             return;
         }
         if (this.currentStoreItPromise !== undefined) {

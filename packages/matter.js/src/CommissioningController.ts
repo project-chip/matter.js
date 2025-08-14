@@ -10,6 +10,7 @@ import {
     ClassExtends,
     Crypto,
     Environment,
+    Hours,
     ImplementationError,
     InternalError,
     Logger,
@@ -662,13 +663,13 @@ export class CommissioningController {
         identifierData: CommissionableDeviceIdentifiers,
         discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>,
         discoveredCallback?: (device: CommissionableDevice) => void,
-        timeoutSeconds = 900,
+        timeout = Hours.quarter,
     ) {
         this.#assertIsAddedToMatterServer();
         const controller = this.#assertControllerIsStarted();
         return await ControllerDiscovery.discoverCommissionableDevices(
             controller.collectScanners(discoveryCapabilities),
-            timeoutSeconds,
+            timeout,
             identifierData,
             discoveredCallback,
         );

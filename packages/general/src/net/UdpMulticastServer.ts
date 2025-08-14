@@ -5,6 +5,7 @@
  */
 
 import { MatterAggregateError } from "#MatterError.js";
+import { Minutes } from "#time/TimeUnit.js";
 import { Bytes } from "#util/Bytes.js";
 import { Logger } from "../log/Logger.js";
 import { Cache } from "../util/Cache.js";
@@ -72,7 +73,7 @@ export class UdpMulticastServer {
     private readonly broadcastChannels = new Cache<Promise<UdpChannel>>(
         "UDP broadcast channel",
         (netInterface, iPv4) => this.createBroadcastChannel(netInterface, iPv4),
-        5 * 60 * 1000 /* 5mn */,
+        Minutes(5),
         async (_netInterface, channel) => (await channel).close(),
     );
 

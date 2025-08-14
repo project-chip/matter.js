@@ -13,6 +13,7 @@ import {
     MockCrypto,
     Network,
     NetworkSimulator,
+    Seconds,
     Storage,
     StorageBackendMemory,
     StorageService,
@@ -108,7 +109,7 @@ export class MockSite {
         controllerCrypto.entropic = deviceCrypto.entropic = true;
 
         const { passcode, discriminator } = device.state.commissioning;
-        await MockTime.resolve(controller.nodes.commission({ passcode, discriminator, timeoutSeconds: 90 }), {
+        await MockTime.resolve(controller.nodes.commission({ passcode, discriminator, timeout: Seconds(90) }), {
             macrotasks: true,
         });
 

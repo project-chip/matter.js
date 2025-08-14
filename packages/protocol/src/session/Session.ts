@@ -5,7 +5,7 @@
  */
 
 import { SupportedTransportsBitmap } from "#common/SupportedTransportsBitmap.js";
-import { AsyncObservable, Bytes, DataWriter, Endian, InternalError, Time } from "#general";
+import { AsyncObservable, Bytes, DataWriter, Endian, InternalError, Interval, Millisecs, Time } from "#general";
 import { NodeId, TypeFromPartialBitSchema } from "#types";
 import { DecodedMessage, DecodedPacket, Message, Packet, SessionType } from "../codec/MessageCodec.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -64,13 +64,13 @@ export abstract class Session {
     abstract get name(): string;
     abstract get closingAfterExchangeFinished(): boolean;
     #manager?: SessionManager;
-    timestamp = Time.nowMs();
-    readonly createdAt = Time.nowMs();
+    timestamp = Time.nowMs;
+    readonly createdAt = Time.nowMs;
     activeTimestamp = 0;
     abstract type: SessionType;
-    protected readonly idleIntervalMs: number;
-    protected readonly activeIntervalMs: number;
-    protected readonly activeThresholdMs: number;
+    protected readonly idleInterval: Interval;
+    protected readonly activeInterval: Interval;
+    protected readonly activeThreshold: Interval;
     protected readonly dataModelRevision: number;
     protected readonly interactionModelRevision: number;
     protected readonly specificationVersion: number;
@@ -100,9 +100,9 @@ export abstract class Session {
             messageCounter,
             messageReceptionState,
             sessionParameters: {
-                idleIntervalMs = SessionIntervals.defaults.idleIntervalMs,
-                activeIntervalMs = SessionIntervals.defaults.activeIntervalMs,
-                activeThresholdMs = SessionIntervals.defaults.activeThresholdMs,
+                idleInterval = SessionIntervals.defaults.idleInterval,
+                activeInterval = SessionIntervals.defaults.activeInterval,
+                activeThreshold = SessionIntervals.defaults.activeThreshold,
                 dataModelRevision = FALLBACK_DATAMODEL_REVISION,
                 interactionModelRevision = FALLBACK_INTERACTIONMODEL_REVISION,
                 specificationVersion = FALLBACK_SPECIFICATION_VERSION,
@@ -115,9 +115,9 @@ export abstract class Session {
         this.#manager = manager;
         this.messageCounter = messageCounter;
         this.messageReceptionState = messageReceptionState;
-        this.idleIntervalMs = idleIntervalMs;
-        this.activeIntervalMs = activeIntervalMs;
-        this.activeThresholdMs = activeThresholdMs;
+        this.idleInterval = idleInterval;
+        this.activeInterval = activeInterval;
+        this.activeThreshold = activeThreshold;
         this.dataModelRevision = dataModelRevision;
         this.interactionModelRevision = interactionModelRevision;
         this.specificationVersion = specificationVersion;
@@ -134,7 +134,7 @@ export abstract class Session {
     }
 
     notifyActivity(messageReceived: boolean) {
-        this.timestamp = Time.nowMs();
+        this.timestamp = Time.nowMs;
         if (messageReceived) {
             // only update active timestamp if we received a message
             this.activeTimestamp = this.timestamp;
@@ -142,7 +142,7 @@ export abstract class Session {
     }
 
     isPeerActive(): boolean {
-        return Time.nowMs() - this.activeTimestamp < this.activeThresholdMs;
+        return Millisecs(Time.nowMs - this.activeTimestamp) < this.activeThreshold;
     }
 
     getIncrementedMessageCounter() {
@@ -169,9 +169,9 @@ export abstract class Session {
      */
     get parameters(): SessionParameters {
         const {
-            idleIntervalMs,
-            activeIntervalMs,
-            activeThresholdMs,
+            idleInterval,
+            activeInterval,
+            activeThreshold,
             dataModelRevision,
             interactionModelRevision,
             specificationVersion,
@@ -180,9 +180,9 @@ export abstract class Session {
             maxTcpMessageSize,
         } = this;
         return {
-            idleIntervalMs,
-            activeIntervalMs,
-            activeThresholdMs,
+            idleInterval,
+            activeInterval,
+            activeThreshold,
             dataModelRevision,
             interactionModelRevision,
             specificationVersion,

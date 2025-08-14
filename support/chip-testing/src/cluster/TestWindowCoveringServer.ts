@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Logger, Time, Timer } from "@matter/main";
+import { Logger, Millisecs, Seconds, Time, Timer } from "@matter/main";
 import { MovementDirection, MovementType, WindowCoveringServer } from "@matter/main/behaviors/window-covering";
 import { WindowCovering } from "@matter/main/clusters/window-covering";
 
@@ -79,7 +79,7 @@ export class TestWindowCoveringServer extends TestWindowCoveringServerBase {
             counter: 0,
             timer: Time.getPeriodicTimer(
                 typeName,
-                950,
+                Millisecs(950),
                 MovementType.Lift === type
                     ? this.callback(this.#handleLiftMovementTick, { lock: true })
                     : this.callback(this.#handleTiltMovementTick, { lock: true }),
@@ -143,7 +143,7 @@ export class TestWindowCoveringServer extends TestWindowCoveringServerBase {
 
     override async executeCalibration() {
         logger.info("Calibration executed");
-        return Time.sleep("calibration", 1000);
+        return Time.sleep("calibration", Seconds.one);
     }
 
     override async [Symbol.asyncDispose]() {

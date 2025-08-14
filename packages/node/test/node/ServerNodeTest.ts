@@ -177,7 +177,7 @@ describe("ServerNode", () => {
 
         const advertisement = DnsCodec.decode(await advertisementReceived);
 
-        expect(advertisement?.answers[0]?.ttl).equals(120);
+        expect(advertisement?.answers[0]?.ttl.secs).equals(120);
 
         function answer(name: string) {
             for (const answer of (advertisement as DnsMessage).answers) {
@@ -212,7 +212,7 @@ describe("ServerNode", () => {
         await node.close();
 
         const expiration = DnsCodec.decode(await expirationReceived);
-        expect(expiration?.answers[0]?.ttl).equals(0);
+        expect(expiration?.answers[0]?.ttl.secs).equals(0);
     });
 
     it("commissions", async () => {

@@ -7,10 +7,9 @@
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
 
 /**
- * If you invoke {@link ValueSupervisor.manage} on a non-collection value, this is
- * the manage implementation you will receive.
+ * If you invoke {@link ValueSupervisor.manage} on a non-collection value, this is the manage implementation you will
+ * receive.
  *
- * Struct and list manager implementations optimize by bypassing
- * PrimitiveManager.
+ * Struct and list manager implementations optimize by bypassing PrimitiveManager.
  */
 export const PrimitiveManager: ValueSupervisor.Manage = reference => reference;

@@ -24,6 +24,7 @@ import {
     InterfaceType,
     isIPv6,
     Logger,
+    Minutes,
     Network,
     NetworkError,
     NetworkInterface,
@@ -112,7 +113,7 @@ export class NetworkReactNative extends Network {
     private static readonly netInterfaces = new AsyncCache<string | undefined>(
         "Network interface",
         (ip: string) => this.getNetInterfaceForRemoveAddress(ip),
-        5 * 60 * 1000 /* 5mn */,
+        Minutes(5),
     );
 
     override async close() {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, MatterError, UnexpectedDataError } from "#general";
+import { Diagnostic, Interval, MatterError, Minutes, Seconds, UnexpectedDataError } from "#general";
 import { GeneralStatusCode, SecureChannelStatusCode, SecureMessageType, TlvSchema } from "#types";
 import { Message } from "../codec/MessageCodec.js";
 import { ExchangeSendOptions, MessageExchange } from "../protocol/MessageExchange.js";
@@ -24,19 +24,19 @@ export class ChannelStatusResponseError extends MatterError {
 }
 
 /** This value is used by chip SDK when performance wise heavy crypto operations are expected. */
-export const EXPECTED_CRYPTO_PROCESSING_TIME_MS = 30_000;
+export const EXPECTED_CRYPTO_PROCESSING_TIME = Minutes.half;
 
 /** This value is used by chip SDK when normal processing time is expected. */
-export const DEFAULT_NORMAL_PROCESSING_TIME_MS = 2_000;
+export const DEFAULT_NORMAL_PROCESSING_TIME = Seconds(2);
 
 export class SecureChannelMessenger {
-    #defaultExpectedProcessingTimeMs: number;
+    #defaultExpectedProcessingTime: Interval;
 
     constructor(
         protected readonly exchange: MessageExchange,
-        defaultExpectedProcessingTimeMs = EXPECTED_CRYPTO_PROCESSING_TIME_MS,
+        defaultExpectedProcessingTime = EXPECTED_CRYPTO_PROCESSING_TIME,
     ) {
-        this.#defaultExpectedProcessingTimeMs = defaultExpectedProcessingTimeMs;
+        this.#defaultExpectedProcessingTime = defaultExpectedProcessingTime;
     }
 
     get channel() {
@@ -45,17 +45,14 @@ export class SecureChannelMessenger {
 
     async nextMessage(
         expectedMessageType: number,
-        expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
+        expectedProcessingTimeMs = this.#defaultExpectedProcessingTime,
         expectedMessageInfo?: string,
     ) {
         return this.#nextMessage(expectedMessageType, expectedProcessingTimeMs, expectedMessageInfo);
     }
 
-    async anyNextMessage(
-        expectedMessageInfo: string,
-        expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
-    ) {
-        return this.#nextMessage(undefined, expectedProcessingTimeMs, expectedMessageInfo);
+    async anyNextMessage(expectedMessageInfo: string, expectedProcessingTime = this.#defaultExpectedProcessingTime) {
+        return this.#nextMessage(undefined, expectedProcessingTime, expectedMessageInfo);
     }
 
     /**
@@ -65,10 +62,10 @@ export class SecureChannelMessenger {
      */
     async #nextMessage(
         expectedMessageType?: number,
-        expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
+        expectedProcessingTime = this.#defaultExpectedProcessingTime,
         expectedMessageInfo?: string,
     ) {
-        const message = await this.exchange.nextMessage({ expectedProcessingTimeMs });
+        const message = await this.exchange.nextMessage({ expectedProcessingTime });
         const messageType = message.payloadHeader.messageType;
         if (expectedMessageType !== undefined && expectedMessageInfo === undefined) {
             expectedMessageInfo = SecureMessageType[expectedMessageType];
@@ -89,9 +86,9 @@ export class SecureChannelMessenger {
     async nextMessageDecoded<T>(
         expectedMessageType: number,
         schema: TlvSchema<T>,
-        expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
+        expectedProcessingTime = this.#defaultExpectedProcessingTime,
     ) {
-        return schema.decode((await this.nextMessage(expectedMessageType, expectedProcessingTimeMs)).payload);
+        return schema.decode((await this.nextMessage(expectedMessageType, expectedProcessingTime)).payload);
     }
 
     /**
@@ -99,12 +96,9 @@ export class SecureChannelMessenger {
      *
      * When no expectedProcessingTimeMs is provided, the default value of EXPECTED_CRYPTO_PROCESSING_TIME_MS is used.
      */
-    async waitForSuccess(
-        expectedMessageInfo: string,
-        expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
-    ) {
+    async waitForSuccess(expectedMessageInfo: string, expectedProcessingTime = this.#defaultExpectedProcessingTime) {
         // If the status is not Success, this would throw an Error.
-        await this.nextMessage(SecureMessageType.StatusReport, expectedProcessingTimeMs, expectedMessageInfo);
+        await this.nextMessage(SecureMessageType.StatusReport, expectedProcessingTime, expectedMessageInfo);
     }
 
     /**
@@ -116,7 +110,7 @@ export class SecureChannelMessenger {
     async send<T>(message: T, type: number, schema: TlvSchema<T>, options?: ExchangeSendOptions) {
         options = {
             ...options,
-            expectedProcessingTimeMs: options?.expectedProcessingTimeMs ?? this.#defaultExpectedProcessingTimeMs,
+            expectedProcessingTime: options?.expectedProcessingTime ?? this.#defaultExpectedProcessingTime,
         };
         const payload = schema.encode(message);
         await this.exchange.send(type, payload, options);
