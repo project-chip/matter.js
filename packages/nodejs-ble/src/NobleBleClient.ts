@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Logger } from "#general";
+import { Bytes, Diagnostic, Logger } from "#general";
 import { BLE_MATTER_SERVICE_UUID_SHORT } from "#protocol";
 import { require } from "@matter/nodejs-ble/require";
 import type { Noble, Peripheral } from "@stoprocent/noble";
@@ -28,14 +28,11 @@ function loadNoble(hciId?: number) {
 }
 
 export class NobleBleClient {
-    private readonly discoveredPeripherals = new Map<
-        string,
-        { peripheral: Peripheral; matterServiceData: Uint8Array }
-    >();
+    private readonly discoveredPeripherals = new Map<string, { peripheral: Peripheral; matterServiceData: Bytes }>();
     private shouldScan = false;
     private isScanning = false;
     private nobleState = "unknown";
-    private deviceDiscoveredCallback: ((peripheral: Peripheral, manufacturerData: Uint8Array) => void) | undefined;
+    private deviceDiscoveredCallback: ((peripheral: Peripheral, manufacturerData: Bytes) => void) | undefined;
     #closing = false;
 
     constructor(options?: BleOptions) {
@@ -75,7 +72,7 @@ export class NobleBleClient {
         noble.on("scanStop", () => (this.isScanning = false));
     }
 
-    public setDiscoveryCallback(callback: (peripheral: Peripheral, manufacturerData: Uint8Array) => void) {
+    public setDiscoveryCallback(callback: (peripheral: Peripheral, manufacturerData: Bytes) => void) {
         this.deviceDiscoveredCallback = callback;
         for (const { peripheral, matterServiceData } of this.discoveredPeripherals.values()) {
             this.deviceDiscoveredCallback(peripheral, matterServiceData);
@@ -138,9 +135,10 @@ export class NobleBleClient {
             return;
         }
 
-        this.discoveredPeripherals.set(address, { peripheral, matterServiceData: matterServiceData.data });
+        const serviceDataBytes = Bytes.of(matterServiceData.data);
+        this.discoveredPeripherals.set(address, { peripheral, matterServiceData: serviceDataBytes });
 
-        this.deviceDiscoveredCallback?.(peripheral, matterServiceData.data);
+        this.deviceDiscoveredCallback?.(peripheral, serviceDataBytes);
     }
 
     close() {

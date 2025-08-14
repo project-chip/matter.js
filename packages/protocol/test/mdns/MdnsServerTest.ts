@@ -6,6 +6,7 @@
 
 import {
     ARecord,
+    Bytes,
     DnsCodec,
     DnsMessage,
     DnsMessageType,
@@ -36,14 +37,14 @@ describe("MdnsServer", () => {
     const simulator = new NetworkSimulator();
     const network: Network = new MockNetwork(simulator, CLIENT_MAC, clientIps);
 
-    let send: (message: Uint8Array, remoteIp: string, netInterface: string) => void;
-    let onResponse: (message: Uint8Array, netInterface?: string, unicastTarget?: string) => Promise<void>;
+    let send: (message: Bytes, remoteIp: string, netInterface: string) => void;
+    let onResponse: (message: Bytes, netInterface?: string, unicastTarget?: string) => Promise<void>;
     const udpServerSimulator = {
-        onMessage(listener: (message: Uint8Array, remoteIp: string, netInterface: string) => void) {
+        onMessage(listener: (message: Bytes, remoteIp: string, netInterface: string) => void) {
             send = listener;
         },
 
-        send(message: Uint8Array, netInterface?: string, unicastTarget?: string) {
+        send(message: Bytes, netInterface?: string, unicastTarget?: string) {
             return onResponse(message, netInterface, unicastTarget);
         },
 
@@ -72,7 +73,7 @@ describe("MdnsServer", () => {
     describe("Server responds to standard queries for different types", () => {
         it("server responds to an ANY query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -115,7 +116,7 @@ describe("MdnsServer", () => {
 
         it("server responds to an PTR query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -158,7 +159,7 @@ describe("MdnsServer", () => {
 
         it("server responds to an SRV query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -197,7 +198,7 @@ describe("MdnsServer", () => {
 
         it("server responds to an A query with A record only", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -238,7 +239,7 @@ describe("MdnsServer", () => {
     describe("Answer suppression", () => {
         it("suppress one answers in an ANY query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -281,7 +282,7 @@ describe("MdnsServer", () => {
 
         it("suppress some answers in an ANY query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -321,7 +322,7 @@ describe("MdnsServer", () => {
 
         it("suppress full answer in an ANY query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -351,7 +352,7 @@ describe("MdnsServer", () => {
 
         it("suppress full answer in an A query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -378,7 +379,7 @@ describe("MdnsServer", () => {
     describe("Handle duplicate messages", () => {
         it("server suppress response to same ANY query when 0ms delay", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -440,7 +441,7 @@ describe("MdnsServer", () => {
 
         it("server suppress response to same ANY query when up to 1s delay", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -503,7 +504,7 @@ describe("MdnsServer", () => {
 
         it("server do not suppress response from same ANY query when > 1s delay", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -570,7 +571,7 @@ describe("MdnsServer", () => {
 
         it("server also suppress response to different query with same records when 0ms delay", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -632,7 +633,7 @@ describe("MdnsServer", () => {
 
         it("server do not suppress additional records to different query when 0ms delay", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -739,7 +740,7 @@ describe("MdnsServer", () => {
 
         it("server responds to an ANY query as multicast if requested via unicast but records were never sent before", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -752,7 +753,7 @@ describe("MdnsServer", () => {
 
         it("server responds to an ANY query as multicast when unicast is requested after a previous unicast query with less than 1/4 of TTL remaining", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -773,7 +774,7 @@ describe("MdnsServer", () => {
 
         it("server responds to an ANY query as multicast even if requested as unicast and after a multicast query with more than 1/4 of ttl but never sent as multicast", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -794,7 +795,7 @@ describe("MdnsServer", () => {
 
         it("server responds to an ANY query as multicast even if requested as unicast and after a multicast query with more than 1/4 of ttl when earlier sent as multicast", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -827,7 +828,7 @@ describe("MdnsServer", () => {
     describe("Server splits response into multiple packets when answer gets too big", () => {
         it("include as many answers as possible and potentially leave additionalRecords out", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -888,7 +889,7 @@ describe("MdnsServer", () => {
 
         it("split answers into multiple responses and add additional records in last one", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 

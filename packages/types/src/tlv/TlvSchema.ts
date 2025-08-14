@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataReader, DataWriter, Endian } from "#general";
+import { Bytes, DataReader, DataWriter, Endian } from "#general";
 import { Schema } from "../schema/Schema.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvTypeLength } from "./TlvCodec.js";
 
@@ -22,12 +22,12 @@ export type TlvEncodingOptions = {
     allowMissingFieldsForNonFabricFilteredRead?: boolean;
 };
 
-export abstract class TlvSchema<T> extends Schema<T, Uint8Array> implements TlvSchema<T> {
-    override decodeInternal(encoded: Uint8Array): T {
+export abstract class TlvSchema<T> extends Schema<T, Bytes> implements TlvSchema<T> {
+    override decodeInternal(encoded: Bytes): T {
         return this.decodeTlvInternal(new TlvByteArrayReader(encoded)).value;
     }
 
-    override encodeInternal(value: T): Uint8Array {
+    override encodeInternal(value: T): Bytes {
         const writer = new TlvByteArrayWriter();
         this.encodeTlvInternal(writer, value);
         return writer.toByteArray();
@@ -134,7 +134,7 @@ export class TlvByteArrayWriter implements TlvWriter {
 export class TlvByteArrayReader implements TlvReader {
     private readonly reader: DataReader<Endian.Little>;
 
-    constructor(byteArray: Uint8Array) {
+    constructor(byteArray: Bytes) {
         this.reader = new DataReader(byteArray, Endian.Little);
     }
 

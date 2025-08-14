@@ -50,19 +50,19 @@ describe("StandardCrypto", () => {
     });
 
     it("signs & verifies with raw keys", async () => {
-        const result = await crypto.signEcdsa(PrivateKey(PRIVATE_KEY), ENCRYPTED_DATA);
+        const result = await crypto.signEcdsa(PrivateKey(Bytes.of(PRIVATE_KEY)), ENCRYPTED_DATA);
 
-        await crypto.verifyEcdsa(PublicKey(PUBLIC_KEY), ENCRYPTED_DATA, result);
+        await crypto.verifyEcdsa(PublicKey(Bytes.of(PUBLIC_KEY)), ENCRYPTED_DATA, result);
     });
 
     it("signs & verifies with SEC1/SPKI keys, DER signature format", async () => {
-        const result = await crypto.signEcdsa(Key({ sec1: SEC1_KEY }), ENCRYPTED_DATA, "der");
-        await crypto.verifyEcdsa(Key({ spki: SPKI_KEY }), ENCRYPTED_DATA, result, "der");
+        const result = await crypto.signEcdsa(Key({ sec1: Bytes.of(SEC1_KEY) }), ENCRYPTED_DATA, "der");
+        await crypto.verifyEcdsa(Key({ spki: Bytes.of(SPKI_KEY) }), ENCRYPTED_DATA, result, "der");
     });
 
     it("signs & verifies with SEC1/SPKI keys, IEEE P1363 signature format", async () => {
-        const result = await crypto.signEcdsa(Key({ sec1: SEC1_KEY }), ENCRYPTED_DATA, "ieee-p1363");
-        await crypto.verifyEcdsa(Key({ spki: SPKI_KEY }), ENCRYPTED_DATA, result, "ieee-p1363");
+        const result = await crypto.signEcdsa(Key({ sec1: Bytes.of(SEC1_KEY) }), ENCRYPTED_DATA, "ieee-p1363");
+        await crypto.verifyEcdsa(Key({ spki: Bytes.of(SPKI_KEY) }), ENCRYPTED_DATA, result, "ieee-p1363");
     });
 
     it("generates a working DSA key pair", async () => {
@@ -110,6 +110,6 @@ describe("StandardCrypto", () => {
         const secret2 = await crypto.generateDhSecret(key2, PublicKey(key1.publicBits));
 
         expect(secret1).deep.equal(secret2);
-        expect(secret1.length).equals(32);
+        expect(secret1.byteLength).equals(32);
     });
 });

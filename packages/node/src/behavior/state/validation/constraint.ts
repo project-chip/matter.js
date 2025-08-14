@@ -97,11 +97,12 @@ function create(
         case Metatype.string: {
             const validateLength: ValueSupervisor.Validate = (value: Val, _session, location) => {
                 assertSequence(value, location);
-                if (!constraint.test(value.length, nameResolverFactory(location))) {
+                const length = typeof value === "string" ? value.length : value.byteLength;
+                if (!constraint.test(length, nameResolverFactory(location))) {
                     throw new ConstraintError(
                         schema,
                         location,
-                        `String length of ${value.length} is not within bounds defined by constraint`,
+                        `String length of ${length} is not within bounds defined by constraint`,
                     );
                 }
             };
@@ -129,11 +130,12 @@ function create(
         case Metatype.bytes:
             return (value: Val, _session, location) => {
                 assertSequence(value, location);
-                if (!constraint.test(value.length, nameResolverFactory(location))) {
+                const length = typeof value === "string" ? value.length : value.byteLength;
+                if (!constraint.test(length, nameResolverFactory(location))) {
                     throw new ConstraintError(
                         schema,
                         location,
-                        `Byte length of ${value.length} is not within bounds defined by constraint`,
+                        `Byte length of ${length} is not within bounds defined by constraint`,
                     );
                 }
             };

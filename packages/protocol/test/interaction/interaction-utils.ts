@@ -45,9 +45,9 @@ export class DummyMessageExchange {
         public timedInteractionExpired = false,
         public writeCallback?: (
             messageType: number,
-            payload: Uint8Array,
+            payload: Bytes,
             options?: ExchangeSendOptions,
-        ) => { payload: Uint8Array; messageType: number } | void,
+        ) => { payload: Bytes; messageType: number } | void,
         public clearTimedInteractionCallback?: () => void,
         public closeCallback?: () => void,
     ) {}
@@ -56,7 +56,7 @@ export class DummyMessageExchange {
         return this.messagesQueue.write(message);
     }
 
-    async send(messageType: number, payload: Uint8Array, options?: ExchangeSendOptions) {
+    async send(messageType: number, payload: Bytes, options?: ExchangeSendOptions) {
         const { payload: responsePayload, messageType: responseMessageType } =
             this.writeCallback?.(messageType, payload, options) ?? {};
         if (payload) {
@@ -100,9 +100,9 @@ export async function createDummyMessageExchange(
     timedInteractionExpired = false,
     writeCallback?: (
         messageType: number,
-        payload: Uint8Array,
+        payload: Bytes,
         options?: ExchangeSendOptions,
-    ) => { payload: Uint8Array; messageType: number } | void,
+    ) => { payload: Bytes; messageType: number } | void,
     clearTimedInteractionCallback?: () => void,
     closeCallback?: () => void,
 ) {

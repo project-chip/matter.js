@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isObject } from "#general";
+import { Bytes, isObject } from "#general";
 import { SchemaErrorPath } from "#model";
 import { DatatypeError, Val } from "#protocol";
 
@@ -43,15 +43,15 @@ export function assertString(value: Val, path: SchemaErrorPath): asserts value i
     throw new DatatypeError(path, "a string", value);
 }
 
-export function assertBytes(value: Val, path: SchemaErrorPath): asserts value is Uint8Array {
-    if (value instanceof Uint8Array) {
+export function assertBytes(value: Val, path: SchemaErrorPath): asserts value is BufferSource {
+    if (Bytes.isBytes(value)) {
         return;
     }
     throw new DatatypeError(path, "a byte array", value);
 }
 
-export function assertSequence(value: Val, path: SchemaErrorPath): asserts value is string | Uint8Array {
-    if (typeof value === "string" || value instanceof Uint8Array) {
+export function assertSequence(value: Val, path: SchemaErrorPath): asserts value is string | BufferSource {
+    if (typeof value === "string" || Bytes.isBytes(value)) {
         return;
     }
     throw new DatatypeError(path, "a string or byte array", value);

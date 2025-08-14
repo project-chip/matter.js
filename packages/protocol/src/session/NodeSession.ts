@@ -49,9 +49,9 @@ export class NodeSession extends SecureSession {
     #fabric: Fabric | undefined;
     readonly #peerNodeId: NodeId;
     readonly #peerSessionId: number;
-    readonly #decryptKey: Uint8Array;
-    readonly #encryptKey: Uint8Array;
-    readonly #attestationKey: Uint8Array;
+    readonly #decryptKey: Bytes;
+    readonly #encryptKey: Bytes;
+    readonly #attestationKey: Bytes;
     #caseAuthenticatedTags: CaseAuthenticatedTag[];
     #isClosing = false;
     readonly supportsMRP = true;
@@ -64,8 +64,8 @@ export class NodeSession extends SecureSession {
         fabric: Fabric | undefined;
         peerNodeId: NodeId;
         peerSessionId: number;
-        sharedSecret: Uint8Array;
-        salt: Uint8Array;
+        sharedSecret: Bytes;
+        salt: Bytes;
         isInitiator: boolean;
         isResumption: boolean;
         peerSessionParameters?: SessionParameterOptions;
@@ -85,11 +85,13 @@ export class NodeSession extends SecureSession {
             peerSessionParameters,
             caseAuthenticatedTags,
         } = args;
-        const keys = await args.crypto.createHkdfKey(
-            sharedSecret,
-            salt,
-            isResumption ? SESSION_RESUMPTION_KEYS_INFO : SESSION_KEYS_INFO,
-            CRYPTO_SYMMETRIC_KEY_LENGTH * 3,
+        const keys = Bytes.of(
+            await args.crypto.createHkdfKey(
+                sharedSecret,
+                salt,
+                isResumption ? SESSION_RESUMPTION_KEYS_INFO : SESSION_KEYS_INFO,
+                CRYPTO_SYMMETRIC_KEY_LENGTH * 3,
+            ),
         );
         const decryptKey = isInitiator ? keys.slice(16, 32) : keys.slice(0, 16);
         const encryptKey = isInitiator ? keys.slice(0, 16) : keys.slice(16, 32);
@@ -117,9 +119,9 @@ export class NodeSession extends SecureSession {
         fabric: Fabric | undefined;
         peerNodeId: NodeId;
         peerSessionId: number;
-        decryptKey: Uint8Array;
-        encryptKey: Uint8Array;
-        attestationKey: Uint8Array;
+        decryptKey: Bytes;
+        encryptKey: Bytes;
+        attestationKey: Bytes;
         sessionParameters?: SessionParameterOptions;
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
         isInitiator: boolean;
@@ -229,7 +231,7 @@ export class NodeSession extends SecureSession {
         await this.end(true, closeAfterExchangeFinished);
     }
 
-    decode({ header, applicationPayload, messageExtension }: DecodedPacket, aad: Uint8Array): DecodedMessage {
+    decode({ header, applicationPayload, messageExtension }: DecodedPacket, aad: Bytes): DecodedMessage {
         if (header.hasMessageExtensions) {
             logger.info(
                 `Message extensions are not supported. Ignoring ${messageExtension ? Bytes.toHex(messageExtension) : undefined}`,
@@ -265,7 +267,7 @@ export class NodeSession extends SecureSession {
         };
     }
 
-    get attestationChallengeKey(): Uint8Array {
+    get attestationChallengeKey(): Bytes {
         return this.#attestationKey;
     }
 

@@ -194,7 +194,7 @@ function convertMatterToWebSocketTagBased(value: unknown, model: ValueModel, clu
         return numberValue;
     }
 
-    if (value instanceof Uint8Array && model.metabase?.metatype === "bytes") {
+    if (Bytes.isBytes(value) && model.metabase?.metatype === "bytes") {
         value = `base64:${Bytes.toBase64(value)}`;
     }
 

@@ -4,14 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError } from "#general";
+import { Bytes, UnexpectedDataError } from "#general";
 import { Schema } from "./Schema.js";
 
 const BASE38_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-.";
 
 /** See {@link MatterSpecification.v10.Core} § 5.1.3.1 */
-class Base38Schema extends Schema<Uint8Array, string> {
-    protected encodeInternal(bytes: Uint8Array): string {
+class Base38Schema extends Schema<Bytes, string> {
+    protected encodeInternal(data: Bytes): string {
+        const bytes = Bytes.of(data);
         const length = bytes.length;
         let offset = 0;
         const result = new Array<string>();
@@ -40,7 +41,7 @@ class Base38Schema extends Schema<Uint8Array, string> {
         return result;
     }
 
-    protected decodeInternal(encoded: string): Uint8Array {
+    protected decodeInternal(encoded: string): BufferSource {
         const encodedLength = encoded.length;
         const remainderEncodedLength = encodedLength % 5;
         let decodeLength = ((encodedLength - remainderEncodedLength) / 5) * 3;

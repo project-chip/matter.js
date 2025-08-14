@@ -5,6 +5,7 @@
  */
 
 import {
+    Bytes,
     ChannelType,
     createPromise,
     Diagnostic,
@@ -152,9 +153,9 @@ export class NodeJsUdpChannel implements UdpChannel {
     }
 
     onData(
-        listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Uint8Array) => void,
+        listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: BufferSource) => void,
     ) {
-        const messageListener = (data: Uint8Array, { address, port }: dgram.RemoteInfo) => {
+        const messageListener = (data: BufferSource, { address, port }: dgram.RemoteInfo) => {
             const netInterface = this.#netInterface ?? NodeJsNetwork.getNetInterfaceForIp(address);
             listener(netInterface, address, port, data);
         };
@@ -189,7 +190,7 @@ export class NodeJsUdpChannel implements UdpChannel {
         }
     }
 
-    async send(host: string, port: number, data: Uint8Array) {
+    async send(host: string, port: number, data: BufferSource) {
         const { promise, resolver, rejecter } = createPromise<void>();
 
         const rejectOrResolve = (error?: Error | null) => {
@@ -219,7 +220,7 @@ export class NodeJsUdpChannel implements UdpChannel {
             this.#sendTimer.start();
         }
         try {
-            this.#socket.send(data, port, host, error => rejectOrResolve(error));
+            this.#socket.send(Bytes.of(data), port, host, error => rejectOrResolve(error));
         } catch (error) {
             rejectOrResolve(repackErrorAs(error, NetworkError));
         }

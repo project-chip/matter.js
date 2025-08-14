@@ -42,7 +42,7 @@ import { CertificateExtension } from "./definitions/operational.js";
  * from a CSR.
  */
 export abstract class X509Base<CT extends X509Certificate> {
-    #signature?: Uint8Array;
+    #signature?: Bytes;
     #cert: Unsigned<CT>;
 
     constructor(cert: CT | Unsigned<CT>) {
@@ -75,7 +75,7 @@ export abstract class X509Base<CT extends X509Certificate> {
      * Set the signature of the certificate.
      * If the certificate is already signed, it throws a CertificateError.
      */
-    set signature(signature: Uint8Array) {
+    set signature(signature: Bytes) {
         if (this.isSigned) {
             throw new CertificateError("Certificate is already signed");
         }
@@ -93,7 +93,7 @@ export abstract class X509Base<CT extends X509Certificate> {
     /**
      * Convert the certificate to ASN.1 DER format without signature.
      */
-    asUnsignedAsn1(): Uint8Array<ArrayBufferLike> {
+    asUnsignedAsn1(): Bytes {
         const certBytes = DerCodec.encode(this.genericBuildAsn1Structure(this.cert));
         assertCertificateDerSize(certBytes);
         return certBytes;
@@ -273,10 +273,10 @@ export abstract class X509Base<CT extends X509Certificate> {
                     asn.extendedKeyUsage = X509.ExtendedKeyUsage(value as number[] | undefined);
                     break;
                 case "subjectKeyIdentifier":
-                    asn.subjectKeyIdentifier = X509.SubjectKeyIdentifier(value as Uint8Array);
+                    asn.subjectKeyIdentifier = X509.SubjectKeyIdentifier(value as Bytes);
                     break;
                 case "authorityKeyIdentifier":
-                    asn.authorityKeyIdentifier = X509.AuthorityKeyIdentifier(value as Uint8Array);
+                    asn.authorityKeyIdentifier = X509.AuthorityKeyIdentifier(value as Bytes);
                     break;
                 case "futureExtension":
                     asn.futureExtension = RawBytes(Bytes.concat(...((value as Uint8Array[] | undefined) ?? [])));
@@ -340,7 +340,7 @@ export abstract class X509Base<CT extends X509Certificate> {
     /**
      * Extract the public key from a Certificate Signing Request (CSR) in ASN.1 DER format.
      */
-    static async getPublicKeyFromCsr(crypto: Crypto, encodedCsr: Uint8Array) {
+    static async getPublicKeyFromCsr(crypto: Crypto, encodedCsr: Bytes) {
         const { [DerKey.Elements]: rootElements } = DerCodec.decode(encodedCsr);
         if (rootElements?.length !== 3) {
             throw new CertificateError("Invalid CSR data");
@@ -353,7 +353,7 @@ export abstract class X509Base<CT extends X509Certificate> {
             throw new CertificateError("Invalid CSR data");
         }
         const [versionNode, subjectNode, publicKeyNode] = requestElements;
-        const requestVersionBytes = versionNode[DerKey.Bytes];
+        const requestVersionBytes = Bytes.of(versionNode[DerKey.Bytes]);
         if (requestVersionBytes.length !== 1 || requestVersionBytes[0] !== 0) {
             throw new CertificateError(`Unsupported CSR version ${requestVersionBytes[0]}`);
         }

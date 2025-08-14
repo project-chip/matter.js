@@ -781,10 +781,10 @@ export class ControllerCommissioningFlow {
             );
         // TODO: validate attestationSignature using device public key
         if (
-            deviceAttestation.length === 0 ||
-            productAttestation.length === 0 ||
-            attestationElements.length === 0 ||
-            attestationSignature.length === 0
+            deviceAttestation.byteLength === 0 ||
+            productAttestation.byteLength === 0 ||
+            attestationElements.byteLength === 0 ||
+            attestationSignature.byteLength === 0
         ) {
             // TODO: validate the data really
             throw new CommissioningError("Device Attestation data missing from device");
@@ -820,7 +820,7 @@ export class ControllerCommissioningFlow {
                 { csrNonce: this.fabric.crypto.randomBytes(32) },
                 { useExtendedFailSafeMessageResponseTimeout: true },
             );
-        if (nocsrElements.length === 0 || csrSignature.length === 0) {
+        if (nocsrElements.byteLength === 0 || csrSignature.byteLength === 0) {
             // TODO: validate the data really
             throw new UnexpectedDataError("Invalid response from device");
         }

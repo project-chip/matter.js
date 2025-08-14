@@ -73,5 +73,5 @@ export function expandBitVector(vector: string) {
         }
         return result;
     }
-    return Bytes.fromHex(vector);
+    return Bytes.of(Bytes.fromHex(vector));
 }

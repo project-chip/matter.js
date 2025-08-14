@@ -56,12 +56,12 @@ interface Socket {
     setMulticastInterface(interfaceAddress: string): void; // Not implemented
     addMembership(multicastAddress: string, multicastInterface?: string): void;
     dropMembership(multicastAddress: string, multicastInterface?: string): void;
-    on(event: "message", listener: (msg: Uint8Array, rinfo: RemoteInfo) => void): void;
+    on(event: "message", listener: (msg: BufferSource, rinfo: RemoteInfo) => void): void;
     on(event: "error", listener: (error: Error) => void): void;
-    removeListener(event: "message", listener: (msg: Uint8Array, rinfo: RemoteInfo) => void): void;
+    removeListener(event: "message", listener: (msg: BufferSource, rinfo: RemoteInfo) => void): void;
     removeListener(event: "error", listener: (error: Error) => void): void;
     send(
-        msg: Uint8Array,
+        msg: BufferSource,
         offset: number,
         length: number,
         port: number,
@@ -190,9 +190,9 @@ export class UdpChannelReactNative implements UdpChannel {
     }
 
     onData(
-        listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Uint8Array) => void,
+        listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: BufferSource) => void,
     ) {
-        const messageListener = async (data: Uint8Array, { address, port }: RemoteInfo) => {
+        const messageListener = async (data: BufferSource, { address, port }: RemoteInfo) => {
             const netInterface = this.#netInterface ?? (await NetworkReactNative.getNetInterfaceForIp(address));
             listener(netInterface, address, port, data);
         };
@@ -207,9 +207,9 @@ export class UdpChannelReactNative implements UdpChannel {
         };
     }
 
-    async send(host: string, port: number, data: Uint8Array) {
+    async send(host: string, port: number, data: BufferSource) {
         return new Promise<void>((resolve, reject) => {
-            this.#socket.send(data, 0, data.length, port, host, error => {
+            this.#socket.send(data, 0, data.byteLength, port, host, error => {
                 if (error) {
                     reject(repackErrorAs(error, NetworkError) as Error);
                     return;

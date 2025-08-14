@@ -55,8 +55,8 @@ const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
     "an object with all fields": {
         decoded: {
             arrayField: [
-                { mandatoryNumber: 1, optionalByteString: Bytes.fromHex("000000") },
-                { mandatoryNumber: 2, optionalByteString: Bytes.fromHex("999999") },
+                { mandatoryNumber: 1, optionalByteString: Bytes.of(Bytes.fromHex("000000")) },
+                { mandatoryNumber: 2, optionalByteString: Bytes.of(Bytes.fromHex("999999")) },
             ],
             optionalString: "test",
             nullableBoolean: true,
@@ -75,8 +75,8 @@ const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
     "an object without wrapped fields": {
         decoded: {
             arrayField: [
-                { mandatoryNumber: 1, optionalByteString: Bytes.fromHex("000000") },
-                { mandatoryNumber: 2, optionalByteString: Bytes.fromHex("999999") },
+                { mandatoryNumber: 1, optionalByteString: Bytes.of(Bytes.fromHex("000000")) },
+                { mandatoryNumber: 2, optionalByteString: Bytes.of(Bytes.fromHex("999999")) },
             ],
             optionalString: "test",
             nullableBoolean: true,

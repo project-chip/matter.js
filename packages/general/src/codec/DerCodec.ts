@@ -54,7 +54,7 @@ export const DerObject = (objectId: string, content: any = {}) => ({
     [DerKey.ObjectId]: ObjectId(objectId),
     ...content,
 });
-export const DerBitString = (data: Uint8Array, padding = 0) => ({
+export const DerBitString = (data: Bytes, padding = 0) => ({
     [DerKey.TagId]: DerType.BitString as number,
     [DerKey.Bytes]: data,
     [DerKey.BitsPadding]: padding,
@@ -63,7 +63,7 @@ export const ContextTagged = (tagId: number, value?: any) => ({
     [DerKey.TagId]: tagId | DerClass.ContextSpecific | CONSTRUCTED,
     [DerKey.Bytes]: value === undefined ? new Uint8Array(0) : DerCodec.encode(value),
 });
-export const ContextTaggedBytes = (tagId: number, value: Uint8Array) => ({
+export const ContextTaggedBytes = (tagId: number, value: Bytes) => ({
     [DerKey.TagId]: tagId | DerClass.ContextSpecific,
     [DerKey.Bytes]: value,
 });
@@ -71,19 +71,17 @@ export const DatatypeOverride = (type: DerType, value: any) => ({
     [DerKey.TypeOverride]: type,
     [DerKey.RawData]: value,
 });
-export const RawBytes = (bytes: Uint8Array) => ({
+export const RawBytes = (bytes: Bytes) => ({
     [DerKey.Bytes]: bytes,
 });
-export const DerBigUint = (number: Uint8Array | ArrayBuffer) => {
+export const DerBigUint = (number: Bytes) => {
     // We don't need bigint support currently, but we can translate here if we ever do
 
-    if (!ArrayBuffer.isView(number)) {
-        number = new Uint8Array(number);
-    }
+    const numberData = Bytes.of(number);
 
     // Ensure value does not encode as negative
-    if ((number as Uint8Array)[0] & 0x80) {
-        number = Bytes.concat(new Uint8Array([0]), number as Uint8Array);
+    if (numberData[0] & 0x80) {
+        number = Bytes.concat(new Uint8Array([0]), numberData);
     }
 
     return {
@@ -94,16 +92,16 @@ export const DerBigUint = (number: Uint8Array | ArrayBuffer) => {
 
 export type DerNode = {
     [DerKey.TagId]: number;
-    [DerKey.Bytes]: Uint8Array;
+    [DerKey.Bytes]: Bytes;
     [DerKey.Elements]?: DerNode[];
     [DerKey.BitsPadding]?: number;
 };
 
 export class DerCodec {
-    static encode(value: unknown): Uint8Array {
+    static encode(value: unknown): Bytes {
         if (Array.isArray(value)) {
             return this.#encodeArray(value);
-        } else if (value instanceof Uint8Array) {
+        } else if (Bytes.isBytes(value)) {
             return this.#encodeOctetString(value);
         } else if (value instanceof Date) {
             return this.#encodeDate(value);
@@ -124,17 +122,15 @@ export class DerCodec {
                 if (bitsPadding !== undefined && typeof bitsPadding !== "number") {
                     throw new DerError("Bits padding is not a numeric byte value");
                 }
-                if (bytes === undefined || !ArrayBuffer.isView(bytes)) {
+                if (bytes === undefined || !Bytes.isBytes(bytes)) {
                     throw new DerError("DER bytes is not a byte array");
                 }
                 return this.#encodeAsn1(
                     tagId,
-                    bitsPadding === undefined
-                        ? (bytes as Uint8Array)
-                        : Bytes.concat(Uint8Array.of(bitsPadding), bytes as Uint8Array),
+                    bitsPadding === undefined ? bytes : Bytes.concat(Uint8Array.of(bitsPadding), Bytes.of(bytes)),
                 );
             } else if (value[DerKey.TypeOverride] !== undefined && value[DerKey.RawData] !== undefined) {
-                if (value[DerKey.TypeOverride] === DerType.Integer && value[DerKey.RawData] instanceof Uint8Array) {
+                if (value[DerKey.TypeOverride] === DerType.Integer && Bytes.isBytes(value[DerKey.RawData])) {
                     return this.#encodeInteger(value[DerKey.RawData]);
                 } else if (
                     value[DerKey.TypeOverride] === DerType.BitString &&
@@ -156,11 +152,11 @@ export class DerCodec {
                 }
             } else if (
                 value[DerKey.Bytes] !== undefined &&
-                value[DerKey.Bytes] instanceof Uint8Array &&
+                Bytes.isBytes(value[DerKey.Bytes]) &&
                 Object.keys(value).length === 1
             ) {
                 // Raw Data
-                return value[DerKey.Bytes];
+                return Bytes.of(value[DerKey.Bytes]);
             } else if (value[DerKey.TypeOverride] === undefined && value[DerKey.Bytes] === undefined) {
                 return this.#encodeObject(value);
             } else {
@@ -171,7 +167,7 @@ export class DerCodec {
         }
     }
 
-    static decode(data: Uint8Array): DerNode {
+    static decode(data: Bytes): DerNode {
         return this.#decodeRec(new DataReader(data));
     }
 
@@ -187,10 +183,10 @@ export class DerCodec {
             throw new DerError(`Expected integer but DER tag is ${DerType[value[DerKey.TagId]]}`);
         }
 
-        const bytes = value[DerKey.Bytes];
-        if (!ArrayBuffer.isView(bytes)) {
+        if (!Bytes.isBytes(value[DerKey.Bytes])) {
             throw new DerError("Incorrect DER object type");
         }
+        const bytes = Bytes.of(value[DerKey.Bytes]);
 
         // The common case
         if (bytes.length === byteLength) {
@@ -244,12 +240,12 @@ export class DerCodec {
         return this.#encodeAsn1(DerType.Set | CONSTRUCTED, Bytes.concat(...array.map(element => this.encode(element))));
     }
 
-    static #encodeOctetString(value: Uint8Array) {
+    static #encodeOctetString(value: Bytes) {
         return this.#encodeAsn1(DerType.OctetString, value);
     }
 
     static #encodeObject(object: any) {
-        const attributes = new Array<Uint8Array>();
+        const attributes = new Array<Bytes>();
         for (const key in object) {
             attributes.push(this.encode(object[key]));
         }
@@ -275,14 +271,9 @@ export class DerCodec {
         return this.#encodeAsn1(DerType.IA5String, Bytes.fromString(value));
     }
 
-    static #encodeInteger(value: number | bigint | Uint8Array) {
-        const isByteArray = ArrayBuffer.isView(value);
-        let valueBytes: Uint8Array;
-        if (isByteArray) {
-            valueBytes = value;
-        } else {
-            valueBytes = Bytes.fromHex(toHex(value));
-        }
+    static #encodeInteger(value: number | bigint | Bytes) {
+        const valueBytes = Bytes.isBytes(value) ? value : Bytes.fromHex(toHex(value));
+
         const byteArray = Bytes.concat(new Uint8Array(1), valueBytes);
         const dataView = Bytes.dataViewOf(byteArray);
         let start = 0;
@@ -290,9 +281,9 @@ export class DerCodec {
             if (dataView.getUint8(start) !== 0) break;
             if (dataView.getUint8(start + 1) >= 0x80) break;
             start++;
-            if (start === byteArray.length - 1) break;
+            if (start === byteArray.byteLength - 1) break;
         }
-        return this.#encodeAsn1(DerType.Integer, byteArray.slice(start));
+        return this.#encodeAsn1(DerType.Integer, start === 0 ? byteArray : Bytes.of(byteArray).slice(start));
     }
 
     static #encodeBitString(value: number) {
@@ -320,14 +311,16 @@ export class DerCodec {
         return byteArray.slice(start);
     }
 
-    static #encodeAsn1(tag: number, data: Uint8Array) {
-        return Bytes.concat(Uint8Array.of(tag), this.#encodeLengthBytes(data.length), data);
+    static #encodeAsn1(tag: number, data: Bytes) {
+        return Bytes.concat(Uint8Array.of(tag), this.#encodeLengthBytes(data.byteLength), data);
     }
 
     static #decodeRec(reader: DataReader): DerNode {
         const { tag, bytes } = this.#decodeAsn1(reader);
-        if (tag === DerType.BitString)
-            return { [DerKey.TagId]: tag, [DerKey.Bytes]: bytes.slice(1), [DerKey.BitsPadding]: bytes[0] };
+        if (tag === DerType.BitString) {
+            const data = Bytes.of(bytes);
+            return { [DerKey.TagId]: tag, [DerKey.Bytes]: data.slice(1), [DerKey.BitsPadding]: data[0] };
+        }
         if ((tag & CONSTRUCTED) === 0) return { [DerKey.TagId]: tag, [DerKey.Bytes]: bytes };
         const elementsReader = new DataReader(bytes);
         const elements: DerNode[] = [];
@@ -337,7 +330,7 @@ export class DerCodec {
         return { [DerKey.TagId]: tag, [DerKey.Bytes]: bytes, [DerKey.Elements]: elements };
     }
 
-    static #decodeAsn1(reader: DataReader): { tag: number; bytes: Uint8Array } {
+    static #decodeAsn1(reader: DataReader): { tag: number; bytes: Bytes } {
         const tag = reader.readUInt8();
         let length = reader.readUInt8();
         if ((length & 0x80) !== 0) {

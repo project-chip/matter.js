@@ -20,5 +20,5 @@ export class NetworkSimulator {
 }
 
 export namespace NetworkSimulator {
-    export type Listener = (netInterface: string, peerAddress: string, peerPort: number, data: Uint8Array) => void;
+    export type Listener = (netInterface: string, peerAddress: string, peerPort: number, data: BufferSource) => void;
 }

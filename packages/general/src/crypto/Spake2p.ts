@@ -25,19 +25,21 @@ const CRYPTO_W_SIZE_BYTES = CRYPTO_GROUP_SIZE_BYTES + 8;
 
 export interface PbkdfParameters {
     iterations: number;
-    salt: Uint8Array;
+    salt: Bytes;
 }
 
 export class Spake2p {
     readonly #crypto: Crypto;
-    readonly #context: Uint8Array;
+    readonly #context: Bytes;
     readonly #random: bigint;
     readonly #w0: bigint;
 
     static async computeW0W1(crypto: Crypto, { iterations, salt }: PbkdfParameters, pin: number) {
         const pinWriter = new DataWriter(Endian.Little);
         pinWriter.writeUInt32(pin);
-        const ws = await crypto.createPbkdf2Key(pinWriter.toByteArray(), salt, iterations, CRYPTO_W_SIZE_BYTES * 2);
+        const ws = Bytes.of(
+            await crypto.createPbkdf2Key(pinWriter.toByteArray(), salt, iterations, CRYPTO_W_SIZE_BYTES * 2),
+        );
         const w0 = mod(bytesToNumberBE(ws.slice(0, 40)), P256_CURVE.n);
         const w1 = mod(bytesToNumberBE(ws.slice(40, 80)), P256_CURVE.n);
         return { w0, w1 };
@@ -49,30 +51,30 @@ export class Spake2p {
         return { w0, L };
     }
 
-    static create(crypto: Crypto, context: Uint8Array, w0: bigint) {
+    static create(crypto: Crypto, context: Bytes, w0: bigint) {
         const random = crypto.randomBigInt(32, P256_CURVE.Fp.ORDER);
         return new Spake2p(crypto, context, random, w0);
     }
 
-    constructor(crypto: Crypto, context: Uint8Array, random: bigint, w0: bigint) {
+    constructor(crypto: Crypto, context: Bytes, random: bigint, w0: bigint) {
         this.#crypto = crypto;
         this.#context = context;
         this.#random = random;
         this.#w0 = w0;
     }
 
-    computeX(): Uint8Array {
+    computeX(): Bytes {
         const X = ProjectivePoint.BASE.multiply(this.#random).add(M.multiply(this.#w0));
         return X.toRawBytes(false);
     }
 
-    computeY(): Uint8Array {
+    computeY(): Bytes {
         const Y = ProjectivePoint.BASE.multiply(this.#random).add(N.multiply(this.#w0));
         return Y.toRawBytes(false);
     }
 
-    async computeSecretAndVerifiersFromY(w1: bigint, X: Uint8Array, Y: Uint8Array) {
-        const YPoint = ProjectivePoint.fromHex(Y);
+    async computeSecretAndVerifiersFromY(w1: bigint, X: Bytes, Y: Bytes) {
+        const YPoint = ProjectivePoint.fromHex(Bytes.of(Y));
         try {
             YPoint.assertValidity();
         } catch (error) {
@@ -81,12 +83,12 @@ export class Spake2p {
         const yNwo = YPoint.add(N.multiply(this.#w0).negate());
         const Z = yNwo.multiply(this.#random);
         const V = yNwo.multiply(w1);
-        return this.computeSecretAndVerifiers(X, Y, Z.toRawBytes(false), V.toRawBytes(false));
+        return this.computeSecretAndVerifiers(X, Y, Bytes.of(Z.toRawBytes(false)), Bytes.of(V.toRawBytes(false)));
     }
 
-    async computeSecretAndVerifiersFromX(L: Uint8Array, X: Uint8Array, Y: Uint8Array) {
-        const XPoint = ProjectivePoint.fromHex(X);
-        const LPoint = ProjectivePoint.fromHex(L);
+    async computeSecretAndVerifiersFromX(L: Bytes, X: Bytes, Y: Bytes) {
+        const XPoint = ProjectivePoint.fromHex(Bytes.of(X));
+        const LPoint = ProjectivePoint.fromHex(Bytes.of(L));
         try {
             XPoint.assertValidity();
         } catch (error) {
@@ -94,15 +96,17 @@ export class Spake2p {
         }
         const Z = XPoint.add(M.multiply(this.#w0).negate()).multiply(this.#random);
         const V = LPoint.multiply(this.#random);
-        return this.computeSecretAndVerifiers(X, Y, Z.toRawBytes(false), V.toRawBytes(false));
+        return this.computeSecretAndVerifiers(X, Y, Bytes.of(Z.toRawBytes(false)), Bytes.of(V.toRawBytes(false)));
     }
 
-    private async computeSecretAndVerifiers(X: Uint8Array, Y: Uint8Array, Z: Uint8Array, V: Uint8Array) {
-        const TT_HASH = await this.computeTranscriptHash(X, Y, Z, V);
+    private async computeSecretAndVerifiers(X: Bytes, Y: Bytes, Z: Bytes, V: Bytes) {
+        const TT_HASH = Bytes.of(await this.computeTranscriptHash(X, Y, Z, V));
         const Ka = TT_HASH.slice(0, 16);
         const Ke = TT_HASH.slice(16, 32);
 
-        const KcAB = await this.#crypto.createHkdfKey(Ka, new Uint8Array(0), Bytes.fromString("ConfirmationKeys"), 32);
+        const KcAB = Bytes.of(
+            await this.#crypto.createHkdfKey(Ka, new Uint8Array(0), Bytes.fromString("ConfirmationKeys"), 32),
+        );
         const KcA = KcAB.slice(0, 16);
         const KcB = KcAB.slice(16, 32);
 
@@ -112,13 +116,13 @@ export class Spake2p {
         return { Ke, hAY, hBX };
     }
 
-    private computeTranscriptHash(X: Uint8Array, Y: Uint8Array, Z: Uint8Array, V: Uint8Array) {
+    private computeTranscriptHash(X: Bytes, Y: Bytes, Z: Bytes, V: Bytes) {
         const TTwriter = new DataWriter(Endian.Little);
         this.addToContext(TTwriter, this.#context);
         this.addToContext(TTwriter, Bytes.fromString(""));
         this.addToContext(TTwriter, Bytes.fromString(""));
-        this.addToContext(TTwriter, M.toRawBytes(false));
-        this.addToContext(TTwriter, N.toRawBytes(false));
+        this.addToContext(TTwriter, Bytes.of(M.toRawBytes(false)));
+        this.addToContext(TTwriter, Bytes.of(N.toRawBytes(false)));
         this.addToContext(TTwriter, X);
         this.addToContext(TTwriter, Y);
         this.addToContext(TTwriter, Z);
@@ -127,8 +131,8 @@ export class Spake2p {
         return this.#crypto.computeSha256(TTwriter.toByteArray());
     }
 
-    private addToContext(TTwriter: DataWriter<Endian.Little>, data: Uint8Array) {
-        TTwriter.writeUInt64(data.length);
+    private addToContext(TTwriter: DataWriter<Endian.Little>, data: Bytes) {
+        TTwriter.writeUInt64(data.byteLength);
         TTwriter.writeByteArray(data);
     }
 }

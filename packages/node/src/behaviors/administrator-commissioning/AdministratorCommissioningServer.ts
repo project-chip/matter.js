@@ -74,13 +74,13 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         commissioningTimeout,
     }: AdministratorCommissioning.OpenCommissioningWindowRequest) {
         // We monkey patched the Tlv definition above, so take care about correct error handling
-        if (pakePasscodeVerifier.length !== PAKE_PASSCODE_VERIFIER_LENGTH) {
+        if (pakePasscodeVerifier.byteLength !== PAKE_PASSCODE_VERIFIER_LENGTH) {
             throw new AdministratorCommissioning.PakeParameterError("PAKE passcode verifier length is invalid");
         }
         if (iterations < 1000 || iterations > 100_000) {
             throw new AdministratorCommissioning.PakeParameterError("PAKE iterations invalid");
         }
-        if (salt.length < 16 || salt.length > 32) {
+        if (salt.byteLength < 16 || salt.byteLength > 32) {
             throw new AdministratorCommissioning.PakeParameterError("PAKE salt has invalid length.");
         }
 

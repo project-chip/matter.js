@@ -77,7 +77,7 @@ export type QrCodeData = TypeFromBitmapSchema<typeof QrCodeDataSchema> & {
      * Variable length TLV data. Zero length if TLV is not included. This data is byte-aligned.
      * All elements SHALL be housed within an anonymous top-level structure container.
      */
-    tlvData?: Uint8Array;
+    tlvData?: Bytes;
 };
 
 /**
@@ -114,8 +114,8 @@ class QrPairingCodeSchema extends Schema<QrCodeData[], string> {
                 .map(payloadData => {
                     const { tlvData } = payloadData;
                     const data =
-                        tlvData !== undefined && tlvData.length > 0
-                            ? Bytes.concat(QrCodeDataSchema.encode(payloadData), tlvData)
+                        tlvData !== undefined && tlvData.byteLength > 0
+                            ? Bytes.of(Bytes.concat(QrCodeDataSchema.encode(payloadData), tlvData))
                             : QrCodeDataSchema.encode(payloadData);
                     return Base38.encode(data);
                 })
@@ -129,7 +129,7 @@ class QrPairingCodeSchema extends Schema<QrCodeData[], string> {
             .slice(PREFIX.length)
             .split("*")
             .map(encodedData => {
-                const data = Base38.decode(encodedData);
+                const data = Bytes.of(Base38.decode(encodedData));
                 return {
                     ...QrCodeDataSchema.decode(data.slice(0, 11)),
                     tlvData: data.length > 11 ? data.slice(11) : undefined, // TlvData (if any) is after the fixed-length data
@@ -144,7 +144,7 @@ class QrPairingCodeSchema extends Schema<QrCodeData[], string> {
      * @param data Encoded TLV data
      * @param schema The schema to use for decoding the TLV data, by default a schema with the QrCodeTlvDataDefaultFields is used
      */
-    decodeTlvData(data: Uint8Array, schema: TlvSchema<any> = TlvObject(QrCodeTlvDataDefaultFields)) {
+    decodeTlvData(data: Bytes, schema: TlvSchema<any> = TlvObject(QrCodeTlvDataDefaultFields)) {
         const decoded = schema.decode(data);
         if (decoded.serialNumber !== undefined) {
             if (

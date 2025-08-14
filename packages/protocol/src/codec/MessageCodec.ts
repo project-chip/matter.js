@@ -46,8 +46,8 @@ export interface PayloadHeader {
 
 export interface Packet {
     header: PacketHeader;
-    messageExtension?: Uint8Array;
-    applicationPayload: Uint8Array;
+    messageExtension?: Bytes;
+    applicationPayload: Bytes;
 }
 
 export interface DecodedPacket extends Packet {
@@ -56,8 +56,8 @@ export interface DecodedPacket extends Packet {
 export interface Message {
     packetHeader: PacketHeader;
     payloadHeader: PayloadHeader;
-    securityExtension?: Uint8Array;
-    payload: Uint8Array;
+    securityExtension?: Bytes;
+    payload: Bytes;
 }
 
 export interface DecodedMessage extends Message {
@@ -113,11 +113,11 @@ function mapProtocolAndMessageType(protocolId: number, messageType: number): { t
 }
 
 export class MessageCodec {
-    static decodePacket(data: Uint8Array): DecodedPacket {
+    static decodePacket(data: Bytes): DecodedPacket {
         const reader = new DataReader(data, Endian.Little);
         const header = this.decodePacketHeader(reader);
 
-        let messageExtension: Uint8Array | undefined = undefined;
+        let messageExtension: Bytes | undefined = undefined;
         if (header.hasMessageExtensions) {
             const extensionLength = reader.readUInt16();
             messageExtension = reader.readByteArray(extensionLength);
@@ -134,7 +134,7 @@ export class MessageCodec {
     static decodePayload({ header, applicationPayload }: DecodedPacket): DecodedMessage {
         const reader = new DataReader(applicationPayload, Endian.Little);
         const payloadHeader = this.decodePayloadHeader(reader);
-        let securityExtension: Uint8Array | undefined = undefined;
+        let securityExtension: Bytes | undefined = undefined;
         if (payloadHeader.hasSecuredExtension) {
             const extensionLength = reader.readUInt16();
             securityExtension = reader.readByteArray(extensionLength);
@@ -165,7 +165,7 @@ export class MessageCodec {
         };
     }
 
-    static encodePacket({ header, applicationPayload, messageExtension }: Packet): Uint8Array {
+    static encodePacket({ header, applicationPayload, messageExtension }: Packet): Bytes {
         if (messageExtension !== undefined || header.hasMessageExtensions) {
             throw new NotImplementedError(`Message extensions not supported when encoding a packet.`);
         }
@@ -316,8 +316,8 @@ export class MessageCodec {
                     reqAck: requiresAck,
                     dup: duplicate,
                 }),
-                size: payload.length ? payload.length : undefined,
-                payload: payload.length ? payload : undefined,
+                size: payload.byteLength ? payload.byteLength : undefined,
+                payload: payload.byteLength ? payload : undefined,
             },
             true,
         );

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataReader, DataWriter, Endian } from "#general";
+import { Bytes, DataReader, DataWriter, Endian } from "#general";
 import { GeneralStatusCode, Schema, VendorId } from "#types";
 
 export type ProtocolStatusMessage<T> = {
@@ -12,10 +12,10 @@ export type ProtocolStatusMessage<T> = {
     protocolId: number;
     vendorId: VendorId;
     protocolStatus: T;
-    protocolData?: Uint8Array;
+    protocolData?: Bytes;
 };
 
-export abstract class ProtocolStatusMessageSchema<T extends ProtocolStatusMessage<any>> extends Schema<T, Uint8Array> {
+export abstract class ProtocolStatusMessageSchema<T extends ProtocolStatusMessage<any>> extends Schema<T, Bytes> {
     #protocolId: number;
     #vendorId: number;
     #protocolSpecificDataAllowed: boolean;
@@ -32,7 +32,7 @@ export abstract class ProtocolStatusMessageSchema<T extends ProtocolStatusMessag
         this.#protocolSpecificDataAllowed = protocolSpecificDataAllowed;
     }
 
-    override encode(message: Omit<T, "protocolId" | "vendorId">): Uint8Array {
+    override encode(message: Omit<T, "protocolId" | "vendorId">): Bytes {
         return super.encode({ ...message, protocolId: this.#protocolId, vendorId: this.#vendorId } as T);
     }
 
@@ -41,13 +41,13 @@ export abstract class ProtocolStatusMessageSchema<T extends ProtocolStatusMessag
         writer.writeUInt16(generalStatus);
         writer.writeUInt32((vendorId << 16) | protocolId);
         writer.writeUInt16(protocolStatus);
-        if (this.#protocolSpecificDataAllowed && protocolData !== undefined && protocolData.length > 0) {
+        if (this.#protocolSpecificDataAllowed && protocolData !== undefined && protocolData.byteLength > 0) {
             writer.writeByteArray(protocolData);
         }
         return writer.toByteArray();
     }
 
-    decodeInternal(bytes: Uint8Array) {
+    decodeInternal(bytes: Bytes) {
         const reader = new DataReader(bytes, Endian.Little);
         const generalStatus = reader.readUInt16();
         const vendorProtocolId = reader.readUInt32();

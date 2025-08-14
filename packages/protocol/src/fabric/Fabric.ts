@@ -52,14 +52,14 @@ export class Fabric {
     readonly fabricId: FabricId;
     readonly nodeId: NodeId;
     readonly rootNodeId: NodeId;
-    readonly operationalId: Uint8Array;
-    readonly rootPublicKey: Uint8Array;
+    readonly operationalId: Bytes;
+    readonly rootPublicKey: Bytes;
     readonly rootVendorId: VendorId;
-    readonly rootCert: Uint8Array;
-    readonly identityProtectionKey: Uint8Array;
-    readonly operationalIdentityProtectionKey: Uint8Array;
-    readonly intermediateCACert: Uint8Array | undefined;
-    readonly operationalCert: Uint8Array;
+    readonly rootCert: Bytes;
+    readonly identityProtectionKey: Bytes;
+    readonly operationalIdentityProtectionKey: Bytes;
+    readonly intermediateCACert: Bytes | undefined;
+    readonly operationalCert: Bytes;
     readonly #keyPair: Key;
     readonly #sessions = new Set<Session>();
     readonly #groups: FabricGroups;
@@ -148,11 +148,11 @@ export class Fabric {
         return this.#keyPair.publicKey;
     }
 
-    sign(data: Uint8Array) {
+    sign(data: Bytes) {
         return this.crypto.signEcdsa(this.#keyPair, data);
     }
 
-    async verifyCredentials(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
+    async verifyCredentials(operationalCert: Bytes, intermediateCACert?: Bytes) {
         const rootCert = Rcac.fromTlv(this.rootCert);
         const nocCert = Noc.fromTlv(operationalCert);
         const icaCert = intermediateCACert !== undefined ? Icac.fromTlv(intermediateCACert) : undefined;
@@ -164,7 +164,7 @@ export class Fabric {
         await nocCert.verify(this.#crypto, rootCert, icaCert);
     }
 
-    matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: Uint8Array) {
+    matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: Bytes) {
         return this.fabricId === fabricId && Bytes.areEqual(this.rootPublicKey, rootPublicKey);
     }
 
@@ -175,7 +175,7 @@ export class Fabric {
         );
     }
 
-    #generateSalt(nodeId: NodeId, random: Uint8Array) {
+    #generateSalt(nodeId: NodeId, random: Bytes) {
         const writer = new DataWriter(Endian.Little);
         writer.writeByteArray(random);
         writer.writeByteArray(this.rootPublicKey);
@@ -188,18 +188,15 @@ export class Fabric {
      * Returns the destination IDs for a given nodeId, random value and optional groupId. When groupId is provided, it
      * returns the time-wise valid operational keys for that groupId.
      */
-    async currentDestinationIdFor(nodeId: NodeId, random: Uint8Array) {
-        return await this.#crypto.signHmac(
-            this.groups.keySets.currentKeyForId(0).key,
-            this.#generateSalt(nodeId, random),
-        );
+    async currentDestinationIdFor(nodeId: NodeId, random: Bytes) {
+        return this.#crypto.signHmac(this.groups.keySets.currentKeyForId(0).key, this.#generateSalt(nodeId, random));
     }
 
     /**
      * Returns the destination IDs for a given nodeId, random value and optional groupId. When groupId is provided, it
      * returns all operational keys for that groupId.
      */
-    async destinationIdsFor(nodeId: NodeId, random: Uint8Array) {
+    async destinationIdsFor(nodeId: NodeId, random: Bytes) {
         const salt = this.#generateSalt(nodeId, random);
         // Check all keys of keyset 0 - typically it is only the IPK
         const destinationIds = this.groups.keySets.allKeysForId(0).map(({ key }) => this.#crypto.signHmac(key, salt));
@@ -277,14 +274,14 @@ export class FabricBuilder {
     #crypto: Crypto;
     #keyPair: PrivateKey;
     #rootVendorId?: VendorId;
-    #rootCert?: Uint8Array;
-    #intermediateCACert?: Uint8Array;
-    #operationalCert?: Uint8Array;
+    #rootCert?: Bytes;
+    #intermediateCACert?: Bytes;
+    #operationalCert?: Bytes;
     #fabricId?: FabricId;
     #nodeId?: NodeId;
     #rootNodeId?: NodeId;
-    #rootPublicKey?: Uint8Array;
-    #identityProtectionKey?: Uint8Array;
+    #rootPublicKey?: Bytes;
+    #identityProtectionKey?: Bytes;
     #fabricIndex?: FabricIndex;
     #label = "";
 
@@ -309,7 +306,7 @@ export class FabricBuilder {
         return X509Base.createCertificateSigningRequest(this.#crypto, this.#keyPair);
     }
 
-    async setRootCert(rootCert: Uint8Array) {
+    async setRootCert(rootCert: Bytes) {
         const root = Rcac.fromTlv(rootCert);
         await root.verify(this.#crypto);
         this.#rootCert = rootCert;
@@ -321,8 +318,8 @@ export class FabricBuilder {
         return this.#rootCert;
     }
 
-    async setOperationalCert(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
-        if (intermediateCACert !== undefined && intermediateCACert.length === 0) {
+    async setOperationalCert(operationalCert: Bytes, intermediateCACert?: Bytes) {
+        if (intermediateCACert !== undefined && intermediateCACert.byteLength === 0) {
             intermediateCACert = undefined;
         }
         const {
@@ -371,7 +368,7 @@ export class FabricBuilder {
         return this;
     }
 
-    setIdentityProtectionKey(key: Uint8Array) {
+    setIdentityProtectionKey(key: Bytes) {
         this.#identityProtectionKey = key;
         return this;
     }
@@ -426,7 +423,7 @@ export class FabricBuilder {
         const saltWriter = new DataWriter();
         saltWriter.writeUInt64(this.#fabricId);
         const operationalId = await this.#crypto.createHkdfKey(
-            this.#rootPublicKey.slice(1),
+            Bytes.of(this.#rootPublicKey).slice(1),
             saltWriter.toByteArray(),
             COMPRESSED_FABRIC_ID_INFO,
             8,
@@ -461,15 +458,15 @@ export namespace Fabric {
         fabricId: FabricId;
         nodeId: NodeId;
         rootNodeId: NodeId;
-        operationalId: Uint8Array;
-        rootPublicKey: Uint8Array;
+        operationalId: Bytes;
+        rootPublicKey: Bytes;
         keyPair: BinaryKeyPair;
         rootVendorId: VendorId;
-        rootCert: Uint8Array;
-        identityProtectionKey: Uint8Array;
-        operationalIdentityProtectionKey: Uint8Array;
-        intermediateCACert: Uint8Array | undefined;
-        operationalCert: Uint8Array;
+        rootCert: Bytes;
+        identityProtectionKey: Bytes;
+        operationalIdentityProtectionKey: Bytes;
+        intermediateCACert: Bytes | undefined;
+        operationalCert: Bytes;
         label: string;
     };
 }

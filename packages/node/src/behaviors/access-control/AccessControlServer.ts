@@ -6,7 +6,7 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { AccessControl as AccessControlTypes } from "#clusters/access-control";
-import { deepCopy, InternalError, Logger, MaybePromise } from "#general";
+import { Bytes, deepCopy, InternalError, Logger, MaybePromise } from "#general";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import {
     AccessControl,
@@ -401,7 +401,12 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
      */
     protected extensionEntryValidator(extension: AccessControlTypes.AccessControlExtension) {
         const { data } = extension;
-        if (data.length < 2 || data[0] !== TlvType.List || data[data.length - 1] !== TlvType.EndOfContainer) {
+        const extensionBytes = Bytes.of(data);
+        if (
+            extensionBytes.length < 2 ||
+            extensionBytes[0] !== TlvType.List ||
+            extensionBytes[extensionBytes.length - 1] !== TlvType.EndOfContainer
+        ) {
             // Easier to check that way that it is an Listen without any tags in general
             throw new StatusResponseError("Extension must be a valid TLV", StatusCode.ConstraintError);
         }

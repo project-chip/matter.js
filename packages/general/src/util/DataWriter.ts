@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Endian } from "./Bytes.js";
+import { Bytes, Endian } from "./Bytes.js";
 import { toNumber } from "./Number.js";
 
 /** Writer that auto-increments its offset after each write. */
@@ -86,8 +86,8 @@ export class DataWriter<E extends Endian = Endian.Big> {
         this.length += 8;
     }
 
-    writeByteArray(value: Uint8Array) {
-        this.chunks.push(value);
+    writeByteArray(value: Bytes) {
+        this.chunks.push(Bytes.of(value));
         this.length += value.byteLength;
     }
 

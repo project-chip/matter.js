@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "#util/Bytes.js";
 import { Channel, ChannelType, IpNetworkChannel } from "./Channel.js";
 import { NetInterface } from "./NetInterface.js";
 import { Network, NetworkError } from "./Network.js";
@@ -40,7 +41,7 @@ export class UdpInterface implements NetInterface {
         return Promise.resolve(new UdpConnection(this.#server, ip, port));
     }
 
-    onData(listener: (channel: Channel<Uint8Array>, messageBytes: Uint8Array) => void): TransportInterface.Listener {
+    onData(listener: (channel: Channel<Bytes>, messageBytes: Bytes) => void): TransportInterface.Listener {
         return this.#server.onData((_netInterface, peerHost, peerPort, data) =>
             listener(new UdpConnection(this.#server, peerHost, peerPort), data),
         );
@@ -63,7 +64,7 @@ export class UdpInterface implements NetInterface {
     }
 }
 
-export class UdpConnection implements IpNetworkChannel<Uint8Array> {
+export class UdpConnection implements IpNetworkChannel<Bytes> {
     readonly isReliable = false;
     readonly type = ChannelType.UDP;
     readonly #server: UdpChannel;
@@ -80,7 +81,7 @@ export class UdpConnection implements IpNetworkChannel<Uint8Array> {
         return this.#server.maxPayloadSize;
     }
 
-    send(data: Uint8Array) {
+    send(data: Bytes) {
         return this.#server.send(this.#peerAddress, this.#peerPort, data);
     }
 

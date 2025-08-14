@@ -68,7 +68,7 @@ describe("Key", () => {
 });
 
 namespace Fixture {
-    const b = (s: string) => Bytes.fromHex(s);
+    const b = (s: string) => Bytes.of(Bytes.fromHex(s));
 
     export const sec1 = b(
         "30770201010420aef3484116e9481ec57be0472df41bf499064e5024ad869eca5e889802d48075a00a06082a8648ce3d030107a144034200043c398922452b55caf389c25bd1bca4656952ccb90e8869249ad8474653014cbf95d687965e036b521c51037e6b8cedefca1eb44046694fa08882eed6519decba",

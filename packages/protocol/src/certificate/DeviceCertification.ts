@@ -5,7 +5,7 @@
  */
 
 import { CertificationDeclaration } from "#certificate/kinds/CertificationDeclaration.js";
-import { Construction, Crypto, ImplementationError, InternalError, PrivateKey } from "#general";
+import { Bytes, Construction, Crypto, ImplementationError, InternalError, PrivateKey } from "#general";
 import { NodeSession } from "#session/NodeSession.js";
 import { ProductDescription } from "#types";
 import { AttestationCertificateManager } from "./AttestationCertificateManager.js";
@@ -16,9 +16,9 @@ import { AttestationCertificateManager } from "./AttestationCertificateManager.j
 export class DeviceCertification {
     #crypto: Crypto;
     #privateKey?: PrivateKey;
-    #certificate?: Uint8Array;
-    #intermediateCertificate?: Uint8Array;
-    #declaration?: Uint8Array;
+    #certificate?: Bytes;
+    #intermediateCertificate?: Bytes;
+    #declaration?: Bytes;
     readonly #construction: Construction<DeviceCertification>;
 
     get construction() {
@@ -65,18 +65,16 @@ export class DeviceCertification {
         this.#construction = Construction(this, async () => {
             const config = await configProvider();
 
-            this.#privateKey =
-                config.privateKey instanceof Uint8Array ? PrivateKey(config.privateKey) : config.privateKey;
+            this.#privateKey = Bytes.isBytes(config.privateKey) ? PrivateKey(config.privateKey) : config.privateKey;
             this.#certificate = config.certificate;
             this.#intermediateCertificate = config.intermediateCertificate;
             this.#declaration = config.declaration;
         });
     }
 
-    async sign(session: NodeSession, data: Uint8Array) {
+    async sign(session: NodeSession, data: Bytes) {
         const { privateKey } = this.#assertInitialized();
-        const signature = await this.#crypto.signEcdsa(privateKey, [data, session.attestationChallengeKey]);
-        return signature;
+        return this.#crypto.signEcdsa(privateKey, [data, session.attestationChallengeKey]);
     }
 
     /**
@@ -106,10 +104,10 @@ export class DeviceCertification {
 
 export namespace DeviceCertification {
     export interface Configuration {
-        privateKey: PrivateKey | Uint8Array;
-        certificate: Uint8Array;
-        intermediateCertificate: Uint8Array;
-        declaration: Uint8Array;
+        privateKey: PrivateKey | Bytes;
+        certificate: Bytes;
+        intermediateCertificate: Bytes;
+        declaration: Bytes;
     }
 
     export type Definition = Configuration | (() => Promise<Configuration>);

@@ -225,7 +225,7 @@ export class FabricManager {
         return this.fabrics.map(translator);
     }
 
-    async findFabricFromDestinationId(destinationId: Uint8Array, initiatorRandom: Uint8Array) {
+    async findFabricFromDestinationId(destinationId: Bytes, initiatorRandom: Bytes) {
         this.#construction.assert();
 
         for (const fabric of this.#fabrics.values()) {

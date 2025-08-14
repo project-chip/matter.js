@@ -144,13 +144,13 @@ const vectors: CcmTestData[] = [
 describe("Ccm", () => {
     for (const { name, key, nonce, adata: aad, pt, ct, tag } of vectors) {
         const ccm = Ccm(Bytes.fromHex(key));
-        const ptb = Bytes.fromHex(pt);
-        const ctb = Bytes.fromHex(ct + tag);
+        const ptb = Bytes.of(Bytes.fromHex(pt));
+        const ctb = Bytes.of(Bytes.fromHex(ct + tag));
         const aadb = Bytes.fromHex(aad);
         const nonceb = Bytes.fromHex(nonce);
         const input = {
-            adata: aadb,
-            nonce: nonceb,
+            adata: Bytes.of(aadb),
+            nonce: Bytes.of(nonceb),
         };
 
         describe(name, () => {

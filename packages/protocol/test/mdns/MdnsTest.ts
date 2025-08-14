@@ -45,7 +45,7 @@ const PORT3 = 5542;
 const OPERATIONAL_ID = Bytes.fromHex("0000000000000018");
 const NODE_ID = NodeId(BigInt(1));
 
-const FABRIC = { operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric;
+const FABRIC = { operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as unknown as Fabric;
 const OPERATIONAL_SERVICE = ServiceDescription.Operational({
     fabric: FABRIC,
 });
@@ -989,7 +989,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                 const messages = await collection;
 
                 const result = await client.findOperationalDevice(
-                    { operationalId: OPERATIONAL_ID } as Fabric,
+                    { operationalId: OPERATIONAL_ID } as unknown as Fabric,
                     NODE_ID,
                     1,
                 );
@@ -1001,8 +1001,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 // Same result when we just get the records
                 expect(
-                    client.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
-                        ?.addresses,
+                    client.getDiscoveredOperationalDevice(
+                        { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                        NODE_ID,
+                    )?.addresses,
                 ).deep.equal(IPIntegrationResultsPort1);
 
                 // And expire the announcement
@@ -1010,19 +1012,25 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 // And empty result after expiry
                 expect(
-                    client.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                    client.getDiscoveredOperationalDevice(
+                        { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                        NODE_ID,
+                    ),
                 ).deep.equal(undefined);
             });
 
             it("the client queries the server record if it has not been announced before", async () => {
-                const sentData = new Array<Uint8Array>();
+                const sentData = new Array<Bytes>();
                 const listener = scanListener.onData((_netInterface, _peerAddress, _peerPort, data) =>
                     sentData.push(data),
                 );
 
                 advertise(OPERATIONAL_SERVICE);
 
-                const findPromise = client.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
+                const findPromise = client.findOperationalDevice(
+                    { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                    NODE_ID,
+                );
 
                 await MockTime.resolve(findPromise);
 
@@ -1049,8 +1057,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 // Same result when we just get the records
                 expect(
-                    client.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
-                        ?.addresses,
+                    client.getDiscoveredOperationalDevice(
+                        { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                        NODE_ID,
+                    )?.addresses,
                 ).deep.equal(IPIntegrationResultsPort1);
 
                 // And expire the announcement
@@ -1058,7 +1068,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 // And empty result after expiry
                 expect(
-                    client.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                    client.getDiscoveredOperationalDevice(
+                        { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                        NODE_ID,
+                    ),
                 ).deep.equal(undefined);
             });
 
@@ -1068,7 +1081,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                 await serve(COMMISSIONABLE_SERVICE, PORT);
                 await serve(OPERATIONAL_SERVICE, PORT2);
 
-                const findPromise = client.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
+                const findPromise = client.findOperationalDevice(
+                    { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                    NODE_ID,
+                );
 
                 const [query, response] = await MockTime.resolve(messages);
 
@@ -1121,8 +1137,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 // Same result when we just get the records
                 expect(
-                    client.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
-                        ?.addresses,
+                    client.getDiscoveredOperationalDevice(
+                        { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                        NODE_ID,
+                    )?.addresses,
                 ).deep.equal(IPIntegrationResultsPort2);
 
                 // No commissionable devices because never queried
@@ -1133,7 +1151,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 // And empty result after expiry
                 expect(
-                    client.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                    client.getDiscoveredOperationalDevice(
+                        { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                        NODE_ID,
+                    ),
                 ).deep.equal(undefined);
             });
         });
@@ -1155,8 +1176,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 // Same result when we just get the records
                 expect(
-                    client.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
-                        ?.addresses,
+                    client.getDiscoveredOperationalDevice(
+                        { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                        NODE_ID,
+                    )?.addresses,
                 ).deep.equal(IPIntegrationResultsPort2);
 
                 // No commissionable devices because never queried
@@ -1189,7 +1212,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 // And removed after expiry
                 expect(
-                    client.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                    client.getDiscoveredOperationalDevice(
+                        { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                        NODE_ID,
+                    ),
                 ).deep.equal(undefined);
 
                 expect(client.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([]);
@@ -1204,7 +1230,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                 const messages = await collection;
 
                 const result = await client.findOperationalDevice(
-                    { operationalId: OPERATIONAL_ID } as Fabric,
+                    { operationalId: OPERATIONAL_ID } as unknown as Fabric,
                     NODE_ID,
                     10,
                 );
@@ -1216,8 +1242,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 // Same result when we just get the records
                 expect(
-                    client.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
-                        ?.addresses,
+                    client.getDiscoveredOperationalDevice(
+                        { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                        NODE_ID,
+                    )?.addresses,
                 ).deep.equal(IPIntegrationResultsPort2);
 
                 // Also commissionable devices known now
@@ -1250,7 +1278,10 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 // And removed after expiry
                 expect(
-                    client.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                    client.getDiscoveredOperationalDevice(
+                        { operationalId: OPERATIONAL_ID } as unknown as Fabric,
+                        NODE_ID,
+                    ),
                 ).deep.equal(undefined);
 
                 expect(client.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([]);

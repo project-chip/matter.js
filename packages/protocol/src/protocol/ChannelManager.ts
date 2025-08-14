@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AsyncObservable, Channel, Environment, Environmental, Logger } from "#general";
+import { AsyncObservable, Bytes, Channel, Environment, Environmental, Logger } from "#general";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { MessageChannel } from "#protocol/MessageChannel.js";
 import { NoChannelError, NodeSession } from "#session/NodeSession.js";
@@ -124,7 +124,7 @@ export class ChannelManager {
         this.#channels.set(address, fabricChannels);
     }
 
-    private getOrCreateAsPaseChannel(byteArrayChannel: Channel<Uint8Array>, session: Session) {
+    private getOrCreateAsPaseChannel(byteArrayChannel: Channel<Bytes>, session: Session) {
         const msgChannel = new MessageChannel(
             byteArrayChannel,
             session,
@@ -138,7 +138,7 @@ export class ChannelManager {
         return msgChannel;
     }
 
-    async getOrCreateChannel(byteArrayChannel: Channel<Uint8Array>, session: Session) {
+    async getOrCreateChannel(byteArrayChannel: Channel<Bytes>, session: Session) {
         if (!NodeSession.is(session)) {
             return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }

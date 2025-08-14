@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { AttributeId, ClusterId, CommandId, EventId, EventNumber, NodeId, Observable } from "@matter/main";
+import { AttributeId, Bytes, ClusterId, CommandId, EventId, EventNumber, NodeId, Observable } from "@matter/main";
 import { CommissionableDeviceIdentifiers } from "@matter/main/protocol";
 import { EndpointNumber, Status } from "@matter/main/types";
 
@@ -167,19 +167,19 @@ export type DiscoveryResponse = {
 }[];
 
 export type RootCertificateResponse = {
-    RCAC: Uint8Array;
+    RCAC: Bytes;
 };
 
 export type IssueNocChainRequest = {
-    elements: Uint8Array;
+    elements: Bytes;
     nodeId: NodeId;
 };
 
 export type IssueNocChainResponse = {
-    ICAC?: Uint8Array;
-    IPK: Uint8Array;
-    NOC: Uint8Array;
-    RCAC: Uint8Array;
+    ICAC?: Bytes;
+    IPK: Bytes;
+    NOC: Bytes;
+    RCAC: Bytes;
 };
 
 export abstract class CommandHandler {

@@ -11,7 +11,7 @@ export const GROUP_KEY_INFO = Bytes.fromString("GroupKeyHash");
 
 export class KeySets<T extends OperationalKeySet> extends BasicSet<T> {
     /** Operational enhanced structure for fast access based on the group session id. */
-    readonly #sessions = new Map<number, { keySetId: number; key: Uint8Array }[]>();
+    readonly #sessions = new Map<number, { keySetId: number; key: Bytes }[]>();
 
     get sessions() {
         return this.#sessions;
@@ -44,7 +44,7 @@ export class KeySets<T extends OperationalKeySet> extends BasicSet<T> {
         if (groupKeySet === undefined) {
             throw new MatterFlowError(`GroupKeySet for groupKeySet ${keySetId} not found.`);
         }
-        const operationalKeys = Array<{ key: Uint8Array; sessionId?: number; startTime: number | bigint }>();
+        const operationalKeys = Array<{ key: Bytes; sessionId?: number; startTime: number | bigint }>();
         const {
             operationalEpochKey0,
             groupSessionId0,
@@ -141,7 +141,7 @@ export class KeySets<T extends OperationalKeySet> extends BasicSet<T> {
     }
 
     /** Calculates a group session id based on the operational group key. */
-    async sessionIdFromKey(crypto: Crypto, operationalGroupKey: Uint8Array) {
+    async sessionIdFromKey(crypto: Crypto, operationalGroupKey: Bytes) {
         // GroupKeyHash is an array of 2 bytes (16 bits) per Crypto_KDF
         const groupKeyHash = await crypto.createHkdfKey(operationalGroupKey, new Uint8Array(), GROUP_KEY_INFO, 2);
 
@@ -185,10 +185,10 @@ export type GroupKeySet = GroupKeyManagement.GroupKeySet;
 
 /** Enhanced structure of GroupKeySet to include operational data for easier operational processing. */
 export type OperationalKeySet = GroupKeySet & {
-    operationalEpochKey0: Uint8Array;
+    operationalEpochKey0: Bytes;
     groupSessionId0: number | null;
-    operationalEpochKey1: Uint8Array | null;
+    operationalEpochKey1: Bytes | null;
     groupSessionId1: number | null;
-    operationalEpochKey2: Uint8Array | null;
+    operationalEpochKey2: Bytes | null;
     groupSessionId2: number | null;
 };

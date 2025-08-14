@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel, InternalError, Logger, Time, createPromise } from "#general";
+import { Bytes, Channel, InternalError, Logger, Time, createPromise } from "#general";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
@@ -133,7 +133,7 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
  * Note: Bleno is only supporting a single connection at a time right now - mainly because it also only can announce
  * one BLE device at a time!
  */
-export class BlenoBleServer extends BleChannel<Uint8Array> {
+export class BlenoBleServer extends BleChannel<Bytes> {
     private state = "unknown";
     isAdvertising = false;
     private additionalAdvertisingData: Buffer = Buffer.alloc(0);
@@ -142,7 +142,7 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
     private latestHandshakePayload: Buffer | undefined;
     private btpSession: BtpSessionHandler | undefined;
 
-    private onMatterMessageListener: ((socket: Channel<Uint8Array>, data: Uint8Array) => void) | undefined;
+    private onMatterMessageListener: ((socket: Channel<Bytes>, data: Bytes) => void) | undefined;
     private writeConformationResolver: ((value: void) => void) | undefined;
 
     public clientAddress: string | undefined;
@@ -286,8 +286,8 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
             new Uint8Array(this.latestHandshakePayload),
 
             // callback to write data to characteristic C2
-            async (data: Uint8Array) => {
-                updateValueCallback(Buffer.from(data.buffer));
+            async (data: Bytes) => {
+                updateValueCallback(Buffer.from(Bytes.of(data)));
                 const { promise, resolver } = createPromise<void>();
                 this.writeConformationResolver = resolver;
 
@@ -298,7 +298,7 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
             async () => this.close(),
 
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
-            async (data: Uint8Array) => {
+            async (data: Bytes) => {
                 if (this.onMatterMessageListener === undefined) {
                     throw new InternalError(`No listener registered for Matter messages`);
                 }
@@ -331,13 +331,13 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
         }
     }
 
-    async advertise(advertiseData: Uint8Array, additionalAdvertisementData?: Uint8Array, intervalMs = 100) {
+    async advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, intervalMs = 100) {
         process.env["BLENO_ADVERTISING_INTERVAL"] = intervalMs.toString();
 
-        this.advertisingData = Buffer.from(advertiseData.buffer);
+        this.advertisingData = Buffer.from(Bytes.of(advertiseData));
 
         if (additionalAdvertisementData) {
-            this.additionalAdvertisingData = Buffer.from(additionalAdvertisementData.buffer);
+            this.additionalAdvertisingData = Buffer.from(Bytes.of(additionalAdvertisementData));
         } else {
             this.additionalAdvertisingData = Buffer.alloc(0);
         }
@@ -370,7 +370,7 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
         }
     }
 
-    setMatterMessageListener(listener: (socket: Channel<Uint8Array>, data: Uint8Array) => void) {
+    setMatterMessageListener(listener: (socket: Channel<Bytes>, data: Bytes) => void) {
         if (this.onMatterMessageListener !== undefined) {
             throw new InternalError(`onData listener already set`);
         }
@@ -416,20 +416,20 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
         });*/
     }
 
-    // Channel<Uint8Array>
+    // Channel<Bytes>
     /**
      * Send a Matter message to the connected device - need to do BTP assembly first.
      *
      * @param data
      */
-    async send(data: Uint8Array) {
+    async send(data: Bytes) {
         if (this.btpSession === undefined) {
             throw new ChannelNotConnectedError(`Cannot send data, no BTP session initialized`);
         }
         await this.btpSession.sendMatterMessage(data);
     }
 
-    // Channel<Uint8Array>
+    // Channel<Bytes>
     get name() {
         return `${this.type}://${this.clientAddress}`;
     }

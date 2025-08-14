@@ -104,7 +104,7 @@ export class BleScanner implements Scanner {
         this.#finishWaiter(queryKey, resolvePromise);
     }
 
-    #handleDiscoveredDevice(peripheral: Peripheral, manufacturerServiceData: Uint8Array) {
+    #handleDiscoveredDevice(peripheral: Peripheral, manufacturerServiceData: Bytes) {
         const address = peripheral.address;
 
         try {

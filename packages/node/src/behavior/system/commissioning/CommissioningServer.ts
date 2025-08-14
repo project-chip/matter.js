@@ -374,7 +374,7 @@ export namespace CommissioningServer {
         passcode = -1;
         discriminator = -1;
         flowType = CommissioningFlowType.Standard;
-        additionalBleAdvertisementData?: Uint8Array = undefined;
+        additionalBleAdvertisementData?: BufferSource = undefined;
         pairingCodes = {} as PairingCodes;
         mdns?: MdnsAdvertiser.Options;
         ble?: BleAdvertiser.Options;

@@ -28,7 +28,7 @@ export class GroupSession extends SecureSession {
     readonly #id: number;
     readonly #fabric: Fabric;
     readonly #peerNodeId: NodeId;
-    readonly #operationalGroupKey: Uint8Array;
+    readonly #operationalGroupKey: Bytes;
     readonly supportsMRP = false;
     readonly closingAfterExchangeFinished = false; // Group sessions do not close after exchange finished, they are long-lived
 
@@ -40,7 +40,7 @@ export class GroupSession extends SecureSession {
         fabric: Fabric;
         keySetId: number; // The Group Key Set ID that was used to encrypt the incoming group message.
         peerNodeId: NodeId; //The Target Group Node Id
-        operationalGroupKey: Uint8Array; // The Operational Group Key that was used to encrypt the incoming group message.
+        operationalGroupKey: Bytes; // The Operational Group Key that was used to encrypt the incoming group message.
     }) {
         const { manager, fabric, operationalGroupKey, id, peerNodeId, keySetId } = args;
         super({
@@ -103,7 +103,7 @@ export class GroupSession extends SecureSession {
         // Group sessions do not have a specific activity notification, so we do nothing here
     }
 
-    override updateMessageCounter(messageCounter: number, sourceNodeId: NodeId, operationalKey: Uint8Array) {
+    override updateMessageCounter(messageCounter: number, sourceNodeId: NodeId, operationalKey: Bytes) {
         if (sourceNodeId === undefined || operationalKey === undefined) {
             throw new InternalError("Source Node ID is required for GroupSession updateMessageCounter.");
         }
@@ -141,10 +141,10 @@ export class GroupSession extends SecureSession {
     static decode(
         fabrics: FabricManager,
         { header, applicationPayload, messageExtension }: DecodedPacket,
-        aad: Uint8Array,
+        aad: Bytes,
     ): {
         message: DecodedMessage;
-        key: Uint8Array;
+        key: Bytes;
         sessionId: number;
         sourceNodeId: NodeId;
         keySetId: number;
@@ -162,7 +162,7 @@ export class GroupSession extends SecureSession {
         }
         const nonce = Session.generateNonce(header.securityFlags, header.messageId, sourceNodeId);
         const sessionId = header.sessionId;
-        const keys = new Array<{ key: Uint8Array; keySetId: number; fabric: Fabric }>();
+        const keys = new Array<{ key: Bytes; keySetId: number; fabric: Fabric }>();
         for (const fabric of fabrics) {
             const sessions = fabric.groups.sessions.get(sessionId);
             if (sessions?.length) {
@@ -175,7 +175,7 @@ export class GroupSession extends SecureSession {
             throw new MatterFlowError("No key candidate found for group session decryption.");
         }
         let message: DecodedMessage | undefined;
-        let key: Uint8Array | undefined;
+        let key: Bytes | undefined;
         let fabric: Fabric | undefined;
         let keySetId: number | undefined;
         let found = false;

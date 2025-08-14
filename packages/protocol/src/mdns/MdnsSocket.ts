@@ -6,6 +6,7 @@
 
 import {
     BasicObservable,
+    Bytes,
     Diagnostic,
     DnsCodec,
     DnsMessage,
@@ -83,13 +84,13 @@ export class MdnsSocket {
 
         // Note - for size calculations we assume queries are relatively small.  We only split answers across messages
         let encodedChunkWithoutAnswers = DnsCodec.encode(chunk);
-        let chunkSize = encodedChunkWithoutAnswers.length;
+        let chunkSize = encodedChunkWithoutAnswers.byteLength;
 
         // Add answers, splitting message as necessary
         for (const answer of message.answers ?? []) {
             const answerEncoded = DnsCodec.encodeRecord(answer);
 
-            if (chunkSize + answerEncoded.length > MAX_MDNS_MESSAGE_SIZE) {
+            if (chunkSize + answerEncoded.byteLength > MAX_MDNS_MESSAGE_SIZE) {
                 if (chunk.answers.length === 0) {
                     // The first answer is already too big, log at least a warning
                     logger.warn(
@@ -108,9 +109,9 @@ export class MdnsSocket {
                     encodedChunkWithoutAnswers = DnsCodec.encode(chunk);
                 }
                 chunk.answers.length = 0;
-                chunkSize = encodedChunkWithoutAnswers.length + answerEncoded.length;
+                chunkSize = encodedChunkWithoutAnswers.byteLength + answerEncoded.byteLength;
             } else {
-                chunkSize += answerEncoded.length;
+                chunkSize += answerEncoded.byteLength;
             }
 
             chunk.answers.push(answerEncoded);
@@ -120,7 +121,7 @@ export class MdnsSocket {
         const additionalRecords = message.additionalRecords ?? [];
         for (const additionalRecord of additionalRecords) {
             const additionalRecordEncoded = DnsCodec.encodeRecord(additionalRecord);
-            chunkSize += additionalRecordEncoded.length;
+            chunkSize += additionalRecordEncoded.byteLength;
             if (chunkSize > MAX_MDNS_MESSAGE_SIZE) {
                 break;
             }
@@ -142,7 +143,7 @@ export class MdnsSocket {
         }
     }
 
-    #handleMessage(bytes: Uint8Array, sourceIp: string, sourceIntf: string) {
+    #handleMessage(bytes: Bytes, sourceIp: string, sourceIntf: string) {
         // Ignore if closed
         if (this.#isClosed) {
             return;

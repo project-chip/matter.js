@@ -68,7 +68,7 @@ export class StorageBackendAsyncStorage extends Storage {
         throw new StorageError("Streams not supported currently in AsyncStorage backend.");
     }
 
-    async writeBlobFromStream(_contexts: string[], _key: string, _stream: ReadableStream<Uint8Array>): Promise<void> {
+    async writeBlobFromStream(_contexts: string[], _key: string, _stream: ReadableStream<BufferSource>): Promise<void> {
         throw new StorageError("Streams not supported currently in AsyncStorage backend.");
     }
 

@@ -5,7 +5,7 @@
  */
 
 import { NotADirectoryError, NotFoundError } from "#errors.js";
-import { decamelize, MaybePromise } from "#general";
+import { Bytes, decamelize, MaybePromise } from "#general";
 import { Stat } from "#stat.js";
 
 /**
@@ -53,7 +53,7 @@ export function Location(basename: string, definition: unknown, stat: Stat, pare
                 tag = `${definition[Symbol.toStringTag]}`;
             } else if (Array.isArray(definition)) {
                 tag = "array";
-            } else if (ArrayBuffer.isView(definition)) {
+            } else if (Bytes.isBytes(definition)) {
                 tag = "bytes";
             } else if (definition.constructor.name !== "Object") {
                 tag = definition.constructor.name;

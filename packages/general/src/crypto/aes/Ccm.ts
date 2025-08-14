@@ -14,6 +14,7 @@
 
 import { CRYPTO_AEAD_MIC_LENGTH_BYTES, CRYPTO_AEAD_NONCE_LENGTH_BYTES } from "#crypto/CryptoConstants.js";
 import { CryptoInputError } from "#crypto/CryptoError.js";
+import { Bytes } from "#util/Bytes.js";
 import { Aes } from "./Aes.js";
 import { WordArray } from "./WordArray.js";
 
@@ -57,11 +58,11 @@ import { WordArray } from "./WordArray.js";
  * * We use {@link DataView} to read/write words where possible.  However, byte buffers may not align to word
  *   boundaries.  We detect this case and manually read/write the last word
  */
-export function Ccm(key: Uint8Array) {
+export function Ccm(key: Bytes) {
     const aes = Aes(key);
 
     return {
-        encrypt(input: Ccm.EncryptInput): Uint8Array {
+        encrypt(input: Ccm.EncryptInput): Bytes {
             validateNonceAndAdata(input);
 
             const ptLength = input.pt.length;
@@ -91,7 +92,7 @@ export function Ccm(key: Uint8Array) {
             return ct;
         },
 
-        decrypt(input: Ccm.DecryptInput): Uint8Array {
+        decrypt(input: Ccm.DecryptInput): Bytes {
             validateNonceAndAdata(input);
 
             if (input.ct.length > MAX_CIPHERTEXT_LENGTH) {

@@ -18,7 +18,7 @@ const validateStorageTestVector: TestVector = {
     "store and retrieve number": { key: "numberKey", input: 1234 },
     "store and retrieve boolean": { key: "booleanKey", input: true },
     "store and retrieve bigint": { key: "bigintKey", input: BigInt(123456789) },
-    "store and retrieve ByteArray": { key: "ByteArrayKey", input: Bytes.fromHex("010203040506070809") },
+    "store and retrieve ByteArray": { key: "ByteArrayKey", input: Bytes.of(Bytes.fromHex("010203040506070809")) },
     "store and retrieve array of string": { key: "stringArrayKey", input: ["1", "2", "3"] },
     "store and retrieve object": { key: "stringArrayKey", input: { key1: "value1", key2: 2 } },
 };
@@ -269,7 +269,7 @@ describe("StorageContext", () => {
 
         it("should write and read a blob", async () => {
             const data = new Uint8Array([1, 2, 3, 4]);
-            const stream = new ReadableStream<Uint8Array>({
+            const stream = new ReadableStream<BufferSource>({
                 start(controller) {
                     controller.enqueue(data);
                     controller.close();
@@ -280,7 +280,7 @@ describe("StorageContext", () => {
 
             const blob = await blobContext.openBlob(KEY);
             const reader = blob.stream().getReader();
-            const chunks: Uint8Array[] = [];
+            const chunks: BufferSource[] = [];
             while (true) {
                 const { value, done } = await reader.read();
                 if (done) break;

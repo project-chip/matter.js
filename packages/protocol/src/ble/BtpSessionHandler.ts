@@ -26,7 +26,7 @@ const logger = Logger.get("BtpSessionHandler");
 
 export class BtpSessionHandler {
     private currentIncomingSegmentedMsgLength: number | undefined;
-    private currentIncomingSegmentedPayload: Uint8Array | undefined;
+    private currentIncomingSegmentedPayload: Bytes | undefined;
     private prevIncomingSequenceNumber = 255; // Incoming Sequence Number received. Set to 255 to start at 0
     private prevIncomingAckNumber = -1; // Previous ackNumber received
     private readonly ackReceiveTimer = Time.getTimer("BTP ack timeout", BTP_ACK_TIMEOUT_MS, () =>
@@ -49,10 +49,10 @@ export class BtpSessionHandler {
     /** Factory method to create a new BTPSessionHandler from a received handshake request */
     static async createFromHandshakeRequest(
         maxDataSize: number | undefined,
-        handshakeRequestPayload: Uint8Array,
-        writeBleCallback: (data: Uint8Array) => Promise<void>,
+        handshakeRequestPayload: Bytes,
+        writeBleCallback: (data: Bytes) => Promise<void>,
         disconnectBleCallback: () => Promise<void>,
-        handleMatterMessagePayload: (data: Uint8Array) => Promise<void>,
+        handleMatterMessagePayload: (data: Bytes) => Promise<void>,
     ): Promise<BtpSessionHandler> {
         // Decode handshake request
         const handshakeRequest = BtpCodec.decodeBtpHandshakeRequest(handshakeRequestPayload);
@@ -117,10 +117,10 @@ export class BtpSessionHandler {
     }
 
     static async createAsCentral(
-        handshakeResponsePayload: Uint8Array,
-        writeBleCallback: (data: Uint8Array) => Promise<void>,
+        handshakeResponsePayload: Bytes,
+        writeBleCallback: (data: Bytes) => Promise<void>,
         disconnectBleCallback: () => Promise<void>,
-        handleMatterMessagePayload: (data: Uint8Array) => Promise<void>,
+        handleMatterMessagePayload: (data: Bytes) => Promise<void>,
     ) {
         const handshakeRequest = BtpCodec.decodeBtpHandshakeResponsePayload(handshakeResponsePayload);
 
@@ -156,9 +156,9 @@ export class BtpSessionHandler {
         btpVersion: number,
         private readonly fragmentSize: number,
         private readonly clientWindowSize: number,
-        private readonly writeBleCallback: (data: Uint8Array) => Promise<void>,
+        private readonly writeBleCallback: (data: Bytes) => Promise<void>,
         private readonly disconnectBleCallback: () => Promise<void>,
-        private readonly handleMatterMessagePayload: (data: Uint8Array) => Promise<void>,
+        private readonly handleMatterMessagePayload: (data: Bytes) => Promise<void>,
     ) {
         if (btpVersion !== 4) {
             throw new BtpProtocolError(`Unsupported BTP version ${btpVersion}`);
@@ -179,21 +179,21 @@ export class BtpSessionHandler {
      *
      * @param data ByteArray containing the data
      */
-    public async handleIncomingBleData(data: Uint8Array) {
+    public async handleIncomingBleData(data: Bytes) {
         if (!this.isActive) {
             logger.debug(`BTP session is not active, ignoring incoming BLE data`);
             return;
         }
         try {
-            if (data.length > this.fragmentSize) {
+            if (data.byteLength > this.fragmentSize) {
                 // Apple seems to interpret the ATT_MTU as the maximum size of a single ATT packet
-                if (data.length > this.fragmentSize + 3) {
+                if (data.byteLength > this.fragmentSize + 3) {
                     throw new BtpProtocolError(
-                        `Received data ${data.length} bytes exceeds fragment size of ${this.fragmentSize} bytes`,
+                        `Received data ${data.byteLength} bytes exceeds fragment size of ${this.fragmentSize} bytes`,
                     );
                 } else {
                     logger.warn(
-                        `Received data ${data.length} bytes exceeds fragment size of ${this.fragmentSize} bytes, still accepting`,
+                        `Received data ${data.byteLength} bytes exceeds fragment size of ${this.fragmentSize} bytes, still accepting`,
                     );
                 }
             }
@@ -214,7 +214,7 @@ export class BtpSessionHandler {
             if (isHandshakeRequest || hasManagementOpcode) {
                 throw new BtpProtocolError("BTP packet must not be a handshake request or have a management opcode.");
             }
-            if (segmentPayload.length === 0 && !hasAckNumber) {
+            if (segmentPayload.byteLength === 0 && !hasAckNumber) {
                 throw new BtpProtocolError("BTP packet must have a segment payload or an ack number.");
             }
 
@@ -261,7 +261,7 @@ export class BtpSessionHandler {
                 if (this.currentIncomingSegmentedPayload === undefined) {
                     throw new BtpProtocolError(`BTP Continuing or ending packet received without beginning packet.`);
                 }
-                if (segmentPayload.length === 0) {
+                if (segmentPayload.byteLength === 0) {
                     throw new BtpProtocolError(`BTP Continuing or ending packet received without payload.`);
                 }
                 this.currentIncomingSegmentedPayload = Bytes.concat(
@@ -277,9 +277,9 @@ export class BtpSessionHandler {
                 ) {
                     throw new BtpProtocolError("BTP beginning packet missing but ending packet received.");
                 }
-                if (this.currentIncomingSegmentedPayload.length !== this.currentIncomingSegmentedMsgLength) {
+                if (this.currentIncomingSegmentedPayload.byteLength !== this.currentIncomingSegmentedMsgLength) {
                     throw new BtpProtocolError(
-                        `BTP packet payload length does not match message length: ${this.currentIncomingSegmentedPayload.length} !== ${this.currentIncomingSegmentedMsgLength}`,
+                        `BTP packet payload length does not match message length: ${this.currentIncomingSegmentedPayload.byteLength} !== ${this.currentIncomingSegmentedMsgLength}`,
                     );
                 }
 
@@ -306,13 +306,13 @@ export class BtpSessionHandler {
      *
      * @param data ByteArray containing the Matter message
      */
-    public async sendMatterMessage(data: Uint8Array) {
+    public async sendMatterMessage(data: Bytes) {
         if (!this.isActive) {
             throw new BtpFlowError("BTP session is not active");
         }
         logger.debug(`Got Matter message to send via BLE transport: ${Bytes.toHex(data)}`);
 
-        if (data.length === 0) {
+        if (data.byteLength === 0) {
             throw new BtpFlowError("BTP packet must not be empty");
         }
         const dataReader = new DataReader(data, Endian.Little);

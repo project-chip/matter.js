@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, serialize, UnexpectedDataError } from "#general";
+import { Bytes, ImplementationError, serialize, UnexpectedDataError } from "#general";
 import { ValidationDatatypeMismatchError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
@@ -36,7 +36,8 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     }
 
     override encodeTlvInternal(writer: TlvWriter, value: TlvToPrimitive[T], tag?: TlvTag): void {
-        const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length) };
+        const length = typeof value === "string" ? value.length : value.byteLength;
+        const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(length) };
         writer.writeTag(typeLength, tag);
         writer.writePrimitive(typeLength, value);
     }
@@ -49,15 +50,16 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     override validate(value: TlvToPrimitive[T]): void {
         if (this.type === TlvType.Utf8String && typeof value !== "string")
             throw new ValidationDatatypeMismatchError(`Expected string, got ${typeof value}.`);
-        if (this.type === TlvType.ByteString && !(value instanceof Uint8Array))
-            throw new ValidationDatatypeMismatchError(`Expected Uint8Array, got ${typeof value}.`);
-        if (value.length > this.maxLength)
+        if (this.type === TlvType.ByteString && !Bytes.isBytes(value))
+            throw new ValidationDatatypeMismatchError(`Expected bytes, got ${typeof value}.`);
+        const length = typeof value === "string" ? value.length : value.byteLength;
+        if (length > this.maxLength)
             throw new ValidationOutOfBoundsError(
-                `String ${serialize(value)} is too long: ${value.length}, max ${this.maxLength}.`,
+                `String ${serialize(value)} is too long: ${length}, max ${this.maxLength}.`,
             );
-        if (value.length < this.minLength)
+        if (length < this.minLength)
             throw new ValidationOutOfBoundsError(
-                `String ${serialize(value)} is too short: ${value.length}, min ${this.minLength}.`,
+                `String ${serialize(value)} is too short: ${length}, min ${this.minLength}.`,
             );
     }
 

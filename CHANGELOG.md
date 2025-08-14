@@ -11,6 +11,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ### __WORK IN PROGRESS__
 -   Breaking: matter.js now requires node.js 20+
+-   Breaking: Because of the upgrade to TypeScript 5.9 all usages of Uint8Array were changed to use a more convenient own type alias Bytes
 
 -   @matter/general
     - Breaking: SyncStorage interface got removed
@@ -25,6 +26,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: MDNS broadcasts more aggressively until a connection is established
     - Enhancement: MDNS and BLE advertising schedules are now configurable and conform to Matter and DNS-SD specifications
     - Enhancement: MDNS client and server efficiency is improved with a shared socket and message parser
+
+-   @matter/node
+    - Fix: (rsulzenbacher) Adjusted OnOffServer default implementation for offWaitTime to be fully compliant to 1.4.1 spec
 
 -   @matter/nodejs
     - Enhancement: Uses "stat" to determine storage file existence instead of reading all content

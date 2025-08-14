@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "#util/Bytes.js";
 import { deepCopy } from "#util/DeepCopy.js";
 import { CloneableStorage, Storage, StorageError } from "./Storage.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
@@ -68,13 +69,13 @@ export class StorageBackendMemory extends Storage implements CloneableStorage {
         if (value === undefined) {
             return new Blob([]);
         }
-        if (!(value instanceof Uint8Array)) {
-            throw new StorageError("Value must be an Uint8Array to read as blob stream.");
+        if (!Bytes.isBytes(value)) {
+            throw new StorageError("Value must be a BufferSource to read as blob stream.");
         }
-        return new Blob([value]);
+        return new Blob([Bytes.exclusive(value)]);
     }
 
-    async writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<Uint8Array>): Promise<void> {
+    async writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<BufferSource>): Promise<void> {
         this.#assertInitialized();
         const reader = stream.getReader();
         const chunks: Uint8Array[] = [];
@@ -84,8 +85,9 @@ export class StorageBackendMemory extends Storage implements CloneableStorage {
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
-                chunks.push(value);
-                length += value.length;
+                const data = Bytes.of(value);
+                chunks.push(data);
+                length += data.length;
             }
             const combined = new Uint8Array(length);
             let offset = 0;

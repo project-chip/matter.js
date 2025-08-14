@@ -13,8 +13,8 @@ export class DataReader<E extends Endian = Endian.Big> {
     readonly #buffer: Uint8Array;
     #offset = 0;
 
-    constructor(buffer: Uint8Array, endian?: E) {
-        this.#buffer = buffer;
+    constructor(buffer: Bytes, endian?: E) {
+        this.#buffer = Bytes.of(buffer);
         this.#dataView = Bytes.dataViewOf(this.#buffer);
         this.#littleEndian = endian === Endian.Little;
     }
