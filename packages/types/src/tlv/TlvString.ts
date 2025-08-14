@@ -50,8 +50,8 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     override validate(value: TlvToPrimitive[T]): void {
         if (this.type === TlvType.Utf8String && typeof value !== "string")
             throw new ValidationDatatypeMismatchError(`Expected string, got ${typeof value}.`);
-        if (this.type === TlvType.ByteString && !Bytes.isBufferSource(value))
-            throw new ValidationDatatypeMismatchError(`Expected BufferSource, got ${typeof value}.`);
+        if (this.type === TlvType.ByteString && !Bytes.isBytes(value))
+            throw new ValidationDatatypeMismatchError(`Expected bytes, got ${typeof value}.`);
         const length = typeof value === "string" ? value.length : value.byteLength;
         if (length > this.maxLength)
             throw new ValidationOutOfBoundsError(

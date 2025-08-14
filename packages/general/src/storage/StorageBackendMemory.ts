@@ -69,16 +69,16 @@ export class StorageBackendMemory extends Storage implements CloneableStorage {
         if (value === undefined) {
             return new Blob([]);
         }
-        if (!Bytes.isBufferSource(value)) {
+        if (!Bytes.isBytes(value)) {
             throw new StorageError("Value must be a BufferSource to read as blob stream.");
         }
-        return new Blob([Bytes.of(value)]);
+        return new Blob([Bytes.exclusive(value)]);
     }
 
     async writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<BufferSource>): Promise<void> {
         this.#assertInitialized();
         const reader = stream.getReader();
-        const chunks: Uint8Array<ArrayBuffer>[] = [];
+        const chunks: Uint8Array[] = [];
 
         try {
             let length = 0;

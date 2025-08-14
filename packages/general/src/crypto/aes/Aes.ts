@@ -18,7 +18,7 @@ import { WordArray } from "./WordArray.js";
  *
  * WARNING: Unaudited.  Consider platform replacement if available.
  */
-export function Aes(key: BufferSource) {
+export function Aes(key: Bytes) {
     const { encryptKey, decryptKey } = expandKey(key);
 
     return {
@@ -165,7 +165,7 @@ function crypt(input: WordArray, output: WordArray, roundKeys: WordArray, tabs: 
  *
  * This generates keys for each round based off of the input key.
  */
-function expandKey(keyData: BufferSource) {
+function expandKey(keyData: Bytes) {
     const key = Bytes.of(keyData);
     const inputLength = key.length / 4,
         roundsNeeded = inputLength + 7,

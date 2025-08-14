@@ -7,6 +7,7 @@
 import { Message, MessageCodec, PacketHeader, SessionType } from "#codec/MessageCodec.js";
 import {
     AsyncObservable,
+    Bytes,
     createPromise,
     CRYPTO_AEAD_MIC_LENGTH_BYTES,
     DataReadQueue,
@@ -344,7 +345,7 @@ export class MessageExchange {
         await this.#messagesQueue.write(message);
     }
 
-    async send(messageType: number, payload: BufferSource, options?: ExchangeSendOptions) {
+    async send(messageType: number, payload: Bytes, options?: ExchangeSendOptions) {
         if (options?.requiresAck && !this.channel.usesMrp) {
             options.requiresAck = false;
         }

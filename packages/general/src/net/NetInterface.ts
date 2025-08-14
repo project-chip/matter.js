@@ -6,6 +6,7 @@
 
 import { Environment } from "#environment/Environment.js";
 import { Environmental } from "#environment/Environmental.js";
+import { Bytes } from "#util/Bytes.js";
 import { Channel } from "./Channel.js";
 import { ServerAddress } from "./ServerAddress.js";
 import { TransportInterface, TransportInterfaceSet } from "./TransportInterface.js";
@@ -14,7 +15,7 @@ import { TransportInterface, TransportInterfaceSet } from "./TransportInterface.
  * A Network interface enhances a TransportInterface with the ability to open a channel to a remote server.
  */
 export interface NetInterface extends TransportInterface {
-    openChannel(address: ServerAddress): Promise<Channel<BufferSource>>;
+    openChannel(address: ServerAddress): Promise<Channel<Bytes>>;
 }
 
 export function isNetworkInterface(obj: TransportInterface | NetInterface): obj is NetInterface {

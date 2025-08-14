@@ -47,14 +47,14 @@ export function ipv6ToBytes(ip: string) {
     return Uint8Array.from(Array.from(ipv6ToArray(ip)).flatMap(value => [value >> 8, value & 0xff]));
 }
 
-export function ipv4BytesToString(bytes: Uint8Array<ArrayBuffer>): string {
+export function ipv4BytesToString(bytes: Uint8Array): string {
     if (bytes.length !== 4) {
         throw new UnexpectedDataError("IPv4 address must be 4 bytes");
     }
     return bytes.join(".");
 }
 
-export function ipv6BytesToString(bytes: Uint8Array<ArrayBuffer>): string {
+export function ipv6BytesToString(bytes: Uint8Array): string {
     if (bytes.length !== 16) {
         throw new UnexpectedDataError("IPv6 address must be 16 bytes");
     }

@@ -6,6 +6,7 @@
 
 import { ReadResult } from "#action/response/ReadResult.js";
 import {
+    Bytes,
     Diagnostic,
     InternalError,
     Logger,
@@ -98,7 +99,7 @@ const DATA_REPORT_MIN_AVAILABLE_BYTES_BEFORE_SENDING = 40;
 class InteractionMessenger {
     constructor(protected exchange: MessageExchange) {}
 
-    send(messageType: number, payload: BufferSource, options?: ExchangeSendOptions) {
+    send(messageType: number, payload: Bytes, options?: ExchangeSendOptions) {
         return this.exchange.send(messageType, payload, options);
     }
 
@@ -915,7 +916,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     }
 
     /** Implements a send method with an automatic reconnection mechanism */
-    override async send(messageType: number, payload: BufferSource, options?: ExchangeSendOptions) {
+    override async send(messageType: number, payload: Bytes, options?: ExchangeSendOptions) {
         try {
             if (this.exchange.channel.closed) {
                 throw new ChannelNotConnectedError("The exchange channel is closed. Please connect the device first.");

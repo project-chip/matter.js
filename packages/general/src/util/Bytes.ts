@@ -4,12 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError } from "../MatterError.js";
+import { ImplementationError, UnexpectedDataError } from "../MatterError.js";
 
 export enum Endian {
     Little,
     Big,
 }
+
+/**
+ * A standard JS source of bytes.
+ *
+ * This alias mainly exists because "AllowedSharedBufferSource" is an annoying name.
+ */
+export type Bytes = AllowSharedBufferSource;
 
 /**
  * A string tag for hex literals.
@@ -34,7 +41,7 @@ export function b$(strings: TemplateStringsArray, ...values: unknown[]) {
  * Utility functions for manipulating Uint8Array.
  */
 export namespace Bytes {
-    export function toHex(array: BufferSource) {
+    export function toHex(array: Bytes) {
         const hexArray = new Array<string>();
         const data = Bytes.of(array);
         hexArray.length = data.length;
@@ -42,42 +49,62 @@ export namespace Bytes {
         return hexArray.join("");
     }
 
-    export function toBase64(array: BufferSource) {
+    export function toBase64(array: Bytes) {
         let result = "";
         const data = Bytes.of(array);
         data.forEach(byte => (result += String.fromCharCode(byte)));
         return btoa(result);
     }
 
-    export function dataViewOf(array: BufferSource) {
+    export function dataViewOf(array: Bytes) {
         const data = Bytes.of(array);
         return new DataView(data.buffer, data.byteOffset, data.byteLength);
     }
 
-    export function areEqual(array1: BufferSource, array2: BufferSource) {
+    export function areEqual(array1: Bytes, array2: Bytes) {
         if (array1.byteLength !== array2.byteLength) return false;
         const data1 = Bytes.of(array1);
         const data2 = Bytes.of(array2);
         return data1.every((value, index) => data2[index] === value);
     }
 
-    export function of(source: BufferSource | Uint8Array): Uint8Array<ArrayBuffer> {
+    /**
+     * Obtain a {@link Uint8Array} for {@link Bytes}.
+     */
+    export function of(source: Bytes) {
         if (source instanceof Uint8Array) {
-            return source as Uint8Array<ArrayBuffer>;
+            return source;
         }
 
         if (ArrayBuffer.isView(source)) {
-            return new Uint8Array<ArrayBuffer>(source.buffer, source.byteLength, source.byteOffset);
+            return new Uint8Array(source.buffer, source.byteLength, source.byteOffset);
         }
 
-        return new Uint8Array<ArrayBuffer>(source);
+        return new Uint8Array(source);
     }
 
-    export function isBufferSource(source: any): source is BufferSource {
-        return source instanceof ArrayBuffer || source instanceof Uint8Array || ArrayBuffer.isView(source);
+    /**
+     * Like {@link of} for the few places where JS differentiates between {@link BufferSource} and
+     * {@link SharedBufferSource}.
+     *
+     * We generally do not deal with shared buffers and this is mostly relevant for security APIs.  So we throw if for
+     * some reason the input sourde is not exclusive.
+     */
+    export function exclusive(source: Bytes) {
+        const buffer = "buffer" in source ? source.buffer : source;
+
+        if (buffer[Symbol.toStringTag] !== "ArrayBuffer") {
+            throw new ImplementationError("A shared buffer source is not allowed here");
+        }
+
+        return source as BufferSource;
     }
 
-    export function fromHex(hexString: string): BufferSource {
+    export function isBytes(source: unknown): source is Bytes {
+        return source instanceof ArrayBuffer || ArrayBuffer.isView(source);
+    }
+
+    export function fromHex(hexString: string): Bytes {
         if (hexString.length === 0) return new Uint8Array(0);
         if (hexString.length % 2 !== 0) throw new UnexpectedDataError("Hex string should have an even length.");
         const bytes = hexString.match(/.{1,2}/g)?.map(byteHex => parseInt(byteHex, 16));
@@ -95,11 +122,11 @@ export namespace Bytes {
         return fromHex(result);
     }
 
-    export function fromString(string: string): BufferSource {
+    export function fromString(string: string): Bytes {
         return new TextEncoder().encode(string);
     }
 
-    export function concat(...arrays: BufferSource[]): BufferSource {
+    export function concat(...arrays: Bytes[]): Bytes {
         let length = 0;
         const data = arrays.map(array => Bytes.of(array));
         data.forEach(array => (length += array.length));
@@ -112,7 +139,7 @@ export namespace Bytes {
         return result;
     }
 
-    export function asBigInt(bytes: BufferSource) {
+    export function asBigInt(bytes: Bytes) {
         const view = Bytes.dataViewOf(bytes);
         let result = 0n;
         const length = view.byteLength;

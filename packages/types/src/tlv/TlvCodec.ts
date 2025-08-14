@@ -71,7 +71,7 @@ export type TlvToPrimitive = {
     [TlvType.Boolean]: never;
     [TlvType.Float]: number;
     [TlvType.Utf8String]: string;
-    [TlvType.ByteString]: BufferSource;
+    [TlvType.ByteString]: Bytes;
     [TlvType.Null]: null;
     [TlvType.Structure]: never;
     [TlvType.Array]: never;

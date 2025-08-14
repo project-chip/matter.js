@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataReader, DataWriter, Endian } from "#general";
+import { Bytes, DataReader, DataWriter, Endian } from "#general";
 import { GeneralStatusCode, Schema, VendorId } from "#types";
 
 export type ProtocolStatusMessage<T> = {
@@ -12,13 +12,10 @@ export type ProtocolStatusMessage<T> = {
     protocolId: number;
     vendorId: VendorId;
     protocolStatus: T;
-    protocolData?: BufferSource;
+    protocolData?: Bytes;
 };
 
-export abstract class ProtocolStatusMessageSchema<T extends ProtocolStatusMessage<any>> extends Schema<
-    T,
-    BufferSource
-> {
+export abstract class ProtocolStatusMessageSchema<T extends ProtocolStatusMessage<any>> extends Schema<T, Bytes> {
     #protocolId: number;
     #vendorId: number;
     #protocolSpecificDataAllowed: boolean;
@@ -35,7 +32,7 @@ export abstract class ProtocolStatusMessageSchema<T extends ProtocolStatusMessag
         this.#protocolSpecificDataAllowed = protocolSpecificDataAllowed;
     }
 
-    override encode(message: Omit<T, "protocolId" | "vendorId">): BufferSource {
+    override encode(message: Omit<T, "protocolId" | "vendorId">): Bytes {
         return super.encode({ ...message, protocolId: this.#protocolId, vendorId: this.#vendorId } as T);
     }
 
@@ -50,7 +47,7 @@ export abstract class ProtocolStatusMessageSchema<T extends ProtocolStatusMessag
         return writer.toByteArray();
     }
 
-    decodeInternal(bytes: BufferSource) {
+    decodeInternal(bytes: Bytes) {
         const reader = new DataReader(bytes, Endian.Little);
         const generalStatus = reader.readUInt16();
         const vendorProtocolId = reader.readUInt32();

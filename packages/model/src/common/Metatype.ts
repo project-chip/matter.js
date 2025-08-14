@@ -245,8 +245,8 @@ export namespace Metatype {
         throw new UnsupportedCastError(`Cannot convert "${value}" to a float`);
     };
 
-    cast.bytes = (value: any): BufferSource | null | undefined => {
-        if (value === undefined || value === null || Bytes.isBufferSource(value)) {
+    cast.bytes = (value: any): Bytes | null | undefined => {
+        if (value === undefined || value === null || Bytes.isBytes(value)) {
             return value;
         }
 

@@ -91,7 +91,7 @@ export class BleScanner implements Scanner {
         this.finishWaiter(queryKey, true);
     }
 
-    private handleDiscoveredDevice(peripheral: Device, manufacturerServiceData: BufferSource) {
+    private handleDiscoveredDevice(peripheral: Device, manufacturerServiceData: Bytes) {
         logger.debug(
             `Discovered device ${peripheral.id} "${peripheral.localName}" ${manufacturerServiceData === undefined ? undefined : Bytes.toHex(manufacturerServiceData)}`,
         );

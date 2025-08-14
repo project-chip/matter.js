@@ -407,7 +407,7 @@ export class LegacyControllerCommandHandler extends CommandHandler {
 
         if (value === null) {
             tlvValue = TlvNullable(TlvBoolean).encodeTlv(value); // Boolean is just a placeholder here
-        } else if (Bytes.isBufferSource(value)) {
+        } else if (Bytes.isBytes(value)) {
             tlvValue = TlvByteString.encodeTlv(value);
         } else {
             switch (typeof value) {

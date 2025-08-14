@@ -305,22 +305,22 @@ export class CaseServer implements ProtocolHandler {
 class Sigma1Context {
     crypto: Crypto;
     messenger: CaseServerMessenger;
-    bytes: BufferSource;
+    bytes: Bytes;
     peerSessionId: number;
-    peerResumptionId?: BufferSource;
-    peerResumeMic?: BufferSource;
-    destinationId: BufferSource;
-    peerRandom: BufferSource;
-    peerEcdhPublicKey: BufferSource;
+    peerResumptionId?: Bytes;
+    peerResumeMic?: Bytes;
+    destinationId: Bytes;
+    peerRandom: Bytes;
+    peerEcdhPublicKey: Bytes;
     peerSessionParams?: TypeFromSchema<typeof TlvSessionParameters>;
     resumptionRecord?: ResumptionRecord;
 
-    #localResumptionId?: BufferSource;
+    #localResumptionId?: Bytes;
 
     constructor(
         crypto: Crypto,
         messenger: CaseServerMessenger,
-        bytes: BufferSource,
+        bytes: Bytes,
         sigma1: TypeFromSchema<typeof TlvCaseSigma1>,
         resumptionRecord?: ResumptionRecord,
     ) {

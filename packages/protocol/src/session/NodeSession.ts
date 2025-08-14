@@ -49,9 +49,9 @@ export class NodeSession extends SecureSession {
     #fabric: Fabric | undefined;
     readonly #peerNodeId: NodeId;
     readonly #peerSessionId: number;
-    readonly #decryptKey: BufferSource;
-    readonly #encryptKey: BufferSource;
-    readonly #attestationKey: BufferSource;
+    readonly #decryptKey: Bytes;
+    readonly #encryptKey: Bytes;
+    readonly #attestationKey: Bytes;
     #caseAuthenticatedTags: CaseAuthenticatedTag[];
     #isClosing = false;
     readonly supportsMRP = true;
@@ -64,8 +64,8 @@ export class NodeSession extends SecureSession {
         fabric: Fabric | undefined;
         peerNodeId: NodeId;
         peerSessionId: number;
-        sharedSecret: BufferSource;
-        salt: BufferSource;
+        sharedSecret: Bytes;
+        salt: Bytes;
         isInitiator: boolean;
         isResumption: boolean;
         peerSessionParameters?: SessionParameterOptions;
@@ -119,9 +119,9 @@ export class NodeSession extends SecureSession {
         fabric: Fabric | undefined;
         peerNodeId: NodeId;
         peerSessionId: number;
-        decryptKey: BufferSource;
-        encryptKey: BufferSource;
-        attestationKey: BufferSource;
+        decryptKey: Bytes;
+        encryptKey: Bytes;
+        attestationKey: Bytes;
         sessionParameters?: SessionParameterOptions;
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
         isInitiator: boolean;
@@ -231,7 +231,7 @@ export class NodeSession extends SecureSession {
         await this.end(true, closeAfterExchangeFinished);
     }
 
-    decode({ header, applicationPayload, messageExtension }: DecodedPacket, aad: BufferSource): DecodedMessage {
+    decode({ header, applicationPayload, messageExtension }: DecodedPacket, aad: Bytes): DecodedMessage {
         if (header.hasMessageExtensions) {
             logger.info(
                 `Message extensions are not supported. Ignoring ${messageExtension ? Bytes.toHex(messageExtension) : undefined}`,
@@ -267,7 +267,7 @@ export class NodeSession extends SecureSession {
         };
     }
 
-    get attestationChallengeKey(): BufferSource {
+    get attestationChallengeKey(): Bytes {
         return this.#attestationKey;
     }
 

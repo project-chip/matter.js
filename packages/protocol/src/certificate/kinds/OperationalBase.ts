@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, Time } from "#general";
+import { Bytes, Logger, Time } from "#general";
 import { X509Base } from "./X509Base.js";
 import { CertificateError, Unsigned } from "./common.js";
 import { X509Certificate } from "./definitions/base.js";
@@ -24,7 +24,7 @@ export abstract class OperationalBase<CT extends X509Certificate> extends X509Ba
     protected abstract validateFields(): void;
 
     /** Encodes the signed certificate into the Matter TLV format. */
-    abstract asSignedTlv(signature: BufferSource): BufferSource;
+    abstract asSignedTlv(signature: Bytes): Bytes;
 
     /**
      * Verifies general requirements a Matter certificate fields must fulfill.

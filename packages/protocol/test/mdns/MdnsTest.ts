@@ -1020,7 +1020,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
             });
 
             it("the client queries the server record if it has not been announced before", async () => {
-                const sentData = new Array<BufferSource>();
+                const sentData = new Array<Bytes>();
                 const listener = scanListener.onData((_netInterface, _peerAddress, _peerPort, data) =>
                     sentData.push(data),
                 );

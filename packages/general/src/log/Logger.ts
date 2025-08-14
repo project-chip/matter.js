@@ -253,7 +253,7 @@ export class Logger {
             if (typeof value === "bigint") {
                 return value.toString();
             }
-            if (Bytes.isBufferSource(value)) {
+            if (Bytes.isBytes(value)) {
                 return Bytes.toHex(value);
             }
             if (value === undefined) {

@@ -133,7 +133,7 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
  * Note: Bleno is only supporting a single connection at a time right now - mainly because it also only can announce
  * one BLE device at a time!
  */
-export class BlenoBleServer extends BleChannel<BufferSource> {
+export class BlenoBleServer extends BleChannel<Bytes> {
     private state = "unknown";
     isAdvertising = false;
     private additionalAdvertisingData: Buffer = Buffer.alloc(0);
@@ -142,7 +142,7 @@ export class BlenoBleServer extends BleChannel<BufferSource> {
     private latestHandshakePayload: Buffer | undefined;
     private btpSession: BtpSessionHandler | undefined;
 
-    private onMatterMessageListener: ((socket: Channel<BufferSource>, data: BufferSource) => void) | undefined;
+    private onMatterMessageListener: ((socket: Channel<Bytes>, data: Bytes) => void) | undefined;
     private writeConformationResolver: ((value: void) => void) | undefined;
 
     public clientAddress: string | undefined;
@@ -286,7 +286,7 @@ export class BlenoBleServer extends BleChannel<BufferSource> {
             new Uint8Array(this.latestHandshakePayload),
 
             // callback to write data to characteristic C2
-            async (data: BufferSource) => {
+            async (data: Bytes) => {
                 updateValueCallback(Buffer.from(Bytes.of(data)));
                 const { promise, resolver } = createPromise<void>();
                 this.writeConformationResolver = resolver;
@@ -298,7 +298,7 @@ export class BlenoBleServer extends BleChannel<BufferSource> {
             async () => this.close(),
 
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
-            async (data: BufferSource) => {
+            async (data: Bytes) => {
                 if (this.onMatterMessageListener === undefined) {
                     throw new InternalError(`No listener registered for Matter messages`);
                 }
@@ -331,7 +331,7 @@ export class BlenoBleServer extends BleChannel<BufferSource> {
         }
     }
 
-    async advertise(advertiseData: BufferSource, additionalAdvertisementData?: BufferSource, intervalMs = 100) {
+    async advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, intervalMs = 100) {
         process.env["BLENO_ADVERTISING_INTERVAL"] = intervalMs.toString();
 
         this.advertisingData = Buffer.from(Bytes.of(advertiseData));
@@ -370,7 +370,7 @@ export class BlenoBleServer extends BleChannel<BufferSource> {
         }
     }
 
-    setMatterMessageListener(listener: (socket: Channel<BufferSource>, data: BufferSource) => void) {
+    setMatterMessageListener(listener: (socket: Channel<Bytes>, data: Bytes) => void) {
         if (this.onMatterMessageListener !== undefined) {
             throw new InternalError(`onData listener already set`);
         }
@@ -416,20 +416,20 @@ export class BlenoBleServer extends BleChannel<BufferSource> {
         });*/
     }
 
-    // Channel<BufferSource>
+    // Channel<Bytes>
     /**
      * Send a Matter message to the connected device - need to do BTP assembly first.
      *
      * @param data
      */
-    async send(data: BufferSource) {
+    async send(data: Bytes) {
         if (this.btpSession === undefined) {
             throw new ChannelNotConnectedError(`Cannot send data, no BTP session initialized`);
         }
         await this.btpSession.sendMatterMessage(data);
     }
 
-    // Channel<BufferSource>
+    // Channel<Bytes>
     get name() {
         return `${this.type}://${this.clientAddress}`;
     }

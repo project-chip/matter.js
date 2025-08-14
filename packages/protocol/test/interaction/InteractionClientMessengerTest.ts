@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "#general";
 import { InteractionClientMessenger, MessageType } from "#interaction/InteractionMessenger.js";
 import { ExchangeProvider } from "#protocol/ExchangeProvider.js";
 import { MessageExchange } from "#protocol/MessageExchange.js";
@@ -21,7 +22,7 @@ import {
 import { Specification } from "@matter/model";
 import { createDummyMessageExchange } from "./interaction-utils.js";
 
-function handleReadRequest(exchange: MessageExchange, messageType: number, payload: BufferSource) {
+function handleReadRequest(exchange: MessageExchange, messageType: number, payload: Bytes) {
     expect(payload.byteLength < exchange.maxPayloadSize).to.be.true;
     expect(messageType).to.equal(MessageType.ReadRequest);
     return {
@@ -39,9 +40,9 @@ function handleReadRequest(exchange: MessageExchange, messageType: number, paylo
 function handleSubscribeRequest(
     exchange: MessageExchange,
     messageType: number,
-    payload: BufferSource,
+    payload: Bytes,
 ): {
-    response?: { payload: BufferSource; messageType: number };
+    response?: { payload: Bytes; messageType: number };
     request?: SubscribeRequest;
     subscriptionFinalized?: boolean;
 } {

@@ -25,12 +25,12 @@ const CRYPTO_W_SIZE_BYTES = CRYPTO_GROUP_SIZE_BYTES + 8;
 
 export interface PbkdfParameters {
     iterations: number;
-    salt: BufferSource;
+    salt: Bytes;
 }
 
 export class Spake2p {
     readonly #crypto: Crypto;
-    readonly #context: BufferSource;
+    readonly #context: Bytes;
     readonly #random: bigint;
     readonly #w0: bigint;
 
@@ -47,33 +47,33 @@ export class Spake2p {
 
     static async computeW0L(crypto: Crypto, pbkdfParameters: PbkdfParameters, pin: number) {
         const { w0, w1 } = await this.computeW0W1(crypto, pbkdfParameters, pin);
-        const L = ProjectivePoint.BASE.multiply(w1).toRawBytes(false) as Uint8Array<ArrayBuffer>;
+        const L = ProjectivePoint.BASE.multiply(w1).toRawBytes(false);
         return { w0, L };
     }
 
-    static create(crypto: Crypto, context: BufferSource, w0: bigint) {
+    static create(crypto: Crypto, context: Bytes, w0: bigint) {
         const random = crypto.randomBigInt(32, P256_CURVE.Fp.ORDER);
         return new Spake2p(crypto, context, random, w0);
     }
 
-    constructor(crypto: Crypto, context: BufferSource, random: bigint, w0: bigint) {
+    constructor(crypto: Crypto, context: Bytes, random: bigint, w0: bigint) {
         this.#crypto = crypto;
         this.#context = context;
         this.#random = random;
         this.#w0 = w0;
     }
 
-    computeX(): BufferSource {
+    computeX(): Bytes {
         const X = ProjectivePoint.BASE.multiply(this.#random).add(M.multiply(this.#w0));
-        return X.toRawBytes(false) as Uint8Array<ArrayBuffer>;
+        return X.toRawBytes(false);
     }
 
-    computeY(): BufferSource {
+    computeY(): Bytes {
         const Y = ProjectivePoint.BASE.multiply(this.#random).add(N.multiply(this.#w0));
-        return Y.toRawBytes(false) as Uint8Array<ArrayBuffer>;
+        return Y.toRawBytes(false);
     }
 
-    async computeSecretAndVerifiersFromY(w1: bigint, X: BufferSource, Y: BufferSource) {
+    async computeSecretAndVerifiersFromY(w1: bigint, X: Bytes, Y: Bytes) {
         const YPoint = ProjectivePoint.fromHex(Bytes.of(Y));
         try {
             YPoint.assertValidity();
@@ -86,7 +86,7 @@ export class Spake2p {
         return this.computeSecretAndVerifiers(X, Y, Bytes.of(Z.toRawBytes(false)), Bytes.of(V.toRawBytes(false)));
     }
 
-    async computeSecretAndVerifiersFromX(L: BufferSource, X: BufferSource, Y: BufferSource) {
+    async computeSecretAndVerifiersFromX(L: Bytes, X: Bytes, Y: Bytes) {
         const XPoint = ProjectivePoint.fromHex(Bytes.of(X));
         const LPoint = ProjectivePoint.fromHex(Bytes.of(L));
         try {
@@ -99,7 +99,7 @@ export class Spake2p {
         return this.computeSecretAndVerifiers(X, Y, Bytes.of(Z.toRawBytes(false)), Bytes.of(V.toRawBytes(false)));
     }
 
-    private async computeSecretAndVerifiers(X: BufferSource, Y: BufferSource, Z: BufferSource, V: BufferSource) {
+    private async computeSecretAndVerifiers(X: Bytes, Y: Bytes, Z: Bytes, V: Bytes) {
         const TT_HASH = Bytes.of(await this.computeTranscriptHash(X, Y, Z, V));
         const Ka = TT_HASH.slice(0, 16);
         const Ke = TT_HASH.slice(16, 32);
@@ -116,7 +116,7 @@ export class Spake2p {
         return { Ke, hAY, hBX };
     }
 
-    private computeTranscriptHash(X: BufferSource, Y: BufferSource, Z: BufferSource, V: BufferSource) {
+    private computeTranscriptHash(X: Bytes, Y: Bytes, Z: Bytes, V: Bytes) {
         const TTwriter = new DataWriter(Endian.Little);
         this.addToContext(TTwriter, this.#context);
         this.addToContext(TTwriter, Bytes.fromString(""));
@@ -127,11 +127,11 @@ export class Spake2p {
         this.addToContext(TTwriter, Y);
         this.addToContext(TTwriter, Z);
         this.addToContext(TTwriter, V);
-        this.addToContext(TTwriter, numberToBytesBE(this.#w0, 32) as Uint8Array<ArrayBuffer>);
+        this.addToContext(TTwriter, numberToBytesBE(this.#w0, 32));
         return this.#crypto.computeSha256(TTwriter.toByteArray());
     }
 
-    private addToContext(TTwriter: DataWriter<Endian.Little>, data: BufferSource) {
+    private addToContext(TTwriter: DataWriter<Endian.Little>, data: Bytes) {
         TTwriter.writeUInt64(data.byteLength);
         TTwriter.writeByteArray(data);
     }

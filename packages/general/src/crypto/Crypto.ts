@@ -50,64 +50,54 @@ export abstract class Crypto {
     /**
      * Encrypt using AES-CCM with constants limited to those required by Matter.
      */
-    abstract encrypt(key: BufferSource, data: BufferSource, nonce: BufferSource, aad?: BufferSource): BufferSource;
+    abstract encrypt(key: Bytes, data: Bytes, nonce: Bytes, aad?: Bytes): Bytes;
 
     /**
      * Decrypt using AES-CCM with constants limited to those required by Matter.
      */
-    abstract decrypt(key: BufferSource, data: BufferSource, nonce: BufferSource, aad?: BufferSource): BufferSource;
+    abstract decrypt(key: Bytes, data: Bytes, nonce: Bytes, aad?: Bytes): Bytes;
 
     /**
      * Create a random buffer from the most cryptographically-appropriate source available.
      */
-    abstract randomBytes(length: number): BufferSource;
+    abstract randomBytes(length: number): Bytes;
 
     /**
      * Compute the SHA-256 hash of a buffer.
      */
-    abstract computeSha256(data: BufferSource | BufferSource[]): MaybePromise<BufferSource>;
+    abstract computeSha256(data: Bytes | Bytes[]): MaybePromise<Bytes>;
 
     /**
      * Create a key from a secret using PBKDF2.
      */
-    abstract createPbkdf2Key(
-        secret: BufferSource,
-        salt: BufferSource,
-        iteration: number,
-        keyLength: number,
-    ): MaybePromise<BufferSource>;
+    abstract createPbkdf2Key(secret: Bytes, salt: Bytes, iteration: number, keyLength: number): MaybePromise<Bytes>;
 
     /**
      * Create a key from a secret using HKDF.
      */
-    abstract createHkdfKey(
-        secret: BufferSource,
-        salt: BufferSource,
-        info: BufferSource,
-        length?: number,
-    ): MaybePromise<BufferSource>;
+    abstract createHkdfKey(secret: Bytes, salt: Bytes, info: Bytes, length?: number): MaybePromise<Bytes>;
 
     /**
      * Create an HMAC signature.
      */
-    abstract signHmac(key: BufferSource, data: BufferSource): MaybePromise<BufferSource>;
+    abstract signHmac(key: Bytes, data: Bytes): MaybePromise<Bytes>;
 
     /**
      * Create an ECDSA signature.
      */
     abstract signEcdsa(
         privateKey: JsonWebKey,
-        data: BufferSource | BufferSource[],
+        data: Bytes | Bytes[],
         dsaEncoding?: CryptoDsaEncoding,
-    ): MaybePromise<BufferSource>;
+    ): MaybePromise<Bytes>;
 
     /**
      * Authenticate an ECDSA signature.
      */
     abstract verifyEcdsa(
         publicKey: JsonWebKey,
-        data: BufferSource,
-        signature: BufferSource,
+        data: Bytes,
+        signature: Bytes,
         dsaEncoding?: CryptoDsaEncoding,
     ): MaybePromise<void>;
 
@@ -119,7 +109,7 @@ export abstract class Crypto {
     /**
      * Compute the shared secret for a Diffie-Hellman exchange.
      */
-    abstract generateDhSecret(key: PrivateKey, peerKey: PublicKey): MaybePromise<BufferSource>;
+    abstract generateDhSecret(key: PrivateKey, peerKey: PublicKey): MaybePromise<Bytes>;
 
     get randomUint8() {
         return Bytes.of(this.randomBytes(1))[0];

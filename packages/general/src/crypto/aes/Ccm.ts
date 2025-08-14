@@ -14,6 +14,7 @@
 
 import { CRYPTO_AEAD_MIC_LENGTH_BYTES, CRYPTO_AEAD_NONCE_LENGTH_BYTES } from "#crypto/CryptoConstants.js";
 import { CryptoInputError } from "#crypto/CryptoError.js";
+import { Bytes } from "#util/Bytes.js";
 import { Aes } from "./Aes.js";
 import { WordArray } from "./WordArray.js";
 
@@ -57,11 +58,11 @@ import { WordArray } from "./WordArray.js";
  * * We use {@link DataView} to read/write words where possible.  However, byte buffers may not align to word
  *   boundaries.  We detect this case and manually read/write the last word
  */
-export function Ccm(key: BufferSource) {
+export function Ccm(key: Bytes) {
     const aes = Aes(key);
 
     return {
-        encrypt(input: Ccm.EncryptInput): BufferSource {
+        encrypt(input: Ccm.EncryptInput): Bytes {
             validateNonceAndAdata(input);
 
             const ptLength = input.pt.length;
@@ -91,7 +92,7 @@ export function Ccm(key: BufferSource) {
             return ct;
         },
 
-        decrypt(input: Ccm.DecryptInput): BufferSource {
+        decrypt(input: Ccm.DecryptInput): Bytes {
             validateNonceAndAdata(input);
 
             if (input.ct.length > MAX_CIPHERTEXT_LENGTH) {
@@ -252,22 +253,22 @@ export function Ccm(key: BufferSource) {
 
 export namespace Ccm {
     export interface Input {
-        nonce: Uint8Array<ArrayBuffer>;
-        adata: Uint8Array<ArrayBuffer> | undefined; // Do not use ? to ensure object shape remains stable
+        nonce: Uint8Array;
+        adata: Uint8Array | undefined; // Do not use ? to ensure object shape remains stable
     }
 
     export interface EncryptInput extends Input {
         /**
          * Plaintext
          */
-        pt: Uint8Array<ArrayBuffer>;
+        pt: Uint8Array;
     }
 
     export interface DecryptInput extends Input {
         /**
          * Ciphertext + tag
          */
-        ct: Uint8Array<ArrayBuffer>;
+        ct: Uint8Array;
     }
 }
 
@@ -282,7 +283,7 @@ export const MAX_PLAINTEXT_LENGTH = MAX_CIPHERTEXT_LENGTH - CRYPTO_AEAD_MIC_LENG
  */
 class SingletonBuffer {
     #words?: Int32Array;
-    #bytes?: Uint8Array<ArrayBuffer>;
+    #bytes?: Uint8Array;
     #view?: DataView;
 
     get words() {
@@ -294,7 +295,7 @@ class SingletonBuffer {
 
     get bytes() {
         if (this.#bytes === undefined) {
-            this.#bytes = new Uint8Array(this.words.buffer) as Uint8Array<ArrayBuffer>;
+            this.#bytes = new Uint8Array(this.words.buffer);
         }
         return this.#bytes;
     }

@@ -147,7 +147,7 @@ export class ExchangeManager {
         this.#exchanges.clear();
     }
 
-    private async onMessage(channel: Channel<BufferSource>, messageBytes: BufferSource) {
+    private async onMessage(channel: Channel<Bytes>, messageBytes: Bytes) {
         const packet = MessageCodec.decodePacket(messageBytes);
         const bytes = Bytes.of(messageBytes);
         const aad = bytes.slice(0, bytes.length - packet.applicationPayload.byteLength); // Header+Extensions
@@ -195,7 +195,7 @@ export class ExchangeManager {
                 throw new UnexpectedDataError("Group session message must include a source NodeId");
             }
 
-            let key: BufferSource;
+            let key: Bytes;
             ({ session, message, key } = this.#sessionManager.groupSessionFromPacket(packet, aad));
 
             try {

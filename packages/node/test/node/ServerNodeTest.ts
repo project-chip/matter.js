@@ -17,6 +17,7 @@ import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointBehaviorsError, EndpointPartsError } from "#endpoint/errors.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import {
+    Bytes,
     CrashedDependenciesError,
     Crypto,
     DnsCodec,
@@ -158,7 +159,7 @@ describe("ServerNode", () => {
         });
         scannerChannel.addMembership("ff02::fb");
 
-        const advertisementReceived = new Promise<BufferSource>(resolve =>
+        const advertisementReceived = new Promise<Bytes>(resolve =>
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolve(data)),
         );
 
@@ -204,7 +205,7 @@ describe("ServerNode", () => {
         expect(additional(DnsRecordType.A)).equals("10.10.10.128");
         expect(additional(DnsRecordType.SRV)?.port).equals(operationalPort);
 
-        const expirationReceived = new Promise<BufferSource>(resolve =>
+        const expirationReceived = new Promise<Bytes>(resolve =>
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolve(data)),
         );
 

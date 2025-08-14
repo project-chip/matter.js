@@ -139,7 +139,7 @@ export function serialize(value: any) {
         if (typeof value === "boolean") {
             return value ? "true" : "false";
         }
-        if (Bytes.isBufferSource(value)) {
+        if (Bytes.isBytes(value)) {
             return Bytes.toHex(value);
         }
 
@@ -279,7 +279,7 @@ export function serializeToJs(value: unknown) {
         return `new Date(${JSON.stringify(value.toISOString)})`;
     }
 
-    if (Bytes.isBufferSource(value)) {
+    if (Bytes.isBytes(value)) {
         return `b$\`${Bytes.toHex(value)}\``;
     }
 

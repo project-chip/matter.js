@@ -14,7 +14,7 @@ import { Rcac } from "./Rcac.js";
 
 export class Noc extends OperationalBase<OperationalCertificate.Noc> {
     /** Construct the class from a Tlv version of the certificate */
-    static fromTlv(tlv: BufferSource) {
+    static fromTlv(tlv: Bytes) {
         return new Noc(OperationalCertificate.TlvNoc.decode(tlv));
     }
 

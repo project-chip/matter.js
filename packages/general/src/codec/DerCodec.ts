@@ -54,7 +54,7 @@ export const DerObject = (objectId: string, content: any = {}) => ({
     [DerKey.ObjectId]: ObjectId(objectId),
     ...content,
 });
-export const DerBitString = (data: BufferSource, padding = 0) => ({
+export const DerBitString = (data: Bytes, padding = 0) => ({
     [DerKey.TagId]: DerType.BitString as number,
     [DerKey.Bytes]: data,
     [DerKey.BitsPadding]: padding,
@@ -63,7 +63,7 @@ export const ContextTagged = (tagId: number, value?: any) => ({
     [DerKey.TagId]: tagId | DerClass.ContextSpecific | CONSTRUCTED,
     [DerKey.Bytes]: value === undefined ? new Uint8Array(0) : DerCodec.encode(value),
 });
-export const ContextTaggedBytes = (tagId: number, value: BufferSource) => ({
+export const ContextTaggedBytes = (tagId: number, value: Bytes) => ({
     [DerKey.TagId]: tagId | DerClass.ContextSpecific,
     [DerKey.Bytes]: value,
 });
@@ -71,10 +71,10 @@ export const DatatypeOverride = (type: DerType, value: any) => ({
     [DerKey.TypeOverride]: type,
     [DerKey.RawData]: value,
 });
-export const RawBytes = (bytes: BufferSource) => ({
+export const RawBytes = (bytes: Bytes) => ({
     [DerKey.Bytes]: bytes,
 });
-export const DerBigUint = (number: BufferSource) => {
+export const DerBigUint = (number: Bytes) => {
     // We don't need bigint support currently, but we can translate here if we ever do
 
     const numberData = Bytes.of(number);
@@ -92,16 +92,16 @@ export const DerBigUint = (number: BufferSource) => {
 
 export type DerNode = {
     [DerKey.TagId]: number;
-    [DerKey.Bytes]: BufferSource;
+    [DerKey.Bytes]: Bytes;
     [DerKey.Elements]?: DerNode[];
     [DerKey.BitsPadding]?: number;
 };
 
 export class DerCodec {
-    static encode(value: unknown): BufferSource {
+    static encode(value: unknown): Bytes {
         if (Array.isArray(value)) {
             return this.#encodeArray(value);
-        } else if (Bytes.isBufferSource(value)) {
+        } else if (Bytes.isBytes(value)) {
             return this.#encodeOctetString(value);
         } else if (value instanceof Date) {
             return this.#encodeDate(value);
@@ -122,7 +122,7 @@ export class DerCodec {
                 if (bitsPadding !== undefined && typeof bitsPadding !== "number") {
                     throw new DerError("Bits padding is not a numeric byte value");
                 }
-                if (bytes === undefined || !Bytes.isBufferSource(bytes)) {
+                if (bytes === undefined || !Bytes.isBytes(bytes)) {
                     throw new DerError("DER bytes is not a byte array");
                 }
                 return this.#encodeAsn1(
@@ -130,7 +130,7 @@ export class DerCodec {
                     bitsPadding === undefined ? bytes : Bytes.concat(Uint8Array.of(bitsPadding), Bytes.of(bytes)),
                 );
             } else if (value[DerKey.TypeOverride] !== undefined && value[DerKey.RawData] !== undefined) {
-                if (value[DerKey.TypeOverride] === DerType.Integer && Bytes.isBufferSource(value[DerKey.RawData])) {
+                if (value[DerKey.TypeOverride] === DerType.Integer && Bytes.isBytes(value[DerKey.RawData])) {
                     return this.#encodeInteger(value[DerKey.RawData]);
                 } else if (
                     value[DerKey.TypeOverride] === DerType.BitString &&
@@ -152,7 +152,7 @@ export class DerCodec {
                 }
             } else if (
                 value[DerKey.Bytes] !== undefined &&
-                Bytes.isBufferSource(value[DerKey.Bytes]) &&
+                Bytes.isBytes(value[DerKey.Bytes]) &&
                 Object.keys(value).length === 1
             ) {
                 // Raw Data
@@ -167,7 +167,7 @@ export class DerCodec {
         }
     }
 
-    static decode(data: BufferSource): DerNode {
+    static decode(data: Bytes): DerNode {
         return this.#decodeRec(new DataReader(data));
     }
 
@@ -183,7 +183,7 @@ export class DerCodec {
             throw new DerError(`Expected integer but DER tag is ${DerType[value[DerKey.TagId]]}`);
         }
 
-        if (!Bytes.isBufferSource(value[DerKey.Bytes])) {
+        if (!Bytes.isBytes(value[DerKey.Bytes])) {
             throw new DerError("Incorrect DER object type");
         }
         const bytes = Bytes.of(value[DerKey.Bytes]);
@@ -240,12 +240,12 @@ export class DerCodec {
         return this.#encodeAsn1(DerType.Set | CONSTRUCTED, Bytes.concat(...array.map(element => this.encode(element))));
     }
 
-    static #encodeOctetString(value: BufferSource) {
+    static #encodeOctetString(value: Bytes) {
         return this.#encodeAsn1(DerType.OctetString, value);
     }
 
     static #encodeObject(object: any) {
-        const attributes = new Array<BufferSource>();
+        const attributes = new Array<Bytes>();
         for (const key in object) {
             attributes.push(this.encode(object[key]));
         }
@@ -271,8 +271,8 @@ export class DerCodec {
         return this.#encodeAsn1(DerType.IA5String, Bytes.fromString(value));
     }
 
-    static #encodeInteger(value: number | bigint | BufferSource) {
-        const valueBytes = Bytes.isBufferSource(value) ? value : Bytes.fromHex(toHex(value));
+    static #encodeInteger(value: number | bigint | Bytes) {
+        const valueBytes = Bytes.isBytes(value) ? value : Bytes.fromHex(toHex(value));
 
         const byteArray = Bytes.concat(new Uint8Array(1), valueBytes);
         const dataView = Bytes.dataViewOf(byteArray);
@@ -311,7 +311,7 @@ export class DerCodec {
         return byteArray.slice(start);
     }
 
-    static #encodeAsn1(tag: number, data: BufferSource) {
+    static #encodeAsn1(tag: number, data: Bytes) {
         return Bytes.concat(Uint8Array.of(tag), this.#encodeLengthBytes(data.byteLength), data);
     }
 
@@ -330,7 +330,7 @@ export class DerCodec {
         return { [DerKey.TagId]: tag, [DerKey.Bytes]: bytes, [DerKey.Elements]: elements };
     }
 
-    static #decodeAsn1(reader: DataReader): { tag: number; bytes: BufferSource } {
+    static #decodeAsn1(reader: DataReader): { tag: number; bytes: Bytes } {
         const tag = reader.readUInt8();
         let length = reader.readUInt8();
         if ((length & 0x80) !== 0) {

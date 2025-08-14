@@ -53,7 +53,7 @@ export function Location(basename: string, definition: unknown, stat: Stat, pare
                 tag = `${definition[Symbol.toStringTag]}`;
             } else if (Array.isArray(definition)) {
                 tag = "array";
-            } else if (Bytes.isBufferSource(definition)) {
+            } else if (Bytes.isBytes(definition)) {
                 tag = "bytes";
             } else if (definition.constructor.name !== "Object") {
                 tag = definition.constructor.name;

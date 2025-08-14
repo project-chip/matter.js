@@ -15,11 +15,11 @@ export class BluetoothUnsupportedError extends MatterError {}
 
 export class ReactNativeBleClient {
     private readonly bleManager = new BleManager();
-    private readonly discoveredPeripherals = new Map<string, { peripheral: Device; matterServiceData: BufferSource }>();
+    private readonly discoveredPeripherals = new Map<string, { peripheral: Device; matterServiceData: Bytes }>();
     private shouldScan = false;
     private isScanning = false;
     private bleState = BluetoothState.Unknown;
-    private deviceDiscoveredCallback: ((peripheral: Device, manufacturerData: BufferSource) => void) | undefined;
+    private deviceDiscoveredCallback: ((peripheral: Device, manufacturerData: Bytes) => void) | undefined;
 
     constructor() {
         // this.bleManager.setLogLevel(LogLevel.Verbose)
@@ -56,7 +56,7 @@ export class ReactNativeBleClient {
         }, true);
     }
 
-    public setDiscoveryCallback(callback: (peripheral: Device, manufacturerData: BufferSource) => void) {
+    public setDiscoveryCallback(callback: (peripheral: Device, manufacturerData: Bytes) => void) {
         this.deviceDiscoveredCallback = callback;
         for (const { peripheral, matterServiceData } of this.discoveredPeripherals.values()) {
             this.deviceDiscoveredCallback(peripheral, matterServiceData);

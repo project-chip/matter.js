@@ -59,8 +59,8 @@ const DEFAULT_SESSION_PARAMETERS = {
 };
 
 export interface ResumptionRecord {
-    sharedSecret: BufferSource;
-    resumptionId: BufferSource;
+    sharedSecret: Bytes;
+    resumptionId: Bytes;
     fabric: Fabric;
     peerNodeId: NodeId;
     sessionParameters: SessionParameters;
@@ -69,8 +69,8 @@ export interface ResumptionRecord {
 
 type ResumptionStorageRecord = {
     nodeId: NodeId;
-    sharedSecret: BufferSource;
-    resumptionId: BufferSource;
+    sharedSecret: Bytes;
+    resumptionId: Bytes;
     fabricId: FabricId;
     peerNodeId: NodeId;
     sessionParameters: {
@@ -265,8 +265,8 @@ export class SessionManager {
         fabric: Fabric | undefined;
         peerNodeId: NodeId;
         peerSessionId: number;
-        sharedSecret: BufferSource;
-        salt: BufferSource;
+        sharedSecret: Bytes;
+        salt: Bytes;
         isInitiator: boolean;
         isResumption: boolean;
         peerSessionParameters?: SessionParameterOptions;
@@ -470,7 +470,7 @@ export class SessionManager {
      * Creates or Returns the Group session based on an incoming packet.
      * The Session ID is determined by trying to decrypt te packet with possible keys.
      */
-    groupSessionFromPacket(packet: DecodedPacket, aad: BufferSource) {
+    groupSessionFromPacket(packet: DecodedPacket, aad: Bytes) {
         const groupId = packet.header.destGroupId;
         if (groupId === undefined) {
             throw new UnexpectedDataError("Group ID is required for GroupSession fromPacket.");
@@ -516,7 +516,7 @@ export class SessionManager {
         }
     }
 
-    findResumptionRecordById(resumptionId: BufferSource) {
+    findResumptionRecordById(resumptionId: Bytes) {
         this.#construction.assert();
         return [...this.#resumptionRecords.values()].find(record => Bytes.areEqual(record.resumptionId, resumptionId));
     }

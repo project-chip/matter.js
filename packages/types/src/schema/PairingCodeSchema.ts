@@ -77,7 +77,7 @@ export type QrCodeData = TypeFromBitmapSchema<typeof QrCodeDataSchema> & {
      * Variable length TLV data. Zero length if TLV is not included. This data is byte-aligned.
      * All elements SHALL be housed within an anonymous top-level structure container.
      */
-    tlvData?: BufferSource;
+    tlvData?: Bytes;
 };
 
 /**
@@ -144,7 +144,7 @@ class QrPairingCodeSchema extends Schema<QrCodeData[], string> {
      * @param data Encoded TLV data
      * @param schema The schema to use for decoding the TLV data, by default a schema with the QrCodeTlvDataDefaultFields is used
      */
-    decodeTlvData(data: BufferSource, schema: TlvSchema<any> = TlvObject(QrCodeTlvDataDefaultFields)) {
+    decodeTlvData(data: Bytes, schema: TlvSchema<any> = TlvObject(QrCodeTlvDataDefaultFields)) {
         const decoded = schema.decode(data);
         if (decoded.serialNumber !== undefined) {
             if (

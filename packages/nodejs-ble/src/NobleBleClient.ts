@@ -28,14 +28,11 @@ function loadNoble(hciId?: number) {
 }
 
 export class NobleBleClient {
-    private readonly discoveredPeripherals = new Map<
-        string,
-        { peripheral: Peripheral; matterServiceData: BufferSource }
-    >();
+    private readonly discoveredPeripherals = new Map<string, { peripheral: Peripheral; matterServiceData: Bytes }>();
     private shouldScan = false;
     private isScanning = false;
     private nobleState = "unknown";
-    private deviceDiscoveredCallback: ((peripheral: Peripheral, manufacturerData: BufferSource) => void) | undefined;
+    private deviceDiscoveredCallback: ((peripheral: Peripheral, manufacturerData: Bytes) => void) | undefined;
     #closing = false;
 
     constructor(options?: BleOptions) {
@@ -75,7 +72,7 @@ export class NobleBleClient {
         noble.on("scanStop", () => (this.isScanning = false));
     }
 
-    public setDiscoveryCallback(callback: (peripheral: Peripheral, manufacturerData: BufferSource) => void) {
+    public setDiscoveryCallback(callback: (peripheral: Peripheral, manufacturerData: Bytes) => void) {
         this.deviceDiscoveredCallback = callback;
         for (const { peripheral, matterServiceData } of this.discoveredPeripherals.values()) {
             this.deviceDiscoveredCallback(peripheral, matterServiceData);

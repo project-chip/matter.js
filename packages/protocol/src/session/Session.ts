@@ -5,7 +5,7 @@
  */
 
 import { SupportedTransportsBitmap } from "#common/SupportedTransportsBitmap.js";
-import { AsyncObservable, DataWriter, Endian, InternalError, Time } from "#general";
+import { AsyncObservable, Bytes, DataWriter, Endian, InternalError, Time } from "#general";
 import { NodeId, TypeFromPartialBitSchema } from "#types";
 import { DecodedMessage, DecodedPacket, Message, Packet, SessionType } from "../codec/MessageCodec.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -149,7 +149,7 @@ export abstract class Session {
         return this.messageCounter.getIncrementedCounter();
     }
 
-    updateMessageCounter(messageCounter: number, _sourceNodeId?: NodeId, _operationalKey?: BufferSource) {
+    updateMessageCounter(messageCounter: number, _sourceNodeId?: NodeId, _operationalKey?: Bytes) {
         if (this.messageReceptionState === undefined) {
             throw new InternalError("MessageReceptionState is not defined for this session");
         }
@@ -200,7 +200,7 @@ export abstract class Session {
     abstract associatedFabric: Fabric;
     abstract supportsMRP: boolean; // TODO: always false for Group Sessions
 
-    abstract decode(packet: DecodedPacket, aad?: BufferSource): DecodedMessage;
+    abstract decode(packet: DecodedPacket, aad?: Bytes): DecodedMessage;
     abstract encode(message: Message): Packet;
     abstract end(sendClose: boolean): Promise<void>;
     abstract destroy(sendClose?: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;

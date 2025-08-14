@@ -12,7 +12,7 @@ import { toNumber } from "./Number.js";
 export class DataWriter<E extends Endian = Endian.Big> {
     private readonly littleEndian: boolean;
     private length = 0;
-    private readonly chunks = new Array<Uint8Array<ArrayBuffer>>();
+    private readonly chunks = new Array<Uint8Array>();
 
     constructor(endian?: E) {
         this.littleEndian = endian === Endian.Little;
@@ -86,7 +86,7 @@ export class DataWriter<E extends Endian = Endian.Big> {
         this.length += 8;
     }
 
-    writeByteArray(value: BufferSource) {
+    writeByteArray(value: Bytes) {
         this.chunks.push(Bytes.of(value));
         this.length += value.byteLength;
     }

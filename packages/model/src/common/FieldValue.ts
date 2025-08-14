@@ -159,7 +159,7 @@ export namespace FieldValue {
         value: string;
     };
 
-    export function Bytes(value: BufferSource | Uint8Array | string): Bytes {
+    export function Bytes(value: AllowSharedBufferSource | string): Bytes {
         return { type: bytes, value: typeof value === "string" ? value : ByteUtils.toHex(ByteUtils.of(value)) };
     }
 
@@ -416,7 +416,7 @@ export namespace FieldValue {
                 if (FieldValue.is(value, FieldValue.bytes)) {
                     return value;
                 }
-                if (typeof value === "string" || ByteUtils.isBufferSource(value)) {
+                if (typeof value === "string" || ByteUtils.isBytes(value)) {
                     return Bytes(value);
                 }
                 break;

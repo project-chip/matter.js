@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { BitFlag, BitmapSchema, TypeFromPartialBitSchema } from "#types";
+import { Bytes } from "@matter/general";
 
 export const ExtensionKeyUsageBitmap = {
     digitalSignature: BitFlag(0),
@@ -19,7 +20,7 @@ export const ExtensionKeyUsageBitmap = {
 export const ExtensionKeyUsageSchema = BitmapSchema(ExtensionKeyUsageBitmap);
 
 export interface X509Certificate {
-    serialNumber: BufferSource;
+    serialNumber: Bytes;
     signatureAlgorithm: number;
     issuer: {};
     notBefore: number;
@@ -27,7 +28,7 @@ export interface X509Certificate {
     subject: {};
     publicKeyAlgorithm: number;
     ellipticCurveIdentifier: number;
-    ellipticCurvePublicKey: BufferSource;
+    ellipticCurvePublicKey: Bytes;
     extensions: {
         basicConstraints: {
             isCa: boolean;
@@ -35,9 +36,9 @@ export interface X509Certificate {
         };
         keyUsage: TypeFromPartialBitSchema<typeof ExtensionKeyUsageBitmap>;
         extendedKeyUsage?: number[];
-        subjectKeyIdentifier: BufferSource;
-        authorityKeyIdentifier: BufferSource;
-        futureExtension?: BufferSource[];
+        subjectKeyIdentifier: Bytes;
+        authorityKeyIdentifier: Bytes;
+        futureExtension?: Bytes[];
     };
-    signature: BufferSource;
+    signature: Bytes;
 }

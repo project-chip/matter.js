@@ -119,7 +119,7 @@ export namespace Stat {
             typeof definition === "object" &&
             definition !== null &&
             !Array.isArray(definition) &&
-            !Bytes.isBufferSource(definition) &&
+            !Bytes.isBytes(definition) &&
             !(definition instanceof Date) &&
             !(definition.constructor.name === "BasicObservable")
         );

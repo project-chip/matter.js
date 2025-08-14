@@ -44,14 +44,14 @@ export function assertString(value: Val, path: SchemaErrorPath): asserts value i
 }
 
 export function assertBytes(value: Val, path: SchemaErrorPath): asserts value is BufferSource {
-    if (Bytes.isBufferSource(value)) {
+    if (Bytes.isBytes(value)) {
         return;
     }
     throw new DatatypeError(path, "a byte array", value);
 }
 
 export function assertSequence(value: Val, path: SchemaErrorPath): asserts value is string | BufferSource {
-    if (typeof value === "string" || Bytes.isBufferSource(value)) {
+    if (typeof value === "string" || Bytes.isBytes(value)) {
         return;
     }
     throw new DatatypeError(path, "a string or byte array", value);

@@ -6,6 +6,7 @@
 
 import {
     AsyncObservable,
+    Bytes,
     Construction,
     Logger,
     MatterFlowError,
@@ -193,7 +194,7 @@ export abstract class FailsafeContext {
     }
 
     /** Handles adding a trusted root certificate from Operational Credentials cluster. */
-    async setRootCert(rootCert: BufferSource) {
+    async setRootCert(rootCert: Bytes) {
         await this.#builder.setRootCert(rootCert);
         this.#rootCertSet = true;
     }
@@ -202,7 +203,7 @@ export abstract class FailsafeContext {
      * Build a new Fabric object based on an existing fabric for the "UpdateNoc" case of the Operational Credentials
      * cluster.
      */
-    async buildUpdatedFabric(nocValue: BufferSource, icacValue: BufferSource | undefined) {
+    async buildUpdatedFabric(nocValue: Bytes, icacValue: Bytes | undefined) {
         if (this.associatedFabric === undefined) {
             throw new MatterFlowError("No fabric associated with failsafe context, but we prepare an Fabric update.");
         }
@@ -213,10 +214,10 @@ export abstract class FailsafeContext {
 
     /** Build a new Fabric object for a new fabric for the "AddNoc" case of the Operational Credentials cluster. */
     async buildFabric(nocData: {
-        nocValue: BufferSource;
-        icacValue: BufferSource | undefined;
+        nocValue: Bytes;
+        icacValue: Bytes | undefined;
         adminVendorId: VendorId;
-        ipkValue: BufferSource;
+        ipkValue: Bytes;
         caseAdminSubject: NodeId;
     }) {
         const builder = this.#builder;

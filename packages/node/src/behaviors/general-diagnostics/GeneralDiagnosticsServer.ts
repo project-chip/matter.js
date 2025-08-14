@@ -81,7 +81,7 @@ export class GeneralDiagnosticsServer extends Base {
         }
     }
 
-    #validateTestEnabledKey(enableKey: BufferSource) {
+    #validateTestEnabledKey(enableKey: Bytes) {
         const keyData = Bytes.of(enableKey);
         if (keyData.every(byte => byte === 0)) {
             throw new StatusResponseError("Invalid test enable key, all zeros", StatusCode.ConstraintError);
@@ -393,7 +393,7 @@ export namespace GeneralDiagnosticsServer {
         totalOperationalHoursCounter: number = 0;
 
         /** The TestEnableKey set for this device for the test commands. Default means "not enabled"." */
-        deviceTestEnableKey: BufferSource = new Uint8Array(16).fill(0);
+        deviceTestEnableKey: Bytes = new Uint8Array(16).fill(0);
 
         [Val.properties](endpoint: Endpoint, _session: ValueSupervisor.Session) {
             return {

@@ -75,14 +75,14 @@ export class NobleBleCentralInterface implements NetInterface {
     #connectionsInProgress = new Set<ServerAddress>();
     #connectionGuards = new Set<BleConnectionGuard>();
     #openChannels = new Map<ServerAddress, Peripheral>();
-    #onMatterMessageListener: ((socket: Channel<BufferSource>, data: BufferSource) => void) | undefined;
+    #onMatterMessageListener: ((socket: Channel<Bytes>, data: Bytes) => void) | undefined;
     #closed = false;
 
     constructor(bleScanner: BleScanner) {
         this.#bleScanner = bleScanner;
     }
 
-    openChannel(address: ServerAddress, tryCount = 1): Promise<Channel<BufferSource>> {
+    openChannel(address: ServerAddress, tryCount = 1): Promise<Channel<Bytes>> {
         if (this.#closed) {
             throw new NetworkError("Network interface is closed");
         }
@@ -96,7 +96,7 @@ export class NobleBleCentralInterface implements NetInterface {
                     logger.debug(`Already resolved or rejected, ignore error:`, error);
                 }
             }
-            function resolveOnce(value: Channel<BufferSource>) {
+            function resolveOnce(value: Channel<Bytes>) {
                 if (!resolvedOrRejected) {
                     resolvedOrRejected = true;
                     resolve(value);
@@ -264,7 +264,7 @@ export class NobleBleCentralInterface implements NetInterface {
 
                         let characteristicC1ForWrite: Characteristic | undefined;
                         let characteristicC2ForSubscribe: Characteristic | undefined;
-                        let additionalCommissioningRelatedData: BufferSource | undefined;
+                        let additionalCommissioningRelatedData: Bytes | undefined;
 
                         for (const characteristic of characteristics) {
                             // Loop through each characteristic and match them to the UUIDs that we know about.
@@ -383,7 +383,7 @@ export class NobleBleCentralInterface implements NetInterface {
         });
     }
 
-    onData(listener: (socket: Channel<BufferSource>, data: BufferSource) => void): TransportInterface.Listener {
+    onData(listener: (socket: Channel<Bytes>, data: Bytes) => void): TransportInterface.Listener {
         this.#onMatterMessageListener = listener;
         return {
             close: async () => await this.close(),
@@ -411,13 +411,13 @@ export class NobleBleCentralInterface implements NetInterface {
     }
 }
 
-export class NobleBleChannel extends BleChannel<BufferSource> {
+export class NobleBleChannel extends BleChannel<Bytes> {
     static async create(
         peripheral: Peripheral,
         characteristicC1ForWrite: Characteristic,
         characteristicC2ForSubscribe: Characteristic,
-        onMatterMessageListener: (socket: Channel<BufferSource>, data: BufferSource) => void,
-        _additionalCommissioningRelatedData?: BufferSource,
+        onMatterMessageListener: (socket: Channel<Bytes>, data: Bytes) => void,
+        _additionalCommissioningRelatedData?: Bytes,
     ): Promise<NobleBleChannel> {
         const { address: peripheralAddress } = peripheral;
         let mtu = peripheral.mtu ?? 0;
@@ -484,7 +484,7 @@ export class NobleBleChannel extends BleChannel<BufferSource> {
         const btpSession = await BtpSessionHandler.createAsCentral(
             new Uint8Array(handshakeResponse),
             // callback to write data to characteristic C1
-            async (data: BufferSource) => {
+            async (data: Bytes) => {
                 return await characteristicC1ForWrite.writeAsync(Buffer.from(Bytes.of(data)), false);
             },
             // callback to disconnect the BLE connection
@@ -502,7 +502,7 @@ export class NobleBleChannel extends BleChannel<BufferSource> {
             },
 
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
-            async (data: BufferSource) => {
+            async (data: Bytes) => {
                 if (onMatterMessageListener === undefined) {
                     throw new InternalError(`No listener registered for Matter messages`);
                 }
@@ -545,7 +545,7 @@ export class NobleBleChannel extends BleChannel<BufferSource> {
      *
      * @param data
      */
-    async send(data: BufferSource) {
+    async send(data: Bytes) {
         if (!this.connected) {
             logger.debug(
                 `Peripheral ${this.peripheral.address}: Cannot send data because not connected to peripheral.`,
@@ -560,7 +560,7 @@ export class NobleBleChannel extends BleChannel<BufferSource> {
         await this.btpSession.sendMatterMessage(data);
     }
 
-    // Channel<BufferSource>
+    // Channel<Bytes>
     get name() {
         return `${this.type}://${this.peripheral.address}`;
     }

@@ -71,13 +71,13 @@ export class StandardCrypto extends Crypto {
         return new StandardCrypto();
     }
 
-    randomBytes(length: number): BufferSource {
+    randomBytes(length: number): Bytes {
         const result = new Uint8Array(length);
         this.#crypto.getRandomValues(result);
         return result;
     }
 
-    encrypt(key: BufferSource, data: BufferSource, nonce: BufferSource, associatedData?: BufferSource) {
+    encrypt(key: Bytes, data: Bytes, nonce: Bytes, associatedData?: Bytes) {
         const ccm = Ccm(key);
         return ccm.encrypt({
             pt: Bytes.of(data),
@@ -86,7 +86,7 @@ export class StandardCrypto extends Crypto {
         });
     }
 
-    decrypt(key: BufferSource, data: BufferSource, nonce: BufferSource, associatedData?: BufferSource) {
+    decrypt(key: Bytes, data: Bytes, nonce: Bytes, associatedData?: Bytes) {
         const ccm = Ccm(key);
         return ccm.decrypt({
             ct: Bytes.of(data),
@@ -95,59 +95,52 @@ export class StandardCrypto extends Crypto {
         });
     }
 
-    async computeSha256(buffer: BufferSource | BufferSource[]): Promise<BufferSource> {
+    computeSha256(buffer: Bytes | Bytes[]) {
         if (Array.isArray(buffer)) {
             buffer = Bytes.concat(...buffer);
         }
-        return new Uint8Array(await this.#subtle.digest("SHA-256", Bytes.of(buffer)));
+        return this.#subtle.digest("SHA-256", Bytes.exclusive(buffer));
     }
 
-    async createPbkdf2Key(
-        secret: BufferSource,
-        salt: BufferSource,
-        iteration: number,
-        keyLength: number,
-    ): Promise<BufferSource> {
+    async createPbkdf2Key(secret: Bytes, salt: Bytes, iteration: number, keyLength: number) {
         const key = await this.importKey("raw", secret, "PBKDF2", false, ["deriveBits"]);
-        const bits = await this.#subtle.deriveBits(
+        return this.#subtle.deriveBits(
             {
                 name: "PBKDF2",
                 hash: "SHA-256",
-                salt: salt,
+                salt: Bytes.exclusive(salt),
                 iterations: iteration,
             },
             key,
             keyLength * 8,
         );
-        return new Uint8Array(bits);
     }
 
     async createHkdfKey(
-        secret: BufferSource,
-        salt: BufferSource,
-        info: BufferSource,
+        secret: Bytes,
+        salt: Bytes,
+        info: Bytes,
         length: number = CRYPTO_SYMMETRIC_KEY_LENGTH,
-    ): Promise<BufferSource> {
+    ): Promise<Bytes> {
         const key = await this.importKey("raw", secret, "HKDF", false, ["deriveBits"]);
-        const bits = await this.#subtle.deriveBits(
+        return this.#subtle.deriveBits(
             {
                 name: "HKDF",
                 hash: "SHA-256",
-                salt: salt,
-                info: info,
+                salt: Bytes.exclusive(salt),
+                info: Bytes.exclusive(info),
             },
             key,
             8 * length,
         );
-        return new Uint8Array(bits);
     }
 
-    async signHmac(secret: BufferSource, data: BufferSource): Promise<BufferSource> {
+    async signHmac(secret: Bytes, data: Bytes): Promise<Bytes> {
         const key = await this.importKey("raw", secret, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-        return new Uint8Array(await this.#subtle.sign("HMAC", key, data));
+        return this.#subtle.sign("HMAC", key, Bytes.exclusive(data));
     }
 
-    async signEcdsa(key: JsonWebKey, data: BufferSource | BufferSource[], dsaEncoding?: CryptoDsaEncoding) {
+    async signEcdsa(key: JsonWebKey, data: Bytes | Bytes[], dsaEncoding?: CryptoDsaEncoding) {
         if (Array.isArray(data)) {
             data = Bytes.concat(...data);
         }
@@ -166,7 +159,7 @@ export class StandardCrypto extends Crypto {
 
         const subtleKey = await this.importKey("jwk", key, SIGNATURE_ALGORITHM, false, ["sign"]);
 
-        const ieeeP1363 = Bytes.of(await this.#subtle.sign(SIGNATURE_ALGORITHM, subtleKey, data));
+        const ieeeP1363 = Bytes.of(await this.#subtle.sign(SIGNATURE_ALGORITHM, subtleKey, Bytes.exclusive(data)));
 
         if (dsaEncoding !== "der") return ieeeP1363;
 
@@ -178,7 +171,7 @@ export class StandardCrypto extends Crypto {
         });
     }
 
-    async verifyEcdsa(key: JsonWebKey, data: BufferSource, signature: BufferSource, dsaEncoding?: CryptoDsaEncoding) {
+    async verifyEcdsa(key: JsonWebKey, data: Bytes, signature: Bytes, dsaEncoding?: CryptoDsaEncoding) {
         const { crv, kty, x, y } = key;
         key = { crv, kty, x, y };
         const subtleKey = await this.importKey("jwk", key, SIGNATURE_ALGORITHM, false, ["verify"]);
@@ -198,7 +191,12 @@ export class StandardCrypto extends Crypto {
             }
         }
 
-        const verified = await this.#subtle.verify(SIGNATURE_ALGORITHM, subtleKey, signature, data);
+        const verified = await this.#subtle.verify(
+            SIGNATURE_ALGORITHM,
+            subtleKey,
+            Bytes.exclusive(signature),
+            Bytes.exclusive(data),
+        );
 
         if (!verified) {
             throw new CryptoVerifyError("Signature verification failed");
@@ -236,7 +234,7 @@ export class StandardCrypto extends Crypto {
         return await this.#subtle.exportKey("jwk", subtleKey.privateKey);
     }
 
-    async generateDhSecret(key: PrivateKey, peerKey: PublicKey): Promise<BufferSource> {
+    async generateDhSecret(key: PrivateKey, peerKey: PublicKey): Promise<Bytes> {
         const subtleKey = await this.importKey(
             "jwk",
             key,
@@ -259,7 +257,7 @@ export class StandardCrypto extends Crypto {
             [],
         );
 
-        const secret = await this.#subtle.deriveBits(
+        return this.#subtle.deriveBits(
             {
                 name: "ECDH",
                 public: subtlePeerKey,
@@ -267,13 +265,11 @@ export class StandardCrypto extends Crypto {
             subtleKey,
             256,
         );
-
-        return new Uint8Array(secret);
     }
 
     protected async importKey(
         format: KeyFormat,
-        keyData: JsonWebKey | BufferSource,
+        keyData: JsonWebKey | Bytes,
         algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm,
         extractable: boolean,
         keyUsages: ReadonlyArray<KeyUsage>,

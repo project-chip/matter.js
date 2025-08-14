@@ -5,7 +5,7 @@
  */
 
 import { Message, MessageCodec } from "#codec/MessageCodec.js";
-import { Channel, Logger, MatterError, MatterFlowError } from "#general";
+import { Bytes, Channel, Logger, MatterError, MatterFlowError } from "#general";
 import type { ExchangeLogContext } from "#protocol/MessageExchange.js";
 import { Session, SessionParameters } from "#session/Session.js";
 
@@ -55,7 +55,7 @@ export class MessageChannel implements Channel<Message> {
     // When the session is supporting MRP and the channel is not reliable, use MRP handling
 
     constructor(
-        readonly channel: Channel<BufferSource>,
+        readonly channel: Channel<Bytes>,
         readonly session: Session,
         closeCallback?: () => Promise<void>,
     ) {

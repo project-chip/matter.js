@@ -46,9 +46,9 @@ const logger = Logger.get("BleChannel");
 
 export class ReactNativeBleCentralInterface implements NetInterface {
     private openChannels: Map<ServerAddress, Device> = new Map();
-    private onMatterMessageListener: ((socket: Channel<BufferSource>, data: BufferSource) => void) | undefined;
+    private onMatterMessageListener: ((socket: Channel<Bytes>, data: Bytes) => void) | undefined;
 
-    async openChannel(address: ServerAddress): Promise<Channel<BufferSource>> {
+    async openChannel(address: ServerAddress): Promise<Channel<Bytes>> {
         if (address.type !== "ble") {
             throw new InternalError(`Unsupported address type ${address.type}.`);
         }
@@ -93,7 +93,7 @@ export class ReactNativeBleCentralInterface implements NetInterface {
 
             let characteristicC1ForWrite: Characteristic | undefined;
             let characteristicC2ForSubscribe: Characteristic | undefined;
-            let additionalCommissioningRelatedData: BufferSource | undefined;
+            let additionalCommissioningRelatedData: Bytes | undefined;
 
             for (const characteristic of characteristics) {
                 // Loop through each characteristic and match them to the UUIDs that we know about.
@@ -142,7 +142,7 @@ export class ReactNativeBleCentralInterface implements NetInterface {
         throw new BleError(`No Matter service found on peripheral ${peripheral.id}`);
     }
 
-    onData(listener: (socket: Channel<BufferSource>, data: BufferSource) => void): TransportInterface.Listener {
+    onData(listener: (socket: Channel<Bytes>, data: Bytes) => void): TransportInterface.Listener {
         this.onMatterMessageListener = listener;
         return {
             close: async () => await this.close(),
@@ -160,13 +160,13 @@ export class ReactNativeBleCentralInterface implements NetInterface {
     }
 }
 
-export class ReactNativeBleChannel extends BleChannel<BufferSource> {
+export class ReactNativeBleChannel extends BleChannel<Bytes> {
     static async create(
         peripheral: Device,
         characteristicC1ForWrite: Characteristic,
         characteristicC2ForSubscribe: Characteristic,
-        onMatterMessageListener: (socket: Channel<BufferSource>, data: BufferSource) => void,
-        _additionalCommissioningRelatedData?: BufferSource,
+        onMatterMessageListener: (socket: Channel<Bytes>, data: Bytes) => void,
+        _additionalCommissioningRelatedData?: Bytes,
     ): Promise<ReactNativeBleChannel> {
         let mtu = peripheral.mtu ?? 0;
         if (mtu > BLE_MAXIMUM_BTP_MTU) {
@@ -190,7 +190,7 @@ export class ReactNativeBleChannel extends BleChannel<BufferSource> {
 
         logger.debug("subscribing to C2 characteristic");
 
-        const { promise: handshakeResponseReceivedPromise, resolver } = createPromise<BufferSource>();
+        const { promise: handshakeResponseReceivedPromise, resolver } = createPromise<Bytes>();
 
         let handshakeReceived = false;
         const handshakeSubscription = characteristicC2ForSubscribe.monitor((error, characteristic) => {
@@ -291,7 +291,7 @@ export class ReactNativeBleChannel extends BleChannel<BufferSource> {
      *
      * @param data
      */
-    async send(data: BufferSource) {
+    async send(data: Bytes) {
         if (!this.connected) {
             logger.debug("Cannot send data because not connected to peripheral.");
             return;
@@ -302,7 +302,7 @@ export class ReactNativeBleChannel extends BleChannel<BufferSource> {
         await this.btpSession.sendMatterMessage(data);
     }
 
-    // Channel<BufferSource>
+    // Channel<Bytes>
     get name() {
         return `ble://${this.peripheral.id}`;
     }

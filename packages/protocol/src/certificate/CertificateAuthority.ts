@@ -35,8 +35,8 @@ export class CertificateAuthority {
     #crypto: Crypto;
     #rootCertId = BigInt(0);
     #rootKeyPair?: PrivateKey;
-    #rootKeyIdentifier?: BufferSource;
-    #rootCertBytes?: BufferSource;
+    #rootKeyIdentifier?: Bytes;
+    #rootCertBytes?: Bytes;
     #nextCertificateId = BigInt(1);
     #construction: Construction<CertificateAuthority>;
 
@@ -67,9 +67,9 @@ export class CertificateAuthority {
 
             if (
                 (typeof certValues.rootCertId === "number" || typeof certValues.rootCertId === "bigint") &&
-                (Bytes.isBufferSource(certValues.rootKeyPair) || typeof certValues.rootKeyPair === "object") &&
-                Bytes.isBufferSource(certValues.rootKeyIdentifier) &&
-                Bytes.isBufferSource(certValues.rootCertBytes) &&
+                (Bytes.isBytes(certValues.rootKeyPair) || typeof certValues.rootKeyPair === "object") &&
+                Bytes.isBytes(certValues.rootKeyIdentifier) &&
+                Bytes.isBytes(certValues.rootCertBytes) &&
                 (typeof certValues.nextCertificateId === "number" || typeof certValues.nextCertificateId === "bigint")
             ) {
                 this.#rootCertId = BigInt(certValues.rootCertId);
@@ -102,7 +102,7 @@ export class CertificateAuthority {
         return instance;
     }
 
-    get rootCert(): BufferSource {
+    get rootCert(): Bytes {
         return this.#construction.assert("root cert", this.#rootCertBytes);
     }
 
@@ -143,7 +143,7 @@ export class CertificateAuthority {
     }
 
     async generateNoc(
-        publicKey: BufferSource,
+        publicKey: Bytes,
         fabricId: FabricId,
         nodeId: NodeId,
         caseAuthenticatedTags?: CaseAuthenticatedTag[],
@@ -193,8 +193,8 @@ export namespace CertificateAuthority {
     export type Configuration = {
         rootCertId: bigint;
         rootKeyPair: BinaryKeyPair;
-        rootKeyIdentifier: BufferSource;
-        rootCertBytes: BufferSource;
+        rootKeyIdentifier: Bytes;
+        rootCertBytes: Bytes;
         nextCertificateId: bigint;
     };
 }

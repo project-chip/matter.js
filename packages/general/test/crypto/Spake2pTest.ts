@@ -64,7 +64,7 @@ describe("Spake2p", () => {
     describe("context hash test", () => {
         it("generates the correct context hash", async () => {
             // Test data captured from https://github.com/project-chip/connectedhomeip/
-            const context = new Array<BufferSource>();
+            const context = new Array<Bytes>();
 
             // "CHIP PAKE V1 Commissioning"
             context.push(Bytes.fromHex("434849502050414b4520563120436f6d6d697373696f6e696e67"));

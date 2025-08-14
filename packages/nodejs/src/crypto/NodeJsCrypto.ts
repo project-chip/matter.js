@@ -25,7 +25,7 @@ import * as crypto from "node:crypto";
 export class NodeJsCrypto extends Crypto {
     implementationName = "Node.js";
 
-    encrypt(key: BufferSource, data: BufferSource, nonce: BufferSource, aad?: BufferSource): BufferSource {
+    encrypt(key: Bytes, data: Bytes, nonce: Bytes, aad?: Bytes): Bytes {
         const cipher = crypto.createCipheriv(CRYPTO_ENCRYPT_ALGORITHM, Bytes.of(key), Bytes.of(nonce), {
             authTagLength: CRYPTO_AUTH_TAG_LENGTH,
         });
@@ -37,7 +37,7 @@ export class NodeJsCrypto extends Crypto {
         return Bytes.concat(Bytes.of(encrypted), Bytes.of(cipher.getAuthTag()));
     }
 
-    decrypt(key: BufferSource, encrypted: BufferSource, nonce: BufferSource, aad?: BufferSource): BufferSource {
+    decrypt(key: Bytes, encrypted: Bytes, nonce: Bytes, aad?: Bytes): Bytes {
         const cipher = crypto.createDecipheriv(CRYPTO_ENCRYPT_ALGORITHM, Bytes.of(key), Bytes.of(nonce), {
             authTagLength: CRYPTO_AUTH_TAG_LENGTH,
         });
@@ -56,19 +56,19 @@ export class NodeJsCrypto extends Crypto {
         return new Uint8Array(result);
     }
 
-    randomBytes(length: number): BufferSource {
+    randomBytes(length: number): Bytes {
         return new Uint8Array(crypto.randomBytes(length));
     }
 
-    ecdhGeneratePublicKey(): { publicKey: BufferSource; ecdh: any } {
+    ecdhGeneratePublicKey(): { publicKey: Bytes; ecdh: any } {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
         return { publicKey: new Uint8Array(ecdh.getPublicKey()), ecdh: ecdh };
     }
 
-    ecdhGeneratePublicKeyAndSecret(peerPublicKey: BufferSource): {
-        publicKey: BufferSource;
-        sharedSecret: BufferSource;
+    ecdhGeneratePublicKeyAndSecret(peerPublicKey: Bytes): {
+        publicKey: Bytes;
+        sharedSecret: Bytes;
     } {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
@@ -78,7 +78,7 @@ export class NodeJsCrypto extends Crypto {
         };
     }
 
-    computeSha256(data: BufferSource | BufferSource[]): BufferSource {
+    computeSha256(data: Bytes | Bytes[]): Bytes {
         const hasher = crypto.createHash(CRYPTO_HASH_ALGORITHM);
         if (Array.isArray(data)) {
             data.forEach(chunk => hasher.update(Bytes.of(chunk)));
@@ -88,13 +88,8 @@ export class NodeJsCrypto extends Crypto {
         return new Uint8Array(hasher.digest());
     }
 
-    createPbkdf2Key(
-        secret: BufferSource,
-        salt: BufferSource,
-        iteration: number,
-        keyLength: number,
-    ): Promise<BufferSource> {
-        return new Promise<BufferSource>((resolver, rejecter) => {
+    createPbkdf2Key(secret: Bytes, salt: Bytes, iteration: number, keyLength: number): Promise<Bytes> {
+        return new Promise<Bytes>((resolver, rejecter) => {
             crypto.pbkdf2(
                 Bytes.of(secret),
                 Bytes.of(salt),
@@ -110,12 +105,12 @@ export class NodeJsCrypto extends Crypto {
     }
 
     createHkdfKey(
-        secret: BufferSource,
-        salt: BufferSource,
-        info: BufferSource,
+        secret: Bytes,
+        salt: Bytes,
+        info: Bytes,
         length: number = CRYPTO_SYMMETRIC_KEY_LENGTH,
-    ): Promise<BufferSource> {
-        return new Promise<BufferSource>((resolver, rejecter) => {
+    ): Promise<Bytes> {
+        return new Promise<Bytes>((resolver, rejecter) => {
             crypto.hkdf(
                 CRYPTO_HASH_ALGORITHM,
                 Bytes.of(secret),
@@ -130,17 +125,13 @@ export class NodeJsCrypto extends Crypto {
         });
     }
 
-    signHmac(key: BufferSource, data: BufferSource): BufferSource {
+    signHmac(key: Bytes, data: Bytes): Bytes {
         const hmac = crypto.createHmac(CRYPTO_HASH_ALGORITHM, Bytes.of(key));
         hmac.update(Bytes.of(data));
         return new Uint8Array(hmac.digest());
     }
 
-    signEcdsa(
-        privateKey: JsonWebKey,
-        data: BufferSource | BufferSource[],
-        dsaEncoding: CryptoDsaEncoding = "ieee-p1363",
-    ): BufferSource {
+    signEcdsa(privateKey: JsonWebKey, data: Bytes | Bytes[], dsaEncoding: CryptoDsaEncoding = "ieee-p1363"): Bytes {
         const signer = crypto.createSign(CRYPTO_HASH_ALGORITHM);
         if (Array.isArray(data)) {
             data.forEach(chunk => signer.update(Bytes.of(chunk)));
@@ -157,12 +148,7 @@ export class NodeJsCrypto extends Crypto {
         );
     }
 
-    verifyEcdsa(
-        publicKey: JsonWebKey,
-        data: BufferSource,
-        signature: BufferSource,
-        dsaEncoding: CryptoDsaEncoding = "ieee-p1363",
-    ) {
+    verifyEcdsa(publicKey: JsonWebKey, data: Bytes, signature: Bytes, dsaEncoding: CryptoDsaEncoding = "ieee-p1363") {
         const verifier = crypto.createVerify(CRYPTO_HASH_ALGORITHM);
         verifier.update(Bytes.of(data));
         const success = verifier.verify(
@@ -191,7 +177,7 @@ export class NodeJsCrypto extends Crypto {
         return PrivateKey(privateKey, { publicKey: Bytes.of(ecdh.getPublicKey()) });
     }
 
-    generateDhSecret(key: PrivateKey, peerKey: PublicKey): BufferSource {
+    generateDhSecret(key: PrivateKey, peerKey: PublicKey): Bytes {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.setPrivateKey(Bytes.of(key.privateBits));
 

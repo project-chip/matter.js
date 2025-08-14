@@ -49,9 +49,7 @@ export namespace Terminal {
         const stderr = createOutputStream("stderr");
 
         docker.intf.modem.demuxStream(stream, stdout, stderr);
-        const write = promisify(stream.write).bind(stream) as (
-            content: Uint8Array<ArrayBuffer> | string,
-        ) => Promise<void>;
+        const write = promisify(stream.write).bind(stream) as (content: Uint8Array | string) => Promise<void>;
 
         // Exited promise should never be unhandled; it's only relevant if the streams close without error
         exited.catch(() => {});
@@ -67,15 +65,9 @@ export namespace Terminal {
                         await this.write(chunk);
                     }
                 } else if (typeof content === "string" || content instanceof Uint8Array) {
-                    await write(content as string | Uint8Array<ArrayBuffer>);
+                    await write(content);
                 } else if (ArrayBuffer.isView(content)) {
-                    await write(
-                        new Uint8Array(
-                            content.buffer,
-                            content.byteOffset,
-                            content.byteLength,
-                        ) as Uint8Array<ArrayBuffer>,
-                    );
+                    await write(new Uint8Array(content.buffer, content.byteOffset, content.byteLength));
                 } else if (typeof content === "object" && Symbol.iterator in content) {
                     for (const chunk of content as Iterable<unknown>) {
                         await this.write(chunk);

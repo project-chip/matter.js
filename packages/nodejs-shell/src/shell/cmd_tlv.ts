@@ -55,7 +55,7 @@ function logGenericElement(reader: TlvArrayReader, preReadElement?: TlvElement<a
                 throw new UnexpectedDataError(`Tag detected for a native type: ${Diagnostic.json(element)}`);
             }
             const value = reader.readPrimitive(element.typeLength);
-            const logValue = Bytes.isBufferSource(value) ? Bytes.toHex(value) : value;
+            const logValue = Bytes.isBytes(value) ? Bytes.toHex(value) : value;
             const logNumberHex =
                 typeof value === "number" || typeof value === "bigint" ? value.toString(16) : undefined;
             logger.info(

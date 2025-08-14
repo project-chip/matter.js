@@ -16,9 +16,9 @@ import { AttestationCertificateManager } from "./AttestationCertificateManager.j
 export class DeviceCertification {
     #crypto: Crypto;
     #privateKey?: PrivateKey;
-    #certificate?: BufferSource;
-    #intermediateCertificate?: BufferSource;
-    #declaration?: BufferSource;
+    #certificate?: Bytes;
+    #intermediateCertificate?: Bytes;
+    #declaration?: Bytes;
     readonly #construction: Construction<DeviceCertification>;
 
     get construction() {
@@ -65,16 +65,14 @@ export class DeviceCertification {
         this.#construction = Construction(this, async () => {
             const config = await configProvider();
 
-            this.#privateKey = Bytes.isBufferSource(config.privateKey)
-                ? PrivateKey(config.privateKey)
-                : config.privateKey;
+            this.#privateKey = Bytes.isBytes(config.privateKey) ? PrivateKey(config.privateKey) : config.privateKey;
             this.#certificate = config.certificate;
             this.#intermediateCertificate = config.intermediateCertificate;
             this.#declaration = config.declaration;
         });
     }
 
-    async sign(session: NodeSession, data: BufferSource) {
+    async sign(session: NodeSession, data: Bytes) {
         const { privateKey } = this.#assertInitialized();
         return this.#crypto.signEcdsa(privateKey, [data, session.attestationChallengeKey]);
     }
@@ -106,10 +104,10 @@ export class DeviceCertification {
 
 export namespace DeviceCertification {
     export interface Configuration {
-        privateKey: PrivateKey | BufferSource;
-        certificate: BufferSource;
-        intermediateCertificate: BufferSource;
-        declaration: BufferSource;
+        privateKey: PrivateKey | Bytes;
+        certificate: Bytes;
+        intermediateCertificate: Bytes;
+        declaration: Bytes;
     }
 
     export type Definition = Configuration | (() => Promise<Configuration>);

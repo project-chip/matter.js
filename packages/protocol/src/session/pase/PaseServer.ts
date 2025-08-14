@@ -46,7 +46,7 @@ export class PaseServer implements ProtocolHandler {
 
     static fromVerificationValue(
         sessions: SessionManager,
-        verificationValue: BufferSource,
+        verificationValue: Bytes,
         pbkdfParameters?: PbkdfParameters,
     ) {
         const verificationData = Bytes.of(verificationValue);
@@ -58,7 +58,7 @@ export class PaseServer implements ProtocolHandler {
     constructor(
         private sessions: SessionManager,
         private readonly w0: bigint,
-        private readonly L: BufferSource,
+        private readonly L: Bytes,
         private readonly pbkdfParameters?: PbkdfParameters,
     ) {}
 

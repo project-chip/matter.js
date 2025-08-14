@@ -62,8 +62,8 @@ const CurveLookup = {
 };
 
 export type BinaryKeyPair = {
-    publicKey: BufferSource;
-    privateKey: BufferSource;
+    publicKey: Bytes;
+    privateKey: Bytes;
 };
 
 /**
@@ -131,40 +131,40 @@ export interface Key extends JsonWebKey {
      * Binary alias to private key field.  Automatically encodes/decodes the
      * base-64 private key.
      */
-    privateBits?: BufferSource;
+    privateBits?: Bytes;
 
     /**
      * Binary alias to the x field.  Automatically encodes/decodes the base-64
      * x-point on EC public keys.
      */
-    xBits?: BufferSource;
+    xBits?: Bytes;
 
     /**
      * Binary alias to the y field.  Automatically encodes/decodes the base-64
      * y-point on EC public keys.
      */
-    yBits?: BufferSource;
+    yBits?: Bytes;
 
     /**
      * Import (write-only) of private keys encoded in SEC1 format.
      */
-    sec1?: BufferSource;
+    sec1?: Bytes;
 
     /**
      * Import (write-only) of private keys encoded in PKCS #8 format.
      */
-    pkcs8?: BufferSource;
+    pkcs8?: Bytes;
 
     /**
      * Import (write-only) of public keys encoded in SPKI format.
      */
-    spki?: BufferSource;
+    spki?: Bytes;
 
     /**
      * Import/export of EC public key in SEC1/SPKI format.  Maps to x & y
      * fields internally.
      */
-    publicBits?: BufferSource;
+    publicBits?: Bytes;
 
     /**
      * Import/export of BinaryKeyPair structure used as an alternate
@@ -175,12 +175,12 @@ export interface Key extends JsonWebKey {
     /**
      * Alias for publicBits that throws if no public key is present.
      */
-    publicKey: BufferSource;
+    publicKey: Bytes;
 
     /**
      * Alias for privateBits that throws if no private key is present.
      */
-    privateKey: BufferSource;
+    privateKey: Bytes;
 
     /**
      * Alias for keyPairBits that throws if a complete key pair is not present.
@@ -196,9 +196,9 @@ export interface PublicKey extends Key {
     curve: CurveType;
     x: string;
     y: string;
-    xBits: BufferSource;
-    yBits: BufferSource;
-    publicBits: BufferSource;
+    xBits: Bytes;
+    yBits: Bytes;
+    publicBits: Bytes;
 }
 
 /**
@@ -207,11 +207,11 @@ export interface PublicKey extends Key {
 export interface PrivateKey extends PublicKey {
     private: string;
     d: string;
-    privateBits: BufferSource;
-    privateKey: BufferSource;
+    privateBits: Bytes;
+    privateKey: Bytes;
     keyPair: BinaryKeyPair;
     keyPairBits: BinaryKeyPair;
-    sharedSecretFor(peerKey: PublicKey): BufferSource;
+    sharedSecretFor(peerKey: PublicKey): Bytes;
 }
 
 /**
@@ -263,7 +263,7 @@ function getDerKey(type: string, node?: DerNode, derType: DerType = DerType.Octe
 namespace Translators {
     // Import SEC1 private key
     export const sec1 = {
-        set: function (this: Key, input: BufferSource) {
+        set: function (this: Key, input: Bytes) {
             const decoded = DerCodec.decode(input);
 
             // Version
@@ -290,7 +290,7 @@ namespace Translators {
 
     // Import PKCS8 private key
     export const pkcs8 = {
-        set: function (this: Key, input: BufferSource) {
+        set: function (this: Key, input: Bytes) {
             const outer = DerCodec.decode(input);
 
             // Version
@@ -327,7 +327,7 @@ namespace Translators {
 
     // Import SPKI public key
     export const spki = {
-        set: function (this: Key, input: BufferSource) {
+        set: function (this: Key, input: Bytes) {
             const decoded = DerCodec.decode(input);
 
             const algorithmElements = decoded?._elements?.[0]?._elements;
@@ -356,7 +356,7 @@ namespace Translators {
 
     // Import public key bytes in SEC1/SPKI format
     export const publicBits = {
-        set: function (this: Key, input: BufferSource) {
+        set: function (this: Key, input: Bytes) {
             const data = Bytes.of(input);
             if (!(data.length % 2)) {
                 throw new KeyInputError("Invalid public key encoding");
@@ -544,8 +544,8 @@ export function Key(properties: Partial<Key>) {
         const ecKey = Point.fromPrivateKey(Bytes.of(that.privateKey));
 
         // Install
-        that.xBits = numberToBytesBE(ecKey.x, keyLength) as Uint8Array<ArrayBuffer>;
-        that.yBits = numberToBytesBE(ecKey.y, keyLength) as Uint8Array<ArrayBuffer>;
+        that.xBits = numberToBytesBE(ecKey.x, keyLength);
+        that.yBits = numberToBytesBE(ecKey.y, keyLength);
     }
 
     if (that.type === KeyType.EC) {
@@ -566,9 +566,9 @@ export function Key(properties: Partial<Key>) {
 /**
  * EC private key factory.
  */
-export function PrivateKey(privateKey: BufferSource | BinaryKeyPair, options?: Partial<Key>) {
+export function PrivateKey(privateKey: Bytes | BinaryKeyPair, options?: Partial<Key>) {
     let priv, pub;
-    if (Bytes.isBufferSource(privateKey)) {
+    if (Bytes.isBytes(privateKey)) {
         priv = privateKey;
     } else {
         priv = privateKey.privateKey;
@@ -586,7 +586,7 @@ export function PrivateKey(privateKey: BufferSource | BinaryKeyPair, options?: P
 /**
  * EC public key factory.
  */
-export function PublicKey(publicKey: BufferSource, options?: Partial<Key>) {
+export function PublicKey(publicKey: Bytes, options?: Partial<Key>) {
     return Key({
         type: KeyType.EC,
         publicKey,
@@ -597,7 +597,7 @@ export function PublicKey(publicKey: BufferSource, options?: Partial<Key>) {
 /**
  * Symmetric key factory.
  */
-export function SymmetricKey(privateKey: BufferSource, options?: Partial<Key>) {
+export function SymmetricKey(privateKey: Bytes, options?: Partial<Key>) {
     return Key({
         type: KeyType.oct,
         privateKey: privateKey,
@@ -610,6 +610,6 @@ export function SymmetricKey(privateKey: BufferSource, options?: Partial<Key>) {
  *
  * We provide this for platforms without a native implementation.
  */
-export function sharedSecretFor(this: PrivateKey, peerKey: PublicKey): BufferSource {
+export function sharedSecretFor(this: PrivateKey, peerKey: PublicKey): Bytes {
     return Bytes.of(getSharedSecret(Bytes.of(this.privateBits), Bytes.of(peerKey.publicBits)));
 }

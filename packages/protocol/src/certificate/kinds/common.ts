@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { ImplementationError, MatterError } from "#general";
+import { Bytes, ImplementationError, MatterError } from "#general";
 
 /**
  * Matter specific Certificate Sizes
@@ -15,7 +15,7 @@ export class CertificateError extends MatterError {}
 
 export type Unsigned<Type> = { [Property in keyof Type as Exclude<Property, "signature">]: Type[Property] };
 
-export function assertCertificateDerSize(certBytes: BufferSource) {
+export function assertCertificateDerSize(certBytes: Bytes) {
     if (certBytes.byteLength > MAX_DER_CERTIFICATE_SIZE) {
         throw new ImplementationError(
             `Certificate to generate is too big: ${certBytes.byteLength} bytes instead of max ${MAX_DER_CERTIFICATE_SIZE} bytes`,

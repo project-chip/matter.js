@@ -26,7 +26,7 @@ const logger = Logger.get("BtpSessionHandler");
 
 export class BtpSessionHandler {
     private currentIncomingSegmentedMsgLength: number | undefined;
-    private currentIncomingSegmentedPayload: BufferSource | undefined;
+    private currentIncomingSegmentedPayload: Bytes | undefined;
     private prevIncomingSequenceNumber = 255; // Incoming Sequence Number received. Set to 255 to start at 0
     private prevIncomingAckNumber = -1; // Previous ackNumber received
     private readonly ackReceiveTimer = Time.getTimer("BTP ack timeout", BTP_ACK_TIMEOUT_MS, () =>
@@ -49,10 +49,10 @@ export class BtpSessionHandler {
     /** Factory method to create a new BTPSessionHandler from a received handshake request */
     static async createFromHandshakeRequest(
         maxDataSize: number | undefined,
-        handshakeRequestPayload: BufferSource,
-        writeBleCallback: (data: BufferSource) => Promise<void>,
+        handshakeRequestPayload: Bytes,
+        writeBleCallback: (data: Bytes) => Promise<void>,
         disconnectBleCallback: () => Promise<void>,
-        handleMatterMessagePayload: (data: BufferSource) => Promise<void>,
+        handleMatterMessagePayload: (data: Bytes) => Promise<void>,
     ): Promise<BtpSessionHandler> {
         // Decode handshake request
         const handshakeRequest = BtpCodec.decodeBtpHandshakeRequest(handshakeRequestPayload);
@@ -117,10 +117,10 @@ export class BtpSessionHandler {
     }
 
     static async createAsCentral(
-        handshakeResponsePayload: BufferSource,
-        writeBleCallback: (data: BufferSource) => Promise<void>,
+        handshakeResponsePayload: Bytes,
+        writeBleCallback: (data: Bytes) => Promise<void>,
         disconnectBleCallback: () => Promise<void>,
-        handleMatterMessagePayload: (data: BufferSource) => Promise<void>,
+        handleMatterMessagePayload: (data: Bytes) => Promise<void>,
     ) {
         const handshakeRequest = BtpCodec.decodeBtpHandshakeResponsePayload(handshakeResponsePayload);
 
@@ -156,9 +156,9 @@ export class BtpSessionHandler {
         btpVersion: number,
         private readonly fragmentSize: number,
         private readonly clientWindowSize: number,
-        private readonly writeBleCallback: (data: BufferSource) => Promise<void>,
+        private readonly writeBleCallback: (data: Bytes) => Promise<void>,
         private readonly disconnectBleCallback: () => Promise<void>,
-        private readonly handleMatterMessagePayload: (data: BufferSource) => Promise<void>,
+        private readonly handleMatterMessagePayload: (data: Bytes) => Promise<void>,
     ) {
         if (btpVersion !== 4) {
             throw new BtpProtocolError(`Unsupported BTP version ${btpVersion}`);
@@ -179,7 +179,7 @@ export class BtpSessionHandler {
      *
      * @param data ByteArray containing the data
      */
-    public async handleIncomingBleData(data: BufferSource) {
+    public async handleIncomingBleData(data: Bytes) {
         if (!this.isActive) {
             logger.debug(`BTP session is not active, ignoring incoming BLE data`);
             return;
@@ -306,7 +306,7 @@ export class BtpSessionHandler {
      *
      * @param data ByteArray containing the Matter message
      */
-    public async sendMatterMessage(data: BufferSource) {
+    public async sendMatterMessage(data: Bytes) {
         if (!this.isActive) {
             throw new BtpFlowError("BTP session is not active");
         }

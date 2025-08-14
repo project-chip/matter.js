@@ -6,6 +6,7 @@
 
 import {
     BasicObservable,
+    Bytes,
     Diagnostic,
     DnsCodec,
     DnsMessage,
@@ -142,7 +143,7 @@ export class MdnsSocket {
         }
     }
 
-    #handleMessage(bytes: BufferSource, sourceIp: string, sourceIntf: string) {
+    #handleMessage(bytes: Bytes, sourceIp: string, sourceIntf: string) {
         // Ignore if closed
         if (this.#isClosed) {
             return;

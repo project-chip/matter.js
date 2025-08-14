@@ -9,6 +9,7 @@ import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData, ScannerSet } from "#common/Scanner.js";
 import { Fabric } from "#fabric/Fabric.js";
 import {
+    Bytes,
     Channel,
     ChannelType,
     ClassExtends,
@@ -304,7 +305,7 @@ export class ControllerCommissioner {
         passcode: number,
         device?: DiscoveryData,
     ): Promise<MessageChannel> {
-        let paseChannel: Channel<BufferSource>;
+        let paseChannel: Channel<Bytes>;
         if (device !== undefined) {
             logger.info(`Establish PASE to device`, MdnsClient.discoveryDataDiagnostics(device));
         }

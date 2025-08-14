@@ -40,13 +40,13 @@ export class AttestationCertificateManager {
     readonly #crypto: Crypto;
     readonly #vendorId: VendorId;
     readonly #paiKeyPair: PrivateKey;
-    readonly #paiKeyIdentifier: BufferSource;
+    readonly #paiKeyIdentifier: Bytes;
     readonly #paaKeyIdentifier = TestCert_PAA_NoVID_SKID;
     readonly #paiCertId = BigInt(1);
     readonly #paiCertBytes;
     #nextCertificateId = 2;
 
-    constructor(crypto: Crypto, vendorId: VendorId, paiKeyPair: PrivateKey, paiKeyIdentifier: BufferSource) {
+    constructor(crypto: Crypto, vendorId: VendorId, paiKeyPair: PrivateKey, paiKeyIdentifier: Bytes) {
         this.#crypto = crypto;
         this.#vendorId = vendorId;
         this.#paiKeyPair = paiKeyPair;
@@ -145,7 +145,7 @@ export class AttestationCertificateManager {
         return cert.asSignedAsn1();
     }
 
-    async generateDaCert(publicKey: BufferSource, vendorId: VendorId, productId: number) {
+    async generateDaCert(publicKey: Bytes, vendorId: VendorId, productId: number) {
         const now = Time.get().now();
         const certId = this.#nextCertificateId++;
         const cert = new Dac({

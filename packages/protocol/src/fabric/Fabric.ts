@@ -52,14 +52,14 @@ export class Fabric {
     readonly fabricId: FabricId;
     readonly nodeId: NodeId;
     readonly rootNodeId: NodeId;
-    readonly operationalId: BufferSource;
-    readonly rootPublicKey: BufferSource;
+    readonly operationalId: Bytes;
+    readonly rootPublicKey: Bytes;
     readonly rootVendorId: VendorId;
-    readonly rootCert: BufferSource;
-    readonly identityProtectionKey: BufferSource;
-    readonly operationalIdentityProtectionKey: BufferSource;
-    readonly intermediateCACert: BufferSource | undefined;
-    readonly operationalCert: BufferSource;
+    readonly rootCert: Bytes;
+    readonly identityProtectionKey: Bytes;
+    readonly operationalIdentityProtectionKey: Bytes;
+    readonly intermediateCACert: Bytes | undefined;
+    readonly operationalCert: Bytes;
     readonly #keyPair: Key;
     readonly #sessions = new Set<Session>();
     readonly #groups: FabricGroups;
@@ -148,11 +148,11 @@ export class Fabric {
         return this.#keyPair.publicKey;
     }
 
-    sign(data: BufferSource) {
+    sign(data: Bytes) {
         return this.crypto.signEcdsa(this.#keyPair, data);
     }
 
-    async verifyCredentials(operationalCert: BufferSource, intermediateCACert?: BufferSource) {
+    async verifyCredentials(operationalCert: Bytes, intermediateCACert?: Bytes) {
         const rootCert = Rcac.fromTlv(this.rootCert);
         const nocCert = Noc.fromTlv(operationalCert);
         const icaCert = intermediateCACert !== undefined ? Icac.fromTlv(intermediateCACert) : undefined;
@@ -164,7 +164,7 @@ export class Fabric {
         await nocCert.verify(this.#crypto, rootCert, icaCert);
     }
 
-    matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: BufferSource) {
+    matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: Bytes) {
         return this.fabricId === fabricId && Bytes.areEqual(this.rootPublicKey, rootPublicKey);
     }
 
@@ -175,7 +175,7 @@ export class Fabric {
         );
     }
 
-    #generateSalt(nodeId: NodeId, random: BufferSource) {
+    #generateSalt(nodeId: NodeId, random: Bytes) {
         const writer = new DataWriter(Endian.Little);
         writer.writeByteArray(random);
         writer.writeByteArray(this.rootPublicKey);
@@ -188,7 +188,7 @@ export class Fabric {
      * Returns the destination IDs for a given nodeId, random value and optional groupId. When groupId is provided, it
      * returns the time-wise valid operational keys for that groupId.
      */
-    async currentDestinationIdFor(nodeId: NodeId, random: BufferSource) {
+    async currentDestinationIdFor(nodeId: NodeId, random: Bytes) {
         return this.#crypto.signHmac(this.groups.keySets.currentKeyForId(0).key, this.#generateSalt(nodeId, random));
     }
 
@@ -196,7 +196,7 @@ export class Fabric {
      * Returns the destination IDs for a given nodeId, random value and optional groupId. When groupId is provided, it
      * returns all operational keys for that groupId.
      */
-    async destinationIdsFor(nodeId: NodeId, random: BufferSource) {
+    async destinationIdsFor(nodeId: NodeId, random: Bytes) {
         const salt = this.#generateSalt(nodeId, random);
         // Check all keys of keyset 0 - typically it is only the IPK
         const destinationIds = this.groups.keySets.allKeysForId(0).map(({ key }) => this.#crypto.signHmac(key, salt));
@@ -274,14 +274,14 @@ export class FabricBuilder {
     #crypto: Crypto;
     #keyPair: PrivateKey;
     #rootVendorId?: VendorId;
-    #rootCert?: BufferSource;
-    #intermediateCACert?: BufferSource;
-    #operationalCert?: BufferSource;
+    #rootCert?: Bytes;
+    #intermediateCACert?: Bytes;
+    #operationalCert?: Bytes;
     #fabricId?: FabricId;
     #nodeId?: NodeId;
     #rootNodeId?: NodeId;
-    #rootPublicKey?: BufferSource;
-    #identityProtectionKey?: BufferSource;
+    #rootPublicKey?: Bytes;
+    #identityProtectionKey?: Bytes;
     #fabricIndex?: FabricIndex;
     #label = "";
 
@@ -306,7 +306,7 @@ export class FabricBuilder {
         return X509Base.createCertificateSigningRequest(this.#crypto, this.#keyPair);
     }
 
-    async setRootCert(rootCert: BufferSource) {
+    async setRootCert(rootCert: Bytes) {
         const root = Rcac.fromTlv(rootCert);
         await root.verify(this.#crypto);
         this.#rootCert = rootCert;
@@ -318,7 +318,7 @@ export class FabricBuilder {
         return this.#rootCert;
     }
 
-    async setOperationalCert(operationalCert: BufferSource, intermediateCACert?: BufferSource) {
+    async setOperationalCert(operationalCert: Bytes, intermediateCACert?: Bytes) {
         if (intermediateCACert !== undefined && intermediateCACert.byteLength === 0) {
             intermediateCACert = undefined;
         }
@@ -368,7 +368,7 @@ export class FabricBuilder {
         return this;
     }
 
-    setIdentityProtectionKey(key: BufferSource) {
+    setIdentityProtectionKey(key: Bytes) {
         this.#identityProtectionKey = key;
         return this;
     }
@@ -458,15 +458,15 @@ export namespace Fabric {
         fabricId: FabricId;
         nodeId: NodeId;
         rootNodeId: NodeId;
-        operationalId: BufferSource;
-        rootPublicKey: BufferSource;
+        operationalId: Bytes;
+        rootPublicKey: Bytes;
         keyPair: BinaryKeyPair;
         rootVendorId: VendorId;
-        rootCert: BufferSource;
-        identityProtectionKey: BufferSource;
-        operationalIdentityProtectionKey: BufferSource;
-        intermediateCACert: BufferSource | undefined;
-        operationalCert: BufferSource;
+        rootCert: Bytes;
+        identityProtectionKey: Bytes;
+        operationalIdentityProtectionKey: Bytes;
+        intermediateCACert: Bytes | undefined;
+        operationalCert: Bytes;
         label: string;
     };
 }

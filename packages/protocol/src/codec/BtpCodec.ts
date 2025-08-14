@@ -24,11 +24,11 @@ export interface BtpPacketPayload {
     ackNumber?: number;
     sequenceNumber: number;
     messageLength?: number;
-    segmentPayload?: BufferSource;
+    segmentPayload?: Bytes;
 }
 
 export interface DecodedBtpPacketPayload extends BtpPacketPayload {
-    segmentPayload: BufferSource;
+    segmentPayload: Bytes;
 }
 
 export interface BtpHeader {
@@ -66,12 +66,12 @@ export enum BtpOpcode {
 const HANDSHAKE_HEADER = 0b01100101;
 
 export class BtpCodec {
-    static decodeBtpHandshakeRequest(data: BufferSource): BtpHandshakeRequest {
+    static decodeBtpHandshakeRequest(data: Bytes): BtpHandshakeRequest {
         const reader = new DataReader(data, Endian.Little);
         return this.decodeHandshakeRequestPayload(reader);
     }
 
-    static decodeBtpPacket(data: BufferSource): DecodedBtpPacket {
+    static decodeBtpPacket(data: Bytes): DecodedBtpPacket {
         const reader = new DataReader(data, Endian.Little);
 
         const header = this.decodeBtpPacketHeader(reader);
@@ -82,11 +82,11 @@ export class BtpCodec {
         };
     }
 
-    static encodeBtpPacket({ header, payload }: BtpPacket): BufferSource {
+    static encodeBtpPacket({ header, payload }: BtpPacket): Bytes {
         return Bytes.concat(this.encodeBtpPacketHeader(header), this.encodeBtpPacketPayload(header, payload));
     }
 
-    static encodeBtpHandshakeRequest({ versions, attMtu, clientWindowSize }: BtpHandshakeRequest): BufferSource {
+    static encodeBtpHandshakeRequest({ versions, attMtu, clientWindowSize }: BtpHandshakeRequest): Bytes {
         const writer = new DataWriter(Endian.Little);
         writer.writeUInt8(HANDSHAKE_HEADER);
         writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
@@ -99,7 +99,7 @@ export class BtpCodec {
         return writer.toByteArray();
     }
 
-    static encodeBtpHandshakeResponse({ version, attMtu, windowSize }: BtpHandshakeResponse): BufferSource {
+    static encodeBtpHandshakeResponse({ version, attMtu, windowSize }: BtpHandshakeResponse): Bytes {
         const writer = new DataWriter(Endian.Little);
         writer.writeUInt8(HANDSHAKE_HEADER);
         writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
@@ -125,7 +125,7 @@ export class BtpCodec {
     private static encodeBtpPacketPayload(
         { hasAckNumber, isBeginningSegment, isContinuingSegment, isEndingSegment }: BtpHeader,
         { ackNumber, sequenceNumber, messageLength, segmentPayload }: BtpPacketPayload,
-    ): BufferSource {
+    ): Bytes {
         const writer = new DataWriter(Endian.Little);
 
         // Validate Header against Payload fields to make sure they match together
@@ -211,7 +211,7 @@ export class BtpCodec {
         return { versions, attMtu, clientWindowSize };
     }
 
-    static decodeBtpHandshakeResponsePayload(data: BufferSource): BtpHandshakeResponse {
+    static decodeBtpHandshakeResponsePayload(data: Bytes): BtpHandshakeResponse {
         const reader = new DataReader(data, Endian.Little);
         const header = reader.readUInt8();
         if (header !== HANDSHAKE_HEADER) {
@@ -259,7 +259,7 @@ export class BtpCodec {
         isEndingSegment,
         isContinuingSegment,
         isBeginningSegment,
-    }: BtpHeader): BufferSource {
+    }: BtpHeader): Bytes {
         const writer = new DataWriter(Endian.Little);
 
         if (isHandshakeRequest || hasManagementOpcode) {
@@ -300,7 +300,7 @@ export class BtpCodec {
         return writer.toByteArray();
     }
 
-    static decodeBleAdvertisementData(data: BufferSource) {
+    static decodeBleAdvertisementData(data: Bytes) {
         const reader = new DataReader(data, Endian.Little);
         if (
             reader.readUInt8() !== 0x02 ||
@@ -320,7 +320,7 @@ export class BtpCodec {
         return { discriminator, vendorId, productId, hasAdditionalAdvertisementData };
     }
 
-    static decodeBleAdvertisementServiceData(data: BufferSource) {
+    static decodeBleAdvertisementServiceData(data: Bytes) {
         const reader = new DataReader(data, Endian.Little);
         if (reader.readUInt8() !== 0x00) {
             throw new BleError("Invalid BLE advertisement data");

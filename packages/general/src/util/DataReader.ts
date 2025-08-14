@@ -10,10 +10,10 @@ import { Bytes, Endian } from "./Bytes.js";
 export class DataReader<E extends Endian = Endian.Big> {
     readonly #littleEndian: boolean;
     readonly #dataView: DataView;
-    readonly #buffer: Uint8Array<ArrayBuffer>;
+    readonly #buffer: Uint8Array;
     #offset = 0;
 
-    constructor(buffer: BufferSource, endian?: E) {
+    constructor(buffer: Bytes, endian?: E) {
         this.#buffer = Bytes.of(buffer);
         this.#dataView = Bytes.dataViewOf(this.#buffer);
         this.#littleEndian = endian === Endian.Little;

@@ -17,7 +17,7 @@ import { Rcac } from "./Rcac.js";
  */
 export class Icac extends OperationalBase<OperationalCertificate.Icac> {
     /** Construct the class from a Tlv version of the certificate */
-    static fromTlv(tlv: BufferSource): Icac {
+    static fromTlv(tlv: Bytes): Icac {
         return new Icac(OperationalCertificate.TlvIcac.decode(tlv));
     }
 

@@ -6,6 +6,7 @@
 
 import { Environment } from "#environment/Environment.js";
 import { Environmental } from "#environment/Environmental.js";
+import { Bytes } from "#util/Bytes.js";
 import { BasicSet } from "#util/Set.js";
 import { Channel, ChannelType } from "./Channel.js";
 
@@ -14,7 +15,7 @@ import { Channel, ChannelType } from "./Channel.js";
  * It cannot open new connections.
  */
 export interface TransportInterface {
-    onData(listener: (socket: Channel<BufferSource>, data: BufferSource) => void): TransportInterface.Listener;
+    onData(listener: (socket: Channel<Bytes>, data: Bytes) => void): TransportInterface.Listener;
     close(): Promise<void>;
     supports(type: ChannelType, address?: string): boolean;
 }
