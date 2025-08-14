@@ -116,7 +116,7 @@ describe("TlvByteString", () => {
 
     describe("validation", () => {
         it("throws an error if the value is not a ByteString", () => {
-            expect(() => TlvByteString.validate(5 as any)).throw(ValidationError, "Expected Uint8Array, got number.");
+            expect(() => TlvByteString.validate(5 as any)).throw(ValidationError, "Expected BufferSource, got number.");
         });
 
         it("throws an error if the value is not a String", () => {
