@@ -70,6 +70,12 @@ export namespace Constants {
     const delayAfterOpeningCommissioningWindowMs = 500;
 
     /**
+     * The server will not find chip-tool unless we provide an explicit path.  The failure mode is a little
+     * non-obvious as it doesn't try to start the server but attempts to establish a websocket connection regardless.
+     */
+    const chipToolPath = "/bin/chip-tool";
+
+    /**
      * Default arguments provided to the YAML runner.
      */
     export const YamlRunnerArgs = [
@@ -83,6 +89,9 @@ export namespace Constants {
 
         "--waitAfterCommissioning",
         `${delayAfterOpeningCommissioningWindowMs}`,
+
+        "--server_path",
+        chipToolPath,
     ];
 
     /**
