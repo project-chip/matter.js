@@ -157,17 +157,13 @@ COPY --from=bins /usr/local/lib /usr/local/lib
 # Note - this is shrinking as they create wheels for these packages
 WORKDIR /usr/local/lib/python3.12/dist-packages
 COPY --from=source /connectedhomeip/scripts/tests/chiptest chiptest
-COPY --from=source /connectedhomeip/examples/chip-tool/py_matter_chip_tool_adapter/matter_chip_tool_adapter matter_chip_tool_adapter
-COPY --from=source /connectedhomeip/examples/placeholder/py_matter_placeholder_adapter/matter_placeholder_adapter matter_placeholder_adapter
-COPY --from=source /connectedhomeip/src/controller/python/py_matter_yamltest_repl_adapter/matter_yamltest_repl_adapter matter_yamltest_repl_adapter
+COPY --from=source /connectedhomeip/scripts/tests/chipyaml chipyaml
 
 # Link various bits to original connectedhomeip locations for discovery and/or convenience
 RUN mkdir -p /scripts/tests
 RUN ln -s "$(realpath chiptest)" /scripts/tests/chiptest
-
-# YAML test logic
+RUN ln -s "$(realpath chipyaml)" /scripts/tests/chipyaml
 WORKDIR /
-COPY --from=source /connectedhomeip/scripts/tests/chipyaml /scripts/tests/chipyaml
 
 # Some scripts expect pigweed root
 ENV PW_PROJECT_ROOT=/
