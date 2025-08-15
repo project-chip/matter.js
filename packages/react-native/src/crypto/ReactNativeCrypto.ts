@@ -108,23 +108,6 @@ export class ReactNativeCrypto extends StandardCrypto {
     override async generateDhSecret(key: PrivateKey, peerKey: PublicKey) {
         return key.sharedSecretFor(peerKey);
     }
-
-    /**
-     * Quick Crypto doesn't support import of raw keys so convert to JWK prior to import.
-     */
-    protected override importKey(
-        format: KeyFormat,
-        keyData: JsonWebKey | BufferSource,
-        algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm,
-        extractable: boolean,
-        keyUsages: ReadonlyArray<KeyUsage>,
-    ) {
-        if (format === "raw") {
-            format = "jwk";
-            keyData = PrivateKey(Bytes.of(keyData as BufferSource));
-        }
-        return super.importKey(format, keyData, algorithm, extractable, keyUsages);
-    }
 }
 
 Environment.default.set(Crypto, new ReactNativeCrypto(crypto as unknown as WebCrypto));
