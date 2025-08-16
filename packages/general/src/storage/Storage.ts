@@ -40,11 +40,7 @@ export abstract class Storage {
     }
 
     abstract openBlob(contexts: string[], key: string): MaybePromise<Blob>;
-    abstract writeBlobFromStream(
-        contexts: string[],
-        key: string,
-        stream: ReadableStream<Bytes>,
-    ): MaybePromise<void>;
+    abstract writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<Bytes>): MaybePromise<void>;
 }
 
 /**
