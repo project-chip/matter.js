@@ -3,7 +3,17 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { AttributeId, Bytes, ClusterId, CommandId, EventId, EventNumber, NodeId, Observable } from "@matter/main";
+import {
+    AttributeId,
+    Bytes,
+    ClusterId,
+    CommandId,
+    EventId,
+    EventNumber,
+    Interval,
+    NodeId,
+    Observable,
+} from "@matter/main";
 import { CommissionableDeviceIdentifiers } from "@matter/main/protocol";
 import { EndpointNumber, Status } from "@matter/main/types";
 
@@ -111,7 +121,7 @@ export type InvokeRequest = {
     clusterId: ClusterId;
     commandId: CommandId;
     data: unknown;
-    timedInteractionTimeoutMs?: number;
+    timedInteractionTimeout?: Interval;
     suppressResponse?: boolean;
 };
 export type InvokeResponse = {
@@ -127,7 +137,7 @@ export type InvokeByIdRequest = {
     clusterId: ClusterId;
     commandId: CommandId;
     data: unknown;
-    timedInteractionTimeoutMs?: number;
+    timedInteractionTimeout?: Interval;
 };
 
 export type DelayRequest = {

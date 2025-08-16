@@ -73,6 +73,7 @@ export function ValueValidator(schema: Schema, supervisor: RootSupervisor): Valu
             break;
 
         case Metatype.date:
+        case Metatype.interval:
         case Metatype.any:
             break;
 

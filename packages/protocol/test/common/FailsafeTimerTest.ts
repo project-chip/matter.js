@@ -5,7 +5,7 @@
  */
 
 import { FailsafeTimer } from "#common/FailsafeTimer.js";
-import { createPromise } from "#general";
+import { createPromise, Instant, Seconds } from "#general";
 
 // TODO identify more cases that are not handled by chip tool tests
 describe("FailSafeTimer Test", () => {
@@ -16,7 +16,7 @@ describe("FailSafeTimer Test", () => {
     describe("Verify Expiry handling", () => {
         it("Expiry callback is called when failsafe expires", async () => {
             const { promise, resolver } = createPromise<void>();
-            new FailsafeTimer(undefined, 1, 100, async () => resolver());
+            new FailsafeTimer(undefined, Seconds.one, Seconds(100), async () => resolver());
 
             await MockTime.advance(1000);
 
@@ -25,13 +25,13 @@ describe("FailSafeTimer Test", () => {
 
         it("Expiry callback is called when failsafe expires after being rearmed (extended)", async () => {
             let expired = false;
-            const failSafe = new FailsafeTimer(undefined, 3, 100, async () => {
+            const failSafe = new FailsafeTimer(undefined, Seconds(3), Seconds(100), async () => {
                 expired = true;
             });
 
             await MockTime.advance(1500);
             expect(expired).to.be.false;
-            await failSafe.reArm(undefined, 3);
+            await failSafe.reArm(undefined, Seconds(3));
             expect(expired).to.be.false;
             await MockTime.advance(1500);
             expect(expired).to.be.false;
@@ -43,25 +43,25 @@ describe("FailSafeTimer Test", () => {
 
         it("Expiry callback is called directly when failsafe expires after being rearmed (with 0)", async () => {
             let expired = false;
-            const failSafe = new FailsafeTimer(undefined, 3, 100, async () => {
+            const failSafe = new FailsafeTimer(undefined, Seconds(3), Seconds(100), async () => {
                 expired = true;
             });
 
             await MockTime.advance(1500);
             expect(expired).to.be.false;
-            await failSafe.reArm(undefined, 0);
+            await failSafe.reArm(undefined, Instant);
             expect(expired).to.be.true;
         });
 
         it("Expiry callback is called when max cumulative failsafe expires", async () => {
             let expired = false;
-            const failSafe = new FailsafeTimer(undefined, 3, 2, async () => {
+            const failSafe = new FailsafeTimer(undefined, Seconds(3), Seconds(2), async () => {
                 expired = true;
             });
 
             await MockTime.advance(1500);
             expect(expired).to.be.false;
-            await failSafe.reArm(undefined, 1);
+            await failSafe.reArm(undefined, Seconds.one);
             expect(expired).to.be.false;
             await MockTime.advance(500);
             expect(expired).to.be.true;
@@ -69,7 +69,7 @@ describe("FailSafeTimer Test", () => {
 
         it("Expiry callback is not called when failsafe was completed", async () => {
             let expired = false;
-            const failSafe = new FailsafeTimer(undefined, 3, 2, async () => {
+            const failSafe = new FailsafeTimer(undefined, Seconds(3), Seconds(2), async () => {
                 expired = true;
             });
 

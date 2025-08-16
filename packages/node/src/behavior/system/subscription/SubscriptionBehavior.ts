@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { deepCopy, isIpNetworkChannel, Logger, MatterError, MaybePromise, ServerAddressIp } from "#general";
+import { deepCopy, isIpNetworkChannel, Logger, MatterError, MaybePromise, Seconds, ServerAddressIp } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import { InteractionServer, PeerSubscription } from "#node/server/InteractionServer.js";
 import { ServerSubscription } from "#node/server/ServerSubscription.js";
@@ -24,7 +24,7 @@ import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 const logger = Logger.get("SubscriptionBehavior");
 
 /** Timeout in seconds to wait for responses or discovery of the peer node when trying to re-establish a subscription. */
-const REESTABLISH_SUBSCRIPTIONS_TIMEOUT_S = 2;
+const REESTABLISH_SUBSCRIPTIONS_TIMEOUT = Seconds(2);
 
 /**
  * Subscriptions Persistence handling.
@@ -115,10 +115,10 @@ export class SubscriptionBehavior extends Behavior {
                     ),
                 ),
                 FieldElement({ name: "isFabricFiltered", type: "bool" }),
-                FieldElement({ name: "maxIntervalCeilingSeconds", type: "uint16" }),
-                FieldElement({ name: "minIntervalFloorSeconds", type: "uint16" }),
-                FieldElement({ name: "maxInterval", type: "uint16" }),
-                FieldElement({ name: "sendInterval", type: "uint16" }),
+                FieldElement({ name: "maxIntervalCeiling", type: "interval" }),
+                FieldElement({ name: "minIntervalFloor", type: "interval" }),
+                FieldElement({ name: "maxInterval", type: "interval" }),
+                FieldElement({ name: "sendInterval", type: "interval" }),
                 FieldElement(
                     {
                         name: "operationalAddress",
@@ -142,8 +142,8 @@ export class SubscriptionBehavior extends Behavior {
             maxInterval,
             sendInterval,
             id,
-            maxIntervalCeilingSeconds,
-            minIntervalFloorSeconds,
+            maxIntervalCeiling,
+            minIntervalFloor,
         } = subscription;
         const { peerAddress } = session;
         const { fabricIndex, nodeId } = peerAddress;
@@ -160,8 +160,8 @@ export class SubscriptionBehavior extends Behavior {
         const peerSubscription: PeerSubscription = {
             subscriptionId: id,
             peerAddress: { fabricIndex, nodeId },
-            maxIntervalCeilingSeconds,
-            minIntervalFloorSeconds,
+            maxIntervalCeiling,
+            minIntervalFloor,
             attributeRequests,
             eventRequests,
             isFabricFiltered,
@@ -234,7 +234,7 @@ export class SubscriptionBehavior extends Behavior {
                     await peers.ensureConnection(peerAddress, {
                         discoveryOptions: {
                             discoveryType: NodeDiscoveryType.TimedDiscovery,
-                            timeoutSeconds: REESTABLISH_SUBSCRIPTIONS_TIMEOUT_S,
+                            timeout: REESTABLISH_SUBSCRIPTIONS_TIMEOUT,
                         },
                         allowUnknownPeer: true,
                         operationalAddress,

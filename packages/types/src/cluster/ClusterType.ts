@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Branded, Merge } from "#general";
+import { Branded, Interval, Merge } from "#general";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
@@ -242,17 +242,19 @@ export namespace ClusterType {
 
     export type PatchType<V> = V extends (infer E)[]
         ? Record<`${number}`, PatchType<E>> | PatchType<E>[]
-        : V extends number
-          ? number
-          : V extends bigint
-            ? bigint
-            : V extends object
-              ? V extends (...args: any[]) => any
-                  ? never
-                  : {
-                        [K in keyof V]?: PatchType<V[K]>;
-                    }
-              : V;
+        : V extends Interval
+          ? Interval
+          : V extends number
+            ? number
+            : V extends bigint
+              ? bigint
+              : V extends object
+                ? V extends (...args: any[]) => any
+                    ? never
+                    : {
+                          [K in keyof V]?: PatchType<V[K]>;
+                      }
+                : V;
 
     /**
      * A slightly relaxed version of AttributeValues for input.

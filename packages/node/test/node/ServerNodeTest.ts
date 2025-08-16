@@ -28,6 +28,7 @@ import {
     MockCrypto,
     MockUdpChannel,
     NetworkSimulator,
+    Seconds,
     StorageBackendMemory,
     StorageManager,
     StorageService,
@@ -177,7 +178,7 @@ describe("ServerNode", () => {
 
         const advertisement = DnsCodec.decode(await advertisementReceived);
 
-        expect(advertisement?.answers[0]?.ttl).equals(120);
+        expect(Seconds.of(advertisement?.answers[0]?.ttl)).equals(120);
 
         function answer(name: string) {
             for (const answer of (advertisement as DnsMessage).answers) {

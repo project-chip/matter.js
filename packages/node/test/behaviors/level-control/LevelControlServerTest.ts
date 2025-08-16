@@ -193,16 +193,16 @@ async function setup() {
         ms: number;
     }>();
 
-    let last = Time.nowMs();
+    let last = Time.nowMs;
 
     endpoint.events.levelControl.remainingTime$Changed.online.on(value => {
-        const now = Time.nowMs();
+        const now = Time.nowMs;
         events.push({ kind: "time", value, ms: now - last });
         last = now;
     });
 
     endpoint.events.levelControl.currentLevel$Changed.online.on(value => {
-        const now = Time.nowMs();
+        const now = Time.nowMs;
         events.push({ kind: "level", value, ms: now - last });
         last = now;
     });

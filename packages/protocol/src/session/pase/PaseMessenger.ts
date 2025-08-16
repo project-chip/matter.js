@@ -6,10 +6,7 @@
 
 import { Bytes } from "#general";
 import { SecureMessageType, TypeFromSchema } from "#types";
-import {
-    DEFAULT_NORMAL_PROCESSING_TIME_MS,
-    SecureChannelMessenger,
-} from "../../securechannel/SecureChannelMessenger.js";
+import { DEFAULT_NORMAL_PROCESSING_TIME, SecureChannelMessenger } from "../../securechannel/SecureChannelMessenger.js";
 import {
     TlvPasePake1,
     TlvPasePake2,
@@ -29,16 +26,13 @@ type PasePake3 = TypeFromSchema<typeof TlvPasePake3>;
 
 export class PaseServerMessenger extends SecureChannelMessenger {
     async readPbkdfParamRequest() {
-        const { payload } = await this.nextMessage(
-            SecureMessageType.PbkdfParamRequest,
-            DEFAULT_NORMAL_PROCESSING_TIME_MS,
-        );
+        const { payload } = await this.nextMessage(SecureMessageType.PbkdfParamRequest, DEFAULT_NORMAL_PROCESSING_TIME);
         return { requestPayload: payload, request: TlvPbkdfParamRequest.decode(payload) };
     }
 
     async sendPbkdfParamResponse(response: PbkdfParamResponse) {
         return this.send(response, SecureMessageType.PbkdfParamResponse, TlvPbkdfParamResponse, {
-            expectedProcessingTimeMs: DEFAULT_NORMAL_PROCESSING_TIME_MS,
+            expectedProcessingTime: DEFAULT_NORMAL_PROCESSING_TIME,
         });
     }
 
@@ -58,14 +52,14 @@ export class PaseServerMessenger extends SecureChannelMessenger {
 export class PaseClientMessenger extends SecureChannelMessenger {
     sendPbkdfParamRequest(request: PbkdfParamRequest) {
         return this.send(request, SecureMessageType.PbkdfParamRequest, TlvPbkdfParamRequest, {
-            expectedProcessingTimeMs: DEFAULT_NORMAL_PROCESSING_TIME_MS,
+            expectedProcessingTime: DEFAULT_NORMAL_PROCESSING_TIME,
         });
     }
 
     async readPbkdfParamResponse() {
         const { payload } = await this.nextMessage(
             SecureMessageType.PbkdfParamResponse,
-            DEFAULT_NORMAL_PROCESSING_TIME_MS,
+            DEFAULT_NORMAL_PROCESSING_TIME,
         );
         return { responsePayload: payload, response: TlvPbkdfParamResponse.decode(payload) };
     }

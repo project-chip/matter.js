@@ -11,9 +11,12 @@ import {
     cropValueRange,
     Diagnostic,
     ImplementationError,
+    Interval,
     Logger,
     MaybePromise,
+    Millisecs,
     ObserverGroup,
+    Seconds,
     Time,
     Timer,
 } from "#general";
@@ -170,7 +173,7 @@ export class Transitions<B extends Behavior> {
             configuration: transition,
             currentValue,
             changePerMs: changePerS / 1000,
-            prevStepAt: Time.nowMs() - (this.#config.stepIntervalMs ?? Transitions.DEFAULT_STEP_INTERVAL_MS),
+            prevStepAt: Time.nowMs - (this.#config.stepInterval ?? Transitions.DEFAULT_STEP_INTERVAL),
             distanceLeft,
         };
 
@@ -244,7 +247,7 @@ export class Transitions<B extends Behavior> {
         if (this.#timer === undefined) {
             this.#timer = Time.getPeriodicTimer(
                 `transition-${this.#endpoint}-${this.#config.type.name}`,
-                this.#config.stepIntervalMs ?? Transitions.DEFAULT_STEP_INTERVAL_MS,
+                this.#config.stepInterval ?? Transitions.DEFAULT_STEP_INTERVAL,
                 this.#step.bind(this),
             );
 
@@ -357,7 +360,7 @@ export class Transitions<B extends Behavior> {
     get remainingTime() {
         if (this.#config.manageTransitions === false) {
             if (this.#config.transitionEndTimeMs !== undefined) {
-                const remaining = this.#config.transitionEndTimeMs - Time.nowMs();
+                const remaining = this.#config.transitionEndTimeMs - Time.nowMs;
                 if (remaining < 0) {
                     return 0;
                 }
@@ -403,7 +406,7 @@ export class Transitions<B extends Behavior> {
      * You may override this method if you want matter.js to run a timer, but you want to handle value updates yourself.
      */
     protected async step(behavior: B) {
-        const now = Time.nowMs();
+        const now = Time.nowMs;
 
         // Compute updated values for all transitioning attributes
         for (const prop of this) {
@@ -593,11 +596,11 @@ export class Transitions<B extends Behavior> {
     }
 
     #externalTimeOf(ms: number) {
-        return Math.round(ms / (this.#config.externalTimeUnitMs ?? Transitions.DEFAULT_EXTERNAL_TIME_UNIT_MS));
+        return Math.round(ms / (this.#config.externalTimeUnit ?? Transitions.DEFAULT_EXTERNAL_TIME_UNIT));
     }
 
     #internalTimeOf(externalUnits: number) {
-        return externalUnits * (this.#config.externalTimeUnitMs ?? Transitions.DEFAULT_EXTERNAL_TIME_UNIT_MS);
+        return Millisecs(externalUnits * (this.#config.externalTimeUnit ?? Transitions.DEFAULT_EXTERNAL_TIME_UNIT));
     }
 
     /**
@@ -644,8 +647,8 @@ export class Transitions<B extends Behavior> {
 }
 
 export namespace Transitions {
-    export const DEFAULT_STEP_INTERVAL_MS = 100;
-    export const DEFAULT_EXTERNAL_TIME_UNIT_MS = 100;
+    export const DEFAULT_STEP_INTERVAL = Seconds.tenth;
+    export const DEFAULT_EXTERNAL_TIME_UNIT = Seconds.tenth;
 
     /**
      * A valid transitionable attribute name for the specified type.
@@ -674,19 +677,19 @@ export namespace Transitions {
         readonly manageTransitions?: boolean;
 
         /**
-         * Milliseconds-per external time unit.  Defaults to 100 which is appropriate for CC & LVL "remaining time"
+         * Interval per external time unit.  Defaults to 100ms which is appropriate for CC & LVL "remaining time"
          * attribute that is defined as 10ths of a second.
          */
-        readonly externalTimeUnitMs?: number;
+        readonly externalTimeUnit?: Interval;
 
         /**
          * The internal tick rate for transitions.
          *
          * This is the smallest time increment between value adjustments.
          *
-         * Defaults to {@link DEFAULT_STEP_INTERVAL_MS}.
+         * Defaults to {@link DEFAULT_STEP_INTERVAL}.
          */
-        readonly stepIntervalMs?: number;
+        readonly stepInterval?: Interval;
 
         /**
          * The end time for a transition if transition management is disabled.

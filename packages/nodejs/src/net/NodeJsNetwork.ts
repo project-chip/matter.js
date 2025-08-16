@@ -9,6 +9,7 @@ import {
     InterfaceType,
     isIPv6,
     Logger,
+    Minutes,
     Network,
     NetworkError,
     NetworkInterface,
@@ -82,7 +83,7 @@ export class NodeJsNetwork extends Network {
     private static readonly netInterfaces = new Cache<string | undefined>(
         "Network interface",
         (ip: string) => this.getNetInterfaceForRemoteAddress(ip),
-        5 * 60 * 1000 /* 5mn */,
+        Minutes(5),
     );
 
     override async close() {

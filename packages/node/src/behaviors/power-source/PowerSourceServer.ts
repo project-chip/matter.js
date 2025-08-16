@@ -6,6 +6,7 @@
 
 import { DescriptorServer } from "#behaviors/descriptor";
 import { PowerSource } from "#clusters/power-source";
+import { Seconds } from "#general";
 import { ClusterType } from "#types";
 import { PowerSourceBehavior } from "./PowerSourceBehavior.js";
 
@@ -25,7 +26,7 @@ export class PowerSourceBaseServer extends PowerSourceLevelBase {
             this.events.batTimeToFullCharge$Changed,
         ].forEach(event => {
             if (event !== undefined) {
-                event.quiet.minimumEmitIntervalMs = 10_000;
+                event.quiet.minimumEmitInterval = Seconds(10);
             }
         });
     }

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes as ByteUtils, serialize as stringSerialize, UnexpectedDataError } from "#general";
+import { Bytes as ByteUtils, Interval, serialize as stringSerialize, UnexpectedDataError } from "#general";
 import type { Metatype } from "./Metatype.js";
 
 /**
@@ -18,6 +18,7 @@ export type FieldValue =
     | bigint
     | boolean
     | Date
+    | Interval
     | FieldValue[]
     | FieldValue.Properties
     | FieldValue.Reference

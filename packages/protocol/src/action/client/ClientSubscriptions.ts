@@ -14,6 +14,7 @@ import {
     Environment,
     Environmental,
     Logger,
+    Millisecs,
     Time,
     TimeoutError,
     Timer,
@@ -88,7 +89,7 @@ export class ClientSubscriptions {
      * Restart the timeout timer for the current set of active subscriptions.
      */
     resetTimer() {
-        const now = Time.nowMs();
+        const now = Time.nowMs;
         let nextTimeoutAt: number | undefined;
 
         // Process each subscription
@@ -127,9 +128,13 @@ export class ClientSubscriptions {
             this.#nextTimeoutAt = nextTimeoutAt;
             if (this.#timeout) {
                 this.#timeout?.stop();
-                this.#timeout.intervalMs = nextTimeoutAt - now;
+                this.#timeout.interval = Millisecs(nextTimeoutAt - now);
             } else {
-                this.#timeout = Time.getTimer("SubscriptionTimeout", nextTimeoutAt - now, this.resetTimer.bind(this));
+                this.#timeout = Time.getTimer(
+                    "SubscriptionTimeout",
+                    Millisecs(nextTimeoutAt - now),
+                    this.resetTimer.bind(this),
+                );
             }
         }
     }

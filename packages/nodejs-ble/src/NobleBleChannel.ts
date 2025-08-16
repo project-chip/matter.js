@@ -11,6 +11,7 @@ import {
     Diagnostic,
     InternalError,
     Logger,
+    Minutes,
     NetInterface,
     NetworkError,
     ServerAddress,
@@ -26,7 +27,7 @@ import {
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID_SHORT,
     BLE_MAXIMUM_BTP_MTU,
-    BTP_CONN_RSP_TIMEOUT_MS,
+    BTP_CONN_RSP_TIMEOUT,
     BTP_MAXIMUM_WINDOW_SIZE,
     BTP_SUPPORTED_VERSIONS,
     BleChannel,
@@ -154,7 +155,7 @@ export class NobleBleCentralInterface implements NetInterface {
                 // Timeout when trying to connect to the device because sometimes connect fails and noble does
                 // not emit an event. If device does not connect we do not try any longer and reject the promise
                 // because a re-discovery is the best option to get teh device into a good state again
-                connectTimeout: Time.getTimer("BLE connect timeout", 120_000, () => {
+                connectTimeout: Time.getTimer("BLE connect timeout", Minutes(2), () => {
                     logger.debug(`Timeout while connecting to peripheral ${peripheralAddress}`);
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     peripheral.removeListener("connect", connectHandler);
@@ -162,7 +163,7 @@ export class NobleBleCentralInterface implements NetInterface {
                     clearConnectionGuard();
                     rejectOnce(new BleError(`Timeout while connecting to peripheral ${peripheralAddress}`));
                 }),
-                disconnectTimeout: Time.getTimer("BLE disconnect timeout", 60_000, () => {
+                disconnectTimeout: Time.getTimer("BLE disconnect timeout", Minutes.one, () => {
                     logger.debug(`Timeout while disconnecting to peripheral ${peripheralAddress}`);
                     peripheral.removeListener("disconnect", reTryHandler);
                     clearConnectionGuard();
@@ -170,7 +171,7 @@ export class NobleBleCentralInterface implements NetInterface {
                 }),
                 // Timeout when trying to interview the device because sometimes when no response from device
                 // comes noble does not resolve promises
-                interviewTimeout: Time.getTimer("BLE interview timeout", 60_000, () => {
+                interviewTimeout: Time.getTimer("BLE interview timeout", Minutes.one, () => {
                     logger.debug(`Timeout while interviewing peripheral ${peripheralAddress}`);
                     peripheral.removeListener("disconnect", reTryHandler);
                     clearConnectionGuard();
@@ -449,7 +450,7 @@ export class NobleBleChannel extends BleChannel<Bytes> {
             }
         };
 
-        const btpHandshakeTimeout = Time.getTimer("BLE handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, async () => {
+        const btpHandshakeTimeout = Time.getTimer("BLE handshake timeout", BTP_CONN_RSP_TIMEOUT, async () => {
             characteristicC2ForSubscribe.removeListener("data", handshakeHandler);
 
             await characteristicC2ForSubscribe

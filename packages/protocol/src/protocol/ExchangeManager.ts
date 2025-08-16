@@ -26,7 +26,7 @@ import {
 import { PeerAddress } from "#peer/PeerAddress.js";
 import {
     ChannelNotConnectedError,
-    DEFAULT_EXPECTED_PROCESSING_TIME_MS,
+    DEFAULT_EXPECTED_PROCESSING_TIME,
     MessageChannel,
 } from "#protocol/MessageChannel.js";
 import { SecureChannelMessenger } from "#securechannel/SecureChannelMessenger.js";
@@ -412,12 +412,9 @@ export class ExchangeManager {
 
     calculateMaximumPeerResponseTimeMsFor(
         channel: MessageChannel,
-        expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS,
+        expectedProcessingTime = DEFAULT_EXPECTED_PROCESSING_TIME,
     ) {
-        return channel.calculateMaximumPeerResponseTimeMs(
-            this.#sessionManager.sessionParameters,
-            expectedProcessingTimeMs,
-        );
+        return channel.calculateMaximumPeerResponseTime(this.#sessionManager.sessionParameters, expectedProcessingTime);
     }
 
     #messageExchangeContextFor(channel: MessageChannel): MessageExchangeContext {

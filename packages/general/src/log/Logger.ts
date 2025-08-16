@@ -225,7 +225,7 @@ export class Logger {
             dest.context.run(() =>
                 dest.add(
                     Diagnostic.message({
-                        now: Time.now(),
+                        now: Time.now,
                         facility: this.#name,
                         level,
                         prefix: nestingPrefix(),

@@ -117,7 +117,7 @@ export class CertificateAuthority {
     }
 
     async #generateRootCert() {
-        const now = Time.get().now();
+        const now = Time.now;
         const cert = new Rcac({
             serialNumber: Bytes.fromHex(toHex(this.#rootCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
@@ -148,7 +148,7 @@ export class CertificateAuthority {
         nodeId: NodeId,
         caseAuthenticatedTags?: CaseAuthenticatedTag[],
     ) {
-        const now = Time.get().now();
+        const now = Time.now;
         const certId = this.#nextCertificateId++;
         const cert = new Noc({
             serialNumber: Bytes.fromHex(toHex(certId)),

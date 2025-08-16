@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, Logger } from "@matter/general";
+import { InternalError, Logger, Seconds } from "@matter/general";
 import {
     AreaNamespaceTag,
     capitalize,
@@ -211,7 +211,7 @@ export class RvcTestInstance extends NodeTestInstance {
                         schedules: [
                             {
                                 ...MdnsAdvertiser.DefaultBroadcastSchedule,
-                                broadcastAfterConnection: 10_000,
+                                broadcastAfterConnection: Seconds(10),
                             },
                             MdnsAdvertiser.RetransmissionBroadcastSchedule,
                         ],
