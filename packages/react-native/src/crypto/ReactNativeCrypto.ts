@@ -42,9 +42,9 @@ export class ReactNativeCrypto extends StandardCrypto {
      * Quick Crypto doesn't currently support {@link SubtleCrypto#deriveBits}.
      */
     override async createHkdfKey(
-        secret: BufferSource,
-        salt: BufferSource,
-        info: BufferSource,
+        secret: Bytes,
+        salt: Bytes,
+        info: Bytes,
         length: number = CRYPTO_SYMMETRIC_KEY_LENGTH,
     ) {
         const prk = crypto

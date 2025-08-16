@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto, Logger, MatterFlowError } from "#general";
+import { Bytes, Crypto, Logger, MatterFlowError } from "#general";
 import { NodeId } from "#types";
 import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet, SessionType } from "../codec/MessageCodec.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -57,7 +57,7 @@ export class InsecureSession extends Session {
         return MessageCodec.encodePayload(message);
     }
 
-    get attestationChallengeKey(): BufferSource {
+    get attestationChallengeKey(): Bytes {
         throw new MatterFlowError("Not supported on an unsecure session");
     }
 

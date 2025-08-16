@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "#general";
 import { ProductDescription } from "../common/ProductDescription.js";
 import { CommissioningFlowType } from "../schema/PairingCodeSchema.js";
 
@@ -48,7 +49,7 @@ export namespace CommissioningOptions {
         /**
          * Vendor-specific BLE advertisement data.
          */
-        readonly additionalBleAdvertisementData?: BufferSource;
+        readonly additionalBleAdvertisementData?: Bytes;
 
         /**
          * Maximum time to advdertise.  Must be > 3 minutes and < 48 hours.

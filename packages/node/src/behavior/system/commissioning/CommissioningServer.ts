@@ -7,6 +7,7 @@
 import { Endpoint } from "#endpoint/Endpoint.js";
 import {
     AsyncObservable,
+    Bytes,
     Crypto,
     Diagnostic,
     EventEmitter,
@@ -374,7 +375,7 @@ export namespace CommissioningServer {
         passcode = -1;
         discriminator = -1;
         flowType = CommissioningFlowType.Standard;
-        additionalBleAdvertisementData?: BufferSource = undefined;
+        additionalBleAdvertisementData?: Bytes = undefined;
         pairingCodes = {} as PairingCodes;
         mdns?: MdnsAdvertiser.Options;
         ble?: BleAdvertiser.Options;

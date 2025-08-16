@@ -158,7 +158,7 @@ export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<T
         return result;
     }
 
-    override decodeInternal(data: BufferSource) {
+    override decodeInternal(data: Bytes) {
         const bitmap = Bytes.of(data);
         if (bitmap.length !== this.byteArrayLength)
             throw new UnexpectedDataError(`Unexpected length: ${bitmap.length}. Expected ${this.byteArrayLength}`);

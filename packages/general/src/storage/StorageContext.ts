@@ -5,6 +5,7 @@
  */
 
 import { MatterAggregateError } from "#MatterError.js";
+import { Bytes } from "#util/Bytes.js";
 import { MaybePromise } from "../util/Promises.js";
 import { Storage, StorageError } from "./Storage.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
@@ -111,7 +112,7 @@ export class StorageContext implements StorageContextFactory {
         return this.storage.openBlob(this.thisContexts, key);
     }
 
-    writeBlobFromStream(key: string, stream: ReadableStream<BufferSource>) {
+    writeBlobFromStream(key: string, stream: ReadableStream<Bytes>) {
         return this.storage.writeBlobFromStream(this.thisContexts, key, stream);
     }
 }

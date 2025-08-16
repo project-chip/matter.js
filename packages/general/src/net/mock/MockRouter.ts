@@ -5,6 +5,7 @@
  */
 
 import { Logger } from "#log/Logger.js";
+import { Bytes } from "#util/Bytes.js";
 
 const logger = Logger.get("MockRouter");
 
@@ -39,7 +40,7 @@ export namespace MockRouter {
         sourcePort: number;
         destAddress: string;
         destPort: number;
-        payload: BufferSource;
+        payload: Bytes;
     }
 
     export interface Route {

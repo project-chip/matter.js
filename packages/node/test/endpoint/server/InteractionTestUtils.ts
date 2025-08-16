@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { AsyncObservable, DataReadQueue, MAX_UDP_MESSAGE_SIZE } from "#general";
+import { AsyncObservable, Bytes, DataReadQueue, MAX_UDP_MESSAGE_SIZE } from "#general";
 import {
     ExchangeSendOptions,
     MATTER_MESSAGE_OVERHEAD,
@@ -28,9 +28,9 @@ export class DummyMessageExchange {
         public timedInteractionExpired = false,
         public writeCallback?: (
             messageType: number,
-            payload: BufferSource,
+            payload: Bytes,
             options?: ExchangeSendOptions,
-        ) => { payload: BufferSource; messageType: number } | void,
+        ) => { payload: Bytes; messageType: number } | void,
         public clearTimedInteractionCallback?: () => void,
         public closeCallback?: () => void,
     ) {}
@@ -39,7 +39,7 @@ export class DummyMessageExchange {
         return this.messagesQueue.write(message);
     }
 
-    async send(messageType: number, payload: BufferSource, options?: ExchangeSendOptions) {
+    async send(messageType: number, payload: Bytes, options?: ExchangeSendOptions) {
         const { payload: responsePayload, messageType: responseMessageType } =
             this.writeCallback?.(messageType, payload, options) ?? {};
         if (payload) {
@@ -83,9 +83,9 @@ export async function createDummyMessageExchange(
     timedInteractionExpired = false,
     writeCallback?: (
         messageType: number,
-        payload: BufferSource,
+        payload: Bytes,
         options?: ExchangeSendOptions,
-    ) => { payload: BufferSource; messageType: number } | void,
+    ) => { payload: Bytes; messageType: number } | void,
     clearTimedInteractionCallback?: () => void,
     closeCallback?: () => void,
 ) {

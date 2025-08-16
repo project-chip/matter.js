@@ -3,6 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { Bytes } from "#util/Bytes.js";
 import { ImplementationError, MatterError } from "../MatterError.js";
 import { MaybePromise } from "../util/Promises.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
@@ -39,11 +40,7 @@ export abstract class Storage {
     }
 
     abstract openBlob(contexts: string[], key: string): MaybePromise<Blob>;
-    abstract writeBlobFromStream(
-        contexts: string[],
-        key: string,
-        stream: ReadableStream<BufferSource>,
-    ): MaybePromise<void>;
+    abstract writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<Bytes>): MaybePromise<void>;
 }
 
 /**

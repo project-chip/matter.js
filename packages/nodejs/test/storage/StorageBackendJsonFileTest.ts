@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "#general";
 import { StorageBackendJsonFile } from "#storage/StorageBackendJsonFile.js";
 import * as assert from "node:assert";
 import { readFile, unlink } from "node:fs/promises";
@@ -137,7 +138,7 @@ describe("Storage in JSON File", () => {
     it("writeBlob and readBlob success", async () => {
         const storage = await StorageBackendJsonFile.create(TEST_STORAGE_LOCATION);
         const data = new Uint8Array([21, 22, 23]);
-        const stream = new ReadableStream<BufferSource>({
+        const stream = new ReadableStream<Bytes>({
             start(controller) {
                 controller.enqueue(data);
                 controller.close();
@@ -148,7 +149,7 @@ describe("Storage in JSON File", () => {
 
         const blob = storage.openBlob(["context"], "blobkey");
         const reader = blob.stream().getReader();
-        const chunks: BufferSource[] = [];
+        const chunks: Bytes[] = [];
         while (true) {
             const { value, done } = await reader.read();
             if (done) break;

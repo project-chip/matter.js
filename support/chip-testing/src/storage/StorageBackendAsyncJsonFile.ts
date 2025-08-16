@@ -5,6 +5,7 @@
  */
 
 import {
+    Bytes,
     InternalError,
     Storage,
     StorageBackendMemory,
@@ -68,7 +69,7 @@ export class StorageBackendAsyncJsonFile extends Storage {
         return this.store.openBlob(contexts, key);
     }
 
-    async writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<BufferSource>) {
+    async writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<Bytes>) {
         if (this.store === undefined) {
             throw new InternalError("Storage not initialized.");
         }

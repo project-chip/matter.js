@@ -6,6 +6,7 @@
 import dgram from "react-native-udp";
 
 import {
+    Bytes,
     ChannelType,
     Diagnostic,
     isIPv4,
@@ -56,12 +57,12 @@ interface Socket {
     setMulticastInterface(interfaceAddress: string): void; // Not implemented
     addMembership(multicastAddress: string, multicastInterface?: string): void;
     dropMembership(multicastAddress: string, multicastInterface?: string): void;
-    on(event: "message", listener: (msg: BufferSource, rinfo: RemoteInfo) => void): void;
+    on(event: "message", listener: (msg: Bytes, rinfo: RemoteInfo) => void): void;
     on(event: "error", listener: (error: Error) => void): void;
-    removeListener(event: "message", listener: (msg: BufferSource, rinfo: RemoteInfo) => void): void;
+    removeListener(event: "message", listener: (msg: Bytes, rinfo: RemoteInfo) => void): void;
     removeListener(event: "error", listener: (error: Error) => void): void;
     send(
-        msg: BufferSource,
+        msg: Bytes,
         offset: number,
         length: number,
         port: number,
@@ -189,10 +190,8 @@ export class UdpChannelReactNative implements UdpChannel {
         }
     }
 
-    onData(
-        listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: BufferSource) => void,
-    ) {
-        const messageListener = async (data: BufferSource, { address, port }: RemoteInfo) => {
+    onData(listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Bytes) => void) {
+        const messageListener = async (data: Bytes, { address, port }: RemoteInfo) => {
             const netInterface = this.#netInterface ?? (await NetworkReactNative.getNetInterfaceForIp(address));
             listener(netInterface, address, port, data);
         };
@@ -207,7 +206,7 @@ export class UdpChannelReactNative implements UdpChannel {
         };
     }
 
-    async send(host: string, port: number, data: BufferSource) {
+    async send(host: string, port: number, data: Bytes) {
         return new Promise<void>((resolve, reject) => {
             this.#socket.send(data, 0, data.byteLength, port, host, error => {
                 if (error) {
