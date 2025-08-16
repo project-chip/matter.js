@@ -1069,7 +1069,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
 
     sendTimedRequest(timeout: Interval) {
         return this.request(MessageType.TimedRequest, TlvTimedRequest, MessageType.StatusResponse, TlvStatusResponse, {
-            timeout: timeout.ms,
+            timeout,
             interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
         });
     }

@@ -53,7 +53,7 @@ export class SwitchSimulator {
                             action.delay,
                             "ms",
                         );
-                        if (action.delay !== undefined && action.delay.ms > 0) {
+                        if (action.delay !== undefined && action.delay > 0) {
                             this.#executionDelayTimer = Time.getTimer("Switch action step", action.delay, () =>
                                 this.#processNextAction(),
                             ).start();
@@ -113,7 +113,7 @@ export class SwitchSimulator {
 
         // Configure cluster according to tests
         await endpoint.setStateOf(SwitchServer, {
-            multiPressDelay: Millisecs(command.multiPressReleasedTimeMillis).plus(Seconds.half),
+            multiPressDelay: Millisecs(command.multiPressReleasedTimeMillis + Seconds.half),
         });
 
         // Collect test steps

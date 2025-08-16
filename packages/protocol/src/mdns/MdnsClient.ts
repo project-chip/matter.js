@@ -238,7 +238,7 @@ export class MdnsClient implements Scanner {
     }
 
     #effectiveTTL(ttl: Interval) {
-        return ttl.times(MDNS_EXPIRY_GRACE_PERIOD_FACTOR).ceil;
+        return Millisecs(ttl * MDNS_EXPIRY_GRACE_PERIOD_FACTOR);
     }
 
     /**
@@ -262,10 +262,10 @@ export class MdnsClient implements Scanner {
         ).start();
 
         logger.debug(
-            `Sending ${queries.length} query records for ${this.#activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${this.#nextAnnounceInterval}`,
+            `Sending ${queries.length} query records for ${this.#activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${Interval.format(this.#nextAnnounceInterval)}`,
         );
 
-        const nextAnnounceInterval = this.#nextAnnounceInterval.times(2);
+        const nextAnnounceInterval = Millisecs(this.#nextAnnounceInterval * 2);
         this.#nextAnnounceInterval = Interval.min(nextAnnounceInterval, Hours.one);
 
         await this.#socket.send({
@@ -749,7 +749,7 @@ export class MdnsClient implements Scanner {
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
 
-        const discoveryEndTime = timeout ? Time.nowMs + timeout.ms : undefined;
+        const discoveryEndTime = timeout ? Time.nowMs + timeout : undefined;
         const queryId = this.#buildCommissionableQueryIdentifier(identifier);
         this.#setQueryRecords(queryId, this.#getCommissionableQueryRecords(identifier));
 
@@ -785,8 +785,8 @@ export class MdnsClient implements Scanner {
 
             let remainingTime;
             if (discoveryEndTime !== undefined) {
-                remainingTime = Seconds((discoveryEndTime - Time.nowMs) / 1000).ceil;
-                if (remainingTime.length <= 0) {
+                remainingTime = Seconds.ceil(Millisecs(discoveryEndTime - Time.nowMs));
+                if (remainingTime <= 0) {
                     break;
                 }
             }
@@ -876,7 +876,7 @@ export class MdnsClient implements Scanner {
                     records.forEach(record => {
                         const existingRecord = combinedAnswers.operational![recordType].get(record.name);
                         if (existingRecord && existingRecord.discoveredAt < record.discoveredAt) {
-                            if (record.ttl.ms === 0) {
+                            if (record.ttl === 0) {
                                 combinedAnswers.operational![recordType].delete(record.name);
                             } else {
                                 combinedAnswers.operational![recordType].set(record.name, record);
@@ -896,7 +896,7 @@ export class MdnsClient implements Scanner {
                     records.forEach(record => {
                         const existingRecord = combinedAnswers.commissionable![recordType].get(record.name);
                         if (existingRecord && existingRecord.discoveredAt < record.discoveredAt) {
-                            if (record.ttl.ms === 0) {
+                            if (record.ttl === 0) {
                                 combinedAnswers.commissionable![recordType].delete(record.name);
                             } else {
                                 combinedAnswers.commissionable![recordType].set(record.name, record);
@@ -1044,7 +1044,7 @@ export class MdnsClient implements Scanner {
         const interfaceRecords = this.#discoveredIpRecords.get(netInterface) ?? {};
         for (const record of ipAddresses) {
             const { recordType, name, value: ip, ttl } = record as DnsRecord<string>;
-            if (ttl.ms === 0) continue; // Skip records with ttl=0
+            if (ttl === 0) continue; // Skip records with ttl=0
             if (recordType === DnsRecordType.AAAA) {
                 interfaceRecords.addressesV6 = interfaceRecords.addressesV6 ?? {};
                 interfaceRecords.addressesV6[name] = interfaceRecords.addressesV6[name] ?? new Map();
@@ -1133,7 +1133,7 @@ export class MdnsClient implements Scanner {
         const discoveredAt = Time.nowMs;
 
         // we got an expiry info, so we can remove the record if we know it already and are done
-        if (ttl.ms === 0) {
+        if (ttl === 0) {
             if (this.#operationalDeviceRecords.has(matterName)) {
                 logger.debug(
                     `Removing operational device ${matterName} from cache (interface ${netInterface}) because of ttl=0`,
@@ -1188,7 +1188,7 @@ export class MdnsClient implements Scanner {
         } = record;
 
         // We got device expiry info, so we can remove the record if we know it already and are done
-        if (ttl.ms === 0) {
+        if (ttl === 0) {
             if (this.#operationalDeviceRecords.has(matterName)) {
                 logger.debug(
                     `Removing operational device ${matterName} from cache (interface ${netInterface}) because of ttl=0`,
@@ -1218,7 +1218,7 @@ export class MdnsClient implements Scanner {
         const { addresses } = device;
         if (ips.length > 0) {
             for (const { value: ip, ttl } of ips) {
-                if (ttl.ms === 0) {
+                if (ttl === 0) {
                     logger.debug(
                         `Removing IP ${ip} for operational device ${matterName} from cache (interface ${netInterface}) because of ttl=0`,
                     );
@@ -1276,7 +1276,7 @@ export class MdnsClient implements Scanner {
         const txtRecords = commissionableRecords[DnsRecordType.TXT] ?? [];
         for (const record of txtRecords) {
             const { name, ttl } = record;
-            if (ttl.ms === 0) {
+            if (ttl === 0) {
                 if (this.#commissionableDeviceRecords.has(name)) {
                     logger.debug(
                         `Removing commissionable device ${name} from cache (interface ${netInterface}) because of ttl=0`,
@@ -1322,7 +1322,7 @@ export class MdnsClient implements Scanner {
                 value: { target, port },
                 ttl,
             } = record as DnsRecord<SrvRecordValue>;
-            if (ttl.ms === 0) {
+            if (ttl === 0) {
                 logger.debug(
                     `Removing commissionable device ${record.name} from cache (interface ${netInterface}) because of ttl=0`,
                 );
@@ -1335,7 +1335,7 @@ export class MdnsClient implements Scanner {
             const ips = this.#handleIpRecords([formerAnswers, answers], target, netInterface);
             if (ips.length > 0) {
                 for (const { value: ip, ttl } of ips) {
-                    if (ttl.ms === 0) {
+                    if (ttl === 0) {
                         logger.debug(
                             `Removing IP ${ip} for commissionable device ${record.name} from cache (interface ${netInterface}) because of ttl=0`,
                         );
@@ -1448,11 +1448,11 @@ export class MdnsClient implements Scanner {
     #expire() {
         const now = Time.nowMs;
         [...this.#operationalDeviceRecords.entries()].forEach(([recordKey, { addresses, discoveredAt, ttl }]) => {
-            const expires = this.#effectiveTTL(ttl).after(discoveredAt);
+            const expires = discoveredAt + this.#effectiveTTL(ttl);
             if (now <= expires) {
                 // Only check expired IPs if not device itself has expired
                 [...addresses.entries()].forEach(([key, { discoveredAt, ttl }]) => {
-                    if (now < this.#effectiveTTL(ttl).after(discoveredAt)) return; // not expired yet
+                    if (now < discoveredAt + this.#effectiveTTL(ttl)) return; // not expired yet
                     addresses.delete(key);
                 });
             }
@@ -1462,11 +1462,11 @@ export class MdnsClient implements Scanner {
             }
         });
         [...this.#commissionableDeviceRecords.entries()].forEach(([recordKey, { addresses, discoveredAt, ttl }]) => {
-            const expires = this.#effectiveTTL(ttl).after(discoveredAt);
+            const expires = discoveredAt + this.#effectiveTTL(ttl);
             if (now <= expires) {
                 // Only check expired IPs if not device itself has expired
                 [...addresses.entries()].forEach(([key, { discoveredAt, ttl }]) => {
-                    if (now < this.#effectiveTTL(ttl).after(discoveredAt)) return; // not expired yet
+                    if (now < discoveredAt + this.#effectiveTTL(ttl)) return; // not expired yet
                     addresses.delete(key);
                 });
             }
@@ -1486,7 +1486,7 @@ export class MdnsClient implements Scanner {
             Object.keys(data.operational).forEach(recordType => {
                 const type = parseInt(recordType);
                 data.operational![type] = data.operational![type].filter(
-                    ({ discoveredAt, ttl }) => now < this.#effectiveTTL(ttl).after(discoveredAt),
+                    ({ discoveredAt, ttl }) => now < discoveredAt + this.#effectiveTTL(ttl),
                 );
                 if (data.operational![type].length === 0) {
                     delete data.operational![type];
@@ -1497,7 +1497,7 @@ export class MdnsClient implements Scanner {
             Object.keys(data.commissionable).forEach(recordType => {
                 const type = parseInt(recordType);
                 data.commissionable![type] = data.commissionable![type].filter(
-                    ({ discoveredAt, ttl }) => now < this.#effectiveTTL(ttl).after(discoveredAt),
+                    ({ discoveredAt, ttl }) => now < discoveredAt + this.#effectiveTTL(ttl),
                 );
                 if (data.commissionable![type].length === 0) {
                     delete data.commissionable![type];
@@ -1507,7 +1507,7 @@ export class MdnsClient implements Scanner {
         if (data.addressesV6) {
             Object.keys(data.addressesV6).forEach(name => {
                 for (const [ip, { discoveredAt, ttl }] of data.addressesV6![name].entries()) {
-                    if (now < this.#effectiveTTL(ttl).after(discoveredAt)) continue; // not expired yet
+                    if (now < discoveredAt + this.#effectiveTTL(ttl)) continue; // not expired yet
                     data.addressesV6![name].delete(ip);
                 }
                 if (data.addressesV6![name].size === 0) {
@@ -1518,7 +1518,7 @@ export class MdnsClient implements Scanner {
         if (data.addressesV4) {
             Object.keys(data.addressesV4).forEach(name => {
                 for (const [ip, { discoveredAt, ttl }] of data.addressesV4![name].entries()) {
-                    if (now < this.#effectiveTTL(ttl).after(discoveredAt)) continue; // not expired yet
+                    if (now < discoveredAt + this.#effectiveTTL(ttl)) continue; // not expired yet
                     data.addressesV4![name].delete(ip);
                 }
                 if (data.addressesV4![name].size === 0) {
@@ -1531,9 +1531,9 @@ export class MdnsClient implements Scanner {
     static discoveryDataDiagnostics(data: DiscoveryData, kind?: string) {
         return Diagnostic.dict({
             kind,
-            SII: data.SII,
-            SAI: data.SAI,
-            SAT: data.SAT,
+            SII: data.SII && Interval.format(data.SII),
+            SAI: data.SAI && Interval.format(data.SAI),
+            SAT: data.SAT && Interval.format(data.SAT),
             T: data.T,
             DT: data.DT,
             PH: data.PH,

@@ -12,6 +12,7 @@ import {
     Interval,
     Logger,
     MatterAggregateError,
+    Millisecs,
     Time,
 } from "#general";
 import { STANDARD_COMMISSIONING_TIMEOUT } from "#types";
@@ -172,7 +173,7 @@ export abstract class Advertisement<T extends ServiceDescription = ServiceDescri
         }
 
         // Extended announcement
-        if (Time.nowMs - this.#startedAt >= STANDARD_COMMISSIONING_TIMEOUT.ms) {
+        if (Time.nowMs - this.#startedAt >= STANDARD_COMMISSIONING_TIMEOUT) {
             return true;
         }
 
@@ -219,7 +220,7 @@ export abstract class Advertisement<T extends ServiceDescription = ServiceDescri
      * Total duration so far.
      */
     get duration() {
-        return Time.nowMs - this.#startedAt;
+        return Millisecs(Time.nowMs - this.#startedAt);
     }
 
     /**

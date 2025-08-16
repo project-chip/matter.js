@@ -19,6 +19,7 @@ import {
     Interval,
     Logger,
     MatterError,
+    Millisecs,
     Minutes,
     repackErrorAs,
     Seconds,
@@ -272,7 +273,7 @@ export class ControllerCommissioningFlow {
                      * command (see Section 11.9.6.2, “ArmFailSafe Command”)
                      */
                     const timeLeft = Math.floor((this.#currentFailSafeEndTime - Time.nowMs) / 1000);
-                    if (timeLeft < this.#defaultFailSafeTime.dividedBy(2).ms) {
+                    if (timeLeft < this.#defaultFailSafeTime / 2) {
                         logger.info(
                             `After Commissioning step ${step.stepNumber}.${step.subStepNumber}: ${
                                 step.name
@@ -614,10 +615,10 @@ export class ControllerCommissioningFlow {
             "armFailSafe",
             await client.armFailSafe({
                 breadcrumb: this.lastBreadcrumb,
-                expiryLengthSeconds: Seconds(expiryLength).length,
+                expiryLengthSeconds: Seconds.of(expiryLength),
             }),
         );
-        this.#currentFailSafeEndTime = Time.nowMs + expiryLength.ms;
+        this.#currentFailSafeEndTime = Time.nowMs + expiryLength;
         return {
             code: CommissioningStepResultCode.Success,
             breadcrumb: this.lastBreadcrumb,
@@ -1288,7 +1289,7 @@ export class ControllerCommissioningFlow {
         // TODO: Check whats needed for non-concurrent commissioning flows (maybe arm initially longer?)
         const reArmFailsafeInterval = Time.getPeriodicTimer(
             "Re-Arm Failsafe during reconnect",
-            this.#defaultFailSafeTime.dividedBy(2),
+            Millisecs(this.#defaultFailSafeTime / 2),
             () => {
                 const now = Time.nowMs;
                 if (this.#commissioningExpiryTime !== undefined && now < this.#commissioningExpiryTime) {

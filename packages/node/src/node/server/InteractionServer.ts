@@ -525,7 +525,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             MessageType.SubscribeResponse,
             TlvSubscribeResponse.encode({
                 subscriptionId,
-                maxInterval: maxInterval.secs,
+                maxInterval: Seconds.of(maxInterval),
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             }),
             {
@@ -590,7 +590,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         logger.info(
             `Successfully created subscription ${id} for Session ${
                 session.id
-            } to ${session.peerAddress}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${subscription.maxInterval} seconds (sendInterval = ${subscription.sendInterval})`,
+            } to ${session.peerAddress}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${Interval.format(subscription.maxInterval)} (sendInterval = ${Interval.format(subscription.sendInterval)})`,
         );
         return subscription;
     }
@@ -648,7 +648,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             logger.info(
                 `Successfully re-established subscription ${subscriptionId} for Session ${
                     session.id
-                } to ${session.peerAddress}. Updates: ${minIntervalFloor} - ${maxIntervalCeiling} => ${subscription.maxInterval} (sendInterval = ${subscription.sendInterval})`,
+                } to ${session.peerAddress}. Updates: ${minIntervalFloor} - ${maxIntervalCeiling} => ${Interval.format(subscription.maxInterval)} (sendInterval = ${Interval.format(subscription.sendInterval)})`,
             );
         } catch (error) {
             await subscription.close(); // Cleanup
@@ -817,7 +817,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     handleTimedRequest(exchange: MessageExchange, { timeout, interactionModelRevision }: TimedRequest) {
         const interval = Millisecs(timeout);
 
-        logger.debug(`Received timed request (${interval}) from ${exchange.channel.name}`);
+        logger.debug(`Received timed request (${Interval.format(interval)}) from ${exchange.channel.name}`);
 
         if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
             logger.debug(

@@ -198,23 +198,31 @@ export class ServerSubscription extends Subscription {
         // (SUBSCRIPTION_MIN_INTERVAL_S). Additionally, we add a randomization window to the max interval to avoid all
         // devices sending at the same time. But we make sure not to exceed the global max interval.
         const maxInterval = Interval.min(
-            Interval.max(
-                subscriptionMinInterval,
-                Interval.max(this.#minIntervalFloor, Interval.min(subscriptionMaxInterval, this.#maxIntervalCeiling)),
-            ).plus(subscriptionRandomizationWindow.times(Math.random()).floor),
+            Millisecs.floor(
+                Millisecs(
+                    Interval.max(
+                        subscriptionMinInterval,
+                        Interval.max(
+                            this.#minIntervalFloor,
+                            Interval.min(subscriptionMaxInterval, this.#maxIntervalCeiling),
+                        ),
+                    ) +
+                        subscriptionRandomizationWindow * Math.random(),
+                ),
+            ),
             MAX_INTERVAL_PUBLISHER_LIMIT,
         );
-        let sendInterval = maxInterval.dividedBy(2).floor; // Ideally we send at half the max interval
+        let sendInterval = Millisecs.floor(Millisecs(maxInterval / 2)); // Ideally we send at half the max interval
         if (sendInterval < Minutes.one) {
             // But if we have no chance of at least one full resubmission process we do like chip-tool.
             // One full resubmission process takes 33-45 seconds. So 60s means we reach at least first 2 retries of a
             // second subscription report after first failed.
-            sendInterval = Interval.max(this.#minIntervalFloor, maxInterval.times(0.8).floor);
+            sendInterval = Interval.max(this.#minIntervalFloor, Millisecs.floor(Millisecs(maxInterval * 0.8)));
         }
         if (sendInterval < subscriptionMinInterval) {
             // But not faster than once every 2s
             logger.warn(
-                `Determined subscription send interval of ${sendInterval} is too low. Using maxInterval (${maxInterval}) instead.`,
+                `Determined subscription send interval of ${Interval.format(sendInterval)} is too low. Using maxInterval (${maxInterval}) instead.`,
             );
             sendInterval = subscriptionMinInterval;
         }
@@ -345,7 +353,7 @@ export class ServerSubscription extends Subscription {
             // Respect minimum delay time between updates
             this.#updateTimer = Time.getTimer(
                 "Subscription update",
-                this.#minIntervalFloor.minus(timeSinceLastUpdate),
+                Millisecs(this.#minIntervalFloor - timeSinceLastUpdate),
                 () => this.#prepareDataUpdate(),
             ).start();
             return;

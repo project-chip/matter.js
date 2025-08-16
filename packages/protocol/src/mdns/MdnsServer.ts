@@ -109,9 +109,7 @@ export class MdnsServer {
             }));
             if (
                 uniCastResponse &&
-                answersTimeSinceLastSent.some(
-                    ({ timeSinceLastMultiCast, ttl }) => timeSinceLastMultiCast > ttl.dividedBy(4),
-                )
+                answersTimeSinceLastSent.some(({ timeSinceLastMultiCast, ttl }) => timeSinceLastMultiCast > ttl / 4)
             ) {
                 // If the query is for unicast response, still send as multicast if they were last sent as multicast longer then 1/4 of their ttl
                 uniCastResponse = false;

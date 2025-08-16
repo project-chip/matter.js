@@ -17,6 +17,7 @@ import {
     Interval,
     Logger,
     MatterError,
+    Millisecs,
     Minutes,
     Observable,
     Seconds,
@@ -948,10 +949,10 @@ export class PairedNode {
         }
         if (delay === undefined) {
             // Calculate a delay with a backoff strategy based on errorCount and maximum 10 minutes
-            delay = Interval.min(RECONNECT_DELAY.times(2 ** this.#reconnectErrorCount), RECONNECT_MAX_DELAY);
+            delay = Interval.min(Millisecs(RECONNECT_DELAY * 2 ** this.#reconnectErrorCount), RECONNECT_MAX_DELAY);
         }
 
-        logger.info(`Node ${this.nodeId}: Reconnecting ${delay ? `in ${delay}` : "now"} ...`);
+        logger.info(`Node ${this.nodeId}: Reconnecting ${delay ? `in ${Interval.format(delay)}` : "now"} ...`);
         this.#reconnectDelayTimer = Time.getTimer("Reconnect delay", delay, async () => await this.reconnect());
         this.#reconnectDelayTimer.start();
     }

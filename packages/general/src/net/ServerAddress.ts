@@ -51,8 +51,8 @@ export namespace ServerAddress {
             diagnostic.push("ble://", Diagnostic.strong(address.peripheralAddress));
         }
 
-        if ("ttl" in address && address.ttl !== undefined && address.ttl !== null) {
-            diagnostic.push(" ttl ", address.ttl);
+        if ("ttl" in address && typeof address.ttl === "number") {
+            diagnostic.push(" ttl ", Interval.format(address.ttl));
         }
 
         return Diagnostic.squash(...diagnostic);

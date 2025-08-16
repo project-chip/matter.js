@@ -247,7 +247,7 @@ function expirationOf<T extends { discoveredAt?: number; ttl?: Interval | number
     lifespan: T,
 ): T extends { discoveredAt: number } ? number : number | undefined {
     if (lifespan.discoveredAt !== undefined) {
-        return (Seconds(lifespan.ttl) ?? DEFAULT_TTL).after(lifespan.discoveredAt);
+        return lifespan.discoveredAt + (Seconds(lifespan.ttl) ?? DEFAULT_TTL);
     }
     return undefined as unknown as number;
 }

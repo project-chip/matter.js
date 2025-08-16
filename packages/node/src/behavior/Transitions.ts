@@ -14,6 +14,7 @@ import {
     Interval,
     Logger,
     MaybePromise,
+    Millisecs,
     ObserverGroup,
     Seconds,
     Time,
@@ -172,7 +173,7 @@ export class Transitions<B extends Behavior> {
             configuration: transition,
             currentValue,
             changePerMs: changePerS / 1000,
-            prevStepAt: (this.#config.stepInterval ?? Transitions.DEFAULT_STEP_INTERVAL).before(Time.nowMs),
+            prevStepAt: Time.nowMs - (this.#config.stepInterval ?? Transitions.DEFAULT_STEP_INTERVAL),
             distanceLeft,
         };
 
@@ -595,11 +596,11 @@ export class Transitions<B extends Behavior> {
     }
 
     #externalTimeOf(ms: number) {
-        return Math.round(ms / (this.#config.externalTimeUnit ?? Transitions.DEFAULT_EXTERNAL_TIME_UNIT).ms);
+        return Math.round(ms / (this.#config.externalTimeUnit ?? Transitions.DEFAULT_EXTERNAL_TIME_UNIT));
     }
 
     #internalTimeOf(externalUnits: number) {
-        return externalUnits * (this.#config.externalTimeUnit ?? Transitions.DEFAULT_EXTERNAL_TIME_UNIT).ms;
+        return Millisecs(externalUnits * (this.#config.externalTimeUnit ?? Transitions.DEFAULT_EXTERNAL_TIME_UNIT));
     }
 
     /**

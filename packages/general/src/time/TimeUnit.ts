@@ -10,8 +10,8 @@ import { Interval } from "./Interval.js";
  * Details of a specific unit of time.
  */
 export interface TimeUnit {
-    (scale: number | Interval.Definition): Interval;
-    (scale: undefined | number | Interval.Definition): undefined | Interval;
+    (length: undefined | number): Interval;
+    (scale: undefined | number): undefined | Interval;
 
     /**
      * Long name of the unit.
@@ -24,14 +24,29 @@ export interface TimeUnit {
     readonly abbrev: string;
 
     /**
-     * Number of milliseconds in the unit.
-     */
-    readonly scale: number;
-
-    /**
-     * A single unit interval.
+     * An interval representing a single unit.
      */
     readonly one: Interval;
+
+    /**
+     * Convert an interval to this unit.
+     */
+    of<T extends Interval | undefined>(interval: T): T extends undefined ? number | undefined : number;
+
+    /**
+     * Compute the ceiling of an interval in this unit.
+     */
+    ceil(interval: Interval): Interval;
+
+    /**
+     * Compute the floor of an interval in this unit.
+     */
+    floor(interval: Interval): Interval;
+
+    /**
+     * Round an interval to this unit.
+     */
+    round(interval: Interval): Interval;
 
     length: never;
 }
@@ -46,27 +61,13 @@ export namespace TimeUnit {
 /**
  * Implement a {@link TimeUnit}.
  */
-export function TimeUnit<T = {}>(kind: TimeUnit.Kind, abbrev: string, scale: number, props = {} as T): TimeUnit & T {
-    let one: Interval | undefined = undefined;
-
+export function TimeUnit<T = {}>(kind: TimeUnit.Kind, abbrev: string, one: number, props = {} as T): TimeUnit & T {
     const unit = {
-        [kind]: (interval: undefined | number | Interval.Definition) => {
-            if (interval === undefined) {
+        [kind]: (length: undefined | number) => {
+            if (length === undefined) {
                 return undefined;
             }
-
-            if (typeof interval === "number") {
-                if (interval === 1) {
-                    return one!;
-                }
-                return new Interval(unit, interval);
-            }
-
-            if (interval instanceof Interval && interval.unit === unit) {
-                return interval;
-            }
-
-            return new Interval(unit, (interval.length * interval.unit.scale) / unit.scale);
+            return (length * one) as Interval;
         },
     }[kind] as TimeUnit & T;
 
@@ -75,19 +76,32 @@ export function TimeUnit<T = {}>(kind: TimeUnit.Kind, abbrev: string, scale: num
         ...props,
         kind,
         abbrev,
-        scale,
+        one,
+        of,
+        ceil,
+        floor,
+        round,
         toString: kindOf,
         [Symbol.for("nodejs.util.inspect.custom")]: kindOf,
     });
 
-    // Create "one" after assigning other properties or initialization will fail
-    one = new Interval(unit, 1);
-    Object.assign(unit, { one });
-
-    // This is to avoid circular reference
-    Interval.units[kind] = unit;
-
     return unit;
+}
+
+function of(this: TimeUnit, interval: Interval) {
+    return interval / this.one;
+}
+
+function ceil(this: TimeUnit, interval: Interval) {
+    return Math.ceil(interval / this.one) * this.one;
+}
+
+function floor(this: TimeUnit, interval: Interval) {
+    return Math.floor(interval / this.one) * this.one;
+}
+
+function round(this: TimeUnit, interval: Interval) {
+    return Math.round(interval / this.one) * this.one;
 }
 
 function kindOf(this: TimeUnit) {

@@ -18,6 +18,7 @@ import {
     Logger,
     MatterError,
     MatterFlowError,
+    Millisecs,
     NoResponseTimeoutError,
     Time,
     Timer,
@@ -498,10 +499,13 @@ export class MessageExchange {
             // the resubmissions from the other side
             if (expectedProcessingTime) {
                 // We already have waited after the last message was sent, so deduct this time from the final wait time
-                const finalWaitTime = this.channel
-                    .calculateMaximumPeerResponseTime(this.context.localSessionParameters, expectedProcessingTime)
-                    .minus(this.#retransmissionTimer?.interval ?? Instant);
-                if (finalWaitTime.length > 0) {
+                const finalWaitTime = Millisecs(
+                    this.channel.calculateMaximumPeerResponseTime(
+                        this.context.localSessionParameters,
+                        expectedProcessingTime,
+                    ) - (this.#retransmissionTimer?.interval ?? Instant),
+                );
+                if (finalWaitTime > 0) {
                     this.#retransmissionCounter--; // We will not resubmit the message again
                     logger.debug(
                         `Message ${message.packetHeader.messageId}: Wait additional ${finalWaitTime}ms for processing time and peer resubmissions after all our resubmissions`,
@@ -579,7 +583,7 @@ export class MessageExchange {
             );
         }
         logger.debug(
-            `Starting timed interaction with Transaction ID ${this.#exchangeId} for ${timeout}ms from ${this.channel.name}`,
+            `Starting timed interaction with Transaction ID ${this.#exchangeId} for ${Interval.format(timeout)} from ${this.channel.name}`,
         );
         this.#timedInteractionTimer = Time.getTimer("Timed interaction", timeout, () => {
             logger.debug(
@@ -655,7 +659,7 @@ export class MessageExchange {
         // in normal case this timer is cancelled before it triggers when all retries are done.
         let maxResubmissionTime = Instant;
         for (let i = this.#retransmissionCounter; i <= MRP.MAX_TRANSMISSIONS; i++) {
-            maxResubmissionTime = maxResubmissionTime.plus(this.channel.getMrpResubmissionBackOffTime(i));
+            maxResubmissionTime = Millisecs(maxResubmissionTime + this.channel.getMrpResubmissionBackOffTime(i));
         }
         this.#closeTimer = Time.getTimer(
             `Message exchange cleanup ${this.session.name} / ${this.#exchangeId}`,

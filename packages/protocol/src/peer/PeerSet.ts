@@ -521,7 +521,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                 const { promise, resolver, rejecter } = createPromise<MessageChannel>();
 
                 logger.debug(
-                    `Starting reconnection polling for ${ServerAddress.urlFor(lastOperationalAddress)} (Interval ${RECONNECTION_POLLING_INTERVAL})`,
+                    `Starting reconnection polling for ${ServerAddress.urlFor(lastOperationalAddress)} (interval ${Interval.format(RECONNECTION_POLLING_INTERVAL)})`,
                 );
                 reconnectionPollingTimer = Time.getPeriodicTimer(
                     "Controller reconnect",
@@ -627,7 +627,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             logger.debug(
                 `Resuming connection to ${PeerAddress(address)} at ${ip}:${port}${
                     expectedProcessingTime !== undefined
-                        ? ` with expected processing time of ${expectedProcessingTime}`
+                        ? ` with expected processing time of ${Interval.format(expectedProcessingTime)}`
                         : ""
                 }`,
             );

@@ -56,7 +56,7 @@ export class FailsafeTimer {
 
         this.#failsafeTimer.stop();
 
-        if (expiry.length === 0) {
+        if (expiry === 0) {
             // If ExpiryLengthSeconds is 0 and the fail-safe timer was already armed and the accessing fabric matches
             // the Fabric currently associated with the fail-safe context, then the fail-safe timer SHALL be
             // immediately expired (see further below for side-effects of expiration).

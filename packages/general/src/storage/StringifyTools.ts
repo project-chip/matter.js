@@ -55,9 +55,6 @@ export function toJson(object: SupportedStorageTypes, spaces?: number): string {
                     toJson(Array.from(value.entries())),
                 )}}`;
             }
-            if (value instanceof Interval) {
-                return `{"${JSON_SPECIAL_KEY_TYPE}":"Interval","${JSON_SPECIAL_KEY_VALUE}":${value.ms}`;
-            }
             return value;
         },
         spaces,
