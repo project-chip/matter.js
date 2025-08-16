@@ -4,133 +4,72 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic } from "#log/Diagnostic.js";
-import { DeepComparable } from "#util/DeepEqual.js";
-import type { TimeUnit } from "./TimeUnit.js";
+import { UnexpectedDataError } from "#MatterError.js";
+import { Branded } from "#util/Type.js";
+import type { Millisecs, Seconds, TimeUnit } from "./TimeUnit.js";
 
 /**
- * An interval of time.
+ * A time interval.
  *
- * An interval consists of a {@link unit} and {@link length}.  We track the units but store the value as milliseconds.
+ * You can create an interval using a {@link TimeUnit} factory such as {@link Seconds}.
  *
- * You may create an interval using {@link TimeUnit} factories such as `Seconds.one` or `Millisecs(1000)`.  You may
- * compare intervals using standard comparison operators.
+ * Regardless of the input unit, intervals are stored as milliseconds.  You can use {@link TimeUnit#of} to convert an
+ * interval to the correct unit.
  *
- * Typescript doesn't allow for arithmetic operations with intervals (even though javascript does).  You may instead use
- * arithmetic functions such as {@link plus} and {@link minus} or perform arithmetic using {@link ms} values such as
- * `Millisecs(interval1.ms + interval2.ms)`.
+ * Math operators always result in millisecond values and can thus be converted back to an interval using
+ * {@link Millisecs}.  For example, `Millisecs(Hours(1) + Minutes(30))` would produce a 90 minute {@link Interval}.
  */
-export class Interval implements DeepComparable {
-    /**
-     * The units of this interval.
-     */
-    readonly unit: TimeUnit;
+export type Interval = Branded<number, "Interval">;
 
-    /**
-     * The length of this interval in {@link unit}.
-     */
-    readonly ms: number;
+/**
+ * Create an interval from an {@link Interval.Definition}.
+ */
+export function Interval<T extends undefined | Interval | string>(
+    source: T,
+): T extends undefined ? undefined | Interval : Interval {
+    if (typeof source === "string") {
+        return Interval.parse(source);
+    }
 
-    constructor(unit: TimeUnit, length: number | Interval.Definition) {
-        this.unit = unit;
-        if (typeof length === "number") {
-            this.ms = length * unit.scale;
-        } else if ("ms" in length) {
-            this.ms = length.ms as number;
-        } else {
-            this.ms = length.unit.scale * length.length;
+    if (typeof source !== "number") {
+        throw new IntervalFormatError(`Interval value is not a number (received ${typeof source})`);
+    }
+
+    if (Number.isNaN(source)) {
+        throw new IntervalFormatError(`An interval may not be NaN`);
+    }
+
+    return source as unknown as T extends undefined ? undefined | Interval : Interval;
+}
+
+export class IntervalFormatError extends UnexpectedDataError {}
+
+export namespace Interval {
+    /**
+     * Determine the greater of two intervals.
+     */
+    export function max(a: Interval, b: Interval) {
+        if (b > a) {
+            return b;
         }
+        return a;
     }
 
     /**
-     * Access the interval in {@link unit}.
+     * Determine the lesser of two intervals.
      */
-    get length(): number {
-        return this.ms / this.unit.scale;
+    export function min(a: Interval, b: Interval) {
+        if (b < a) {
+            return b;
+        }
+        return a;
     }
 
     /**
-     * Access the interval as raw seconds.
+     * Convert an interval to a compact human readable string.
      */
-    get secs(): number {
-        return Interval.units.second(this).length;
-    }
-
-    equals(other: Interval) {
-        return this.ms === other.ms;
-    }
-
-    dividedBy(divisor: number) {
-        return this.unit(this.length / divisor);
-    }
-
-    times(multiplier: number) {
-        return this.unit(this.length * multiplier);
-    }
-
-    plus(other: Interval) {
-        return this.unit((this.ms + other.ms) / this.unit.scale);
-    }
-
-    minus(other: Interval) {
-        return this.unit((this.ms - other.ms) / this.unit.scale);
-    }
-
-    /**
-     * Add this interval to a POSIX timestamp.
-     */
-    before(time: number): number;
-
-    /**
-     * Add this interval to a Date.
-     */
-    before(time: Date): Date;
-
-    before(time: number | Date): number | Date {
-        return typeof time === "number" ? time - this.ms : new Date(time.getTime() - this.ms);
-    }
-
-    /**
-     * Subtract this interval from a POSIX timestamp.
-     */
-    after(time: number): number;
-
-    /**
-     * Subtract this interval from a Date.
-     */
-    after(time: Date): Date;
-
-    after(time: number | Date): number | Date {
-        return typeof time === "number" ? time + this.ms : new Date(time.getTime() + this.ms);
-    }
-
-    /**
-     * Round the interval to the nearest whole unit.
-     */
-    get round() {
-        return new Interval(this.unit, Math.round(this.length));
-    }
-
-    /**
-     * Round the interval to the next highest whole unit.
-     */
-    get ceil() {
-        return new Interval(this.unit, Math.ceil(this.length));
-    }
-
-    /**
-     * Round the interval to the next lowest whole unit.
-     */
-    get floor() {
-        return new Interval(this.unit, Math.floor(this.length));
-    }
-
-    valueOf() {
-        return this.ms;
-    }
-
-    toString() {
-        let { ms } = this;
+    export function format(interval: Interval) {
+        let ms = interval as number;
 
         if (typeof ms !== "number" || Number.isNaN(ms)) {
             return "invalid";
@@ -184,54 +123,59 @@ export class Interval implements DeepComparable {
         return parts.join(" ");
     }
 
-    get [Diagnostic.value]() {
-        return this.toString();
-    }
-
-    [DeepComparable.equals](other: unknown) {
-        if (!(other instanceof Interval)) {
-            return false;
-        }
-        return other.ms === this.ms;
-    }
-
     /**
-     * Determine the greater of two intervals.
+     * Parse a string into an interval.
      */
-    static max(a: Interval, b: Interval) {
-        if (b.ms > a.ms) {
-            return b;
-        }
-        return a;
-    }
+    export function parse(text: string) {
+        const parts = text.split(/\s+/).filter(part => part !== "");
 
-    /**
-     * Determine the lesser of two intervals.
-     */
-    static min(a: Interval, b: Interval) {
-        if (b.ms < a.ms) {
-            return b;
+        let interval = 0;
+        for (const part of parts) {
+            const suffix = text.match(/[a-zμ]+/i)?.[1];
+            if (suffix === undefined) {
+                throw new IntervalFormatError(`Interval component "${part}" is missing an time suffix`);
+            }
+
+            const value = Number(text.slice(text.length - suffix.length));
+            if (Number.isNaN(value)) {
+                throw new IntervalFormatError(`Interval component "${part}" contains no numeric component`);
+            }
+
+            switch (suffix.toLowerCase()) {
+                case "μs":
+                case "us":
+                    interval += value / 1000;
+                    break;
+
+                case "ms":
+                    interval += value;
+                    break;
+
+                case "s":
+                    interval += value * 1000;
+                    break;
+
+                case "m":
+                    interval += value * 60_000;
+                    break;
+
+                case "h":
+                    interval += value * 3_600_000;
+                    break;
+
+                case "d":
+                    interval += value * 86_400_000;
+                    break;
+
+                default:
+                    throw new IntervalFormatError(`Interval component ${part} contains an unsupported unit suffix`);
+            }
         }
-        return a;
+
+        return interval as Interval;
     }
 }
 
 function toPrecision(number: number, precision: number) {
     return number.toPrecision(precision).replace(/\.?0+/, "");
-}
-
-export namespace Interval {
-    export const units = {} as Record<TimeUnit.Kind, TimeUnit>;
-
-    export interface Definition {
-        /**
-         * The units of this interval.
-         */
-        readonly unit: TimeUnit;
-
-        /**
-         * The length of this interval in {@link unit}.
-         */
-        readonly length: number;
-    }
 }

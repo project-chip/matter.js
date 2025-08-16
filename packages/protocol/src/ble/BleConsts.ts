@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MAX_UDP_MESSAGE_SIZE, Minutes, Seconds } from "#general";
+import { MAX_UDP_MESSAGE_SIZE, Millisecs, Minutes, Seconds } from "#general";
 
 /** @see {@link MatterSpecification.v11.Core} § 4.17.3.2 */
 export const BLE_MATTER_SERVICE_UUID_SHORT = "fff6";
@@ -27,7 +27,7 @@ export const BTP_CONN_RSP_TIMEOUT = Seconds(5); // timer starts when receives ha
 /** The maximum amount of time after receipt of a segment before a stand-alone ACK must be sent. */
 export const BTP_ACK_TIMEOUT = Minutes.quarter; // timer in ms before ack should be sent for a segment
 
-export const BTP_SEND_ACK_TIMEOUT = BTP_ACK_TIMEOUT.dividedBy(3); // timer starts when we receive a packet and stops when we sends its ack
+export const BTP_SEND_ACK_TIMEOUT = Millisecs(BTP_ACK_TIMEOUT / 3); // timer starts when we receive a packet and stops when we sends its ack
 
 /**
  * The maximum amount of time no unique data has been sent over a BTP session before the Central Device must close the

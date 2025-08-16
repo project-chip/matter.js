@@ -64,7 +64,7 @@ export class PromiseQueue {
                 }) // already catched internally, but rethrow if it happens to not hide it
                 .finally(() => {
                     logger.debug("Promise processed ... Still running:", this.#runningCount - 1);
-                    if (this.#delay.length > 0) {
+                    if (this.#delay > 0) {
                         // Keep the queue blocked for the delay time
                         Time.sleep("Queue delay", this.#delay)
                             .then(() => this.#runNext())

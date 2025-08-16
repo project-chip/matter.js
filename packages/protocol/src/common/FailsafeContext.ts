@@ -65,15 +65,15 @@ export abstract class FailsafeContext {
             this.#failsafe = new FailsafeTimer(associatedFabric, expiryLength, maxCumulativeFailsafe, () =>
                 this.#failSafeExpired(),
             );
-            logger.debug(`Arm failSafe timer for ${expiryLength}`);
+            logger.debug(`Arm failSafe timer for ${Interval.format(expiryLength)}`);
         });
     }
 
     async extend(fabric: Fabric | undefined, expiryLength: Interval) {
         await this.#construction;
         await this.#failsafe?.reArm(fabric, expiryLength);
-        if (expiryLength.length > 0) {
-            logger.debug(`Extend failSafe timer for ${expiryLength}`);
+        if (expiryLength > 0) {
+            logger.debug(`Extend failSafe timer for ${Interval.format(expiryLength)}`);
         }
     }
 

@@ -99,7 +99,7 @@ export class SwitchBaseServer extends SwitchServerBase {
 
     #debounceRawPosition(newPosition: number) {
         // When a debounce delay is set then we debounce the raw position, else we set the current position immediately
-        if (this.state.debounceDelay?.ms) {
+        if (this.state.debounceDelay) {
             this.internal.debounceTimer?.stop();
 
             this.internal.currentUnstablePosition = newPosition;

@@ -59,7 +59,7 @@ class GenericCache<T> {
     private async expire() {
         const now = Time.nowMs;
         for (const [key, timestamp] of this.timestamps.entries()) {
-            if (now - timestamp < this.expiration.ms) continue;
+            if (now - timestamp < this.expiration) continue;
             await this.delete(key);
         }
     }

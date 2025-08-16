@@ -873,8 +873,8 @@ export class InteractionClient {
                 eventRequests: [{ endpointId, clusterId, eventId, isUrgent }],
                 eventFilters: minimumEventNumber !== undefined ? [{ eventMin: minimumEventNumber }] : undefined,
                 keepSubscriptions: true,
-                minIntervalFloorSeconds: minIntervalFloor.secs,
-                maxIntervalCeilingSeconds: maxIntervalCeiling.secs,
+                minIntervalFloorSeconds: Seconds.of(minIntervalFloor),
+                maxIntervalCeilingSeconds: Seconds.of(maxIntervalCeiling),
                 isFabricFiltered,
             });
             const { subscribeResponse, report } = await messenger.readAggregateSubscribeResponse();

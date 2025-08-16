@@ -8,7 +8,17 @@ import { Advertisement } from "#advertisement/Advertisement.js";
 import type { Advertiser } from "#advertisement/Advertiser.js";
 import type { ServiceDescription } from "#advertisement/ServiceDescription.js";
 import { SupportedTransportsSchema } from "#common/SupportedTransportsBitmap.js";
-import { AAAARecord, ARecord, DnsRecord, Logger, NetworkInterfaceDetails, SrvRecord, Time, TxtRecord } from "#general";
+import {
+    AAAARecord,
+    ARecord,
+    DnsRecord,
+    Interval,
+    Logger,
+    NetworkInterfaceDetails,
+    SrvRecord,
+    Time,
+    TxtRecord,
+} from "#general";
 import type { MdnsServer } from "#mdns/MdnsServer.js";
 import { SessionIntervals } from "#session/SessionIntervals.js";
 import type { MdnsAdvertiser } from "./MdnsAdvertiser.js";
@@ -56,7 +66,7 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
             }
 
             number++;
-            logger.debug("Broadcast", this.dict({ number, next: retryInterval }));
+            logger.debug("Broadcast", this.dict({ number, next: Interval.format(retryInterval) }));
             await this.broadcast();
             await context.sleep("MDNS repeat", retryInterval);
         }
@@ -78,7 +88,7 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
      * Broadcast expiration announcement immediately.
      */
     async expire() {
-        logger.info("Unpublishing", this.dict({ time: this.duration }));
+        logger.info("Unpublishing", this.dict({ time: Interval.format(this.duration) }));
         await this.advertiser.server.expireAnnouncements(this.service);
     }
 
@@ -89,12 +99,12 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
             return;
         }
 
-        if (broadcastAfterConnection.length <= 0) {
+        if (broadcastAfterConnection <= 0) {
             this.stop();
             return;
         }
 
-        this.#stopAt = Time.nowMs + broadcastAfterConnection.ms;
+        this.#stopAt = Time.nowMs + broadcastAfterConnection;
     }
 
     override serviceDisconnected() {
@@ -148,9 +158,9 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
 
     get #txtValues() {
         const values: Record<string, unknown> = {
-            SII: this.description.idleInterval?.ms /* Session Idle Interval */,
-            SAI: this.description.activeInterval?.ms /* Session Active Interval */,
-            SAT: this.description.activeThreshold?.ms /* Session Active Threshold */,
+            SII: this.description.idleInterval /* Session Idle Interval */,
+            SAI: this.description.activeInterval /* Session Active Interval */,
+            SAT: this.description.activeThreshold /* Session Active Threshold */,
             ...this.txtValues,
         };
 

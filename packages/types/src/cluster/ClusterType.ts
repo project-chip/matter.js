@@ -242,12 +242,12 @@ export namespace ClusterType {
 
     export type PatchType<V> = V extends (infer E)[]
         ? Record<`${number}`, PatchType<E>> | PatchType<E>[]
-        : V extends number
-          ? number
-          : V extends bigint
-            ? bigint
-            : V extends Interval
-              ? Interval
+        : V extends Interval
+          ? Interval
+          : V extends number
+            ? number
+            : V extends bigint
+              ? bigint
               : V extends object
                 ? V extends (...args: any[]) => any
                     ? never

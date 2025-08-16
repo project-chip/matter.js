@@ -83,7 +83,7 @@ export class BleScanner implements Scanner {
         }
         this.#recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords, cancelResolver });
         logger.debug(
-            `Registered waiter for query ${queryId} with timeout ${timeout} ${
+            `Registered waiter for query ${queryId} with timeout ${timeout === undefined ? "(none)" : Interval.format(timeout)} ${
                 resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"
             }`,
         );
@@ -276,7 +276,7 @@ export class BleScanner implements Scanner {
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
 
-        const discoveryEndTime = timeout ? timeout.after(Time.nowMs) : undefined;
+        const discoveryEndTime = timeout ? Time.nowMs + timeout : undefined;
         const queryKey = this.#buildCommissionableQueryIdentifier(identifier);
         await this.#nobleClient.startScanning();
 
@@ -312,8 +312,8 @@ export class BleScanner implements Scanner {
 
             let remainingTime;
             if (discoveryEndTime !== undefined) {
-                remainingTime = Millisecs(discoveryEndTime - Time.nowMs).ceil;
-                if (remainingTime.ms <= 0) {
+                remainingTime = Millisecs.ceil(Millisecs(discoveryEndTime - Time.nowMs));
+                if (remainingTime <= 0) {
                     break;
                 }
             }

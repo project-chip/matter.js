@@ -317,7 +317,7 @@ export class DnsCodec {
         writer.writeByteArray(this.encodeQName(name));
         writer.writeUInt16(recordType);
         writer.writeUInt16(recordClass | (flushCache ? 0x8000 : 0));
-        writer.writeUInt32(ttl.secs);
+        writer.writeUInt32(Seconds.of(ttl));
         const encodedValue = this.encodeRecordValue(value, recordType);
         writer.writeUInt16(encodedValue.byteLength);
         writer.writeByteArray(encodedValue);

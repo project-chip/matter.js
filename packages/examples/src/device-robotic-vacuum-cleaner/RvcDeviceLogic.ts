@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Behavior, Hours, Logger, Minutes, Node, Seconds, Time, Timer } from "@matter/main";
+import { Behavior, Hours, Logger, Millisecs, Minutes, Node, Seconds, Time, Timer } from "@matter/main";
 import { ServiceAreaServer } from "@matter/main/behaviors/service-area";
 import { RvcOperationalState } from "@matter/main/clusters/rvc-operational-state";
 import { CustomRvcCleanModeServer } from "./behaviors/CustomRvcCleanModeServer.js";
@@ -370,7 +370,7 @@ export class RvcDeviceLogic extends Behavior {
 
         this.internal.serviceAreaChangeTimer = Time.getPeriodicTimer(
             "ServiceAreaChangeTimer",
-            CLEANING_MAPPING_ROUND_TIME.dividedBy(numberOfAreas).plus(Seconds(1)), // Two Areas by default
+            Millisecs(CLEANING_MAPPING_ROUND_TIME / numberOfAreas + Seconds(1)), // Two Areas by default
             () => this.#changeCurrentServiceArea(),
         ).start();
         await this.#changeCurrentServiceArea();

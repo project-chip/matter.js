@@ -733,7 +733,7 @@ export class QuietObservable<T extends any[] = any[]> extends BasicObservable<T>
     }
 
     set minimumEmitInterval(value: Interval) {
-        if (this.#minimumEmitInterval.equals(value)) {
+        if (this.#minimumEmitInterval === value) {
             return;
         }
         const needStart = this.#emitTimer !== undefined;
@@ -819,7 +819,7 @@ export class QuietObservable<T extends any[] = any[]> extends BasicObservable<T>
             immediate ||
             !this.#suppressionEnabled ||
             this.#lastEmitAt === undefined ||
-            this.#lastEmitAt + this.#minimumEmitInterval.ms < now
+            this.#lastEmitAt + this.#minimumEmitInterval < now
         ) {
             return this.#emit(payload, now);
         }
@@ -867,10 +867,10 @@ export class QuietObservable<T extends any[] = any[]> extends BasicObservable<T>
         if (this.#lastEmitAt === undefined) {
             timeout = Instant;
         } else {
-            timeout = Millisecs(this.#minimumEmitInterval.ms - ((now ?? Time.nowMs) - this.#lastEmitAt));
+            timeout = Millisecs(this.#minimumEmitInterval - ((now ?? Time.nowMs) - this.#lastEmitAt));
         }
 
-        if (timeout.length <= 0) {
+        if (timeout <= 0) {
             this.emitNow();
         } else {
             this.#emitTimer = Time.getTimer("delayed emit", timeout, this.emitNow.bind(this));

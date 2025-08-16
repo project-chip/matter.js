@@ -171,7 +171,7 @@ export class StandardTimer implements Timer {
      * You can change this value but changes have no effect until the timer restarts.
      */
     set interval(interval: Interval) {
-        if (interval.ms < 0 || interval.ms > 2147483647) {
+        if (interval < 0 || interval > 2147483647) {
             throw new ImplementationError(
                 `Invalid intervalMs: ${interval}. The value must be between 0 and 32-bit maximum value (2147483647)`,
             );
@@ -215,7 +215,7 @@ export class StandardTimer implements Timer {
                 this.isRunning = false;
             }
             this.callback();
-        }, this.interval.ms);
+        }, this.interval);
         return this;
     }
 

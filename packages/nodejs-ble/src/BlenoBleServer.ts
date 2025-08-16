@@ -332,7 +332,7 @@ export class BlenoBleServer extends BleChannel<Bytes> {
     }
 
     async advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, interval = Seconds.tenth) {
-        process.env["BLENO_ADVERTISING_INTERVAL"] = interval.ms.toString();
+        process.env["BLENO_ADVERTISING_INTERVAL"] = interval.toString();
 
         this.advertisingData = Buffer.from(Bytes.of(advertiseData));
 

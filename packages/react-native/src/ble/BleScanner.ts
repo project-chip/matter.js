@@ -71,7 +71,7 @@ export class BleScanner implements Scanner {
         const timer = Time.getTimer("BLE query timeout", timeout, () => this.finishWaiter(queryId, true)).start();
         this.recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords });
         logger.debug(
-            `Registered waiter for query ${queryId} with timeout ${timeout}${
+            `Registered waiter for query ${queryId} with timeout ${timeout ? Interval.format(timeout) : "(none)"}${
                 resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"
             }`,
         );
@@ -258,7 +258,7 @@ export class BleScanner implements Scanner {
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
 
-        const discoveryEndTime = timeout.after(Time.nowMs);
+        const discoveryEndTime = Time.nowMs + timeout;
         const queryKey = this.buildCommissionableQueryIdentifier(identifier);
         await this.bleClient.startScanning();
 
@@ -271,8 +271,8 @@ export class BleScanner implements Scanner {
                 }
             });
 
-            const remainingTime = Seconds(Millisecs(discoveryEndTime - Time.nowMs)).ceil;
-            if (remainingTime.ms <= 0) {
+            const remainingTime = Seconds.ceil(Millisecs(discoveryEndTime - Time.nowMs));
+            if (remainingTime <= 0) {
                 break;
             }
             await this.registerWaiterPromise(queryKey, remainingTime, false);

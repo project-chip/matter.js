@@ -6,7 +6,7 @@
 
 import type { FieldModel } from "#models/FieldModel.js";
 import { FeatureMap } from "#standard/elements/definitions.js";
-import { Bytes, camelize, Interval, Millisecs, NotImplementedError } from "@matter/general";
+import { Bytes, camelize, Interval, NotImplementedError } from "@matter/general";
 import { ElementTag, FieldValue, Metatype } from "../common/index.js";
 import { Model } from "../models/Model.js";
 import type { ValueModel } from "../models/ValueModel.js";
@@ -100,12 +100,8 @@ function castValue(model: ValueModel, modelDefault?: FieldValue): unknown {
             return;
 
         case Metatype.interval:
-            if (modelDefault instanceof Interval) {
-                return modelDefault;
-            }
-            if (typeof modelDefault === "number") {
-                return Millisecs(modelDefault);
-            }
+            if (typeof modelDefault === "number" || typeof modelDefault === "string")
+                return Interval(modelDefault as Interval | string);
             break;
 
         case Metatype.array:

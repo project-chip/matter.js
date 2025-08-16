@@ -225,7 +225,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
         }
 
         function waitForMessages(config: { count: number } | Interval) {
-            if ("count" in config) {
+            if (typeof config === "object") {
                 return new Promise<Array<DnsMessage>>((resolve, reject) => {
                     const collector = new MessageCollector(() => {
                         if (collector.length < config.count) {

@@ -61,13 +61,13 @@ export class Project {
             await this.#build(format, "test", `build/${format}/test`);
         }
 
-        const src = `dist/${format}`;
-        const dest = `build/${format}/src`;
+        const src = join("dist", format);
+        const dest = join("build", format, "src");
 
         try {
             const destPath = this.pkg.resolve(dest);
             await mkdir(dirname(destPath), { recursive: true });
-            await ignoreError("EEXIST", async () => await symlink(this.pkg.resolve(src), destPath));
+            await ignoreError("EEXIST", async () => await symlink(join("..", "..", src), destPath));
         } catch (e) {
             if ((e as any).code === "EPERM" && platform() === "win32") {
                 // If developer mode is not enabled, we can't create a symlink

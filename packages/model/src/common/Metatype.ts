@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Interval, isObject, Millisecs, UnexpectedDataError } from "#general";
+import { Bytes, Interval, isObject, UnexpectedDataError } from "#general";
 
 export class UnsupportedCastError extends UnexpectedDataError {}
 
@@ -345,18 +345,11 @@ export namespace Metatype {
     };
 
     cast.interval = (value: any): Interval | null | undefined => {
-        if (value === undefined || value === null || value instanceof Interval) {
+        if (value === undefined || value === null) {
             return value;
         }
 
-        if (typeof value === "number") {
-            const interval = Millisecs(value);
-            if (!Number.isNaN(interval.ms)) {
-                return interval;
-            }
-        }
-
-        throw new UnexpectedDataError("Invalid interval value");
+        return Interval(value);
     };
 
     /**

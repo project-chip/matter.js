@@ -186,9 +186,6 @@ export namespace FieldValue {
         if (is(value, properties)) {
             return stringSerialize((value as Properties).properties) ?? "?";
         }
-        if (value instanceof Interval) {
-            return `${value.ms}ms`;
-        }
         return value.toString();
     }
 
@@ -243,13 +240,7 @@ export namespace FieldValue {
      * Unwrap wrapped values, leave others as-is.
      */
     export function unwrap(value: FieldValue | undefined, typeName?: string) {
-        if (
-            value === null ||
-            typeof value !== "object" ||
-            Array.isArray(value) ||
-            value instanceof Date ||
-            value instanceof Interval
-        ) {
+        if (value === null || typeof value !== "object" || Array.isArray(value) || value instanceof Date) {
             return value;
         }
 

@@ -41,21 +41,21 @@ export class RetrySchedule {
 
         while ((timeout === undefined || timeSoFar < timeout) && (maximumCount === undefined || maximumCount > count)) {
             count++;
-            const maxJitter = jitterFactor * baseInterval.ms;
-            const jitter = Millisecs((maxJitter * this.#crypto.randomUint32) / Math.pow(2, 32)).floor;
-            let interval = baseInterval.plus(jitter);
+            const maxJitter = jitterFactor * baseInterval;
+            const jitter = Millisecs.floor(Millisecs((maxJitter * this.#crypto.randomUint32) / Math.pow(2, 32)));
+            let interval = Millisecs(baseInterval + jitter);
 
-            if (timeout !== undefined && timeSoFar.plus(interval) > timeout) {
-                interval = timeout.minus(timeSoFar);
+            if (timeout !== undefined && timeSoFar + interval > timeout) {
+                interval = Millisecs(timeout - timeSoFar);
             }
             if (maximumInterval !== undefined && interval > maximumInterval) {
                 interval = maximumInterval;
             }
 
             yield interval;
-            timeSoFar = timeSoFar.plus(interval);
+            timeSoFar = Millisecs(timeSoFar + interval);
 
-            baseInterval = baseInterval.times(backoffFactor);
+            baseInterval = Millisecs(baseInterval * backoffFactor);
         }
     }
 }

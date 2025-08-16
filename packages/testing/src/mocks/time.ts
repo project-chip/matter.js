@@ -25,12 +25,12 @@ class MockTimer {
     isPeriodic = false;
 
     #mockTime: MockTime;
-    #duration: { ms: number };
+    #duration: number;
 
     isRunning = false;
     private readonly callback: TimerCallback;
 
-    constructor(mockTime: MockTime, name: string, duration: { ms: number }, callback: TimerCallback) {
+    constructor(mockTime: MockTime, name: string, duration: number, callback: TimerCallback) {
         this.name = name;
 
         this.#mockTime = mockTime;
@@ -48,7 +48,7 @@ class MockTimer {
 
     start() {
         registry.register(this);
-        this.#mockTime.callbackAtTime(this.#mockTime.nowMs + this.#duration.ms, this.callback);
+        this.#mockTime.callbackAtTime(this.#mockTime.nowMs + this.#duration, this.callback);
         this.isRunning = true;
         return this;
     }
@@ -62,9 +62,9 @@ class MockTimer {
 }
 
 class MockInterval extends MockTimer {
-    constructor(mockTime: MockTime, name: string, duration: { ms: number }, callback: TimerCallback) {
+    constructor(mockTime: MockTime, name: string, duration: number, callback: TimerCallback) {
         const intervalCallback = async () => {
-            mockTime.callbackAtTime(mockTime.nowMs + duration.ms, intervalCallback);
+            mockTime.callbackAtTime(mockTime.nowMs + duration, intervalCallback);
             await callback();
         };
         super(mockTime, name, duration, intervalCallback);
@@ -173,11 +173,11 @@ export const MockTime = {
         return nowMs;
     },
 
-    getTimer(name: string, duration: { ms: number }, callback: TimerCallback): MockTimer {
+    getTimer(name: string, duration: number, callback: TimerCallback): MockTimer {
         return new MockTimer(this, name, duration, callback);
     },
 
-    getPeriodicTimer(name: string, interval: { ms: number }, callback: TimerCallback): MockTimer {
+    getPeriodicTimer(name: string, interval: number, callback: TimerCallback): MockTimer {
         return new MockInterval(this, name, interval, callback);
     },
 
