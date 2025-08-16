@@ -152,10 +152,8 @@ export class NodeJsUdpChannel implements UdpChannel {
         }
     }
 
-    onData(
-        listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: BufferSource) => void,
-    ) {
-        const messageListener = (data: BufferSource, { address, port }: dgram.RemoteInfo) => {
+    onData(listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Bytes) => void) {
+        const messageListener = (data: Bytes, { address, port }: dgram.RemoteInfo) => {
             const netInterface = this.#netInterface ?? NodeJsNetwork.getNetInterfaceForIp(address);
             listener(netInterface, address, port, data);
         };
@@ -190,7 +188,7 @@ export class NodeJsUdpChannel implements UdpChannel {
         }
     }
 
-    async send(host: string, port: number, data: BufferSource) {
+    async send(host: string, port: number, data: Bytes) {
         const { promise, resolver, rejecter } = createPromise<void>();
 
         const rejectOrResolve = (error?: Error | null) => {

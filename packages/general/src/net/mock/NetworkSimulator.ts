@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "#util/Bytes.js";
 import { MockNetwork } from "./MockNetwork.js";
 import { MockRouter } from "./MockRouter.js";
 
@@ -20,5 +21,5 @@ export class NetworkSimulator {
 }
 
 export namespace NetworkSimulator {
-    export type Listener = (netInterface: string, peerAddress: string, peerPort: number, data: BufferSource) => void;
+    export type Listener = (netInterface: string, peerAddress: string, peerPort: number, data: Bytes) => void;
 }

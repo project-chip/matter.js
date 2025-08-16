@@ -269,7 +269,7 @@ describe("StorageContext", () => {
 
         it("should write and read a blob", async () => {
             const data = new Uint8Array([1, 2, 3, 4]);
-            const stream = new ReadableStream<BufferSource>({
+            const stream = new ReadableStream<Bytes>({
                 start(controller) {
                     controller.enqueue(data);
                     controller.close();
@@ -280,7 +280,7 @@ describe("StorageContext", () => {
 
             const blob = await blobContext.openBlob(KEY);
             const reader = blob.stream().getReader();
-            const chunks: BufferSource[] = [];
+            const chunks: Bytes[] = [];
             while (true) {
                 const { value, done } = await reader.read();
                 if (done) break;

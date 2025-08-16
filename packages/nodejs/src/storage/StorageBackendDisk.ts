@@ -5,6 +5,7 @@
  */
 
 import {
+    Bytes,
     createPromise,
     fromJson,
     Logger,
@@ -144,7 +145,7 @@ export class StorageBackendDisk extends Storage {
         }
     }
 
-    writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<BufferSource>) {
+    writeBlobFromStream(contexts: string[], key: string, stream: ReadableStream<Bytes>) {
         return this.#writeFile(this.buildStorageKey(contexts, key), stream);
     }
 
@@ -167,7 +168,7 @@ export class StorageBackendDisk extends Storage {
     }
 
     /** According to Node.js documentation, writeFile is not atomic. This method ensures atomicity. */
-    async #writeFile(fileName: string, valueOrStream: string | ReadableStream<BufferSource>): Promise<void> {
+    async #writeFile(fileName: string, valueOrStream: string | ReadableStream<Bytes>): Promise<void> {
         const blocker = this.#writeFileBlocker.get(fileName);
         if (blocker !== undefined) {
             await blocker;
@@ -182,7 +183,7 @@ export class StorageBackendDisk extends Storage {
         return promise;
     }
 
-    async #writeAndMoveFile(filepath: string, valueOrStream: string | ReadableStream<BufferSource>): Promise<void> {
+    async #writeAndMoveFile(filepath: string, valueOrStream: string | ReadableStream<Bytes>): Promise<void> {
         const tmpName = `${filepath}.tmp`;
         const handle = await open(tmpName, "w");
         const isStream = valueOrStream instanceof ReadableStream;

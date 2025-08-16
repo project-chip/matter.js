@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "#general";
 import { StorageBackendDisk } from "#storage/index.js";
 import * as assert from "node:assert";
 import { readFile, rm, stat } from "node:fs/promises";
@@ -212,7 +213,7 @@ describe("StorageBackendDiskAsync", () => {
 
     it("writeBlob and readBlob success", async () => {
         const data = new Uint8Array([5, 6, 7, 8]);
-        const stream = new ReadableStream<BufferSource>({
+        const stream = new ReadableStream<Bytes>({
             start(controller) {
                 controller.enqueue(data);
                 controller.close();
@@ -223,7 +224,7 @@ describe("StorageBackendDiskAsync", () => {
 
         const blob = await storage.openBlob(CONTEXTx1, "blobkey");
         const reader = blob.stream().getReader();
-        const chunks: BufferSource[] = [];
+        const chunks: Bytes[] = [];
         while (true) {
             const { value, done } = await reader.read();
             if (done) break;
@@ -234,7 +235,7 @@ describe("StorageBackendDiskAsync", () => {
 
     it("blobSize returns correct size", async () => {
         const data = new Uint8Array([9, 10, 11]);
-        const stream = new ReadableStream<BufferSource>({
+        const stream = new ReadableStream<Bytes>({
             start(controller) {
                 controller.enqueue(data);
                 controller.close();

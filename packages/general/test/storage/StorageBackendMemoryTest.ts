@@ -6,6 +6,7 @@
 
 import { StorageError } from "#storage/Storage.js";
 import { StorageBackendMemory } from "#storage/StorageBackendMemory.js";
+import { Bytes } from "#util/Bytes.js";
 
 const CONTEXTx1 = ["context"];
 const CONTEXTx2 = [...CONTEXTx1, "subcontext"];
@@ -140,7 +141,7 @@ describe("StorageBackendMemory", () => {
     it("writeBlob and readBlob success", async () => {
         const storage = await StorageBackendMemory.create();
         const data = new Uint8Array([1, 2, 3, 4]);
-        const stream = new ReadableStream<BufferSource>({
+        const stream = new ReadableStream<Bytes>({
             start(controller) {
                 controller.enqueue(data);
                 controller.close();
@@ -151,7 +152,7 @@ describe("StorageBackendMemory", () => {
 
         const blob = storage.openBlob(CONTEXTx1, "blobkey");
         const reader = blob.stream().getReader();
-        const chunks: BufferSource[] = [];
+        const chunks: Bytes[] = [];
         while (true) {
             const { value, done } = await reader.read();
             if (done) break;

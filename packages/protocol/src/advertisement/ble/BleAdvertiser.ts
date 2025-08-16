@@ -5,7 +5,7 @@
  */
 
 import { BlePeripheralInterface } from "#ble/Ble.js";
-import { ImplementationError } from "#general";
+import { Bytes, ImplementationError } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import { MAXIMUM_COMMISSIONING_TIMEOUT_S } from "#types";
 import { Advertisement } from "../Advertisement.js";
@@ -61,7 +61,7 @@ export namespace BleAdvertiser {
         /**
          * Additional advertisement data.
          */
-        readonly aad?: BufferSource;
+        readonly aad?: Bytes;
 
         /**
          * Advertisement timeout.

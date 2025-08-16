@@ -41,7 +41,7 @@ class Base38Schema extends Schema<Bytes, string> {
         return result;
     }
 
-    protected decodeInternal(encoded: string): BufferSource {
+    protected decodeInternal(encoded: string): Bytes {
         const encodedLength = encoded.length;
         const remainderEncodedLength = encodedLength % 5;
         let decodeLength = ((encodedLength - remainderEncodedLength) / 5) * 3;
