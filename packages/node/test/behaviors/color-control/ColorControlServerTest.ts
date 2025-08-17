@@ -7,7 +7,7 @@
 import { ColorControlServer } from "#behaviors/color-control";
 import { ColorControl } from "#clusters/color-control";
 import { ExtendedColorLightDevice } from "#devices/extended-color-light";
-import { Time } from "#general";
+import { Duration, Time, Timespan } from "#general";
 import { MockServerNode } from "../../node/mock-server-node.js";
 
 describe("ColorControlServer", () => {
@@ -68,18 +68,18 @@ async function setup() {
     const events = Array<{
         kind: "hue" | "time";
         value: number | null;
-        ms: number;
+        ms: Duration;
     }>();
 
     let last = Time.nowMs;
 
     endpoint.events.colorControl.remainingTime$Changed!.online.on(value => {
-        events.push({ kind: "time", value, ms: Time.nowMs - last });
+        events.push({ kind: "time", value, ms: Timespan(last, Time.nowMs).duration });
         last = Time.nowMs;
     });
 
     endpoint.events.colorControl.currentHue$Changed.online.on(value => {
-        events.push({ kind: "hue", value, ms: Time.nowMs - last });
+        events.push({ kind: "hue", value, ms: Timespan(last, Time.nowMs).duration });
         last = Time.nowMs;
     });
 

@@ -7,11 +7,11 @@
 import { Metatype } from "@matter/model";
 import { LocalMatter } from "../local.js";
 
-// Matter does not formally define an interval type but matter.js uses it for some fields
+// Matter does not formally define a duration type but matter.js uses it for some fields
 LocalMatter.children.push({
     tag: "datatype",
-    name: "interval",
-    metatype: Metatype.interval,
-    description: "A datatype that represents an arbitrary time interval.",
+    name: "duration",
+    metatype: Metatype.duration,
+    description: "A datatype that represents an arbitrary time duration.",
     details: "This is a matter.js extension to Matter semantics.",
 });

@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interval } from "#time/Interval.js";
-import { Millisecs } from "#time/TimeUnit.js";
+import { Duration } from "#time/Duration.js";
+import { Time } from "#time/Time.js";
+import { Timestamp } from "#time/Timestamp.js";
+import { Millis } from "#time/TimeUnit.js";
 import { Bytes } from "#util/Bytes.js";
 import type { Lifecycle } from "../util/Lifecycle.js";
 import { LogLevel } from "./LogLevel.js";
@@ -304,8 +306,8 @@ export namespace Diagnostic {
     }
 
     export interface Elapsed {
-        readonly startedAt: number;
-        readonly time: Interval;
+        readonly startedAt: Timestamp;
+        readonly time: Duration;
         toString(): string;
     }
 
@@ -314,14 +316,14 @@ export namespace Diagnostic {
      */
     export function elapsed(): Elapsed {
         return {
-            startedAt: performance.now(),
+            startedAt: Time.nowUs,
 
             get time() {
-                return Millisecs(performance.now() - this.startedAt);
+                return Millis(Time.nowUs - this.startedAt);
             },
 
             toString() {
-                return this.time.toString();
+                return Duration.format(this.time);
             },
         };
     }

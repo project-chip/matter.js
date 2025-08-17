@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Interval, Merge } from "#general";
+import { Duration, Merge } from "#general";
 import {
     Attribute,
     AttributeId,
@@ -63,13 +63,13 @@ export type SignatureFromCommandSpec<C extends Command<any, any, any>> = (
         asTimedRequest?: boolean;
 
         /** Override the request timeout when the command is sent as times request. Default are 10s. */
-        timedRequestTimeout?: Interval;
+        timedRequestTimeout?: Duration;
 
         /**
          * Expected processing time on the device side for this command.
          * useExtendedFailSafeMessageResponseTimeout is ignored if this value is set.
          */
-        expectedProcessingTime?: Interval;
+        expectedProcessingTime?: Duration;
 
         /**
          * Use the extended fail-safe message response timeout of 30 seconds. Use this for all commands

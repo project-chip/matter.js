@@ -5,7 +5,7 @@
  */
 
 import type { ReadResult } from "#action/response/ReadResult.js";
-import { CanceledError, TimeoutError, UINT16_MAX } from "#general";
+import { CanceledError, Duration, Seconds, TimeoutError, UINT16_MAX } from "#general";
 import { MalformedRequestError } from "./MalformedRequestError.js";
 import { Read } from "./Read.js";
 
@@ -17,9 +17,9 @@ import { Read } from "./Read.js";
  */
 export interface Subscribe extends Read {
     keepSubscriptions: boolean;
-    minIntervalFloorSeconds?: number;
-    maxIntervalCeilingSeconds?: number;
-    maxPeerResponseTime?: number;
+    minIntervalFloor?: Duration;
+    maxIntervalCeiling?: Duration;
+    maxPeerResponseTime?: Duration;
 
     /**
      * Invoked when subscribed data changes.
@@ -35,21 +35,23 @@ export interface Subscribe extends Read {
 export function Subscribe(options: Subscribe.Options, ...selectors: Read.Selector[]): Subscribe {
     const subscribe = Read(options, ...selectors) as unknown as Subscribe;
 
-    const { keepSubscriptions, minIntervalFloorSeconds, maxIntervalCeilingSeconds } = options;
+    const { keepSubscriptions, minIntervalFloor, maxIntervalCeiling } = options;
     subscribe.keepSubscriptions = keepSubscriptions ?? true;
 
-    if (minIntervalFloorSeconds !== undefined) {
-        if (minIntervalFloorSeconds < 0 || minIntervalFloorSeconds > UINT16_MAX) {
-            throw new MalformedRequestError(`Minimum interval floor ${minIntervalFloorSeconds} is out of range`);
+    if (minIntervalFloor !== undefined) {
+        if (minIntervalFloor < 0 || Seconds.of(minIntervalFloor) > UINT16_MAX) {
+            throw new MalformedRequestError(`Minimum interval floor ${Seconds.of(minIntervalFloor)} is out of range`);
         }
-        subscribe.minIntervalFloorSeconds = minIntervalFloorSeconds;
+        subscribe.minIntervalFloor = minIntervalFloor;
     }
 
-    if (maxIntervalCeilingSeconds !== undefined) {
-        if (maxIntervalCeilingSeconds < 0 || maxIntervalCeilingSeconds > UINT16_MAX) {
-            throw new MalformedRequestError(`Maximum interval ceiling ${maxIntervalCeilingSeconds} is out of range`);
+    if (maxIntervalCeiling !== undefined) {
+        if (maxIntervalCeiling < 0 || Seconds.of(maxIntervalCeiling) > UINT16_MAX) {
+            throw new MalformedRequestError(
+                `Maximum interval ceiling ${Seconds.of(maxIntervalCeiling)} is out of range`,
+            );
         }
-        subscribe.maxIntervalCeilingSeconds = maxIntervalCeilingSeconds;
+        subscribe.maxIntervalCeiling = maxIntervalCeiling;
     }
 
     return subscribe;
@@ -58,8 +60,8 @@ export function Subscribe(options: Subscribe.Options, ...selectors: Read.Selecto
 export namespace Subscribe {
     export interface Options extends Read.Options {
         keepSubscriptions?: boolean;
-        minIntervalFloorSeconds?: number;
-        maxIntervalCeilingSeconds?: number;
+        minIntervalFloor?: Duration;
+        maxIntervalCeiling?: Duration;
         update?: Subscribe["updated"];
         closed?: Subscribe["closed"];
     }

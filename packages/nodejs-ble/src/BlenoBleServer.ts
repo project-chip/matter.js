@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Channel, InternalError, Logger, Seconds, Time, createPromise } from "#general";
+import { Bytes, Channel, InternalError, Logger, Millis, Time, createPromise } from "#general";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
@@ -331,7 +331,7 @@ export class BlenoBleServer extends BleChannel<Bytes> {
         }
     }
 
-    async advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, interval = Seconds.tenth) {
+    async advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, interval = Millis(100)) {
         process.env["BLENO_ADVERTISING_INTERVAL"] = interval.toString();
 
         this.advertisingData = Buffer.from(Bytes.of(advertiseData));

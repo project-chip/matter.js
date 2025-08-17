@@ -19,7 +19,7 @@ import {
     ImplementationError,
     Logger,
     MaybePromise,
-    Millisecs,
+    Millis,
 } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
 import { Val } from "#protocol";
@@ -1809,7 +1809,7 @@ export namespace ColorControlBaseServer {
         /**
          * When managing transitions, this is the interval at which steps occur in ms.
          */
-        transitionStepInterval = Millisecs(100);
+        transitionStepInterval = Millis(100);
 
         [Val.properties](endpoint: Endpoint) {
             // Only return remaining time if the attribute is defined in the endpoint

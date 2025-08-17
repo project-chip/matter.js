@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AsyncObservable, InternalError, Interval, Logger } from "#general";
+import { AsyncObservable, Duration, InternalError, Logger } from "#general";
 import { NodeSession } from "#session/NodeSession.js";
 import { TlvAttributePath, TlvDataVersionFilter, TlvEventFilter, TlvEventPath, TypeFromSchema } from "#types";
 
@@ -30,7 +30,7 @@ export abstract class Subscription {
     #isCanceledByPeer?: boolean;
     #criteria: SubscriptionCriteria;
     #cancelled = AsyncObservable<[subscription: Subscription]>();
-    #maxInterval?: Interval;
+    #maxInterval?: Duration;
 
     constructor(session: NodeSession, id: SubscriptionId, criteria: SubscriptionCriteria) {
         this.#session = session;
@@ -69,7 +69,7 @@ export abstract class Subscription {
         return this.#maxInterval;
     }
 
-    set maxInterval(value: Interval) {
+    set maxInterval(value: Duration) {
         if (this.#maxInterval !== undefined) {
             throw new InternalError("Subscription maxInterval set twice");
         }

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Branded, Interval, Merge } from "#general";
+import { Branded, Duration, Merge } from "#general";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
@@ -242,8 +242,8 @@ export namespace ClusterType {
 
     export type PatchType<V> = V extends (infer E)[]
         ? Record<`${number}`, PatchType<E>> | PatchType<E>[]
-        : V extends Interval
-          ? Interval
+        : V extends Duration
+          ? Duration
           : V extends number
             ? number
             : V extends bigint

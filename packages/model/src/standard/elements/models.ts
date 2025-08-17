@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import * as definitions from "./definitions.js";
+import { AttributeModel } from "../../models/AttributeModel.js";
 import { ClusterModel } from "../../models/ClusterModel.js";
 import { DatatypeModel } from "../../models/DatatypeModel.js";
-import { AttributeModel } from "../../models/AttributeModel.js";
-import { FieldModel } from "../../models/FieldModel.js";
 import { DeviceTypeModel } from "../../models/DeviceTypeModel.js";
+import { FieldModel } from "../../models/FieldModel.js";
 import { SemanticNamespaceModel } from "../../models/SemanticNamespaceModel.js";
+import * as definitions from "./definitions.js";
 
 export const Identify = new ClusterModel(definitions.Identify);
 export const Groups = new ClusterModel(definitions.Groups);
@@ -42,15 +42,23 @@ export const ActivatedCarbonFilterMonitoring = new ClusterModel(definitions.Acti
 export const WaterTankLevelMonitoring = new ClusterModel(definitions.WaterTankLevelMonitoring);
 export const AirQuality = new ClusterModel(definitions.AirQuality);
 export const ConcentrationMeasurement = new ClusterModel(definitions.ConcentrationMeasurement);
-export const CarbonMonoxideConcentrationMeasurement = new ClusterModel(definitions.CarbonMonoxideConcentrationMeasurement);
-export const CarbonDioxideConcentrationMeasurement = new ClusterModel(definitions.CarbonDioxideConcentrationMeasurement);
-export const NitrogenDioxideConcentrationMeasurement = new ClusterModel(definitions.NitrogenDioxideConcentrationMeasurement);
+export const CarbonMonoxideConcentrationMeasurement = new ClusterModel(
+    definitions.CarbonMonoxideConcentrationMeasurement,
+);
+export const CarbonDioxideConcentrationMeasurement = new ClusterModel(
+    definitions.CarbonDioxideConcentrationMeasurement,
+);
+export const NitrogenDioxideConcentrationMeasurement = new ClusterModel(
+    definitions.NitrogenDioxideConcentrationMeasurement,
+);
 export const OzoneConcentrationMeasurement = new ClusterModel(definitions.OzoneConcentrationMeasurement);
 export const Pm25ConcentrationMeasurement = new ClusterModel(definitions.Pm25ConcentrationMeasurement);
 export const FormaldehydeConcentrationMeasurement = new ClusterModel(definitions.FormaldehydeConcentrationMeasurement);
 export const Pm1ConcentrationMeasurement = new ClusterModel(definitions.Pm1ConcentrationMeasurement);
 export const Pm10ConcentrationMeasurement = new ClusterModel(definitions.Pm10ConcentrationMeasurement);
-export const TotalVolatileOrganicCompoundsConcentrationMeasurement = new ClusterModel(definitions.TotalVolatileOrganicCompoundsConcentrationMeasurement);
+export const TotalVolatileOrganicCompoundsConcentrationMeasurement = new ClusterModel(
+    definitions.TotalVolatileOrganicCompoundsConcentrationMeasurement,
+);
 export const RadonConcentrationMeasurement = new ClusterModel(definitions.RadonConcentrationMeasurement);
 export const SmokeCoAlarm = new ClusterModel(definitions.SmokeCoAlarm);
 export const ElectricalEnergyMeasurement = new ClusterModel(definitions.ElectricalEnergyMeasurement);
@@ -84,7 +92,9 @@ export const DishwasherMode = new ClusterModel(definitions.DishwasherMode);
 export const DishwasherAlarm = new ClusterModel(definitions.DishwasherAlarm);
 export const LaundryWasherMode = new ClusterModel(definitions.LaundryWasherMode);
 export const LaundryWasherControls = new ClusterModel(definitions.LaundryWasherControls);
-export const RefrigeratorAndTemperatureControlledCabinetMode = new ClusterModel(definitions.RefrigeratorAndTemperatureControlledCabinetMode);
+export const RefrigeratorAndTemperatureControlledCabinetMode = new ClusterModel(
+    definitions.RefrigeratorAndTemperatureControlledCabinetMode,
+);
 export const RefrigeratorAlarm = new ClusterModel(definitions.RefrigeratorAlarm);
 export const LaundryDryerControls = new ClusterModel(definitions.LaundryDryerControls);
 export const OvenCavityOperationalState = new ClusterModel(definitions.OvenCavityOperationalState);
@@ -216,9 +226,11 @@ export const namespace = new DatatypeModel(definitions.namespace);
 export const tag = new DatatypeModel(definitions.tag);
 export const locationdesc = new DatatypeModel(definitions.locationdesc);
 export const WildcardPathFlagsBitmap = new DatatypeModel(definitions.WildcardPathFlagsBitmap);
-export const SoftwareVersionCertificationStatusEnum = new DatatypeModel(definitions.SoftwareVersionCertificationStatusEnum);
+export const SoftwareVersionCertificationStatusEnum = new DatatypeModel(
+    definitions.SoftwareVersionCertificationStatusEnum,
+);
 export const any = new DatatypeModel(definitions.any);
-export const interval = new DatatypeModel(definitions.interval);
+export const interval = new DatatypeModel(definitions.duration);
 export const subjectId = new DatatypeModel(definitions.subjectId);
 export const ClusterRevision = new AttributeModel(definitions.ClusterRevision);
 export const FeatureMap = new AttributeModel(definitions.FeatureMap);

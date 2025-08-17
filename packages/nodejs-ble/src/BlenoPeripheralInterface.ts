@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Channel, ChannelType, Interval, TransportInterface } from "#general";
+import { Bytes, Channel, ChannelType, Duration, TransportInterface } from "#general";
 import { BlePeripheralInterface } from "@matter/protocol";
 import { BlenoBleServer } from "./BlenoBleServer.js";
 
@@ -35,7 +35,7 @@ export class BlenoPeripheralInterface implements BlePeripheralInterface {
         return this.blenoServer.clientAddress === address;
     }
 
-    advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, interval?: Interval) {
+    advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, interval?: Duration) {
         return this.blenoServer.advertise(advertiseData, additionalAdvertisementData, interval);
     }
 

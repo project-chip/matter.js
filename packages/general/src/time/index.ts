@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./Interval.js";
+export * from "./Duration.js";
 export * from "./Time.js";
+export * from "./Timespan.js";
+export * from "./Timestamp.js";
 export * from "./TimeUnit.js";

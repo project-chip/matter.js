@@ -5,7 +5,7 @@
  */
 
 import { Bytes } from "#general";
-import { Interval } from "@matter/general";
+import { Duration } from "@matter/general";
 import { ProductDescription } from "../common/ProductDescription.js";
 import { CommissioningFlowType } from "../schema/PairingCodeSchema.js";
 
@@ -57,6 +57,6 @@ export namespace CommissioningOptions {
          *
          * Defaults to 15 minutes.
          */
-        readonly advertisementWindow?: Interval;
+        readonly advertisementWindow?: Duration;
     }
 }

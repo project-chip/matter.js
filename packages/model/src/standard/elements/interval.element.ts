@@ -9,5 +9,5 @@
 import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
-export const interval = Datatype({ name: "interval", metatype: "interval" });
-MatterDefinition.children.push(interval);
+export const duration = Datatype({ name: "duration", metatype: "duration" });
+MatterDefinition.children.push(duration);

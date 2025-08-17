@@ -12,12 +12,12 @@ import {
     Construction,
     Crypto,
     Diagnostic,
+    Duration,
     ImplementationError,
     InternalError,
-    Interval,
     Logger,
     MatterError,
-    Millisecs,
+    Millis,
     Minutes,
     Observable,
     Seconds,
@@ -77,10 +77,10 @@ const logger = Logger.get("PairedNode");
 const STRUCTURE_UPDATE_TIMEOUT = Seconds(5);
 
 /** Delay after a disconnect to try to reconnect to the device */
-const RECONNECT_DELAY = Minutes.quarter;
+const RECONNECT_DELAY = Seconds(15);
 
 /** Delay after a shutdown event to try to reconnect to the device */
-const RECONNECT_DELAY_AFTER_SHUTDOWN = Minutes.half; // Give device time to restart and maybe inform us about
+const RECONNECT_DELAY_AFTER_SHUTDOWN = Seconds(30); // Give device time to restart and maybe inform us about
 
 /** Maximum delay after a disconnect to try to reconnect to the device */
 const RECONNECT_MAX_DELAY = Minutes(10);
@@ -236,7 +236,7 @@ export class PairedNode {
                 );
                 // Try last known address first to speed up reconnection
                 this.#setConnectionState(NodeStates.Reconnecting);
-                this.#scheduleReconnect();
+                this.#scheduleReconnect(0);
             }
         },
     );
@@ -516,7 +516,7 @@ export class PairedNode {
             );
             return;
         }
-        this.#scheduleReconnect();
+        this.#scheduleReconnect(0);
     }
 
     /**
@@ -939,7 +939,7 @@ export class PairedNode {
         this.#scheduleReconnect(RECONNECT_DELAY_AFTER_SHUTDOWN);
     }
 
-    #scheduleReconnect(delay?: Interval) {
+    #scheduleReconnect(delay?: Duration) {
         if (this.state !== NodeStates.WaitingForDeviceDiscovery) {
             this.#setConnectionState(NodeStates.Reconnecting);
         }
@@ -949,10 +949,10 @@ export class PairedNode {
         }
         if (delay === undefined) {
             // Calculate a delay with a backoff strategy based on errorCount and maximum 10 minutes
-            delay = Interval.min(Millisecs(RECONNECT_DELAY * 2 ** this.#reconnectErrorCount), RECONNECT_MAX_DELAY);
+            delay = Duration.min(Millis(RECONNECT_DELAY * 2 ** this.#reconnectErrorCount), RECONNECT_MAX_DELAY);
         }
 
-        logger.info(`Node ${this.nodeId}: Reconnecting ${delay ? `in ${Interval.format(delay)}` : "now"} ...`);
+        logger.info(`Node ${this.nodeId}: Reconnecting ${delay ? `in ${Duration.format(delay)}` : "now"} ...`);
         this.#reconnectDelayTimer = Time.getTimer("Reconnect delay", delay, async () => await this.reconnect());
         this.#reconnectDelayTimer.start();
     }

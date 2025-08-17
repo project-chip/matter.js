@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time } from "#general";
+import { Seconds, Time, Timestamp } from "#general";
 import { uptime } from "node:os";
 
-Time.startup.processMs = Math.floor(Time.nowMs - process.uptime() * 1000);
-Time.startup.systemMs = Math.floor(Time.nowMs - uptime());
+Time.startup.processMs = Timestamp(Time.nowMs - Seconds(process.uptime()));
+Time.startup.systemMs = Timestamp(Time.nowMs - Seconds(uptime()));

@@ -10,15 +10,16 @@ import {
     addValueWithOverflow,
     cropValueRange,
     Diagnostic,
+    Duration,
     ImplementationError,
-    Interval,
     Logger,
     MaybePromise,
-    Millisecs,
+    Millis,
     ObserverGroup,
-    Seconds,
     Time,
     Timer,
+    Timespan,
+    Timestamp,
 } from "#general";
 import { Behavior } from "./Behavior.js";
 import { ClusterEvents } from "./cluster/ClusterEvents.js";
@@ -173,7 +174,7 @@ export class Transitions<B extends Behavior> {
             configuration: transition,
             currentValue,
             changePerMs: changePerS / 1000,
-            prevStepAt: Time.nowMs - (this.#config.stepInterval ?? Transitions.DEFAULT_STEP_INTERVAL),
+            prevStepAt: Timestamp(Time.nowMs - (this.#config.stepInterval ?? Transitions.DEFAULT_STEP_INTERVAL)),
             distanceLeft,
         };
 
@@ -360,7 +361,7 @@ export class Transitions<B extends Behavior> {
     get remainingTime() {
         if (this.#config.manageTransitions === false) {
             if (this.#config.transitionEndTimeMs !== undefined) {
-                const remaining = this.#config.transitionEndTimeMs - Time.nowMs;
+                const remaining = Timespan(Time.nowMs, this.#config.transitionEndTimeMs).duration;
                 if (remaining < 0) {
                     return 0;
                 }
@@ -600,7 +601,7 @@ export class Transitions<B extends Behavior> {
     }
 
     #internalTimeOf(externalUnits: number) {
-        return Millisecs(externalUnits * (this.#config.externalTimeUnit ?? Transitions.DEFAULT_EXTERNAL_TIME_UNIT));
+        return Millis(externalUnits * (this.#config.externalTimeUnit ?? Transitions.DEFAULT_EXTERNAL_TIME_UNIT));
     }
 
     /**
@@ -647,8 +648,8 @@ export class Transitions<B extends Behavior> {
 }
 
 export namespace Transitions {
-    export const DEFAULT_STEP_INTERVAL = Seconds.tenth;
-    export const DEFAULT_EXTERNAL_TIME_UNIT = Seconds.tenth;
+    export const DEFAULT_STEP_INTERVAL = Millis(100);
+    export const DEFAULT_EXTERNAL_TIME_UNIT = Millis(100);
 
     /**
      * A valid transitionable attribute name for the specified type.
@@ -680,7 +681,7 @@ export namespace Transitions {
          * Interval per external time unit.  Defaults to 100ms which is appropriate for CC & LVL "remaining time"
          * attribute that is defined as 10ths of a second.
          */
-        readonly externalTimeUnit?: Interval;
+        readonly externalTimeUnit?: Duration;
 
         /**
          * The internal tick rate for transitions.
@@ -689,7 +690,7 @@ export namespace Transitions {
          *
          * Defaults to {@link DEFAULT_STEP_INTERVAL}.
          */
-        readonly stepInterval?: Interval;
+        readonly stepInterval?: Duration;
 
         /**
          * The end time for a transition if transition management is disabled.
@@ -824,7 +825,7 @@ export namespace Transitions {
         /**
          * The time of the last step.
          */
-        prevStepAt: number;
+        prevStepAt: Timestamp;
 
         /**
          * Set to true when the reporting of remaining time should be suppressed when finishing the transition.

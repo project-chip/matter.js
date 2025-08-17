@@ -9,10 +9,10 @@ import { ServiceDescription } from "#advertisement/ServiceDescription.js";
 import {
     Bytes,
     Crypto,
+    Duration,
     ImplementationError,
     Instant,
     InternalError,
-    Interval,
     RetrySchedule,
     Seconds,
     STANDARD_MATTER_PORT,
@@ -198,7 +198,7 @@ export namespace MdnsAdvertiser {
          * Set to zero to terminate broadcast immediately after connection.  If undefined broadcasts will continue until
          * terminated by {@link timeout} or {@link maximumCount}.
          */
-        readonly broadcastAfterConnection?: Interval;
+        readonly broadcastAfterConnection?: Duration;
     }
 
     /**

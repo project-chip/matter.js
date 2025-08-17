@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { capitalize, Diagnostic, ImplementationError, Interval, Logger, Merge } from "#general";
+import { capitalize, Diagnostic, Duration, ImplementationError, Logger, Merge } from "#general";
 import {
     Attribute,
     AttributeId,
@@ -387,8 +387,8 @@ export function ClusterClient<const T extends ClusterType>(
             request: RequestT,
             options: {
                 asTimedRequest?: boolean;
-                timedRequestTimeout?: Interval;
-                expectedProcessingTime?: Interval;
+                timedRequestTimeout?: Duration;
+                expectedProcessingTime?: Duration;
                 useExtendedFailSafeMessageResponseTimeout?: boolean;
             } = {},
         ) => {

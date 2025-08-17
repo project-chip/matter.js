@@ -8,7 +8,7 @@ import {
     Bytes,
     Channel,
     ChannelType,
-    Interval,
+    Duration,
     MatterError,
     NetInterface,
     NoProviderError,
@@ -37,7 +37,7 @@ export abstract class Ble {
 }
 
 export interface BlePeripheralInterface extends TransportInterface {
-    advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, interval?: Interval): Promise<void>;
+    advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, interval?: Duration): Promise<void>;
     stopAdvertising(): Promise<void>;
 }
 

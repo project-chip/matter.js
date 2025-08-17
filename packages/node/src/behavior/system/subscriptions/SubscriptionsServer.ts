@@ -21,7 +21,7 @@ import {
 import { StatusCode, StatusResponseError } from "#types";
 import { Behavior } from "../../Behavior.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
-const logger = Logger.get("SubscriptionBehavior");
+const logger = Logger.get("SubscriptionsBehavior");
 
 /** Timeout in seconds to wait for responses or discovery of the peer node when trying to re-establish a subscription. */
 const REESTABLISH_SUBSCRIPTIONS_TIMEOUT = Seconds(2);
@@ -33,11 +33,11 @@ const REESTABLISH_SUBSCRIPTIONS_TIMEOUT = Seconds(2);
  * speed up the controller reconnection process. This can mean a bit more memory usage on start of the device. To
  * disable this feature set `persistenceEnabled` as state of the `subscription` behavior to `false`.
  */
-export class SubscriptionBehavior extends Behavior {
-    static override readonly id = "subscription";
+export class SubscriptionsBehavior extends Behavior {
+    static override readonly id = "subscriptions";
 
-    declare state: SubscriptionBehavior.State;
-    declare internal: SubscriptionBehavior.Internal;
+    declare state: SubscriptionsBehavior.State;
+    declare internal: SubscriptionsBehavior.Internal;
 
     override initialize() {
         if (this.state.subscriptions !== undefined && this.state.persistenceEnabled !== false) {
@@ -115,10 +115,10 @@ export class SubscriptionBehavior extends Behavior {
                     ),
                 ),
                 FieldElement({ name: "isFabricFiltered", type: "bool" }),
-                FieldElement({ name: "maxIntervalCeiling", type: "interval" }),
-                FieldElement({ name: "minIntervalFloor", type: "interval" }),
-                FieldElement({ name: "maxInterval", type: "interval" }),
-                FieldElement({ name: "sendInterval", type: "interval" }),
+                FieldElement({ name: "maxIntervalCeiling", type: "duration" }),
+                FieldElement({ name: "minIntervalFloor", type: "duration" }),
+                FieldElement({ name: "maxInterval", type: "duration" }),
+                FieldElement({ name: "sendInterval", type: "duration" }),
                 FieldElement(
                     {
                         name: "operationalAddress",
@@ -282,7 +282,7 @@ export class SubscriptionBehavior extends Behavior {
     }
 }
 
-export namespace SubscriptionBehavior {
+export namespace SubscriptionsBehavior {
     export class State {
         /** Set to false if persistence of subscriptions should be disabled */
         persistenceEnabled = true;

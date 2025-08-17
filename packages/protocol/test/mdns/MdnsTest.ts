@@ -11,10 +11,10 @@ import {
     DnsMessage,
     DnsMessageType,
     DnsRecordType,
+    Duration,
     Instant,
     InternalError,
-    Interval,
-    Millisecs,
+    Millis,
     MockCrypto,
     MockNetwork,
     MockUdpChannel,
@@ -224,7 +224,7 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
             return waitForMessages({ count: 1 }).then(messages => messages[0]);
         }
 
-        function waitForMessages(config: { count: number } | Interval) {
+        function waitForMessages(config: { count: number } | Duration) {
             if (typeof config === "object") {
                 return new Promise<Array<DnsMessage>>((resolve, reject) => {
                     const collector = new MessageCollector(() => {
@@ -255,8 +255,8 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
 
                 advertise({
                     ...OPERATIONAL_SERVICE,
-                    idleInterval: Seconds.tenth,
-                    activeInterval: Millisecs(200),
+                    idleInterval: Millis(100),
+                    activeInterval: Millis(200),
                 });
 
                 expectMessage(await announcement, {
@@ -1195,9 +1195,9 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                         DT: 1,
                         P: 32768,
                         PH: 33,
-                        SAI: Millisecs(300),
+                        SAI: Millis(300),
                         SD: 4,
-                        SII: Millisecs(500),
+                        SII: Millis(500),
                         SAT: Seconds(4),
                         T: 0,
                         ICD: 0,
@@ -1261,9 +1261,9 @@ const COMMISSIONABLE_SERVICE = ServiceDescription.Commissionable({
                         DT: 1,
                         P: 32768,
                         PH: 33,
-                        SAI: Millisecs(300),
+                        SAI: Millis(300),
                         SD: 4,
-                        SII: Millisecs(500),
+                        SII: Millis(500),
                         SAT: Seconds(4),
                         T: 0,
                         ICD: 0,

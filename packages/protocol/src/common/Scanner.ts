@@ -7,9 +7,9 @@
 import {
     BasicSet,
     ChannelType,
+    Duration,
     Environment,
     Environmental,
-    Interval,
     Lifespan,
     ServerAddress,
     ServerAddressIp,
@@ -41,13 +41,13 @@ export type DiscoveryData = {
     PI?: string;
 
     /** Sleep Idle Interval */
-    SII?: Interval;
+    SII?: Duration;
 
     /** Sleep Active Interval */
-    SAI?: Interval;
+    SAI?: Duration;
 
     /** Session active threshold */
-    SAT?: Interval;
+    SAT?: Duration;
 
     /** TCP supported */
     T?: number; // SupportedTransportsBitmap but comes in as number, so converted on usage
@@ -125,7 +125,7 @@ export interface Scanner {
     findOperationalDevice(
         fabric: Fabric,
         nodeId: NodeId,
-        timeout?: Interval,
+        timeout?: Duration,
         ignoreExistingRecords?: boolean,
     ): Promise<OperationalDevice | undefined>;
 
@@ -141,7 +141,7 @@ export interface Scanner {
      */
     findCommissionableDevices(
         identifier: CommissionableDeviceIdentifiers,
-        timeout?: Interval,
+        timeout?: Duration,
         ignoreExistingRecords?: boolean,
     ): Promise<CommissionableDevice[]>;
 
@@ -153,7 +153,7 @@ export interface Scanner {
     findCommissionableDevicesContinuously(
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
-        timeout?: Interval,
+        timeout?: Duration,
         cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]>;
 

@@ -59,7 +59,7 @@ export class ClientSubscriptionHandler implements ProtocolHandler {
 
         // If this is just a ping, only reset the timeout
         if (!initialReport.attributeReports?.length && !initialReport.eventReports?.length) {
-            subscription.timeoutAtMs = undefined;
+            subscription.timeoutAt = undefined;
             this.#subscriptions.resetTimer();
             await exchange.close();
             return;
@@ -79,7 +79,7 @@ export class ClientSubscriptionHandler implements ProtocolHandler {
             }
         } finally {
             subscription.isReading = false;
-            subscription.timeoutAtMs = undefined;
+            subscription.timeoutAt = undefined;
             this.#subscriptions.resetTimer();
             await exchange.close();
         }

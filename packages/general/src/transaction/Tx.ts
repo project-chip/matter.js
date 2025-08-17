@@ -8,7 +8,8 @@ import { Diagnostic } from "#log/Diagnostic.js";
 import { Logger } from "#log/Logger.js";
 import { ImplementationError, ReadOnlyError } from "#MatterError.js";
 import { Time, Timer } from "#time/Time.js";
-import { Millisecs } from "#time/TimeUnit.js";
+import { Timestamp } from "#time/Timestamp.js";
+import { Millis } from "#time/TimeUnit.js";
 import { asError } from "#util/Error.js";
 import { Observable } from "#util/Observable.js";
 import { MaybePromise } from "#util/Promises.js";
@@ -811,7 +812,7 @@ function throwIfErrored(errored: undefined | Array<Participant>, when: string) {
  * "Slow" async transaction monitoring implementation.
  */
 const Monitor = (function () {
-    const monitored = new Map<Tx, number>();
+    const monitored = new Map<Tx, Timestamp>();
     let monitor: Timer | undefined;
 
     function check() {
@@ -839,9 +840,9 @@ const Monitor = (function () {
                 return;
             }
 
-            monitored.set(tx, Time.nowMs + slowTransactionTime);
+            monitored.set(tx, Timestamp(Time.nowMs + slowTransactionTime));
             if (monitor === undefined) {
-                monitor = Time.getPeriodicTimer("tx-lock-monitor", Millisecs(slowTransactionTime / 10), check);
+                monitor = Time.getPeriodicTimer("tx-lock-monitor", Millis(slowTransactionTime / 10), check);
                 monitor.start();
             }
         },

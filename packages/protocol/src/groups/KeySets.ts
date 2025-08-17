@@ -5,7 +5,7 @@
  */
 
 import type { GroupKeyManagement } from "#clusters/group-key-management";
-import { BasicSet, Bytes, Crypto, DataReader, ImplementationError, MatterFlowError, Time } from "#general";
+import { BasicSet, Bytes, Crypto, DataReader, ImplementationError, MatterFlowError, Time, Timestamp } from "#general";
 
 export const GROUP_KEY_INFO = Bytes.fromString("GroupKeyHash");
 
@@ -44,7 +44,7 @@ export class KeySets<T extends OperationalKeySet> extends BasicSet<T> {
         if (groupKeySet === undefined) {
             throw new MatterFlowError(`GroupKeySet for groupKeySet ${keySetId} not found.`);
         }
-        const operationalKeys = Array<{ key: Bytes; sessionId?: number; startTime: number | bigint }>();
+        const operationalKeys = Array<{ key: Bytes; sessionId?: number; startTime: Timestamp }>();
         const {
             operationalEpochKey0,
             groupSessionId0,
@@ -63,13 +63,21 @@ export class KeySets<T extends OperationalKeySet> extends BasicSet<T> {
         operationalKeys.push({
             key: operationalEpochKey0,
             sessionId: groupSessionId0 !== null ? groupSessionId0 : undefined,
-            startTime: epochStartTime0,
+            startTime: Timestamp.fromMicroseconds(epochStartTime0),
         });
         if (operationalEpochKey1 !== null && groupSessionId1 !== null && epochStartTime1 !== null) {
-            operationalKeys.push({ key: operationalEpochKey1, sessionId: groupSessionId1, startTime: epochStartTime1 });
+            operationalKeys.push({
+                key: operationalEpochKey1,
+                sessionId: groupSessionId1,
+                startTime: Timestamp.fromMicroseconds(epochStartTime1),
+            });
         }
         if (operationalEpochKey2 !== null && groupSessionId2 !== null && epochStartTime2 !== null) {
-            operationalKeys.push({ key: operationalEpochKey2, sessionId: groupSessionId2, startTime: epochStartTime2 });
+            operationalKeys.push({
+                key: operationalEpochKey2,
+                sessionId: groupSessionId2,
+                startTime: Timestamp.fromMicroseconds(epochStartTime2),
+            });
         }
         return operationalKeys;
     }

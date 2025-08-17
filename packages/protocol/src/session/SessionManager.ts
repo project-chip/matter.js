@@ -11,9 +11,9 @@ import {
     BasicSet,
     Bytes,
     Construction,
+    Duration,
     Environment,
     Environmental,
-    Interval,
     Lifecycle,
     Logger,
     MatterAggregateError,
@@ -75,9 +75,9 @@ type ResumptionStorageRecord = {
     fabricId: FabricId;
     peerNodeId: NodeId;
     sessionParameters: {
-        idleInterval: Interval;
-        activeInterval: Interval;
-        activeThreshold: Interval;
+        idleInterval: Duration;
+        activeInterval: Duration;
+        activeThreshold: Duration;
         dataModelRevision: number;
         interactionModelRevision: number;
         specificationVersion: number;

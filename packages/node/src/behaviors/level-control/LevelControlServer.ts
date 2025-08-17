@@ -13,7 +13,7 @@ import { OnOffServer } from "#behaviors/on-off";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { LevelControl } from "#clusters/level-control";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { AsyncObservable, Identity, Logger, MaybePromise, Seconds } from "#general";
+import { AsyncObservable, Identity, Logger, MaybePromise, Millis } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
 import { Val } from "#protocol";
 import { ClusterType, StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
@@ -614,7 +614,7 @@ export namespace LevelControlBaseServer {
         /**
          * When managing transitions, this is the interval at which steps occur in ms.
          */
-        transitionStepInterval = Seconds.tenth;
+        transitionStepInterval = Millis(100);
 
         [Val.properties](endpoint: Endpoint) {
             // Only return remaining time if the attribute is defined in the endpoint

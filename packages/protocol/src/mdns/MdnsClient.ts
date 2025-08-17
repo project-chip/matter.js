@@ -14,14 +14,14 @@ import {
     DnsRecord,
     DnsRecordClass,
     DnsRecordType,
+    Duration,
     Hours,
     ImplementationError,
     Instant,
     InternalError,
-    Interval,
     Lifespan,
     Logger,
-    Millisecs,
+    Millis,
     Minutes,
     ObserverGroup,
     Seconds,
@@ -30,6 +30,7 @@ import {
     SrvRecordValue,
     Time,
     Timer,
+    Timespan,
     createPromise,
     isIPv6,
 } from "#general";
@@ -237,8 +238,8 @@ export class MdnsClient implements Scanner {
         }
     }
 
-    #effectiveTTL(ttl: Interval) {
-        return Millisecs(ttl * MDNS_EXPIRY_GRACE_PERIOD_FACTOR);
+    #effectiveTTL(ttl: Duration) {
+        return Millis(ttl * MDNS_EXPIRY_GRACE_PERIOD_FACTOR);
     }
 
     /**
@@ -262,11 +263,11 @@ export class MdnsClient implements Scanner {
         ).start();
 
         logger.debug(
-            `Sending ${queries.length} query records for ${this.#activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${Interval.format(this.#nextAnnounceInterval)}`,
+            `Sending ${queries.length} query records for ${this.#activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${Duration.format(this.#nextAnnounceInterval)}`,
         );
 
-        const nextAnnounceInterval = Millisecs(this.#nextAnnounceInterval * 2);
-        this.#nextAnnounceInterval = Interval.min(nextAnnounceInterval, Hours.one);
+        const nextAnnounceInterval = Millis(this.#nextAnnounceInterval * 2);
+        this.#nextAnnounceInterval = Duration.min(nextAnnounceInterval, Hours.one);
 
         await this.#socket.send({
             messageType: DnsMessageType.Query,
@@ -402,7 +403,7 @@ export class MdnsClient implements Scanner {
     async #registerWaiterPromise(
         queryId: string,
         commissionable: boolean,
-        timeout?: Interval,
+        timeout?: Duration,
         resolveOnUpdatedRecords = true,
         cancelResolver?: (value: void) => void,
     ) {
@@ -489,7 +490,7 @@ export class MdnsClient implements Scanner {
     async findOperationalDevice(
         { operationalId }: Fabric,
         nodeId: NodeId,
-        timeout?: Interval,
+        timeout?: Duration,
         ignoreExistingRecords = false,
     ): Promise<OperationalDevice | undefined> {
         if (this.#closing) {
@@ -744,7 +745,7 @@ export class MdnsClient implements Scanner {
     async findCommissionableDevicesContinuously(
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
-        timeout?: Interval,
+        timeout?: Duration,
         cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
@@ -785,7 +786,7 @@ export class MdnsClient implements Scanner {
 
             let remainingTime;
             if (discoveryEndTime !== undefined) {
-                remainingTime = Seconds.ceil(Millisecs(discoveryEndTime - Time.nowMs));
+                remainingTime = Seconds.ceil(Timespan(Time.nowMs, discoveryEndTime).duration);
                 if (remainingTime <= 0) {
                     break;
                 }
@@ -1062,7 +1063,7 @@ export class MdnsClient implements Scanner {
         answers: StructuredDnsAnswers[],
         target: string,
         netInterface: string,
-    ): { value: string; ttl: Interval }[] {
+    ): { value: string; ttl: Duration }[] {
         const ipRecords = new Array<AnyDnsRecordWithExpiry>();
         answers.forEach(answer => {
             if (answer.addressesV6?.[target]) {
@@ -1080,7 +1081,7 @@ export class MdnsClient implements Scanner {
         this.#registerIpRecords(ipRecords, netInterface); // Register for potential later usage
 
         // If an IP is included multiple times we only keep the latest record
-        const collectedIps = new Map<string, { value: string; ttl: Interval }>();
+        const collectedIps = new Map<string, { value: string; ttl: Duration }>();
         ipRecords.forEach(record => {
             const { value, ttl } = record as DnsRecord<string>;
             if (value.startsWith("fe80::")) {
@@ -1409,7 +1410,7 @@ export class MdnsClient implements Scanner {
                     const intValue = parseInt(value);
                     if (isNaN(intValue)) continue;
                     result[key] = intValue;
-                    result[key] = Millisecs(intValue);
+                    result[key] = Millis(intValue);
                 }
             }
         }
@@ -1531,9 +1532,9 @@ export class MdnsClient implements Scanner {
     static discoveryDataDiagnostics(data: DiscoveryData, kind?: string) {
         return Diagnostic.dict({
             kind,
-            SII: data.SII && Interval.format(data.SII),
-            SAI: data.SAI && Interval.format(data.SAI),
-            SAT: data.SAT && Interval.format(data.SAT),
+            SII: Duration.format(data.SII),
+            SAI: Duration.format(data.SAI),
+            SAT: Duration.format(data.SAT),
             T: data.T,
             DT: data.DT,
             PH: data.PH,

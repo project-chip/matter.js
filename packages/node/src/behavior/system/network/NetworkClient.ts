@@ -6,7 +6,7 @@
 
 import { DatatypeModel, FieldElement } from "#model";
 import { Node } from "#node/Node.js";
-import { DEFAULT_MIN_INTERVAL_FLOOR_SECONDS, Subscribe } from "#protocol";
+import { DEFAULT_MIN_INTERVAL_FLOOR, Subscribe } from "#protocol";
 import { ClientNetworkRuntime } from "./ClientNetworkRuntime.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
 
@@ -28,8 +28,8 @@ export class NetworkClient extends NetworkBehavior {
         // TODO - configure subscription based on physical device properties
         const subscribe = Subscribe({
             fabricFilter: true,
-            minIntervalFloorSeconds: DEFAULT_MIN_INTERVAL_FLOOR_SECONDS,
-            maxIntervalCeilingSeconds: 0,
+            minIntervalFloor: DEFAULT_MIN_INTERVAL_FLOOR,
+            maxIntervalCeiling: 0,
             attributes: [{}],
             ...startupSubscription,
         });

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interval } from "#time/Interval.js";
+import { Duration } from "#time/Duration.js";
 import { Time, Timer } from "#time/Time.js";
-import { Instant, Millisecs, Seconds } from "#time/TimeUnit.js";
+import { Instant, Millis, Seconds } from "#time/TimeUnit.js";
 import { ImplementationError } from "../MatterError.js";
 import { Logger } from "../log/Logger.js";
 import "../polyfills/disposable.js";
@@ -732,7 +732,7 @@ export class QuietObservable<T extends any[] = any[]> extends BasicObservable<T>
         return this.#minimumEmitInterval;
     }
 
-    set minimumEmitInterval(value: Interval) {
+    set minimumEmitInterval(value: Duration) {
         if (this.#minimumEmitInterval === value) {
             return;
         }
@@ -863,11 +863,11 @@ export class QuietObservable<T extends any[] = any[]> extends BasicObservable<T>
             return;
         }
 
-        let timeout: Interval;
+        let timeout: Duration;
         if (this.#lastEmitAt === undefined) {
             timeout = Instant;
         } else {
-            timeout = Millisecs(this.#minimumEmitInterval - ((now ?? Time.nowMs) - this.#lastEmitAt));
+            timeout = Millis(this.#minimumEmitInterval - ((now ?? Time.nowMs) - this.#lastEmitAt));
         }
 
         if (timeout <= 0) {
@@ -902,7 +902,7 @@ export namespace QuietObservable {
         /**
          * The minimum time between emits in milliseconds.
          */
-        minimumEmitInterval: Interval;
+        minimumEmitInterval: Duration;
 
         /**
          * An input observable this observable will automatically observe to produce events.

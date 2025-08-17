@@ -9,12 +9,12 @@ import {
     DnsMessageType,
     DnsRecord,
     DnsRecordType,
-    Hours,
     Instant,
     isDeepEqual,
     Logger,
     MatterAggregateError,
-    Millisecs,
+    Millis,
+    Minutes,
     NetworkInterfaceDetails,
     ObserverGroup,
     Time,
@@ -41,7 +41,7 @@ export class MdnsServer {
 
             return serviceRecords;
         },
-        Hours.quarter /* matches maximum standard commissioning window time */,
+        Minutes(15) /* matches maximum standard commissioning window time */,
     );
     readonly #recordLastSentAsMulticastAnswer = new Map<string, number>();
 
@@ -102,7 +102,7 @@ export class MdnsServer {
             const now = Time.nowMs;
             let uniCastResponse = queries.filter(query => !query.uniCastResponse).length === 0;
             const answersTimeSinceLastSent = answers.map(answer => ({
-                timeSinceLastMultiCast: Millisecs(
+                timeSinceLastMultiCast: Millis(
                     now - (this.#recordLastSentAsMulticastAnswer.get(this.buildDnsRecordKey(answer, sourceIntf)) ?? 0),
                 ),
                 ttl: answer.ttl,
@@ -117,7 +117,7 @@ export class MdnsServer {
             if (!uniCastResponse) {
                 answers = answers.filter(
                     // The last time sent as multicast was more than 900 ms ago
-                    (_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast >= Millisecs(900),
+                    (_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast >= Millis(900),
                 );
                 if (answers.length === 0) continue; // Nothing to send
 
@@ -140,7 +140,7 @@ export class MdnsServer {
                 .catch(error => {
                     logger.warn(`Failed to send mDNS response to ${sourceIp}`, error);
                 });
-            await Time.sleep("MDNS delay", Millisecs(20 + Math.floor(Math.random() * 100))); // as per DNS-SD spec wait 20-120ms before sending more packets
+            await Time.sleep("MDNS delay", Millis(20 + Math.floor(Math.random() * 100))); // as per DNS-SD spec wait 20-120ms before sending more packets
         }
     }
 
@@ -167,7 +167,7 @@ export class MdnsServer {
 
                     // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
                     await this.#announceRecordsForInterface(netInterface, serviceRecords);
-                    await Time.sleep("MDNS delay", Millisecs(20 + Math.floor(Math.random() * 100))); // as per DNS-SD spec wait 20-120ms before sending more packets
+                    await Time.sleep("MDNS delay", Millis(20 + Math.floor(Math.random() * 100))); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
             "Error announcing MDNS messages",
@@ -191,7 +191,7 @@ export class MdnsServer {
                     // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
                     await this.#announceRecordsForInterface(netInterface, serviceRecords);
                     this.#recordsGenerator.delete(service);
-                    await Time.sleep("MDNS delay", Millisecs(20 + Math.floor(Math.random() * 100))); // as per DNS-SD spec wait 20-120ms before sending more packets
+                    await Time.sleep("MDNS delay", Millis(20 + Math.floor(Math.random() * 100))); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
             "Error happened when expiring MDNS announcements",

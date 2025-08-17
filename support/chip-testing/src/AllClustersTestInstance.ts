@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, InternalError, Logger, Seconds } from "@matter/general";
+import { Bytes, InternalError, Logger, Millis, Seconds } from "@matter/general";
 import { Endpoint, NumberTag, ServerNode } from "@matter/main";
 import {
     AdministratorCommissioningServer,
@@ -1014,7 +1014,7 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 switch: {
                     rawPosition: 0,
                     longPressDelay: Seconds(5), // Expected by the Python test framework to simulate a long press
-                    multiPressDelay: Seconds.tenth,
+                    multiPressDelay: Millis(100),
                     multiPressMax: 3,
                 },
             },

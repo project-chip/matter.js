@@ -12,11 +12,11 @@ import {
     ChannelType,
     Construction,
     createPromise,
+    Duration,
     Environment,
     Environmental,
     ImmutableSet,
     ImplementationError,
-    Interval,
     isIpNetworkChannel,
     isIPv6,
     Logger,
@@ -81,7 +81,7 @@ export class UnknownNodeError extends MatterError {}
  */
 export interface DiscoveryOptions {
     discoveryType?: NodeDiscoveryType;
-    timeout?: Interval;
+    timeout?: Duration;
     discoveryData?: DiscoveryData;
 }
 
@@ -521,7 +521,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                 const { promise, resolver, rejecter } = createPromise<MessageChannel>();
 
                 logger.debug(
-                    `Starting reconnection polling for ${ServerAddress.urlFor(lastOperationalAddress)} (interval ${Interval.format(RECONNECTION_POLLING_INTERVAL)})`,
+                    `Starting reconnection polling for ${ServerAddress.urlFor(lastOperationalAddress)} (interval ${Duration.format(RECONNECTION_POLLING_INTERVAL)})`,
                 );
                 reconnectionPollingTimer = Time.getPeriodicTimer(
                     "Controller reconnect",
@@ -617,7 +617,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         address: PeerAddress,
         operationalAddress: ServerAddressIp,
         discoveryData?: DiscoveryData,
-        expectedProcessingTime?: Interval,
+        expectedProcessingTime?: Duration,
     ): Promise<MessageChannel | undefined> {
         address = PeerAddress(address);
 
@@ -627,7 +627,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             logger.debug(
                 `Resuming connection to ${PeerAddress(address)} at ${ip}:${port}${
                     expectedProcessingTime !== undefined
-                        ? ` with expected processing time of ${Interval.format(expectedProcessingTime)}`
+                        ? ` with expected processing time of ${Duration.format(expectedProcessingTime)}`
                         : ""
                 }`,
             );
@@ -675,7 +675,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         address: PeerAddress,
         operationalServerAddress: ServerAddressIp,
         discoveryData?: DiscoveryData,
-        expectedProcessingTime?: Interval,
+        expectedProcessingTime?: Duration,
     ) {
         logger.debug(`Pair with ${address} at ${ServerAddress.urlFor(operationalServerAddress)}`);
         const { ip, port } = operationalServerAddress;
@@ -729,7 +729,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     async #doCasePair(
         unsecureMessageChannel: MessageChannel,
         address: PeerAddress,
-        expectedProcessingTime?: Interval,
+        expectedProcessingTime?: Duration,
     ): Promise<SecureSession> {
         const fabric = this.#sessions.fabricFor(address);
         let exchange: MessageExchange | undefined;

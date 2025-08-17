@@ -8,7 +8,7 @@ import {
     AsyncObservable,
     Bytes,
     Construction,
-    Interval,
+    Duration,
     Logger,
     MatterFlowError,
     UnexpectedDataError,
@@ -65,15 +65,15 @@ export abstract class FailsafeContext {
             this.#failsafe = new FailsafeTimer(associatedFabric, expiryLength, maxCumulativeFailsafe, () =>
                 this.#failSafeExpired(),
             );
-            logger.debug(`Arm failSafe timer for ${Interval.format(expiryLength)}`);
+            logger.debug(`Arm failSafe timer for ${Duration.format(expiryLength)}`);
         });
     }
 
-    async extend(fabric: Fabric | undefined, expiryLength: Interval) {
+    async extend(fabric: Fabric | undefined, expiryLength: Duration) {
         await this.#construction;
         await this.#failsafe?.reArm(fabric, expiryLength);
         if (expiryLength > 0) {
-            logger.debug(`Extend failSafe timer for ${Interval.format(expiryLength)}`);
+            logger.debug(`Extend failSafe timer for ${Duration.format(expiryLength)}`);
         }
     }
 
@@ -339,8 +339,8 @@ export namespace FailsafeContext {
     export interface Options {
         sessions: SessionManager;
         fabrics: FabricManager;
-        expiryLength: Interval;
-        maxCumulativeFailsafe: Interval;
+        expiryLength: Duration;
+        maxCumulativeFailsafe: Duration;
         associatedFabric: Fabric | undefined;
     }
 }

@@ -14,10 +14,11 @@ import {
     Environment,
     Environmental,
     Logger,
-    Millisecs,
+    Millis,
     Time,
     TimeoutError,
     Timer,
+    Timestamp,
 } from "#general";
 import { SubscriptionId } from "#interaction/Subscription.js";
 import { SubscribeResponse } from "#types";
@@ -47,7 +48,7 @@ export class ClientSubscriptions {
             ...response,
             request,
             close: () => this.#closeOne(subscription, new CanceledError()),
-            timeoutAtMs: undefined,
+            timeoutAt: undefined,
             isClosed: false,
             isReading: true,
         };
@@ -90,7 +91,7 @@ export class ClientSubscriptions {
      */
     resetTimer() {
         const now = Time.nowMs;
-        let nextTimeoutAt: number | undefined;
+        let nextTimeoutAt: Timestamp | undefined;
 
         // Process each subscription
         for (const subscription of this.#subscriptions) {
@@ -100,10 +101,10 @@ export class ClientSubscriptions {
             }
 
             // Update timeout or expire if timed out
-            let { timeoutAtMs } = subscription;
+            let { timeoutAt: timeoutAtMs } = subscription;
             if (timeoutAtMs === undefined) {
                 // Set timeout time
-                timeoutAtMs = subscription.timeoutAtMs = timeoutFor(subscription);
+                timeoutAtMs = subscription.timeoutAt = timeoutFor(subscription);
             } else if (timeoutAtMs < now) {
                 // Timeout
                 this.#timeOut(subscription);
@@ -128,11 +129,11 @@ export class ClientSubscriptions {
             this.#nextTimeoutAt = nextTimeoutAt;
             if (this.#timeout) {
                 this.#timeout?.stop();
-                this.#timeout.interval = Millisecs(nextTimeoutAt - now);
+                this.#timeout.interval = Millis(nextTimeoutAt - now);
             } else {
                 this.#timeout = Time.getTimer(
                     "SubscriptionTimeout",
-                    Millisecs(nextTimeoutAt - now),
+                    Millis(nextTimeoutAt - now),
                     this.resetTimer.bind(this),
                 );
             }
@@ -167,7 +168,7 @@ export class ClientSubscriptions {
 }
 
 function timeoutFor(subscription: ClientSubscription) {
-    return subscription.maxInterval * 1000 + (subscription.request.maxPeerResponseTime ?? 0);
+    return Timestamp(subscription.maxInterval * 1000 + (subscription.request.maxPeerResponseTime ?? 0));
 }
 
 export namespace ClientSubscriptions {

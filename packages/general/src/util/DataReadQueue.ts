@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interval } from "#time/Interval.js";
+import { Duration } from "#time/Duration.js";
 import { Minutes } from "#time/TimeUnit.js";
 import { MatterFlowError } from "../MatterError.js";
 import { Time, Timer } from "../time/Time.js";
@@ -32,7 +32,7 @@ export class DataReadQueue<T> implements Stream<T> {
             timeoutTimer: Time.getTimer("Queue timeout", timeout, () =>
                 rejecter(
                     new NoResponseTimeoutError(
-                        `Expected response data missing within timeout of ${Interval.format(timeout)}`,
+                        `Expected response data missing within timeout of ${Duration.format(timeout)}`,
                     ),
                 ),
             ).start(),

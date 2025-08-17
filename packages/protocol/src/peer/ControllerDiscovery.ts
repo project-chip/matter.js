@@ -8,10 +8,10 @@ import {
     anyPromise,
     ClassExtends,
     Diagnostic,
-    Interval,
+    Duration,
     Logger,
-    Minutes,
     NoResponseTimeoutError,
+    Seconds,
     ServerAddress,
 } from "#general";
 import { CommissionableDeviceDiscoveryFailedError } from "#peer/ControllerCommissioningFlow.js";
@@ -47,7 +47,7 @@ export class ControllerDiscovery {
     static async discoverDeviceAddressesByIdentifier(
         scanners: Array<Scanner>,
         identifier: CommissionableDeviceIdentifiers,
-        timeout = Minutes.half,
+        timeout = Seconds(30),
     ): Promise<CommissionableDevice[]> {
         logger.info(`Start Discovering devices using identifier ${Diagnostic.json(identifier)} ...`);
 
@@ -82,7 +82,7 @@ export class ControllerDiscovery {
 
     static async discoverCommissionableDevices(
         scanners: Array<Scanner>,
-        timeout: Interval,
+        timeout: Duration,
         identifier: CommissionableDeviceIdentifiers = {},
         discoveredCallback?: (device: CommissionableDevice) => void,
     ): Promise<CommissionableDevice[]> {
@@ -127,7 +127,7 @@ export class ControllerDiscovery {
         fabric: Fabric,
         peerNodeId: NodeId,
         scanner: MdnsClient,
-        timeout?: Interval,
+        timeout?: Duration,
         ignoreExistingRecords?: boolean,
     ): Promise<OperationalDevice> {
         const foundDevice = await scanner.findOperationalDevice(fabric, peerNodeId, timeout, ignoreExistingRecords);

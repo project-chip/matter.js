@@ -14,15 +14,16 @@ import {
     ChannelType,
     ClassExtends,
     Diagnostic,
+    Duration,
     Environment,
     Environmental,
-    Interval,
     isIPv6,
     Logger,
-    Millisecs,
+    Millis,
     Minutes,
     NetInterfaceSet,
     NoResponseTimeoutError,
+    Seconds,
     ServerAddress,
 } from "#general";
 import { InteractionClient, InteractionClientProvider } from "#interaction/InteractionClient.js";
@@ -117,7 +118,7 @@ export interface DiscoveryAndCommissioningOptions extends CommissioningOptions {
         knownAddress?: ServerAddress;
 
         /** Timeout in seconds for the discovery process. Default: 30 seconds */
-        timeout?: Interval;
+        timeout?: Duration;
     };
 }
 
@@ -199,7 +200,7 @@ export class ControllerCommissioner {
         options: DiscoveryAndCommissioningOptions,
     ): Promise<{ paseSecureChannel: MessageChannel; discoveryData?: DiscoveryData }> {
         const {
-            discovery: { timeout = Minutes.half },
+            discovery: { timeout = Seconds(30) },
             passcode,
         } = options;
 
@@ -341,9 +342,9 @@ export class ControllerCommissioner {
         const unsecureSession = this.#context.sessions.createInsecureSession({
             // Use the session parameters from MDNS announcements when available and rest is assumed to be fallbacks
             sessionParameters: {
-                idleInterval: Millisecs(device?.SII),
-                activeInterval: Millisecs(device?.SAI),
-                activeThreshold: Millisecs(device?.SAT),
+                idleInterval: Millis(device?.SII),
+                activeInterval: Millis(device?.SAI),
+                activeThreshold: Millis(device?.SAT),
             },
             isInitiator: true,
         });

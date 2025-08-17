@@ -5,7 +5,8 @@
  */
 
 import { Diagnostic } from "#log/Diagnostic.js";
-import { Interval } from "#time/Interval.js";
+import { Duration } from "#time/Duration.js";
+import { Timestamp } from "#time/Timestamp.js";
 import { Seconds } from "#time/TimeUnit.js";
 
 export type ServerAddressIp = {
@@ -21,10 +22,10 @@ export type ServerAddressBle = {
 
 export interface Lifespan {
     /** Beginning of lifespan (system time in milliseconds) */
-    discoveredAt: number;
+    discoveredAt: Timestamp;
 
     /** Length of lifespan, if known (seconds) */
-    ttl: Interval;
+    ttl: Duration;
 }
 
 export type ServerAddress = (ServerAddressIp | ServerAddressBle) & Partial<Lifespan>;
@@ -52,7 +53,7 @@ export namespace ServerAddress {
         }
 
         if ("ttl" in address && typeof address.ttl === "number") {
-            diagnostic.push(" ttl ", Interval.format(address.ttl));
+            diagnostic.push(" ttl ", Duration.format(address.ttl));
         }
 
         return Diagnostic.squash(...diagnostic);
@@ -63,6 +64,6 @@ export namespace ServerAddress {
     }
 
     export interface Definition extends Omit<ServerAddress, "ttl"> {
-        ttl?: Interval;
+        ttl?: Duration;
     }
 }

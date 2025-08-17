@@ -8,11 +8,11 @@ import { ReadResult } from "#action/response/ReadResult.js";
 import {
     Bytes,
     Diagnostic,
+    Duration,
     InternalError,
-    Interval,
     Logger,
     MatterFlowError,
-    Millisecs,
+    Millis,
     NoResponseTimeoutError,
     UnexpectedDataError,
 } from "#general";
@@ -122,7 +122,7 @@ class InteractionMessenger {
 
     async waitForSuccess(
         expectedMessageInfo: string,
-        options?: { expectedProcessingTime?: Interval; timeout?: Interval },
+        options?: { expectedProcessingTime?: Duration; timeout?: Duration },
     ) {
         // If the status is not Success, this would throw an Error.
         await this.nextMessage(MessageType.StatusResponse, options, `Success-${expectedMessageInfo}`);
@@ -131,8 +131,8 @@ class InteractionMessenger {
     async nextMessage(
         expectedMessageType: number,
         options?: {
-            expectedProcessingTime?: Interval;
-            timeout?: Interval;
+            expectedProcessingTime?: Duration;
+            timeout?: Duration;
         },
         expectedMessageInfo?: string,
     ) {
@@ -142,8 +142,8 @@ class InteractionMessenger {
     async anyNextMessage(
         expectedMessageInfo: string,
         options?: {
-            expectedProcessingTime?: Interval;
-            timeout?: Interval;
+            expectedProcessingTime?: Duration;
+            timeout?: Duration;
         },
     ) {
         return this.#nextMessage(undefined, options, expectedMessageInfo);
@@ -152,8 +152,8 @@ class InteractionMessenger {
     async #nextMessage(
         expectedMessageType?: number,
         options?: {
-            expectedProcessingTime?: Interval;
-            timeout?: Interval;
+            expectedProcessingTime?: Duration;
+            timeout?: Duration;
         },
         expectedMessageInfo?: string,
     ) {
@@ -699,7 +699,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
                 logContext,
             });
             // We wait for a Success Message - when we don't request an Ack only wait 500ms
-            await this.waitForSuccess("DataReport", { timeout: waitForAck ? undefined : Millisecs(500) });
+            await this.waitForSuccess("DataReport", { timeout: waitForAck ? undefined : Millis(500) });
         }
     }
 
@@ -780,7 +780,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
 }
 
 export class IncomingInteractionClientMessenger extends InteractionMessenger {
-    async waitFor(expectedMessageInfo: string, messageType: number, timeout?: Interval) {
+    async waitFor(expectedMessageInfo: string, messageType: number, timeout?: Duration) {
         const message = await this.anyNextMessage(expectedMessageInfo, { timeout });
         const {
             payloadHeader: { messageType: receivedMessageType },
@@ -1033,7 +1033,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         };
     }
 
-    async sendInvokeCommand(invokeRequest: InvokeRequest, expectedProcessingTime?: Interval) {
+    async sendInvokeCommand(invokeRequest: InvokeRequest, expectedProcessingTime?: Duration) {
         if (invokeRequest.suppressResponse) {
             await this.requestWithSuppressedResponse(
                 MessageType.InvokeRequest,
@@ -1067,7 +1067,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         }
     }
 
-    sendTimedRequest(timeout: Interval) {
+    sendTimedRequest(timeout: Duration) {
         return this.request(MessageType.TimedRequest, TlvTimedRequest, MessageType.StatusResponse, TlvStatusResponse, {
             timeout,
             interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -1078,7 +1078,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         requestMessageType: number,
         requestSchema: TlvSchema<RequestT>,
         request: RequestT,
-        expectedProcessingTime?: Interval,
+        expectedProcessingTime?: Duration,
     ): Promise<void> {
         await this.send(requestMessageType, requestSchema.encode(request), {
             expectAckOnly: true,
@@ -1097,7 +1097,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         responseMessageType: number,
         responseSchema: TlvSchema<ResponseT>,
         request: RequestT,
-        expectedProcessingTime?: Interval,
+        expectedProcessingTime?: Duration,
     ): Promise<ResponseT> {
         await this.send(requestMessageType, requestSchema.encode(request), {
             expectAckOnly: false,

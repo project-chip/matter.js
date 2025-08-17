@@ -7,11 +7,11 @@
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import {
+    Duration,
     Hours,
-    Interval,
     Logger,
     MatterError,
-    Millisecs,
+    Millis,
     Minutes,
     NetworkError,
     NoResponseTimeoutError,
@@ -19,6 +19,7 @@ import {
     Seconds,
     Time,
     Timer,
+    Timestamp,
 } from "#general";
 import { Specification } from "#model";
 import type { ServerNode } from "#node/ServerNode.js";
@@ -71,21 +72,21 @@ export interface ServerSubscriptionConfig {
      * Optional maximum subscription interval to use for sending subscription reports. It will be used if not too
      * low and inside the range requested by the connected controller.
      */
-    maxInterval: Interval;
+    maxInterval: Duration;
 
     /**
      * Optional minimum subscription interval to use for sending subscription reports. It will be used when other
      * calculated values are smaller than it. Use this to make sure your device hardware can handle the load and to
      * set limits.
      */
-    minInterval: Interval;
+    minInterval: Duration;
 
     /**
      * Optional subscription randomization window to use for sending subscription reports. This specifies a window
      * in seconds from which a random part is added to the calculated maximum interval to make sure that devices
      * that get powered on in parallel not all send at the same timepoint.
      */
-    randomizationWindow: Interval;
+    randomizationWindow: Duration;
 }
 
 export namespace ServerSubscriptionConfig {
@@ -97,7 +98,7 @@ export namespace ServerSubscriptionConfig {
     export function of(options?: Partial<ServerSubscriptionConfig>) {
         return {
             maxInterval: options?.maxInterval ?? INTERNAL_INTERVAL_PUBLISHER_LIMIT,
-            minInterval: Interval.max(options?.minInterval ?? MIN_INTERVAL, MIN_INTERVAL),
+            minInterval: Duration.max(options?.minInterval ?? MIN_INTERVAL, MIN_INTERVAL),
             randomizationWindow: options?.randomizationWindow ?? DEFAULT_RANDOMIZATION_WINDOW,
         };
     }
@@ -118,9 +119,9 @@ export interface ServerSubscriptionContext {
 export class ServerSubscription extends Subscription {
     readonly #context: ServerSubscriptionContext;
 
-    #lastUpdateTimeMs = 0;
+    #lastUpdateTime = Timestamp.zero;
     #updateTimer: Timer;
-    readonly #sendDelayTimer: Timer = Time.getTimer(`Subscription ${this.id} delay`, Millisecs(50), () =>
+    readonly #sendDelayTimer: Timer = Time.getTimer(`Subscription ${this.id} delay`, Millis(50), () =>
         this.#triggerSendUpdate(),
     );
     #outstandingAttributeUpdates?: AttributeResponseFilter;
@@ -130,9 +131,9 @@ export class ServerSubscription extends Subscription {
     #sendUpdatesActivated = false;
     #seededClusterDetails? = new Map<string, number>();
     #latestSeededEventNumber? = EventNumber(0);
-    readonly #sendInterval: Interval;
-    readonly #minIntervalFloor: Interval;
-    readonly #maxIntervalCeiling: Interval;
+    readonly #sendInterval: Duration;
+    readonly #minIntervalFloor: Duration;
+    readonly #maxIntervalCeiling: Duration;
     readonly #peerAddress: PeerAddress;
 
     #sendNextUpdateImmediately = false;
@@ -143,11 +144,11 @@ export class ServerSubscription extends Subscription {
         id: number;
         context: ServerSubscriptionContext;
         criteria: SubscriptionCriteria;
-        minIntervalFloor: Interval;
-        maxIntervalCeiling: Interval;
+        minIntervalFloor: Duration;
+        maxIntervalCeiling: Duration;
         subscriptionOptions: ServerSubscriptionConfig;
-        useAsMaxInterval?: Interval;
-        useAsSendInterval?: Interval;
+        useAsMaxInterval?: Duration;
+        useAsSendInterval?: Duration;
     }) {
         const {
             id,
@@ -167,8 +168,8 @@ export class ServerSubscription extends Subscription {
         this.#minIntervalFloor = minIntervalFloor;
         this.#maxIntervalCeiling = maxIntervalCeiling;
 
-        let maxInterval: Interval;
-        let sendInterval: Interval;
+        let maxInterval: Duration;
+        let sendInterval: Duration;
         if (useAsMaxInterval !== undefined && useAsSendInterval !== undefined) {
             maxInterval = useAsMaxInterval;
             sendInterval = useAsSendInterval;
@@ -188,23 +189,23 @@ export class ServerSubscription extends Subscription {
     }
 
     #determineSendingIntervals(
-        subscriptionMinInterval: Interval,
-        subscriptionMaxInterval: Interval,
-        subscriptionRandomizationWindow: Interval,
-    ): { maxInterval: Interval; sendInterval: Interval } {
+        subscriptionMinInterval: Duration,
+        subscriptionMaxInterval: Duration,
+        subscriptionRandomizationWindow: Duration,
+    ): { maxInterval: Duration; sendInterval: Duration } {
         // Max Interval is the Max interval that the controller request, unless the configured one from the developer
         // is lower. In that case we use the configured one. But we make sure to not be smaller than the requested
         // controller minimum. But in general never faster than minimum interval configured or 2 seconds
         // (SUBSCRIPTION_MIN_INTERVAL_S). Additionally, we add a randomization window to the max interval to avoid all
         // devices sending at the same time. But we make sure not to exceed the global max interval.
-        const maxInterval = Interval.min(
-            Millisecs.floor(
-                Millisecs(
-                    Interval.max(
+        const maxInterval = Duration.min(
+            Millis.floor(
+                Millis(
+                    Duration.max(
                         subscriptionMinInterval,
-                        Interval.max(
+                        Duration.max(
                             this.#minIntervalFloor,
-                            Interval.min(subscriptionMaxInterval, this.#maxIntervalCeiling),
+                            Duration.min(subscriptionMaxInterval, this.#maxIntervalCeiling),
                         ),
                     ) +
                         subscriptionRandomizationWindow * Math.random(),
@@ -212,17 +213,17 @@ export class ServerSubscription extends Subscription {
             ),
             MAX_INTERVAL_PUBLISHER_LIMIT,
         );
-        let sendInterval = Millisecs.floor(Millisecs(maxInterval / 2)); // Ideally we send at half the max interval
+        let sendInterval = Millis.floor(Millis(maxInterval / 2)); // Ideally we send at half the max interval
         if (sendInterval < Minutes.one) {
             // But if we have no chance of at least one full resubmission process we do like chip-tool.
             // One full resubmission process takes 33-45 seconds. So 60s means we reach at least first 2 retries of a
             // second subscription report after first failed.
-            sendInterval = Interval.max(this.#minIntervalFloor, Millisecs.floor(Millisecs(maxInterval * 0.8)));
+            sendInterval = Duration.max(this.#minIntervalFloor, Millis.floor(Millis(maxInterval * 0.8)));
         }
         if (sendInterval < subscriptionMinInterval) {
             // But not faster than once every 2s
             logger.warn(
-                `Determined subscription send interval of ${Interval.format(sendInterval)} is too low. Using maxInterval (${maxInterval}) instead.`,
+                `Determined subscription send interval of ${Duration.format(sendInterval)} is too low. Using maxInterval (${maxInterval}) instead.`,
             );
             sendInterval = subscriptionMinInterval;
         }
@@ -348,12 +349,12 @@ export class ServerSubscription extends Subscription {
 
         this.#updateTimer.stop();
         const now = Time.nowMs;
-        const timeSinceLastUpdate = Millisecs(now - this.#lastUpdateTimeMs);
+        const timeSinceLastUpdate = Millis(now - this.#lastUpdateTime);
         if (timeSinceLastUpdate < this.#minIntervalFloor) {
             // Respect minimum delay time between updates
             this.#updateTimer = Time.getTimer(
                 "Subscription update",
-                Millisecs(this.#minIntervalFloor - timeSinceLastUpdate),
+                Millis(this.#minIntervalFloor - timeSinceLastUpdate),
                 () => this.#prepareDataUpdate(),
             ).start();
             return;
@@ -392,7 +393,7 @@ export class ServerSubscription extends Subscription {
             return;
         }
 
-        this.#lastUpdateTimeMs = Time.nowMs;
+        this.#lastUpdateTime = Time.nowMs;
 
         try {
             if (await this.#sendUpdateMessage(attributeFilter, eventsMinNumber, onlyWithData)) {
@@ -547,7 +548,7 @@ export class ServerSubscription extends Subscription {
         } finally {
             session[Symbol.dispose]();
         }
-        this.#lastUpdateTimeMs = Time.nowMs;
+        this.#lastUpdateTime = Time.nowMs;
     }
 
     async sendInitialReport(

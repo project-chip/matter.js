@@ -9,8 +9,9 @@ import { CancelablePromise } from "#util/Cancelable.js";
 import { ImplementationError } from "../MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
-import { Interval } from "./Interval.js";
+import { Duration } from "./Duration.js";
 import { Instant } from "./TimeUnit.js";
+import type { Timestamp } from "./Timestamp.js";
 
 const registry = new Set<Timer>();
 
@@ -24,8 +25,8 @@ export class Time {
     static default: Time;
 
     static startup = {
-        systemMs: 0,
-        processMs: 0,
+        systemMs: 0 as Timestamp,
+        processMs: 0 as Timestamp,
     };
 
     get now() {
@@ -39,11 +40,11 @@ export class Time {
         return Date.now();
     }
     static get nowMs() {
-        return Time.default.nowMs;
+        return Time.default.nowMs as Timestamp;
     }
 
     get nowUs() {
-        return Math.floor(performance.now() + performance.timeOrigin) * 1000;
+        return Math.floor(performance.now() + performance.timeOrigin) as Timestamp;
     }
     static get nowUs() {
         return Time.default.nowUs;
@@ -52,25 +53,25 @@ export class Time {
     /**
      * Create a timer that will call callback after durationMs has passed.
      */
-    getTimer(name: string, duration: Interval, callback: Timer.Callback): Timer {
+    getTimer(name: string, duration: Duration, callback: Timer.Callback): Timer {
         return new StandardTimer(name, duration, callback, false);
     }
-    static readonly getTimer = (name: string, duration: Interval, callback: Timer.Callback): Timer =>
+    static readonly getTimer = (name: string, duration: Duration, callback: Timer.Callback): Timer =>
         Time.default.getTimer(name, duration, callback);
 
     /**
      * Create a timer that will periodically call callback at intervalMs intervals.
      */
-    getPeriodicTimer(name: string, interval: Interval, callback: Timer.Callback): Timer {
-        return new StandardTimer(name, interval, callback, true);
+    getPeriodicTimer(name: string, duration: Duration, callback: Timer.Callback): Timer {
+        return new StandardTimer(name, duration, callback, true);
     }
-    static readonly getPeriodicTimer = (name: string, interval: Interval, callback: Timer.Callback): Timer =>
-        Time.default.getPeriodicTimer(name, interval, callback);
+    static readonly getPeriodicTimer = (name: string, duration: Duration, callback: Timer.Callback): Timer =>
+        Time.default.getPeriodicTimer(name, duration, callback);
 
     /**
      * Create a promise that resolves after a specific interval or when canceled, whichever comes first.
      */
-    sleep(name: string, duration: Interval): CancelablePromise {
+    sleep(name: string, duration: Duration): CancelablePromise {
         let timer: Timer;
         let resolver: () => void;
         return new CancelablePromise(
@@ -86,7 +87,7 @@ export class Time {
             },
         );
     }
-    static sleep(name: string, duration: Interval) {
+    static sleep(name: string, duration: Duration) {
         return Time.default.sleep(name, duration);
     }
 
@@ -108,7 +109,7 @@ export class Time {
 if (!performance || typeof performance.now !== "function" || typeof performance.timeOrigin !== "number") {
     Object.defineProperty(Time.prototype.nowUs, "nowUs", {
         get() {
-            return Time.nowMs * 1000; // Fallback is a bit less accurate
+            return Time.nowMs; // Fallback is a bit less accurate
         },
     });
 }
@@ -124,7 +125,7 @@ export interface Timer {
     systemId: unknown;
 
     /** Interval (diagnostics) */
-    interval: Interval;
+    interval: Duration;
 
     /** Is the timer periodic? (diagnostics) */
     isPeriodic: boolean;
@@ -158,11 +159,11 @@ export class StandardTimer implements Timer {
 
     constructor(
         readonly name: string,
-        interval: Interval,
+        duration: Duration,
         private readonly callback: Timer.Callback,
         readonly isPeriodic: boolean,
     ) {
-        this.interval = interval;
+        this.interval = duration;
     }
 
     /**
@@ -170,7 +171,7 @@ export class StandardTimer implements Timer {
      *
      * You can change this value but changes have no effect until the timer restarts.
      */
-    set interval(interval: Interval) {
+    set interval(interval: Duration) {
         if (interval < 0 || interval > 2147483647) {
             throw new ImplementationError(
                 `Invalid intervalMs: ${interval}. The value must be between 0 and 32-bit maximum value (2147483647)`,

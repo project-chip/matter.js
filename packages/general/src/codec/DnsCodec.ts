@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interval } from "#time/Interval.js";
+import { Duration } from "#time/Duration.js";
 import { Seconds } from "#time/TimeUnit.js";
 import { InternalError, NotImplementedError, UnexpectedDataError } from "../MatterError.js";
 import { Bytes, Endian } from "../util/Bytes.js";
@@ -100,7 +100,7 @@ export type DnsRecord<T = unknown> = {
     recordType: DnsRecordType;
     recordClass: DnsRecordClass;
     flushCache?: boolean;
-    ttl: Interval;
+    ttl: Duration;
     value: T;
 };
 

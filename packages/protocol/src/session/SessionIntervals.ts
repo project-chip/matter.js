@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Hours, ImplementationError, Interval, Millisecs, Seconds } from "#general";
+import { Duration, Hours, ImplementationError, Millis, Seconds } from "#general";
 
 export interface SessionIntervals {
     /**
@@ -13,7 +13,7 @@ export interface SessionIntervals {
      *
      * Default: 500ms
      */
-    idleInterval: Interval;
+    idleInterval: Duration;
 
     /**
      * Minimum amount of time between sender retries when the destination node is active. This SHALL be greater than or
@@ -21,14 +21,14 @@ export interface SessionIntervals {
      *
      * Default: 300ms
      */
-    activeInterval: Interval;
+    activeInterval: Duration;
 
     /**
      * Minimum amount of time the node SHOULD stay active after network activity.
      *
      * Default: 4000ms
      */
-    activeThreshold: Interval;
+    activeThreshold: Duration;
 }
 
 export function SessionIntervals(intervals?: Partial<SessionIntervals>): SessionIntervals {
@@ -50,8 +50,8 @@ export function SessionIntervals(intervals?: Partial<SessionIntervals>): Session
 
 export namespace SessionIntervals {
     export const defaults = {
-        idleInterval: Millisecs(500),
-        activeInterval: Millisecs(300),
+        idleInterval: Millis(500),
+        activeInterval: Millis(300),
         activeThreshold: Seconds(4),
     };
 }

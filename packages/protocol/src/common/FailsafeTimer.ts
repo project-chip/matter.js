@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interval, Logger, MatterFlowError, Time, Timer } from "#general";
+import { Duration, Logger, MatterFlowError, Time, Timer } from "#general";
 import { Fabric } from "../fabric/Fabric.js";
 import type { FailsafeContext } from "./FailsafeContext.js";
 
@@ -22,8 +22,8 @@ export class FailsafeTimer {
 
     constructor(
         public associatedFabric: Fabric | undefined,
-        expiryLength: Interval,
-        maxCumulativeFailsafe: Interval,
+        expiryLength: Duration,
+        maxCumulativeFailsafe: Duration,
         expiryCallback: () => Promise<void>,
     ) {
         this.#expiryCallback = expiryCallback;
@@ -43,7 +43,7 @@ export class FailsafeTimer {
     }
 
     /** Handle "Re-Arming" an existing FailSafe context to extend the timer, expire or fail if not allowed. */
-    async reArm(associatedFabric: Fabric | undefined, expiry: Interval) {
+    async reArm(associatedFabric: Fabric | undefined, expiry: Duration) {
         if (!this.#failsafeTimer.isRunning) {
             throw new MatterFlowError("FailSafe already expired.");
         }
@@ -81,7 +81,7 @@ export class FailsafeTimer {
         this.#maxCumulativeFailsafeTimer.stop();
     }
 
-    #startFailsafeTimer(expiry: Interval) {
+    #startFailsafeTimer(expiry: Duration) {
         return Time.getTimer("Failsafe expiration", expiry, () =>
             this.expire().catch(e => logger.error("Error during failsafe expiration", e)),
         ).start();

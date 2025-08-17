@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Interval, isObject, UnexpectedDataError } from "#general";
+import { Bytes, Duration, isObject, UnexpectedDataError } from "#general";
 
 export class UnsupportedCastError extends UnexpectedDataError {}
 
@@ -23,7 +23,7 @@ export enum Metatype {
     object = "object",
     string = "string",
     date = "date",
-    interval = "interval",
+    duration = "duration",
 }
 
 export namespace Metatype {
@@ -73,8 +73,8 @@ export namespace Metatype {
             case Metatype.date:
                 return Date;
 
-            case Metatype.interval:
-                return Interval;
+            case Metatype.duration:
+                return Duration;
         }
     }
 
@@ -344,12 +344,12 @@ export namespace Metatype {
         throw new UnexpectedDataError("Invalid date value");
     };
 
-    cast.interval = (value: any): Interval | null | undefined => {
+    cast.duration = (value: any): Duration | null | undefined => {
         if (value === undefined || value === null) {
             return value;
         }
 
-        return Interval(value);
+        return Duration(value);
     };
 
     /**

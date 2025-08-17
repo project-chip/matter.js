@@ -6,7 +6,7 @@
 
 import { UnexpectedDataError } from "#MatterError.js";
 import { Branded } from "#util/Type.js";
-import type { Millisecs, Seconds, TimeUnit } from "./TimeUnit.js";
+import type { Millis, Seconds, TimeUnit } from "./TimeUnit.js";
 
 /**
  * A time interval.
@@ -17,38 +17,38 @@ import type { Millisecs, Seconds, TimeUnit } from "./TimeUnit.js";
  * interval to the correct unit.
  *
  * Math operators always result in millisecond values and can thus be converted back to an interval using
- * {@link Millisecs}.  For example, `Millisecs(Hours(1) + Minutes(30))` would produce a 90 minute {@link Interval}.
+ * {@link Millis}.  For example, `Millisecs(Hours(1) + Minutes(30))` would produce a 90 minute {@link Duration}.
  */
-export type Interval = Branded<number, "Interval">;
+export type Duration = Branded<number, "Interval"> | 0;
 
 /**
- * Create an interval from an {@link Interval.Definition}.
+ * Create an interval from a number or string.
  */
-export function Interval<T extends undefined | Interval | string>(
-    source: T,
-): T extends undefined ? undefined | Interval : Interval {
+export function Duration<T extends Duration | string>(source: T): Duration {
     if (typeof source === "string") {
-        return Interval.parse(source);
+        return Duration.parse(source);
     }
 
-    if (typeof source !== "number") {
-        throw new IntervalFormatError(`Interval value is not a number (received ${typeof source})`);
+    if (typeof source === "number") {
+        if (Number.isNaN(source)) {
+            throw new DurationFormatError(`A duration may not be NaN`);
+        }
+        return source;
     }
 
-    if (Number.isNaN(source)) {
-        throw new IntervalFormatError(`An interval may not be NaN`);
-    }
-
-    return source as unknown as T extends undefined ? undefined | Interval : Interval;
+    throw new DurationFormatError(`Interval value is not a number (received ${typeof source})`);
 }
 
-export class IntervalFormatError extends UnexpectedDataError {}
+/**
+ * Thrown when a textual duration cannot be parsed.
+ */
+export class DurationFormatError extends UnexpectedDataError {}
 
-export namespace Interval {
+export namespace Duration {
     /**
      * Determine the greater of two intervals.
      */
-    export function max(a: Interval, b: Interval) {
+    export function max(a: Duration, b: Duration) {
         if (b > a) {
             return b;
         }
@@ -58,7 +58,7 @@ export namespace Interval {
     /**
      * Determine the lesser of two intervals.
      */
-    export function min(a: Interval, b: Interval) {
+    export function min(a: Duration, b: Duration) {
         if (b < a) {
             return b;
         }
@@ -68,8 +68,10 @@ export namespace Interval {
     /**
      * Convert an interval to a compact human readable string.
      */
-    export function format(interval: Interval) {
-        let ms = interval as number;
+    export function format<T extends Duration | undefined>(
+        duration: T,
+    ): T extends undefined ? string | undefined : string {
+        let ms = duration as number;
 
         if (typeof ms !== "number" || Number.isNaN(ms)) {
             return "invalid";
@@ -86,9 +88,7 @@ export namespace Interval {
                 return "until now"; // Umm...  I guess?
         }
 
-        if (ms === 0) {
-            return "0";
-        } else if (ms < 0) {
+        if (ms < 0) {
             return `${toPrecision(ms * 1000, 3)}μs`;
         } else if (ms < 1000) {
             return `${toPrecision(ms, 3)}ms`;
@@ -133,12 +133,12 @@ export namespace Interval {
         for (const part of parts) {
             const suffix = text.match(/[a-zμ]+/i)?.[1];
             if (suffix === undefined) {
-                throw new IntervalFormatError(`Interval component "${part}" is missing an time suffix`);
+                throw new DurationFormatError(`Interval component "${part}" is missing an time suffix`);
             }
 
             const value = Number(text.slice(text.length - suffix.length));
             if (Number.isNaN(value)) {
-                throw new IntervalFormatError(`Interval component "${part}" contains no numeric component`);
+                throw new DurationFormatError(`Interval component "${part}" contains no numeric component`);
             }
 
             switch (suffix.toLowerCase()) {
@@ -168,11 +168,11 @@ export namespace Interval {
                     break;
 
                 default:
-                    throw new IntervalFormatError(`Interval component ${part} contains an unsupported unit suffix`);
+                    throw new DurationFormatError(`Interval component ${part} contains an unsupported unit suffix`);
             }
         }
 
-        return interval as Interval;
+        return interval as Duration;
     }
 }
 

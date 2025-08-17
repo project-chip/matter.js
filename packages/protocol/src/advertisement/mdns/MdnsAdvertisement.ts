@@ -12,11 +12,12 @@ import {
     AAAARecord,
     ARecord,
     DnsRecord,
-    Interval,
+    Duration,
     Logger,
     NetworkInterfaceDetails,
     SrvRecord,
     Time,
+    Timestamp,
     TxtRecord,
 } from "#general";
 import type { MdnsServer } from "#mdns/MdnsServer.js";
@@ -39,7 +40,7 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
     qname: string;
 
     #isPrivacyMasked: boolean;
-    #stopAt?: number;
+    #stopAt?: Timestamp;
 
     constructor(advertiser: MdnsAdvertiser, qname: string, description: T) {
         description = {
@@ -66,7 +67,7 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
             }
 
             number++;
-            logger.debug("Broadcast", this.dict({ number, next: Interval.format(retryInterval) }));
+            logger.debug("Broadcast", this.dict({ number, next: Duration.format(retryInterval) }));
             await this.broadcast();
             await context.sleep("MDNS repeat", retryInterval);
         }
@@ -88,7 +89,7 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
      * Broadcast expiration announcement immediately.
      */
     async expire() {
-        logger.info("Unpublishing", this.dict({ time: Interval.format(this.duration) }));
+        logger.info("Unpublishing", this.dict({ time: Duration.format(this.duration) }));
         await this.advertiser.server.expireAnnouncements(this.service);
     }
 
@@ -104,7 +105,7 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
             return;
         }
 
-        this.#stopAt = Time.nowMs + broadcastAfterConnection;
+        this.#stopAt = Timestamp(Time.nowMs + broadcastAfterConnection);
     }
 
     override serviceDisconnected() {

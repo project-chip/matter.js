@@ -4,18 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    Bytes,
-    ChannelType,
-    createPromise,
-    Interval,
-    Logger,
-    Millisecs,
-    Minutes,
-    Seconds,
-    Time,
-    Timer,
-} from "#general";
+import { Bytes, ChannelType, createPromise, Duration, Logger, Minutes, Seconds, Time, Timer, Timespan } from "#general";
 import { BleError, BtpCodec, CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "#protocol";
 import { VendorId } from "#types";
 import { Device } from "react-native-ble-plx";
@@ -66,12 +55,12 @@ export class BleScanner implements Scanner {
      * Registers a deferred promise for a specific queryId together with a timeout and return the promise.
      * The promise will be resolved when the timer runs out latest.
      */
-    private async registerWaiterPromise(queryId: string, timeout: Interval, resolveOnUpdatedRecords = true) {
+    private async registerWaiterPromise(queryId: string, timeout: Duration, resolveOnUpdatedRecords = true) {
         const { promise, resolver } = createPromise<void>();
         const timer = Time.getTimer("BLE query timeout", timeout, () => this.finishWaiter(queryId, true)).start();
         this.recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords });
         logger.debug(
-            `Registered waiter for query ${queryId} with timeout ${timeout ? Interval.format(timeout) : "(none)"}${
+            `Registered waiter for query ${queryId} with timeout ${timeout ? Duration.format(timeout) : "(none)"}${
                 resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"
             }`,
         );
@@ -271,10 +260,11 @@ export class BleScanner implements Scanner {
                 }
             });
 
-            const remainingTime = Seconds.ceil(Millisecs(discoveryEndTime - Time.nowMs));
+            const remainingTime = Timespan(Time.nowMs, discoveryEndTime).duration;
             if (remainingTime <= 0) {
                 break;
             }
+
             await this.registerWaiterPromise(queryKey, remainingTime, false);
         }
         await this.bleClient.stopScanning();

@@ -5,7 +5,7 @@
  */
 
 import { LogLevel } from "#log/LogLevel.js";
-import { Millisecs } from "#time/TimeUnit.js";
+import { Millis } from "#time/TimeUnit.js";
 import { TransactionFlowError } from "./errors.js";
 import type { Transaction } from "./Transaction.js";
 
@@ -75,7 +75,7 @@ export namespace Status {
      * A value of 0 forces lock reports for all async transactions; a negative value disables reporting.
      */
     // eslint-disable-next-line prefer-const
-    export let slowTransactionTime = Millisecs(200);
+    export let slowTransactionTime = Millis(200);
 
     /**
      * The log level for slow transaction reporting.

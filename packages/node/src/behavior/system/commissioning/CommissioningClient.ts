@@ -7,7 +7,15 @@
 import { Behavior } from "#behavior/Behavior.js";
 import { Events as BaseEvents } from "#behavior/Events.js";
 import { OperationalCredentialsClient } from "#behaviors/operational-credentials";
-import { ImplementationError, Interval, NotImplementedError, Observable, ServerAddress, Time } from "#general";
+import {
+    Duration,
+    ImplementationError,
+    NotImplementedError,
+    Observable,
+    ServerAddress,
+    Time,
+    Timestamp,
+} from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import type { ClientNode } from "#node/ClientNode.js";
 import type { Node } from "#node/Node.js";
@@ -259,9 +267,9 @@ export class CommissioningClient extends Behavior {
                 type: "struct",
                 quality: "N",
                 children: [
-                    FieldElement({ name: "idleInterval", type: "interval", constraint: "max 3600000" }),
-                    FieldElement({ name: "activeInterval", type: "interval", constraint: "max 3600000" }),
-                    FieldElement({ name: "activeThreshold", type: "interval", constraint: "max 65535" }),
+                    FieldElement({ name: "idleInterval", type: "duration", constraint: "max 3600000" }),
+                    FieldElement({ name: "activeInterval", type: "duration", constraint: "max 3600000" }),
+                    FieldElement({ name: "activeThreshold", type: "duration", constraint: "max 65535" }),
                 ],
             }),
             FieldElement({ name: "tcpSupport", type: "uint8", quality: "N" }),
@@ -286,22 +294,22 @@ export namespace CommissioningClient {
         /**
          * Time at which the device was discovered.
          */
-        discoveredAt?: number;
+        discoveredAt?: Timestamp;
 
         /**
          * Time at which we discovered the device's current operational addresses.
          */
-        onlineAt?: number;
+        onlineAt?: Timestamp;
 
         /**
          * Time at which we concluded the device's current operational address is unreachable.
          */
-        offlineAt?: number;
+        offlineAt?: Timestamp;
 
         /**
          * The TTL of the discovery record if applicable (in seconds).
          */
-        ttl?: Interval;
+        ttl?: Duration;
 
         /**
          * The canonical global ID of the device.

@@ -8,9 +8,9 @@ import {
     Bytes,
     ClusterId,
     CommandId,
+    Duration,
     EventId,
     EventNumber,
-    Interval,
     NodeId,
     Observable,
 } from "@matter/main";
@@ -121,7 +121,7 @@ export type InvokeRequest = {
     clusterId: ClusterId;
     commandId: CommandId;
     data: unknown;
-    timedInteractionTimeout?: Interval;
+    timedInteractionTimeout?: Duration;
     suppressResponse?: boolean;
 };
 export type InvokeResponse = {
@@ -137,7 +137,7 @@ export type InvokeByIdRequest = {
     clusterId: ClusterId;
     commandId: CommandId;
     data: unknown;
-    timedInteractionTimeout?: Interval;
+    timedInteractionTimeout?: Duration;
 };
 
 export type DelayRequest = {

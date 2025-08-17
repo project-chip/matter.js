@@ -12,13 +12,13 @@ import {
     CRYPTO_AEAD_MIC_LENGTH_BYTES,
     DataReadQueue,
     Diagnostic,
+    Duration,
     Instant,
     InternalError,
-    Interval,
     Logger,
     MatterError,
     MatterFlowError,
-    Millisecs,
+    Millis,
     NoResponseTimeoutError,
     Time,
     Timer,
@@ -73,7 +73,7 @@ export type ExchangeSendOptions = {
      * Defined an expected processing time by the responder for the message. This is used to calculate the final
      * timeout for responses together with the normal retransmission logic when MRP is used.
      */
-    expectedProcessingTime?: Interval;
+    expectedProcessingTime?: Duration;
 
     /** Allows to specify if the send message requires to be acknowledged by the receiver or not. */
     requiresAck?: boolean;
@@ -140,9 +140,9 @@ export class MessageExchange {
         );
     }
 
-    readonly #activeInterval: Interval;
-    readonly #idleInterval: Interval;
-    readonly #activeThreshold: Interval;
+    readonly #activeInterval: Duration;
+    readonly #idleInterval: Duration;
+    readonly #activeThreshold: Duration;
     readonly #messagesQueue = new DataReadQueue<Message>();
     #receivedMessageToAck: Message | undefined;
     #receivedMessageAckTimer = Time.getTimer("Ack receipt timeout", MRP.STANDALONE_ACK_TIMEOUT, () => {
@@ -470,8 +470,8 @@ export class MessageExchange {
         }
     }
 
-    nextMessage(options?: { expectedProcessingTime?: Interval; timeout?: Interval }) {
-        let timeout: Interval;
+    nextMessage(options?: { expectedProcessingTime?: Duration; timeout?: Duration }) {
+        let timeout: Duration;
         if (options?.timeout !== undefined) {
             timeout = options.timeout;
         } else if (this.#messagesQueue.size > 0) {
@@ -492,14 +492,14 @@ export class MessageExchange {
         );
     }
 
-    #retransmitMessage(message: Message, expectedProcessingTime?: Interval) {
+    #retransmitMessage(message: Message, expectedProcessingTime?: Duration) {
         this.#retransmissionCounter++;
         if (this.#retransmissionCounter >= MRP.MAX_TRANSMISSIONS) {
             // Ok all 4 resubmissions are done, but we need to wait a bit longer because of processing time and
             // the resubmissions from the other side
             if (expectedProcessingTime) {
                 // We already have waited after the last message was sent, so deduct this time from the final wait time
-                const finalWaitTime = Millisecs(
+                const finalWaitTime = Millis(
                     this.channel.calculateMaximumPeerResponseTime(
                         this.context.localSessionParameters,
                         expectedProcessingTime,
@@ -554,7 +554,7 @@ export class MessageExchange {
             });
     }
 
-    #initializeResubmission(message: Message, resubmissionBackoffTime: Interval, expectedProcessingTimeMs?: Interval) {
+    #initializeResubmission(message: Message, resubmissionBackoffTime: Duration, expectedProcessingTimeMs?: Duration) {
         this.#retransmissionTimer = Time.getTimer("Message retransmission", resubmissionBackoffTime, () =>
             this.#retransmitMessage(message, expectedProcessingTimeMs),
         ).start();
@@ -574,7 +574,7 @@ export class MessageExchange {
         await this.#close();
     }
 
-    startTimedInteraction(timeout: Interval) {
+    startTimedInteraction(timeout: Duration) {
         if (this.#timedInteractionTimer !== undefined && this.#timedInteractionTimer.isRunning) {
             this.#timedInteractionTimer.stop();
             throw new StatusResponseError(
@@ -583,7 +583,7 @@ export class MessageExchange {
             );
         }
         logger.debug(
-            `Starting timed interaction with Transaction ID ${this.#exchangeId} for ${Interval.format(timeout)} from ${this.channel.name}`,
+            `Starting timed interaction with Transaction ID ${this.#exchangeId} for ${Duration.format(timeout)} from ${this.channel.name}`,
         );
         this.#timedInteractionTimer = Time.getTimer("Timed interaction", timeout, () => {
             logger.debug(
@@ -659,7 +659,7 @@ export class MessageExchange {
         // in normal case this timer is cancelled before it triggers when all retries are done.
         let maxResubmissionTime = Instant;
         for (let i = this.#retransmissionCounter; i <= MRP.MAX_TRANSMISSIONS; i++) {
-            maxResubmissionTime = Millisecs(maxResubmissionTime + this.channel.getMrpResubmissionBackOffTime(i));
+            maxResubmissionTime = Millis(maxResubmissionTime + this.channel.getMrpResubmissionBackOffTime(i));
         }
         this.#closeTimer = Time.getTimer(
             `Message exchange cleanup ${this.session.name} / ${this.#exchangeId}`,

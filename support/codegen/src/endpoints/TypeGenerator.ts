@@ -58,7 +58,7 @@ export class TypeGenerator {
             case Metatype.date:
                 return "Date";
 
-            case Metatype.interval:
+            case Metatype.duration:
                 return "Interval";
 
             case Metatype.enum:

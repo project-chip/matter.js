@@ -9,12 +9,13 @@ import {
     ChannelType,
     createPromise,
     Diagnostic,
-    Interval,
+    Duration,
     Logger,
-    Millisecs,
+    Millis,
     Seconds,
     Time,
     Timer,
+    Timespan,
 } from "#general";
 import { BleError, BtpCodec, CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "#protocol";
 import { VendorId } from "#types";
@@ -69,7 +70,7 @@ export class BleScanner implements Scanner {
      */
     async #registerWaiterPromise(
         queryId: string,
-        timeout?: Interval,
+        timeout?: Duration,
         resolveOnUpdatedRecords = true,
         cancelResolver?: (value: void) => void,
     ) {
@@ -83,7 +84,7 @@ export class BleScanner implements Scanner {
         }
         this.#recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords, cancelResolver });
         logger.debug(
-            `Registered waiter for query ${queryId} with timeout ${timeout === undefined ? "(none)" : Interval.format(timeout)} ${
+            `Registered waiter for query ${queryId} with timeout ${timeout === undefined ? "(none)" : Duration.format(timeout)} ${
                 resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"
             }`,
         );
@@ -271,7 +272,7 @@ export class BleScanner implements Scanner {
     async findCommissionableDevicesContinuously(
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
-        timeout?: Interval,
+        timeout?: Duration,
         cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
@@ -312,7 +313,7 @@ export class BleScanner implements Scanner {
 
             let remainingTime;
             if (discoveryEndTime !== undefined) {
-                remainingTime = Millisecs.ceil(Millisecs(discoveryEndTime - Time.nowMs));
+                remainingTime = Millis.ceil(Timespan(Time.nowMs, discoveryEndTime).duration);
                 if (remainingTime <= 0) {
                     break;
                 }

@@ -7,13 +7,12 @@
 import { AccessControl } from "#clusters/access-control";
 import {
     Diagnostic,
+    Duration,
     Environment,
     Environmental,
     ImplementationError,
-    Interval,
     Logger,
     MatterFlowError,
-    Minutes,
     PromiseQueue,
     Seconds,
     ServerAddressIp,
@@ -65,7 +64,7 @@ const logger = Logger.get("InteractionClient");
 
 const REQUEST_ALL = [{}];
 const DEFAULT_TIMED_REQUEST_TIMEOUT = Seconds(10);
-const DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE = Minutes.half;
+const DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE = Seconds(30);
 
 const AclClusterId = AccessControl.Complete.id;
 const AclAttributeId = AccessControl.Complete.attributes.acl.id;
@@ -207,7 +206,7 @@ export class InteractionClient {
     }
 
     /** Calculates the current maximum response time for a message use in additional logic like timers. */
-    maximumPeerResponseTime(expectedProcessingTime?: Interval) {
+    maximumPeerResponseTime(expectedProcessingTime?: Duration) {
         return this.#exchangeProvider.maximumPeerResponseTime(expectedProcessingTime);
     }
 
@@ -547,7 +546,7 @@ export class InteractionClient {
             dataVersion?: number;
         };
         asTimedRequest?: boolean;
-        timedRequestTimeout?: Interval;
+        timedRequestTimeout?: Duration;
         suppressResponse?: boolean;
         executeQueued?: boolean;
         chunkLists?: boolean;
@@ -588,7 +587,7 @@ export class InteractionClient {
             dataVersion?: number;
         }[];
         asTimedRequest?: boolean;
-        timedRequestTimeout?: Interval;
+        timedRequestTimeout?: Duration;
         suppressResponse?: boolean;
         executeQueued?: boolean;
         chunkLists?: boolean;
@@ -754,7 +753,7 @@ export class InteractionClient {
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTime: Interval;
+            maximumPeerResponseTime: Duration;
         }>(async messenger => {
             await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -824,8 +823,8 @@ export class InteractionClient {
         endpointId: EndpointNumber;
         clusterId: ClusterId;
         event: E;
-        minIntervalFloor: Interval;
-        maxIntervalCeiling: Interval;
+        minIntervalFloor: Duration;
+        maxIntervalCeiling: Duration;
         isUrgent?: boolean;
         minimumEventNumber?: EventNumber;
         isFabricFiltered?: boolean;
@@ -866,7 +865,7 @@ export class InteractionClient {
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTime: Interval;
+            maximumPeerResponseTime: Duration;
         }>(async messenger => {
             await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -1034,7 +1033,7 @@ export class InteractionClient {
         } = await this.withMessenger<{
             subscribeResponse: TypeFromSchema<typeof TlvSubscribeResponse>;
             report: DataReport;
-            maximumPeerResponseTime: Interval;
+            maximumPeerResponseTime: Duration;
         }>(async messenger => {
             await messenger.sendSubscribeRequest({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -1158,13 +1157,13 @@ export class InteractionClient {
         asTimedRequest?: boolean;
 
         /** Use this timeout and send the request as Timed Request. If this is specified the above parameter is implied. */
-        timedRequestTimeout?: Interval;
+        timedRequestTimeout?: Duration;
 
         /**
          * Expected processing time on the device side for this command.
          * useExtendedFailSafeMessageResponseTimeout is ignored if this value is set.
          */
-        expectedProcessingTime?: Interval;
+        expectedProcessingTime?: Duration;
 
         /** Use an extended Message Response Timeout as defined for FailSafe cases which is 30s. */
         useExtendedFailSafeMessageResponseTimeout?: boolean;
@@ -1304,7 +1303,7 @@ export class InteractionClient {
         request: RequestType<C>;
         command: C;
         asTimedRequest?: boolean;
-        timedRequestTimeout?: Interval;
+        timedRequestTimeout?: Duration;
         executeQueued?: boolean;
     }): Promise<void> {
         const { executeQueued } = options;

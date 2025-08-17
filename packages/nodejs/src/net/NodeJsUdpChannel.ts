@@ -13,7 +13,7 @@ import {
     isIPv6,
     Logger,
     MAX_UDP_MESSAGE_SIZE,
-    Millisecs,
+    Millis,
     NetworkError,
     NoAddressAvailableError,
     repackErrorAs,
@@ -179,7 +179,7 @@ export class NodeJsUdpChannel implements UdpChannel {
         }
         const now = Time.nowMs;
         for (const [promise, { sendMs, rejecter }] of this.#sendsInProgress) {
-            const elapsed = Millisecs(now - sendMs);
+            const elapsed = Millis(now - sendMs);
             if (elapsed >= UDP_SEND_TIMEOUT_CHECK_INTERVAL) {
                 this.#sendsInProgress.delete(promise);
                 rejecter(new NetworkError("UDP send timeout"));

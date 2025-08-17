@@ -9,7 +9,7 @@
 import { Resource } from "#models/Resource.js";
 
 Resource.add({
-    tag: "datatype", name: "interval",
-    description: "A datatype that represents an arbitrary time interval.",
+    tag: "datatype", name: "duration",
+    description: "A datatype that represents an arbitrary time duration.",
     details: "This is a matter.js extension to Matter semantics."
 });

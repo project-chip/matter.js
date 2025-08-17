@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { ChannelType, Interval, Observable } from "#general";
+import { ChannelType, Duration, Observable } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { ChannelManager } from "#protocol/ChannelManager.js";
 import { ExchangeManager } from "#protocol/ExchangeManager.js";
@@ -37,7 +37,7 @@ export abstract class ExchangeProvider {
         this.exchangeManager.addProtocolHandler(handler);
     }
 
-    abstract maximumPeerResponseTime(expectedProcessingTime?: Interval): Interval;
+    abstract maximumPeerResponseTime(expectedProcessingTime?: Duration): Duration;
     abstract initiateExchange(): Promise<MessageExchange>;
     abstract reconnectChannel(): Promise<boolean>;
     abstract session: Session;

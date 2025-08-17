@@ -5,7 +5,7 @@
  */
 
 import { AdministratorCommissioning } from "#clusters/administrator-commissioning";
-import { InternalError, Interval, Logger, Seconds, Time, Timer } from "#general";
+import { Duration, InternalError, Logger, Seconds, Time, Timer } from "#general";
 import { AccessLevel } from "#model";
 import { DeviceCommissioner, FailsafeContext, PaseServer, SessionManager } from "#protocol";
 import {
@@ -148,7 +148,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      * adjusts the needed attributes.
      */
     #initializeCommissioningWindow(
-        commissioningTimeout: Interval,
+        commissioningTimeout: Duration,
         windowStatus: AdministratorCommissioning.CommissioningWindowStatus,
     ) {
         if (this.internal.commissioningWindowTimeout !== undefined) {
@@ -182,7 +182,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     /**
      * This method validates if a commissioning window can be opened and throws various exceptions in case of failures.
      */
-    #assertCommissioningWindowRequirements(commissioningTimeout: Interval, commissioner: DeviceCommissioner) {
+    #assertCommissioningWindowRequirements(commissioningTimeout: Duration, commissioner: DeviceCommissioner) {
         if (this.internal.commissioningWindowTimeout !== undefined) {
             throw new AdministratorCommissioning.BusyError("A commissioning window is already opened");
         }

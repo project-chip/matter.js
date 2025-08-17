@@ -6,10 +6,13 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { Switch } from "#clusters/switch";
-import { Instant, Interval, Logger, MaybePromise, Observable, Time, Timer } from "#general";
+import { Duration, Logger, MaybePromise, Millis, Observable, Seconds, Time, Timer } from "#general";
 import { FieldElement } from "#model";
 import { ClusterType, StatusCode, StatusResponseError } from "#types";
 import { SwitchBehavior } from "./SwitchBehavior.js";
+
+const DEFAULT_MULTIPRESS_DELAY = Millis(300);
+const DEFAULT_LONG_PRESS_DELAY = Seconds(2);
 
 const logger = Logger.get("SwitchServer");
 
@@ -170,8 +173,7 @@ export class SwitchBaseServer extends SwitchServerBase {
                 this.internal.currentLongPressPosition = newPosition;
                 this.internal.longPressTimer = Time.getTimer(
                     "longPress",
-                    // TODO - old behavior is default delay of zero; should we throw an error instead?
-                    this.state.longPressDelay ?? Instant,
+                    this.state.longPressDelay ?? DEFAULT_LONG_PRESS_DELAY,
                     this.callback(this.#handleLongPress, { lock: true }),
                 ).start();
             }
@@ -227,8 +229,7 @@ export class SwitchBaseServer extends SwitchServerBase {
             if (!pressSequenceFinished) {
                 this.internal.multiPressTimer = Time.getTimer(
                     "multiPress",
-                    // TODO - old behavior is default delay of zero; should we throw an error instead?
-                    this.state.multiPressDelay ?? Instant,
+                    this.state.multiPressDelay ?? DEFAULT_MULTIPRESS_DELAY,
                     this.callback(this.#handleMultiPressComplete, { lock: true }),
                 ).start();
             }
@@ -320,13 +321,13 @@ export namespace SwitchBaseServer {
          * Debounce Delay to wait until a newly reported raw position is considered stable and written to the
          * currentPosition attribue.
          */
-        debounceDelay?: Interval;
+        debounceDelay?: Duration;
 
         /** Time to wait until a value is considered "long" pressed */
-        longPressDelay?: Interval;
+        longPressDelay?: Duration;
 
         /** Timeframe starting with a stable release to detect multi-presses. */
-        multiPressDelay?: Interval;
+        multiPressDelay?: Duration;
 
         /** Number of the position considered as the neutral position for the momentary switch. */
         momentaryNeutralPosition: number = 0;

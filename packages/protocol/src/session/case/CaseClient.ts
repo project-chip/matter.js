@@ -6,7 +6,7 @@
 
 import { Icac } from "#certificate/kinds/Icac.js";
 import { Noc } from "#certificate/kinds/Noc.js";
-import { Bytes, Interval, Logger, PublicKey, UnexpectedDataError } from "#general";
+import { Bytes, Duration, Logger, PublicKey, UnexpectedDataError } from "#general";
 import { ChannelStatusResponseError } from "#securechannel/SecureChannelMessenger.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId, SecureChannelStatusCode } from "#types";
@@ -36,7 +36,7 @@ export class CaseClient {
         this.#sessions = sessions;
     }
 
-    async pair(exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId, expectedProcessingTime?: Interval) {
+    async pair(exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId, expectedProcessingTime?: Duration) {
         const messenger = new CaseClientMessenger(exchange, expectedProcessingTime);
 
         try {

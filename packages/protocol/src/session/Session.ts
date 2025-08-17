@@ -5,7 +5,17 @@
  */
 
 import { SupportedTransportsBitmap } from "#common/SupportedTransportsBitmap.js";
-import { AsyncObservable, Bytes, DataWriter, Endian, InternalError, Interval, Millisecs, Time } from "#general";
+import {
+    AsyncObservable,
+    Bytes,
+    DataWriter,
+    Duration,
+    Endian,
+    InternalError,
+    Time,
+    Timespan,
+    Timestamp,
+} from "#general";
 import { NodeId, TypeFromPartialBitSchema } from "#types";
 import { DecodedMessage, DecodedPacket, Message, Packet, SessionType } from "../codec/MessageCodec.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -66,11 +76,11 @@ export abstract class Session {
     #manager?: SessionManager;
     timestamp = Time.nowMs;
     readonly createdAt = Time.nowMs;
-    activeTimestamp = 0;
+    activeTimestamp: Timestamp = 0;
     abstract type: SessionType;
-    protected readonly idleInterval: Interval;
-    protected readonly activeInterval: Interval;
-    protected readonly activeThreshold: Interval;
+    protected readonly idleInterval: Duration;
+    protected readonly activeInterval: Duration;
+    protected readonly activeThreshold: Duration;
     protected readonly dataModelRevision: number;
     protected readonly interactionModelRevision: number;
     protected readonly specificationVersion: number;
@@ -142,7 +152,7 @@ export abstract class Session {
     }
 
     isPeerActive(): boolean {
-        return Millisecs(Time.nowMs - this.activeTimestamp) < this.activeThreshold;
+        return Timespan(this.activeTimestamp, Time.nowMs).duration < this.activeThreshold;
     }
 
     getIncrementedMessageCounter() {

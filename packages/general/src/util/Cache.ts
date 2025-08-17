@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interval } from "#time/Interval.js";
+import { Duration } from "#time/Duration.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Time, Timer } from "../time/Time.js";
 
@@ -18,7 +18,7 @@ class GenericCache<T> {
 
     constructor(
         name: string,
-        private readonly expiration: Interval,
+        private readonly expiration: Duration,
         private readonly expireCallback?: (key: string, value: T) => Promise<void>,
     ) {
         this.periodicTimer = Time.getPeriodicTimer(
@@ -69,7 +69,7 @@ export class Cache<T> extends GenericCache<T> {
     constructor(
         name: string,
         private readonly generator: (...params: any[]) => T,
-        expiration: Interval,
+        expiration: Duration,
         expireCallback?: (key: string, value: T) => Promise<void>,
     ) {
         super(name, expiration, expireCallback);
@@ -92,7 +92,7 @@ export class AsyncCache<T> extends GenericCache<T> {
     constructor(
         name: string,
         private readonly generator: (...params: any[]) => Promise<T>,
-        expiration: Interval,
+        expiration: Duration,
         expireCallback?: (key: string, value: T) => Promise<void>,
     ) {
         super(name, expiration, expireCallback);

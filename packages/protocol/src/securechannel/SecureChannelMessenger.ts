@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Interval, MatterError, Minutes, Seconds, UnexpectedDataError } from "#general";
+import { Diagnostic, Duration, MatterError, Seconds, UnexpectedDataError } from "#general";
 import { GeneralStatusCode, SecureChannelStatusCode, SecureMessageType, TlvSchema } from "#types";
 import { Message } from "../codec/MessageCodec.js";
 import { ExchangeSendOptions, MessageExchange } from "../protocol/MessageExchange.js";
@@ -24,13 +24,13 @@ export class ChannelStatusResponseError extends MatterError {
 }
 
 /** This value is used by chip SDK when performance wise heavy crypto operations are expected. */
-export const EXPECTED_CRYPTO_PROCESSING_TIME = Minutes.half;
+export const EXPECTED_CRYPTO_PROCESSING_TIME = Seconds(30);
 
 /** This value is used by chip SDK when normal processing time is expected. */
 export const DEFAULT_NORMAL_PROCESSING_TIME = Seconds(2);
 
 export class SecureChannelMessenger {
-    #defaultExpectedProcessingTime: Interval;
+    #defaultExpectedProcessingTime: Duration;
 
     constructor(
         protected readonly exchange: MessageExchange,

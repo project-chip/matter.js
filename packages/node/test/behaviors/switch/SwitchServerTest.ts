@@ -7,7 +7,7 @@
 import { SwitchServer } from "#behaviors/switch";
 import { Switch } from "#clusters/switch";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
-import { Instant, Millisecs, Seconds } from "@matter/general";
+import { Instant, Millis } from "@matter/general";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 
 function createEventCatcher(device: MockEndpoint<EndpointType>) {
@@ -145,7 +145,7 @@ describe("SwitchServer", () => {
 
         beforeEach(async () => {
             device = await createLatchingSwitch();
-            await device.set({ switch: { debounceDelay: Millisecs(50) } });
+            await device.set({ switch: { debounceDelay: Millis(50) } });
         });
 
         it("set currentState is immediately", async () => {
@@ -593,7 +593,7 @@ describe("SwitchServer", () => {
 
         beforeEach(async () => {
             device = await createMsMsrMslSwitch();
-            await device.set({ switch: { longPressDelay: Seconds.tenth } });
+            await device.set({ switch: { longPressDelay: Millis(100) } });
         });
 
         it("Test short Press with 2 positions", async () => {
@@ -927,7 +927,7 @@ describe("SwitchServer", () => {
         beforeEach(async () => {
             device = await createMsMsrMslMsmSwitch();
             await device.set({
-                switch: { longPressDelay: Seconds.tenth, multiPressDelay: Millisecs(150), multiPressMax: 3 },
+                switch: { longPressDelay: Millis(100), multiPressDelay: Millis(150), multiPressMax: 3 },
             });
         });
 
@@ -1587,7 +1587,7 @@ describe("SwitchServer", () => {
             await device.set({
                 switch: {
                     currentPosition: 1,
-                    longPressDelay: Millisecs(300),
+                    longPressDelay: Millis(300),
                 },
             });
 
@@ -1721,7 +1721,7 @@ describe("SwitchServer", () => {
         beforeEach(async () => {
             device = await createMsAsMslMsmSwitch();
             await device.set({
-                switch: { longPressDelay: Seconds.tenth, multiPressDelay: Millisecs(150), multiPressMax: 3 },
+                switch: { longPressDelay: Millis(100), multiPressDelay: Millis(150), multiPressMax: 3 },
             });
         });
 
@@ -2214,7 +2214,7 @@ describe("SwitchServer", () => {
             await device.set({
                 switch: {
                     currentPosition: 1,
-                    longPressDelay: Millisecs(300),
+                    longPressDelay: Millis(300),
                 },
             });
 
@@ -2341,7 +2341,7 @@ describe("SwitchServer", () => {
             await device.set({
                 switch: {
                     currentPosition: 1,
-                    longPressDelay: Millisecs(300),
+                    longPressDelay: Millis(300),
                 },
             });
 

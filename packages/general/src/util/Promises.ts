@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interval } from "#time/Interval.js";
+import { Duration } from "#time/Duration.js";
 import { asError } from "#util/Error.js";
 import { InternalError, TimeoutError } from "../MatterError.js";
 import { Time } from "../time/Time.js";
@@ -80,7 +80,7 @@ export class PromiseTimeoutError extends TimeoutError {}
  * @param cancel invoked on timeout (default implementation throws {@link PromiseTimeoutError})
  */
 export async function withTimeout<T>(
-    timeout: Interval,
+    timeout: Duration,
     promise: Promise<T>,
     cancel?: AbortController | (() => void),
 ): Promise<T> {

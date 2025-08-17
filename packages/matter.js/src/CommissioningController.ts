@@ -10,10 +10,10 @@ import {
     ClassExtends,
     Crypto,
     Environment,
-    Hours,
     ImplementationError,
     InternalError,
     Logger,
+    Minutes,
     NetInterfaceSet,
     Network,
     NoAddressAvailableError,
@@ -663,7 +663,7 @@ export class CommissioningController {
         identifierData: CommissionableDeviceIdentifiers,
         discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>,
         discoveredCallback?: (device: CommissionableDevice) => void,
-        timeout = Hours.quarter,
+        timeout = Minutes(15),
     ) {
         this.#assertIsAddedToMatterServer();
         const controller = this.#assertControllerIsStarted();

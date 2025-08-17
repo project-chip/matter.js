@@ -31,7 +31,7 @@ export function isDeepEqual(a: unknown, b: unknown, ignoreUndefinedProperties = 
     const bIsObject = typeof b === "object" && b !== null;
     if (bIsObject) {
         if (DeepComparable.equals in b) {
-            return (a as DeepComparable)[DeepComparable.equals](b);
+            return (b as DeepComparable)[DeepComparable.equals](a);
         }
     }
 

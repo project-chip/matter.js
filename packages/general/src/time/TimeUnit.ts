@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interval } from "./Interval.js";
+import { Duration } from "./Duration.js";
 
 /**
  * Details of a specific unit of time.
  */
 export interface TimeUnit {
-    (length: undefined | number): Interval;
-    (scale: undefined | number): undefined | Interval;
+    (scale: number | bigint): Duration;
+    (scale: undefined | number | bigint): undefined | Duration;
 
     /**
      * Long name of the unit.
@@ -26,27 +26,34 @@ export interface TimeUnit {
     /**
      * An interval representing a single unit.
      */
-    readonly one: Interval;
+    readonly one: Duration;
 
     /**
-     * Convert an interval to this unit.
+     * Convert an interval to an integer of this unit.
+     *
+     * Produces an even integer result.  Use {@link fractionalOf} to retain any fractional component.
      */
-    of<T extends Interval | undefined>(interval: T): T extends undefined ? number | undefined : number;
+    of<T extends Duration | undefined>(interval: T): T extends undefined ? number | undefined : number;
+
+    /**
+     * Convert an interval to this unit, retaining fractional component.
+     */
+    fractionalOf<T extends Duration | undefined>(interval: T): T extends undefined ? number | undefined : number;
 
     /**
      * Compute the ceiling of an interval in this unit.
      */
-    ceil(interval: Interval): Interval;
+    ceil(duration: Duration): Duration;
 
     /**
      * Compute the floor of an interval in this unit.
      */
-    floor(interval: Interval): Interval;
+    floor(duration: Duration): Duration;
 
     /**
      * Round an interval to this unit.
      */
-    round(interval: Interval): Interval;
+    round(duration: Duration): Duration;
 
     length: never;
 }
@@ -55,7 +62,7 @@ export namespace TimeUnit {
     /**
      * Standard time units.
      */
-    export type Kind = "nanosecond" | "millisecond" | "second" | "minute" | "hour" | "day";
+    export type Kind = "microsecond" | "millisecond" | "second" | "minute" | "hour" | "day";
 }
 
 /**
@@ -63,11 +70,14 @@ export namespace TimeUnit {
  */
 export function TimeUnit<T = {}>(kind: TimeUnit.Kind, abbrev: string, one: number, props = {} as T): TimeUnit & T {
     const unit = {
-        [kind]: (length: undefined | number) => {
-            if (length === undefined) {
+        [kind]: (scale: undefined | number | bigint) => {
+            if (scale === undefined) {
                 return undefined;
             }
-            return (length * one) as Interval;
+            if (typeof scale === "bigint") {
+                scale = Number(scale);
+            }
+            return (scale * one) as Duration;
         },
     }[kind] as TimeUnit & T;
 
@@ -78,6 +88,7 @@ export function TimeUnit<T = {}>(kind: TimeUnit.Kind, abbrev: string, one: numbe
         abbrev,
         one,
         of,
+        fractionalOf,
         ceil,
         floor,
         round,
@@ -88,20 +99,24 @@ export function TimeUnit<T = {}>(kind: TimeUnit.Kind, abbrev: string, one: numbe
     return unit;
 }
 
-function of(this: TimeUnit, interval: Interval) {
-    return interval / this.one;
+function of(this: TimeUnit, duration: Duration) {
+    return Math.floor(duration / this.one);
 }
 
-function ceil(this: TimeUnit, interval: Interval) {
-    return Math.ceil(interval / this.one) * this.one;
+function fractionalOf(this: TimeUnit, duration: Duration) {
+    return duration / this.one;
 }
 
-function floor(this: TimeUnit, interval: Interval) {
-    return Math.floor(interval / this.one) * this.one;
+function ceil(this: TimeUnit, duration: Duration) {
+    return Math.ceil(duration / this.one) * this.one;
 }
 
-function round(this: TimeUnit, interval: Interval) {
-    return Math.round(interval / this.one) * this.one;
+function floor(this: TimeUnit, duration: Duration) {
+    return Math.floor(duration / this.one) * this.one;
+}
+
+function round(this: TimeUnit, duration: Duration) {
+    return Math.round(duration / this.one) * this.one;
 }
 
 function kindOf(this: TimeUnit) {
@@ -109,33 +124,29 @@ function kindOf(this: TimeUnit) {
 }
 
 /**
- * Create an interval in nanoseconds.
+ * Create an interval in microseconds.
  */
-export const Nanosecs = TimeUnit("nanosecond", "ns", 0.001);
+export const Microseconds = TimeUnit("microsecond", "μs", 0.001);
 
 /**
  * Create an interval in milliseconds.
  */
-export const Millisecs = TimeUnit("millisecond", "ms", 1);
+export const Millis = TimeUnit("millisecond", "ms", 1);
 
 /**
  * Create an interval in seconds.
  */
-export const Seconds = TimeUnit("second", "s", 1_000, {
-    tenth: Millisecs(100),
-    quarter: Millisecs(250),
-    half: Millisecs(500),
-});
+export const Seconds = TimeUnit("second", "s", 1_000);
 
 /**
  * Create an interval in minutes.
  */
-export const Minutes = TimeUnit("minute", "m", 60_000, { quarter: Seconds(15), half: Seconds(30) });
+export const Minutes = TimeUnit("minute", "m", 60_000);
 
 /**
  * Create an interval in hours.
  */
-export const Hours = TimeUnit("hour", "h", 3_600_000, { quarter: Minutes(15), half: Minutes(30) });
+export const Hours = TimeUnit("hour", "h", 3_600_000);
 
 /**
  * Create an interval in days.
@@ -145,4 +156,4 @@ export const Days = TimeUnit("day", "d", 86_400_000);
 /**
  * A zero-length interval.
  */
-export const Instant = Millisecs(0);
+export const Instant = Millis(0);

@@ -9,11 +9,11 @@ import {
     CancelablePromise,
     CanceledError,
     Diagnostic,
-    Interval,
+    Duration,
     Logger,
     MatterAggregateError,
-    Millisecs,
     Time,
+    Timespan,
 } from "#general";
 import { STANDARD_COMMISSIONING_TIMEOUT } from "#types";
 import type { Advertiser } from "./Advertiser.js";
@@ -173,7 +173,7 @@ export abstract class Advertisement<T extends ServiceDescription = ServiceDescri
         }
 
         // Extended announcement
-        if (Time.nowMs - this.#startedAt >= STANDARD_COMMISSIONING_TIMEOUT) {
+        if (this.duration >= STANDARD_COMMISSIONING_TIMEOUT) {
             return true;
         }
 
@@ -220,7 +220,7 @@ export abstract class Advertisement<T extends ServiceDescription = ServiceDescri
      * Total duration so far.
      */
     get duration() {
-        return Millisecs(Time.nowMs - this.#startedAt);
+        return Timespan(this.#startedAt, Time.nowMs).duration;
     }
 
     /**
@@ -302,7 +302,7 @@ export namespace Advertisement {
          * Throws {@link CanceledError} if interrupted.  If thrown from {@link run} this will result in the promise
          * resolving.
          */
-        sleep(name: string, interval: Interval): Promise<void>;
+        sleep(name: string, duration: Duration): Promise<void>;
     }
 }
 
@@ -326,10 +326,10 @@ class ActivityContext extends CancelablePromise implements Advertisement.Activit
         });
     }
 
-    sleep(name: string, interval: Interval) {
+    sleep(name: string, duration: Duration) {
         this.abortIfCanceled();
 
-        const sleep = Time.sleep(name, interval).finally(() => {
+        const sleep = Time.sleep(name, duration).finally(() => {
             if (this.#sleep === sleep) {
                 this.#sleep = undefined;
             }

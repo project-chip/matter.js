@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interval } from "#time/Interval.js";
+import { Duration } from "#time/Duration.js";
 import { Time } from "#time/Time.js";
 import { Instant } from "#time/TimeUnit.js";
 import { Logger } from "../log/Logger.js";
@@ -16,7 +16,7 @@ const logger = Logger.get("PromiseQueue");
  * A queue that processes promises with a given concurrency and delays after each promise if desired.
  */
 export class PromiseQueue {
-    readonly #delay: Interval;
+    readonly #delay: Duration;
     readonly #queue = new Array<{ func: () => Promise<any>; rejecter: (reason?: any) => void }>();
     readonly #concurrency: number;
     #runningCount = 0;

@@ -15,15 +15,17 @@ import {
     Bytes,
     ChannelType,
     Diagnostic,
+    Duration,
     Instant,
-    Interval,
     Logger,
     MatterError,
-    Millisecs,
+    Millis,
     Minutes,
     repackErrorAs,
     Seconds,
     Time,
+    Timespan,
+    Timestamp,
     UnexpectedDataError,
 } from "#general";
 import {
@@ -200,9 +202,9 @@ export class ControllerCommissioningFlow {
     protected readonly commissioningSteps = new Array<CommissioningStep>();
     protected readonly commissioningStepResults = new Map<string, CommissioningStepResult>();
     readonly #clusterClients = new Map<ClusterId, ClusterClientObj>();
-    #commissioningStartedTime: number | undefined;
-    #commissioningExpiryTime: number | undefined;
-    #currentFailSafeEndTime: number | undefined;
+    #commissioningStartedTime: Timestamp | undefined;
+    #commissioningExpiryTime: Timestamp | undefined;
+    #currentFailSafeEndTime: Timestamp | undefined;
     protected lastBreadcrumb = 1;
     protected collectedCommissioningData: CollectedCommissioningData = {};
     #defaultFailSafeTime = DEFAULT_FAILSAFE_TIME;
@@ -267,12 +269,13 @@ export class ControllerCommissioningFlow {
                             `Commissioning time exceeds the maximum timeframe${maxTimeS ? ` of ${maxTimeS}s` : ""}`,
                         );
                     }
+
                     /**
                      * Commissioner SHALL re-arm the Fail-safe timer on the Commissionee to the desired commissioning
                      * timeout within 60 seconds of the completion of PASE session establishment, using the ArmFailSafe
                      * command (see Section 11.9.6.2, “ArmFailSafe Command”)
                      */
-                    const timeLeft = Math.floor((this.#currentFailSafeEndTime - Time.nowMs) / 1000);
+                    const timeLeft = Timespan(Time.nowMs, this.#currentFailSafeEndTime).duration;
                     if (timeLeft < this.#defaultFailSafeTime / 2) {
                         logger.info(
                             `After Commissioning step ${step.stepNumber}.${step.subStepNumber}: ${
@@ -600,15 +603,16 @@ export class ControllerCommissioningFlow {
      * reading BasicCommissioningInfo attribute (see Section 11.10.5.2, “BasicCommissioningInfo
      * Attribute”) prior to invoking the ArmFailSafe command.
      */
-    async #armFailsafe(time?: Interval) {
+    async #armFailsafe(time?: Duration) {
         const client = this.#getClusterClient(GeneralCommissioning.Cluster);
         if (this.collectedCommissioningData.basicCommissioningInfo === undefined) {
             const basicCommissioningInfo = await client.getBasicCommissioningInfoAttribute();
             this.collectedCommissioningData.basicCommissioningInfo = basicCommissioningInfo;
             this.#defaultFailSafeTime = Seconds(basicCommissioningInfo.failSafeExpiryLengthSeconds);
             this.#commissioningStartedTime = Time.nowMs;
-            this.#commissioningExpiryTime =
-                this.#commissioningStartedTime + basicCommissioningInfo.maxCumulativeFailsafeSeconds * 1000;
+            this.#commissioningExpiryTime = Timestamp(
+                this.#commissioningStartedTime + Seconds(basicCommissioningInfo.maxCumulativeFailsafeSeconds),
+            );
         }
         const expiryLength = time ?? this.#defaultFailSafeTime;
         this.#ensureGeneralCommissioningSuccess(
@@ -618,7 +622,7 @@ export class ControllerCommissioningFlow {
                 expiryLengthSeconds: Seconds.of(expiryLength),
             }),
         );
-        this.#currentFailSafeEndTime = Time.nowMs + expiryLength;
+        this.#currentFailSafeEndTime = Timestamp(Time.nowMs + expiryLength);
         return {
             code: CommissioningStepResultCode.Success,
             breadcrumb: this.lastBreadcrumb,
@@ -629,16 +633,16 @@ export class ControllerCommissioningFlow {
         if (this.#currentFailSafeEndTime === undefined) {
             return Instant;
         }
-        return Math.max(0, Math.ceil((this.#currentFailSafeEndTime - Time.nowMs) / 1000));
+        return Duration.max(Timespan(Time.nowMs, this.#currentFailSafeEndTime).duration, 0);
     }
 
-    async #ensureFailsafeTimerFor(maxProcessingTime: Interval) {
+    async #ensureFailsafeTimerFor(maxProcessingTime: Duration) {
         const minFailsafeTime = this.interactionClient.maximumPeerResponseTime(maxProcessingTime);
 
         const timeLeft = this.#failSafeTimeLeft;
         if (timeLeft < minFailsafeTime) {
             logger.debug(`Failsafe timer has only ${timeLeft}s left, re-arming for at least ${minFailsafeTime}`);
-            await this.#armFailsafe(Interval.max(minFailsafeTime, this.#defaultFailSafeTime));
+            await this.#armFailsafe(Duration.max(minFailsafeTime, this.#defaultFailSafeTime));
         } else {
             logger.debug(`Failsafe timer is already set for at least ${timeLeft}s`);
         }
@@ -1289,7 +1293,7 @@ export class ControllerCommissioningFlow {
         // TODO: Check whats needed for non-concurrent commissioning flows (maybe arm initially longer?)
         const reArmFailsafeInterval = Time.getPeriodicTimer(
             "Re-Arm Failsafe during reconnect",
-            Millisecs(this.#defaultFailSafeTime / 2),
+            Millis(this.#defaultFailSafeTime / 2),
             () => {
                 const now = Time.nowMs;
                 if (this.#commissioningExpiryTime !== undefined && now < this.#commissioningExpiryTime) {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CancelablePromise, Diagnostic, Interval, Logger, MaybePromise, withTimeout } from "#general";
+import { CancelablePromise, Diagnostic, Duration, Logger, MaybePromise, withTimeout } from "#general";
 import { ClientNodeFactory } from "#node/client/ClientNodeFactory.js";
 import type { ClientNode } from "#node/ClientNode.js";
 import type { ServerNode } from "#node/ServerNode.js";
@@ -260,7 +260,7 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
 
 export namespace Discovery {
     export type Options = CommissionableDeviceIdentifiers & {
-        timeout?: Interval;
+        timeout?: Duration;
     };
 
     export type InstanceOptions = Options & {
