@@ -168,7 +168,7 @@ describe("ServerNode", () => {
             type: ServerNode.RootEndpoint,
             network: { port: 0 },
             commissioning: { discriminator: 2002 },
-            basicInformation: { vendorId: 65501 },
+            basicInformation: { vendorId: VendorId(65501) },
             simulator,
         });
 

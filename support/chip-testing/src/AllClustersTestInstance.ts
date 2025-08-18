@@ -723,9 +723,9 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     description: "ModeSelect",
                     standardNamespace: null,
                     supportedModes: [
-                        { label: "Black", mode: 0, semanticTags: [{ mfgCode: 0, value: 0 }] },
-                        { label: "Cappuccino", mode: 4, semanticTags: [{ mfgCode: 0, value: 0 }] },
-                        { label: "Espresso", mode: 7, semanticTags: [{ mfgCode: 0, value: 0 }] },
+                        { label: "Black", mode: 0, semanticTags: [{ mfgCode: VendorId(0), value: 0 }] },
+                        { label: "Cappuccino", mode: 4, semanticTags: [{ mfgCode: VendorId(0), value: 0 }] },
+                        { label: "Espresso", mode: 7, semanticTags: [{ mfgCode: VendorId(0), value: 0 }] },
                     ],
                     currentMode: 0,
                     startUpMode: 4,

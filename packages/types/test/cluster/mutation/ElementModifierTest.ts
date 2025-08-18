@@ -98,11 +98,6 @@ describe("ElementModifier", () => {
             type Vals = ClusterType.AttributeValues<ClusterType>;
             ({}) as IsNever<Vals> satisfies false;
             ({}) as Vals satisfies {};
-
-            // Type: Test InputAttributeValues
-            type InputVals = ClusterType.InputAttributeValues<ClusterType>;
-            ({}) as IsNever<InputVals> satisfies false;
-            ({}) as InputVals satisfies {};
         });
 
         it("sets default value", () => {
@@ -119,7 +114,7 @@ describe("ElementModifier", () => {
             // Type: Untyped cluster
             type UntypedCluster = ElementModifier.WithValues<
                 ClusterType,
-                Partial<ClusterType.InputAttributeValues<ClusterType>>
+                Partial<ClusterType.AttributeValues<ClusterType>>
             >;
             const untypedCluster = {} as UntypedCluster;
             untypedCluster satisfies ClusterType;
@@ -127,7 +122,7 @@ describe("ElementModifier", () => {
             // Type: Untyped values
             type UntypedValues = ElementModifier.WithValues<
                 typeof TestBase,
-                Partial<ClusterType.InputAttributeValues<typeof TestBase>>
+                Partial<ClusterType.AttributeValues<typeof TestBase>>
             >;
             const untypedValues = {} as UntypedValues;
             untypedValues satisfies Elements1ish;

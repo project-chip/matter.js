@@ -30,7 +30,7 @@ export class ElementModifier<const T extends ClusterType> {
      * This "sets" the values of attributes when the cluster is created
      * for the first time with no persistent state.
      */
-    set<const ValuesT extends Partial<ClusterType.InputAttributeValues<T>>>(values: ValuesT) {
+    set<const ValuesT extends Partial<ClusterType.AttributeValues<T>>>(values: ValuesT) {
         return modifyElements(this.cluster, { attributes: values }, (element, defaultValue) => {
             element.default = defaultValue;
         }) as ElementModifier.WithValues<T, ValuesT>;
@@ -110,7 +110,7 @@ export namespace ElementModifier {
      */
     export type WithValues<
         T extends ClusterType,
-        ValuesT extends Partial<ClusterType.InputAttributeValues<T>>,
+        ValuesT extends Partial<ClusterType.AttributeValues<T>>,
     > = WithAlterations<T, AttributeValueAlterations<ValuesT>>;
 
     /**
@@ -124,7 +124,7 @@ export namespace ElementModifier {
     /**
      * Alterations implied by AttributeValues.
      */
-    export type AttributeValueAlterations<ValuesT extends Partial<ClusterType.InputAttributeValues<any>>> = {
+    export type AttributeValueAlterations<ValuesT extends Partial<ClusterType.AttributeValues<any>>> = {
         attributes: {
             [K in keyof ValuesT]: { default: ValuesT[K] };
         };

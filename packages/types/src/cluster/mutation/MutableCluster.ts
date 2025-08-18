@@ -41,7 +41,7 @@ export function MutableCluster<const T extends ClusterType.Options, const C exte
             return new ElementModifier(cluster).alter(alterations);
         },
 
-        set(values: ClusterType.InputAttributeValues<typeof cluster>) {
+        set(values: Partial<ClusterType.AttributeValues<typeof cluster>>) {
             return new ElementModifier(cluster).set(values);
         },
 
@@ -86,7 +86,7 @@ export namespace MutableCluster {
         /**
          * Modify elements using {@link ElementModifier.set}.
          */
-        set<const ValuesT extends ClusterType.InputAttributeValues<T>>(
+        set<const ValuesT extends Partial<ClusterType.AttributeValues<T>>>(
             values: ValuesT,
         ): ElementModifier.WithValues<T, ValuesT>;
 
