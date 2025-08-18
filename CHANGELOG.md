@@ -31,7 +31,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/node
     - Breaking: `Endpoint` and `Node` initialization values now require the correct type for some time values and IDs.  So for example, `VendorId(1234)` instead of just `1234`
-    - Breaking: `SubscriptionBehavior` is renamed to `SubscriptionsServer` with corresponding ID change to "subscriptions"
+    - Breaking: `SubscriptionBehavior` is renamed to `SubscriptionsServer` with corresponding ID change to "subscriptions".  This means in part that matter.js will ignore saved subscriptions but devices will recreate them automatically
     - Fix: (rsulzenbacher) Adjusted OnOffServer default implementation for offWaitTime to be fully compliant to 1.4.1 spec
 
 -   @matter/nodejs

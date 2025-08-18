@@ -150,7 +150,7 @@ export namespace Timer {
 export class StandardTimer implements Timer {
     #timerId: unknown;
     #utility = false;
-    #interval = Instant;
+    #interval = Instant; // Real value installed in constructor
     isRunning = false;
 
     get systemId() {
