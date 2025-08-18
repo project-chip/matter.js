@@ -169,11 +169,11 @@ export class NodeSession extends SecureSession {
         logger.debug(
             `Created secure ${this.isPase ? "PASE" : "CASE"} session for fabric index ${fabric?.fabricIndex}`,
             this.name,
-            this.parameterDiagnostics(),
+            this.parameterDiagnostics,
         );
     }
 
-    parameterDiagnostics() {
+    get parameterDiagnostics() {
         return Diagnostic.dict(
             {
                 SII: this.idleInterval,

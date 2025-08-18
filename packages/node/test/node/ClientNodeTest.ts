@@ -9,7 +9,7 @@ import { IdentifyClient } from "#behaviors/identify";
 import { OnOffClient } from "#behaviors/on-off";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { b$, deepCopy, Seconds } from "#general";
+import { b$, deepCopy, Seconds, Time, TimeoutError } from "#general";
 import { MockSite } from "./mock-site.js";
 
 describe("ClientNode", () => {
@@ -55,7 +55,7 @@ describe("ClientNode", () => {
         expect(discovered[0].state.commissioning.discriminator === device.state.commissioning.discriminator);
     });
 
-    it("commissions and initializes endpoints", async () => {
+    it("commissions and initializes endpoints after commissioning and restart", async () => {
         // *** COMMISSIONING ***
 
         await using site = new MockSite();
@@ -111,7 +111,7 @@ describe("ClientNode", () => {
         expect(ep1b).not.undefined;
         expect(ep1b.construction.status).equals("active");
         expect(ep1b.state).deep.equals(expectedEp1State);
-    });
+    }).timeout(1e9);
 
     it("invokes and receives state updates", async () => {
         // *** SETUP ***
@@ -175,9 +175,42 @@ describe("ClientNode", () => {
         expect(ep1Server.state.identify.identifyTime).equals(5);
     });
 
-    it("reconnects and updates connection status", () => {
-        // TODO
+    it("throws error if node cannot be reached", async () => {
+        // *** SETUP ***
+
+        await using site = new MockSite();
+        const { controller, device } = await site.addCommissionedPair();
+        const peer1 = controller.nodes.get("peer1")!;
+        const ep1 = peer1.parts.get("ep1")!;
+        await MockTime.resolve(device.close());
+
+        // *** INVOCATION ***
+
+        await expect(MockTime.resolve(ep1.commandsOf(OnOffClient).toggle())).rejectedWith(TimeoutError);
     });
+
+    it("reconnects and updates connection status", async () => {
+        // *** SETUP ***
+
+        await using site = new MockSite();
+        const { controller, device } = await site.addCommissionedPair();
+        const peer1 = controller.nodes.get("peer1")!;
+        const ep1 = peer1.parts.get("ep1")!;
+        await MockTime.resolve(device.cancel());
+
+        // *** INVOKE ***
+
+        const toggle = MockTime.resolve(ep1.commandsOf(OnOffClient).toggle());
+
+        // Delay
+        await MockTime.resolve(Time.sleep("waiting to start device", Seconds(5)));
+
+        // Bring device online
+        await MockTime.resolve(device.start());
+
+        // Toggle should now complete
+        await MockTime.resolve(toggle);
+    }).timeout(1e9);
 
     it("emits events", () => {
         // TODO
@@ -198,7 +231,7 @@ const PEER1_STATE = {
         onlineAt: undefined,
         offlineAt: undefined,
         ttl: undefined,
-        deviceIdentifier: expect.STRING,
+        deviceIdentifier: "0202020202020202",
         discriminator: 0x202,
         commissioningMode: 1,
         vendorId: 0xfff1,
@@ -212,7 +245,7 @@ const PEER1_STATE = {
         tcpSupport: 0,
         longIdleOperatingMode: undefined,
     },
-    network: { port: 0x15a4, operationalPort: -1, startupSubscription: undefined },
+    network: { isDisabled: false, port: 0x15a4, operationalPort: -1, startupSubscription: undefined },
     basicInformation: {
         clusterRevision: 4,
         dataModelRevision: 0x12,

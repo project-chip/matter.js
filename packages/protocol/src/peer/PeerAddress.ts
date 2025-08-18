@@ -24,7 +24,11 @@ const internedAddresses = new Map<FabricIndex, Map<NodeId, PeerAddress>>();
  * This allows for identification based on object comparison.  Interned addresses render to a string in the format
  * "@<fabric index>:<node id>"
  */
-export function PeerAddress(address: PeerAddress): PeerAddress {
+export function PeerAddress<T extends undefined | PeerAddress>(address: T): T {
+    if (address === undefined) {
+        return undefined as T;
+    }
+
     if (interned in address) {
         return address;
     }
@@ -36,7 +40,7 @@ export function PeerAddress(address: PeerAddress): PeerAddress {
 
     let internedAddress = internedFabric.get(address.nodeId);
     if (internedAddress) {
-        return internedAddress;
+        return internedAddress as T;
     }
 
     internedFabric.set(
@@ -53,7 +57,7 @@ export function PeerAddress(address: PeerAddress): PeerAddress {
         } as PeerAddress),
     );
 
-    return internedAddress;
+    return internedAddress as T;
 }
 
 export namespace PeerAddress {

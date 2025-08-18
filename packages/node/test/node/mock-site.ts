@@ -113,7 +113,7 @@ export class MockSite {
             macrotasks: true,
         });
 
-        controllerCrypto.entropic = deviceCrypto.entropic = true;
+        controllerCrypto.entropic = deviceCrypto.entropic = false;
 
         return { controller, device };
     }

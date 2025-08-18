@@ -64,7 +64,7 @@ export class CaseServer implements ProtocolHandler {
     }
 
     async #handleSigma1(messenger: CaseServerMessenger) {
-        logger.info(`Received pairing request from ${messenger.getChannelName()}`);
+        logger.info(`Received pairing request from ${messenger.channelName}`);
 
         // Initialize context with information from peer
         const { sigma1Bytes, sigma1 } = await messenger.readSigma1();
@@ -86,7 +86,7 @@ export class CaseServer implements ProtocolHandler {
         }
 
         logger.info(
-            `Invalid resumption ID or resume MIC received from ${messenger.getChannelName()}`,
+            `Invalid resumption ID or resume MIC received from ${messenger.channelName}`,
             context.peerResumptionId,
             context.peerResumeMic,
         );
@@ -152,7 +152,7 @@ export class CaseServer implements ProtocolHandler {
         }
 
         logger.info(
-            `Session ${secureSession.id} resumed with ${cx.messenger.getChannelName()} for Fabric ${NodeId.toHexString(
+            `Session ${secureSession.id} resumed with ${cx.messenger.channelName} for Fabric ${NodeId.toHexString(
                 fabric.nodeId,
             )} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
             "with CATs",
@@ -274,7 +274,7 @@ export class CaseServer implements ProtocolHandler {
             caseAuthenticatedTags,
         });
         logger.info(
-            `Session ${secureSession.id} created with ${cx.messenger.getChannelName()} for Fabric ${NodeId.toHexString(
+            `Session ${secureSession.id} created with ${cx.messenger.channelName} for Fabric ${NodeId.toHexString(
                 fabric.nodeId,
             )} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
             "with CATs",
