@@ -5,7 +5,7 @@
  */
 
 import { Identify } from "#clusters/identify";
-import { MaybePromise, Observable, Time, Timer } from "#general";
+import { MaybePromise, Observable, Seconds, Time, Timer } from "#general";
 import { IdentifyBehavior } from "./IdentifyBehavior.js";
 
 /**
@@ -37,7 +37,7 @@ export class IdentifyServer extends IdentifyBehavior {
         // Enable I/2.4 once this is done
         this.internal.identifyTimer = Time.getPeriodicTimer(
             "Identify time update",
-            1000,
+            Seconds.one,
             this.callback(this.#identifyTick, { lock: true }),
         );
 

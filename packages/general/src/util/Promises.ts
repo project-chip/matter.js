@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Duration } from "#time/Duration.js";
 import { asError } from "#util/Error.js";
 import { InternalError, TimeoutError } from "../MatterError.js";
 import { Time } from "../time/Time.js";
@@ -74,12 +75,12 @@ export class PromiseTimeoutError extends TimeoutError {}
  *
  * By default, rejects with {@link PromiseTimeoutError} on timeout but you can override by supplying {@link cancel}.
  *
- * @param timeoutMs the timeout in milliseconds
+ * @param timeout the timeout in milliseconds
  * @param promise a promise that resolves or rejects when the timed task completes
  * @param cancel invoked on timeout (default implementation throws {@link PromiseTimeoutError})
  */
 export async function withTimeout<T>(
-    timeoutMs: number,
+    timeout: Duration,
     promise: Promise<T>,
     cancel?: AbortController | (() => void),
 ): Promise<T> {
@@ -97,8 +98,8 @@ export async function withTimeout<T>(
     let cancelTimer: undefined | (() => void);
 
     // Sub-promise 1, the timer
-    const timeout = new Promise<void>((resolve, reject) => {
-        const timer = Time.getTimer("promise-timeout", timeoutMs, () => {
+    const timedOut = new Promise<void>((resolve, reject) => {
+        const timer = Time.getTimer("promise-timeout", timeout, () => {
             try {
                 cancelFn();
             } catch (e) {
@@ -130,7 +131,7 @@ export async function withTimeout<T>(
     );
 
     // Output promise, resolves like input promise unless timed out
-    await Promise.all([timeout, producer]);
+    await Promise.all([timedOut, producer]);
 
     return result as T;
 }

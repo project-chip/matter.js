@@ -182,7 +182,7 @@ export class OnlineEvent<T extends any[] = any[], S extends ValueModel = ValueMo
         const trigger = (payload?: any) => {
             const maybePromise = occurrenceManager.add({
                 ...this.#baseOccurrence!,
-                epochTimestamp: Time.nowMs(),
+                epochTimestamp: Time.nowMs,
                 payload,
             });
 

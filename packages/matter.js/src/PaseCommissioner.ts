@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Environment, ImplementationError, Logger, Network } from "#general";
+import { Environment, ImplementationError, Logger, Minutes, Network } from "#general";
 import {
     CertificateAuthority,
     CommissionableDevice,
@@ -154,12 +154,12 @@ export class PaseCommissioner {
         identifierData: CommissionableDeviceIdentifiers,
         discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>,
         discoveredCallback?: (device: CommissionableDevice) => void,
-        timeoutSeconds = 900,
+        timeout = Minutes(15),
     ) {
         const controller = this.assertControllerIsStarted();
         return await ControllerDiscovery.discoverCommissionableDevices(
             controller.collectScanners(discoveryCapabilities),
-            timeoutSeconds,
+            timeout,
             identifierData,
             discoveredCallback,
         );

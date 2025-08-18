@@ -11,6 +11,7 @@ import {
     BasicSet,
     Bytes,
     Construction,
+    Duration,
     Environment,
     Environmental,
     Lifecycle,
@@ -74,9 +75,9 @@ type ResumptionStorageRecord = {
     fabricId: FabricId;
     peerNodeId: NodeId;
     sessionParameters: {
-        idleIntervalMs: number;
-        activeIntervalMs: number;
-        activeThresholdMs: number;
+        idleInterval: Duration;
+        activeInterval: Duration;
+        activeThreshold: Duration;
         dataModelRevision: number;
         interactionModelRevision: number;
         specificationVersion: number;
@@ -575,9 +576,9 @@ export class SessionManager {
                 fabricId,
                 peerNodeId,
                 sessionParameters: {
-                    idleIntervalMs,
-                    activeIntervalMs,
-                    activeThresholdMs,
+                    idleInterval,
+                    activeInterval,
+                    activeThreshold,
                     dataModelRevision,
                     interactionModelRevision,
                     specificationVersion,
@@ -607,9 +608,9 @@ export class SessionManager {
                     peerNodeId,
                     sessionParameters: {
                         // Make sure to initialize default values when restoring an older resumption record
-                        idleIntervalMs: idleIntervalMs ?? SessionIntervals.defaults.idleIntervalMs,
-                        activeIntervalMs: activeIntervalMs ?? SessionIntervals.defaults.activeIntervalMs,
-                        activeThresholdMs: activeThresholdMs ?? SessionIntervals.defaults.activeThresholdMs,
+                        idleInterval: idleInterval ?? SessionIntervals.defaults.idleInterval,
+                        activeInterval: activeInterval ?? SessionIntervals.defaults.activeInterval,
+                        activeThreshold: activeThreshold ?? SessionIntervals.defaults.activeThreshold,
                         dataModelRevision: dataModelRevision ?? FALLBACK_DATAMODEL_REVISION,
                         interactionModelRevision: interactionModelRevision ?? FALLBACK_INTERACTIONMODEL_REVISION,
                         specificationVersion: specificationVersion ?? FALLBACK_SPECIFICATION_VERSION,

@@ -60,7 +60,7 @@ describe("DescriptorServer", () => {
 
     it("does not add device type automatically if unnecessary", async () => {
         const Device2Endpoint = MockEndpointType.set({
-            descriptor: { deviceTypeList: [{ deviceType: 2, revision: 2 }] },
+            descriptor: { deviceTypeList: [{ deviceType: DeviceTypeId(2), revision: 2 }] },
         });
 
         const device = await MockEndpoint.create(Device2Endpoint);

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SubscriptionBehavior } from "#behavior/system/subscription/SubscriptionBehavior.js";
+import { SubscriptionsBehavior } from "#behavior/system/subscriptions/SubscriptionsServer.js";
 import {
     Construction,
     Crypto,
@@ -355,7 +355,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         this.#formerSubscriptionsHandled = true;
 
         await this.owner.act(agent =>
-            agent.get(SubscriptionBehavior).reestablishFormerSubscriptions(env.get(InteractionServer)),
+            agent.get(SubscriptionsBehavior).reestablishFormerSubscriptions(env.get(InteractionServer)),
         );
     }
 

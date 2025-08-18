@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Environment, Environmental, PromiseQueue } from "#general";
+import { Environment, Environmental, Millis, PromiseQueue } from "#general";
 
 const CONCURRENT_QUEUED_INTERACTIONS = 4;
-const INTERACTION_QUEUE_DELAY_MS = 100;
+const INTERACTION_QUEUE_DELAY = Millis(100);
 
 export class InteractionQueue extends PromiseQueue {
     constructor() {
-        super(CONCURRENT_QUEUED_INTERACTIONS, INTERACTION_QUEUE_DELAY_MS);
+        super(CONCURRENT_QUEUED_INTERACTIONS, INTERACTION_QUEUE_DELAY);
     }
 
     static [Environmental.create](env: Environment) {

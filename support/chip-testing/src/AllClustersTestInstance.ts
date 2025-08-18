@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, InternalError, Logger } from "@matter/general";
+import { Bytes, InternalError, Logger, Millis, Seconds } from "@matter/general";
 import { Endpoint, NumberTag, ServerNode } from "@matter/main";
 import {
     AdministratorCommissioningServer,
@@ -290,7 +290,7 @@ export class AllClustersTestInstance extends NodeTestInstance {
                                 // the issue, so we just do that for now
                                 // TODO - if this is only an issue on macs either resolve the broadcast issue or make
                                 // this hack mac specific
-                                broadcastAfterConnection: 10_000,
+                                broadcastAfterConnection: Seconds(10),
                             },
                             MdnsAdvertiser.RetransmissionBroadcastSchedule,
                         ],
@@ -723,9 +723,9 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     description: "ModeSelect",
                     standardNamespace: null,
                     supportedModes: [
-                        { label: "Black", mode: 0, semanticTags: [{ mfgCode: 0, value: 0 }] },
-                        { label: "Cappuccino", mode: 4, semanticTags: [{ mfgCode: 0, value: 0 }] },
-                        { label: "Espresso", mode: 7, semanticTags: [{ mfgCode: 0, value: 0 }] },
+                        { label: "Black", mode: 0, semanticTags: [{ mfgCode: VendorId(0), value: 0 }] },
+                        { label: "Cappuccino", mode: 4, semanticTags: [{ mfgCode: VendorId(0), value: 0 }] },
+                        { label: "Espresso", mode: 7, semanticTags: [{ mfgCode: VendorId(0), value: 0 }] },
                     ],
                     currentMode: 0,
                     startUpMode: 4,
@@ -1013,8 +1013,8 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 },
                 switch: {
                     rawPosition: 0,
-                    longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
-                    multiPressDelay: 100,
+                    longPressDelay: Seconds(5), // Expected by the Python test framework to simulate a long press
+                    multiPressDelay: Millis(100),
                     multiPressMax: 3,
                 },
             },
@@ -1044,7 +1044,7 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 },
                 switch: {
                     rawPosition: 0,
-                    longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
+                    longPressDelay: Seconds(5), // Expected by the Python test framework to simulate a long press
                 },
             },
         );

@@ -19,6 +19,7 @@ import {
     ImplementationError,
     Logger,
     MaybePromise,
+    Millis,
 } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
 import { Val } from "#protocol";
@@ -1671,8 +1672,8 @@ export class ColorControlBaseServer extends ColorControlBase {
                 return readOnlyState.transitionEndTimeMs;
             },
 
-            get stepIntervalMs() {
-                return readOnlyState.transitionStepIntervalMs;
+            get stepInterval() {
+                return readOnlyState.transitionStepInterval;
             },
 
             properties: {
@@ -1803,12 +1804,12 @@ export namespace ColorControlBaseServer {
          * If transition management is disabled you may specify this as the "end time" for transitions.  The remaining
          * time attribute will then report correctly.
          */
-        transitionEndTimeMs = undefined;
+        transitionEndTimeMs?: number;
 
         /**
          * When managing transitions, this is the interval at which steps occur in ms.
          */
-        transitionStepIntervalMs = 100;
+        transitionStepInterval = Millis(100);
 
         [Val.properties](endpoint: Endpoint) {
             // Only return remaining time if the attribute is defined in the endpoint

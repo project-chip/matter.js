@@ -13,9 +13,11 @@ import {
     isIPv6,
     Logger,
     MAX_UDP_MESSAGE_SIZE,
+    Millis,
     NetworkError,
     NoAddressAvailableError,
     repackErrorAs,
+    Seconds,
     Time,
     UdpChannel,
     UdpChannelOptions,
@@ -29,7 +31,7 @@ const logger = Logger.get("NodejsChannel");
 
 // UDP should be sent out in some ms so if we needed 1s+, we have a problem
 // 1s should be fine because we do not require any DNS lookups because we usually work with IPs directly
-const UDP_SEND_TIMEOUT_CHECK_INTERVAL_MS = 1_000;
+const UDP_SEND_TIMEOUT_CHECK_INTERVAL = Seconds.one;
 
 function createDgramSocket(host: string | undefined, port: number | undefined, options: dgram.SocketOptions) {
     const socket = dgram.createSocket(options);
@@ -105,7 +107,7 @@ export class NodeJsUdpChannel implements UdpChannel {
      * Timer for a maximum interval to check for dangling send calls that are not completed.
      * The way it is implemented we ensure that any "send" is rejected latest after < 2s
      */
-    readonly #sendTimer = Time.getTimer("UDPChannel.send timeout check", UDP_SEND_TIMEOUT_CHECK_INTERVAL_MS, () =>
+    readonly #sendTimer = Time.getTimer("UDPChannel.send timeout check", UDP_SEND_TIMEOUT_CHECK_INTERVAL, () =>
         this.#rejectDanglingSends(),
     );
     readonly #sendsInProgress = new Map<Promise<void>, { sendMs: number; rejecter: (reason?: any) => void }>();
@@ -175,10 +177,10 @@ export class NodeJsUdpChannel implements UdpChannel {
             // nothing to do
             return;
         }
-        const now = Time.nowMs();
+        const now = Time.nowMs;
         for (const [promise, { sendMs, rejecter }] of this.#sendsInProgress) {
-            const elapsed = now - sendMs;
-            if (elapsed >= UDP_SEND_TIMEOUT_CHECK_INTERVAL_MS) {
+            const elapsed = Millis(now - sendMs);
+            if (elapsed >= UDP_SEND_TIMEOUT_CHECK_INTERVAL) {
                 this.#sendsInProgress.delete(promise);
                 rejecter(new NetworkError("UDP send timeout"));
             }
@@ -213,7 +215,7 @@ export class NodeJsUdpChannel implements UdpChannel {
             }
         };
 
-        this.#sendsInProgress.set(promise, { sendMs: Time.nowMs(), rejecter });
+        this.#sendsInProgress.set(promise, { sendMs: Time.nowMs, rejecter });
         if (!this.#sendTimer.isRunning) {
             this.#sendTimer.start();
         }

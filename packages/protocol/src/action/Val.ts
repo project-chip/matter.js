@@ -33,6 +33,11 @@ export namespace Val {
     export type Collection = Struct | List;
 
     /**
+     * A readonly version of {@link Collection}.
+     */
+    export type ReadonlyCollection = { readonly [K: string | number]: Val } | ReadonlyArray<unknown>;
+
+    /**
      * A Reference offers a simple mechanism for referring to properties by reference.
      */
     export interface Reference<T extends Val = Val> {

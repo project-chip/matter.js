@@ -96,7 +96,7 @@ export class FabricGroups {
 
     /*
     TODO for Controller to generate new epochs
-    addGroupEpoch(groupKeySetId: number, startTimeMs = Time.nowMs()) {
+    addGroupEpoch(groupKeySetId: number, startTimeMs = Time.nowMs) {
         // TODO for Controller to generate new epochs
         const epochKey = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
         const operationalEpochKey = Crypto.hkdf(epochKey, this.#fabric.operationalId, GROUP_SECURITY_INFO);

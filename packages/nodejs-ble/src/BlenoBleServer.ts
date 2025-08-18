@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Channel, InternalError, Logger, Time, createPromise } from "#general";
+import { Bytes, Channel, InternalError, Logger, Millis, Time, createPromise } from "#general";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID_SHORT,
-    BTP_CONN_RSP_TIMEOUT_MS,
+    BTP_CONN_RSP_TIMEOUT,
     BleChannel,
     BleError,
     BtpFlowError,
@@ -146,7 +146,7 @@ export class BlenoBleServer extends BleChannel<Bytes> {
     private writeConformationResolver: ((value: void) => void) | undefined;
 
     public clientAddress: string | undefined;
-    private btpHandshakeTimeout = Time.getTimer("BTP handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, () =>
+    private btpHandshakeTimeout = Time.getTimer("BTP handshake timeout", BTP_CONN_RSP_TIMEOUT, () =>
         this.btpHandshakeTimeoutTriggered(),
     );
     #disconnected = false;
@@ -331,8 +331,8 @@ export class BlenoBleServer extends BleChannel<Bytes> {
         }
     }
 
-    async advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, intervalMs = 100) {
-        process.env["BLENO_ADVERTISING_INTERVAL"] = intervalMs.toString();
+    async advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, interval = Millis(100)) {
+        process.env["BLENO_ADVERTISING_INTERVAL"] = interval.toString();
 
         this.advertisingData = Buffer.from(Bytes.of(advertiseData));
 

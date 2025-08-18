@@ -3,13 +3,13 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { ChannelType, Observable } from "#general";
+import { ChannelType, Duration, Observable } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { ChannelManager } from "#protocol/ChannelManager.js";
 import { ExchangeManager } from "#protocol/ExchangeManager.js";
 import {
     ChannelNotConnectedError,
-    DEFAULT_EXPECTED_PROCESSING_TIME_MS,
+    DEFAULT_EXPECTED_PROCESSING_TIME,
     MessageChannel,
 } from "#protocol/MessageChannel.js";
 import { MessageExchange } from "#protocol/MessageExchange.js";
@@ -37,7 +37,7 @@ export abstract class ExchangeProvider {
         this.exchangeManager.addProtocolHandler(handler);
     }
 
-    abstract maximumPeerResponseTimeMs(expectedProcessingTimeMs?: number): number;
+    abstract maximumPeerResponseTime(expectedProcessingTime?: Duration): Duration;
     abstract initiateExchange(): Promise<MessageExchange>;
     abstract reconnectChannel(): Promise<boolean>;
     abstract session: Session;
@@ -72,8 +72,8 @@ export class DedicatedChannelExchangeProvider extends ExchangeProvider {
         return this.#channel.type;
     }
 
-    maximumPeerResponseTimeMs(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS) {
-        return this.exchangeManager.calculateMaximumPeerResponseTimeMsFor(this.#channel, expectedProcessingTimeMs);
+    maximumPeerResponseTime(expectedProcessingTime = DEFAULT_EXPECTED_PROCESSING_TIME) {
+        return this.exchangeManager.calculateMaximumPeerResponseTimeMsFor(this.#channel, expectedProcessingTime);
     }
 }
 
@@ -136,7 +136,7 @@ export class ReconnectableExchangeProvider extends ExchangeProvider {
         return this.channelManager.getChannel(this.#address).type;
     }
 
-    maximumPeerResponseTimeMs(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS) {
+    maximumPeerResponseTime(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME) {
         const channel = this.channelManager.getChannel(this.#address);
         if (!channel) {
             throw new ChannelNotConnectedError("Channel not connected");

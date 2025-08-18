@@ -219,7 +219,7 @@ async function getConfiguration() {
     const port = environment.vars.number("port") ?? 5540;
 
     const uniqueId =
-        environment.vars.string("uniqueid") ?? (await deviceStorage.get("uniqueid", Time.nowMs().toString()));
+        environment.vars.string("uniqueid") ?? (await deviceStorage.get("uniqueid", Time.nowMs.toString()));
 
     // Persist basic data to keep them also on restart
     await deviceStorage.set({

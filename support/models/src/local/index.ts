@@ -18,6 +18,7 @@ import "./any.js";
 import "./BasicInformationOverrides.js";
 import "./ColorControlOverrides.js";
 import "./DoorLockOverrides.js";
+import "./duration.js";
 import "./ElectricalPowerMeasurementOverrides.js";
 import "./GroupKeyManagementOverrides.js";
 import "./GroupsOverrides.js";

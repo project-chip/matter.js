@@ -4,7 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { anyPromise, ClassExtends, Diagnostic, Logger, NoResponseTimeoutError, serverAddressToString } from "#general";
+import {
+    anyPromise,
+    ClassExtends,
+    Diagnostic,
+    Duration,
+    Logger,
+    NoResponseTimeoutError,
+    Seconds,
+    ServerAddress,
+} from "#general";
 import { CommissionableDeviceDiscoveryFailedError } from "#peer/ControllerCommissioningFlow.js";
 import { NodeId } from "#types";
 import {
@@ -38,14 +47,14 @@ export class ControllerDiscovery {
     static async discoverDeviceAddressesByIdentifier(
         scanners: Array<Scanner>,
         identifier: CommissionableDeviceIdentifiers,
-        timeoutSeconds = 30,
+        timeout = Seconds(30),
     ): Promise<CommissionableDevice[]> {
         logger.info(`Start Discovering devices using identifier ${Diagnostic.json(identifier)} ...`);
 
         const scanResults = scanners.map(async scanner => {
             const foundDevices = await scanner.findCommissionableDevices(
                 identifier,
-                timeoutSeconds,
+                timeout,
                 scanner.type === "ble", // Force rediscovery for BLE
             );
             logger.info(`Found ${foundDevices.length} devices using identifier ${Diagnostic.json(identifier)}`);
@@ -73,7 +82,7 @@ export class ControllerDiscovery {
 
     static async discoverCommissionableDevices(
         scanners: Array<Scanner>,
-        timeoutSeconds: number,
+        timeout: Duration,
         identifier: CommissionableDeviceIdentifiers = {},
         discoveredCallback?: (device: CommissionableDevice) => void,
     ): Promise<CommissionableDevice[]> {
@@ -90,7 +99,7 @@ export class ControllerDiscovery {
                             discoveredCallback?.(device);
                         }
                     },
-                    timeoutSeconds,
+                    timeout,
                 );
             }),
         );
@@ -118,15 +127,10 @@ export class ControllerDiscovery {
         fabric: Fabric,
         peerNodeId: NodeId,
         scanner: MdnsClient,
-        timeoutSeconds?: number,
+        timeout?: Duration,
         ignoreExistingRecords?: boolean,
     ): Promise<OperationalDevice> {
-        const foundDevice = await scanner.findOperationalDevice(
-            fabric,
-            peerNodeId,
-            timeoutSeconds,
-            ignoreExistingRecords,
-        );
+        const foundDevice = await scanner.findOperationalDevice(fabric, peerNodeId, timeout, ignoreExistingRecords);
         if (foundDevice === undefined) {
             throw new DiscoveryError(
                 "The operational device cannot be found on the network. Please make sure it is online.",
@@ -160,7 +164,7 @@ export class ControllerDiscovery {
             address: AddressTypeFromDevice<DD>,
             device?: DD,
         ): Promise<{ result: T; resultAddress: AddressTypeFromDevice<DD>; resultDevice?: DD } | undefined> => {
-            const serverKey = serverAddressToString(address);
+            const serverKey = ServerAddress.urlFor(address);
 
             logger.debug(`Try to communicate with ${serverKey} ...`);
             try {
@@ -177,13 +181,13 @@ export class ControllerDiscovery {
         const addresses = new Map<string, { address: AddressTypeFromDevice<DD>; device?: DD }>();
 
         devices.forEach(device =>
-            device.addresses.forEach(address => addresses.set(serverAddressToString(address), { address, device })),
+            device.addresses.forEach(address => addresses.set(ServerAddress.urlFor(address), { address, device })),
         );
         const triedAddresses = new Set<string>();
 
         if (lastKnownAddress !== undefined) {
-            const knownKey = serverAddressToString(lastKnownAddress);
-            const knownDevice = addresses.has(serverAddressToString(lastKnownAddress))
+            const knownKey = ServerAddress.urlFor(lastKnownAddress);
+            const knownDevice = addresses.has(ServerAddress.urlFor(lastKnownAddress))
                 ? addresses.get(knownKey)?.device
                 : undefined;
             addresses.delete(knownKey);
@@ -203,7 +207,7 @@ export class ControllerDiscovery {
 
             let triedOne = false;
             for (const { address, device } of addresses.values()) {
-                const serverKey = serverAddressToString(address);
+                const serverKey = ServerAddress.urlFor(address);
                 if (triedAddresses.has(serverKey)) continue;
                 triedAddresses.add(serverKey);
 
@@ -224,7 +228,7 @@ export class ControllerDiscovery {
             if (triedOne) {
                 (await updateDevicesFunc()).forEach(device =>
                     device.addresses.forEach(address =>
-                        addresses.set(serverAddressToString(address), { address, device }),
+                        addresses.set(ServerAddress.urlFor(address), { address, device }),
                     ),
                 ); // Update list and add new
             } else {

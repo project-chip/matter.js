@@ -24,7 +24,7 @@ import {
 import { SecureChannelProtocol } from "#securechannel/SecureChannelProtocol.js";
 import { PaseServer } from "#session/pase/PaseServer.js";
 import { SessionManager } from "#session/SessionManager.js";
-import { CommissioningOptions, STANDARD_COMMISSIONING_TIMEOUT_S, StatusCode, StatusResponseError } from "#types";
+import { CommissioningOptions, STANDARD_COMMISSIONING_TIMEOUT, StatusCode, StatusResponseError } from "#types";
 import type { ControllerCommissioner } from "../peer/ControllerCommissioner.js";
 import { DeviceAdvertiser } from "./DeviceAdvertiser.js";
 
@@ -161,7 +161,7 @@ export class DeviceCommissioner {
 
         this.#windowStatus = windowStatus;
         const commissioningConfig = this.#context.commissioningConfig.values;
-        const advertisementWindowS = commissioningConfig.advertisementWindowS ?? STANDARD_COMMISSIONING_TIMEOUT_S;
+        const advertisementWindowS = commissioningConfig.advertisementWindow ?? STANDARD_COMMISSIONING_TIMEOUT;
 
         const mode =
             windowStatus === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen

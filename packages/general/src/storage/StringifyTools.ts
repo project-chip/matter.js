@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Duration } from "#time/Duration.js";
+import { Millis } from "#time/TimeUnit.js";
 import { UnexpectedDataError } from "../MatterError.js";
 import { Bytes } from "../util/Bytes.js";
 import { isObject } from "../util/Type.js";
@@ -17,6 +19,7 @@ type SupportedComplexStorageTypes =
     | { [key: string]: SupportedStorageBaseTypes | SupportedComplexStorageTypes | null | undefined } // Objects
     | Array<[SupportedStorageBaseTypes, SupportedStorageBaseTypes | SupportedComplexStorageTypes | null | undefined]> // Map style arrays
     | Map<SupportedStorageBaseTypes, SupportedStorageBaseTypes | SupportedComplexStorageTypes>
+    | Duration
     | null
     | undefined; // Maps
 
@@ -77,6 +80,8 @@ export function fromJson(json: string): SupportedStorageTypes {
                             SupportedStorageBaseTypes,
                         ][],
                     );
+                case "Interval":
+                    return Millis(data);
 
                 // TODO Remove in the future, leave here for now for backward compatibility?
                 case "AttributeId":

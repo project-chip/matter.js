@@ -5,6 +5,8 @@
  */
 
 import { Crypto } from "#crypto/Crypto.js";
+import { Duration } from "#time/Duration.js";
+import { Instant, Millis, Seconds } from "#time/TimeUnit.js";
 
 /**
  * An iterable of retry values based on a scheduling configuration.
@@ -29,31 +31,31 @@ export class RetrySchedule {
             maximumInterval,
             maximumCount,
             jitterFactor = 0,
-            initialInterval = 1000,
+            initialInterval = Seconds.one,
             backoffFactor = 2,
         } = this.config;
 
         let count = 0;
         let baseInterval = initialInterval;
-        let timeSoFar = 0;
+        let timeSoFar = Instant;
 
         while ((timeout === undefined || timeSoFar < timeout) && (maximumCount === undefined || maximumCount > count)) {
             count++;
             const maxJitter = jitterFactor * baseInterval;
-            const jitter = Math.floor((maxJitter * this.#crypto.randomUint32) / Math.pow(2, 32));
-            let interval = baseInterval + jitter;
+            const jitter = Millis.floor(Millis((maxJitter * this.#crypto.randomUint32) / Math.pow(2, 32)));
+            let interval = Millis(baseInterval + jitter);
 
             if (timeout !== undefined && timeSoFar + interval > timeout) {
-                interval = timeout - timeSoFar;
+                interval = Millis(timeout - timeSoFar);
             }
             if (maximumInterval !== undefined && interval > maximumInterval) {
                 interval = maximumInterval;
             }
 
             yield interval;
-            timeSoFar += interval;
+            timeSoFar = Millis(timeSoFar + interval);
 
-            baseInterval *= backoffFactor;
+            baseInterval = Millis(baseInterval * backoffFactor);
         }
     }
 }
@@ -61,16 +63,14 @@ export class RetrySchedule {
 export namespace RetrySchedule {
     /**
      * Configuration parameters for retry schedule.
-     *
-     * All intervals are in milliseconds.
      */
     export interface Configuration {
         /**
-         * Overall timeout in seconds.
+         * Overall timeout.
          *
          * Leave undefined to allow indefinite transmission.
          */
-        readonly timeout?: number;
+        readonly timeout?: Duration;
 
         /**
          * Maximum number of occurrences (including first).
@@ -82,9 +82,9 @@ export namespace RetrySchedule {
         /**
          * Interval between first request and final interval.
          *
-         * Defaults to 1000 ms.
+         * Defaults to 1s.
          */
-        readonly initialInterval?: number;
+        readonly initialInterval?: Duration;
 
         /**
          * Multiplier for subsequent retries.
@@ -98,7 +98,7 @@ export namespace RetrySchedule {
          *
          * Leave undefined for interval to allow interval to grow continuously.
          */
-        readonly maximumInterval?: number;
+        readonly maximumInterval?: Duration;
 
         /**
          * Multiplier for retry jitter.

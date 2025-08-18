@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Migration } from "#behavior/state/migrations/Migration.js";
 import type { Agent } from "#endpoint/Agent.js";
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import { BehaviorInitializationError } from "#endpoint/errors.js";
@@ -102,9 +103,15 @@ export abstract class BehaviorBacking {
     }
 
     initializeDataSource() {
-        if (!this.#datasource) {
-            this.#datasource = Datasource(this.datasourceOptions);
+        if (this.#datasource) {
+            return;
         }
+
+        if (this.store.initialValues !== undefined) {
+            Migration.migrate(this.type, this.store.initialValues);
+        }
+
+        this.#datasource = Datasource(this.datasourceOptions);
     }
 
     /**

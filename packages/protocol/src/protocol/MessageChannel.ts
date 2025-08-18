@@ -5,7 +5,7 @@
  */
 
 import { Message, MessageCodec } from "#codec/MessageCodec.js";
-import { Bytes, Channel, Logger, MatterError, MatterFlowError } from "#general";
+import { Bytes, Channel, Duration, Logger, MatterError, MatterFlowError, Millis, Seconds } from "#general";
 import type { ExchangeLogContext } from "#protocol/MessageExchange.js";
 import { Session, SessionParameters } from "#session/Session.js";
 
@@ -18,13 +18,13 @@ export class ChannelNotConnectedError extends MatterError {}
  * from chip implementation. This is basically the default used with different names, also kExpectedLowProcessingTime or
  * kExpectedSigma1ProcessingTime.
  */
-export const DEFAULT_EXPECTED_PROCESSING_TIME_MS = 2000;
+export const DEFAULT_EXPECTED_PROCESSING_TIME = Seconds(2);
 
 /**
  * The buffer time in milliseconds to add to the peer response time to also consider network delays and other factors.
  * TODO: This is a pure guess and should be adjusted in the future.
  */
-const PEER_RESPONSE_TIME_BUFFER_MS = 5_000;
+const PEER_RESPONSE_TIME_BUFFER = Seconds(5);
 
 export namespace MRP {
     /**
@@ -46,7 +46,7 @@ export namespace MRP {
     export const BACKOFF_THRESHOLD = 1;
 
     /** @see {@link MatterSpecification.v12.Core}, section 4.11.8 */
-    export const STANDALONE_ACK_TIMEOUT_MS = 200;
+    export const STANDALONE_ACK_TIMEOUT = Millis(200);
 }
 
 export class MessageChannel implements Channel<Message> {
@@ -113,26 +113,29 @@ export class MessageChannel implements Channel<Message> {
         }
     }
 
-    calculateMaximumPeerResponseTimeMs(
+    calculateMaximumPeerResponseTime(
         sessionParameters: SessionParameters,
-        expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS,
-    ) {
+        expectedProcessingTime = DEFAULT_EXPECTED_PROCESSING_TIME,
+    ): Duration {
         switch (this.channel.type) {
             case "tcp":
                 // TCP uses 30s timeout according to chip sdk implementation, so do the same
-                return 30_000 + PEER_RESPONSE_TIME_BUFFER_MS;
+                return Millis(Seconds(30) + PEER_RESPONSE_TIME_BUFFER);
+
             case "udp":
                 // UDP normally uses MRP, if not we have Group communication, which normally have no responses
                 if (!this.usesMrp) {
                     throw new MatterFlowError("No response expected for this message exchange because UDP and no MRP.");
                 }
-                return (
-                    this.#calculateMrpMaximumPeerResponseTime(sessionParameters, expectedProcessingTimeMs) +
-                    PEER_RESPONSE_TIME_BUFFER_MS
+                return Millis(
+                    this.#calculateMrpMaximumPeerResponseTime(sessionParameters, expectedProcessingTime) +
+                        PEER_RESPONSE_TIME_BUFFER,
                 );
+
             case "ble":
                 // chip sdk uses BTP_ACK_TIMEOUT_MS which is wrong in my eyes, so we use static 30s as like TCP here
-                return 30_000 + PEER_RESPONSE_TIME_BUFFER_MS;
+                return Millis(Seconds(30) + PEER_RESPONSE_TIME_BUFFER);
+
             default:
                 throw new MatterFlowError(
                     `Can not calculate expected timeout for unknown channel type: ${this.channel.type}`,
@@ -149,27 +152,29 @@ export class MessageChannel implements Channel<Message> {
      * @see {@link MatterSpecification.v10.Core}, section 4.11.2.1
      */
     getMrpResubmissionBackOffTime(retransmissionCount: number, sessionParameters?: SessionParameters) {
-        const { activeIntervalMs, idleIntervalMs } = sessionParameters ?? this.session.parameters;
+        const { activeInterval, idleInterval } = sessionParameters ?? this.session.parameters;
         const baseInterval =
-            sessionParameters !== undefined || this.session.isPeerActive() ? activeIntervalMs : idleIntervalMs;
-        return Math.floor(
-            MRP.BACKOFF_MARGIN *
+            sessionParameters !== undefined || this.session.isPeerActive() ? activeInterval : idleInterval;
+        return Millis.floor(
+            Millis(
                 baseInterval *
-                Math.pow(MRP.BACKOFF_BASE, Math.max(0, retransmissionCount - MRP.BACKOFF_THRESHOLD)) *
-                (1 + (sessionParameters !== undefined ? 1 : Math.random()) * MRP.BACKOFF_JITTER),
+                    MRP.BACKOFF_MARGIN *
+                    Math.pow(MRP.BACKOFF_BASE, Math.max(0, retransmissionCount - MRP.BACKOFF_THRESHOLD)) *
+                    (1 + (sessionParameters !== undefined ? 1 : Math.random()) * MRP.BACKOFF_JITTER),
+            ),
         );
     }
 
     #calculateMrpMaximumPeerResponseTime(
         sessionParameters: SessionParameters,
-        expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS,
+        expectedProcessingTime = DEFAULT_EXPECTED_PROCESSING_TIME,
     ) {
         // We use the expected processing time and deduct the time we already waited since last resubmission
-        let finalWaitTime = expectedProcessingTimeMs;
+        let finalWaitTime = expectedProcessingTime;
 
         // and then add the time the other side needs for a full resubmission cycle under the assumption we are active
         for (let i = 0; i < MRP.MAX_TRANSMISSIONS; i++) {
-            finalWaitTime += this.getMrpResubmissionBackOffTime(i, sessionParameters);
+            finalWaitTime = Millis(finalWaitTime + this.getMrpResubmissionBackOffTime(i, sessionParameters));
         }
 
         // TODO: Also add any network latency buffer, for now lets consider it's included in the processing time already

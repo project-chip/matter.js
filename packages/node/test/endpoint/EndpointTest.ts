@@ -19,6 +19,7 @@ import { Agent } from "#endpoint/Agent.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import { RootEndpoint } from "#endpoints/root";
+import { FabricIndex } from "#types";
 import { MockServerNode } from "../node/mock-server-node.js";
 
 const WindowCoveringLiftDevice = WindowCoveringDevice.with(
@@ -126,7 +127,7 @@ describe("Endpoint", () => {
                     acl: [
                         {
                             authMode: AccessControl.AccessControlEntryAuthMode.Pase,
-                            fabricIndex: 1,
+                            fabricIndex: FabricIndex(1),
                             privilege: AccessControl.AccessControlEntryPrivilege.Manage,
                         },
                     ],
@@ -138,7 +139,7 @@ describe("Endpoint", () => {
                     acl: {
                         1: {
                             authMode: AccessControl.AccessControlEntryAuthMode.Case,
-                            fabricIndex: 1,
+                            fabricIndex: FabricIndex(1),
                             privilege: AccessControl.AccessControlEntryPrivilege.Manage,
                         },
                     },
@@ -182,14 +183,14 @@ describe("Endpoint", () => {
                     acl: [
                         {
                             authMode: AccessControl.AccessControlEntryAuthMode.Pase,
-                            fabricIndex: 1,
+                            fabricIndex: FabricIndex(1),
                             privilege: AccessControl.AccessControlEntryPrivilege.Administer,
                             subjects: null,
                             targets: null,
                         },
                         {
                             authMode: AccessControl.AccessControlEntryAuthMode.Case,
-                            fabricIndex: 1,
+                            fabricIndex: FabricIndex(1),
                             privilege: AccessControl.AccessControlEntryPrivilege.Manage,
                             subjects: null,
                             targets: null,
@@ -203,7 +204,7 @@ describe("Endpoint", () => {
                     acl: [
                         {
                             authMode: AccessControl.AccessControlEntryAuthMode.Group,
-                            fabricIndex: 1,
+                            fabricIndex: FabricIndex(1),
                             privilege: AccessControl.AccessControlEntryPrivilege.Manage,
                             subjects: null,
                             targets: null,
@@ -232,7 +233,7 @@ describe("Endpoint", () => {
                     acl: [
                         {
                             authMode: AccessControl.AccessControlEntryAuthMode.Pase,
-                            fabricIndex: 1,
+                            fabricIndex: FabricIndex(1),
                             privilege: AccessControl.AccessControlEntryPrivilege.Manage,
                         },
                     ],

@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./SubscriptionBehavior.js";
+export * from "./SubscriptionsServer.js";

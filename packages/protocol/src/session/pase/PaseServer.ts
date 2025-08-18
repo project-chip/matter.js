@@ -11,6 +11,7 @@ import {
     Logger,
     MatterFlowError,
     PbkdfParameters,
+    Seconds,
     Spake2p,
     Time,
     Timer,
@@ -27,7 +28,7 @@ const { bytesToNumberBE } = ec;
 
 const logger = Logger.get("PaseServer");
 
-const PASE_PAIRING_TIMEOUT_MS = 60_000;
+const PASE_PAIRING_TIMEOUT_MS = Seconds(60);
 const PASE_COMMISSIONING_MAX_ERRORS = 20;
 
 export class MaximumPasePairingErrorsReachedError extends MatterFlowError {}

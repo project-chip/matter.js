@@ -366,6 +366,9 @@ export function selectMetatype(typeName: string) {
         case "date":
             return Metatype.date;
 
+        case "duration":
+            return Metatype.duration;
+
         case "status":
             return Metatype.enum;
     }

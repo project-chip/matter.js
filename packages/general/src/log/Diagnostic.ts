@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Duration } from "#time/Duration.js";
+import { Time } from "#time/Time.js";
+import { Timestamp } from "#time/Timestamp.js";
+import { Millis } from "#time/TimeUnit.js";
 import { Bytes } from "#util/Bytes.js";
 import type { Lifecycle } from "../util/Lifecycle.js";
 import { LogLevel } from "./LogLevel.js";
@@ -302,41 +306,9 @@ export namespace Diagnostic {
     }
 
     export interface Elapsed {
-        readonly startedAt: number;
-        readonly time: number;
+        readonly startedAt: Timestamp;
+        readonly time: Duration;
         toString(): string;
-    }
-
-    /**
-     * Convert an interval to text.
-     */
-    export function interval(ms: number) {
-        if (ms < 0) {
-            return `${(ms * 1000).toPrecision(3)}μs`;
-        } else if (ms < 1000) {
-            return `${ms.toPrecision(3)}ms`;
-        } else if (ms < 60000) {
-            return `${(ms / 1000).toPrecision(3)}s`;
-        }
-
-        let days;
-        if (ms > 86_400_000) {
-            days = `${Math.floor(ms / 86_400_000)}d `;
-            ms %= 86_400_000;
-        } else {
-            days = "";
-        }
-        const hours = Math.floor(ms / 3_600_000)
-            .toString()
-            .padStart(2, "0");
-        ms %= 3_600_000;
-        const minutes = Math.floor(ms / 60_000)
-            .toString()
-            .padStart(2, "0");
-        ms %= 60_000;
-        const seconds = Math.floor(ms).toString().padStart(2, "0");
-
-        return `${days}${hours}:${minutes}:${seconds}`;
     }
 
     /**
@@ -344,14 +316,14 @@ export namespace Diagnostic {
      */
     export function elapsed(): Elapsed {
         return {
-            startedAt: performance.now(),
+            startedAt: Time.nowUs,
 
             get time() {
-                return performance.now() - this.startedAt;
+                return Millis(Time.nowUs - this.startedAt);
             },
 
             toString() {
-                return interval(this.time);
+                return Duration.format(this.time);
             },
         };
     }

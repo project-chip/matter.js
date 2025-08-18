@@ -14,6 +14,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   Breaking: Because of the upgrade to TypeScript 5.9 all usages of Uint8Array were changed to use a more convenient own type alias Bytes
 
 -   @matter/general
+    - Breaking: Our time API is upgraded, most notably with proper typing for time intervals.  This makes time handling more consistent and safer but it does change how you convey intervals to matter.js.  For example: `delay: Seconds(1)` rather than `delayMs: 1000`.
+    - Breaking: There are other small time changes such as converting `nowMs()` (a function) to `nowMs` (a property).
     - Breaking: SyncStorage interface got removed
     - Breaking: MaybeAsyncStorage got renamed to Storage because it is the only interface from now on
     - Feature: Adds Blob support to the Storage interface
@@ -28,6 +30,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: MDNS client and server efficiency is improved with a shared socket and message parser
 
 -   @matter/node
+    - Breaking: `Endpoint` and `Node` initialization values now require the correct type for some time values and IDs.  So for example, `VendorId(1234)` instead of just `1234`
+    - Breaking: `SubscriptionBehavior` is renamed to `SubscriptionsServer` with corresponding ID change to "subscriptions".  This means in part that matter.js will ignore saved subscriptions but devices will recreate them automatically
     - Fix: (rsulzenbacher) Adjusted OnOffServer default implementation for offWaitTime to be fully compliant to 1.4.1 spec
 
 -   @matter/nodejs

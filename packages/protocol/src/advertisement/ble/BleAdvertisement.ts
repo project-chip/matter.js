@@ -5,18 +5,19 @@
  */
 
 import { BtpCodec } from "#codec/BtpCodec.js";
+import { Days, Duration, Millis, Minutes, Seconds } from "#general";
 import { Advertisement } from "../Advertisement.js";
 import { ServiceDescription } from "../ServiceDescription.js";
 import type { BleAdvertiser } from "./BleAdvertiser.js";
 
 // Period for "fast" broadcast.  See core spec 5.4.2.5.3
-const EARLY_INTERVAL_SLEEP = 30_000;
+const EARLY_INTERVAL_SLEEP = Seconds(30);
 
 // Period for "medium" broadcast.  See core spec 5.4.2.5.3
-const LATE_INTERVAL_SLEEP = 15 * 60_000 - EARLY_INTERVAL_SLEEP;
+const LATE_INTERVAL_SLEEP = Millis(Minutes(15) - EARLY_INTERVAL_SLEEP);
 
 // Period for "extended" broadcast.  See core spec 5.4.2.5.3
-const EXTENDED_INTERVAL_SLEEP = 48 * 60 * 60_000 - LATE_INTERVAL_SLEEP;
+const EXTENDED_INTERVAL_SLEEP = Millis(Days(2) - LATE_INTERVAL_SLEEP);
 
 export class BleAdvertisement extends Advertisement<ServiceDescription.Commissionable> {
     declare advertiser: BleAdvertiser;
@@ -58,10 +59,10 @@ export class BleAdvertisement extends Advertisement<ServiceDescription.Commissio
                 await peripheral.advertise(advertisementData, aad, broadcastInterval);
 
                 // Wait for timeout at this broadcast interval
-                await context.sleep("BLE advertisement interval", Math.min(timeout, sleepTime));
+                await context.sleep("BLE advertisement interval", Duration.min(timeout, sleepTime));
 
-                timeout -= sleepTime;
-                if ((timeout -= sleepTime) <= 0) {
+                timeout = Millis(timeout - sleepTime);
+                if (timeout <= 0) {
                     break;
                 }
             }

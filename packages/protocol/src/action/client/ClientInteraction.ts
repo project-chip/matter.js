@@ -13,7 +13,7 @@ import { InvokeResult } from "#action/response/InvokeResult.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { SubscribeResult } from "#action/response/SubscribeResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
-import { BasicSet, Environment, Environmental, ImplementationError, PromiseQueue } from "#general";
+import { BasicSet, Environment, Environmental, ImplementationError, PromiseQueue, Seconds } from "#general";
 import { InteractionClientMessenger, MessageType } from "#interaction/InteractionMessenger.js";
 import { InteractionQueue } from "#peer/InteractionQueue.js";
 import { ExchangeProvider } from "#protocol/ExchangeProvider.js";
@@ -27,7 +27,7 @@ export interface ClientInteractionContext {
     queue: PromiseQueue;
 }
 
-export const DEFAULT_MIN_INTERVAL_FLOOR_SECONDS = 1;
+export const DEFAULT_MIN_INTERVAL_FLOOR = Seconds(1);
 
 /**
  * Client-side implementation of the Matter protocol.
@@ -195,8 +195,8 @@ export class ClientInteraction<SessionT extends InteractionSession = Interaction
 
             await messenger.sendSubscribeRequest({
                 ...request,
-                minIntervalFloorSeconds: DEFAULT_MIN_INTERVAL_FLOOR_SECONDS,
-                maxIntervalCeilingSeconds: DEFAULT_MIN_INTERVAL_FLOOR_SECONDS,
+                minIntervalFloorSeconds: Seconds.of(DEFAULT_MIN_INTERVAL_FLOOR),
+                maxIntervalCeilingSeconds: Seconds.of(DEFAULT_MIN_INTERVAL_FLOOR),
             });
 
             await this.#handleSubscriptionResponse(request, readChunks(messenger));

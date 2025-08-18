@@ -100,7 +100,7 @@ export namespace SupportedBehaviors {
      * Patch input version of {@link StateOf}.
      */
     export type StatePatchOf<SB extends SupportedBehaviors> = {
-        [K in keyof SB]?: Behavior.PatchStateOf<SB[K]>;
+        readonly [K in keyof SB]?: Behavior.PatchStateOf<SB[K]>;
     } & {
         descriptor?: Behavior.PatchStateOf<typeof DescriptorBehavior>;
     };

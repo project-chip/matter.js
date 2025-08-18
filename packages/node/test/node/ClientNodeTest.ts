@@ -9,7 +9,7 @@ import { IdentifyClient } from "#behaviors/identify";
 import { OnOffClient } from "#behaviors/on-off";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { b$, deepCopy } from "#general";
+import { b$, deepCopy, Seconds } from "#general";
 import { MockSite } from "./mock-site.js";
 
 describe("ClientNode", () => {
@@ -25,7 +25,7 @@ describe("ClientNode", () => {
         const controller = await site.addNode(undefined, { online: false, device: undefined });
         await MockTime.resolve(
             expect(
-                controller.nodes.commission({ passcode: 12341234, discriminator: 1234, timeoutSeconds: 90 }),
+                controller.nodes.commission({ passcode: 12341234, discriminator: 1234, timeout: Seconds(90) }),
             ).rejectedWith(DiscoveryError),
         );
     });
@@ -35,7 +35,7 @@ describe("ClientNode", () => {
 
         const controller = await site.addNode(undefined, { online: false, device: undefined });
         const discovered = await MockTime.resolve(
-            controller.nodes.discover({ longDiscriminator: 1234, timeoutSeconds: 90 }),
+            controller.nodes.discover({ longDiscriminator: 1234, timeout: Seconds(90) }),
         );
 
         expect(discovered.length).equals(0);
@@ -47,7 +47,7 @@ describe("ClientNode", () => {
 
         const { discriminator } = device.state.commissioning;
         const discovered = await MockTime.resolve(
-            controller.nodes.discover({ longDiscriminator: discriminator, timeoutSeconds: 90 }),
+            controller.nodes.discover({ longDiscriminator: discriminator, timeout: Seconds(90) }),
             { macrotasks: true },
         );
 
@@ -71,7 +71,12 @@ describe("ClientNode", () => {
         expect(peer1).not.undefined;
 
         // Validate the root endpoint
-        expect(peer1.state).deep.equals(PEER1_STATE);
+        expect(Object.keys(peer1.state)).deep.equals(Object.keys(PEER1_STATE));
+        for (const key in peer1.state) {
+            const actual = (peer1.state as Record<string, unknown>)[key];
+            const expected = (PEER1_STATE as Record<string, unknown>)[key];
+            expect(actual).deep.equals(expected);
+        }
         const expectedPeer1State = deepCopy(peer1.state);
 
         // Validate the light endpoint
@@ -106,7 +111,7 @@ describe("ClientNode", () => {
         expect(ep1b).not.undefined;
         expect(ep1b.construction.status).equals("active");
         expect(ep1b.state).deep.equals(expectedEp1State);
-    }).timeout(1e9);
+    });
 
     it("invokes and receives state updates", async () => {
         // *** SETUP ***
@@ -168,7 +173,7 @@ describe("ClientNode", () => {
         const ep1Server = device.parts.get(1) as Endpoint<OnOffLightDevice>;
         expect(ep1Server.state.onOff.onTime).equals(20);
         expect(ep1Server.state.identify.identifyTime).equals(5);
-    }).timeout(1e9);
+    });
 
     it("reconnects and updates connection status", () => {
         // TODO
@@ -186,7 +191,7 @@ const PEER1_STATE = {
         longIdleTimeOperatingMode: false,
         peerAddress: { fabricIndex: 1, nodeId: expect.BIGINT },
         addresses: [
-            { type: "udp", ip: "10.10.10.2", port: 0x15a4, peripheralAddress: undefined },
+            { type: "udp", ip: "1111:2222:3333:4444:5555:6666:7777:8802", port: 0x15a4, peripheralAddress: undefined },
             { type: "udp", ip: "10.10.10.2", port: 0x15a4, peripheralAddress: undefined },
         ],
         discoveredAt: expect.NUMBER,
@@ -203,7 +208,7 @@ const PEER1_STATE = {
         rotatingIdentifier: undefined,
         pairingHint: 0x21,
         pairingInstructions: undefined,
-        sessionParameters: { idleIntervalMs: 0x1f4, activeIntervalMs: 0x12c, activeThresholdMs: 0xfa0 },
+        sessionParameters: { idleInterval: 500, activeInterval: 300, activeThreshold: 4000 },
         tcpSupport: 0,
         longIdleOperatingMode: undefined,
     },

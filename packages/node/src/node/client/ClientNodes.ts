@@ -10,7 +10,7 @@ import { ContinuousDiscovery } from "#behavior/system/controller/discovery/Conti
 import { Discovery } from "#behavior/system/controller/discovery/Discovery.js";
 import { InstanceDiscovery } from "#behavior/system/controller/discovery/InstanceDiscovery.js";
 import { EndpointContainer } from "#endpoint/properties/EndpointContainer.js";
-import { CancelablePromise, Lifespan, Logger, Time } from "#general";
+import { CancelablePromise, Duration, Logger, Minutes, Seconds, Time, Timestamp } from "#general";
 import { PeerAddress, PeerAddressStore } from "#protocol";
 import { ServerNodeStore } from "#storage/server/ServerNodeStore.js";
 import { ClientNode } from "../ClientNode.js";
@@ -20,8 +20,8 @@ import { NodePeerAddressStore } from "./NodePeerAddressStore.js";
 
 const logger = Logger.get("ClientNodes");
 
-const DEFAULT_TTL = 900 * 1000;
-const EXPIRATION_INTERVAL = 60 * 1000;
+const DEFAULT_TTL = Minutes(15);
+const EXPIRATION_INTERVAL = Minutes.one;
 
 /**
  * Manages the set of known remote nodes.
@@ -160,7 +160,7 @@ export class ClientNodes extends EndpointContainer<ClientNode> {
     }
 
     async #cullExpiredNodesAndAddresses() {
-        const now = Time.nowMs();
+        const now = Time.nowMs;
 
         for (const node of this) {
             const state = node.state.commissioning;
@@ -243,11 +243,11 @@ class Factory extends ClientNodeFactory {
     }
 }
 
-function expirationOf<T extends Partial<Lifespan>>(
+function expirationOf<T extends { discoveredAt?: Timestamp; ttl?: Duration | number }>(
     lifespan: T,
-): T extends { discoveredAt: number } ? number : number | undefined {
+): T extends { discoveredAt: Timestamp } ? Timestamp : Timestamp | undefined {
     if (lifespan.discoveredAt !== undefined) {
-        return lifespan.discoveredAt + (lifespan.ttl ?? DEFAULT_TTL);
+        return Timestamp(lifespan.discoveredAt + (Seconds(lifespan.ttl) ?? DEFAULT_TTL));
     }
-    return undefined as unknown as number;
+    return undefined as unknown as Timestamp;
 }

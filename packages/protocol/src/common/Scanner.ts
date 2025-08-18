@@ -4,7 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BasicSet, ChannelType, Environment, Environmental, Lifespan, ServerAddress, ServerAddressIp } from "#general";
+import {
+    BasicSet,
+    ChannelType,
+    Duration,
+    Environment,
+    Environmental,
+    Lifespan,
+    ServerAddress,
+    ServerAddressIp,
+} from "#general";
 import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema, VendorId } from "#types";
 import { Fabric } from "../fabric/Fabric.js";
 
@@ -32,13 +41,13 @@ export type DiscoveryData = {
     PI?: string;
 
     /** Sleep Idle Interval */
-    SII?: number;
+    SII?: Duration;
 
     /** Sleep Active Interval */
-    SAI?: number;
+    SAI?: Duration;
 
     /** Session active threshold */
-    SAT?: number;
+    SAT?: Duration;
 
     /** TCP supported */
     T?: number; // SupportedTransportsBitmap but comes in as number, so converted on usage
@@ -116,7 +125,7 @@ export interface Scanner {
     findOperationalDevice(
         fabric: Fabric,
         nodeId: NodeId,
-        timeoutSeconds?: number,
+        timeout?: Duration,
         ignoreExistingRecords?: boolean,
     ): Promise<OperationalDevice | undefined>;
 
@@ -132,7 +141,7 @@ export interface Scanner {
      */
     findCommissionableDevices(
         identifier: CommissionableDeviceIdentifiers,
-        timeoutSeconds?: number,
+        timeout?: Duration,
         ignoreExistingRecords?: boolean,
     ): Promise<CommissionableDevice[]>;
 
@@ -144,7 +153,7 @@ export interface Scanner {
     findCommissionableDevicesContinuously(
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
-        timeoutSeconds?: number,
+        timeout?: Duration,
         cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]>;
 

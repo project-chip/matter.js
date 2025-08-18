@@ -8,6 +8,7 @@ import {
     AsyncObservable,
     Bytes,
     Construction,
+    Duration,
     Logger,
     MatterFlowError,
     UnexpectedDataError,
@@ -46,7 +47,7 @@ export abstract class FailsafeContext {
     #commissioned = AsyncObservable<[], void>();
 
     constructor(options: FailsafeContext.Options) {
-        const { expiryLengthSeconds, associatedFabric, maxCumulativeFailsafeSeconds } = options;
+        const { expiryLength, associatedFabric, maxCumulativeFailsafe } = options;
 
         this.#sessions = options.sessions;
         this.#fabrics = options.fabrics;
@@ -61,21 +62,18 @@ export abstract class FailsafeContext {
 
             // If ExpiryLengthSeconds is non-zero and the fail-safe timer was not currently armed, then the fail-safe
             // timer SHALL be armed for that duration.
-            this.#failsafe = new FailsafeTimer(
-                associatedFabric,
-                expiryLengthSeconds,
-                maxCumulativeFailsafeSeconds,
-                () => this.#failSafeExpired(),
+            this.#failsafe = new FailsafeTimer(associatedFabric, expiryLength, maxCumulativeFailsafe, () =>
+                this.#failSafeExpired(),
             );
-            logger.debug(`Arm failSafe timer for ${expiryLengthSeconds}s.`);
+            logger.debug(`Arm failSafe timer for ${Duration.format(expiryLength)}`);
         });
     }
 
-    async extend(fabric: Fabric | undefined, expiryLengthSeconds: number) {
+    async extend(fabric: Fabric | undefined, expiryLength: Duration) {
         await this.#construction;
-        await this.#failsafe?.reArm(fabric, expiryLengthSeconds);
-        if (expiryLengthSeconds > 0) {
-            logger.debug(`Extend failSafe timer for ${expiryLengthSeconds}s.`);
+        await this.#failsafe?.reArm(fabric, expiryLength);
+        if (expiryLength > 0) {
+            logger.debug(`Extend failSafe timer for ${Duration.format(expiryLength)}`);
         }
     }
 
@@ -341,8 +339,8 @@ export namespace FailsafeContext {
     export interface Options {
         sessions: SessionManager;
         fabrics: FabricManager;
-        expiryLengthSeconds: number;
-        maxCumulativeFailsafeSeconds: number;
+        expiryLength: Duration;
+        maxCumulativeFailsafe: Duration;
         associatedFabric: Fabric | undefined;
     }
 }

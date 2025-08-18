@@ -8,7 +8,18 @@ import { Advertisement } from "#advertisement/Advertisement.js";
 import type { Advertiser } from "#advertisement/Advertiser.js";
 import type { ServiceDescription } from "#advertisement/ServiceDescription.js";
 import { SupportedTransportsSchema } from "#common/SupportedTransportsBitmap.js";
-import { AAAARecord, ARecord, DnsRecord, Logger, NetworkInterfaceDetails, SrvRecord, Time, TxtRecord } from "#general";
+import {
+    AAAARecord,
+    ARecord,
+    DnsRecord,
+    Duration,
+    Logger,
+    NetworkInterfaceDetails,
+    SrvRecord,
+    Time,
+    Timestamp,
+    TxtRecord,
+} from "#general";
 import type { MdnsServer } from "#mdns/MdnsServer.js";
 import { SessionIntervals } from "#session/SessionIntervals.js";
 import type { MdnsAdvertiser } from "./MdnsAdvertiser.js";
@@ -29,7 +40,7 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
     qname: string;
 
     #isPrivacyMasked: boolean;
-    #stopAt?: number;
+    #stopAt?: Timestamp;
 
     constructor(advertiser: MdnsAdvertiser, qname: string, description: T) {
         description = {
@@ -51,12 +62,12 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
         this.#stopAt = undefined;
         let number = 0;
         for (const retryInterval of this.advertiser.broadcastScheduleFor(this, event)) {
-            if (this.#stopAt !== undefined && this.#stopAt <= Time.nowMs()) {
+            if (this.#stopAt !== undefined && this.#stopAt <= Time.nowMs) {
                 break;
             }
 
             number++;
-            logger.debug("Broadcast", this.dict({ number, next: retryInterval }));
+            logger.debug("Broadcast", this.dict({ number, next: Duration.format(retryInterval) }));
             await this.broadcast();
             await context.sleep("MDNS repeat", retryInterval);
         }
@@ -78,7 +89,7 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
      * Broadcast expiration announcement immediately.
      */
     async expire() {
-        logger.info("Unpublishing", this.dict({ time: this.duration }));
+        logger.info("Unpublishing", this.dict({ time: Duration.format(this.duration) }));
         await this.advertiser.server.expireAnnouncements(this.service);
     }
 
@@ -94,7 +105,7 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
             return;
         }
 
-        this.#stopAt = Time.nowMs() + broadcastAfterConnection;
+        this.#stopAt = Timestamp(Time.nowMs + broadcastAfterConnection);
     }
 
     override serviceDisconnected() {
@@ -148,9 +159,9 @@ export abstract class MdnsAdvertisement<T extends ServiceDescription = ServiceDe
 
     get #txtValues() {
         const values: Record<string, unknown> = {
-            SII: this.description.idleIntervalMs /* Session Idle Interval */,
-            SAI: this.description.activeIntervalMs /* Session Active Interval */,
-            SAT: this.description.activeThresholdMs /* Session Active Threshold */,
+            SII: this.description.idleInterval /* Session Idle Interval */,
+            SAI: this.description.activeInterval /* Session Active Interval */,
+            SAT: this.description.activeThreshold /* Session Active Threshold */,
             ...this.txtValues,
         };
 

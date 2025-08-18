@@ -102,7 +102,7 @@ export namespace ValueSupervisor {
 
     export type Manage = (reference: Val.Reference, session: Session) => Val;
 
-    export type Patch = (changes: Val.Collection, target: Val.Collection, path: DataModelPath) => Val;
+    export type Patch = (changes: Val.ReadonlyCollection, target: Val.Collection, path: DataModelPath) => Val;
 
     export type Cast = (value: Val) => Val;
 }

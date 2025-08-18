@@ -105,13 +105,13 @@ function StructPatcher(schema: ValueModel, supervisor: RootSupervisor): ValueSup
             throw new WriteError(path, `cannot patch ${target} because it is not an object`);
         }
 
-        for (const key in changes) {
+        for (const key in changes as Val.Struct) {
             // Validate the key
             if (!(key in memberPatchers)) {
                 throw new WriteError(path, `${key} is not a property of ${schema.name}`);
             }
 
-            let newValue = changes[key];
+            let newValue = (changes as Val.Struct)[key];
 
             // If this is not a subcollection or the new value is not an object, just do direct set
             const subpatch = memberPatchers[key];

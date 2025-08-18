@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Immutable } from "#general";
+import { Immutable, Seconds, ServerAddress } from "#general";
 import { CommissionableDevice, OperationalDevice, PeerAddress, SessionParameters } from "#protocol";
 import { DeviceTypeId, VendorId } from "#types";
 import type { CommissioningClient } from "./CommissioningClient.js";
@@ -67,7 +67,7 @@ export namespace RemoteDescriptor {
         }
 
         if (ttl !== undefined) {
-            result.ttl = ttl;
+            result.ttl = Seconds(ttl);
         }
 
         if (deviceIdentifier !== undefined) {
@@ -103,18 +103,18 @@ export namespace RemoteDescriptor {
         }
 
         if (sessionParameters !== undefined) {
-            const { idleIntervalMs, activeIntervalMs, activeThresholdMs } = sessionParameters;
+            const { idleInterval, activeInterval, activeThreshold } = sessionParameters;
 
-            if (idleIntervalMs !== undefined) {
-                result.SII = idleIntervalMs;
+            if (idleInterval !== undefined) {
+                result.SII = idleInterval;
             }
 
-            if (activeIntervalMs !== undefined) {
-                result.SAI = activeIntervalMs;
+            if (activeInterval !== undefined) {
+                result.SAI = activeInterval;
             }
 
-            if (activeThresholdMs !== undefined) {
-                result.SAT = activeThresholdMs;
+            if (activeThreshold !== undefined) {
+                result.SAT = activeThreshold;
             }
         }
 
@@ -129,11 +129,11 @@ export namespace RemoteDescriptor {
         const isOperational = long.peerAddress !== undefined;
         if (isOperational) {
             if (addresses !== undefined) {
-                result.addresses = addresses?.filter(address => address.type === "udp");
+                result.addresses = addresses?.filter(address => address.type === "udp").map(ServerAddress);
             }
         } else {
             if (addresses !== undefined) {
-                result.addresses = addresses.map(address => ({ ...address }));
+                result.addresses = addresses.map(address => ({ ...address })).map(ServerAddress);
             }
 
             if (discriminator !== undefined) {
@@ -165,7 +165,7 @@ export namespace RemoteDescriptor {
         }
 
         if (addresses?.length) {
-            long.addresses = addresses;
+            long.addresses = addresses.map(ServerAddress.definitionOf);
         }
 
         if (deviceIdentifier !== undefined) {
@@ -181,13 +181,13 @@ export namespace RemoteDescriptor {
 
         let sessionParameters: Partial<SessionParameters> | undefined;
         if (SII !== undefined) {
-            (sessionParameters ??= {}).idleIntervalMs = SII;
+            (sessionParameters ??= {}).idleInterval = SII;
         }
         if (SAI !== undefined) {
-            (sessionParameters ??= {}).activeIntervalMs = SAI;
+            (sessionParameters ??= {}).activeInterval = SAI;
         }
         if (SAT !== undefined) {
-            (sessionParameters ??= {}).activeThresholdMs = SAT;
+            (sessionParameters ??= {}).activeThreshold = SAT;
         }
         long.sessionParameters = sessionParameters;
 

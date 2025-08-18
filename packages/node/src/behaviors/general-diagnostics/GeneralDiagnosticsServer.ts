@@ -11,7 +11,21 @@ import { NetworkCommissioningServer } from "#behaviors/network-commissioning";
 import { TimeSynchronizationBehavior } from "#behaviors/time-synchronization";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import type { Endpoint } from "#endpoint/Endpoint.js";
-import { Bytes, ImplementationError, ipv4ToBytes, Logger, MaybePromise, Time, Timer } from "#general";
+import {
+    Bytes,
+    Duration,
+    Hours,
+    ImplementationError,
+    ipv4ToBytes,
+    Logger,
+    MaybePromise,
+    Millis,
+    Minutes,
+    Seconds,
+    Time,
+    Timer,
+    Timespan,
+} from "#general";
 import { FieldElement, Specification } from "#model";
 import type { NodeLifecycle } from "#node/NodeLifecycle.js";
 import { MdnsService, Val } from "#protocol";
@@ -105,7 +119,7 @@ export class GeneralDiagnosticsServer extends Base {
     }
 
     override timeSnapshot(): MaybePromise<GeneralDiagnostics.TimeSnapshotResponse> {
-        const time = Time.nowMs();
+        const time = Time.nowMs;
 
         // TC_DGGEN_2_4.py fails us if we set this without TimeSynchronizationCluster support.  Spec is worded poorly
         // but my read of "SHALL only if" is "may not unless" and not "SHALL if and only if".  But conforming to tests
@@ -294,11 +308,11 @@ export class GeneralDiagnosticsServer extends Base {
         );
 
         // Update the timestamps now that node is really online.
-        this.internal.lastTotalOperationalHoursCounterUpdateTime = Time.nowMs();
+        this.internal.lastTotalOperationalHoursCounterUpdateTime = Time.nowMs;
 
         this.internal.lastTotalOperationalHoursTimer = Time.getPeriodicTimer(
             "GeneralDiagnostics.operationalHours",
-            5 * 60_000,
+            Minutes(5),
             this.callback(this.#updateTotalOperationalHoursCounter),
         ).start();
 
@@ -311,9 +325,9 @@ export class GeneralDiagnosticsServer extends Base {
     }
 
     #updateTotalOperationalHoursCounter() {
-        const now = Time.nowMs();
-        const elapsedTime = now - this.internal.lastTotalOperationalHoursCounterUpdateTime;
-        this.state.totalOperationalHoursCounter = this.state.totalOperationalHoursCounter + elapsedTime;
+        const now = Time.nowMs;
+        const elapsedTime = Timespan(this.internal.lastTotalOperationalHoursCounterUpdateTime, now).duration;
+        this.state.totalOperationalHoursCounter = Millis(this.state.totalOperationalHoursCounter + elapsedTime);
         this.internal.lastTotalOperationalHoursCounterUpdateTime = now;
     }
 
@@ -382,15 +396,15 @@ export class GeneralDiagnosticsServer extends Base {
 export namespace GeneralDiagnosticsServer {
     export class Internal {
         /** Last time the total operational hours counter was updated. */
-        lastTotalOperationalHoursCounterUpdateTime: number = Time.nowMs();
+        lastTotalOperationalHoursCounterUpdateTime = Time.nowMs;
 
         /** Timer to update the total operational hours counter every 5 minutes. */
         lastTotalOperationalHoursTimer: Timer | undefined;
     }
 
     export class State extends Base.State {
-        /** Internal counter of the total operational hours, counted in seconds, updated every 5 minutes. */
-        totalOperationalHoursCounter: number = 0;
+        /** Internal counter of the total time, updated every 5 minutes. */
+        totalOperationalHoursCounter: Duration = 0;
 
         /** The TestEnableKey set for this device for the test commands. Default means "not enabled"." */
         deviceTestEnableKey: Bytes = new Uint8Array(16).fill(0);
@@ -415,7 +429,7 @@ export namespace GeneralDiagnosticsServer {
                         return 0;
                     }
 
-                    return Math.round((Time.nowMs() - onlineAt.getTime()) / 1000);
+                    return Seconds.of(Timespan(onlineAt, Time.nowMs).duration);
                 },
 
                 /**
@@ -423,16 +437,19 @@ export namespace GeneralDiagnosticsServer {
                  * is not send out via subscriptions anyway.
                  */
                 get totalOperationalHours() {
-                    const lastTotalOperationalHoursCounterUpdateTime =
-                        endpoint.behaviors.internalsOf(
-                            GeneralDiagnosticsServer,
-                        ).lastTotalOperationalHoursCounterUpdateTime;
-                    const totalOperationalHoursCounter =
-                        endpoint.stateOf(GeneralDiagnosticsServer).totalOperationalHoursCounter;
-                    return Math.floor(
-                        (Time.nowMs() - lastTotalOperationalHoursCounterUpdateTime + totalOperationalHoursCounter) /
-                            (60 * 60_000),
-                    );
+                    const { lastTotalOperationalHoursCounterUpdateTime } =
+                        endpoint.behaviors.internalsOf(GeneralDiagnosticsServer);
+
+                    const timeSinceLastUpdate = Timespan(
+                        lastTotalOperationalHoursCounterUpdateTime,
+                        Time.nowMs,
+                    ).duration;
+
+                    const timeAsOfLastUpdate = endpoint.stateOf(GeneralDiagnosticsServer).totalOperationalHoursCounter;
+
+                    const totalOperationalTime = Millis(timeAsOfLastUpdate + timeSinceLastUpdate);
+
+                    return Hours.of(totalOperationalTime);
                 },
             };
         }

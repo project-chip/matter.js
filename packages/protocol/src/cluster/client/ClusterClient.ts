@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { capitalize, Diagnostic, ImplementationError, Logger, Merge } from "#general";
+import { capitalize, Diagnostic, Duration, ImplementationError, Logger, Merge } from "#general";
 import {
     Attribute,
     AttributeId,
@@ -387,16 +387,16 @@ export function ClusterClient<const T extends ClusterType>(
             request: RequestT,
             options: {
                 asTimedRequest?: boolean;
-                timedRequestTimeoutMs?: number;
-                expectedProcessingTimeMs?: number;
+                timedRequestTimeout?: Duration;
+                expectedProcessingTime?: Duration;
                 useExtendedFailSafeMessageResponseTimeout?: boolean;
             } = {},
         ) => {
             const {
                 asTimedRequest,
-                timedRequestTimeoutMs,
+                timedRequestTimeout,
                 useExtendedFailSafeMessageResponseTimeout,
-                expectedProcessingTimeMs,
+                expectedProcessingTime,
             } = options;
             if (isGroupAddress) {
                 return interactionClient.invokeWithSuppressedResponse<Command<RequestT, ResponseT, any>>({
@@ -404,7 +404,7 @@ export function ClusterClient<const T extends ClusterType>(
                     command: commandDef[commandName],
                     request,
                     asTimedRequest,
-                    timedRequestTimeoutMs,
+                    timedRequestTimeout,
                 });
             }
             return interactionClient.invoke<Command<RequestT, ResponseT, any>>({
@@ -413,8 +413,8 @@ export function ClusterClient<const T extends ClusterType>(
                 command: commandDef[commandName],
                 request,
                 asTimedRequest,
-                timedRequestTimeoutMs,
-                expectedProcessingTimeMs,
+                timedRequestTimeout,
+                expectedProcessingTime,
                 useExtendedFailSafeMessageResponseTimeout,
             });
         };

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Environment, Environmental, Logger, MaybePromise, Time, Timer } from "#general";
+import { Duration, Environment, Environmental, Logger, MaybePromise, Millis, Time, Timer } from "#general";
 import { MessageExchange } from "#protocol/MessageExchange.js";
 import { ProtocolHandler } from "#protocol/ProtocolHandler.js";
 import { INTERACTION_PROTOCOL_ID } from "#types";
@@ -14,8 +14,8 @@ const logger = Logger.get("SubscriptionClient");
 
 export interface RegisteredSubscription {
     id: number;
-    maximumPeerResponseTimeMs: number;
-    maxIntervalS: number;
+    maximumPeerResponseTime: Duration;
+    maxInterval: Duration;
     onData: (dataReport: DataReport) => MaybePromise<void>;
     onTimeout?: () => void;
 }
@@ -53,10 +53,10 @@ export class SubscriptionClient implements ProtocolHandler {
                 this.#timeouts.delete(id);
             }
 
-            const maxIntervalMs = subscription.maxIntervalS * 1000 + subscription.maximumPeerResponseTimeMs;
+            const maxInterval = Millis(subscription.maxInterval + subscription.maximumPeerResponseTime);
 
-            timer = Time.getTimer("Subscription timeout", maxIntervalMs, () => {
-                logger.info(`Subscription ${id} timed out after ${maxIntervalMs}ms`);
+            timer = Time.getTimer("Subscription timeout", maxInterval, () => {
+                logger.info(`Subscription ${id} timed out after ${Duration.format(maxInterval)}`);
                 this.delete(id);
                 onTimeout();
             }).start();

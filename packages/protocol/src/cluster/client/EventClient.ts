@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "#general";
+import { Duration, ImplementationError } from "#general";
 import { ClusterId, EndpointNumber, Event, EventId, EventNumber } from "#types";
 import { DecodedEventData } from "../../interaction/EventDataDecoder.js";
 import { InteractionClient } from "../../interaction/InteractionClient.js";
@@ -58,8 +58,8 @@ export class EventClient<T> {
     }
 
     async subscribe(
-        minIntervalFloorSeconds: number,
-        maxIntervalCeilingSeconds: number,
+        minIntervalFloor: Duration,
+        maxIntervalCeiling: Duration,
         isUrgent = true,
         minimumEventNumber?: EventNumber,
         isFabricFiltered?: boolean,
@@ -71,8 +71,8 @@ export class EventClient<T> {
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             event: this.event,
-            minIntervalFloorSeconds,
-            maxIntervalCeilingSeconds,
+            minIntervalFloor,
+            maxIntervalCeiling,
             isUrgent,
             minimumEventNumber,
             isFabricFiltered,

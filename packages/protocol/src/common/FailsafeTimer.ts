@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, MatterFlowError, Time, Timer } from "#general";
+import { Duration, Logger, MatterFlowError, Time, Timer } from "#general";
 import { Fabric } from "../fabric/Fabric.js";
 import type { FailsafeContext } from "./FailsafeContext.js";
 
@@ -22,16 +22,14 @@ export class FailsafeTimer {
 
     constructor(
         public associatedFabric: Fabric | undefined,
-        expiryLengthSeconds: number,
-        maxCumulativeFailsafeSeconds: number,
+        expiryLength: Duration,
+        maxCumulativeFailsafe: Duration,
         expiryCallback: () => Promise<void>,
     ) {
         this.#expiryCallback = expiryCallback;
-        this.#failsafeTimer = this.#startFailsafeTimer(expiryLengthSeconds);
-        this.#maxCumulativeFailsafeTimer = Time.getTimer(
-            "Max cumulative failsafe",
-            maxCumulativeFailsafeSeconds * 1000,
-            () => this.expire(),
+        this.#failsafeTimer = this.#startFailsafeTimer(expiryLength);
+        this.#maxCumulativeFailsafeTimer = Time.getTimer("Max cumulative failsafe", maxCumulativeFailsafe, () =>
+            this.expire(),
         ).start();
     }
 
@@ -45,7 +43,7 @@ export class FailsafeTimer {
     }
 
     /** Handle "Re-Arming" an existing FailSafe context to extend the timer, expire or fail if not allowed. */
-    async reArm(associatedFabric: Fabric | undefined, expiryLengthSeconds: number) {
+    async reArm(associatedFabric: Fabric | undefined, expiry: Duration) {
         if (!this.#failsafeTimer.isRunning) {
             throw new MatterFlowError("FailSafe already expired.");
         }
@@ -58,7 +56,7 @@ export class FailsafeTimer {
 
         this.#failsafeTimer.stop();
 
-        if (expiryLengthSeconds === 0) {
+        if (expiry === 0) {
             // If ExpiryLengthSeconds is 0 and the fail-safe timer was already armed and the accessing fabric matches
             // the Fabric currently associated with the fail-safe context, then the fail-safe timer SHALL be
             // immediately expired (see further below for side-effects of expiration).
@@ -67,7 +65,7 @@ export class FailsafeTimer {
             // If ExpiryLengthSeconds is non-zero and the fail-safe timer was currently armed, and the accessing Fabric
             // matches the fail-safe context’s associated Fabric, then the fail-safe timer SHALL be re- armed to expire
             // in ExpiryLengthSeconds.
-            this.#failsafeTimer = this.#startFailsafeTimer(expiryLengthSeconds);
+            this.#failsafeTimer = this.#startFailsafeTimer(expiry);
         }
     }
 
@@ -83,8 +81,8 @@ export class FailsafeTimer {
         this.#maxCumulativeFailsafeTimer.stop();
     }
 
-    #startFailsafeTimer(expiryLengthSeconds: number) {
-        return Time.getTimer("Failsafe expiration", expiryLengthSeconds * 1000, () =>
+    #startFailsafeTimer(expiry: Duration) {
+        return Time.getTimer("Failsafe expiration", expiry, () =>
             this.expire().catch(e => logger.error("Error during failsafe expiration", e)),
         ).start();
     }

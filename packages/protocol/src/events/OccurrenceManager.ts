@@ -277,7 +277,7 @@ export class OccurrenceManager {
 
     add(occurrence: Occurrence): MaybePromise<NumberedOccurrence> {
         return MaybePromise.then(this.#store.add(occurrence), entry => {
-            logger.debug(`Recorded event #${entry.number}: ${Diagnostic.json(occurrence)}`);
+            logger.debug(`Recorded event #${entry.number}`, Diagnostic.dict(occurrence));
             this.#occurrences.push(entry);
             if (this.#occurrences.length > this.#bufferConfig.maxEventAllowance) {
                 this.#startCull();

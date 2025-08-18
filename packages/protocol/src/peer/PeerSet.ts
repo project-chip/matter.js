@@ -12,6 +12,7 @@ import {
     ChannelType,
     Construction,
     createPromise,
+    Duration,
     Environment,
     Environmental,
     ImmutableSet,
@@ -20,11 +21,13 @@ import {
     isIPv6,
     Logger,
     MatterError,
+    Minutes,
     NetInterfaceSet,
     NoResponseTimeoutError,
     ObservableSet,
+    Seconds,
+    ServerAddress,
     ServerAddressIp,
-    serverAddressToString,
     STANDARD_MATTER_PORT,
     Time,
     Timer,
@@ -50,8 +53,8 @@ import { PeerAddressStore, PeerDataStore } from "./PeerAddressStore.js";
 
 const logger = Logger.get("PeerSet");
 
-const RECONNECTION_POLLING_INTERVAL_MS = 600_000; // 10 minutes
-const RETRANSMISSION_DISCOVERY_TIMEOUT_S = 5;
+const RECONNECTION_POLLING_INTERVAL = Minutes(10);
+const RETRANSMISSION_DISCOVERY_TIMEOUT = Seconds(5);
 
 /**
  * Types of discovery that may be performed when connecting operationally.
@@ -78,7 +81,7 @@ export class UnknownNodeError extends MatterError {}
  */
 export interface DiscoveryOptions {
     discoveryType?: NodeDiscoveryType;
-    timeoutSeconds?: number;
+    timeout?: Duration;
     discoveryData?: DiscoveryData;
 }
 
@@ -333,7 +336,10 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                 await this.#sessions.removeAllSessionsForNode(address);
                 throw new RetransmissionLimitReachedError(`No operational address found for ${PeerAddress(address)}`);
             }
-            if ((await this.#reconnectKnownAddress(address, operationalAddress, discoveryData, 2_000)) === undefined) {
+            if (
+                (await this.#reconnectKnownAddress(address, operationalAddress, discoveryData, Seconds(2))) ===
+                undefined
+            ) {
                 throw new RetransmissionLimitReachedError(`${PeerAddress(address)} is not reachable.`);
             }
         });
@@ -438,10 +444,10 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         address = PeerAddress(address);
         const {
             discoveryType: requestedDiscoveryType = NodeDiscoveryType.FullDiscovery,
-            timeoutSeconds,
+            timeout,
             discoveryData = this.#peersByAddress.get(address)?.discoveryData,
         } = discoveryOptions;
-        if (timeoutSeconds !== undefined && requestedDiscoveryType !== NodeDiscoveryType.TimedDiscovery) {
+        if (timeout !== undefined && requestedDiscoveryType !== NodeDiscoveryType.TimedDiscovery) {
             throw new ImplementationError("Cannot set timeout without timed discovery.");
         }
         if (requestedDiscoveryType === NodeDiscoveryType.RetransmissionDiscovery) {
@@ -480,7 +486,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                 operationalAddress,
                 discoveryData,
                 // When we use a timeout for discovery also use this for reconnecting to the node
-                timeoutSeconds ? timeoutSeconds * 1000 : undefined,
+                timeout,
             );
             if (directReconnection !== undefined) {
                 return directReconnection;
@@ -515,14 +521,14 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                 const { promise, resolver, rejecter } = createPromise<MessageChannel>();
 
                 logger.debug(
-                    `Starting reconnection polling for ${serverAddressToString(lastOperationalAddress)} (Interval ${RECONNECTION_POLLING_INTERVAL_MS / 1000}s)`,
+                    `Starting reconnection polling for ${ServerAddress.urlFor(lastOperationalAddress)} (interval ${Duration.format(RECONNECTION_POLLING_INTERVAL)})`,
                 );
                 reconnectionPollingTimer = Time.getPeriodicTimer(
                     "Controller reconnect",
-                    RECONNECTION_POLLING_INTERVAL_MS,
+                    RECONNECTION_POLLING_INTERVAL,
                     async () => {
                         try {
-                            logger.debug(`Polling for device at ${serverAddressToString(lastOperationalAddress)} ...`);
+                            logger.debug(`Polling for device at ${ServerAddress.urlFor(lastOperationalAddress)} ...`);
                             const result = await this.#reconnectKnownAddress(
                                 address,
                                 lastOperationalAddress,
@@ -565,8 +571,8 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                 this.#sessions.fabricFor(address),
                 address.nodeId,
                 mdnsScanner,
-                timeoutSeconds,
-                timeoutSeconds === undefined,
+                timeout,
+                timeout === undefined,
             );
             const { stopTimerFunc } = this.#runningPeerDiscoveries.get(address) ?? {};
             stopTimerFunc?.();
@@ -611,21 +617,21 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         address: PeerAddress,
         operationalAddress: ServerAddressIp,
         discoveryData?: DiscoveryData,
-        expectedProcessingTimeMs?: number,
+        expectedProcessingTime?: Duration,
     ): Promise<MessageChannel | undefined> {
         address = PeerAddress(address);
 
         const { ip, port } = operationalAddress;
-        const startTime = Time.nowMs();
+        const startTime = Time.nowMs;
         try {
             logger.debug(
                 `Resuming connection to ${PeerAddress(address)} at ${ip}:${port}${
-                    expectedProcessingTimeMs !== undefined
-                        ? ` with expected processing time of ${expectedProcessingTimeMs}ms`
+                    expectedProcessingTime !== undefined
+                        ? ` with expected processing time of ${Duration.format(expectedProcessingTime)}`
                         : ""
                 }`,
             );
-            const channel = await this.#pair(address, operationalAddress, discoveryData, expectedProcessingTimeMs);
+            const channel = await this.#pair(address, operationalAddress, discoveryData, expectedProcessingTime);
             await this.#addOrUpdatePeer(address, operationalAddress);
             return channel;
         } catch (error) {
@@ -669,9 +675,9 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         address: PeerAddress,
         operationalServerAddress: ServerAddressIp,
         discoveryData?: DiscoveryData,
-        expectedProcessingTimeMs?: number,
+        expectedProcessingTime?: Duration,
     ) {
-        logger.debug(`Pair with ${address} at ${serverAddressToString(operationalServerAddress)}`);
+        logger.debug(`Pair with ${address} at ${ServerAddress.urlFor(operationalServerAddress)}`);
         const { ip, port } = operationalServerAddress;
         // Do CASE pairing
         const isIpv6Address = isIPv6(ip);
@@ -693,9 +699,9 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         const unsecureSession = this.#sessions.createInsecureSession({
             // Use the session parameters from MDNS announcements when available and rest is assumed to be fallbacks
             sessionParameters: {
-                idleIntervalMs: discoveryData?.SII ?? sessionParameters?.idleIntervalMs,
-                activeIntervalMs: discoveryData?.SAI ?? sessionParameters?.activeIntervalMs,
-                activeThresholdMs: discoveryData?.SAT ?? sessionParameters?.activeThresholdMs,
+                idleInterval: discoveryData?.SII ?? sessionParameters?.idleInterval,
+                activeInterval: discoveryData?.SAI ?? sessionParameters?.activeInterval,
+                activeThreshold: discoveryData?.SAT ?? sessionParameters?.activeThreshold,
             },
             isInitiator: true,
         });
@@ -704,7 +710,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             const operationalSecureSession = await this.#doCasePair(
                 new MessageChannel(operationalChannel, unsecureSession),
                 address,
-                expectedProcessingTimeMs,
+                expectedProcessingTime,
             );
 
             const channel = new MessageChannel(operationalChannel, operationalSecureSession);
@@ -723,7 +729,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     async #doCasePair(
         unsecureMessageChannel: MessageChannel,
         address: PeerAddress,
-        expectedProcessingTimeMs?: number,
+        expectedProcessingTime?: Duration,
     ): Promise<SecureSession> {
         const fabric = this.#sessions.fabricFor(address);
         let exchange: MessageExchange | undefined;
@@ -734,7 +740,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                 exchange,
                 fabric,
                 address.nodeId,
-                expectedProcessingTimeMs,
+                expectedProcessingTime,
             );
 
             if (!resumed) {
@@ -755,7 +761,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                         `Case client: Resumption record seems outdated for Fabric ${NodeId.toHexString(fabric.nodeId)} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(address.nodeId)}. Retrying pairing without resumption...`,
                     );
                     // An endless loop should not happen here, as the resumption record is deleted in the next step
-                    return await this.#doCasePair(unsecureMessageChannel, address, expectedProcessingTimeMs);
+                    return await this.#doCasePair(unsecureMessageChannel, address, expectedProcessingTime);
                 }
             }
             throw error;
@@ -844,7 +850,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         this.#runningPeerDiscoveries.set(address, { type: NodeDiscoveryType.RetransmissionDiscovery });
         this.#scanners
             .scannerFor(ChannelType.UDP)
-            ?.findOperationalDevice(fabric, nodeId, RETRANSMISSION_DISCOVERY_TIMEOUT_S, true)
+            ?.findOperationalDevice(fabric, nodeId, RETRANSMISSION_DISCOVERY_TIMEOUT, true)
             .catch(error => {
                 logger.error(`Failed to discover ${address} after resubmission started.`, error);
             })

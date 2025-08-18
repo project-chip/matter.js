@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ServerNode } from "@matter/main";
+import { ServerNode, VendorId } from "@matter/main";
 import { MovementDirection, MovementType, WindowCoveringServer } from "@matter/main/behaviors/window-covering";
 import { OnOffLightDevice, OnOffLightRequirements } from "@matter/main/devices/on-off-light";
 import { WindowCoveringDevice } from "@matter/main/devices/window-covering";
@@ -68,7 +68,7 @@ const node = new ServerNode({
     basicInformation: {
         vendorName: "Acme Corporation",
         productName: "Excelsior 1000 EZ-Nite™",
-        vendorId: 0xfff1,
+        vendorId: VendorId(0xfff1),
         productId: 0x8000,
         serialNumber: "1234-12345-123",
     },

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AsyncObservable, InternalError, Logger } from "#general";
+import { AsyncObservable, Duration, InternalError, Logger } from "#general";
 import { NodeSession } from "#session/NodeSession.js";
 import { TlvAttributePath, TlvDataVersionFilter, TlvEventFilter, TlvEventPath, TypeFromSchema } from "#types";
 
@@ -30,7 +30,7 @@ export abstract class Subscription {
     #isCanceledByPeer?: boolean;
     #criteria: SubscriptionCriteria;
     #cancelled = AsyncObservable<[subscription: Subscription]>();
-    #maxIntervalMs?: number;
+    #maxInterval?: Duration;
 
     constructor(session: NodeSession, id: SubscriptionId, criteria: SubscriptionCriteria) {
         this.#session = session;
@@ -62,22 +62,18 @@ export abstract class Subscription {
         return this.#cancelled;
     }
 
-    get maxIntervalMs(): number {
-        if (this.#maxIntervalMs === undefined) {
-            throw new InternalError("Subscription MaxIntervalMs accessed before it was set");
+    get maxInterval() {
+        if (this.#maxInterval === undefined) {
+            throw new InternalError("Subscription maxInterval accessed before it was set");
         }
-        return this.#maxIntervalMs;
+        return this.#maxInterval;
     }
 
-    set maxIntervalMs(value: number) {
-        if (this.#maxIntervalMs !== undefined) {
-            throw new InternalError("Subscription MaxIntervalMs set twice. This should never happen.");
+    set maxInterval(value: Duration) {
+        if (this.#maxInterval !== undefined) {
+            throw new InternalError("Subscription maxInterval set twice");
         }
-        this.#maxIntervalMs = value;
-    }
-
-    get maxInterval(): number {
-        return Math.ceil(this.maxIntervalMs / 1000);
+        this.#maxInterval = value;
     }
 
     /**

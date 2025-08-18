@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CancelablePromise, Diagnostic, Logger, MaybePromise, withTimeout } from "#general";
+import { CancelablePromise, Diagnostic, Duration, Logger, MaybePromise, withTimeout } from "#general";
 import { ClientNodeFactory } from "#node/client/ClientNodeFactory.js";
 import type { ClientNode } from "#node/ClientNode.js";
 import type { ServerNode } from "#node/ServerNode.js";
@@ -224,8 +224,8 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
 
         let promise = DiscoveryAggregateError.allSettled(promises, `${this} failed`);
 
-        if (this.#options.timeoutSeconds !== undefined) {
-            promise = withTimeout(this.#options.timeoutSeconds * 1_000, promise, this.stop.bind(this));
+        if (this.#options.timeout !== undefined) {
+            promise = withTimeout(this.#options.timeout, promise, this.stop.bind(this));
         }
 
         promise.then(this.#afterDiscovery.bind(this)).catch(this.#reject);
@@ -260,7 +260,7 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
 
 export namespace Discovery {
     export type Options = CommissionableDeviceIdentifiers & {
-        timeoutSeconds?: number;
+        timeout?: Duration;
     };
 
     export type InstanceOptions = Options & {

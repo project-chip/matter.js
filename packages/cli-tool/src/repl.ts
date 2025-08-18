@@ -6,7 +6,7 @@
 
 import { Domain } from "#domain.js";
 import { IncompleteError } from "#errors.js";
-import { Environment, InternalError, Observable, RuntimeService, StorageService, Time } from "#general";
+import { Environment, InternalError, Millis, Observable, RuntimeService, StorageService, Time } from "#general";
 import { isCommand } from "#parser.js";
 import colors from "ansi-colors";
 import { readFile } from "node:fs/promises";
@@ -42,7 +42,7 @@ export async function repl() {
 
 // Maybe worth sharing spinner implementation with tools.  Maybe not
 const SPINNER = "◐◓◑◒";
-const SPINNER_INTERVAL = 100;
+const SPINNER_INTERVAL = Millis(100);
 
 // Node.js repl implementation does good stuff for us so want to keep it but we don't want the "." commands and it has
 // no way to disable those.  So use this prefix as a hack to prevent it from noticing lines that start with "."

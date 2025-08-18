@@ -228,36 +228,17 @@ export namespace ClusterType {
             : never;
     };
 
-    export type RelaxTypes<V> = V extends number
-        ? number
-        : V extends bigint
-          ? bigint
+    export type PatchType<V> = V extends (infer E)[]
+        ? { readonly [K in `${number}`]: PatchType<E> } | Readonly<PatchType<E>[]>
+        : V extends boolean | number | bigint | string
+          ? V
           : V extends object
             ? V extends (...args: any[]) => any
-                ? V
+                ? never
                 : {
-                      [K in keyof V]: RelaxTypes<V[K]>;
+                      readonly [K in keyof V]?: PatchType<V[K]>;
                   }
             : V;
-
-    export type PatchType<V> = V extends (infer E)[]
-        ? Record<`${number}`, PatchType<E>> | PatchType<E>[]
-        : V extends number
-          ? number
-          : V extends bigint
-            ? bigint
-            : V extends object
-              ? V extends (...args: any[]) => any
-                  ? never
-                  : {
-                        [K in keyof V]?: PatchType<V[K]>;
-                    }
-              : V;
-
-    /**
-     * A slightly relaxed version of AttributeValues for input.
-     */
-    export type InputAttributeValues<T extends ClusterType> = RelaxTypes<AttributeValues<T>>;
 
     /**
      * Matter clusters support named "features" that enable sets of optional functionality.

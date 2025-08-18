@@ -7,7 +7,7 @@
 
 // This demonstrates bringing a "socket" device with electrical power and energy measurement online with matter.js.
 
-import { Endpoint, ServerNode, Time } from "@matter/main";
+import { Endpoint, Seconds, ServerNode, Time } from "@matter/main";
 import { ElectricalEnergyMeasurementServer, ElectricalPowerMeasurementServer } from "@matter/main/behaviors";
 import { ElectricalEnergyMeasurement, ElectricalPowerMeasurement } from "@matter/main/clusters";
 import { OnOffPlugInUnitDevice } from "@matter/main/devices";
@@ -97,7 +97,7 @@ measuredSocketEndpoint.events.onOff.onOff$Changed.on(value => {
 // We will simulate the device sending measurements every 10 seconds.
 // When the device is turned off, the measurements will be zero, otherwise they will be random values.
 // Note: This is just example code. In a real device, you would set the data to 0 once the device is turned off.
-const fakeMeasurementTimer = Time.getPeriodicTimer("fakeMeasurement", 10_000, async () => {
+const fakeMeasurementTimer = Time.getPeriodicTimer("fakeMeasurement", Seconds(10), async () => {
     const turnedOn = measuredSocketEndpoint.state.onOff.onOff;
     const power = turnedOn ? Math.round(Math.random() * 1000) : 0; // W
     const current = turnedOn ? Math.round(Math.random() * 32) : 0; // A

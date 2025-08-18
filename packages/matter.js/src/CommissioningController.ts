@@ -13,6 +13,7 @@ import {
     ImplementationError,
     InternalError,
     Logger,
+    Minutes,
     NetInterfaceSet,
     Network,
     NoAddressAvailableError,
@@ -662,13 +663,13 @@ export class CommissioningController {
         identifierData: CommissionableDeviceIdentifiers,
         discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>,
         discoveredCallback?: (device: CommissionableDevice) => void,
-        timeoutSeconds = 900,
+        timeout = Minutes(15),
     ) {
         this.#assertIsAddedToMatterServer();
         const controller = this.#assertControllerIsStarted();
         return await ControllerDiscovery.discoverCommissionableDevices(
             controller.collectScanners(discoveryCapabilities),
-            timeoutSeconds,
+            timeout,
             identifierData,
             discoveredCallback,
         );

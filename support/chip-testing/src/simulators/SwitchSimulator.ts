@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, Time, Timer } from "@matter/general";
+import { Duration, Logger, Millis, Time, Timer } from "@matter/general";
 import { Endpoint } from "@matter/main";
 import { SwitchServer } from "@matter/main/behaviors/switch";
 import { BackchannelCommand } from "@matter/testing";
@@ -14,7 +14,7 @@ const logger = Logger.get("SwitchSimulator");
 const NEUTRAL_SWITCH_POSITION = 0;
 
 export class SwitchSimulator {
-    #switchActions = new Array<{ position: number; delay?: number }>();
+    #switchActions = new Array<{ position: number; delay?: Duration }>();
     #endpoint: Endpoint;
     #executionDelayTimer?: Timer;
 
@@ -22,7 +22,7 @@ export class SwitchSimulator {
         this.#endpoint = endpoint;
     }
 
-    executeActions(actions: { position: number; delay?: number }[]) {
+    executeActions(actions: { position: number; delay?: Duration }[]) {
         if (this.#switchActions.length !== 0 || this.#executionDelayTimer !== undefined) {
             throw new Error("Still unprocessed actions existing ... Invalid state!");
         }
@@ -82,11 +82,11 @@ export class SwitchSimulator {
         const simulator = new SwitchSimulator(endpoint);
 
         // Configure cluster according to tests
-        await endpoint.setStateOf(SwitchServer, { longPressDelay: command.longPressDelayMillis });
+        await endpoint.setStateOf(SwitchServer, { longPressDelay: Millis(command.longPressDelayMillis) });
 
         // Execute tests
         simulator.executeActions([
-            { position: command.buttonId, delay: command.longPressDurationMillis }, // LongPressDelayMillis is ignored because just used to send the LogPress event?
+            { position: command.buttonId, delay: Millis(command.longPressDurationMillis) }, // LongPressDelayMillis is ignored because just used to send the LogPress event?
             { position: NEUTRAL_SWITCH_POSITION },
         ]);
     }
@@ -112,20 +112,22 @@ export class SwitchSimulator {
         const simulator = new SwitchSimulator(endpoint);
 
         // Configure cluster according to tests
-        await endpoint.setStateOf(SwitchServer, { multiPressDelay: command.multiPressReleasedTimeMillis + 500 });
+        await endpoint.setStateOf(SwitchServer, {
+            multiPressDelay: Millis(command.multiPressReleasedTimeMillis + 500),
+        });
 
         // Collect test steps
-        const actions: { position: number; delay?: number }[] = [];
+        const actions: { position: number; delay?: Duration }[] = [];
 
         for (let i = 0; i < command.multiPressNumPresses; i++) {
             actions.push({
                 position: command.buttonId,
-                delay: command.multiPressPressedTimeMillis,
+                delay: Millis(command.multiPressPressedTimeMillis),
             });
             if (i < command.multiPressNumPresses - 1) {
                 actions.push({
                     position: NEUTRAL_SWITCH_POSITION,
-                    delay: command.multiPressReleasedTimeMillis,
+                    delay: Millis(command.multiPressReleasedTimeMillis),
                 });
             }
         }

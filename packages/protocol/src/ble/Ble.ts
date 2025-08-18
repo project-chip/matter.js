@@ -4,7 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Channel, ChannelType, MatterError, NetInterface, NoProviderError, TransportInterface } from "#general";
+import {
+    Bytes,
+    Channel,
+    ChannelType,
+    Duration,
+    MatterError,
+    NetInterface,
+    NoProviderError,
+    TransportInterface,
+} from "#general";
 import { Scanner } from "../common/Scanner.js";
 import { BLE_MAX_MATTER_PAYLOAD_SIZE } from "./BleConsts.js";
 
@@ -28,7 +37,7 @@ export abstract class Ble {
 }
 
 export interface BlePeripheralInterface extends TransportInterface {
-    advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, intervalMs?: number): Promise<void>;
+    advertise(advertiseData: Bytes, additionalAdvertisementData?: Bytes, interval?: Duration): Promise<void>;
     stopAdvertising(): Promise<void>;
 }
 

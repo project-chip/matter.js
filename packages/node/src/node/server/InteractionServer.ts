@@ -10,11 +10,14 @@ import { AccessControlServer } from "#behaviors/access-control";
 import {
     Crypto,
     Diagnostic,
+    Duration,
     InternalError,
     Logger,
     MatterError,
     MaybePromise,
+    Millis,
     Observable,
+    Seconds,
     ServerAddressIp,
 } from "#general";
 import { GLOBAL_IDS, Specification } from "#model";
@@ -63,13 +66,13 @@ const logger = Logger.get("InteractionServer");
 export interface PeerSubscription {
     subscriptionId: number;
     peerAddress: PeerAddress;
-    minIntervalFloorSeconds: number;
-    maxIntervalCeilingSeconds: number;
+    minIntervalFloor: Duration;
+    maxIntervalCeiling: Duration;
     attributeRequests?: TypeFromSchema<typeof TlvAttributePath>[];
     eventRequests?: TypeFromSchema<typeof TlvEventPath>[];
     isFabricFiltered: boolean;
-    maxInterval: number;
-    sendInterval: number;
+    maxInterval: Duration;
+    sendInterval: Duration;
     operationalAddress?: ServerAddressIp;
 }
 
@@ -516,12 +519,13 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         }
 
         const maxInterval = subscription.maxInterval;
+
         // Then send the subscription response
         await messenger.send(
             MessageType.SubscribeResponse,
             TlvSubscribeResponse.encode({
                 subscriptionId,
-                maxInterval,
+                maxInterval: Seconds.of(maxInterval),
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             }),
             {
@@ -569,8 +573,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 eventFilters,
                 isFabricFiltered,
             },
-            minIntervalFloorSeconds,
-            maxIntervalCeilingSeconds,
+            minIntervalFloor: Seconds(minIntervalFloorSeconds),
+            maxIntervalCeiling: Seconds(maxIntervalCeilingSeconds),
             subscriptionOptions: this.#subscriptionConfig,
         });
 
@@ -586,7 +590,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         logger.info(
             `Successfully created subscription ${id} for Session ${
                 session.id
-            } to ${session.peerAddress}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${subscription.maxInterval} seconds (sendInterval = ${subscription.sendInterval} seconds)`,
+            } to ${session.peerAddress}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${Duration.format(subscription.maxInterval)} (sendInterval = ${Duration.format(subscription.sendInterval)})`,
         );
         return subscription;
     }
@@ -597,8 +601,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             attributeRequests,
             eventRequests,
             isFabricFiltered,
-            minIntervalFloorSeconds,
-            maxIntervalCeilingSeconds,
+            minIntervalFloor,
+            maxIntervalCeiling,
             maxInterval,
             sendInterval,
         }: PeerSubscription,
@@ -620,8 +624,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         const subscription = new ServerSubscription({
             id: subscriptionId,
             context,
-            minIntervalFloorSeconds,
-            maxIntervalCeilingSeconds,
+            minIntervalFloor,
+            maxIntervalCeiling,
             criteria: {
                 attributeRequests,
                 eventRequests,
@@ -644,7 +648,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             logger.info(
                 `Successfully re-established subscription ${subscriptionId} for Session ${
                     session.id
-                } to ${session.peerAddress}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${subscription.maxInterval} seconds (sendInterval = ${subscription.sendInterval} seconds)`,
+                } to ${session.peerAddress}. Updates: ${minIntervalFloor} - ${maxIntervalCeiling} => ${Duration.format(subscription.maxInterval)} (sendInterval = ${Duration.format(subscription.sendInterval)})`,
             );
         } catch (error) {
             await subscription.close(); // Cleanup
@@ -811,7 +815,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     }
 
     handleTimedRequest(exchange: MessageExchange, { timeout, interactionModelRevision }: TimedRequest) {
-        logger.debug(`Received timed request (${timeout}ms) from ${exchange.channel.name}`);
+        const interval = Millis(timeout);
+
+        logger.debug(`Received timed request (${Duration.format(interval)}) from ${exchange.channel.name}`);
 
         if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
             logger.debug(
@@ -819,7 +825,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             );
         }
 
-        exchange.startTimedInteraction(timeout);
+        exchange.startTimedInteraction(interval);
     }
 
     async close() {

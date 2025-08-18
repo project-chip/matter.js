@@ -72,7 +72,7 @@ export class SessionsBehavior extends Behavior {
             return;
         }
 
-        // When subscription was added then inform SubscriptionBehavior
+        // When subscription was added then inform SubscriptionsBehavior
         if (session.subscriptions.has(subscription)) {
             this.events.subscriptionAdded.emit(subscription);
         }

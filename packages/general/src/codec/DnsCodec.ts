@@ -4,11 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Duration } from "#time/Duration.js";
+import { Seconds } from "#time/TimeUnit.js";
 import { InternalError, NotImplementedError, UnexpectedDataError } from "../MatterError.js";
 import { Bytes, Endian } from "../util/Bytes.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { ipv4BytesToString, ipv4ToBytes, ipv6BytesToString, ipv6ToBytes, isIPv4, isIPv6 } from "../util/Ip.js";
+
+export const DEFAULT_MDNS_TTL = Seconds(120);
 
 /**
  * The maximum MDNS message size to usually fit into one UDP network MTU packet. Data are split into multiple messages
@@ -16,7 +20,12 @@ import { ipv4BytesToString, ipv4ToBytes, ipv6BytesToString, ipv6ToBytes, isIPv4,
  */
 export const MAX_MDNS_MESSAGE_SIZE = 1232; // 1280bytes (IPv6 packet size) - 8bytes (UDP header) - 40bytes (IPv6 IP header, IPv4 is only 20bytes)
 
-export const PtrRecord = (name: string, ptr: string, ttl = 120, flushCache = false): DnsRecord<string> => ({
+export const PtrRecord = (
+    name: string,
+    ptr: string,
+    ttl = DEFAULT_MDNS_TTL,
+    flushCache = false,
+): DnsRecord<string> => ({
     name,
     value: ptr,
     ttl,
@@ -24,7 +33,7 @@ export const PtrRecord = (name: string, ptr: string, ttl = 120, flushCache = fal
     recordClass: DnsRecordClass.IN,
     flushCache,
 });
-export const ARecord = (name: string, ip: string, ttl = 120, flushCache = false): DnsRecord<string> => ({
+export const ARecord = (name: string, ip: string, ttl = DEFAULT_MDNS_TTL, flushCache = false): DnsRecord<string> => ({
     name,
     value: ip,
     ttl,
@@ -32,7 +41,12 @@ export const ARecord = (name: string, ip: string, ttl = 120, flushCache = false)
     recordClass: DnsRecordClass.IN,
     flushCache,
 });
-export const AAAARecord = (name: string, ip: string, ttl = 120, flushCache = false): DnsRecord<string> => ({
+export const AAAARecord = (
+    name: string,
+    ip: string,
+    ttl = DEFAULT_MDNS_TTL,
+    flushCache = false,
+): DnsRecord<string> => ({
     name,
     value: ip,
     ttl,
@@ -40,7 +54,12 @@ export const AAAARecord = (name: string, ip: string, ttl = 120, flushCache = fal
     recordClass: DnsRecordClass.IN,
     flushCache,
 });
-export const TxtRecord = (name: string, entries: string[], ttl = 120, flushCache = false): DnsRecord<string[]> => ({
+export const TxtRecord = (
+    name: string,
+    entries: string[],
+    ttl = DEFAULT_MDNS_TTL,
+    flushCache = false,
+): DnsRecord<string[]> => ({
     name,
     value: entries,
     ttl,
@@ -51,7 +70,7 @@ export const TxtRecord = (name: string, entries: string[], ttl = 120, flushCache
 export const SrvRecord = (
     name: string,
     srv: SrvRecordValue,
-    ttl = 120,
+    ttl = DEFAULT_MDNS_TTL,
     flushCache = false,
 ): DnsRecord<SrvRecordValue> => ({
     name,
@@ -81,7 +100,7 @@ export type DnsRecord<T = unknown> = {
     recordType: DnsRecordType;
     recordClass: DnsRecordClass;
     flushCache?: boolean;
-    ttl: number;
+    ttl: Duration;
     value: T;
 };
 
@@ -168,7 +187,7 @@ export class DnsCodec {
         const classInt = reader.readUInt16();
         const flushCache = (classInt & 0x8000) !== 0;
         const recordClass = classInt & 0x7fff;
-        const ttl = reader.readUInt32();
+        const ttl = Seconds(reader.readUInt32());
         const valueLength = reader.readUInt16();
         const valueBytes = reader.readByteArray(valueLength);
         const value = this.decodeRecordValue(valueBytes, recordType, message);
@@ -298,7 +317,7 @@ export class DnsCodec {
         writer.writeByteArray(this.encodeQName(name));
         writer.writeUInt16(recordType);
         writer.writeUInt16(recordClass | (flushCache ? 0x8000 : 0));
-        writer.writeUInt32(ttl);
+        writer.writeUInt32(Seconds.of(ttl));
         const encodedValue = this.encodeRecordValue(value, recordType);
         writer.writeUInt16(encodedValue.byteLength);
         writer.writeByteArray(encodedValue);

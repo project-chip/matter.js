@@ -8,9 +8,11 @@ import { ReadResult } from "#action/response/ReadResult.js";
 import {
     Bytes,
     Diagnostic,
+    Duration,
     InternalError,
     Logger,
     MatterFlowError,
+    Millis,
     NoResponseTimeoutError,
     UnexpectedDataError,
 } from "#general";
@@ -120,7 +122,7 @@ class InteractionMessenger {
 
     async waitForSuccess(
         expectedMessageInfo: string,
-        options?: { expectedProcessingTimeMs?: number; timeoutMs?: number },
+        options?: { expectedProcessingTime?: Duration; timeout?: Duration },
     ) {
         // If the status is not Success, this would throw an Error.
         await this.nextMessage(MessageType.StatusResponse, options, `Success-${expectedMessageInfo}`);
@@ -129,8 +131,8 @@ class InteractionMessenger {
     async nextMessage(
         expectedMessageType: number,
         options?: {
-            expectedProcessingTimeMs?: number;
-            timeoutMs?: number;
+            expectedProcessingTime?: Duration;
+            timeout?: Duration;
         },
         expectedMessageInfo?: string,
     ) {
@@ -140,8 +142,8 @@ class InteractionMessenger {
     async anyNextMessage(
         expectedMessageInfo: string,
         options?: {
-            expectedProcessingTimeMs?: number;
-            timeoutMs?: number;
+            expectedProcessingTime?: Duration;
+            timeout?: Duration;
         },
     ) {
         return this.#nextMessage(undefined, options, expectedMessageInfo);
@@ -150,13 +152,13 @@ class InteractionMessenger {
     async #nextMessage(
         expectedMessageType?: number,
         options?: {
-            expectedProcessingTimeMs?: number;
-            timeoutMs?: number;
+            expectedProcessingTime?: Duration;
+            timeout?: Duration;
         },
         expectedMessageInfo?: string,
     ) {
-        const { expectedProcessingTimeMs, timeoutMs } = options ?? {};
-        const message = await this.exchange.nextMessage({ expectedProcessingTimeMs, timeoutMs });
+        const { expectedProcessingTime, timeout } = options ?? {};
+        const message = await this.exchange.nextMessage({ expectedProcessingTime, timeout });
         const messageType = message.payloadHeader.messageType;
         if (expectedMessageType !== undefined && expectedMessageInfo === undefined) {
             expectedMessageInfo = MessageType[expectedMessageType];
@@ -697,7 +699,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
                 logContext,
             });
             // We wait for a Success Message - when we don't request an Ack only wait 500ms
-            await this.waitForSuccess("DataReport", { timeoutMs: waitForAck ? undefined : 500 });
+            await this.waitForSuccess("DataReport", { timeout: waitForAck ? undefined : Millis(500) });
         }
     }
 
@@ -778,8 +780,8 @@ export class InteractionServerMessenger extends InteractionMessenger {
 }
 
 export class IncomingInteractionClientMessenger extends InteractionMessenger {
-    async waitFor(expectedMessageInfo: string, messageType: number, timeoutMs?: number) {
-        const message = await this.anyNextMessage(expectedMessageInfo, { timeoutMs });
+    async waitFor(expectedMessageInfo: string, messageType: number, timeout?: Duration) {
+        const message = await this.anyNextMessage(expectedMessageInfo, { timeout });
         const {
             payloadHeader: { messageType: receivedMessageType },
         } = message;
@@ -1031,13 +1033,13 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         };
     }
 
-    async sendInvokeCommand(invokeRequest: InvokeRequest, expectedProcessingTimeMs?: number) {
+    async sendInvokeCommand(invokeRequest: InvokeRequest, expectedProcessingTime?: Duration) {
         if (invokeRequest.suppressResponse) {
             await this.requestWithSuppressedResponse(
                 MessageType.InvokeRequest,
                 TlvInvokeRequest,
                 invokeRequest,
-                expectedProcessingTimeMs,
+                expectedProcessingTime,
             );
         } else {
             return await this.request(
@@ -1046,7 +1048,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
                 MessageType.InvokeResponse,
                 TlvInvokeResponse,
                 invokeRequest,
-                expectedProcessingTimeMs,
+                expectedProcessingTime,
             );
         }
     }
@@ -1065,9 +1067,9 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         }
     }
 
-    sendTimedRequest(timeoutSeconds: number) {
+    sendTimedRequest(timeout: Duration) {
         return this.request(MessageType.TimedRequest, TlvTimedRequest, MessageType.StatusResponse, TlvStatusResponse, {
-            timeout: timeoutSeconds,
+            timeout,
             interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
         });
     }
@@ -1076,11 +1078,11 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         requestMessageType: number,
         requestSchema: TlvSchema<RequestT>,
         request: RequestT,
-        expectedProcessingTimeMs?: number,
+        expectedProcessingTime?: Duration,
     ): Promise<void> {
         await this.send(requestMessageType, requestSchema.encode(request), {
             expectAckOnly: true,
-            expectedProcessingTimeMs,
+            expectedProcessingTime: expectedProcessingTime,
             logContext: {
                 invokeFlags: Diagnostic.asFlags({
                     suppressResponse: true,
@@ -1095,15 +1097,15 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         responseMessageType: number,
         responseSchema: TlvSchema<ResponseT>,
         request: RequestT,
-        expectedProcessingTimeMs?: number,
+        expectedProcessingTime?: Duration,
     ): Promise<ResponseT> {
         await this.send(requestMessageType, requestSchema.encode(request), {
             expectAckOnly: false,
-            expectedProcessingTimeMs,
+            expectedProcessingTime,
         });
         const responseMessage = await this.nextMessage(
             responseMessageType,
-            { expectedProcessingTimeMs },
+            { expectedProcessingTime },
             MessageType[responseMessageType] ?? `Response-${Diagnostic.hex(responseMessageType)}`,
         );
         return responseSchema.decode(responseMessage.payload);
