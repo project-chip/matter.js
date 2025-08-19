@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { STANDARD_MATTER_PORT } from "#general";
+import { MaybePromise, STANDARD_MATTER_PORT } from "#general";
 import { Behavior } from "../../Behavior.js";
 import type { NetworkRuntime } from "./NetworkRuntime.js";
 
@@ -24,6 +24,11 @@ export class NetworkBehavior extends Behavior {
     override [Symbol.asyncDispose]() {
         return this.internal.runtime?.close();
     }
+
+    /**
+     * Invoked by node when networking is ready.
+     */
+    startup(): MaybePromise {}
 }
 
 export namespace NetworkBehavior {

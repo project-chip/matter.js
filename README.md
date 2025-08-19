@@ -118,6 +118,7 @@ Devices created with matter.js/matter-node.js have been tested with:
 - **Tuya Smart (SmartLife) app**: Fully working
 - **Samsung SmartThings (Station or Hub v2 and later)**: Fully working
 - **LG ThinQ**: Fully working, beside glitches in LG software sometimes
+- **Homey Pro**: Fully working
 - **Home Assistant - Matter integration**: Fully working
 - **OpenHAB - Matter Binding**: Fully working (openHAB Matter Client in openHAB 5.0)
 - **Aqara Hubs**: Fully working with Aqara starting matter.js 0.12.3 and newest Apps and controller firmwares

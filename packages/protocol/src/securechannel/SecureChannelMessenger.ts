@@ -129,7 +129,7 @@ export class SecureChannelMessenger {
         return this.#sendStatusReport(GeneralStatusCode.Success, SecureChannelStatusCode.CloseSession, false);
     }
 
-    getChannelName() {
+    get channelName() {
         return this.exchange.channel.channel.name;
     }
 

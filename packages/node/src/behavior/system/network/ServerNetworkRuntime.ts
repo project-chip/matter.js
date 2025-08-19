@@ -293,6 +293,8 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         if (this.owner.stateOf(CommissioningServer).commissioned) {
             this.enableMdnsAdvertising();
         }
+
+        await this.owner.act(agent => this.owner.lifecycle.online.emit(agent.context));
     }
 
     override async [Construction.construct]() {

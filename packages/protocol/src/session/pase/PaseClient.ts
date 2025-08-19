@@ -115,7 +115,7 @@ export class PaseClient {
             peerSessionParameters: sessionParameters,
         });
         await messenger.close();
-        logger.info(`Pase client: Paired successfully with ${messenger.getChannelName()}.`);
+        logger.info(`Pase client: Paired successfully with ${messenger.channelName}.`);
 
         return secureSession;
     }

@@ -14,14 +14,10 @@ export class NetworkClient extends NetworkBehavior {
     declare internal: NetworkClient.Internal;
     declare state: NetworkClient.State;
 
-    override initialize() {
-        this.reactTo(this.#node.lifecycle.online, this.startup);
-    }
+    override async startup() {
+        const { startupSubscription, isDisabled } = this.state;
 
-    protected async startup() {
-        const { startupSubscription } = this.state;
-
-        if (startupSubscription === null) {
+        if (startupSubscription === null || isDisabled) {
             return;
         }
 
@@ -59,6 +55,12 @@ export class NetworkClient extends NetworkBehavior {
                 default: { type: "properties", properties: {} },
                 quality: "XN",
             }),
+
+            FieldElement({
+                name: "isDisabled",
+                type: "bool",
+                quality: "N",
+            }),
         ],
     });
 }
@@ -72,11 +74,16 @@ export namespace NetworkClient {
         /**
          * A subscription installed when the node is first commissioned and when the service is restarted.
          *
-         * The default subscription is a wildcard for all attributes and of the node.  You can set to undefined or
-         * filter the fields and values but only values selected by this subscription will update automatically.
+         * The default subscription is a wildcard for all attributes of the node.  You can set to undefined or filter
+         * the fields and values but only values selected by this subscription will update automatically.
          *
          * Set to null to disable automatic subscription.
          */
         startupSubscription?: Subscribe | null;
+
+        /**
+         * If true, the matter.js will not perform network communication with the node.
+         */
+        isDisabled = false;
     }
 }
