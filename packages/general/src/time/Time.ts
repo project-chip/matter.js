@@ -109,7 +109,7 @@ export class Time {
 if (!performance || typeof performance.now !== "function" || typeof performance.timeOrigin !== "number") {
     Object.defineProperty(Time.prototype, "nowUs", {
         get() {
-            return Time.nowMs * 1000; // Fallback is a bit less accurate
+            return Time.nowMs; // Fallback is a bit less accurate
         },
     });
 }
