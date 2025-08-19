@@ -217,65 +217,67 @@ export class CommissioningClient extends Behavior {
     /**
      * Define logical schema.  This enables runtime validation, make fields persistent and makes subfields editable.
      */
-    static override readonly schema = new DatatypeModel({
-        name: "CommissioningState",
-        type: "struct",
+    static override readonly schema = new DatatypeModel(
+        {
+            name: "CommissioningState",
+            type: "struct",
+        },
 
-        children: [
-            FieldElement({
-                name: "peerAddress",
-                type: "struct",
-                quality: "N",
-                children: [
-                    FieldElement({ name: "fabricIndex", type: "fabric-id" }),
-                    FieldElement({ name: "nodeId", type: "node-id" }),
-                ],
-            }),
-            FieldElement({
-                name: "addresses",
-                type: "list",
-                quality: "N",
-                children: [
-                    FieldElement({
-                        name: "entry",
-                        type: "struct",
-                        children: [
-                            FieldElement({ name: "type", type: "string" }),
-                            FieldElement({ name: "ip", type: "string" }),
-                            FieldElement({ name: "port", type: "uint16" }),
-                            FieldElement({ name: "peripheralAddress", type: "string" }),
-                        ],
-                    }),
-                ],
-            }),
-            FieldElement({ name: "discoveredAt", type: "systime-ms", quality: "N", conformance: "M" }),
-            FieldElement({ name: "onlineAt", type: "systime-ms" }),
-            FieldElement({ name: "offlineAt", type: "systime-ms" }),
-            FieldElement({ name: "ttl", type: "uint32", quality: "N" }),
-            FieldElement({ name: "deviceIdentifier", type: "string", quality: "N" }),
-            FieldElement({ name: "discriminator", type: "uint16", quality: "N" }),
-            FieldElement({ name: "commissioningMode", type: "uint8", quality: "N" }),
-            FieldElement({ name: "vendorId", type: "vendor-id", quality: "N" }),
-            FieldElement({ name: "productId", type: "uint16", quality: "N" }),
-            FieldElement({ name: "deviceType", type: "uint16", quality: "N" }),
-            FieldElement({ name: "deviceName", type: "string", quality: "N" }),
-            FieldElement({ name: "rotatingIdentifier", type: "string", quality: "N" }),
-            FieldElement({ name: "pairingHint", type: "uint32", quality: "N" }),
-            FieldElement({ name: "pairingInstructions", type: "string", quality: "N" }),
-            FieldElement({
-                name: "sessionParameters",
-                type: "struct",
-                quality: "N",
-                children: [
-                    FieldElement({ name: "idleInterval", type: "duration", constraint: "max 3600000" }),
-                    FieldElement({ name: "activeInterval", type: "duration", constraint: "max 3600000" }),
-                    FieldElement({ name: "activeThreshold", type: "duration", constraint: "max 65535" }),
-                ],
-            }),
-            FieldElement({ name: "tcpSupport", type: "uint8", quality: "N" }),
-            FieldElement({ name: "longIdleOperatingMode", type: "bool", quality: "N" }),
-        ],
-    });
+        FieldElement({
+            name: "peerAddress",
+            type: "struct",
+            quality: "N",
+            children: [
+                FieldElement({ name: "fabricIndex", type: "fabric-id" }),
+                FieldElement({ name: "nodeId", type: "node-id" }),
+            ],
+        }),
+
+        FieldElement({
+            name: "addresses",
+            type: "list",
+            quality: "N",
+            children: [
+                FieldElement({
+                    name: "entry",
+                    type: "struct",
+                    children: [
+                        FieldElement({ name: "type", type: "string" }),
+                        FieldElement({ name: "ip", type: "string" }),
+                        FieldElement({ name: "port", type: "uint16" }),
+                        FieldElement({ name: "peripheralAddress", type: "string" }),
+                    ],
+                }),
+            ],
+        }),
+
+        FieldElement({ name: "discoveredAt", type: "systime-ms", quality: "N", conformance: "M" }),
+        FieldElement({ name: "onlineAt", type: "systime-ms" }),
+        FieldElement({ name: "offlineAt", type: "systime-ms" }),
+        FieldElement({ name: "ttl", type: "uint32", quality: "N" }),
+        FieldElement({ name: "deviceIdentifier", type: "string", quality: "N" }),
+        FieldElement({ name: "discriminator", type: "uint16", quality: "N" }),
+        FieldElement({ name: "commissioningMode", type: "uint8", quality: "N" }),
+        FieldElement({ name: "vendorId", type: "vendor-id", quality: "N" }),
+        FieldElement({ name: "productId", type: "uint16", quality: "N" }),
+        FieldElement({ name: "deviceType", type: "uint16", quality: "N" }),
+        FieldElement({ name: "deviceName", type: "string", quality: "N" }),
+        FieldElement({ name: "rotatingIdentifier", type: "string", quality: "N" }),
+        FieldElement({ name: "pairingHint", type: "uint32", quality: "N" }),
+        FieldElement({ name: "pairingInstructions", type: "string", quality: "N" }),
+        FieldElement({
+            name: "sessionParameters",
+            type: "struct",
+            quality: "N",
+            children: [
+                FieldElement({ name: "idleInterval", type: "duration", constraint: "max 3600000" }),
+                FieldElement({ name: "activeInterval", type: "duration", constraint: "max 3600000" }),
+                FieldElement({ name: "activeThreshold", type: "duration", constraint: "max 65535" }),
+            ],
+        }),
+        FieldElement({ name: "tcpSupport", type: "uint8", quality: "N" }),
+        FieldElement({ name: "longIdleOperatingMode", type: "bool", quality: "N" }),
+    );
 }
 
 export namespace CommissioningClient {

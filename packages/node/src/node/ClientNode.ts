@@ -108,6 +108,36 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         await this.lifecycle.mutex.produce(this.eraseWithMutex.bind(this));
     }
 
+    /**
+     * Disable the node.
+     *
+     * This shuts down any active connections and prevents future connections until re-enabled.
+     */
+    async disable() {
+        if (this.state.network.isDisabled) {
+            return;
+        }
+
+        await this.lifecycle.mutex.produce(async () => {
+            await this.cancelWithMutex();
+            await this.setStateOf(NetworkClient, { isDisabled: true });
+        });
+    }
+
+    /**
+     * Enable the node.
+     *
+     * If the node is disabled but reachable, this brings it online.
+     */
+    async enable() {
+        if (!this.state.network.isDisabled) {
+            return;
+        }
+
+        await this.setStateOf(NetworkClient, { isDisabled: false });
+        await this.start();
+    }
+
     protected async eraseWithMutex() {
         // First ensure we're offline
         await this.cancelWithMutex();

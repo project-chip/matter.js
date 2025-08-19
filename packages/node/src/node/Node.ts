@@ -7,6 +7,7 @@
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { IndexBehavior } from "#behavior/system/index/IndexBehavior.js";
+import { NetworkBehavior } from "#behavior/system/network/NetworkBehavior.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { PartsBehavior } from "#behavior/system/parts/PartsBehavior.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
@@ -116,6 +117,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
             this.#runtime.construction.start();
             this.#environment.set(NetworkRuntime, this.#runtime);
             await this.#runtime.construction.ready;
+            await this.act("network startup", agent => agent.get(NetworkBehavior).startup());
         } catch (e) {
             this.env.runtime.delete(this);
             throw e;

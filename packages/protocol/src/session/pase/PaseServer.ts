@@ -103,7 +103,7 @@ export class PaseServer implements ProtocolHandler {
     }
 
     private async handlePairingRequest(crypto: Crypto, messenger: PaseServerMessenger) {
-        logger.info(`Received pairing request from ${messenger.getChannelName()}.`);
+        logger.info(`Received pairing request from ${messenger.channelName}.`);
 
         this.#pairingTimer = Time.getTimer("PASE pairing timeout", PASE_PAIRING_TIMEOUT_MS, () =>
             this.cancelPairing(messenger),
@@ -174,7 +174,7 @@ export class PaseServer implements ProtocolHandler {
             isResumption: false,
             peerSessionParameters: initiatorSessionParams,
         });
-        logger.info(`Session ${responderSessionId} created with ${messenger.getChannelName()}.`);
+        logger.info(`Session ${responderSessionId} created with ${messenger.channelName}.`);
 
         await messenger.sendSuccess();
         await messenger.close();

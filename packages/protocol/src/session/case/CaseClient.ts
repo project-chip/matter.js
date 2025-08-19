@@ -6,12 +6,14 @@
 
 import { Icac } from "#certificate/kinds/Icac.js";
 import { Noc } from "#certificate/kinds/Noc.js";
-import { Bytes, Duration, Logger, PublicKey, UnexpectedDataError } from "#general";
+import { Fabric } from "#fabric/Fabric.js";
+import { Bytes, Diagnostic, Duration, Logger, PublicKey, UnexpectedDataError } from "#general";
+import { PeerAddress } from "#peer/PeerAddress.js";
+import { MessageExchange, RetransmissionLimitReachedError } from "#protocol/MessageExchange.js";
 import { ChannelStatusResponseError } from "#securechannel/SecureChannelMessenger.js";
+import { NodeSession } from "#session/NodeSession.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId, SecureChannelStatusCode } from "#types";
-import { Fabric } from "../../fabric/Fabric.js";
-import { MessageExchange } from "../../protocol/MessageExchange.js";
 import {
     KDFSR1_KEY_INFO,
     KDFSR2_INFO,
@@ -42,7 +44,7 @@ export class CaseClient {
         try {
             return await this.#doPair(messenger, exchange, fabric, peerNodeId);
         } catch (error) {
-            if (!(error instanceof ChannelStatusResponseError)) {
+            if (!(error instanceof ChannelStatusResponseError || error instanceof RetransmissionLimitReachedError)) {
                 await messenger.sendError(SecureChannelStatusCode.InvalidParam);
             }
             throw error;
@@ -126,10 +128,7 @@ export class CaseClient {
                 caseAuthenticatedTags,
             });
             await messenger.sendSuccess();
-            logger.info(
-                `Case client: Session ${secureSession.id} successfully resumed with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(fabric.nodeId)} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)} with parameters`,
-                secureSession.parameterDiagnostics(),
-            );
+            this.#logNewSession("Resumed", secureSession, messenger, fabric, peerNodeId);
 
             resumptionRecord.resumptionId = resumptionId; /* update resumptionId */
             resumptionRecord.sessionParameters = secureSession.parameters; /* update mrpParams */
@@ -239,12 +238,7 @@ export class CaseClient {
                 peerSessionParameters: sessionParameters,
                 caseAuthenticatedTags,
             });
-            logger.info(
-                `Case client Session ${secureSession.id} established successfully with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
-                    fabric.nodeId,
-                )} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)} with parameters`,
-                secureSession.parameterDiagnostics(),
-            );
+            this.#logNewSession("New", secureSession, messenger, fabric, peerNodeId);
             resumptionRecord = {
                 fabric,
                 peerNodeId,
@@ -259,5 +253,24 @@ export class CaseClient {
         await this.#sessions.saveResumptionRecord(resumptionRecord);
 
         return { session: secureSession, resumed };
+    }
+
+    #logNewSession(
+        operation: "New" | "Resumed",
+        session: NodeSession,
+        messenger: CaseClientMessenger,
+        fabric: Fabric,
+        peerNodeId: NodeId,
+    ) {
+        logger.info(
+            `${operation} session with`,
+            Diagnostic.strong(PeerAddress({ fabricIndex: fabric.fabricIndex, nodeId: peerNodeId }).toString()),
+            Diagnostic.dict({
+                id: session.id,
+                address: messenger.channelName,
+                fabric: `${NodeId.toHexString(fabric.nodeId)} (#${fabric.fabricIndex})`,
+                ...session.parameterDiagnostics,
+            }),
+        );
     }
 }
