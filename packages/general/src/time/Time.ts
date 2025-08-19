@@ -107,7 +107,7 @@ export class Time {
 
 // Check if performance API is available and has the required methods. Use lower accuracy fallback if not.
 if (!performance || typeof performance.now !== "function" || typeof performance.timeOrigin !== "number") {
-    Object.defineProperty(Time.prototype.nowUs, "nowUs", {
+    Object.defineProperty(Time.prototype, "nowUs", {
         get() {
             return Time.nowMs; // Fallback is a bit less accurate
         },
