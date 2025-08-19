@@ -13,7 +13,6 @@ import {
     TlvNoResponse,
     OptionalWritableAttribute,
     OptionalEvent,
-    EventPriority,
     OptionalCommand,
     Event
 } from "../cluster/Cluster.js";
@@ -35,6 +34,7 @@ import { TlvArray } from "../tlv/TlvArray.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { TlvString, TlvByteString } from "../tlv/TlvString.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -1097,7 +1097,7 @@ export namespace EnergyEvse {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.3.10.6
              */
-            rfid: OptionalEvent(0x5, EventPriority.Info, TlvRfidEvent)
+            rfid: OptionalEvent(0x5, Priority.Info, TlvRfidEvent)
         }
     });
 
@@ -1375,7 +1375,7 @@ export namespace EnergyEvse {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.3.10.1
              */
-            evConnected: Event(0x0, EventPriority.Info, TlvEvConnectedEvent),
+            evConnected: Event(0x0, Priority.Info, TlvEvConnectedEvent),
 
             /**
              * This event shall be generated when the EV is unplugged or not detected (having been previously plugged
@@ -1383,7 +1383,7 @@ export namespace EnergyEvse {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.3.10.2
              */
-            evNotDetected: Event(0x1, EventPriority.Info, TlvEvNotDetectedEvent),
+            evNotDetected: Event(0x1, Priority.Info, TlvEvNotDetectedEvent),
 
             /**
              * This event shall be generated whenever the EV starts charging or discharging, except when an EV has
@@ -1392,7 +1392,7 @@ export namespace EnergyEvse {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.3.10.3
              */
-            energyTransferStarted: Event(0x2, EventPriority.Info, TlvEnergyTransferStartedEvent),
+            energyTransferStarted: Event(0x2, Priority.Info, TlvEnergyTransferStartedEvent),
 
             /**
              * This event shall be generated whenever the EV stops charging or discharging, except when an EV has
@@ -1401,7 +1401,7 @@ export namespace EnergyEvse {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.3.10.4
              */
-            energyTransferStopped: Event(0x3, EventPriority.Info, TlvEnergyTransferStoppedEvent),
+            energyTransferStopped: Event(0x3, Priority.Info, TlvEnergyTransferStoppedEvent),
 
             /**
              * If the EVSE detects a fault it shall generate a Fault Event. The SupplyState attribute shall be set to
@@ -1416,7 +1416,7 @@ export namespace EnergyEvse {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.3.10.5
              */
-            fault: Event(0x4, EventPriority.Critical, TlvFaultEvent)
+            fault: Event(0x4, Priority.Critical, TlvFaultEvent)
         },
 
         /**

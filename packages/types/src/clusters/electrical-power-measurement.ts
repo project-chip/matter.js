@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { OptionalAttribute, Attribute, FixedAttribute, OptionalEvent, EventPriority } from "../cluster/Cluster.js";
+import { OptionalAttribute, Attribute, FixedAttribute, OptionalEvent } from "../cluster/Cluster.js";
 import { TlvInt64, TlvUInt8, TlvEnum, TlvEpochS, TlvSysTimeMS } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvArray } from "../tlv/TlvArray.js";
@@ -16,6 +16,7 @@ import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvMeasurementAccuracy } from "../globals/MeasurementAccuracy.js";
 import { MeasurementType } from "../globals/MeasurementType.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -701,7 +702,7 @@ export namespace ElectricalPowerMeasurement {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.13.7.1
              */
-            measurementPeriodRanges: OptionalEvent(0x0, EventPriority.Info, TlvMeasurementPeriodRangesEvent)
+            measurementPeriodRanges: OptionalEvent(0x0, Priority.Info, TlvMeasurementPeriodRangesEvent)
         },
 
         /**

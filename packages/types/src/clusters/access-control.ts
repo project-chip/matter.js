@@ -10,7 +10,6 @@ import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
 import {
     WritableFabricScopedAttribute,
     Event,
-    EventPriority,
     FixedAttribute,
     FabricScopedAttribute,
     Command
@@ -21,6 +20,7 @@ import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { TlvFabricIndex } from "../datatype/FabricIndex.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { AccessLevel } from "#model";
+import { Priority } from "../globals/Priority.js";
 import { TlvNodeId } from "../datatype/NodeId.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvUInt16, TlvEnum, TlvUInt32, TlvUInt64 } from "../tlv/TlvNumber.js";
@@ -881,7 +881,7 @@ export namespace AccessControl {
              */
             accessControlExtensionChanged: Event(
                 0x1,
-                EventPriority.Info,
+                Priority.Info,
                 TlvAccessControlExtensionChangedEvent,
                 { readAcl: AccessLevel.Administer }
             )
@@ -978,7 +978,7 @@ export namespace AccessControl {
              */
             fabricRestrictionReviewUpdate: Event(
                 0x2,
-                EventPriority.Info,
+                Priority.Info,
                 TlvFabricRestrictionReviewUpdateEvent,
                 { readAcl: AccessLevel.Administer }
             )
@@ -1150,7 +1150,7 @@ export namespace AccessControl {
              */
             accessControlEntryChanged: Event(
                 0x0,
-                EventPriority.Info,
+                Priority.Info,
                 TlvAccessControlEntryChangedEvent,
                 { readAcl: AccessLevel.Administer }
             )

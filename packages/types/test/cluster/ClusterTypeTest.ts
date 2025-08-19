@@ -4,16 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    Attribute,
-    Cluster,
-    EventPriority,
-    OptionalAttribute,
-    OptionalCommand,
-    OptionalEvent,
-} from "#cluster/Cluster.js";
+import { Attribute, Cluster, OptionalAttribute, OptionalCommand, OptionalEvent } from "#cluster/Cluster.js";
 import { ClusterType } from "#cluster/ClusterType.js";
 import { Branded } from "#general";
+import { Priority } from "#globals/Priority.js";
 import { TlvNumberSchema, TlvUInt8 } from "#tlv/TlvNumber.js";
 import { TlvSchema } from "#tlv/TlvSchema.js";
 import { stripFunctions } from "./mutation/util.js";
@@ -32,7 +26,7 @@ const BaseFoo = {
     },
 
     events: {
-        ev: OptionalEvent(4, EventPriority.Debug, TlvUInt8),
+        ev: OptionalEvent(4, Priority.Debug, TlvUInt8),
     },
 } as const;
 
@@ -65,7 +59,7 @@ type SatisfactoryFoo = {
     events: {
         ev: {
             //id: Branded<4, "EventId">,
-            //priority: EventPriority.Debug,
+            //priority: Priority.Debug,
             schema: TlvSchema<number>;
             optional: true;
         };

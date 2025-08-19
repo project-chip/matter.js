@@ -7,12 +7,13 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { Command, TlvNoResponse, OptionalEvent, EventPriority } from "../cluster/Cluster.js";
+import { Command, TlvNoResponse, OptionalEvent } from "../cluster/Cluster.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { AccessLevel } from "#model";
 import { TlvNodeId } from "../datatype/NodeId.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -283,12 +284,7 @@ export namespace AccountLogin {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 6.2.5.1
              */
-            loggedOut: OptionalEvent(
-                0x0,
-                EventPriority.Critical,
-                TlvLoggedOutEvent,
-                { readAcl: AccessLevel.Administer }
-            )
+            loggedOut: OptionalEvent(0x0, Priority.Critical, TlvLoggedOutEvent, { readAcl: AccessLevel.Administer })
         }
     });
 

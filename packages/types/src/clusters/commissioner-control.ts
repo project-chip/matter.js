@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { Attribute, Command, TlvNoResponse, Event, EventPriority } from "../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, Event } from "../cluster/Cluster.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvUInt32, TlvBitmap, TlvUInt64, TlvUInt16, TlvEnum } from "../tlv/TlvNumber.js";
 import { AccessLevel } from "#model";
@@ -15,6 +15,7 @@ import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
 import { TlvString, TlvByteString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { Priority } from "../globals/Priority.js";
 import { TlvNodeId } from "../datatype/NodeId.js";
 import { Status } from "../globals/Status.js";
 import { TlvFabricIndex } from "../datatype/FabricIndex.js";
@@ -244,7 +245,7 @@ export namespace CommissionerControl {
              */
             commissioningRequestResult: Event(
                 0x0,
-                EventPriority.Info,
+                Priority.Info,
                 TlvCommissioningRequestResultEvent,
                 { readAcl: AccessLevel.Manage }
             )

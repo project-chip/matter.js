@@ -24,6 +24,7 @@ import {
 import { Behavior } from "./Behavior.js";
 import { ClusterEvents } from "./cluster/ClusterEvents.js";
 import { OfflineContext } from "./context/server/OfflineContext.js";
+import { Events } from "./Events.js";
 import { BehaviorBacking } from "./internal/BehaviorBacking.js";
 
 const logger = Logger.get("Transition");
@@ -297,9 +298,9 @@ export class Transitions<B extends Behavior> {
 
             this.stop(state.name);
 
-            const event = (
-                this.#endpoint.events as Record<string, Record<string, ClusterEvents.ChangedObservable<any>>>
-            )[this.#config.type.id][`${name}$Changed`];
+            const event = (this.#endpoint.events as Events.Generic<ClusterEvents.ChangedObservable<any>>)[
+                this.#config.type.id
+            ]?.[`${name}$Changed`];
 
             // Per specification, quieter events always emit at end of transition.  This will need an option in the
             // property configuration if this is ever not the case
@@ -621,9 +622,9 @@ export class Transitions<B extends Behavior> {
 
         this.#instrumentedProperties.add(name);
 
-        const event = (
-            this.#endpoint.events as Record<string, Record<string, ClusterEvents.ChangedObservable<any> | undefined>>
-        )[this.#config.type.id][`${name}$Changed`];
+        const event = (this.#endpoint.events as Events.Generic<ClusterEvents.ChangedObservable<any>>)[
+            this.#config.type.id
+        ]?.[`${name}$Changed`];
         if (!event) {
             return;
         }

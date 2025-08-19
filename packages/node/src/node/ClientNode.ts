@@ -12,7 +12,7 @@ import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { Agent } from "#endpoint/Agent.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { Identity, Lifecycle, MaybePromise } from "#general";
-import { Interactable } from "#protocol";
+import { Interactable, OccurrenceManager } from "#protocol";
 import { ClientNodeStore } from "#storage/client/ClientNodeStore.js";
 import { RemoteWriter } from "#storage/client/RemoteWriter.js";
 import { ServerNodeStore } from "#storage/server/ServerNodeStore.js";
@@ -40,6 +40,9 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         };
 
         super(opts);
+
+        // Block the OccurranceManager from parent environment so we don't attempt to record events from peers
+        this.env.block(OccurrenceManager);
 
         this.env.set(Node, this);
         this.env.set(ClientNode, this);

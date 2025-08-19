@@ -8,7 +8,6 @@ import {
     Attribute,
     Command,
     Event,
-    EventPriority,
     TlvNoResponse,
     WritableAttribute,
     WritableFabricScopedAttribute,
@@ -20,6 +19,7 @@ import { TlvFabricIndex } from "#datatype/FabricIndex.js";
 import { TlvGroupId } from "#datatype/GroupId.js";
 import { TlvNodeId } from "#datatype/NodeId.js";
 import { isObject } from "#general";
+import { Priority } from "#globals/Priority.js";
 import { AccessLevel } from "#model";
 import { BitFlag } from "#schema/BitmapSchema.js";
 import { TlvArray } from "#tlv/TlvArray.js";
@@ -69,7 +69,7 @@ export const ELEMENTS1 = {
         cmd1: Command(2, TlvNoArguments, 2, TlvNoResponse),
     },
     events: {
-        ev1: Event(3, EventPriority.Debug, TlvNoArguments),
+        ev1: Event(3, Priority.Debug, TlvNoArguments),
     },
 };
 
@@ -109,7 +109,7 @@ export const ELEMENTS2 = {
         ),
     },
     events: {
-        ev2: Event(6, EventPriority.Debug, TlvNoArguments),
+        ev2: Event(6, Priority.Debug, TlvNoArguments),
     },
 };
 

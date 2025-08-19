@@ -18,8 +18,8 @@ import {
 } from "#general";
 import {
     EventNumber,
-    EventPriority,
     FabricIndex,
+    Priority,
     resolveEventName,
     TlvEventFilter,
     TlvEventPath,
@@ -323,11 +323,11 @@ export class OccurrenceManager {
         logger.debug(`Event store is full; dropping ${toDelete} old occurrence${toDelete === 1 ? "s" : ""}`);
 
         const prioData = {
-            [EventPriority.Info]: {
+            [Priority.Info]: {
                 count: this.#bufferConfig.minPriorityEventAllowance["info"],
                 minPosition: -1,
             },
-            [EventPriority.Debug]: {
+            [Priority.Debug]: {
                 count: this.#bufferConfig.minPriorityEventAllowance["debug"],
                 minPosition: -1,
             },
@@ -340,16 +340,13 @@ export class OccurrenceManager {
         for (let i = this.#occurrences.length - 1; i >= 0; i--) {
             const { priority } = this.#occurrences[i];
 
-            if (priority !== EventPriority.Critical) {
+            if (priority !== Priority.Critical) {
                 const data = prioData[priority];
                 if (data.count > 0) {
                     data.count--;
                     if (data.count === 0) {
                         data.minPosition = i;
-                        if (
-                            prioData[EventPriority.Info].minPosition > -1 &&
-                            prioData[EventPriority.Debug].minPosition > -1
-                        ) {
+                        if (prioData[Priority.Info].minPosition > -1 && prioData[Priority.Debug].minPosition > -1) {
                             // We have found the minimum position for both priorities, we can stop
                             break;
                         }
@@ -364,9 +361,9 @@ export class OccurrenceManager {
         // of entries to remove.
         // Deleted entries are marked as undefined in the array, so we can filter them out later in one pass.
         const occurrences = this.#occurrences as Array<OccurrenceSummary | undefined>;
-        for (const priority of [EventPriority.Debug, EventPriority.Info, EventPriority.Critical]) {
+        for (const priority of [Priority.Debug, Priority.Info, Priority.Critical]) {
             const checkUpTo =
-                priority === EventPriority.Critical ? this.#occurrences.length : prioData[priority].minPosition;
+                priority === Priority.Critical ? this.#occurrences.length : prioData[priority].minPosition;
             if (checkUpTo === -1) {
                 // We have less than the minimum of this event type, so we can not remove any
                 continue;

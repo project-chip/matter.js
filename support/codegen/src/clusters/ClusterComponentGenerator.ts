@@ -167,13 +167,13 @@ export class ClusterComponentGenerator {
                 factory = "OptionalEvent";
             }
             this.file.addImport("!types/cluster/Cluster.js", factory);
-            this.file.addImport("!types/cluster/Cluster.js", "EventPriority");
+            this.file.addImport("!types/globals/Priority.js", "Priority");
 
             const priority = camelize(model.priority ?? EventElement.Priority.Debug, true);
 
             const block = add(factory);
             block.atom(hex(model.id));
-            block.atom(`EventPriority.${priority}`);
+            block.atom(`Priority.${priority}`);
             block.atom(this.tlv.reference(model));
 
             const options = block.expressions("{", "}");

@@ -7,14 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import {
-    Attribute,
-    Command,
-    TlvNoResponse,
-    OptionalAttribute,
-    OptionalEvent,
-    EventPriority
-} from "../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, OptionalAttribute, OptionalEvent } from "../cluster/Cluster.js";
 import { TlvUInt64, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { AccessLevel } from "#model";
@@ -23,6 +16,7 @@ import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString, TlvByteString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -217,7 +211,7 @@ export namespace SoftwareDiagnostics {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.13.8.1
              */
-            softwareFault: OptionalEvent(0x0, EventPriority.Info, TlvSoftwareFaultEvent)
+            softwareFault: OptionalEvent(0x0, Priority.Info, TlvSoftwareFaultEvent)
         },
 
         /**

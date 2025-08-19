@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Priority } from "#globals/Priority.js";
 import { TypeFromSchema } from "#tlv/TlvSchema.js";
-import { EventPriority } from "../../cluster/Cluster.js";
 import { TlvEventNumber } from "../../datatype/EventNumber.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
 import { TlvEnum, TlvPosixMs, TlvSysTimeMS } from "../../tlv/TlvNumber.js";
@@ -18,7 +18,7 @@ export const TlvEventData = TlvObject({
     // EventDataIB
     path: TlvField(0, TlvEventPath),
     eventNumber: TlvField(1, TlvEventNumber),
-    priority: TlvField(2, TlvEnum<EventPriority>()),
+    priority: TlvField(2, TlvEnum<Priority>()),
     epochTimestamp: TlvOptionalField(3, TlvPosixMs),
     systemTimestamp: TlvOptionalField(4, TlvSysTimeMS),
     deltaEpochTimestamp: TlvOptionalField(5, TlvPosixMs),

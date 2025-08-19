@@ -10,10 +10,10 @@ import {
     EndpointNumber,
     EventId,
     EventNumber,
-    EventPriority,
     getClusterById,
     getClusterEventById,
     NodeId,
+    Priority,
     Status,
     TlvAny,
     TlvEventData,
@@ -27,7 +27,7 @@ const logger = Logger.get("EventDataDecoder");
 
 export type DecodedEventData<T> = {
     eventNumber: EventNumber;
-    priority: EventPriority;
+    priority: Priority;
     epochTimestamp?: number | bigint;
     systemTimestamp?: number | bigint;
     deltaEpochTimestamp?: number | bigint;

@@ -12,13 +12,13 @@ import {
     FixedAttribute,
     OptionalFixedAttribute,
     OptionalEvent,
-    EventPriority,
     Attribute
 } from "../cluster/Cluster.js";
 import { TlvUInt32, TlvUInt16, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvArray } from "../tlv/TlvArray.js";
+import { Priority } from "../globals/Priority.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvString } from "../tlv/TlvString.js";
@@ -1004,7 +1004,7 @@ export namespace PowerSource {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.7.8.1
              */
-            wiredFaultChange: OptionalEvent(0x0, EventPriority.Info, TlvWiredFaultChangeEvent)
+            wiredFaultChange: OptionalEvent(0x0, Priority.Info, TlvWiredFaultChangeEvent)
         }
     });
 
@@ -1109,7 +1109,7 @@ export namespace PowerSource {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.7.8.2
              */
-            batFaultChange: OptionalEvent(0x1, EventPriority.Info, TlvBatFaultChangeEvent)
+            batFaultChange: OptionalEvent(0x1, Priority.Info, TlvBatFaultChangeEvent)
         }
     });
 
@@ -1252,7 +1252,7 @@ export namespace PowerSource {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.7.8.3
              */
-            batChargeFaultChange: OptionalEvent(0x2, EventPriority.Info, TlvBatChargeFaultChangeEvent)
+            batChargeFaultChange: OptionalEvent(0x2, Priority.Info, TlvBatChargeFaultChangeEvent)
         }
     });
 

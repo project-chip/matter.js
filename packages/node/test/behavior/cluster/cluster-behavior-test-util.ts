@@ -12,11 +12,11 @@ import {
     BitFlag,
     Command,
     Event,
-    EventPriority,
     MutableCluster,
     OptionalAttribute,
     OptionalCommand,
     OptionalEvent,
+    Priority,
     TlvBoolean,
     TlvNoResponse,
     TlvString,
@@ -38,7 +38,7 @@ export namespace My {
         },
 
         events: {
-            becameAwesome: Event(11, EventPriority.Info, TlvUInt8),
+            becameAwesome: Event(11, Priority.Info, TlvUInt8),
         },
     });
 
@@ -81,10 +81,10 @@ export namespace My {
 
         events: {
             /** This event is required */
-            reqEv: Event(7, EventPriority.Critical, TlvString),
+            reqEv: Event(7, Priority.Critical, TlvString),
 
             /** This event is optional */
-            optEv: OptionalEvent(8, EventPriority.Debug, TlvString),
+            optEv: OptionalEvent(8, Priority.Debug, TlvString),
         },
 
         extensions: MutableCluster.Extensions({ flags: { awesome: true }, component: AwesomeComponent }),

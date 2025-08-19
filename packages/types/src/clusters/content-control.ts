@@ -7,13 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { Attribute, Command, TlvNoResponse, Event, EventPriority } from "../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, Event } from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { AccessLevel } from "#model";
 import { TlvUInt32, TlvUInt16, TlvUInt8, TlvBitmap } from "../tlv/TlvNumber.js";
+import { Priority } from "../globals/Priority.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
@@ -977,7 +978,7 @@ export namespace ContentControl {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 6.13.9.1
              */
-            remainingScreenTimeExpired: Event(0x0, EventPriority.Info, TlvNoArguments)
+            remainingScreenTimeExpired: Event(0x0, Priority.Info, TlvNoArguments)
         }
     });
 
@@ -1212,7 +1213,7 @@ export namespace ContentControl {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 6.13.9.2
              */
-            enteringBlockContentTimeWindow: Event(0x1, EventPriority.Info, TlvNoArguments)
+            enteringBlockContentTimeWindow: Event(0x1, Priority.Info, TlvNoArguments)
         }
     });
 

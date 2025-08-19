@@ -7,15 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import {
-    Attribute,
-    Command,
-    TlvNoResponse,
-    Event,
-    EventPriority,
-    FixedAttribute,
-    OptionalAttribute
-} from "../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, Event, FixedAttribute, OptionalAttribute } from "../cluster/Cluster.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvFabricIndex } from "../datatype/FabricIndex.js";
 import { TlvNodeId } from "../datatype/NodeId.js";
@@ -23,6 +15,7 @@ import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { AccessLevel } from "#model";
+import { Priority } from "../globals/Priority.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
@@ -618,7 +611,7 @@ export namespace TimeSynchronization {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.17.10.5
              */
-            missingTrustedTimeSource: Event(0x4, EventPriority.Info, TlvNoArguments)
+            missingTrustedTimeSource: Event(0x4, Priority.Info, TlvNoArguments)
         }
     });
 
@@ -837,14 +830,14 @@ export namespace TimeSynchronization {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.17.10.1
              */
-            dstTableEmpty: Event(0x0, EventPriority.Info, TlvNoArguments),
+            dstTableEmpty: Event(0x0, Priority.Info, TlvNoArguments),
 
             /**
              * This event shall be generated when the node starts or stops applying a DST offset.
              *
              * @see {@link MatterSpecification.v141.Core} § 11.17.10.2
              */
-            dstStatus: Event(0x1, EventPriority.Info, TlvDstStatusEvent),
+            dstStatus: Event(0x1, Priority.Info, TlvDstStatusEvent),
 
             /**
              * This event shall be generated when the node changes its time zone offset or name. It shall NOT be sent
@@ -852,7 +845,7 @@ export namespace TimeSynchronization {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.17.10.3
              */
-            timeZoneStatus: Event(0x2, EventPriority.Info, TlvTimeZoneStatusEvent)
+            timeZoneStatus: Event(0x2, Priority.Info, TlvTimeZoneStatusEvent)
         }
     });
 
@@ -983,7 +976,7 @@ export namespace TimeSynchronization {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.17.10.4
              */
-            timeFailure: Event(0x3, EventPriority.Info, TlvNoArguments)
+            timeFailure: Event(0x3, Priority.Info, TlvNoArguments)
         },
 
         /**

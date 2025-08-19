@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalAttribute, Command, OptionalEvent, EventPriority } from "../cluster/Cluster.js";
+import { Attribute, OptionalAttribute, Command, OptionalEvent } from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../tlv/TlvNumber.js";
@@ -15,6 +15,7 @@ import { TlvString, TlvByteString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { StatusResponseError } from "../common/StatusResponseError.js";
 import { Status as GlobalStatus } from "../globals/Status.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -218,7 +219,7 @@ export namespace TargetNavigator {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 6.11.7.1
              */
-            targetUpdated: OptionalEvent(0x0, EventPriority.Info, TlvTargetUpdatedEvent)
+            targetUpdated: OptionalEvent(0x0, Priority.Info, TlvTargetUpdatedEvent)
         }
     });
 

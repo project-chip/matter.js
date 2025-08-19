@@ -12,14 +12,14 @@ import {
     Attribute,
     FixedAttribute,
     OptionalFixedAttribute,
-    OptionalEvent,
-    EventPriority
+    OptionalEvent
 } from "../cluster/Cluster.js";
 import { TlvUInt16, TlvUInt8, TlvBitmap, TlvEnum } from "../tlv/TlvNumber.js";
 import { AccessLevel } from "#model";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -459,7 +459,7 @@ export namespace OccupancySensing {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.7.7.1
              */
-            occupancyChanged: OptionalEvent(0x0, EventPriority.Info, TlvOccupancyChangedEvent)
+            occupancyChanged: OptionalEvent(0x0, Priority.Info, TlvOccupancyChangedEvent)
         },
 
         /**

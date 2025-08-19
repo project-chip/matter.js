@@ -20,6 +20,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: MaybeAsyncStorage got renamed to Storage because it is the only interface from now on
     - Feature: Adds Blob support to the Storage interface
 
+-   @matter/types
+    - Enhancement: The duplicate event priority definition `EventPriority` is deprecated; use the generated `Priority` enum instead
+
 -   @matter/protocol
     - Breaking: The platform-specific BLE abstraction has changed so that higher-level logic may be shared across platforms
     - Breaking: Low-level advertising APIs have changed significantly; in particular, `MdnsBroadcaster`, `MdnsInstanceBroadcaster` and `MdnsScanner` are replaced by `MdnsServer`, `MdnsAdvertisement` and `MdnsClient`

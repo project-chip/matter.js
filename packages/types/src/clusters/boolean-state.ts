@@ -7,8 +7,9 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalEvent, EventPriority } from "../cluster/Cluster.js";
+import { Attribute, OptionalEvent } from "../cluster/Cluster.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
+import { Priority } from "../globals/Priority.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Identity } from "#general";
@@ -63,7 +64,7 @@ export namespace BooleanState {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.7.5.1
              */
-            stateChange: OptionalEvent(0x0, EventPriority.Info, TlvStateChangeEvent)
+            stateChange: OptionalEvent(0x0, Priority.Info, TlvStateChangeEvent)
         }
     });
 

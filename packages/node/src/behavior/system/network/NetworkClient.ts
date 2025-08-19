@@ -27,6 +27,7 @@ export class NetworkClient extends NetworkBehavior {
             minIntervalFloor: DEFAULT_MIN_INTERVAL_FLOOR,
             maxIntervalCeiling: 0,
             attributes: [{}],
+            events: [{ isUrgent: true }],
             ...startupSubscription,
         });
 

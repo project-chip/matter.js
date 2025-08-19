@@ -5,7 +5,7 @@
  */
 
 import { MaybePromise } from "#general";
-import { ClusterId, EndpointNumber, EventId, EventNumber, EventPriority } from "#types";
+import { ClusterId, EndpointNumber, EventId, EventNumber, Priority } from "#types";
 import { Occurrence } from "./Occurrence.js";
 import type { OccurrenceManager } from "./OccurrenceManager.js";
 
@@ -14,7 +14,7 @@ import type { OccurrenceManager } from "./OccurrenceManager.js";
  */
 export interface OccurrenceSummary {
     number: EventNumber;
-    priority: EventPriority;
+    priority: Priority;
     endpointId: EndpointNumber;
     clusterId: ClusterId;
     eventId: EventId;

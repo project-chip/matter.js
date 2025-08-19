@@ -38,7 +38,7 @@ export function* InputChunk(input: DataReport): ReadResult.Chunk {
             yield {
                 kind: "event-value",
                 path: event.path,
-                value: occurrence,
+                value: occurrence.data,
                 number: occurrence.eventNumber,
                 priority: occurrence.priority,
                 timestamp: Number(

@@ -5,6 +5,7 @@
  */
 
 import { MatterError, Merge } from "#general";
+import { Priority } from "#globals/Priority.js";
 import { AccessLevel } from "#model";
 import { AttributeId, TlvAttributeId } from "../datatype/AttributeId.js";
 import { ClusterId } from "../datatype/ClusterId.js";
@@ -695,19 +696,19 @@ export const ConditionalCommand = <RequestT, ResponseT, F extends BitSchema>(
 });
 
 /**
- * Interfaces and helper methods to define a cluster event
- * @see {@link MatterSpecification.v11.Core} § 7.18.2.25
+ * @deprecated use {@link Priority}
  */
-export enum EventPriority {
-    Debug,
-    Info,
-    Critical,
-}
+export type EventPriority = Priority;
+
+/**
+ * @deprecated use {@link Priority}
+ */
+export const EventPriority = Priority;
 
 export interface Event<T, F extends BitSchema> {
     id: EventId;
     schema: TlvSchema<T>;
-    priority: EventPriority;
+    priority: Priority;
     optional: boolean;
     readAcl: AccessLevel;
     isConditional: boolean;
@@ -739,7 +740,7 @@ export interface ConditionalEvent<T, F extends BitSchema> extends OptionalEvent<
 
 export const Event = <T, F extends BitSchema>(
     id: number,
-    priority: EventPriority,
+    priority: Priority,
     schema: TlvSchema<T>,
     { readAcl = AccessLevel.View }: EventOptions = {},
 ): Event<T, F> => ({
@@ -756,7 +757,7 @@ export const Event = <T, F extends BitSchema>(
 
 export const OptionalEvent = <T, F extends BitSchema>(
     id: number,
-    priority: EventPriority,
+    priority: Priority,
     schema: TlvSchema<T>,
     { readAcl = AccessLevel.View }: EventOptions = {},
 ): OptionalEvent<T, F> => ({
@@ -773,7 +774,7 @@ export const OptionalEvent = <T, F extends BitSchema>(
 
 export const ConditionalEvent = <T, F extends BitSchema>(
     id: EventId,
-    priority: EventPriority,
+    priority: Priority,
     schema: TlvSchema<T>,
     { readAcl = AccessLevel.View, optionalIf = [], mandatoryIf = [] }: ConditionalEventOptions<F>,
 ): ConditionalEvent<T, F> => ({
@@ -791,7 +792,7 @@ export const ConditionalEvent = <T, F extends BitSchema>(
 export const UnknownEvent = <F extends BitSchema>(id: number): Event<unknown, F> => ({
     id: EventId(id),
     schema: TlvVoid,
-    priority: EventPriority.Debug,
+    priority: Priority.Debug,
     optional: false,
     readAcl: AccessLevel.View,
     isConditional: false,

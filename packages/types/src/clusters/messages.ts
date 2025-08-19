@@ -8,7 +8,7 @@
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { FabricScopedAttribute, Attribute, Command, TlvNoResponse, Event, EventPriority } from "../cluster/Cluster.js";
+import { FabricScopedAttribute, Attribute, Command, TlvNoResponse, Event } from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
@@ -16,6 +16,7 @@ import { TlvEnum, TlvUInt16, TlvBitmap, TlvEpochS, TlvUInt64, TlvUInt32 } from "
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvFabricIndex } from "../datatype/FabricIndex.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -578,14 +579,14 @@ export namespace Messages {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.16.8.1
              */
-            messageQueued: Event(0x0, EventPriority.Info, TlvMessageQueuedEvent),
+            messageQueued: Event(0x0, Priority.Info, TlvMessageQueuedEvent),
 
             /**
              * This event shall be generated when the message is presented to the user.
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.16.8.2
              */
-            messagePresented: Event(0x1, EventPriority.Info, TlvMessagePresentedEvent),
+            messagePresented: Event(0x1, Priority.Info, TlvMessagePresentedEvent),
 
             /**
              * This event shall be generated when the message is confirmed by the user, or when the Duration of the
@@ -593,7 +594,7 @@ export namespace Messages {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.16.8.3
              */
-            messageComplete: Event(0x2, EventPriority.Info, TlvMessageCompleteEvent)
+            messageComplete: Event(0x2, Priority.Info, TlvMessageCompleteEvent)
         },
 
         /**

@@ -7,14 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import {
-    Attribute,
-    Command,
-    TlvNoResponse,
-    OptionalCommand,
-    OptionalEvent,
-    EventPriority
-} from "../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, OptionalCommand, OptionalEvent } from "../cluster/Cluster.js";
 import { TlvEpochUs, TlvUInt64, TlvFloat, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
@@ -26,6 +19,7 @@ import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -1094,7 +1088,7 @@ export namespace MediaPlayback {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 6.10.8.1
              */
-            stateChanged: OptionalEvent(0x0, EventPriority.Info, TlvStateChangedEvent)
+            stateChanged: OptionalEvent(0x0, Priority.Info, TlvStateChangedEvent)
         },
 
         /**

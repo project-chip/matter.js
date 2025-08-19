@@ -11,7 +11,6 @@ import {
     Attribute,
     OptionalWritableAttribute,
     Event,
-    EventPriority,
     FixedAttribute,
     Command,
     TlvNoResponse,
@@ -22,6 +21,7 @@ import {
 import { TlvEnum, TlvUInt32, TlvUInt16, TlvUInt8, TlvBitmap, TlvEpochS } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { AccessLevel } from "#model";
+import { Priority } from "../globals/Priority.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { BitFlag, BitsFromPartial, BitField } from "../schema/BitmapSchema.js";
@@ -3182,7 +3182,7 @@ export namespace DoorLock {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 5.2.11.2
              */
-            doorStateChange: Event(0x1, EventPriority.Critical, TlvDoorStateChangeEvent)
+            doorStateChange: Event(0x1, Priority.Critical, TlvDoorStateChangeEvent)
         }
     });
 
@@ -3358,7 +3358,7 @@ export namespace DoorLock {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 5.2.11.5
              */
-            lockUserChange: Event(0x4, EventPriority.Info, TlvLockUserChangeEvent)
+            lockUserChange: Event(0x4, Priority.Info, TlvLockUserChangeEvent)
         }
     });
 
@@ -4485,7 +4485,7 @@ export namespace DoorLock {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 5.2.11.1
              */
-            doorLockAlarm: Event(0x0, EventPriority.Critical, TlvDoorLockAlarmEvent),
+            doorLockAlarm: Event(0x0, Priority.Critical, TlvDoorLockAlarmEvent),
 
             /**
              * The door lock server sends out a LockOperation event when the event is triggered by the various lock
@@ -4516,7 +4516,7 @@ export namespace DoorLock {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 5.2.11.3
              */
-            lockOperation: Event(0x2, EventPriority.Critical, TlvLockOperationEvent),
+            lockOperation: Event(0x2, Priority.Critical, TlvLockOperationEvent),
 
             /**
              * The door lock server sends out a LockOperationError event when a lock operation fails for various
@@ -4524,7 +4524,7 @@ export namespace DoorLock {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 5.2.11.4
              */
-            lockOperationError: Event(0x3, EventPriority.Critical, TlvLockOperationErrorEvent)
+            lockOperationError: Event(0x3, Priority.Critical, TlvLockOperationErrorEvent)
         },
 
         /**
