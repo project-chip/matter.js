@@ -37,7 +37,7 @@ export class PartsBehavior extends Behavior implements MutableSet<Endpoint, Endp
 
     *[Symbol.iterator]() {
         for (const part of this.endpoint.parts) {
-            yield this.context.agentFor(part);
+            yield part.agentFor(this.context);
         }
     }
 }

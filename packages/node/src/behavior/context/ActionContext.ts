@@ -6,7 +6,6 @@
 
 import type { Agent } from "#endpoint/Agent.js";
 import type { Endpoint } from "#endpoint/Endpoint.js";
-import type { EndpointType } from "#endpoint/type/EndpointType.js";
 import type { AccessLevel } from "#model";
 import type { Message, SecureSession } from "#protocol";
 import { MessageExchange } from "#protocol";
@@ -62,9 +61,4 @@ export interface ActionContext extends ValueSupervisor.Session {
      * The priority of actions in this context.
      */
     priority?: Priority;
-
-    /**
-     * Obtain an agent for interacting with an endpoint in this context.
-     */
-    agentFor<const T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T>;
 }

@@ -81,7 +81,7 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
             await this.#node.visit(async endpoint => {
                 const networks = this.#storedState?.networks.get(endpoint);
                 if (networks) {
-                    context.agentFor(endpoint).get(NetworkCommissioningBehavior).state.networks = [...networks];
+                    endpoint.agentFor(context).get(NetworkCommissioningBehavior).state.networks = [...networks];
                 }
             });
         });

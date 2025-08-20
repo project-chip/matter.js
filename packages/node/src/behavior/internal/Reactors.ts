@@ -411,7 +411,7 @@ class ReactorBacking<T extends any[], R> {
      * Bind the reactor to a behavior instance once locks are held.
      */
     #bindReactor(context: ActionContext, backing: BehaviorBacking): Reactor<T, Awaited<R>> {
-        const agent = context.agentFor(this.#endpoint);
+        const agent = this.#endpoint.agentFor(context);
 
         // Do not use Agent.get because it will throw during initialization
         const behavior = backing.createBehavior(agent, backing.type);

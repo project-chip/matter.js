@@ -602,7 +602,7 @@ function invokeCommand(
         requestDiagnostic,
     );
 
-    const agent = context.agentFor(endpoint);
+    const agent = endpoint.agentFor(context);
     const behavior = agent.get(backing.type);
 
     let isAsync = false;

@@ -51,7 +51,7 @@ export class Agent {
         if (this.#endpoint.owner === undefined) {
             return undefined;
         }
-        return this.context.agentFor(this.#endpoint.owner);
+        return this.#endpoint.owner.agentFor(this.context);
     }
 
     /**

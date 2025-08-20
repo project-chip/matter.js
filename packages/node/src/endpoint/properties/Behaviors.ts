@@ -186,7 +186,7 @@ export class Behaviors {
 
         // Initialization action.  We initialize all behaviors in the same transaction
         const initializeBehaviors = (context: ActionContext): MaybePromise => {
-            const agent = context.agentFor(this.#endpoint);
+            const agent = this.#endpoint.agentFor(context);
 
             // Activate behaviors
             //
@@ -377,7 +377,7 @@ export class Behaviors {
      */
     async close() {
         const dispose = async (context: ActionContext) => {
-            const agent = context.agentFor(this.#endpoint);
+            const agent = this.#endpoint.agentFor(context);
 
             let destroyNow = new Set(Object.keys(this.#backings));
             while (destroyNow.size) {
@@ -565,7 +565,7 @@ export class Behaviors {
         const result = OfflineContext.act(
             "behavior-late-activation",
             context => {
-                this.activate(type, context.agentFor(this.#endpoint));
+                this.activate(type, this.#endpoint.agentFor(context));
 
                 // Agent must remain active until backing is initialized
                 const backing = this.#backingFor(type);

@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Agent } from "#endpoint/Agent.js";
-import { Endpoint } from "#endpoint/Endpoint.js";
-import { EndpointType } from "#endpoint/type/EndpointType.js";
 import { AsyncObservable, Diagnostic, ImplementationError, InternalError, MaybePromise, Transaction } from "#general";
 import { AccessLevel } from "#model";
 import type { Node } from "#node/Node.js";
@@ -23,7 +20,6 @@ import { FabricIndex, NodeId } from "#types";
 import { ActionContext } from "../ActionContext.js";
 import { Contextual } from "../Contextual.js";
 import { NodeActivity } from "../NodeActivity.js";
-import { ContextAgents } from "./ContextAgents.js";
 
 /**
  * Caches completion events per exchange. Uses if multiple OnlineContext instances are created for an exchange.
@@ -150,7 +146,6 @@ export function OnlineContext(options: OnlineContext.Options) {
         if (session) {
             SecureSession.assert(session);
         }
-        let agents: undefined | ContextAgents;
         let interactionComplete: AsyncObservable<[session?: ActionContext | undefined]> | undefined;
         if (exchange !== undefined) {
             interactionComplete = exchangeCompleteEvents.get(exchange);
@@ -209,13 +204,6 @@ export function OnlineContext(options: OnlineContext.Options) {
                 return accessLevels.includes(desiredAccessLevel)
                     ? AccessControl.Authority.Granted
                     : AccessControl.Authority.Unauthorized;
-            },
-
-            agentFor<T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T> {
-                if (!agents) {
-                    agents = ContextAgents(context);
-                }
-                return agents.agentFor(endpoint);
             },
 
             get [Contextual.context](): ActionContext {

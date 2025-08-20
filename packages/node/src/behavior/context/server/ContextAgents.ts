@@ -12,9 +12,25 @@ import type { ActionContext } from "../ActionContext.js";
 /**
  * Internal helper for managing agents associated with a session.
  */
-export interface ContextAgents extends ReturnType<typeof ContextAgents> {}
+export interface ContextAgents {
+    [Symbol.toStringTag]: "ContextAgents";
+    agentFor<const T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T>;
+}
+
+const contextAgents = new WeakMap<ActionContext, ContextAgents>();
 
 export function ContextAgents(context: ActionContext) {
+    let instance = contextAgents.get(context);
+
+    if (instance === undefined) {
+        instance = create(context);
+        contextAgents.set(context, instance);
+    }
+
+    return instance;
+}
+
+function create(context: ActionContext): ContextAgents {
     const agents = new Map<Endpoint, Agent>();
 
     return {
