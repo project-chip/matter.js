@@ -8,7 +8,6 @@ import {
     Attribute,
     Command,
     Event,
-    EventPriority,
     GlobalAttributes,
     OptionalAttribute,
     OptionalCommand,
@@ -16,6 +15,7 @@ import {
 } from "#cluster/Cluster.js";
 import { ClusterType } from "#cluster/ClusterType.js";
 import { ElementModifier } from "#cluster/mutation/ElementModifier.js";
+import { Priority } from "#globals/Priority.js";
 import { TlvBoolean } from "#tlv/TlvBoolean.js";
 import { TlvUInt8 } from "#tlv/TlvNumber.js";
 import { Elements1ish, TestBase, stripFunctions } from "./util.js";
@@ -161,7 +161,7 @@ describe("ElementModifier", () => {
                 name: "Foo",
                 attributes: { attr: Attribute(1, TlvBoolean) },
                 commands: { cmd: Command(1, TlvBoolean, 1, TlvBoolean) },
-                events: { ev: Event(1, EventPriority.Debug, TlvBoolean) },
+                events: { ev: Event(1, Priority.Debug, TlvBoolean) },
             });
 
             const flags = {
@@ -203,7 +203,7 @@ describe("ElementModifier", () => {
                 name: "Foo",
                 attributes: { attr: OptionalAttribute(1, TlvBoolean) },
                 commands: { cmd: OptionalCommand(1, TlvBoolean, 1, TlvBoolean) },
-                events: { ev: OptionalEvent(1, EventPriority.Debug, TlvBoolean) },
+                events: { ev: OptionalEvent(1, Priority.Debug, TlvBoolean) },
             });
 
             const flags = {

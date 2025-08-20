@@ -12,6 +12,7 @@ import {
     camelize,
     EventEmitter,
     ImplementationError,
+    InternalError,
     Logger,
     MaybePromise,
     Observable,
@@ -23,7 +24,7 @@ import {
 } from "#general";
 import { ElementTag, EventElement, EventModel, type AttributeElement, type ValueModel } from "#model";
 import { Occurrence, OccurrenceManager } from "@matter/protocol";
-import { ClusterId, EventId, EventPriority } from "@matter/types";
+import { ClusterId, EventId, Priority } from "@matter/types";
 import type { Behavior } from "./Behavior.js";
 import { NodeActivity } from "./context/NodeActivity.js";
 
@@ -71,6 +72,12 @@ export class Events extends EventEmitter {
 
 export namespace Events {
     export interface Context {}
+
+    /**
+     * Generic type for {@link Endpoint#events}.
+     */
+    export interface Generic<T extends Observable = Observable>
+        extends Record<string, undefined | Record<string, undefined | T>> {}
 }
 
 /**
@@ -168,17 +175,23 @@ export class OnlineEvent<T extends any[] = any[], S extends ValueModel = ValueMo
                 eventId: EventId(this.schema.id),
                 clusterId: ClusterId(this.owner.behavior.schema!.id!),
                 endpointId: this.owner.endpoint.number,
-                priority: EventElement.PriorityId[eventSchema.priority] as unknown as EventPriority,
+                priority: EventElement.PriorityId[eventSchema.priority] as unknown as Priority,
             };
-            this.#connectWithOccuranceManager();
+            this.#connectWithOccurenceManager();
         }
     }
 
-    #connectWithOccuranceManager() {
+    #connectWithOccurenceManager() {
         if (this.owner.endpoint === undefined) {
-            throw new ImplementationError("Event is not assigned to an endpoint");
+            throw new InternalError("Events initialized with no assigned endpoint");
         }
-        const occurrenceManager = this.owner.endpoint.env.get(OccurrenceManager);
+
+        // Obtain occurrence manager.  Events on client nodes will not have one
+        const occurrenceManager = this.owner.endpoint.env.maybeGet(OccurrenceManager);
+        if (occurrenceManager === undefined) {
+            return;
+        }
+
         const trigger = (payload?: any) => {
             const maybePromise = occurrenceManager.add({
                 ...this.#baseOccurrence!,

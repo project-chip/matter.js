@@ -17,6 +17,7 @@ import { DatasourceCache } from "#storage/client/DatasourceCache.js";
 import { ClientNodeStore } from "#storage/index.js";
 import type { AttributeId, ClusterId, ClusterType, CommandId, DeviceTypeId, EndpointNumber } from "#types";
 import { ClientBehavior } from "./ClientBehavior.js";
+import { ClientEventEmitter } from "./ClientEventEmitter.js";
 
 const DEVICE_TYPE_LIST_ATTR_ID = DescriptorCluster.attributes.deviceTypeList.id;
 const SERVER_LIST_ATTR_ID = DescriptorCluster.attributes.serverList.id;
@@ -28,6 +29,7 @@ const PARTS_LIST_ATTR_ID = DescriptorCluster.attributes.partsList.id;
 export class ClientStructure {
     #nodeStore: ClientNodeStore;
     #endpoints: Record<EndpointNumber, EndpointStructure> = {};
+    #emitEvent: ClientEventEmitter;
 
     constructor(node: ClientNode) {
         this.#nodeStore = node.env.get(ClientNodeStore);
@@ -35,6 +37,7 @@ export class ClientStructure {
             endpoint: node,
             clusters: {},
         };
+        this.#emitEvent = ClientEventEmitter(node, this);
     }
 
     /**
@@ -76,9 +79,9 @@ export class ClientStructure {
     }
 
     /**
+     * Obtain the store for a non-cluster behavior.
      *
-     * @param request
-     * @returns
+     * The data for these behaviors is managed locally and not synced from the peer.
      */
     storeForLocal(endpoint: Endpoint, type: Behavior.Type) {
         return this.#nodeStore.storeForEndpoint(endpoint).createStoreForLocalBehavior(type.id);
@@ -132,39 +135,17 @@ export class ClientStructure {
 
         for await (const chunk of changes) {
             for (const change of chunk) {
+                switch (change.kind) {
+                    case "attr-value":
+                        currentUpdates = await this.#mutateAttribute(change, scope, currentUpdates);
+                        break;
+
+                    case "event-value":
+                        this.#emitEvent(change);
+                        break;
+                }
                 if (change.kind !== "attr-value") {
                     continue;
-                }
-
-                const { endpointId, clusterId, attributeId } = change.path;
-
-                // If we are building updates to a cluster and the cluster/endpoint changes, apply the current update
-                // set
-                if (
-                    currentUpdates &&
-                    (currentUpdates.endpointId !== endpointId || currentUpdates.clusterId !== clusterId)
-                ) {
-                    await this.#updateCluster(currentUpdates);
-                    currentUpdates = undefined;
-                }
-
-                if (currentUpdates === undefined) {
-                    // Updating a new endpoint/cluster
-                    currentUpdates = {
-                        endpointId,
-                        clusterId,
-                        values: {
-                            [attributeId]: change.value,
-                        },
-                    };
-
-                    // Update version but only if this was a wildcard read
-                    if (scope.isWildcard(endpointId, clusterId)) {
-                        currentUpdates.values[DatasourceCache.VERSION_KEY] = change.version;
-                    }
-                } else {
-                    // Add value to change set for current endpoint/cluster
-                    currentUpdates.values[attributeId] = change.value;
                 }
             }
 
@@ -176,8 +157,44 @@ export class ClientStructure {
         }
     }
 
+    async #mutateAttribute(
+        change: ReadResult.AttributeValue,
+        scope: ReadScope,
+        currentUpdates: undefined | AttributeUpdates,
+    ) {
+        const { endpointId, clusterId, attributeId } = change.path;
+
+        // If we are building updates to a cluster and the cluster/endpoint changes, apply the current update
+        // set
+        if (currentUpdates && (currentUpdates.endpointId !== endpointId || currentUpdates.clusterId !== clusterId)) {
+            await this.#updateCluster(currentUpdates);
+            currentUpdates = undefined;
+        }
+
+        if (currentUpdates === undefined) {
+            // Updating a new endpoint/cluster
+            currentUpdates = {
+                endpointId,
+                clusterId,
+                values: {
+                    [attributeId]: change.value,
+                },
+            };
+
+            // Update version but only if this was a wildcard read
+            if (scope.isWildcard(endpointId, clusterId)) {
+                currentUpdates.values[DatasourceCache.VERSION_KEY] = change.version;
+            }
+        } else {
+            // Add value to change set for current endpoint/cluster
+            currentUpdates.values[attributeId] = change.value;
+        }
+
+        return currentUpdates;
+    }
+
     /**
-     * Obtain the {@link ClusterType} for an endpoint number and cluster ID.
+     * Obtain the {@link ClusterType} for an {@link EndpointNumber} and {@link ClusterId}.
      */
     clusterFor(endpoint: EndpointNumber, cluster: ClusterId) {
         const ep = this.#endpointFor(endpoint);
@@ -186,6 +203,13 @@ export class ClientStructure {
         }
 
         return this.#clusterFor(ep, cluster)?.behavior?.cluster;
+    }
+
+    /**
+     * Obtain the {@link Endpoint} for a {@link EndpointNumber}.
+     */
+    endpointFor(endpoint: EndpointNumber): Endpoint | undefined {
+        return this.#endpoints[endpoint]?.endpoint;
     }
 
     /**

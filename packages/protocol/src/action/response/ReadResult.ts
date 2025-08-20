@@ -12,8 +12,8 @@ import type {
     EventId,
     EventNumber,
     EventPath,
-    EventPriority,
     NodeId,
+    Priority,
     Status,
     StatusCode,
     TlvSchema,
@@ -69,7 +69,7 @@ export namespace ReadResult {
         path: ConcreteEventPath;
         number: EventNumber;
         timestamp: number;
-        priority: EventPriority;
+        priority: Priority;
         value: unknown;
         tlv: TlvSchema<unknown>;
     }

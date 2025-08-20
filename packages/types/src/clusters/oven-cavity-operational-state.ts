@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalAttribute, Command, Event, EventPriority, OptionalEvent } from "../cluster/Cluster.js";
+import { Attribute, OptionalAttribute, Command, Event, OptionalEvent } from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
@@ -16,6 +16,7 @@ import { OperationalState } from "./operational-state.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -161,7 +162,7 @@ export namespace OvenCavityOperationalState {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.14.7.1
              */
-            operationalError: Event(0x0, EventPriority.Critical, OperationalState.TlvOperationalErrorEvent),
+            operationalError: Event(0x0, Priority.Critical, OperationalState.TlvOperationalErrorEvent),
 
             /**
              * This event SHOULD be generated when the overall operation ends, successfully or otherwise. For example,
@@ -176,7 +177,7 @@ export namespace OvenCavityOperationalState {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.14.7.2
              */
-            operationCompletion: OptionalEvent(0x1, EventPriority.Info, OperationalState.TlvOperationCompletionEvent)
+            operationCompletion: OptionalEvent(0x1, Priority.Info, OperationalState.TlvOperationCompletionEvent)
         }
     });
 

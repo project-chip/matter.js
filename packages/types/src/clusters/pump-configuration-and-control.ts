@@ -14,13 +14,13 @@ import {
     Attribute,
     OptionalWritableAttribute,
     WritableAttribute,
-    OptionalEvent,
-    EventPriority
+    OptionalEvent
 } from "../cluster/Cluster.js";
 import { TlvInt16, TlvUInt16, TlvBitmap, TlvEnum, TlvUInt24, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { AccessLevel } from "#model";
+import { Priority } from "../globals/Priority.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
@@ -780,87 +780,87 @@ export namespace PumpConfigurationAndControl {
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            supplyVoltageLow: OptionalEvent(0x0, EventPriority.Info, TlvNoArguments),
+            supplyVoltageLow: OptionalEvent(0x0, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            supplyVoltageHigh: OptionalEvent(0x1, EventPriority.Info, TlvNoArguments),
+            supplyVoltageHigh: OptionalEvent(0x1, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            powerMissingPhase: OptionalEvent(0x2, EventPriority.Info, TlvNoArguments),
+            powerMissingPhase: OptionalEvent(0x2, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            systemPressureLow: OptionalEvent(0x3, EventPriority.Info, TlvNoArguments),
+            systemPressureLow: OptionalEvent(0x3, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            systemPressureHigh: OptionalEvent(0x4, EventPriority.Info, TlvNoArguments),
+            systemPressureHigh: OptionalEvent(0x4, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            dryRunning: OptionalEvent(0x5, EventPriority.Critical, TlvNoArguments),
+            dryRunning: OptionalEvent(0x5, Priority.Critical, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            motorTemperatureHigh: OptionalEvent(0x6, EventPriority.Info, TlvNoArguments),
+            motorTemperatureHigh: OptionalEvent(0x6, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            pumpMotorFatalFailure: OptionalEvent(0x7, EventPriority.Critical, TlvNoArguments),
+            pumpMotorFatalFailure: OptionalEvent(0x7, Priority.Critical, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            electronicTemperatureHigh: OptionalEvent(0x8, EventPriority.Info, TlvNoArguments),
+            electronicTemperatureHigh: OptionalEvent(0x8, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            pumpBlocked: OptionalEvent(0x9, EventPriority.Critical, TlvNoArguments),
+            pumpBlocked: OptionalEvent(0x9, Priority.Critical, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            sensorFailure: OptionalEvent(0xa, EventPriority.Info, TlvNoArguments),
+            sensorFailure: OptionalEvent(0xa, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            electronicNonFatalFailure: OptionalEvent(0xb, EventPriority.Info, TlvNoArguments),
+            electronicNonFatalFailure: OptionalEvent(0xb, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            electronicFatalFailure: OptionalEvent(0xc, EventPriority.Critical, TlvNoArguments),
+            electronicFatalFailure: OptionalEvent(0xc, Priority.Critical, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            generalFault: OptionalEvent(0xd, EventPriority.Info, TlvNoArguments),
+            generalFault: OptionalEvent(0xd, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            leakage: OptionalEvent(0xe, EventPriority.Info, TlvNoArguments),
+            leakage: OptionalEvent(0xe, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            airDetection: OptionalEvent(0xf, EventPriority.Info, TlvNoArguments),
+            airDetection: OptionalEvent(0xf, Priority.Info, TlvNoArguments),
 
             /**
              * @see {@link MatterSpecification.v141.Cluster} § 4.2.8
              */
-            turbineOperation: OptionalEvent(0x10, EventPriority.Info, TlvNoArguments)
+            turbineOperation: OptionalEvent(0x10, Priority.Info, TlvNoArguments)
         },
 
         /**

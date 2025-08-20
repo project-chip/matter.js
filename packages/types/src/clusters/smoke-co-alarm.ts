@@ -12,7 +12,6 @@ import {
     OptionalAttribute,
     OptionalWritableAttribute,
     Event,
-    EventPriority,
     OptionalEvent,
     OptionalFixedAttribute,
     OptionalCommand,
@@ -20,6 +19,7 @@ import {
 } from "../cluster/Cluster.js";
 import { TlvEnum, TlvEpochS } from "../tlv/TlvNumber.js";
 import { AccessLevel } from "#model";
+import { Priority } from "../globals/Priority.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
@@ -439,7 +439,7 @@ export namespace SmokeCoAlarm {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.11.8.1
              */
-            smokeAlarm: Event(0x0, EventPriority.Critical, TlvSmokeAlarmEvent),
+            smokeAlarm: Event(0x0, Priority.Critical, TlvSmokeAlarmEvent),
 
             /**
              * This event shall be generated when the device hosting the server receives a smoke alarm from an
@@ -447,7 +447,7 @@ export namespace SmokeCoAlarm {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.11.8.9
              */
-            interconnectSmokeAlarm: OptionalEvent(0x8, EventPriority.Critical, TlvInterconnectSmokeAlarmEvent)
+            interconnectSmokeAlarm: OptionalEvent(0x8, Priority.Critical, TlvInterconnectSmokeAlarmEvent)
         }
     });
 
@@ -470,7 +470,7 @@ export namespace SmokeCoAlarm {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.11.8.2
              */
-            coAlarm: Event(0x1, EventPriority.Critical, TlvCoAlarmEvent),
+            coAlarm: Event(0x1, Priority.Critical, TlvCoAlarmEvent),
 
             /**
              * This event shall be generated when the device hosting the server receives a CO alarm from an
@@ -478,7 +478,7 @@ export namespace SmokeCoAlarm {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.11.8.10
              */
-            interconnectCoAlarm: OptionalEvent(0x9, EventPriority.Critical, TlvInterconnectCoAlarmEvent)
+            interconnectCoAlarm: OptionalEvent(0x9, Priority.Critical, TlvInterconnectCoAlarmEvent)
         }
     });
 
@@ -614,7 +614,7 @@ export namespace SmokeCoAlarm {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.11.8.3
              */
-            lowBattery: Event(0x2, EventPriority.Info, TlvLowBatteryEvent),
+            lowBattery: Event(0x2, Priority.Info, TlvLowBatteryEvent),
 
             /**
              * This event shall be generated when the device detects a hardware fault that leads to setting
@@ -622,14 +622,14 @@ export namespace SmokeCoAlarm {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.11.8.4
              */
-            hardwareFault: Event(0x3, EventPriority.Info, TlvNoArguments),
+            hardwareFault: Event(0x3, Priority.Info, TlvNoArguments),
 
             /**
              * This event shall be generated when the EndOfServiceAlert is set to Expired.
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.11.8.5
              */
-            endOfService: Event(0x4, EventPriority.Info, TlvNoArguments),
+            endOfService: Event(0x4, Priority.Info, TlvNoArguments),
 
             /**
              * This event shall be generated when the SelfTest completes, and the attribute TestInProgress changes to
@@ -637,28 +637,28 @@ export namespace SmokeCoAlarm {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.11.8.6
              */
-            selfTestComplete: Event(0x5, EventPriority.Info, TlvNoArguments),
+            selfTestComplete: Event(0x5, Priority.Info, TlvNoArguments),
 
             /**
              * This event shall be generated when the DeviceMuted attribute changes to Muted.
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.11.8.7
              */
-            alarmMuted: OptionalEvent(0x6, EventPriority.Info, TlvNoArguments),
+            alarmMuted: OptionalEvent(0x6, Priority.Info, TlvNoArguments),
 
             /**
              * This event shall be generated when DeviceMuted attribute changes to NotMuted.
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.11.8.8
              */
-            muteEnded: OptionalEvent(0x7, EventPriority.Info, TlvNoArguments),
+            muteEnded: OptionalEvent(0x7, Priority.Info, TlvNoArguments),
 
             /**
              * This event shall be generated when ExpressedState attribute returns to Normal state.
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.11.8.11
              */
-            allClear: Event(0xa, EventPriority.Info, TlvNoArguments)
+            allClear: Event(0xa, Priority.Info, TlvNoArguments)
         },
 
         /**

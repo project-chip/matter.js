@@ -75,6 +75,7 @@ function generateType(analysis: ShapeAnalysis, baseType: Behavior.Type): Cluster
     }
 
     let { schema } = analysis;
+    let isCloned = false;
     const { extraAttrs, extraCommands } = analysis;
 
     // Obtain a ClusterType.  This provides TLV for known elements
@@ -99,8 +100,7 @@ function generateType(analysis: ShapeAnalysis, baseType: Behavior.Type): Cluster
         .map(([k]) => k);
     if (featureNames.length) {
         // Update ClusterModel
-        schema = schema.clone();
-        schema.supportedFeatures = featureNames;
+        cloneSchema();
 
         // Update the cluster.  Note that we do not validate feature combinations.  What the device sends we work with
         cluster = new ClusterComposer(cluster, true).compose(featureNames.map(capitalize));
@@ -109,7 +109,7 @@ function generateType(analysis: ShapeAnalysis, baseType: Behavior.Type): Cluster
     // If the schema does not match what the device actually returned, further augment both the ClusterModel and
     // ClusterType with unknown attributes and/or commands
     if (schema.revision !== analysis.shape.revision || extraAttrs.size || extraCommands.size) {
-        schema = schema.clone();
+        cloneSchema();
 
         cluster = {
             ...cluster,
@@ -117,8 +117,6 @@ function generateType(analysis: ShapeAnalysis, baseType: Behavior.Type): Cluster
             attributes: { ...cluster.attributes },
             commands: { ...cluster.commands },
         };
-
-        schema.supportedFeatures = supportedFeatures;
 
         for (const id of extraAttrs) {
             const name = createUnknownName("attr", id);
@@ -144,6 +142,15 @@ function generateType(analysis: ShapeAnalysis, baseType: Behavior.Type): Cluster
     }
 
     return type;
+
+    function cloneSchema() {
+        if (isCloned) {
+            return;
+        }
+        schema = schema.clone();
+        schema.supportedFeatures = featureNames;
+        isCloned = true;
+    }
 
     function implementCommand(command: ClusterType.Command) {
         return async function (this: ClusterBehavior, fields?: {}) {

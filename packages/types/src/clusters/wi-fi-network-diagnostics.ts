@@ -7,19 +7,13 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import {
-    Attribute,
-    Command,
-    TlvNoResponse,
-    OptionalAttribute,
-    OptionalEvent,
-    EventPriority
-} from "../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, OptionalAttribute, OptionalEvent } from "../cluster/Cluster.js";
 import { TlvUInt32, TlvUInt64, TlvEnum, TlvUInt16, TlvInt8 } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvByteString } from "../tlv/TlvString.js";
+import { Priority } from "../globals/Priority.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Identity } from "#general";
@@ -396,7 +390,7 @@ export namespace WiFiNetworkDiagnostics {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.15.8.1
              */
-            disconnection: OptionalEvent(0x0, EventPriority.Info, TlvDisconnectionEvent),
+            disconnection: OptionalEvent(0x0, Priority.Info, TlvDisconnectionEvent),
 
             /**
              * The AssociationFailure event shall indicate that a Node has attempted to connect, or reconnect, to a
@@ -405,7 +399,7 @@ export namespace WiFiNetworkDiagnostics {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.15.8.2
              */
-            associationFailure: OptionalEvent(0x1, EventPriority.Info, TlvAssociationFailureEvent),
+            associationFailure: OptionalEvent(0x1, Priority.Info, TlvAssociationFailureEvent),
 
             /**
              * The ConnectionStatus Event shall indicate that a Node’s connection status to a Wi-Fi network has changed.
@@ -414,7 +408,7 @@ export namespace WiFiNetworkDiagnostics {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.15.8.3
              */
-            connectionStatus: OptionalEvent(0x2, EventPriority.Info, TlvConnectionStatusEvent)
+            connectionStatus: OptionalEvent(0x2, Priority.Info, TlvConnectionStatusEvent)
         },
 
         /**

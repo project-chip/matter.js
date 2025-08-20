@@ -7,13 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { Attribute, Command, TlvNoResponse, Event, EventPriority, FixedAttribute } from "../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, Event, FixedAttribute } from "../cluster/Cluster.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvInt64, TlvUInt32, TlvEnum, TlvUInt16, TlvEpochS, TlvInt32, TlvUInt8, TlvInt8 } from "../tlv/TlvNumber.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { Priority } from "../globals/Priority.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { Identity } from "#general";
@@ -1329,14 +1330,14 @@ export namespace DeviceEnergyManagement {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.2.10.1
              */
-            powerAdjustStart: Event(0x0, EventPriority.Info, TlvNoArguments),
+            powerAdjustStart: Event(0x0, Priority.Info, TlvNoArguments),
 
             /**
              * This event shall be generated when the Power Adjustment session ends.
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.2.10.2
              */
-            powerAdjustEnd: Event(0x1, EventPriority.Info, TlvPowerAdjustEndEvent)
+            powerAdjustEnd: Event(0x1, Priority.Info, TlvPowerAdjustEndEvent)
         }
     });
 
@@ -1442,14 +1443,14 @@ export namespace DeviceEnergyManagement {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.2.10.3
              */
-            paused: Event(0x2, EventPriority.Info, TlvNoArguments),
+            paused: Event(0x2, Priority.Info, TlvNoArguments),
 
             /**
              * This event shall be generated when the ESA leaves the Paused state and resumes operation.
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.2.10.4
              */
-            resumed: Event(0x3, EventPriority.Info, TlvResumedEvent)
+            resumed: Event(0x3, Priority.Info, TlvResumedEvent)
         }
     });
 

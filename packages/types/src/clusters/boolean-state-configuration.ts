@@ -16,13 +16,13 @@ import {
     Command,
     TlvNoResponse,
     Event,
-    EventPriority,
     OptionalEvent
 } from "../cluster/Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvUInt16 } from "../tlv/TlvNumber.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -302,7 +302,7 @@ export namespace BooleanStateConfiguration {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.8.8.1
              */
-            alarmsStateChanged: Event(0x0, EventPriority.Info, TlvAlarmsStateChangedEvent)
+            alarmsStateChanged: Event(0x0, Priority.Info, TlvAlarmsStateChangedEvent)
         }
     });
 
@@ -399,7 +399,7 @@ export namespace BooleanStateConfiguration {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.8.8.2
              */
-            sensorFault: OptionalEvent(0x1, EventPriority.Info, TlvSensorFaultEvent)
+            sensorFault: OptionalEvent(0x1, Priority.Info, TlvSensorFaultEvent)
         },
 
         /**

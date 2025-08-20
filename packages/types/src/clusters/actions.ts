@@ -7,14 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import {
-    Attribute,
-    OptionalAttribute,
-    OptionalCommand,
-    TlvNoResponse,
-    Event,
-    EventPriority
-} from "../cluster/Cluster.js";
+import { Attribute, OptionalAttribute, OptionalCommand, TlvNoResponse, Event } from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvUInt16, TlvEnum, TlvBitmap, TlvUInt32 } from "../tlv/TlvNumber.js";
@@ -22,6 +15,7 @@ import { TlvString } from "../tlv/TlvString.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -911,7 +905,7 @@ export namespace Actions {
              *
              * @see {@link MatterSpecification.v141.Core} § 9.14.7.1
              */
-            stateChanged: Event(0x0, EventPriority.Info, TlvStateChangedEvent),
+            stateChanged: Event(0x0, Priority.Info, TlvStateChangedEvent),
 
             /**
              * This event shall be generated when there is some error which prevents the action from its normal planned
@@ -940,7 +934,7 @@ export namespace Actions {
              *
              * @see {@link MatterSpecification.v141.Core} § 9.14.7.2
              */
-            actionFailed: Event(0x1, EventPriority.Info, TlvActionFailedEvent)
+            actionFailed: Event(0x1, Priority.Info, TlvActionFailedEvent)
         }
     });
 

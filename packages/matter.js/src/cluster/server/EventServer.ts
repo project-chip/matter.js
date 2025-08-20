@@ -16,9 +16,9 @@ import {
     Commands,
     Event,
     EventId,
-    EventPriority,
     Events,
     FabricIndex,
+    Priority,
     TlvEventFilter,
     TlvSchema,
     TypeFromPartialBitSchema,
@@ -39,7 +39,7 @@ export function createEventServer<
     eventDef: Event<T, F>,
     eventName: string,
     schema: TlvSchema<T>,
-    priority: EventPriority,
+    priority: Priority,
     readAcl: AccessLevel | undefined,
 ): EventServer<T> {
     let fabricSensitive = false;
@@ -69,7 +69,7 @@ export class EventServer<T = any> {
         readonly clusterId: ClusterId,
         readonly name: string,
         readonly schema: TlvSchema<T>,
-        readonly priority: EventPriority,
+        readonly priority: Priority,
         readAcl: AccessLevel | undefined,
     ) {
         this.#readAcl = readAcl;

@@ -7,14 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import {
-    Attribute,
-    Command,
-    TlvNoResponse,
-    OptionalAttribute,
-    OptionalEvent,
-    EventPriority
-} from "../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, OptionalAttribute, OptionalEvent } from "../cluster/Cluster.js";
 import { TlvUInt64, TlvUInt16, TlvUInt32, TlvEnum, TlvUInt8, TlvInt8 } from "../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { AccessLevel } from "#model";
@@ -25,6 +18,7 @@ import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -1161,7 +1155,7 @@ export namespace ThreadNetworkDiagnostics {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.14.8.2
              */
-            connectionStatus: OptionalEvent(0x0, EventPriority.Info, TlvConnectionStatusEvent),
+            connectionStatus: OptionalEvent(0x0, Priority.Info, TlvConnectionStatusEvent),
 
             /**
              * The NetworkFaultChange Event shall indicate a change in the set of network faults currently detected by
@@ -1169,7 +1163,7 @@ export namespace ThreadNetworkDiagnostics {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.14.8.1
              */
-            networkFaultChange: OptionalEvent(0x1, EventPriority.Info, TlvNetworkFaultChangeEvent)
+            networkFaultChange: OptionalEvent(0x1, Priority.Info, TlvNetworkFaultChangeEvent)
         },
 
         /**

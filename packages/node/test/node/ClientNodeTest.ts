@@ -5,6 +5,7 @@
  */
 
 import { DiscoveryError } from "#behavior/system/controller/discovery/DiscoveryError.js";
+import { BasicInformationBehavior } from "#behaviors/basic-information";
 import { IdentifyClient } from "#behaviors/identify";
 import { OnOffClient } from "#behaviors/on-off";
 import { OnOffLightDevice } from "#devices/on-off-light";
@@ -113,7 +114,7 @@ describe("ClientNode", () => {
         expect(ep1b.state).deep.equals(expectedEp1State);
     }).timeout(1e9);
 
-    it("invokes and receives state updates", async () => {
+    it("invokes, receives state updates and emits changed events", async () => {
         // *** SETUP ***
 
         await using site = new MockSite();
@@ -212,7 +213,37 @@ describe("ClientNode", () => {
         await MockTime.resolve(toggle);
     }).timeout(1e9);
 
-    it("emits events", () => {
+    it("emits Matter events", async () => {
+        // *** SETUP ***
+
+        await using site = new MockSite();
+        const { controller, device } = await site.addCommissionedPair();
+        const peer1 = controller.nodes.get("peer1")!;
+
+        // *** TEST ***
+
+        const startUp = new Promise(resolve =>
+            peer1.eventsOf(BasicInformationBehavior).startUp.on(payload => {
+                resolve(payload);
+            }),
+        );
+        device.act(agent => agent.basicInformation.events.startUp.emit({ softwareVersion: 12 }, agent.context));
+        const payload = await MockTime.resolve(startUp);
+
+        // *** VALIDATE ***
+
+        expect(payload).deep.equals({ softwareVersion: 12 });
+    });
+
+    it("detects lack of ping and reestablishes connection", async () => {
+        // TODO
+    });
+
+    it("handles shutdown event and reestablishes connection", () => {
+        // TODO
+    });
+
+    it("removes node after leave event", () => {
         // TODO
     });
 });

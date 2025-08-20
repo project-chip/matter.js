@@ -7,19 +7,12 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import {
-    FixedAttribute,
-    Command,
-    TlvNoResponse,
-    Attribute,
-    OptionalCommand,
-    Event,
-    EventPriority
-} from "../cluster/Cluster.js";
+import { FixedAttribute, Command, TlvNoResponse, Attribute, OptionalCommand, Event } from "../cluster/Cluster.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 
 export namespace AlarmBase {
@@ -229,7 +222,7 @@ export namespace AlarmBase {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.15.8.1
              */
-            notify: Event(0x0, EventPriority.Info, TlvNotifyEvent)
+            notify: Event(0x0, Priority.Info, TlvNotifyEvent)
         },
 
         /**

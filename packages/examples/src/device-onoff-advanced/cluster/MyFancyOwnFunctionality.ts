@@ -18,8 +18,8 @@ import {
     ClusterRegistry,
     Command,
     Event,
-    EventPriority,
     MutableCluster,
+    Priority,
     TlvField,
     TlvInt16,
     TlvNullable,
@@ -75,7 +75,7 @@ export namespace MyFancyOwnFunctionality {
 
         events: {
             /** My fancy event */
-            myFancyEvent: Event(0x5, EventPriority.Info, TlvMyFancyEvent),
+            myFancyEvent: Event(0x5, Priority.Info, TlvMyFancyEvent),
         },
     });
 

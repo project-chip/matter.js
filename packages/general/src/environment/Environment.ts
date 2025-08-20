@@ -32,7 +32,7 @@ const logger = Logger.get("Environment");
  * TODO - could remove global singletons by moving here
  */
 export class Environment {
-    #services?: Map<abstract new (...args: any[]) => any, Environmental.Service>;
+    #services?: Map<abstract new (...args: any[]) => any, Environmental.Service | null>;
     #name: string;
     #parent?: Environment;
     #added = Observable<[type: abstract new (...args: any[]) => {}, instance: {}]>();
@@ -48,7 +48,13 @@ export class Environment {
      * Determine if an environmental service is available.
      */
     has(type: abstract new (...args: any[]) => any): boolean {
-        return this.#services?.get(type) !== undefined || (this.#parent?.has(type) ?? false);
+        const mine = this.#services?.get(type);
+
+        if (mine === null) {
+            return false;
+        }
+
+        return mine !== undefined || (this.#parent?.has(type) ?? false);
     }
 
     /**
@@ -57,13 +63,15 @@ export class Environment {
     get<T extends object>(type: abstract new (...args: any[]) => T): T {
         let instance = this.#services?.get(type) ?? this.#parent?.maybeGet(type);
 
-        if (instance) {
+        if (instance !== undefined && instance !== null) {
             return instance as T;
         }
 
-        if ((type as Environmental.Factory<T>)[Environmental.create]) {
-            this.set(type, (instance = (type as any)[Environmental.create](this)));
-            return instance as T;
+        if (instance !== null) {
+            if ((type as Environmental.Factory<T>)[Environmental.create]) {
+                this.set(type, (instance = (type as any)[Environmental.create](this)));
+                return instance as T;
+            }
         }
 
         throw new UnsupportedDependencyError(`Required dependency ${type.name}`, "is not available");
@@ -97,6 +105,19 @@ export class Environment {
         if (serviceEvents) {
             serviceEvents.deleted.emit(instance);
         }
+    }
+
+    /**
+     * Prevent this environment from automatically instantiating or retrieving a service from parent environment.
+     *
+     * @param type the class of the service to block
+     */
+    block(type: abstract new (...args: any[]) => any) {
+        if (this.has(type)) {
+            this.delete(type);
+        }
+
+        this.#services?.set(type, null);
     }
 
     /**

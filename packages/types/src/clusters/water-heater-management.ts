@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { Attribute, FixedAttribute, Command, TlvNoResponse, Event, EventPriority } from "../cluster/Cluster.js";
+import { Attribute, FixedAttribute, Command, TlvNoResponse, Event } from "../cluster/Cluster.js";
 import {
     TlvUInt16,
     TlvInt64,
@@ -24,6 +24,7 @@ import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { AccessLevel } from "#model";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -367,14 +368,14 @@ export namespace WaterHeaterManagement {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.5.9.1
              */
-            boostStarted: Event(0x0, EventPriority.Info, TlvBoostStartedEvent),
+            boostStarted: Event(0x0, Priority.Info, TlvBoostStartedEvent),
 
             /**
              * This event shall be generated whenever the BoostState transitions from Active to Inactive.
              *
              * @see {@link MatterSpecification.v141.Cluster} § 9.5.9.2
              */
-            boostEnded: Event(0x1, EventPriority.Info, TlvNoArguments)
+            boostEnded: Event(0x1, Priority.Info, TlvNoArguments)
         },
 
         /**

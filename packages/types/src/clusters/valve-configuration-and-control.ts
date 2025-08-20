@@ -15,8 +15,7 @@ import {
     OptionalAttribute,
     Command,
     TlvNoResponse,
-    OptionalEvent,
-    EventPriority
+    OptionalEvent
 } from "../cluster/Cluster.js";
 import { TlvEpochUs, TlvPercent, TlvUInt8, TlvUInt32, TlvEnum, TlvUInt16, TlvBitmap } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
@@ -24,6 +23,7 @@ import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvOptionalField, TlvObject, TlvField } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { Priority } from "../globals/Priority.js";
 import { StatusResponseError } from "../common/StatusResponseError.js";
 import { Status } from "../globals/Status.js";
 import { Identity } from "#general";
@@ -447,7 +447,7 @@ export namespace ValveConfigurationAndControl {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 4.6.9.1
              */
-            valveStateChanged: OptionalEvent(0x0, EventPriority.Info, TlvValveStateChangedEvent),
+            valveStateChanged: OptionalEvent(0x0, Priority.Info, TlvValveStateChangedEvent),
 
             /**
              * This event shall be generated when the valve registers or clears a fault, e.g. not being able to
@@ -455,7 +455,7 @@ export namespace ValveConfigurationAndControl {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 4.6.9.2
              */
-            valveFault: OptionalEvent(0x1, EventPriority.Info, TlvValveFaultEvent)
+            valveFault: OptionalEvent(0x1, Priority.Info, TlvValveFaultEvent)
         },
 
         /**

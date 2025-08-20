@@ -7,8 +7,9 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { FixedAttribute, Event, EventPriority, Attribute } from "../cluster/Cluster.js";
+import { FixedAttribute, Event, Attribute } from "../cluster/Cluster.js";
 import { TlvUInt8 } from "../tlv/TlvNumber.js";
+import { Priority } from "../globals/Priority.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
@@ -304,7 +305,7 @@ export namespace Switch {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.13.6.7
              */
-            multiPressComplete: Event(0x6, EventPriority.Info, TlvMultiPressCompleteEvent)
+            multiPressComplete: Event(0x6, Priority.Info, TlvMultiPressCompleteEvent)
         }
     });
 
@@ -319,7 +320,7 @@ export namespace Switch {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.13.6.1
              */
-            switchLatched: Event(0x0, EventPriority.Info, TlvSwitchLatchedEvent)
+            switchLatched: Event(0x0, Priority.Info, TlvSwitchLatchedEvent)
         }
     });
 
@@ -333,7 +334,7 @@ export namespace Switch {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.13.6.2
              */
-            initialPress: Event(0x1, EventPriority.Info, TlvInitialPressEvent)
+            initialPress: Event(0x1, Priority.Info, TlvInitialPressEvent)
         }
     });
 
@@ -376,7 +377,7 @@ export namespace Switch {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.13.6.3
              */
-            longPress: Event(0x2, EventPriority.Info, TlvLongPressEvent),
+            longPress: Event(0x2, Priority.Info, TlvLongPressEvent),
 
             /**
              * This event shall be generated, when the momentary switch has been released (after debouncing) and after
@@ -386,7 +387,7 @@ export namespace Switch {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.13.6.5
              */
-            longRelease: Event(0x4, EventPriority.Info, TlvLongReleaseEvent)
+            longRelease: Event(0x4, Priority.Info, TlvLongReleaseEvent)
         }
     });
 
@@ -414,7 +415,7 @@ export namespace Switch {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.13.6.4
              */
-            shortRelease: Event(0x3, EventPriority.Info, TlvShortReleaseEvent)
+            shortRelease: Event(0x3, Priority.Info, TlvShortReleaseEvent)
         }
     });
 
@@ -433,7 +434,7 @@ export namespace Switch {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 1.13.6.6
              */
-            multiPressOngoing: Event(0x5, EventPriority.Info, TlvMultiPressOngoingEvent)
+            multiPressOngoing: Event(0x5, Priority.Info, TlvMultiPressOngoingEvent)
         }
     });
 

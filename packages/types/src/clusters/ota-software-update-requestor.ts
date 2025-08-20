@@ -7,14 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import {
-    WritableFabricScopedAttribute,
-    Attribute,
-    OptionalCommand,
-    TlvNoResponse,
-    Event,
-    EventPriority
-} from "../cluster/Cluster.js";
+import { WritableFabricScopedAttribute, Attribute, OptionalCommand, TlvNoResponse, Event } from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvNodeId } from "../datatype/NodeId.js";
@@ -27,6 +20,7 @@ import { TlvEnum, TlvUInt8, TlvUInt32, TlvUInt16, TlvUInt64, TlvInt64 } from "..
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
 import { TlvByteString } from "../tlv/TlvString.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -557,7 +551,7 @@ export namespace OtaSoftwareUpdateRequestor {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.20.7.7.1
              */
-            stateTransition: Event(0x0, EventPriority.Info, TlvStateTransitionEvent),
+            stateTransition: Event(0x0, Priority.Info, TlvStateTransitionEvent),
 
             /**
              * This event shall be generated whenever a new version starts executing after being applied due to a
@@ -566,14 +560,14 @@ export namespace OtaSoftwareUpdateRequestor {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.20.7.7.2
              */
-            versionApplied: Event(0x1, EventPriority.Critical, TlvVersionAppliedEvent),
+            versionApplied: Event(0x1, Priority.Critical, TlvVersionAppliedEvent),
 
             /**
              * This event shall be generated whenever an error occurs during OTA Requestor download operation.
              *
              * @see {@link MatterSpecification.v141.Core} § 11.20.7.7.3
              */
-            downloadError: Event(0x2, EventPriority.Info, TlvDownloadErrorEvent)
+            downloadError: Event(0x2, Priority.Info, TlvDownloadErrorEvent)
         }
     });
 

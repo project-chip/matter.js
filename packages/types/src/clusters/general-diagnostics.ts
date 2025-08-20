@@ -7,15 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import {
-    Command,
-    Attribute,
-    OptionalAttribute,
-    TlvNoResponse,
-    OptionalEvent,
-    EventPriority,
-    Event
-} from "../cluster/Cluster.js";
+import { Command, Attribute, OptionalAttribute, TlvNoResponse, OptionalEvent, Event } from "../cluster/Cluster.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { TlvUInt8, TlvUInt16, TlvEnum, TlvUInt64, TlvUInt32, TlvSysTimeMS, TlvPosixMs } from "../tlv/TlvNumber.js";
@@ -26,6 +18,7 @@ import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { Priority } from "../globals/Priority.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -815,7 +808,7 @@ export namespace GeneralDiagnostics {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.12.8.1
              */
-            hardwareFaultChange: OptionalEvent(0x0, EventPriority.Critical, TlvHardwareFaultChangeEvent),
+            hardwareFaultChange: OptionalEvent(0x0, Priority.Critical, TlvHardwareFaultChangeEvent),
 
             /**
              * The RadioFaultChange Event shall indicate a change in the set of radio faults currently detected by the
@@ -823,7 +816,7 @@ export namespace GeneralDiagnostics {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.12.8.2
              */
-            radioFaultChange: OptionalEvent(0x1, EventPriority.Critical, TlvRadioFaultChangeEvent),
+            radioFaultChange: OptionalEvent(0x1, Priority.Critical, TlvRadioFaultChangeEvent),
 
             /**
              * The NetworkFaultChange Event shall indicate a change in the set of network faults currently detected by
@@ -831,14 +824,14 @@ export namespace GeneralDiagnostics {
              *
              * @see {@link MatterSpecification.v141.Core} § 11.12.8.3
              */
-            networkFaultChange: OptionalEvent(0x2, EventPriority.Critical, TlvNetworkFaultChangeEvent),
+            networkFaultChange: OptionalEvent(0x2, Priority.Critical, TlvNetworkFaultChangeEvent),
 
             /**
              * The BootReason Event shall indicate the reason that caused the device to start-up.
              *
              * @see {@link MatterSpecification.v141.Core} § 11.12.8.4
              */
-            bootReason: Event(0x3, EventPriority.Critical, TlvBootReasonEvent)
+            bootReason: Event(0x3, Priority.Critical, TlvBootReasonEvent)
         },
 
         /**

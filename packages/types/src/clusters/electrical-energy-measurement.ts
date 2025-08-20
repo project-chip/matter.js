@@ -7,11 +7,12 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalAttribute, Event, EventPriority, FixedAttribute } from "../cluster/Cluster.js";
+import { Attribute, OptionalAttribute, Event, FixedAttribute } from "../cluster/Cluster.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvInt64, TlvEpochS, TlvSysTimeMS } from "../tlv/TlvNumber.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
+import { Priority } from "../globals/Priority.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvMeasurementAccuracy } from "../globals/MeasurementAccuracy.js";
 import { Identity } from "#general";
@@ -443,7 +444,7 @@ export namespace ElectricalEnergyMeasurement {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.12.7.1
              */
-            cumulativeEnergyMeasured: Event(0x0, EventPriority.Info, TlvCumulativeEnergyMeasuredEvent)
+            cumulativeEnergyMeasured: Event(0x0, Priority.Info, TlvCumulativeEnergyMeasuredEvent)
         }
     });
 
@@ -458,7 +459,7 @@ export namespace ElectricalEnergyMeasurement {
              *
              * @see {@link MatterSpecification.v141.Cluster} § 2.12.7.2
              */
-            periodicEnergyMeasured: Event(0x1, EventPriority.Info, TlvPeriodicEnergyMeasuredEvent)
+            periodicEnergyMeasured: Event(0x1, Priority.Info, TlvPeriodicEnergyMeasuredEvent)
         }
     });
 
