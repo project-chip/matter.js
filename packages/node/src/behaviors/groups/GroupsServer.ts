@@ -67,7 +67,7 @@ export class GroupsServer extends GroupsBase {
 
     // We need to search the root here ourselves because we cannot include ServerNode because else we generate a
     // circular dependency
-    #rootEndpoint(): Endpoint<RootEndpoint> {
+    get #rootEndpoint(): Endpoint<RootEndpoint> {
         const rootEndpoint = this.endpoint.ownerOfType(RootEndpoint);
         if (rootEndpoint === undefined) {
             throw new InternalError("RootEndpoint not found");
@@ -76,7 +76,7 @@ export class GroupsServer extends GroupsBase {
     }
 
     async #actOnGroupKeyManagement<T>(act: (groupKeyManagement: GroupKeyManagementServer) => T): Promise<T> {
-        const agent = this.context.agentFor(this.#rootEndpoint());
+        const agent = this.#rootEndpoint.agentFor(this.context);
         const gkm = agent.get(GroupKeyManagementServer);
         await agent.context.transaction.addResources(gkm);
         await agent.context.transaction.begin();
@@ -122,7 +122,7 @@ export class GroupsServer extends GroupsBase {
         const fabricIndex = fabric.fabricIndex;
         const endpointNumber = this.endpoint.number;
 
-        const { groupTable } = this.#rootEndpoint().stateOf(GroupKeyManagementServer);
+        const { groupTable } = this.#rootEndpoint.stateOf(GroupKeyManagementServer);
         const groupEntry = groupTable.find(entry => entry.groupId === groupId && entry.fabricIndex === fabricIndex);
         if (groupEntry === undefined || !groupEntry.endpoints.includes(endpointNumber)) {
             return { status: StatusCode.NotFound, groupId, groupName: "" };
@@ -137,7 +137,7 @@ export class GroupsServer extends GroupsBase {
         const fabricIndex = fabric.fabricIndex;
         const endpointNumber = this.endpoint.number;
 
-        const { groupTable } = this.#rootEndpoint().stateOf(GroupKeyManagementServer);
+        const { groupTable } = this.#rootEndpoint.stateOf(GroupKeyManagementServer);
         const endpointGroups = groupTable.filter(
             entry => entry.endpoints.includes(endpointNumber) && entry.fabricIndex === fabricIndex,
         );

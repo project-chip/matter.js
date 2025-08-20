@@ -44,7 +44,7 @@ export class IdentityService {
             other = this.#node;
         } else {
             if (this.#partsById === undefined) {
-                this.#partsById = OfflineContext.ReadOnly.agentFor(this.#node).get(IndexBehavior).partsById;
+                this.#partsById = this.#node.agentFor(OfflineContext.ReadOnly).get(IndexBehavior).partsById;
             }
             other = this.#partsById?.[number];
         }

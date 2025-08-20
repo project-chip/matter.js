@@ -5,7 +5,9 @@
  */
 
 import { Behavior } from "#behavior/Behavior.js";
+import { ActionContext } from "#behavior/context/ActionContext.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
+import { ContextAgents } from "#behavior/context/server/ContextAgents.js";
 import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
 import {
     Construction,
@@ -110,6 +112,17 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     get owner(): Endpoint | undefined {
         return this.#owner;
+    }
+
+    /**
+     * Access an {@link Agent} for this endpoint.
+     *
+     * An {@link Agent} allows you to interact directly with the behaviors supported by the endpoint.  Normally you
+     * would use {@link act} to obtain an agent but {@link agentFor} is useful if you need to interact with multiple
+     * endpoints in the same context.
+     */
+    agentFor<T extends EndpointType>(this: Endpoint<T>, context: ActionContext) {
+        return ContextAgents(context).agentFor(this);
     }
 
     get endpointProtocol() {
@@ -599,7 +612,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         return OfflineContext.act(
             purpose,
             context => {
-                return actor(context.agentFor(this));
+                return actor(this.agentFor(context));
             },
             { activity: this.#activity },
         );

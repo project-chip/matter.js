@@ -116,7 +116,7 @@ function inferDeviceType(agent: Agent): DeviceTypeId | undefined {
     }
 
     for (const child of agent.endpoint.parts) {
-        const deviceType = inferDeviceType(agent.context.agentFor(child));
+        const deviceType = inferDeviceType(child.agentFor(agent.context));
         if (deviceType !== undefined) {
             return deviceType;
         }

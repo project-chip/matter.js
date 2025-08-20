@@ -67,7 +67,7 @@ function Implementation(endpoint: Endpoint, type: Behavior.Type, name: string): 
 
             // Create function to perform invocation
             function invokerFor(context: ActionContext) {
-                const agent = context.agentFor(endpoint);
+                const agent = endpoint.agentFor(context);
                 const behavior = agent.get(type);
                 const method = (behavior as unknown as Record<string, Commands.Command>)[name];
                 if (typeof method !== "function") {

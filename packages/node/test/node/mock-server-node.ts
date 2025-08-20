@@ -93,7 +93,7 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
         if (!options.node) {
             options.node = this;
         }
-        return OnlineContext(options as OnlineContext.Options).act(context => actor(context.agentFor(this)));
+        return OnlineContext(options as OnlineContext.Options).act(context => actor(this.agentFor(context)));
     }
 
     static async createOnline<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint>(

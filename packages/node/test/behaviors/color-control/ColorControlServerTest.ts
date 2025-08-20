@@ -21,7 +21,7 @@ describe("ColorControlServer", () => {
         });
 
         await node.online({ command: true }, async agent => {
-            const endpointAgent = agent.context.agentFor(endpoint);
+            const endpointAgent = endpoint.agentFor(agent.context);
 
             await agent.context.transaction.addResources(endpointAgent.colorControl);
 

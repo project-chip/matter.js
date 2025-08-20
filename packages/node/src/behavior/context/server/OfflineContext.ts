@@ -5,15 +5,12 @@
  */
 
 import type { Agent } from "#endpoint/Agent.js";
-import type { Endpoint } from "#endpoint/Endpoint.js";
-import type { EndpointType } from "#endpoint/type/EndpointType.js";
 import { Diagnostic, InternalError, MaybePromise, Transaction } from "#general";
 import { AccessLevel } from "#model";
 import { AccessControl } from "#protocol";
 import type { ActionContext } from "../ActionContext.js";
 import { Contextual } from "../Contextual.js";
 import type { NodeActivity } from "../NodeActivity.js";
-import { ContextAgents } from "./ContextAgents.js";
 
 export let nextInternalId = 1;
 
@@ -70,7 +67,6 @@ export const OfflineContext = {
 
         try {
             frame = options?.activity?.begin(via);
-            let agents: undefined | ContextAgents;
 
             transaction = Transaction.open(via, options?.isolation);
 
@@ -92,13 +88,6 @@ export const OfflineContext = {
                     return desiredAccessLevel === AccessLevel.View
                         ? AccessControl.Authority.Granted
                         : AccessControl.Authority.Unauthorized;
-                },
-
-                agentFor<const T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T> {
-                    if (!agents) {
-                        agents = ContextAgents(context);
-                    }
-                    return agents?.agentFor(endpoint);
                 },
 
                 get [Contextual.context]() {

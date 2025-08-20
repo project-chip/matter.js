@@ -66,7 +66,7 @@ describe("LevelControlServer", () => {
         });
 
         await node.online({ command: true }, async agent => {
-            const endpointAgent = agent.context.agentFor(endpoint);
+            const endpointAgent = endpoint.agentFor(agent.context);
 
             await agent.context.transaction.addResources(endpointAgent.levelControl);
 
@@ -237,7 +237,7 @@ async function initializeDimmableLight() {
 async function changeLevel(endpoint: Endpoint<DimmableLightDevice>, steps = 200) {
     const node = endpoint.owner as MockServerNode;
     await node.online({ command: true }, async agent => {
-        const endpointAgent = agent.context.agentFor(endpoint);
+        const endpointAgent = endpoint.agentFor(agent.context);
 
         await agent.context.transaction.addResources(endpointAgent.levelControl);
 

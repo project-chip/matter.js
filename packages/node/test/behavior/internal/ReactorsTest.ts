@@ -26,17 +26,8 @@ class MockAgent {
 }
 
 function MockContext(offline = true) {
-    let agent: MockAgent | undefined;
-
     const context = {
         offline,
-
-        agentFor() {
-            if (agent === undefined) {
-                agent = new MockAgent(undefined, this as ActionContext);
-            }
-            return agent;
-        },
 
         get [Contextual.context]() {
             return this;
@@ -51,6 +42,7 @@ function MockContext(offline = true) {
 }
 
 class MockEndpoint {
+    agent: MockAgent | undefined;
     event = Observable<[value: string, context?: ActionContext], MaybePromise<string>>();
     env = new Environment("reactor-test");
     activity = new NodeActivity();
@@ -68,6 +60,13 @@ class MockEndpoint {
 
     get agentType() {
         return MockAgent;
+    }
+
+    agentFor(context: ActionContext) {
+        if (this.agent === undefined) {
+            this.agent = new MockAgent(undefined, context);
+        }
+        return this.agent;
     }
 
     constructor(isAsync = false) {
@@ -267,7 +266,7 @@ describe("Reactors", () => {
         expect(reactionText).equals("foo");
         expect(offline).false;
         expect(reactionContext).equals(context);
-        expect(reactionThis).equals(context.agentFor({} as any).get({} as Behavior.Type));
+        expect(reactionThis).equals(endpoint.agentFor(context).get());
 
         expect(reacted).equals(1);
     });
