@@ -560,6 +560,10 @@ export function Key(properties: Partial<Key>) {
         }
     }
 
+    if ("sharedSecretFor" in properties && typeof properties["sharedSecretFor"] === "function") {
+        (that as PrivateKey).sharedSecretFor = properties["sharedSecretFor"] as (peerKey: PublicKey) => Bytes;
+    }
+
     return that;
 }
 
