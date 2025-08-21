@@ -110,7 +110,7 @@ export class ReactNativeCrypto extends StandardCrypto {
     }
 
     /**
-     * QuickCrypro's subtle doesn't support HMAC signing, so use the non-subtle version.
+     * QuickCrypto's subtle doesn't support HMAC signing, so use the non-subtle version.
      */
     override async signHmac(secret: Bytes, data: Bytes): Promise<Bytes> {
         const hmac = crypto.createHmac("SHA-256", Bytes.of(secret));
