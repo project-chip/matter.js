@@ -17,6 +17,7 @@ import {
     WebCrypto,
 } from "#general";
 import { Buffer } from "@craftzdog/react-native-buffer";
+import { NodeJsCrypto } from "@matter/nodejs";
 import QuickCrypto from "react-native-quick-crypto";
 
 // The default export from QuickCrypto should be compatible with the standard `crypto` object but the type system
@@ -111,13 +112,9 @@ export class ReactNativeCrypto extends StandardCrypto {
     }
 
     /**
-     * QuickCrypto's subtle doesn't support HMAC signing, so use the non-subtle version.
+     * QuickCrypto's subtle doesn't support HMAC signing; instead rely on Node.js crypto emulation.
      */
-    override async signHmac(secret: Bytes, data: Bytes): Promise<Bytes> {
-        const hmac = crypto.createHmac("SHA-256", Bytes.of(secret));
-        hmac.update(Bytes.of(data));
-        return Bytes.of(hmac.digest());
-    }
+    override signHmac = NodeJsCrypto.prototype.signHmac;
 }
 
 Environment.default.set(Crypto, new ReactNativeCrypto(crypto as unknown as WebCrypto));

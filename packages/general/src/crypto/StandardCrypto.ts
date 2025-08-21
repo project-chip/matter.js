@@ -9,6 +9,7 @@ import { DerBigUint, DerCodec, DerError } from "#codec/DerCodec.js";
 import { Environment } from "#environment/Environment.js";
 import { ImplementationError } from "#MatterError.js";
 import { Bytes } from "#util/Bytes.js";
+import { MaybePromise } from "#util/Promises.js";
 import { describeList } from "#util/String.js";
 import { Ccm } from "./aes/Ccm.js";
 import { Crypto, CRYPTO_SYMMETRIC_KEY_LENGTH, CryptoDsaEncoding } from "./Crypto.js";
@@ -135,9 +136,10 @@ export class StandardCrypto extends Crypto {
         );
     }
 
-    async signHmac(secret: Bytes, data: Bytes): Promise<Bytes> {
-        const key = await this.importKey("raw", secret, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-        return this.#subtle.sign("HMAC", key, Bytes.exclusive(data));
+    signHmac(secret: Bytes, data: Bytes): MaybePromise<Bytes> {
+        return this.importKey("raw", secret, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]).then(key =>
+            this.#subtle.sign("HMAC", key, Bytes.exclusive(data)),
+        );
     }
 
     async signEcdsa(key: JsonWebKey, data: Bytes | Bytes[], dsaEncoding?: CryptoDsaEncoding) {
