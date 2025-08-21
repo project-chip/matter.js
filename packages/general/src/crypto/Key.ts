@@ -211,7 +211,6 @@ export interface PrivateKey extends PublicKey {
     privateKey: Bytes;
     keyPair: BinaryKeyPair;
     keyPairBits: BinaryKeyPair;
-    sharedSecretFor(peerKey: PublicKey): Bytes;
 }
 
 /**
@@ -579,7 +578,6 @@ export function PrivateKey(privateKey: Bytes | BinaryKeyPair, options?: Partial<
         privateKey: priv,
         publicKey: pub,
         ...options,
-        sharedSecretFor,
     } as Key) as PrivateKey;
 }
 
@@ -605,11 +603,13 @@ export function SymmetricKey(privateKey: Bytes, options?: Partial<Key>) {
     });
 }
 
-/**
- * Diffie-Hellman shared secret computation.
- *
- * We provide this for platforms without a native implementation.
- */
-export function sharedSecretFor(this: PrivateKey, peerKey: PublicKey): Bytes {
-    return Bytes.of(getSharedSecret(Bytes.of(this.privateBits), Bytes.of(peerKey.publicBits)));
+export namespace Key {
+    /**
+     * Diffie-Hellman shared secret computation.
+     *
+     * We provide this for platforms without a native implementation.
+     */
+    export function sharedSecretFor(key: PrivateKey, peerKey: PublicKey): Bytes {
+        return Bytes.of(getSharedSecret(Bytes.of(key.privateBits), Bytes.of(peerKey.publicBits)));
+    }
 }

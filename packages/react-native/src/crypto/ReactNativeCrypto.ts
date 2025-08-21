@@ -10,12 +10,14 @@ import {
     CRYPTO_HASH_LEN_BYTES,
     CRYPTO_SYMMETRIC_KEY_LENGTH,
     Environment,
+    Key,
     PrivateKey,
     PublicKey,
     StandardCrypto,
     WebCrypto,
 } from "#general";
 import { Buffer } from "@craftzdog/react-native-buffer";
+import { NodeJsCrypto } from "@matter/nodejs";
 import QuickCrypto from "react-native-quick-crypto";
 
 // The default export from QuickCrypto should be compatible with the standard `crypto` object but the type system
@@ -61,7 +63,7 @@ export class ReactNativeCrypto extends StandardCrypto {
 
         const N = Math.ceil(length / CRYPTO_HASH_LEN_BYTES);
 
-        // Single T buffer to accomodate T = T(1) | T(2) | T(3) | ... | T(N)
+        // Single T buffer to accommodate T = T(1) | T(2) | T(3) | ... | T(N)
         // with a little extra for info | N during T(N)
         const T = new Uint8Array(CRYPTO_HASH_LEN_BYTES * N + info.byteLength + 1);
         let prev = 0;
@@ -106,8 +108,13 @@ export class ReactNativeCrypto extends StandardCrypto {
      * See comment on {@link createHkdfKey}.
      */
     override async generateDhSecret(key: PrivateKey, peerKey: PublicKey) {
-        return key.sharedSecretFor(peerKey);
+        return Key.sharedSecretFor(key, peerKey);
     }
+
+    /**
+     * QuickCrypto's subtle doesn't support HMAC signing; instead rely on Node.js crypto emulation.
+     */
+    override signHmac = NodeJsCrypto.prototype.signHmac;
 }
 
 Environment.default.set(Crypto, new ReactNativeCrypto(crypto as unknown as WebCrypto));

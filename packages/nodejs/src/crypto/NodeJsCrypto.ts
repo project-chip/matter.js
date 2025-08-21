@@ -53,17 +53,17 @@ export class NodeJsCrypto extends Crypto {
         } catch (e) {
             throw new CryptoDecryptError(`${CRYPTO_ENCRYPT_ALGORITHM} decryption failed: ${asError(e).message}`);
         }
-        return new Uint8Array(result);
+        return Bytes.of(result);
     }
 
     randomBytes(length: number): Bytes {
-        return new Uint8Array(crypto.randomBytes(length));
+        return Bytes.of(crypto.randomBytes(length));
     }
 
     ecdhGeneratePublicKey(): { publicKey: Bytes; ecdh: any } {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
-        return { publicKey: new Uint8Array(ecdh.getPublicKey()), ecdh: ecdh };
+        return { publicKey: Bytes.of(ecdh.getPublicKey()), ecdh: ecdh };
     }
 
     ecdhGeneratePublicKeyAndSecret(peerPublicKey: Bytes): {
@@ -73,8 +73,8 @@ export class NodeJsCrypto extends Crypto {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
         return {
-            publicKey: new Uint8Array(ecdh.getPublicKey()),
-            sharedSecret: new Uint8Array(ecdh.computeSecret(Bytes.of(peerPublicKey))),
+            publicKey: Bytes.of(ecdh.getPublicKey()),
+            sharedSecret: Bytes.of(ecdh.computeSecret(Bytes.of(peerPublicKey))),
         };
     }
 
@@ -85,7 +85,7 @@ export class NodeJsCrypto extends Crypto {
         } else {
             hasher.update(Bytes.of(data));
         }
-        return new Uint8Array(hasher.digest());
+        return Bytes.of(hasher.digest());
     }
 
     createPbkdf2Key(secret: Bytes, salt: Bytes, iteration: number, keyLength: number): Promise<Bytes> {
@@ -98,7 +98,7 @@ export class NodeJsCrypto extends Crypto {
                 CRYPTO_HASH_ALGORITHM,
                 (error, key) => {
                     if (error !== null) rejecter(error);
-                    resolver(new Uint8Array(key));
+                    resolver(Bytes.of(key));
                 },
             );
         });
@@ -119,7 +119,7 @@ export class NodeJsCrypto extends Crypto {
                 length,
                 (error, key) => {
                     if (error !== null) rejecter(error);
-                    resolver(new Uint8Array(key));
+                    resolver(Bytes.of(key));
                 },
             );
         });
@@ -128,7 +128,7 @@ export class NodeJsCrypto extends Crypto {
     signHmac(key: Bytes, data: Bytes): Bytes {
         const hmac = crypto.createHmac(CRYPTO_HASH_ALGORITHM, Bytes.of(key));
         hmac.update(Bytes.of(data));
-        return new Uint8Array(hmac.digest());
+        return Bytes.of(hmac.digest());
     }
 
     signEcdsa(privateKey: JsonWebKey, data: Bytes | Bytes[], dsaEncoding: CryptoDsaEncoding = "ieee-p1363"): Bytes {
@@ -138,7 +138,7 @@ export class NodeJsCrypto extends Crypto {
         } else {
             signer.update(Bytes.of(data));
         }
-        return new Uint8Array(
+        return Bytes.of(
             signer.sign({
                 key: privateKey as any,
                 format: "jwk",
