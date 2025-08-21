@@ -287,8 +287,8 @@ export class BdxMessenger {
 
     /**
      * Ensure that the value is a number and that it is not too large. Matter spec allows also 64bit values, but they
-     * make not much sense for now, so make sure we handle them as too large. MAX_SAFE_INTEGER is 2^53 - 1 nd is
-     * sufficient for now.
+     * make little sense for now, so make sure we handle them as too large. MAX_SAFE_INTEGER is 2^53-1 and is
+     * enough for now.
      */
     asNumber(value: number | bigint | undefined, context = "", bdxErrorCode = BdxStatusCode.Unknown): number {
         if (typeof value !== "number" && typeof value !== "bigint") {
