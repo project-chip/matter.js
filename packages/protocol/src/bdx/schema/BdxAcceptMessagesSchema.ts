@@ -12,7 +12,7 @@ import {
     BdxRangeControlSchema,
     BdxTransferControlBitmap,
     BdxTransferControlSchema,
-} from "./BdxInitMessagesShema.js";
+} from "./BdxInitMessagesSchema.js";
 
 /** @see {@link MatterSpecification.v141.Core}, section 11.22.5.2 */
 export interface BdxSendAccept {

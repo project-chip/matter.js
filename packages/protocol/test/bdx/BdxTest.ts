@@ -207,7 +207,7 @@ describe("BdxTest", () => {
                             metaData: undefined,
                         });
 
-                        // No ned to etst all details again because tested with former test already
+                        // No need to test all details again because tested with former test already
 
                         const receivedData = await serverStorage.get(fd.text);
                         expect(receivedData).to.deep.equal(data);

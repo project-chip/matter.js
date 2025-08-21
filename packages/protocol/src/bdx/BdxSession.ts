@@ -14,8 +14,8 @@ import { BdxError } from "./BdxError.js";
 import { BdxMessenger } from "./BdxMessenger.js";
 import { FileDesignator } from "./FileDesignator.js";
 import { BdxTransferFlow } from "./flow/BdxTransferFlow.js";
-import { BdxReceiveAccept, BdxSendAccept } from "./schema/BdxAcceptMessagesShema.js";
-import { BDX_VERSION, BdxInit, BdxTransferControlBitmap } from "./schema/BdxInitMessagesShema.js";
+import { BdxReceiveAccept, BdxSendAccept } from "./schema/BdxAcceptMessagesSchema.js";
+import { BDX_VERSION, BdxInit, BdxTransferControlBitmap } from "./schema/BdxInitMessagesSchema.js";
 
 const logger = Logger.get("BdxSession");
 
@@ -25,7 +25,7 @@ const logger = Logger.get("BdxSession");
  * Matter BDX protocol is used to transfer files between devices.
  *
  * Notes:
- * * Even that Matter allows 64bit values for size and offset, we do not use them, as they make no sense for now.
+ * * Even though Matter allows 64bit values for size and offset, we do not use them, as they make no sense for now.
  *   We support up to MAX_SAFE_INTEGER for size and offset (which basically is 2^53 - 1 and so far enough for us).
  * * We support partial transfers (startOffset or shorter dataLength) only when we act as the sender. As a receiver,
  *   only full transfers are supported.
@@ -262,11 +262,7 @@ export class BdxSession {
 
     /** Initialize and start the transfer from an *Init message */
     async #startFromInitialMessage(initMessage: BdxInit) {
-        logger.debug(
-            this.#messenger.exchange.id,
-            `Handling BDX ${this.#isSender ? "ReceiveInit" : "SendInit"} from incoming Message`,
-            initMessage,
-        );
+        logger.debug(`Handling BDX ${this.#isSender ? "ReceiveInit" : "SendInit"} from incoming Message`, initMessage);
         await this.#handleInitMessage(initMessage);
 
         await this.#processTransferFlow();

@@ -28,7 +28,7 @@ export class FileDesignator {
         // When all uint8 values are in char() range "a-z0-0-." then use this as the blob name, else hex encode it
         const isValidName = fileDesignatorData.every(
             byte =>
-                (byte >= 0x11 && byte <= 0x5a) || // A-Z
+                (byte >= 0x41 && byte <= 0x5a) || // A-Z
                 (byte >= 0x61 && byte <= 0x7a) || // a-z
                 (byte >= 0x30 && byte <= 0x39) || // 0..9
                 byte === 0x2e || // "."

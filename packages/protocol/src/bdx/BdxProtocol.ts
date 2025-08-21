@@ -11,7 +11,7 @@ import { BDX_PROTOCOL_ID, BdxMessageTypes, BdxStatusCode } from "#types";
 import { Message } from "../codec/MessageCodec.js";
 import { BdxMessenger } from "./BdxMessenger.js";
 import { BdxSession } from "./BdxSession.js";
-import { BdxInitMessageSchema } from "./schema/BdxInitMessagesShema.js";
+import { BdxInitMessageSchema } from "./schema/BdxInitMessagesSchema.js";
 
 const logger = Logger.get("BdxProtocol");
 

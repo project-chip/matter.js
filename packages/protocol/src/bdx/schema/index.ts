@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./BdxAcceptMessagesShema.js";
+export * from "./BdxAcceptMessagesSchema.js";
 export * from "./BdxBlockMessagesSchema.js";
-export * from "./BdxInitMessagesShema.js";
+export * from "./BdxInitMessagesSchema.js";
 export * from "./BdxStatusMessageSchema.js";
