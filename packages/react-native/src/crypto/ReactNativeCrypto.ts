@@ -61,7 +61,7 @@ export class ReactNativeCrypto extends StandardCrypto {
 
         const N = Math.ceil(length / CRYPTO_HASH_LEN_BYTES);
 
-        // Single T buffer to accomodate T = T(1) | T(2) | T(3) | ... | T(N)
+        // Single T buffer to accommodate T = T(1) | T(2) | T(3) | ... | T(N)
         // with a little extra for info | N during T(N)
         const T = new Uint8Array(CRYPTO_HASH_LEN_BYTES * N + info.byteLength + 1);
         let prev = 0;
@@ -107,6 +107,15 @@ export class ReactNativeCrypto extends StandardCrypto {
      */
     override async generateDhSecret(key: PrivateKey, peerKey: PublicKey) {
         return key.sharedSecretFor(peerKey);
+    }
+
+    /**
+     * QuickCrypro's subtle doesn't support HMAC signing, so use the non-subtle version.
+     */
+    override async signHmac(secret: Bytes, data: Bytes): Promise<Bytes> {
+        const hmac = crypto.createHmac("SHA-256", Bytes.of(secret));
+        hmac.update(Bytes.of(data));
+        return Bytes.of(hmac.digest());
     }
 }
 
