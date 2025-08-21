@@ -10,6 +10,7 @@ import {
     CRYPTO_HASH_LEN_BYTES,
     CRYPTO_SYMMETRIC_KEY_LENGTH,
     Environment,
+    Key,
     PrivateKey,
     PublicKey,
     StandardCrypto,
@@ -106,7 +107,7 @@ export class ReactNativeCrypto extends StandardCrypto {
      * See comment on {@link createHkdfKey}.
      */
     override async generateDhSecret(key: PrivateKey, peerKey: PublicKey) {
-        return key.sharedSecretFor(peerKey);
+        return Key.sharedSecretFor(key, peerKey);
     }
 
     /**

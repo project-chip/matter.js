@@ -13,7 +13,7 @@ import { describeList } from "#util/String.js";
 import { Ccm } from "./aes/Ccm.js";
 import { Crypto, CRYPTO_SYMMETRIC_KEY_LENGTH, CryptoDsaEncoding } from "./Crypto.js";
 import { CryptoVerifyError, KeyInputError } from "./CryptoError.js";
-import { CurveType, Key, KeyType, PrivateKey, PublicKey, sharedSecretFor } from "./Key.js";
+import { CurveType, Key, KeyType, PrivateKey, PublicKey } from "./Key.js";
 import { WebCrypto } from "./WebCrypto.js";
 
 // Ensure we don't reference global crypto accidentally
@@ -213,8 +213,7 @@ export class StandardCrypto extends Crypto {
             d: key.d,
             x: key.x,
             y: key.y,
-            sharedSecretFor,
-        } as Partial<Key>) as PrivateKey;
+        }) as PrivateKey;
     }
 
     protected async generateJwk() {
