@@ -5,9 +5,8 @@
  */
 
 import { Message } from "#codec/MessageCodec.js";
-import { Diagnostic, Duration, InternalError, Logger, UnexpectedDataError } from "#general";
+import { Diagnostic, Duration, InternalError, Logger, Minutes, UnexpectedDataError } from "#general";
 import { MessageExchange } from "#protocol/MessageExchange.js";
-import { EXPECTED_CRYPTO_PROCESSING_TIME } from "#securechannel/SecureChannelMessenger.js";
 import { BdxMessageTypes, BdxStatusCode, GeneralStatusCode, SecureMessageType } from "#types";
 import { ImplementationError } from "@matter/general";
 import { BdxError, BdxStatusResponseError } from "./BdxError.js";
@@ -40,16 +39,23 @@ export type BdxMessageWithType<M> = M & {
     messageType: BdxMessageTypes;
 };
 
+export const BDX_TRANSFER_IDLE_TIMEOUT = Minutes(5); // Minimum time according to Matter spec
+
 /** Messenger class that contains all Bdx Messages */
 export class BdxMessenger {
     #exchange: MessageExchange;
-    #defaultExpectedProcessingTime: Duration;
+    #messageTimeout: Duration;
 
-    constructor(exchange: MessageExchange, defaultExpectedProcessingTimeMs = EXPECTED_CRYPTO_PROCESSING_TIME) {
+    /**
+     * Creates a new BdxMessenger instance.
+     * @param exchange Exchange to use for the messaging
+     * @param messageTimeout Communication Timeout for the Bdx Messages, defaults to 5 minutes as defined for Matter OTA transfers
+     */
+    constructor(exchange: MessageExchange, messageTimeout = BDX_TRANSFER_IDLE_TIMEOUT) {
         if (!exchange.channel.isReliable) {
             throw new ImplementationError("Bdx Protocol requires a reliable channel for message exchange");
         }
-        this.#defaultExpectedProcessingTime = defaultExpectedProcessingTimeMs;
+        this.#messageTimeout = messageTimeout;
         this.#exchange = exchange;
     }
 
@@ -65,12 +71,23 @@ export class BdxMessenger {
         return this.#exchange.maxPayloadSize;
     }
 
-    async nextMessage(
-        expectedMessageTypes: number[],
-        expectedProcessingTimeMs = this.#defaultExpectedProcessingTime,
-        expectedMessageInfo?: string,
-    ) {
-        return this.#nextMessage(expectedMessageTypes, expectedProcessingTimeMs, expectedMessageInfo);
+    /**
+     * Waits for the next message and returns it.
+     * A List of allowed expected message types can be provided.
+     * If the message type is not in the list, an error will be thrown.
+     */
+    async nextMessage(expectedMessageTypes: number[], timeout = this.#messageTimeout, expectedMessageInfo?: string) {
+        const message = await this.exchange.nextMessage({ timeout });
+        const messageType = message.payloadHeader.messageType;
+        if (expectedMessageTypes !== undefined && expectedMessageInfo === undefined) {
+            expectedMessageInfo = expectedMessageTypes.map(t => `${t} (${BdxMessageTypes[t]})`).join(",");
+        }
+        this.throwIfErrorStatusReport(message, expectedMessageInfo);
+        if (expectedMessageTypes !== undefined && !expectedMessageTypes.includes(messageType))
+            throw new UnexpectedDataError(
+                `Received unexpected message type: ${messageType}, expected: ${expectedMessageInfo}`,
+            );
+        return message;
     }
 
     /** Sends a Bdx SendInit message and waits for the SendAccept message as a response and returns it decoded. */
@@ -208,30 +225,6 @@ export class BdxMessenger {
         const result = BdxBlockAckMessage.decode(message.payload);
         logger.debug("Received Bdx BlockAck", result);
         return result;
-    }
-
-    /**
-     * Waits for the next message and returns it.
-     * A List of allowed expected message types can be provided.
-     * If the message type is not in the list, an error will be thrown.
-     * When no expectedProcessingTime is provided, the default value of EXPECTED_CRYPTO_PROCESSING_TIME is used.
-     */
-    async #nextMessage(
-        expectedMessageTypes?: number[],
-        expectedProcessingTime = this.#defaultExpectedProcessingTime,
-        expectedMessageInfo?: string,
-    ) {
-        const message = await this.exchange.nextMessage({ expectedProcessingTime });
-        const messageType = message.payloadHeader.messageType;
-        if (expectedMessageTypes !== undefined && expectedMessageInfo === undefined) {
-            expectedMessageInfo = expectedMessageTypes.map(t => `${t} (${BdxMessageTypes[t]})`).join(",");
-        }
-        this.throwIfErrorStatusReport(message, expectedMessageInfo);
-        if (expectedMessageTypes !== undefined && !expectedMessageTypes.includes(messageType))
-            throw new UnexpectedDataError(
-                `Received unexpected message type: ${messageType}, expected: ${expectedMessageInfo}`,
-            );
-        return message;
     }
 
     /** Sends a Bdx Error StatusReport message with the given protocol status. */
