@@ -1,6 +1,10 @@
 # This workflow reacts on a PR that is labeled with "automated-docker-release", will automatically merge it
 name: Automatic Labeled Doker Release
 
+permissions:
+  contents: write
+  pull-requests: write
+  
 on:
   pull_request:
     types: [labeled]
