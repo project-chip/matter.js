@@ -31,7 +31,7 @@ export class BdxFollowingReceivingTransferFlow extends BdxReadingTransferFlow {
 
             // Read the data query from the peer
             const message = await this.messenger.readBlockQuery();
-            let bytesToSkip =
+            const bytesToSkip =
                 "bytesToSkip" in message
                     ? this.messenger.asNumber(
                           message.bytesToSkip,

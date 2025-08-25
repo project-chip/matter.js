@@ -27,7 +27,7 @@ export class BytesStreamReader {
             }
             // No data or not enough data available, read more data from the stream
             if (this.#dataReader === undefined || this.#dataReader.remainingBytesCount < chunkSize) {
-                let { value, done } = await this.#streamReader.read();
+                const { value, done } = await this.#streamReader.read();
                 if (value === undefined || done) {
                     // We are done and have no more data to read, send out the rest if there is any
                     if (this.#dataReader !== undefined) {
@@ -76,7 +76,7 @@ export class BytesStreamReader {
         let skippedBytes = desiredSkippedBytes - (this.#dataReader?.remainingBytesCount ?? 0);
         this.#dataReader = undefined;
         while (true) {
-            let { value, done } = await this.#streamReader.read();
+            const { value, done } = await this.#streamReader.read();
             if (value === undefined || done) {
                 this.#streamEndReached = true;
                 // No more data to skip, return the number of bytes we could skip
