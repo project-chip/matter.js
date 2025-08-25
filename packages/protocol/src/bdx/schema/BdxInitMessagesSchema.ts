@@ -200,12 +200,12 @@ export class BdxInitMessageSchema extends Schema<BdxInit, Bytes> {
         }
         if (fileDesignator.byteLength > 0xffff) {
             throw new BdxError(
-                "File Designator length exceeds maximum allowed size of 65535 bytes",
+                "File Designator length exceeds maximum allowed size of 65535bytes",
                 BdxStatusCode.BadMessageContent,
             );
         }
         if (maxBlockSize < 1 || maxBlockSize > 0xffff) {
-            throw new BdxError("Max Block Size must be between 1 and 65535 bytes", BdxStatusCode.BadMessageContent);
+            throw new BdxError("Max Block Size must be between 1 and 65535bytes", BdxStatusCode.BadMessageContent);
         }
     }
 }

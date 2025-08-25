@@ -40,7 +40,8 @@ export async function bdxTransfer(params: {
         meta: {
             clientExchangeData: MessageRecords[];
             serverExchangeData: MessageRecords[];
-            error?: any;
+            clientError?: any;
+            serverError?: any;
         },
     ) => MaybePromise<void>;
     clientExchangeManipulator?: (message: Message) => Message;
@@ -104,17 +105,27 @@ export async function bdxTransfer(params: {
 
     const bdxProtocol = new BdxProtocol(serverStorage, serverLimits);
 
-    let error: unknown;
+    let serverError: unknown;
     try {
         // Simulate that the initial message receives on the server side
         await bdxProtocol.onNewExchange(receivingExchange, message);
+    } catch (err) {
+        serverError = err;
+    }
 
+    let clientError: unknown;
+    try {
         // Wait until the transfer has finished
         await bdxFinished;
     } catch (err) {
-        error = err;
+        clientError = err;
     }
-    await params.validate(clientStorage, serverStorage, { clientExchangeData, serverExchangeData, error });
+    await params.validate(clientStorage, serverStorage, {
+        clientExchangeData,
+        serverExchangeData,
+        clientError,
+        serverError,
+    });
 }
 
 function parseMessage(message: Message): MessageRecords {

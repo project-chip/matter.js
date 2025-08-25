@@ -15,7 +15,7 @@ import { BdxReadingTransferFlow } from "./BdxReadingTransferFlow.js";
 export class BdxDrivenSendingTransferFlow extends BdxReadingTransferFlow {
     async processTransfer() {
         const { blockSize, dataLength, asynchronousTransfer } = this.transferParameters;
-        const reader = this.readStream;
+        const { iterator } = this.readStream;
         let bytesLeft = dataLength;
 
         while (true) {
@@ -28,7 +28,7 @@ export class BdxDrivenSendingTransferFlow extends BdxReadingTransferFlow {
 
             const blockCounter = this.nextMessageCounter;
             // Read the next data chunk from the storage
-            ({ data, done, bytesLeft } = await this.readDataChunk(reader, blockSize, bytesLeft, dataLength));
+            ({ data, done, bytesLeft } = await this.readDataChunk(iterator, blockSize, bytesLeft, dataLength));
 
             if (done) {
                 // Send the last Block and wait for AckEof and close down

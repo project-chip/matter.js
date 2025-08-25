@@ -1,7 +1,11 @@
 import { FileDesignator } from "#bdx/FileDesignator.js";
 import {
     BdxBlockEofMessage,
+    BdxBlockQueryMessage,
+    BdxBlockQueryWithSkip,
+    BdxBlockQueryWithSkipMessage,
     BdxClient,
+    BdxError,
     BdxReceiveInitMessage,
     BdxStatusResponseError,
     BdxTransferFlow,
@@ -1175,9 +1179,9 @@ describe("BdxTest", () => {
                         },
                     };
                 },
-                validate: async (_clientStorage, serverStorage, { serverExchangeData, error }) => {
-                    expect(error instanceof BdxStatusResponseError).equals(true);
-                    expect(error.protocolStatusCode).equals(BdxStatusCode.TransferMethodNotSupported);
+                validate: async (_clientStorage, serverStorage, { serverExchangeData, clientError }) => {
+                    expect(clientError instanceof BdxStatusResponseError).equals(true);
+                    expect(clientError.protocolStatusCode).equals(BdxStatusCode.TransferMethodNotSupported);
 
                     expect(serverExchangeData[0].type).equals(SecureMessageType.StatusReport);
                     expect(serverExchangeData[0].data.generalStatus).equals(GeneralStatusCode.Failure);
@@ -1198,9 +1202,9 @@ describe("BdxTest", () => {
                         expectedInitialMessageType: BdxMessageTypes.ReceiveInit,
                     };
                 },
-                validate: async (_clientStorage, _serverStorage, { serverExchangeData, error }) => {
-                    expect(error instanceof BdxStatusResponseError).equals(true);
-                    expect(error.protocolStatusCode).equals(BdxStatusCode.FileDesignatorUnknown);
+                validate: async (_clientStorage, _serverStorage, { serverExchangeData, clientError }) => {
+                    expect(clientError instanceof BdxStatusResponseError).equals(true);
+                    expect(clientError.protocolStatusCode).equals(BdxStatusCode.FileDesignatorUnknown);
 
                     expect(serverExchangeData[0].type).equals(SecureMessageType.StatusReport);
                     expect(serverExchangeData[0].data.generalStatus).equals(GeneralStatusCode.Failure);
@@ -1230,9 +1234,9 @@ describe("BdxTest", () => {
                     }
                     return message;
                 },
-                validate: async (clientStorage, _serverStorage, { error }) => {
-                    expect(error instanceof BdxStatusResponseError).equals(true);
-                    expect(error.protocolStatusCode).equals(BdxStatusCode.LengthTooLarge);
+                validate: async (clientStorage, _serverStorage, { clientError }) => {
+                    expect(clientError instanceof BdxStatusResponseError).equals(true);
+                    expect(clientError.protocolStatusCode).equals(BdxStatusCode.LengthTooLarge);
 
                     expect(clientStorage.has(fd.text)).equals(false);
                 },
@@ -1261,9 +1265,9 @@ describe("BdxTest", () => {
                     }
                     return message;
                 },
-                validate: async (clientStorage, _serverStorage, { error }) => {
-                    expect(error instanceof BdxStatusResponseError).equals(true);
-                    expect(error.protocolStatusCode).equals(BdxStatusCode.LengthTooLarge);
+                validate: async (clientStorage, _serverStorage, { clientError }) => {
+                    expect(clientError instanceof BdxStatusResponseError).equals(true);
+                    expect(clientError.protocolStatusCode).equals(BdxStatusCode.LengthTooLarge);
 
                     expect(clientStorage.has(fd.text)).equals(false);
                 },
@@ -1291,13 +1295,110 @@ describe("BdxTest", () => {
                     }
                     return message;
                 },
-                validate: async (_clientStorage, serverStorage, { serverExchangeData, error }) => {
-                    expect(error instanceof BdxStatusResponseError).equals(true);
-                    expect(error.protocolStatusCode).equals(BdxStatusCode.BadBlockCounter);
+                validate: async (_clientStorage, serverStorage, { serverExchangeData, clientError }) => {
+                    expect(clientError instanceof BdxStatusResponseError).equals(true);
+                    expect(clientError.protocolStatusCode).equals(BdxStatusCode.BadBlockCounter);
 
                     expect(serverExchangeData[1].type).equals(SecureMessageType.StatusReport);
                     expect(serverExchangeData[1].data.generalStatus).equals(GeneralStatusCode.Failure);
                     expect(serverExchangeData[1].data.protocolStatus).equals(BdxStatusCode.BadBlockCounter);
+
+                    expect(serverStorage.has(fd.text)).equals(false);
+                },
+            });
+        });
+
+        it("BlockQueryWithSkip skipping bytes but end errors because of too less data", async () => {
+            const data = crypto.randomBytes(2048);
+            const fd = new FileDesignator("data");
+
+            await bdxTransfer({
+                prepare: (clientStorage, _serverStorage, messenger) => {
+                    clientStorage.set(fd.text, data);
+
+                    return {
+                        bdxClient: BdxClient.asSender(clientStorage, messenger, fd, {
+                            preferredDriverModes: [BdxTransferFlow.DriverMode.ReceiverDrive],
+                        }),
+                        expectedInitialMessageType: BdxMessageTypes.SendInit,
+                    };
+                },
+                serverExchangeManipulator: message => {
+                    if (message.payloadHeader.messageType === BdxMessageTypes.BlockQuery) {
+                        const data = BdxBlockQueryMessage.decode(message.payload);
+                        // Manipulate the second BlockQuery to also Skip over bytes
+                        if (data.blockCounter === 2) {
+                            const skipQuery: BdxBlockQueryWithSkip = {
+                                blockCounter: data.blockCounter,
+                                bytesToSkip: 100,
+                            };
+                            message.payload = BdxBlockQueryWithSkipMessage.encode(skipQuery);
+                            message.payloadHeader.messageType = BdxMessageTypes.BlockQueryWithSkip;
+                        }
+                    }
+                    return message;
+                },
+                validate: async (
+                    _clientStorage,
+                    serverStorage,
+                    { clientExchangeData, serverExchangeData, clientError },
+                ) => {
+                    console.log(clientError);
+                    expect(clientError instanceof BdxError).equals(true);
+                    expect(clientError.code).equals(BdxStatusCode.LengthTooShort);
+
+                    expect(clientExchangeData.length).equals(4);
+                    expect(serverExchangeData.length).equals(4);
+
+                    expect(clientExchangeData[0].type).equals(BdxMessageTypes.SendInit);
+                    expect(clientExchangeData[0].data).deep.equals({
+                        transferProtocol: {
+                            version: 0,
+                            senderDrive: false,
+                            receiverDrive: true,
+                            asynchronousTransfer: false,
+                        },
+                        maxBlockSize: 966,
+                        fileDesignator: fd.bytes,
+                        maxLength: 2048,
+                        metaData: undefined,
+                        startOffset: undefined,
+                    });
+
+                    expect(serverExchangeData[0].type).equals(BdxMessageTypes.SendAccept);
+                    expect(serverExchangeData[0].data).deep.equals({
+                        transferControl: {
+                            version: 0,
+                            senderDrive: false,
+                            receiverDrive: true,
+                            asynchronousTransfer: false,
+                        },
+                        maxBlockSize: 966,
+                        metaData: undefined,
+                    });
+
+                    expect(serverExchangeData[1].type).equals(BdxMessageTypes.BlockQuery);
+                    expect(serverExchangeData[1].data.blockCounter).equals(1);
+
+                    expect(clientExchangeData[1].type).equals(BdxMessageTypes.Block);
+                    expect(clientExchangeData[1].data.blockCounter).equals(1);
+                    expect(clientExchangeData[1].data.data.length).equals(966);
+                    expect(clientExchangeData[1].data.data).deep.equals(Bytes.of(data).slice(0, 966));
+
+                    expect(serverExchangeData[2].type).equals(BdxMessageTypes.BlockQuery); // Original is stored, so not manipulated type
+                    expect(serverExchangeData[2].data.blockCounter).equals(2);
+
+                    expect(clientExchangeData[2].type).equals(BdxMessageTypes.Block);
+                    expect(clientExchangeData[2].data.blockCounter).equals(2);
+                    expect(clientExchangeData[2].data.data.length).equals(966);
+                    expect(clientExchangeData[2].data.data).deep.equals(Bytes.of(data).slice(1066, 1066 + 966));
+
+                    expect(serverExchangeData[3].type).equals(BdxMessageTypes.BlockQuery);
+                    expect(serverExchangeData[3].data.blockCounter).equals(3);
+
+                    expect(clientExchangeData[3].type).equals(SecureMessageType.StatusReport);
+                    expect(clientExchangeData[3].data.generalStatus).equals(GeneralStatusCode.Failure);
+                    expect(clientExchangeData[3].data.protocolStatus).equals(BdxStatusCode.LengthTooShort);
 
                     expect(serverStorage.has(fd.text)).equals(false);
                 },

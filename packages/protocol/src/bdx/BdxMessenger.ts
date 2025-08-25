@@ -126,7 +126,7 @@ export class BdxMessenger {
 
     /** Encodes and sends a Bdx Block message. */
     async sendBlock(message: BdxBlock) {
-        logger.debug(`Sending Bdx Block with ${message.data.byteLength} bytes`, message);
+        logger.debug(`Sending Bdx Block with ${message.data.byteLength}bytes`, message);
         await this.exchange.send(BdxMessageTypes.Block, BdxBlockMessage.encode(message));
     }
 
@@ -144,7 +144,7 @@ export class BdxMessenger {
 
     /** Encodes and sends a Bdx BlockEof message. */
     async sendBlockEof(message: BdxBlockEof) {
-        logger.debug(`Sending Bdx BlockEof with ${message.data.byteLength} bytes`, message);
+        logger.debug(`Sending Bdx BlockEof with ${message.data.byteLength}bytes`, message);
         await this.exchange.send(BdxMessageTypes.BlockEof, BdxBlockEofMessage.encode(message));
     }
 
@@ -170,7 +170,7 @@ export class BdxMessenger {
             // empty block only allowed in BlockAckEof
             throw new BdxError("Received empty data in Block message", BdxStatusCode.BadMessageContent);
         }
-        logger.debug(`Received Bdx Block with ${block.data.byteLength} bytes`, block);
+        logger.debug(`Received Bdx Block with ${block.data.byteLength}bytes`, block);
         return { ...block, messageType };
     }
 
@@ -205,7 +205,10 @@ export class BdxMessenger {
                 BdxStatusCode.BadBlockCounter,
             );
         }
-        logger.debug("Received Bdx BlockQuery", query);
+        logger.debug(
+            `Received Bdx BlockQuery${messageType === BdxMessageTypes.BlockQueryWithSkip ? "WithSkip" : ""}`,
+            query,
+        );
         return { ...query, messageType };
     }
 

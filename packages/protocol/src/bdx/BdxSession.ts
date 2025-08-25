@@ -29,8 +29,6 @@ const logger = Logger.get("BdxSession");
  *   We support up to MAX_SAFE_INTEGER for size and offset (which basically is 2^53 - 1 and so far enough for us).
  * * We support partial transfers (startOffset or shorter dataLength) only when we act as the sender. As a receiver,
  *   only full transfers are supported.
- * * If data are queried with skipping some data (BlockQueryWithSkip) then we might send out a message shorter than the
- *   blockSize which is ok according to spec.
  * * We do not use BlockQueryWithSkip when requesting data ourselves
  */
 export class BdxSession {
@@ -192,6 +190,7 @@ export class BdxSession {
             logger.warn(`BDX session failed with error:`, error);
 
             await this.close(error);
+            throw error;
         }
     }
 

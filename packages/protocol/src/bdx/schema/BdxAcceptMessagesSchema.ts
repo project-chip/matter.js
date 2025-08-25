@@ -93,7 +93,7 @@ export class BdxSendAcceptMessageSchema<M extends BdxSendAccept> extends Schema<
             );
         }
         if (maxBlockSize < 1 || maxBlockSize > 0xffff) {
-            throw new BdxError("Max Block Size must be between 1 and 65535 bytes", BdxStatusCode.BadMessageContent);
+            throw new BdxError("Max Block Size must be between 1 and 65535bytes", BdxStatusCode.BadMessageContent);
         }
     }
 }

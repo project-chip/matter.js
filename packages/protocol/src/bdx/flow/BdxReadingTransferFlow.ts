@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, DataReader } from "#general";
 import { BdxStatusCode } from "#types";
+import { BytesStreamReader } from "@matter/general";
 import { BdxError } from "../BdxError.js";
 import { BdxMessenger } from "../BdxMessenger.js";
 import { BdxTransferFlow } from "./BdxTransferFlow.js";
@@ -38,62 +38,52 @@ export abstract class BdxReadingTransferFlow extends BdxTransferFlow {
 
         const stream = dataBlob.stream();
 
-        // For Blobs the chunk size is determined by the underlying storage, so we need to chunk the stream ourselves.
-        let dataReader: DataReader | undefined = undefined;
-        const chunker = new TransformStream<Bytes>({
-            transform: (chunk, controller) => {
-                if (dataReader !== undefined) {
-                    dataReader = new DataReader(Bytes.concat(dataReader.remainingBytes, chunk));
-                } else {
-                    dataReader = new DataReader(chunk);
-                }
-                while (dataReader.remainingBytesCount >= blockSize) {
-                    controller.enqueue(dataReader.readByteArray(blockSize));
-                }
-                if (dataReader.remainingBytesCount === 0) {
-                    dataReader = undefined;
-                }
-            },
-            flush: controller => controller.enqueue(dataReader?.remainingBytes ?? new Uint8Array()),
-        });
-        const reader = stream.pipeThrough(chunker).getReader();
+        const reader = stream.getReader();
         // Method to be used by main close() method to make sure all streams are correctly closed or cancelled
         this.#closeStreams = async (_error?: unknown) => {
             if (stream.locked) {
                 reader?.releaseLock();
-                await reader?.cancel();
+                try {
+                    await reader?.cancel();
+                } catch (error) {
+                    // A TypeError is expected when the stream is already cancelled, so we ignore it
+                    if (!(error instanceof TypeError)) {
+                        throw error;
+                    }
+                }
             }
             await stream.cancel();
         };
 
-        return reader;
+        const streamReader = new BytesStreamReader(reader);
+        return { iterator: streamReader.read(blockSize), streamReader };
     }
 
     /**
      * Reads one data chunk from the reader and does some basic checks.
      */
     protected async readDataChunk(
-        reader: ReadableStreamDefaultReader<Bytes>,
+        reader: AsyncGenerator<Uint8Array<ArrayBufferLike>, void, unknown>,
         blockSize: number,
         bytesLeft: number | undefined,
         dataLength: number | undefined,
     ) {
-        let { value, done = false } = await reader.read();
+        let { value, done = false } = await reader.next();
         if (value === undefined) {
             // Done needs to be true when value is undefined or there is something broken
             if (!done) {
                 throw new BdxError(
-                    `Data length too short, expected ${blockSize} bytes, but got less`,
+                    `Data length too short, expected ${blockSize}bytes, but got less`,
                     BdxStatusCode.LengthTooShort,
                 );
             }
             value = new Uint8Array(); // Simulate an empty value when we reached the end of the stream
         } else if (value.byteLength < blockSize) {
             // When we git less data than blocksize it is the last block, so validate that
-            ({ done = false } = await reader.read());
+            ({ done = false } = await reader.next());
             if (!done) {
                 throw new BdxError(
-                    `Data length too short, expected ${blockSize} bytes, but got less`,
+                    `Data length too short, expected ${blockSize}bytes, but got less`,
                     BdxStatusCode.LengthTooShort,
                 );
             }
@@ -103,13 +93,13 @@ export abstract class BdxReadingTransferFlow extends BdxTransferFlow {
             bytesLeft -= value.byteLength;
             if (bytesLeft < 0) {
                 throw new BdxError(
-                    `Data length exceeded, expected ${dataLength} bytes, but got ${-bytesLeft}bytes more`,
+                    `Data length exceeded, expected ${dataLength}bytes, but got ${-bytesLeft}bytes more`,
                     BdxStatusCode.LengthTooLarge,
                 );
             }
             if (done && bytesLeft > 0) {
                 throw new BdxError(
-                    `Data length too short, expected ${dataLength} bytes, but got ${bytesLeft}bytes less`,
+                    `Data length too short, expected ${dataLength}bytes, but got ${bytesLeft}bytes less`,
                     BdxStatusCode.LengthTooShort,
                 );
             }

@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "#general";
+import { Bytes, Logger } from "#general";
 import { BdxStatusCode } from "#types";
 import { BdxReadingTransferFlow } from "./BdxReadingTransferFlow.js";
 
+const logger = Logger.get("BdxFollowingReceivingTransferFlow");
 /**
  * BDX Transport flow logic for a "BDX Following Receiver":
  * - Reads BlockQuery(WithSkip) messages and responds with Block or (for last block) BlockEof.
@@ -17,7 +18,7 @@ import { BdxReadingTransferFlow } from "./BdxReadingTransferFlow.js";
 export class BdxFollowingReceivingTransferFlow extends BdxReadingTransferFlow {
     async processTransfer() {
         const { blockSize, dataLength } = this.transferParameters;
-        const reader = this.readStream;
+        const { iterator, streamReader } = this.readStream;
         let bytesLeft = dataLength;
 
         while (true) {
@@ -42,23 +43,11 @@ export class BdxFollowingReceivingTransferFlow extends BdxReadingTransferFlow {
             const { blockCounter } = message;
             this.validateCounter(blockCounter);
 
-            // Read data from the storage and potentially skip over some data as requested by the peer
-            while (true) {
-                ({ data, done, bytesLeft } = await this.readDataChunk(reader, blockSize, bytesLeft, dataLength));
-
-                if (bytesToSkip === 0 || done) {
-                    break; // When reading is done or no data to skip, so return the data chunk in any case
-                }
-
-                if (data.byteLength > bytesToSkip) {
-                    // Skip the requested bytes and send the data left even if the message is then shorter
-                    data = Bytes.of(data).slice(bytesToSkip);
-                    break;
-                }
-
-                // Peer requested to skip more bytes that were returned by the reader, so we read more
-                bytesToSkip -= data.byteLength;
+            if (bytesToSkip > 0) {
+                const skipped = await streamReader.skip(bytesToSkip);
+                logger.debug(`Skipped ${skipped}bytes of data (requested ${bytesToSkip}bytes)`);
             }
+            ({ data, done, bytesLeft } = await this.readDataChunk(iterator, blockSize, bytesLeft, dataLength));
 
             if (done) {
                 await this.messenger.sendBlockEof({ data, blockCounter });

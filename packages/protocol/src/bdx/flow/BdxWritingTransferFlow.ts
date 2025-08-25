@@ -80,7 +80,7 @@ export abstract class BdxWritingTransferFlow extends BdxTransferFlow {
         if (messageType === BdxMessageTypes.BlockEof) {
             if (bytesLeft !== undefined && bytesLeft !== 0) {
                 throw new BdxError(
-                    `Received BlockEof with ${bytesLeft} bytes left, but no more data available`,
+                    `Received BlockEof with ${bytesLeft}bytes left, but no more data available`,
                     bytesLeft > 0 ? BdxStatusCode.LengthTooShort : BdxStatusCode.LengthTooLarge,
                 );
             }
