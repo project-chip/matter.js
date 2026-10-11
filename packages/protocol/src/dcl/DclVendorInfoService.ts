@@ -358,7 +358,7 @@ export class DclVendorInfoService {
     #addStaticVendors() {
         for (const vendor of STATIC_VENDORS) {
             if (!this.#vendorIndex.has(vendor.vendorId)) {
-                this.#vendorIndex.set(vendor.vendorId, vendor);
+                this.#vendorIndex.set(vendor.vendorId, { ...vendor });
             }
         }
     }
