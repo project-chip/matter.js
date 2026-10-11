@@ -13,8 +13,8 @@ import { Migration } from "./Migration.js";
  * effective set once a session existed, otherwise only the DNS-SD intervals.  The first becomes the reported set, the
  * second the advertised intervals.
  *
- * The store is not rewritten, so this runs on every load; values under the new keys win.  Only CommissioningClient state
- * ever had `sessionParameters`; CommissioningServer shares the behavior id.
+ * Values already under the new keys win.  Only CommissioningClient state ever had `sessionParameters`;
+ * CommissioningServer shares the behavior id.
  */
 Migration("commissioning", values => {
     const { sessionParameters } = values;

@@ -290,7 +290,7 @@ export class Peer {
         const parameters = SessionParameters({
             ...reported,
             supportedTransports: this.#descriptor.tcpUnsupported
-                ? { tcpClient: false, tcpServer: false }
+                ? { tcpClient: reported?.supportedTransports?.tcpClient ?? false, tcpServer: false }
                 : reported?.supportedTransports,
             dataModelRevision: reported?.dataModelRevision ?? beforeSession?.dataModelRevision,
             maxPathsPerInvoke: reported?.maxPathsPerInvoke ?? beforeSession?.maxPathsPerInvoke,
@@ -314,6 +314,17 @@ export class Peer {
         }
 
         return parameters;
+    }
+
+    /**
+     * The transports the peer advertises in the DNS-SD `T` key.  Reads the live TXT record when one is cached because
+     * the descriptor lags it by a tick when TXT and addresses share one mDNS response.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 4.3.4
+     */
+    get advertisedTransports() {
+        const service = this.#service;
+        return service.hasTxtRecord ? DiscoveryData(service.parameters).T : this.#descriptor.discoveryData?.T;
     }
 
     get network() {
@@ -369,7 +380,6 @@ export class Peer {
 
         // mDNS T is a fallback for an absent tag 8 only — some 1.5+ peers omit the field yet serve TCP.  Pre-1.5 peers
         // arrive as an explicit `false` (SessionParameters clears their TCP), so the 1.5.0 gate needs no code here.
-        // Live TXT first: the descriptor cache lags a tick when TXT and addresses share one mDNS response.
         const params = this.sessionParameters;
         const specVersion = Diagnostic.hex(params.specificationVersion);
         const tcpServerParam = params.supportedTransports.tcpServer;
@@ -387,8 +397,7 @@ export class Peer {
                 diag: { paramTcpServer: false, specVersion },
             };
         }
-        const tcpServerMdns =
-            (DiscoveryData(this.#service.parameters).T ?? this.#descriptor.discoveryData?.T)?.tcpServer === true;
+        const tcpServerMdns = this.advertisedTransports?.tcpServer === true;
         return tcpServerMdns
             ? {
                   transports: tcp,

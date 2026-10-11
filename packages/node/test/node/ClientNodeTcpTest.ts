@@ -5,7 +5,16 @@
  */
 
 import { OnOffClient } from "#behaviors/on-off";
-import { ChannelType, Crypto, MockCrypto, Seconds, ServerAddress } from "@matter/general";
+import {
+    Bytes,
+    ChannelType,
+    Crypto,
+    DnsRecordClass,
+    DnsRecordType,
+    MockCrypto,
+    Seconds,
+    ServerAddress,
+} from "@matter/general";
 import { MockSite, subscribedPeer } from "@matter/node/testing";
 import { ExchangeManager, Peer, PeerSet } from "@matter/protocol";
 
@@ -288,6 +297,32 @@ describe("ClientNodeTcp", () => {
             expect(peer.descriptor.discoveryData?.T?.tcpServer).true;
 
             expect(peer.resolveTransports(undefined, ChannelType.TCP)).deep.equals([ChannelType.TCP, ChannelType.UDP]);
+        });
+
+        it("falls back to UDP as soon as the live TXT record drops the TCP server", async () => {
+            await using site = new MockSite();
+            const { controller } = await commissionPair(site, { tcp: true }, { tcp: true });
+
+            const peer = protocolPeer(controller);
+            peer.descriptor.reportedSessionParameters = { ...peer.sessionParameters, supportedTransports: {} };
+            const { name } = peer.service;
+            for (const record of [...name.records]) {
+                if (record.recordType === DnsRecordType.TXT) {
+                    name.deleteRecord(record);
+                }
+            }
+            name.installRecord({
+                name: name.qname,
+                recordType: DnsRecordType.TXT,
+                recordClass: DnsRecordClass.IN,
+                flushCache: true,
+                ttl: Seconds(120),
+                value: [Bytes.fromString("SII=5000")],
+            });
+
+            // The descriptor still holds the T the device advertised before
+            expect(peer.descriptor.discoveryData?.T?.tcpServer).true;
+            expect(peer.resolveTransports(undefined, ChannelType.TCP)).undefined;
         });
 
         it("falls back to UDP when session parameters omit TCP support and mDNS does not advertise a TCP server", async () => {

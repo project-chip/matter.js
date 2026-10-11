@@ -15,6 +15,7 @@ import {
     MockCrypto,
     Seconds,
 } from "@matter/general";
+import { Specification } from "@matter/model";
 import { MockSite } from "@matter/node/testing";
 import { Peer, PeerSet, SessionParameters } from "@matter/protocol";
 
@@ -156,7 +157,7 @@ describe("Peer descriptor", () => {
     });
 
     describe("stored by older versions", () => {
-        async function restartWithLegacy(sessionParameters: Record<string, unknown>, advertisedIntervals?: unknown) {
+        async function restartWithLegacy(sessionParameters: Record<string, unknown>, current = {}) {
             const site = new MockSite();
             const { controller } = await commissionedPeer(site);
             const controllerId = controller.id;
@@ -165,14 +166,17 @@ describe("Peer descriptor", () => {
             const stored = site.storageFor(controllerId)["nodes.peer1.endpoints.0.commissioning"];
             delete stored.reportedSessionParameters;
             delete stored.advertisedIntervals;
-            if (advertisedIntervals !== undefined) {
-                stored.advertisedIntervals = advertisedIntervals;
-            }
-            stored.sessionParameters = sessionParameters;
+            Object.assign(stored, current, { sessionParameters });
 
             const controllerB = await site.addNode(undefined, { id: controllerId, index: 1 });
             const [restored] = controllerB.env.get(PeerSet);
-            return { site, state: controllerB.peers.get("peer1")!.stateOf(CommissioningClient), restored };
+            return {
+                site,
+                controllerB,
+                state: controllerB.peers.get("peer1")!.stateOf(CommissioningClient),
+                restored,
+                stored: () => site.storageFor(controllerId)["nodes.peer1.endpoints.0.commissioning"],
+            };
         }
 
         it("moves a set of DNS-SD intervals to the advertised intervals", async () => {
@@ -212,12 +216,46 @@ describe("Peer descriptor", () => {
         it("keeps advertised intervals already stored under the new key", async () => {
             const { site, state } = await restartWithLegacy(
                 { idleInterval: 1234, activeInterval: 321 },
-                { idleInterval: 777 },
+                { advertisedIntervals: { idleInterval: 777 } },
             );
             await using _site = site;
 
             expect(state.advertisedIntervals?.idleInterval).equals(777);
             expect(state.advertisedIntervals?.activeInterval).undefined;
+        });
+
+        it("keeps reported session parameters already stored under the new key", async () => {
+            const { site, state } = await restartWithLegacy(
+                { idleInterval: 1234, interactionModelRevision: 12 },
+                { reportedSessionParameters: { idleInterval: 777 } },
+            );
+            await using _site = site;
+
+            expect(state.reportedSessionParameters?.idleInterval).equals(777);
+            expect(state.reportedSessionParameters?.interactionModelRevision).undefined;
+        });
+
+        it("persist with the next write of the behavior", async () => {
+            const { site, controllerB, stored } = await restartWithLegacy({ idleInterval: 1234, activeInterval: 321 });
+            await using _site = site;
+
+            await controllerB.peers.get("peer1")!.setStateOf(CommissioningClient, { tcpUnsupported: true });
+
+            expect(stored()).not.has.property("sessionParameters");
+            expect(stored().advertisedIntervals).deep.equals({ idleInterval: 1234, activeInterval: 321 });
+        });
+
+        it("do not return after the migrated value is cleared", async () => {
+            const { site, controllerB } = await restartWithLegacy({ idleInterval: 1234, activeInterval: 321 });
+            await using _site = site;
+
+            await controllerB.peers.get("peer1")!.setStateOf(CommissioningClient, { advertisedIntervals: undefined });
+            await site.close();
+            const controllerC = await site.addNode(undefined, { id: controllerB.id, index: 1 });
+
+            expect(controllerC.peers.get("peer1")!.stateOf(CommissioningClient).advertisedIntervals).undefined;
+            const [restored] = controllerC.env.get(PeerSet);
+            expect(restored.descriptor.discoveryData?.SII).undefined;
         });
 
         it("drops DNS-SD intervals beyond what DNS-SD can advertise", async () => {
@@ -365,13 +403,18 @@ describe("Peer descriptor", () => {
         it("stay as reported when TCP is marked unsupported", async () => {
             await using site = new MockSite();
             const { peer } = await commissionedPeer(site);
-            peer.descriptor.reportedSessionParameters = { idleInterval: Millis(2000) };
+            const reported = {
+                idleInterval: Millis(2000),
+                specificationVersion: Specification.SPECIFICATION_VERSION,
+                supportedTransports: { tcpClient: true, tcpServer: true },
+            };
+            peer.descriptor.reportedSessionParameters = reported;
 
             peer.markTcpUnsupported();
 
-            expect(peer.descriptor.reportedSessionParameters).deep.equals({ idleInterval: 2000 });
+            expect(peer.descriptor.reportedSessionParameters).deep.equals(reported);
             expect(peer.descriptor.tcpUnsupported).true;
-            expect(peer.sessionParameters.supportedTransports).deep.equals({ tcpClient: false, tcpServer: false });
+            expect(peer.sessionParameters.supportedTransports).deep.equals({ tcpClient: true, tcpServer: false });
         });
 
         it("of a known peer are not replaced by a descriptor added later", async () => {
