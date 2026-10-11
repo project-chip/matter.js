@@ -99,15 +99,20 @@ export namespace SessionIntervals {
     export function advertisable(intervals: Partial<SessionIntervals>): Partial<SessionIntervals> | undefined {
         const { idleInterval, activeInterval, activeThreshold } = intervals;
         const result: Partial<SessionIntervals> = {};
-        if (idleInterval !== undefined && idleInterval <= maxAdvertisedInterval) {
+        if (isAdvertisable(idleInterval, 0, maxAdvertisedInterval)) {
             result.idleInterval = idleInterval;
         }
-        if (activeInterval !== undefined && activeInterval <= maxAdvertisedInterval) {
+        if (isAdvertisable(activeInterval, 0, maxAdvertisedInterval)) {
             result.activeInterval = activeInterval;
         }
-        if (activeThreshold !== undefined && activeThreshold <= maxActiveThreshold) {
+        // DiscoveryData treats an SAT of 0 as absent, so a stored 0 must not apply either
+        if (isAdvertisable(activeThreshold, 1, maxActiveThreshold)) {
             result.activeThreshold = activeThreshold;
         }
         return Object.keys(result).length ? result : undefined;
     }
+}
+
+function isAdvertisable(value: Duration | undefined, min: number, max: Duration): value is Duration {
+    return value !== undefined && Number.isInteger(value) && value >= min && value <= max;
 }

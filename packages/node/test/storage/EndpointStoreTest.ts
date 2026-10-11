@@ -63,6 +63,20 @@ describe("EndpointStore", () => {
             expect(driver.get(["ep", "commissioning"], "advertisedIntervals")).undefined;
         });
 
+        it("do not overwrite a key a shared transaction wrote", async () => {
+            const { driver, store } = await legacyStore();
+
+            const tx = await driver.begin();
+            await store.set({ commissioning: { advertisedIntervals: { idleInterval: 777 } } }, tx);
+            tx.commit();
+            await store.set({ commissioning: { tcpUnsupported: true } });
+
+            expect(driver.values(["ep", "commissioning"])).deep.equals({
+                advertisedIntervals: { idleInterval: 777 },
+                tcpUnsupported: true,
+            });
+        });
+
         it("are not written through a shared transaction", async () => {
             const { driver, store } = await legacyStore();
 

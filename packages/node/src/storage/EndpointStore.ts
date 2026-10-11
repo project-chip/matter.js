@@ -52,7 +52,8 @@ export class EndpointStore {
      * When {@link sharedTx} is provided, writes go through it and the caller owns the transaction lifecycle (no
      * commit/dispose here).
      *
-     * A behavior's first write in an own transaction also persists what a {@link Migration} changed on load.
+     * A behavior's first write in an own transaction also persists what a {@link Migration} changed on load; a write in
+     * a shared transaction replaces the migrated values of the keys it writes.
      */
     async set(values: Record<string, undefined | Val.Struct>, sharedTx?: StorageDriver.Transaction) {
         const ownTx = sharedTx === undefined;
@@ -72,9 +73,16 @@ export class EndpointStore {
                 let behaviorValues = values[behaviorId];
                 const behaviorStorage = txContext.createContext(behaviorId);
 
-                const migrated = ownTx ? this.#migratedValues.get(behaviorId) : undefined;
+                const migrated = this.#migratedValues.get(behaviorId);
                 if (migrated !== undefined && behaviorValues !== undefined) {
-                    behaviorValues = { ...migrated, ...behaviorValues };
+                    if (ownTx) {
+                        behaviorValues = { ...migrated, ...behaviorValues };
+                    } else {
+                        // The caller owns the commit, so only drop what this newer write supersedes
+                        for (const key in behaviorValues) {
+                            delete migrated[key];
+                        }
+                    }
                 }
 
                 if (behaviorValues === undefined) {
