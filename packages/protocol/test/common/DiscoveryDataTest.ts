@@ -94,4 +94,21 @@ describe("DiscoveryData", () => {
             expect(decode({ PH: "0" })).deep.equal({});
         });
     });
+
+    describe("T/ICD decoding", () => {
+        it("decodes valid values", () => {
+            expect(decode({ T: "4", ICD: "1" })).deep.equal({ T: { tcpClient: false, tcpServer: true }, ICD: 1 });
+            expect(decode({ T: "0", ICD: "0" })).deep.equal({ T: { tcpClient: false, tcpServer: false }, ICD: 0 });
+        });
+
+        it("drops signed, hexadecimal, non-integer and leading-zero values", () => {
+            for (const value of ["-1", "+4", "0x4", "4.0", "1e1", " 4", "04", ""]) {
+                expect(decode({ T: value, ICD: value }), value).deep.equal({});
+            }
+        });
+
+        it("drops T outside 16 bits and ICD other than 0 or 1", () => {
+            expect(decode({ T: "65536", ICD: "2" })).deep.equal({});
+        });
+    });
 });

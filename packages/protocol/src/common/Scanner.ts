@@ -111,16 +111,16 @@ export function DiscoveryData(kvs: ReadonlyMap<string, string>) {
             }
 
             case "ICD": {
-                const num = Number(value);
-                if (isFinite(num)) {
+                const num = parseTxtDecimal(value, 1);
+                if (num !== undefined) {
                     dd.ICD = num;
                 }
                 break;
             }
 
             case "T": {
-                const num = Number(value);
-                if (isFinite(num)) {
+                const num = parseTxtDecimal(value, UINT16_MAX);
+                if (num !== undefined) {
                     dd.T = SupportedTransportsSchema.decode(num);
                 }
                 break;
