@@ -118,7 +118,12 @@ export default function commands(theNode: MatterNode) {
                         }
 
                         await theNode.start();
-                        const product = await (await theNode.vendorInfoService()).productInfoFor(vendorId, productId);
+                        const vendorService = await theNode.vendorInfoService();
+                        if (vendorService.offline) {
+                            console.error("DCL vendor service is offline, no product lookup made");
+                            return;
+                        }
+                        const product = await vendorService.productInfoFor(vendorId, productId);
                         if (!product) {
                             console.error(
                                 `Product with vendor ID ${vendorIdStr} and product ID ${productIdStr} not found in DCL`,
@@ -137,6 +142,12 @@ export default function commands(theNode: MatterNode) {
                     async () => {
                         await theNode.start();
                         const vendorService = await theNode.vendorInfoService();
+                        if (vendorService.offline) {
+                            console.error(
+                                `DCL vendor service is offline, no update made. ${vendorService.vendors.size} vendor(s) available.`,
+                            );
+                            return;
+                        }
                         console.log("Updating vendor information from DCL...");
 
                         try {

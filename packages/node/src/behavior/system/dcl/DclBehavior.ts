@@ -5,8 +5,11 @@
  */
 
 import { Behavior } from "#behavior/Behavior.js";
-import { SharedEnvironmentServices } from "@matter/general";
+import { Logger, SharedEnvironmentServices } from "@matter/general";
+import { bool, field } from "@matter/model";
 import { DclCertificateService, DclConfig, DclOtaUpdateService, DclVendorInfoService } from "@matter/protocol";
+
+const logger = Logger.get("DclBehavior");
 
 /**
  * DCL (Distributed Compliance Ledger) configuration behavior.
@@ -22,6 +25,7 @@ import { DclCertificateService, DclConfig, DclOtaUpdateService, DclVendorInfoSer
  * - MATTER_DCL_TESTURL - Test DCL API endpoint
  * - MATTER_DCL_FETCHTESTCERTIFICATES - Enable test certificate fetching (true/false)
  * - MATTER_DCL_FETCHGITHUBCERTIFICATES - Enable GitHub dev cert fetching (true/false)
+ * - MATTER_DCL_OFFLINE - Run all DCL services without network access (true/false)
  *
  * @example Programmatic configuration:
  * ```typescript
@@ -79,9 +83,13 @@ export class DclBehavior extends Behavior {
                     fetchGithubCertificates: this.state.fetchGithubCertificates,
                     dclConfig: this.productionConfig,
                     testDclConfig: this.state.fetchTestCertificates ? this.testConfig : undefined,
+                    offline: this.state.offline,
                 });
             }
-            this.internal.certificateService = this.#services.get(DclCertificateService);
+            this.internal.certificateService = this.#checkOffline(
+                "DclCertificateService",
+                this.#services.get(DclCertificateService),
+            );
         }
         return this.internal.certificateService;
     }
@@ -95,9 +103,13 @@ export class DclBehavior extends Behavior {
             if (!this.env.root.has(DclVendorInfoService)) {
                 new DclVendorInfoService(this.env, {
                     dclConfig: this.productionConfig,
+                    offline: this.state.offline,
                 });
             }
-            this.internal.vendorInfoService = this.#services.get(DclVendorInfoService);
+            this.internal.vendorInfoService = this.#checkOffline(
+                "DclVendorInfoService",
+                this.#services.get(DclVendorInfoService),
+            );
         }
         return this.internal.vendorInfoService;
     }
@@ -112,11 +124,26 @@ export class DclBehavior extends Behavior {
                 new DclOtaUpdateService(this.env, {
                     productionDclConfig: this.productionConfig,
                     testDclConfig: this.testConfig,
+                    offline: this.state.offline,
                 });
             }
-            this.internal.otaService = this.#services.get(DclOtaUpdateService);
+            this.internal.otaService = this.#checkOffline(
+                "DclOtaUpdateService",
+                this.#services.get(DclOtaUpdateService),
+            );
         }
         return this.internal.otaService;
+    }
+
+    /**
+     * The services are shared through the environment root, so one created earlier keeps its own `offline` setting.
+     * Only an online service for an offline node is a problem; an offline service created on purpose is not.
+     */
+    #checkOffline<T extends { readonly offline: boolean }>(name: string, service: T) {
+        if (this.state.offline && !service.offline) {
+            logger.warn(`${name} already exists and is online, so dcl.offline of this node has no effect on it`);
+        }
+        return service;
     }
 
     override async [Symbol.asyncDispose]() {
@@ -141,6 +168,7 @@ export namespace DclBehavior {
         testUrl = DclConfig.test.url;
 
         /** Whether to fetch test certificates in addition to production ones. */
+        @field(bool)
         fetchTestCertificates = false;
 
         /**
@@ -148,10 +176,25 @@ export namespace DclBehavior {
          * attestation. Independent of {@link fetchTestCertificates}. When unset, defaults to the value of
          * `fetchTestCertificates`.
          */
+        @field(bool)
         acceptTestCertificates?: boolean = undefined;
 
         /** Whether to fetch development certificates from GitHub (only when fetchTestCertificates is true). */
+        @field(bool)
         fetchGithubCertificates = true;
+
+        /**
+         * Whether the DCL services reach no network at all, neither the DCL nor GitHub nor OTA image URLs. Passed as
+         * `offline` to {@link DclCertificateService}, {@link DclVendorInfoService} and {@link DclOtaUpdateService}.
+         * They then serve only what storage holds from earlier online runs, plus the built-in test vendors. This
+         * behavior passes no seed, so on fresh storage the certificate trust store is empty; create the services
+         * yourself with a `seed` for that case.
+         *
+         * Read when a service is first created. A service already present in the environment keeps its own
+         * `offline` setting; an online one is logged as a warning when this is `true`.
+         */
+        @field(bool)
+        offline = false;
     }
 
     export class Internal {
