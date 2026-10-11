@@ -411,6 +411,24 @@ describe("ProtocolServiceTest", () => {
         await node.close();
     });
 
+    it("shares one state reference between reads that bring no session properties", async () => {
+        const node = await MockServerNode.createOnline();
+
+        const nodeLabel = BasicInformation.attributes.nodeLabel.id;
+        const basicInformation = node.protocol[0]?.[BasicInformation.id];
+        expect(basicInformation).not.undefined;
+        const first = basicInformation!.readState({});
+        for (let i = 0; i < 10; i++) {
+            expect(basicInformation!.readState({})).equals(first);
+        }
+
+        await node.set({ basicInformation: { nodeLabel: "relabelled" } });
+        expect(first[nodeLabel]).equals("relabelled");
+        expect(basicInformation!.readState({})[nodeLabel]).equals("relabelled");
+
+        await node.close();
+    });
+
     it("all attribute TLV schemas can encode their values", async () => {
         const node = await MockServerNode.createOnline(undefined, {
             device: OnOffLightDevice.with(OnOffServer),

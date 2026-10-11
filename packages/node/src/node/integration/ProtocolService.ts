@@ -376,12 +376,7 @@ class ClusterState implements ClusterProtocol {
     }
 
     readState(session: InteractionSession): Val.ProtocolStruct {
-        const { interactionComplete: _ic, ...readOnly } = LocalActorContext.ReadOnly;
-        const supervisorSession: ValueSupervisor.Session = {
-            ...readOnly,
-            ...session,
-        };
-        return this.#datasource.reference(supervisorSession);
+        return this.#datasource.reference(readStateSession(session));
     }
 
     async openForWrite(session: InteractionSession): Promise<Val.ProtocolStruct> {
@@ -400,6 +395,22 @@ class ClusterState implements ClusterProtocol {
     inspect() {
         return this.toString();
     }
+}
+
+let emptyReadStateSession: ValueSupervisor.Session | undefined;
+
+function readStateSession(session: InteractionSession): ValueSupervisor.Session {
+    const isEmpty = Reflect.ownKeys(session).length === 0;
+    if (isEmpty && emptyReadStateSession) {
+        return emptyReadStateSession;
+    }
+
+    const { interactionComplete: _ic, ...readOnly } = LocalActorContext.ReadOnly;
+    const supervisorSession: ValueSupervisor.Session = { ...readOnly, ...session };
+    if (isEmpty) {
+        emptyReadStateSession = supervisorSession;
+    }
+    return supervisorSession;
 }
 
 const behaviorCache = new WeakMap<Behavior.Type, Map<string, ClusterTypeProtocol | undefined>>();
