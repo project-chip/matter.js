@@ -71,6 +71,10 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: `discoveryCapabilities` moved from `CommissioningClient.CommissioningOptions` to `Discovery.Options`, declare such options as `CommissioningDiscovery.Options`; `Discovery.Options.scannerFilter` is removed
     - Breaking: A commissionable advertisement with vendor or product ID 0 reports it as `undefined`
     - Breaking: Commissioning or decommissioning a node that is gone rejects with `DestroyedDependencyError` or `CrashedDependencyError`, and a concurrent attempt with `FabricOperationInProgressError`
+    - Breaking: An endpoint whose number another endpoint of the same node or `ClientNode` uses is refused with `IdentityConflictError`, and the existing endpoint keeps its number
+    - Breaking: `parts.delete()` and `parts.clear()`, also on `agent.parts`, throw `ImplementationError`; remove an endpoint with its `close()` or `delete()`
+    - Breaking: Adding an endpoint with the number of an erased endpoint that is still a part of its parent is refused
+    - Breaking: An essential endpoint whose initialization fails in `add()` is closed instead of reset, so the same instance cannot be added again
     - Deprecation: `ClientNodeInteraction.localStateFor()` will be removed in 0.19
     - Feature: Finalized the `ClientNode` API for controllers: `ServerNode.peers.commissioned`, `ClientNode.disable()`/`enable()`, connection state, split commissioning, opening commissioning windows on peers and more; see [Controller migration guide](docs/MIGRATION_CONTROLLER_018.md)
     - Feature: Groupcast cluster (`GroupcastServer`) and AccessControl `Auxiliary` feature; group commands via `ClientGroup` endpoints and group bindings
@@ -89,6 +93,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Device type requirements honor relaxed mandatory elements and revision-gated features
     - Enhancement: Adding endpoints under an aggregator is faster
     - Enhancement: In `strict` validation mode a cluster server refuses construction when a mandatory command throws `Behavior.unimplemented`
+    - Adjustment: For a part of a server node, the `IdAssigned` and `NumberAssigned` lifecycle changes are emitted before `Installed`
     - Adjustment: `ChangeNotificationService.Change` has a new kind `"readable"`, emitted when an endpoint's state becomes readable; consumers that switch on kind must handle or ignore it
     - Adjustment: Device types with a mandatory client application cluster include `BindingServer`; `behaviors.require(BindingServer, options)` no longer sets its state (use `add()` or `setStateOf()`), and an own `BindingServer` implementation subclass must be declared with `.with()` on the endpoint on creation
     - Adjustment: A binding entry resolves only once something observes `binding.established`, and is ignored for the OTA Provider and WebRTC Transport clients
@@ -150,6 +155,13 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A peer cluster ID outside the allowed ranges no longer fails node initialization
     - Fix: `endpoints.size` no longer double-counts the root endpoint
     - Fix: `RemoteServer` declares `certificate` and `key` as PEM strings
+    - Fix: Adding an endpoint below one of its own descendants fails with `ImplementationError` instead of creating a cycle
+    - Fix: An endpoint created with `ClientNodeEndpoints.require()` on a running `ClientNode` is reused when the peer later reports that endpoint
+    - Fix: An endpoint without a `number` no longer gets a number that another endpoint of the node sets in its options but is not yet added, so adding that endpoint later no longer fails
+    - Fix: An endpoint refused for its number is not listed in `PartsList` and is not reported as deleted
+    - Fix: Automatically assigned endpoint numbers count up from the highest number used so far or explicitly requested in options; after 0xFFFE they continue with the lowest free number instead of the invalid 0xFFFF
+    - Fix: Deleting or erasing an endpoint frees the stored numbers of its whole subtree
+    - Fix: An endpoint that sets a `number` in its options which a stored endpoint with another ID had before gets that number and logs a warning; the stored endpoint gets a new number when it is added again
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument
