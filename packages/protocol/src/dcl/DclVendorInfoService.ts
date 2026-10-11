@@ -441,12 +441,12 @@ export class DclVendorInfoService {
      * Close the service and stop periodic updates.
      */
     async close() {
-        if (this.#closed) return;
         this.#closed = true;
         await this.#construction.close(async () => {
-            await this.#fetchPromise;
             this.#updateTimer?.stop();
             this.#updateTimer = undefined;
+            // update() logs a failed fetch; close only waits for it to settle
+            await Promise.allSettled([this.#fetchPromise]);
             await this.#storageManager?.close();
         });
     }

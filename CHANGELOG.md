@@ -218,6 +218,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A node can start after mDNS failed to open its socket, and the process can exit after all nodes closed
     - Fix: Event stores never reuse event numbers across restarts
     - Fix: The DCL certificate service authenticates CRLs before using them, combines all distribution points, and skips malformed records
+    - Fix: Closing a DCL certificate or vendor info service no longer leaves its update timer running
     - Fix: Certificates with mismatching signature algorithms are rejected, proprietary extensions no longer fail parsing, and malformed attestation data fails with a clear finding
     - Fix: A server sends no response under SuppressResponse, answers schema mismatches with `INVALID_COMMAND`, and answers handler errors with `FAILURE` per command
     - Fix: `UpdateFabricLabel` accepts an empty label
