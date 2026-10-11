@@ -5,7 +5,13 @@
  */
 
 import { Immutable, ServerAddress } from "@matter/general";
-import { CommissionableDevice, OperationalDevice, PeerAddress, SupportedTransportsSchema } from "@matter/protocol";
+import {
+    CommissionableDevice,
+    OperationalDevice,
+    PeerAddress,
+    SessionIntervals,
+    SupportedTransportsSchema,
+} from "@matter/protocol";
 import { DeviceTypeId, VendorId } from "@matter/types";
 import type { CommissioningClient } from "./CommissioningClient.js";
 
@@ -61,7 +67,7 @@ export namespace RemoteDescriptor {
             rotatingIdentifier,
             pairingHint,
             pairingInstructions,
-            sessionParameters,
+            advertisedIntervals,
             tcpSupport,
             longIdleTimeOperatingMode,
         } = long;
@@ -110,8 +116,9 @@ export namespace RemoteDescriptor {
             }
         }
 
-        if (sessionParameters !== undefined) {
-            const { idleInterval, activeInterval, activeThreshold } = sessionParameters;
+        const intervals = advertisedIntervals && SessionIntervals.advertisable(advertisedIntervals);
+        if (intervals !== undefined) {
+            const { idleInterval, activeInterval, activeThreshold } = intervals;
 
             if (idleInterval !== undefined) {
                 result.SII = idleInterval;
@@ -213,20 +220,11 @@ export namespace RemoteDescriptor {
             long.productId = Number.isFinite(product) && product !== 0 ? product : undefined;
         }
 
-        // With a peer address the Peer owns sessionParameters and its session values win; DNS-SD only seeds them before
-        // commissioning
-        if (long.peerAddress === undefined) {
-            if (SII !== undefined) {
-                (long.sessionParameters ??= {}).idleInterval = SII;
-            }
-            if (SAI !== undefined) {
-                (long.sessionParameters ??= {}).activeInterval = SAI;
-            }
-            if (SAT !== undefined) {
-                (long.sessionParameters ??= {}).activeThreshold = SAT;
-            }
-        }
-
+        long.advertisedIntervals = SessionIntervals.advertisable({
+            idleInterval: SII,
+            activeInterval: SAI,
+            activeThreshold: SAT,
+        });
         long.deviceType = DT === undefined ? undefined : DeviceTypeId(DT, false);
         long.deviceName = DN;
         long.rotatingIdentifier = RI;
