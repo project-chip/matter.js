@@ -6,6 +6,7 @@
 
 export * from "./Agent.js";
 export * from "./Endpoint.js";
+export * from "./errors.js";
 export * from "./properties/index.js";
 export * from "./storage/index.js";
 export * from "./type/index.js";
