@@ -195,8 +195,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: PASE throws `PasscodeMismatchError` on a wrong passcode to allow better user guidance
     - Enhancement: Interactions can be aborted via `ClientRequest.abort`
     - Enhancement: `ClientRequest.largeMessage` requires a TCP-backed session for any interaction
-    - Enhancement: `DclCertificateService` can run `offline` and accepts extra revocation information (`installRevocations()`, `revocations`)
-    - Enhancement: `DclVendorInfoService` and `DclOtaUpdateService` can run `offline` too
+    - Enhancement: `DclCertificateService`, `DclVendorInfoService` and `DclOtaUpdateService` can run `offline`. Use data seeds to have a basic set of details
+    - Enhancement: `DclCertificateService`accepts extra revocation information (`installRevocations()`, `revocations`)
     - Enhancement: A custom `BleScannerClient` may report `listeningTime` and `isPeripheralReachable()`, so stale or unreachable peripherals are not offered for commissioning
     - Enhancement: Network profiles can define BDX transfer delays separately via `bdxAdditionalMrpDelay`
     - Adjustment: `DclVendorInfo` is a deprecated alias of `VendorDclSchema`
