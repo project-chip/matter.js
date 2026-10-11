@@ -4,9 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { IdentityConflictError } from "#node/server/IdentityService.js";
-import { BasicSet, decamelize, Diagnostic, ImmutableSet, MutableSet, ObservableSet } from "@matter/general";
+import {
+    BasicSet,
+    decamelize,
+    Diagnostic,
+    ImmutableSet,
+    MatterAggregateError,
+    MutableSet,
+    ObservableSet,
+} from "@matter/general";
 import { Endpoint } from "../Endpoint.js";
+import { IdentityConflictError } from "../errors.js";
 
 /**
  * Manages parent-child relationships between endpoints.
@@ -52,16 +60,25 @@ export class EndpointContainer<T extends Endpoint = Endpoint>
         endpoint.owner = this.#owner;
 
         endpoint.lifecycle.destroyed.once(() => {
-            this.delete(endpoint);
+            this.remove(endpoint);
         });
     }
 
     delete(endpoint: T) {
-        return this.#children.delete(endpoint);
+        return this.remove(endpoint);
     }
 
     clear() {
         this.#children.clear();
+    }
+
+    /**
+     * Remove an endpoint from the container when it is destroyed or moves to another owner.
+     *
+     * @internal
+     */
+    remove(endpoint: T) {
+        return this.#children.delete(endpoint);
     }
 
     has(endpoint: T) {
@@ -117,8 +134,13 @@ export class EndpointContainer<T extends Endpoint = Endpoint>
      * Destroy all parts.  Invoked automatically by the owner on destroy.
      */
     async close() {
+        await MatterAggregateError.settleSeries(this.#closeTasks(), `Error closing endpoints owned by ${this.#owner}`);
+    }
+
+    // Iterates the live set, so an endpoint added while closing is closed too
+    *#closeTasks() {
         for (const endpoint of this) {
-            await endpoint.close();
+            yield () => endpoint.close();
         }
     }
 

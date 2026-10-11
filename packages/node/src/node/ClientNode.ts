@@ -28,6 +28,7 @@ import {
     InternalError,
     Lifecycle,
     Logger,
+    MatterAggregateError,
     MaybePromise,
 } from "@matter/general";
 import { Matter, MatterModel } from "@matter/model";
@@ -292,11 +293,18 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         try {
             const interaction = this.#interaction;
             this.#interaction = undefined;
-            await interaction?.close();
-            await super.cancelWithMutex();
+            await MatterAggregateError.settleSeries(
+                [() => interaction?.close(), () => super.cancelWithMutex()],
+                `Error disconnecting ${this}`,
+            );
         } finally {
             this.#blockInteractions = false;
         }
+    }
+
+    // A peer belongs to its host's Peers, which closes it within the host's teardown
+    protected override get isRuntimeWorker() {
+        return false;
     }
 
     protected override get container() {

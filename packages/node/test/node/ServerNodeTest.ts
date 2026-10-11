@@ -6,16 +6,18 @@
 
 import { Behavior } from "#behavior/Behavior.js";
 import { EventsBehavior } from "#behavior/system/events/EventsBehavior.js";
+import { AccessControlServer } from "#behaviors/access-control";
 import { DescriptorBehavior } from "#behaviors/descriptor";
 import { OnOffServer } from "#behaviors/on-off";
 import { PumpConfigurationAndControlServer } from "#behaviors/pump-configuration-and-control";
+import { WebRtcTransportProviderServer } from "#behaviors/web-rtc-transport-provider";
 import { ColorTemperatureLightDevice } from "#devices/color-temperature-light";
 import { ExtendedColorLightDevice } from "#devices/extended-color-light";
 import { LightSensorDevice } from "#devices/light-sensor";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { PumpDevice } from "#devices/pump";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { EndpointBehaviorsError, EndpointPartsError } from "#endpoint/errors.js";
+import { EndpointBehaviorsError, EndpointPartsError, IdentityConflictError } from "#endpoint/errors.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import { LocalActorContext } from "#index.js";
@@ -23,11 +25,16 @@ import { ChangeNotificationService } from "#node/integration/ChangeNotificationS
 import { IdentityService } from "#node/server/IdentityService.js";
 import { ServerEnvironment } from "#node/server/ServerEnvironment.js";
 import { ServerNode } from "#node/ServerNode.js";
+import { ClientCacheBuffer } from "#storage/client/ClientCacheBuffer.js";
 import { ServerNodeStore } from "#storage/server/ServerNodeStore.js";
 import {
     Bytes,
     CrashedDependencyError,
     Crypto,
+    DatafileRoot,
+    Diagnostic,
+    DiagnosticPresentation,
+    DiagnosticSource,
     DnsCodec,
     DnsMessage,
     DnsRecordType,
@@ -36,10 +43,15 @@ import {
     InternalError,
     Lifecycle,
     isObject,
+    LogDestination,
+    LogFormat,
+    Logger,
+    LogLevel,
     MemoryBlobStorageDriver,
     MemoryStorageDriver,
     MdnsSocket,
     MockCrypto,
+    MockFilesystem,
     MockNetwork,
     MockUdpSocket,
     Network,
@@ -72,9 +84,11 @@ import {
     PeerAddress,
     PeerSet,
     ProtocolMocks,
+    SessionManager,
     Val,
 } from "@matter/protocol";
-import { EndpointNumber, FabricId, FabricIndex, NodeId, VendorId } from "@matter/types";
+import { EndpointNumber, FabricId, FabricIndex, NodeId, StreamUsage, VendorId } from "@matter/types";
+import { AccessControl } from "@matter/types/clusters/access-control";
 import { BasicInformation as BasicInformationCluster } from "@matter/types/clusters/basic-information";
 import { PumpConfigurationAndControl } from "@matter/types/clusters/pump-configuration-and-control";
 
@@ -158,9 +172,9 @@ describe("ServerNode", () => {
             expect(changes).deep.equals([
                 ["ready", "node0"],
                 ["ready"],
-                ["installed", "node0.?"],
                 ["idAssigned", "node0.part0"],
                 ["numberAssigned", "node0.part0"],
+                ["installed", "node0.part0"],
                 ["ready", "node0.part0"],
                 ["partsReady", "node0.part0"],
                 ["partsReady", "node0"],
@@ -188,9 +202,9 @@ describe("ServerNode", () => {
                 ["ready"],
                 ["partsReady", "node0"],
                 ["partsReady"],
-                ["installed", "node0.?"],
                 ["idAssigned", "node0.part0"],
                 ["numberAssigned", "node0.part0"],
+                ["installed", "node0.part0"],
                 ["ready", "node0.part0"],
                 ["partsReady", "node0.part0"],
                 ["online"],
@@ -217,9 +231,9 @@ describe("ServerNode", () => {
                 ["partsReady", "node0"],
                 ["partsReady"],
                 ["online"],
-                ["installed", "node0.?"],
                 ["idAssigned", "node0.part0"],
                 ["numberAssigned", "node0.part0"],
+                ["installed", "node0.part0"],
                 ["ready", "node0.part0"],
                 ["partsReady", "node0.part0"],
                 ["offline"],
@@ -294,6 +308,19 @@ describe("ServerNode", () => {
 
         const expiration = DnsCodec.decode(await expirationReceived);
         expect(expiration?.answers[0]?.ttl).equals(0);
+    });
+
+    it("lists its peers in its diagnostics", async () => {
+        await using site = new MockSite();
+        const { controller } = await site.addCommissionedPair();
+        const peer = controller.peers.get("peer1");
+        if (peer === undefined) {
+            expect.fail("No commissioned peer");
+        }
+
+        const text = LogFormat.formats.plain(Diagnostic.valueOf(controller));
+
+        expect(text).contains(`${peer} ${peer.lifecycle.isOnline ? "online" : "offline"}`);
     });
 
     describe("operational port", () => {
@@ -468,6 +495,163 @@ describe("ServerNode", () => {
         await node.close();
     });
 
+    describe("removes a fabric while another session holds the fail-safe", () => {
+        /** Records the factory resets of `node`; each entry settles when its reset is done. */
+        function watchErase(node: MockServerNode) {
+            const erase = node.erase.bind(node);
+            const resets = new Array<Promise<void>>();
+            node.erase = () => {
+                const reset = erase();
+                resets.push(reset);
+                return reset;
+            };
+            return resets;
+        }
+
+        async function armFailsafe(node: MockServerNode, expiryLengthSeconds = FAILSAFE_LENGTH_S) {
+            const exchange = await node.createExchange();
+            await node.online({ exchange, command: true }, async agent => {
+                await agent.generalCommissioning.armFailSafe({ expiryLengthSeconds, breadcrumb: 1 });
+            });
+            return exchange;
+        }
+
+        const OPERATIONAL_SESSION_ID = 50;
+
+        /** Opens a session that is not PASE and belongs to no fabric, so the pending reset waits for it. */
+        async function openOperationalSession(node: MockServerNode) {
+            await node.createExchange({
+                id: OPERATIONAL_SESSION_ID,
+                peerSessionId: OPERATIONAL_SESSION_ID,
+                peerNodeId: NodeId(OPERATIONAL_SESSION_ID),
+            });
+        }
+
+        async function closeOperationalSession(node: MockServerNode) {
+            for (const session of node.env.get(SessionManager).sessions) {
+                if (session.id === OPERATIONAL_SESSION_ID) {
+                    await session.handlePeerClose();
+                }
+            }
+        }
+
+        async function removeFabric(node: MockServerNode, contextOptions: { exchange: ProtocolMocks.Exchange }) {
+            const fabricIndex = await node.online(
+                contextOptions,
+                async agent => agent.operationalCredentials.state.currentFabricIndex,
+            );
+            const changes = new Array<[FabricIndex, string]>();
+            node.events.commissioning.fabricsChanged.on((index, action) => void changes.push([index, action]));
+
+            await node.online(contextOptions, async agent => {
+                await agent.operationalCredentials.removeFabric({ fabricIndex });
+            });
+
+            expect(changes).deep.equals([[fabricIndex, "deleted"]]);
+        }
+
+        it("decommissions on the last fabric and resets once the fail-safe ends", async () => {
+            const { node, contextOptions } = await commissioning.commission();
+            const resets = watchErase(node);
+            const commissionerExchange = await armFailsafe(node);
+
+            await removeFabric(node, contextOptions);
+            await MockTime.resolve(Promise.resolve(), { macrotasks: true });
+
+            expect(node.state.commissioning.commissioned).false;
+            expect(node.lifecycle.isCommissioned).false;
+            expect(resets.length).equals(0);
+
+            await node.online({ exchange: commissionerExchange, command: true }, async agent => {
+                await agent.generalCommissioning.armFailSafe({ expiryLengthSeconds: 0, breadcrumb: 0 });
+            });
+
+            expect(resets.length).equals(1);
+            await MockTime.resolve(resets[0], { macrotasks: true });
+
+            await node.close();
+        });
+
+        it("keeps a commissioning that completes under the fail-safe after the last fabric left", async () => {
+            const { node, contextOptions } = await commissioning.commission();
+            const resets = watchErase(node);
+            const commissionerExchange = await armFailsafe(node);
+
+            await removeFabric(node, contextOptions);
+            await commissioning.commission(node, 2, commissionerExchange);
+            for (const session of [...node.env.get(SessionManager).sessions]) {
+                await session.handlePeerClose();
+            }
+            await MockTime.resolve(Promise.resolve(), { macrotasks: true });
+
+            expect(node.state.commissioning.commissioned).true;
+            expect(node.env.get(FabricManager).fabrics.length).equals(1);
+            expect(resets.length).equals(0);
+
+            await node.close();
+        });
+
+        it("resets when the fail-safe rolls back a fabric it added after the last fabric left", async () => {
+            const { node, contextOptions } = await commissioning.commission();
+            const resets = watchErase(node);
+            const commissionerExchange = await armFailsafe(node);
+
+            await removeFabric(node, contextOptions);
+            await commissioning.almostCommission(node, 2, commissionerExchange);
+            await openOperationalSession(node);
+            await closeOperationalSession(node);
+            await MockTime.resolve(Promise.resolve(), { macrotasks: true });
+            expect(resets.length).equals(0);
+
+            await node.online({ exchange: commissionerExchange, command: true }, async agent => {
+                await agent.generalCommissioning.armFailSafe({ expiryLengthSeconds: 0, breadcrumb: 0 });
+            });
+
+            expect(node.env.get(FabricManager).fabrics.length).equals(0);
+            expect(resets.length).equals(1);
+            await MockTime.resolve(resets[0], { macrotasks: true });
+
+            await node.close();
+        });
+
+        it("waits for a fail-safe armed after the last fabric left", async () => {
+            const { node, contextOptions } = await commissioning.commission();
+            const resets = watchErase(node);
+            await openOperationalSession(node);
+
+            await removeFabric(node, contextOptions);
+            const commissionerExchange = await armFailsafe(node);
+            await closeOperationalSession(node);
+            await MockTime.resolve(Promise.resolve(), { macrotasks: true });
+            expect(resets.length).equals(0);
+
+            await node.online({ exchange: commissionerExchange, command: true }, async agent => {
+                await agent.generalCommissioning.armFailSafe({ expiryLengthSeconds: 0, breadcrumb: 0 });
+            });
+
+            expect(resets.length).equals(1);
+            await MockTime.resolve(resets[0], { macrotasks: true });
+
+            await node.close();
+        });
+
+        it("stays commissioned when another fabric remains", async () => {
+            const { node, contextOptions } = await commissioning.commission();
+            (node.env.get(Crypto) as MockCrypto).index++;
+            await commissioning.commission(node, 2);
+            const resets = watchErase(node);
+            await armFailsafe(node);
+
+            await removeFabric(node, contextOptions);
+            await MockTime.resolve(Promise.resolve(), { macrotasks: true });
+
+            expect(node.state.commissioning.commissioned).true;
+            expect(resets.length).equals(0);
+
+            await node.close();
+        });
+    });
+
     it("factory resets when offline after commission", async () => {
         await testFactoryReset("offline-after-commission");
     });
@@ -549,14 +733,78 @@ describe("ServerNode", () => {
             }
         }
 
-        // Not disposed: a node whose construction fails before its endpoint initializer is installed cannot be closed
-        const site = new MockSite({ createStorageDriver: store => new FailingDriver(store) });
+        await using site = new MockSite({ createStorageDriver: store => new FailingDriver(store) });
 
         await expect(site.addNode(undefined, { id: "doomed", device: undefined, commissioning: { enabled: false } }))
             .rejected;
 
         expect(closes).equals(1);
     });
+
+    it("releases the storage lock when an earlier service fails to close", async () => {
+        let bufferClosed = false;
+        class FailingBuffer extends ClientCacheBuffer {
+            override async close() {
+                bufferClosed = true;
+                throw new ImplementationError("Cannot flush client cache");
+            }
+        }
+
+        await using site = new MockSite();
+        const node = await site.addNode(undefined, { device: undefined, commissioning: { enabled: false } });
+        node.env.set(ClientCacheBuffer, new FailingBuffer(new MemoryStorageDriver(), Seconds(1)));
+        const lock = installLock(node);
+
+        await MockTime.resolve(node.close(), { macrotasks: true });
+
+        expect(bufferClosed).equals(true);
+        expect(lock.released).equals(true);
+    });
+
+    it("releases the storage lock when an endpoint fails to close", async () => {
+        await using site = new MockSite();
+        const node = await site.addNode(undefined, { device: undefined, commissioning: { enabled: false } });
+        const light = await node.add(OnOffLightDevice);
+        const initializer = node.env.get(EndpointInitializer);
+        const deactivate = initializer.deactivateDescendant.bind(initializer);
+        initializer.deactivateDescendant = async endpoint => {
+            if (endpoint === light) {
+                throw new ImplementationError("Cannot deactivate light");
+            }
+            await deactivate(endpoint);
+        };
+        const lock = installLock(node);
+
+        await MockTime.resolve(node.close(), { macrotasks: true });
+
+        expect(lock.released).equals(true);
+        expect(DiagnosticSource[DiagnosticPresentation.value]).not.include(node);
+    });
+
+    it("releases the storage lock when taking the node offline fails", async () => {
+        await using site = new MockSite();
+        const node = await site.addNode(undefined, { device: undefined, commissioning: { enabled: false } });
+        node.lifecycle.goingOffline.on(() => {
+            throw new ImplementationError("Cannot go offline");
+        });
+        const lock = installLock(node);
+
+        await expect(MockTime.resolve(node.close(), { macrotasks: true })).rejected;
+
+        expect(node.lifecycle.isOnline).equals(false);
+        expect(lock.released).equals(true);
+    });
+
+    function installLock(node: ServerNode) {
+        const lock = { released: false };
+        node.env.set(
+            DatafileRoot.Lock,
+            new DatafileRoot.Lock(new MockFilesystem().directory(node.id), async () => {
+                lock.released = true;
+            }),
+        );
+        return lock;
+    }
 
     it("starts a node after an earlier node could not open the mDNS socket", async () => {
         class MdnsBlockingNetwork extends MockNetwork {
@@ -577,8 +825,7 @@ describe("ServerNode", () => {
         ]);
         environment.set(Network, network);
 
-        // Not disposed: a node whose construction fails before its endpoint initializer is installed cannot be closed
-        const site = new MockSite();
+        await using site = new MockSite();
         const options = { environment, device: undefined, commissioning: { enabled: false } };
 
         const error = await site.addNode(undefined, { ...options, id: "blocked" }).then(
@@ -609,7 +856,7 @@ describe("ServerNode", () => {
         await node.add(new Endpoint(OnOffLightDevice, { id: "second", number: EndpointNumber(2) }));
         await node.close();
 
-        // Only the first endpoint is present this session, so the second's number is held as pre-allocated
+        // Only the first endpoint is present this session, so the second's number stays held by its stored endpoint
         const rebooted = await site.addNode(undefined, { id, device: undefined, commissioning: { enabled: false } });
         await rebooted.add(new Endpoint(OnOffLightDevice, { id: "first" }));
 
@@ -619,6 +866,336 @@ describe("ServerNode", () => {
         await rebooted.add(added);
 
         expect(added.number).equals(2);
+    });
+
+    describe("a preset number a stored endpoint holds", () => {
+        async function storeHolder(site: MockSite, id: string) {
+            const node = await site.addNode(undefined, { id, device: undefined, commissioning: { enabled: false } });
+            const holder = await node.add(new Endpoint(OnOffLightDevice, { id: "holder" }));
+            const storedNumber = holder.number;
+            await node.close();
+            return storedNumber;
+        }
+
+        // Characterization
+        it("goes to the preset endpoint when it constructs before the stored endpoint", async () => {
+            await using site = new MockSite();
+            const id = "storedNumbers";
+            const storedNumber = await storeHolder(site, id);
+
+            const claimant = new Endpoint(OnOffLightDevice, { id: "claimant", number: storedNumber });
+            const holder = new Endpoint(OnOffLightDevice, { id: "holder" });
+            await site.addNode(undefined, {
+                id,
+                device: undefined,
+                commissioning: { enabled: false },
+                parts: [claimant, holder],
+            });
+
+            expect(claimant.number).equals(storedNumber);
+            expect(holder.number).not.equals(storedNumber);
+        });
+
+        // Characterization
+        it("is refused when the stored endpoint is installed first", async () => {
+            await using site = new MockSite();
+            const id = "storedNumbers";
+            const storedNumber = await storeHolder(site, id);
+
+            const holder = new Endpoint(OnOffLightDevice, { id: "holder" });
+            const claimant = new Endpoint(OnOffLightDevice, {
+                id: "claimant",
+                number: storedNumber,
+                isEssential: false,
+            });
+            await site.addNode(undefined, {
+                id,
+                device: undefined,
+                commissioning: { enabled: false },
+                parts: [holder, claimant],
+            });
+
+            expect(holder.number).equals(storedNumber);
+            expect(claimant.construction.error).instanceOf(IdentityConflictError);
+        });
+
+        // Characterization
+        it("ignores a stored number outside the range of a part", async () => {
+            await using site = new MockSite();
+            const id = "storedNumbers";
+            await storeHolder(site, id);
+            const storage = site.storageFor(id);
+            const holderContext = Object.keys(storage).find(key => key.endsWith(".parts.holder"));
+            storage[holderContext!].__number__ = 0;
+
+            const restarted = await site.addNode(undefined, {
+                id,
+                device: undefined,
+                commissioning: { enabled: false },
+            });
+            const holder = await restarted.add(new Endpoint(OnOffLightDevice, { id: "holder" }));
+
+            expect(holder.number).equals(2);
+        });
+
+        it("starts over from 1 when the next number in storage is corrupt", async () => {
+            await using site = new MockSite();
+            const id = "storedNumbers";
+            await storeHolder(site, id);
+            const storage = site.storageFor(id);
+            const rootContext = Object.keys(storage).find(key => "__nextNumber__" in storage[key]);
+            storage[rootContext!].__nextNumber__ = "corrupt";
+
+            const restarted = await site.addNode(undefined, {
+                id,
+                device: undefined,
+                commissioning: { enabled: false },
+            });
+            const added = await restarted.add(new Endpoint(OnOffLightDevice, { id: "added" }));
+
+            expect(added.number).equals(2);
+        });
+
+        it("is taken over when the stored endpoint is not part of the node", async () => {
+            await using site = new MockSite();
+            const id = "storedNumbers";
+            const storedNumber = await storeHolder(site, id);
+
+            const warnings = new Array<string>();
+            Logger.destinations.capture = LogDestination({
+                format: LogFormat.formats.plain,
+                write(text, message) {
+                    if (message.level === LogLevel.WARN) {
+                        warnings.push(text);
+                    }
+                },
+            });
+            let claimant, holder;
+            try {
+                const rebooted = await site.addNode(undefined, {
+                    id,
+                    device: undefined,
+                    commissioning: { enabled: false },
+                });
+                claimant = await rebooted.add(new Endpoint(OnOffLightDevice, { id: "claimant", number: storedNumber }));
+                holder = await rebooted.add(new Endpoint(OnOffLightDevice, { id: "holder" }));
+            } finally {
+                delete Logger.destinations.capture;
+            }
+
+            expect(claimant.number).equals(storedNumber);
+            expect(holder.number).not.equals(storedNumber);
+            expect(warnings.join("\n")).contains(`takes endpoint number ${storedNumber} from stored endpoint holder`);
+        });
+
+        // Characterization
+        it("is taken over from an endpoint closed in the same run", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            const closed = await node.add(OnOffLightDevice, { id: "closed" });
+            const number = closed.number;
+            await closed.close();
+
+            const claimant = await node.add(OnOffLightDevice, { id: "claimant", number });
+            const returned = await node.add(OnOffLightDevice, { id: "closed" });
+
+            expect(claimant.number).equals(number);
+            expect(returned.number).not.equals(number);
+        });
+
+        it("clears the stored number of the endpoint it took over", async () => {
+            await using site = new MockSite();
+            const id = "storedNumbers";
+            const storedNumber = await storeHolder(site, id);
+
+            const rebooted = await site.addNode(undefined, {
+                id,
+                device: undefined,
+                commissioning: { enabled: false },
+            });
+            await rebooted.add(new Endpoint(OnOffLightDevice, { id: "claimant", number: storedNumber }));
+            await rebooted.close();
+
+            const restarted = await site.addNode(undefined, {
+                id,
+                device: undefined,
+                commissioning: { enabled: false },
+            });
+            const holder = await restarted.add(new Endpoint(OnOffLightDevice, { id: "holder" }));
+            const claimant = await restarted.add(
+                new Endpoint(OnOffLightDevice, { id: "claimant", number: storedNumber }),
+            );
+
+            expect(holder.number).not.equals(storedNumber);
+            expect(claimant.number).equals(storedNumber);
+        });
+
+        // Characterization; guards that a store gives up its previous number
+        it("keeps both numbers across a restart when a returning endpoint changes its preset", async () => {
+            for (const order of ["claimant first", "holder first"]) {
+                await using site = new MockSite();
+                const id = "storedNumbers";
+                const storedNumber = await storeHolder(site, id);
+
+                const parts = () => {
+                    const claimant = new Endpoint(OnOffLightDevice, { id: "claimant", number: storedNumber });
+                    const holder = new Endpoint(OnOffLightDevice, { id: "holder", number: storedNumber + 10 });
+                    return {
+                        claimant,
+                        holder,
+                        list: order === "claimant first" ? [claimant, holder] : [holder, claimant],
+                    };
+                };
+
+                const warnings = new Array<string>();
+                Logger.destinations.capture = LogDestination({
+                    format: LogFormat.formats.plain,
+                    write(text, message) {
+                        if (message.level === LogLevel.WARN) {
+                            warnings.push(text);
+                        }
+                    },
+                });
+                try {
+                    const first = parts();
+                    const node = await site.addNode(undefined, {
+                        id,
+                        device: undefined,
+                        commissioning: { enabled: false },
+                        parts: first.list,
+                    });
+                    await node.close();
+                } finally {
+                    delete Logger.destinations.capture;
+                }
+                if (order === "holder first") {
+                    expect(warnings.join("\n"), order).not.contains("takes endpoint number");
+                }
+
+                const second = parts();
+                await site.addNode(undefined, {
+                    id,
+                    device: undefined,
+                    commissioning: { enabled: false },
+                    parts: second.list,
+                });
+
+                expect(second.claimant.number, order).equals(storedNumber);
+                expect(second.holder.number, order).equals(storedNumber + 10);
+            }
+        });
+
+        // Characterization
+        it("gives a number two stored endpoints record to the first that returns", async () => {
+            for (const first of ["holder", "twin"]) {
+                await using site = new MockSite();
+                const id = "storedNumbers";
+                const storedNumber = await storeHolder(site, id);
+                const storage = site.storageFor(id);
+                const holderContext = Object.keys(storage).find(key => key.endsWith(".parts.holder"));
+                expect(holderContext).not.undefined;
+                storage[holderContext!.replace(/holder$/, "twin")] = { ...storage[holderContext!] };
+
+                const restarted = await site.addNode(undefined, {
+                    id,
+                    device: undefined,
+                    commissioning: { enabled: false },
+                });
+                const second = first === "holder" ? "twin" : "holder";
+                const winner = await restarted.add(new Endpoint(OnOffLightDevice, { id: first }));
+                const loser = await restarted.add(new Endpoint(OnOffLightDevice, { id: second }));
+
+                expect(winner.number, first).equals(storedNumber);
+                expect(loser.number, first).not.equals(storedNumber);
+            }
+        });
+    });
+
+    // Characterization; guards the release of the subtree's numbers on erase
+    it("frees the numbers of a deleted subtree", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const aggregator = await node.add(AggregatorEndpoint, {
+            id: "aggregator",
+            parts: [{ type: OnOffLightDevice, id: "child" }],
+        });
+        const childNumber = aggregator.parts.require("child").number;
+
+        await aggregator.delete();
+
+        const warnings = new Array<string>();
+        Logger.destinations.capture = LogDestination({
+            format: LogFormat.formats.plain,
+            write(text, message) {
+                if (message.level === LogLevel.WARN) {
+                    warnings.push(text);
+                }
+            },
+        });
+        let reused;
+        try {
+            reused = await node.add(OnOffLightDevice, { id: "reused", number: childNumber });
+        } finally {
+            delete Logger.destinations.capture;
+        }
+
+        expect(reused.number).equals(childNumber);
+        expect(warnings.join("\n")).not.match(/takes (endpoint )?number/);
+    });
+
+    it("continues new endpoint numbers after the highest preset number", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        await node.add(OnOffLightDevice, { id: "preset", number: 10 });
+
+        const automatic = await node.add(OnOffLightDevice, { id: "automatic" });
+
+        expect(automatic.number).equals(11);
+    });
+
+    it("wraps new endpoint numbers to the lowest free number", async () => {
+        await using site = new MockSite();
+        const id = "wrapping";
+        const node = await site.addNode(undefined, { id, device: undefined, commissioning: { enabled: false } });
+        const first = await node.add(new Endpoint(OnOffLightDevice, { id: "first" }));
+        expect(first.number).equals(1);
+        await node.close();
+
+        const storage = site.storageFor(id);
+        const rootContext = Object.keys(storage).find(key => "__nextNumber__" in storage[key]);
+        expect(rootContext).not.undefined;
+        storage[rootContext!].__nextNumber__ = 0xfffe;
+
+        const restarted = await site.addNode(undefined, { id, device: undefined, commissioning: { enabled: false } });
+        await restarted.add(new Endpoint(OnOffLightDevice, { id: "first" }));
+        const last = await restarted.add(new Endpoint(OnOffLightDevice, { id: "last" }));
+        const wrapped = await restarted.add(new Endpoint(OnOffLightDevice, { id: "wrapped" }));
+        await wrapped.delete();
+        const next = await restarted.add(new Endpoint(OnOffLightDevice, { id: "next" }));
+
+        expect(last.number).equals(0xfffe);
+        expect(wrapped.number).equals(2);
+        expect(next.number).equals(3);
+    });
+
+    it("keeps the holder's number when a refused endpoint is erased", async () => {
+        await using node = new MockServerNode();
+        const holder = new Endpoint(OnOffLightDevice, { id: "holder", number: EndpointNumber(4) });
+        const refused = new Endpoint(OnOffLightDevice, {
+            id: "refused",
+            number: EndpointNumber(4),
+            isEssential: false,
+        });
+        node.parts.add(holder);
+        node.parts.add(refused);
+        await node.start();
+        expect(refused.construction.error).instanceOf(IdentityConflictError);
+
+        await refused.erase();
+
+        const added = new Array<number>();
+        for (let i = 0; i < 4; i++) {
+            added.push((await node.add(OnOffLightDevice)).number);
+        }
+        expect(added).not.contains(4);
+        expect(node.endpoints.for(4)).equals(holder);
     });
 
     it("erases the persisted store of a part that crashes before number assignment", async () => {
@@ -969,6 +1546,39 @@ describe("ServerNode", () => {
         await node.close();
     });
 
+    it("removes the entries of a removed fabric from a fabric-sensitive list", async () => {
+        const camera = new Endpoint(OnOffLightDevice.with(WebRtcTransportProviderServer), { id: "camera" });
+        const node = await MockServerNode.createOnline(undefined, { device: camera });
+        const { contextOptions } = await commissioning.commission(node);
+        (node.env.get(Crypto) as MockCrypto).index++;
+        await commissioning.commission(node, 2);
+
+        const session = (id: number, fabricIndex: number) => ({
+            id,
+            peerNodeId: NodeId(id),
+            peerEndpointId: EndpointNumber(1),
+            streamUsage: StreamUsage.LiveView,
+            videoStreams: [10],
+            metadataEnabled: false,
+            fabricIndex: FabricIndex(fabricIndex),
+        });
+        await camera.set({ webRtcTransportProvider: { currentSessions: [session(1, 1), session(2, 2)] } });
+
+        const sanitized = Promise.resolve(ServerEnvironment.fabricScopedDataSanitized);
+        await node.online(contextOptions, async agent => {
+            await agent.operationalCredentials.removeFabric({ fabricIndex: FabricIndex(1) });
+        });
+        await sanitized;
+
+        expect(
+            camera
+                .stateOf(WebRtcTransportProviderServer)
+                .currentSessions.map(({ id, fabricIndex }) => [id, fabricIndex]),
+        ).deep.equals([[2, 2]]);
+
+        await node.close();
+    });
+
     it("commissions twice and removes first including fabric scoped data", async () => {
         const { node, contextOptions } = await commissioning.commission();
 
@@ -1200,6 +1810,45 @@ describe("ServerNode", () => {
                 },
             });
 
+            await node.close();
+        }
+    });
+
+    it("keeps the access control list when a newer default root endpoint adds a feature", async () => {
+        const environment = new Environment("test");
+        const service = environment.get(StorageService);
+
+        // Configure storage that will survive node replacement
+        const storage = new StorageManager(new MemoryStorageDriver());
+        storage.close = () => {};
+        await storage.initialize();
+        service.open = () => Promise.resolve(storage);
+
+        const acl = [
+            {
+                privilege: AccessControl.AccessControlEntryPrivilege.Administer,
+                authMode: AccessControl.AccessControlEntryAuthMode.Case,
+                subjects: [NodeId(0x1234)],
+                targets: null,
+                auxiliaryType: undefined,
+                fabricIndex: FabricIndex(1),
+            },
+        ];
+
+        {
+            const node = new MockServerNode(MockServerNode.RootEndpoint.with(AccessControlServer.with("Extension")), {
+                id: "node0",
+                environment,
+            });
+            await node.construction.ready;
+            await node.setStateOf(AccessControlServer, { acl });
+            await node.close();
+        }
+
+        {
+            const node = new MockServerNode({ id: "node0", environment });
+            await node.construction.ready;
+            expect(node.stateOf(AccessControlServer).acl.map(entry => ({ ...entry }))).deep.equals(acl);
             await node.close();
         }
     });

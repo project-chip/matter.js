@@ -82,8 +82,12 @@ other value fails the node's construction with an `ImplementationError` as the c
   between checks. Only the misplaced-singleton check before an endpoint's behaviors initialize still runs, because a
   behavior that works only on the root endpoint otherwise fails with an untyped error.
 
-During development keep `warn`, or use `strict` to refuse a non-conforming structure. In production, `off` skips the
-checks for performance.
+The mode also applies to every cluster server, device type or not, when it initializes. In `strict` mode a command the
+conformance of the cluster requires that throws `Behavior.unimplemented` fails the initialization, with a
+`ClusterImplementationError` as the cause. In `warn` and `off` mode each such command logs a warning. In every mode the
+command is left out of the `AcceptedCommandList`.
+
+During development keep `warn`, or use `strict` to refuse a non-conforming structure. In production, `off` skips device-type checks for performance; cluster implementation validation still runs.
 
 A misplaced singleton is refused at construction in every mode; in `off` mode only when a device type above the
 endpoint declares it.
@@ -168,6 +172,6 @@ matter.js does not recognize is reported as an `unknownCondition` violation wher
 - A construction is refused after the endpoint's `ready` and `partsReady` lifecycle events. Listeners of these
   events may already have run for an endpoint that is then refused, such as the node initialization of
   `CommissioningServer` or application logic started from `partsReady`.
-- A refused essential endpoint is rolled back, but its number stays listed in its ancestors' `PartsList`s and stays
-  allocated, so a retry with the same ID gets a different number. A refused non-essential endpoint is not rolled back;
-  it stays in its parent, crashed.
+- A refused essential endpoint is closed. It leaves its ancestors' `PartsList`s and keeps its number reserved, so a
+  retry with the same ID gets the same number. A refused non-essential endpoint is not rolled back; it stays in its
+  parent, crashed.

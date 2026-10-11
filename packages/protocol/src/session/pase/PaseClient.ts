@@ -32,6 +32,14 @@ const logger = Logger.get("PaseClient");
 
 const MAX_PASSCODE_GENERATION_ATTEMPTS = 100;
 
+/**
+ * The responder's key confirmation (Pake2 cB) does not verify: the passcode is wrong for the device at this address, or
+ * a stale address reached another device in commissioning mode.
+ *
+ * @see {@link MatterSpecification.v161.Core} § 4.14.1.2.7
+ */
+export class PasscodeMismatchError extends UnexpectedDataError {}
+
 export class PaseClient {
     #sessions: SessionManager;
 
@@ -81,6 +89,7 @@ export class PaseClient {
                 setupPin,
                 abort,
                 options?.suppressPeerLoss,
+                options?.onPbkdfParamResponse,
             );
         } catch (error) {
             // Unlike CASE, for PASE we send InvalidParam even on abort. This signals the device to reset its
@@ -121,6 +130,7 @@ export class PaseClient {
         setupPin: number,
         abort: Abort,
         suppressPeerLoss?: boolean,
+        onPbkdfParamResponse?: () => void,
     ) {
         const { crypto } = this.#sessions;
         const initiatorRandom = crypto.randomBytes(32);
@@ -143,6 +153,7 @@ export class PaseClient {
             responsePayload,
             response: { pbkdfParameters, responderSessionId, responderSessionParams },
         } = await messenger.readPbkdfParamResponse({ abort: abort.signal });
+        onPbkdfParamResponse?.();
 
         if (pbkdfParameters === undefined) {
             throw new UnexpectedDataError("Missing requested PbkdfParameters in the response. Commissioning failed.");
@@ -173,8 +184,8 @@ export class PaseClient {
         const { y: Y, verifier } = await messenger.readPasePake2({ abort: abort.signal });
         const { Ke, hAY, hBX } = await abort.attempt(spake2p.computeSecretAndVerifiersFromY(w1, X, Y));
         if (!Bytes.areEqual(verifier, hBX)) {
-            throw new UnexpectedDataError(
-                "Received incorrect key confirmation from the receiver. Commissioning failed.",
+            throw new PasscodeMismatchError(
+                "PASE key confirmation from the device does not match: the passcode is wrong for this device",
             );
         }
 
@@ -210,5 +221,8 @@ export namespace PaseClient {
 
         /** @see {@link NodeSession.suppressPeerLoss} */
         suppressPeerLoss?: boolean;
+
+        /** Called once the responder has answered the PBKDFParamRequest. */
+        onPbkdfParamResponse?: () => void;
     }
 }

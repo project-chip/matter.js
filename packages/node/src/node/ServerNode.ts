@@ -19,6 +19,7 @@ import type { Environment } from "@matter/general";
 import {
     asyncNew,
     Construction,
+    Diagnostic,
     DiagnosticSource,
     errorOf,
     Identity,
@@ -130,12 +131,21 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     }
 
     override async [Construction.destruct]() {
-        if (this.#peers) {
-            await this.#peers.close();
-        }
+        await MatterAggregateError.settleSeries(
+            [() => this.#peers?.close(), () => super[Construction.destruct](), () => ServerEnvironment.close(this)],
+            `Error destroying server node ${this}`,
+        );
+    }
 
-        await super[Construction.destruct]();
-        await ServerEnvironment.close(this);
+    protected override get diagnosticSections() {
+        const peers = this.#peers;
+        if (peers === undefined || peers.size === 0) {
+            return [];
+        }
+        return [
+            Diagnostic.strong("Peers"),
+            Diagnostic.list([...peers].map(peer => `${peer} ${peer.lifecycle.isOnline ? "online" : "offline"}`)),
+        ];
     }
 
     override async prepareRuntimeShutdown() {
@@ -263,7 +273,8 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
 export namespace ServerNode {
     /**
-     * The root endpoint of a server node without the Groupcast cluster.
+     * The root endpoint of a server node without the Groupcast cluster.  Its Access Control server has no Auxiliary
+     * feature.  Controllers, which need neither, use this as their root.
      *
      * A node with a Groups server on any endpoint does not conform to Matter 1.6.1 without Groupcast on its root, so
      * use this only for nodes without Groups or that deliberately model a pre-Groupcast device.

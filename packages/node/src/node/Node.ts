@@ -24,6 +24,7 @@ import {
     Identity,
     ImplementationError,
     Logger,
+    MatterAggregateError,
 } from "@matter/general";
 import { Matter, MatterModel } from "@matter/model";
 import { Interactable } from "@matter/protocol";
@@ -129,7 +130,9 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     }
 
     protected async startWithMutex() {
-        this.env.runtime.add(this);
+        if (this.isRuntimeWorker) {
+            this.env.runtime.add(this);
+        }
 
         try {
             await this.construction.ready;
@@ -160,7 +163,9 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
                     logger.warn("Error closing network runtime", asError(e));
                 });
             }
-            this.env.runtime.delete(this);
+            if (this.isRuntimeWorker) {
+                this.env.runtime.delete(this);
+            }
             throw e;
         }
     }
@@ -212,12 +217,21 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
             return;
         }
 
-        await this.act(agent => this.lifecycle.goingOffline.emit(agent.context));
-        if (this.#runtime) {
-            this.#environment.delete(NetworkRuntime, this.#runtime);
-        }
-        await this.#runtime?.close();
-        this.#runtime = undefined;
+        await MatterAggregateError.settleSeries(
+            [
+                () => this.act(agent => this.lifecycle.goingOffline.emit(agent.context)),
+                async () => {
+                    const runtime = this.#runtime;
+                    if (runtime === undefined) {
+                        return;
+                    }
+                    this.#runtime = undefined;
+                    this.#environment.delete(NetworkRuntime, runtime);
+                    await runtime.close();
+                },
+            ],
+            `Error taking ${this} offline`,
+        );
     }
 
     override async close() {
@@ -237,11 +251,10 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     protected async closeWithMutex() {
         // The runtime is not designed to operate with a node that is shutting down so destroy it before performing
         // actual close
-        if (this.#runtime) {
-            await this.cancelWithMutex();
-        }
-
-        await super.close();
+        await MatterAggregateError.settleSeries(
+            [() => (this.#runtime ? this.cancelWithMutex() : undefined), () => super.close()],
+            `Error closing node ${this}`,
+        );
     }
 
     override async reset() {
@@ -266,6 +279,21 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
 
     protected abstract prepareRuntimeShutdown(): Promise<void>;
 
+    /**
+     * Whether the node registers with the environment's runtime when it starts, so that shutting down the runtime
+     * closes it.
+     */
+    protected get isRuntimeWorker() {
+        return true;
+    }
+
+    /**
+     * Sections this node adds to its diagnostics, each a heading followed by its content.
+     */
+    protected get diagnosticSections(): unknown[] {
+        return [];
+    }
+
     get [DiagnosticPresentation.name]() {
         return ["Runtime for", Diagnostic.strong(this.toString())];
     }
@@ -279,6 +307,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
                 Diagnostic.list([super[Diagnostic.value]]),
                 Diagnostic.strong("Activity"),
                 nodeActivity[Diagnostic.value],
+                ...this.diagnosticSections,
             ],
         });
     }
@@ -292,10 +321,15 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     }
 
     override async [Construction.destruct]() {
-        await this.cancelWithMutex();
-        await super[Construction.destruct]();
-        DiagnosticSource.delete(this);
-        this.#environment[Symbol.dispose]();
+        await MatterAggregateError.settleSeries(
+            [
+                () => this.cancelWithMutex(),
+                () => super[Construction.destruct](),
+                () => DiagnosticSource.delete(this),
+                () => this.#environment[Symbol.dispose](),
+            ],
+            `Error destroying node ${this}`,
+        );
     }
 }
 

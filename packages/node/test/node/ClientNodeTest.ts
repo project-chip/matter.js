@@ -17,14 +17,18 @@ import {
     BooleanStateConfigurationClient,
     BooleanStateConfigurationServer,
 } from "#behaviors/boolean-state-configuration";
+import { GeneralDiagnosticsClient } from "#behaviors/general-diagnostics";
 import { IdentifyClient, IdentifyServer } from "#behaviors/identify";
 import { LevelControlClient } from "#behaviors/level-control";
 import { OnOffClient } from "#behaviors/on-off";
+import { PowerSourceServer } from "#behaviors/power-source";
+import { TimeSynchronizationClient } from "#behaviors/time-synchronization";
 import { WindowCoveringClient, WindowCoveringServer } from "#behaviors/window-covering";
 import { ContactSensorDevice } from "#devices/contact-sensor";
 import { OnOffLightDevice, OnOffLightRequirements } from "#devices/on-off-light";
 import { WindowCoveringDevice } from "#devices/window-covering";
 import { Endpoint } from "#endpoint/Endpoint.js";
+import { IdentityConflictError } from "#endpoint/errors.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import type { ClientEndpointInitializer } from "#node/client/ClientEndpointInitializer.js";
@@ -37,14 +41,18 @@ import { ServerNode } from "#node/ServerNode.js";
 import {
     b$,
     Bytes,
+    ChannelType,
     createPromise,
     Crypto,
     deepCopy,
     Entropy,
+    ImplementationError,
     MatterAggregateError,
     Millis,
     Minutes,
     MockCrypto,
+    MockNetwork,
+    Network,
     Observable,
     Seconds,
     ServerAddress,
@@ -62,12 +70,21 @@ import {
 } from "@matter/model";
 import { clientStructureOf, MockSite, seedPeerCache, subscribedPeer } from "@matter/node/testing";
 import {
+    CommissionableDevice,
+    CommissionableDeviceIdentity,
+    CommissioningError,
     ControllerCommissioner,
+    ControllerCommissioningFlow,
+    EstablishPaseOptions,
     FabricAuthority,
     FabricManager,
+    MessageCodec,
+    PasscodeMismatchError,
     PeerSet,
     Read,
     ReadResult,
+    Scanner,
+    ScannerSet,
     SessionManager,
     Val,
     ValidateError,
@@ -78,6 +95,8 @@ import {
     EndpointNumber,
     FabricIndex,
     NodeId,
+    SECURE_CHANNEL_PROTOCOL_ID,
+    SecureMessageType,
     Status,
     StatusResponseError,
     TlvAny,
@@ -87,14 +106,49 @@ import { BasicInformation } from "@matter/types/clusters/basic-information";
 import { Descriptor } from "@matter/types/clusters/descriptor";
 import { LevelControl } from "@matter/types/clusters/level-control";
 import { OnOff } from "@matter/types/clusters/on-off";
+import { PowerSource } from "@matter/types/clusters/power-source";
 import { WindowCovering } from "@matter/types/clusters/window-covering";
 import { MyBehavior } from "../behavior/cluster/cluster-behavior-test-util.js";
 import { captureErrorsOf } from "../endpoint/validation/validation-helpers.js";
 
-describe("ClientNode", function () {
-    // Commissioning runs real crypto, which a loaded CI runner can stretch past the 2 s wall-clock default
-    this.timeout(10_000);
+/** Records what a commissioning tells the scanners to forget. */
+class ForgetRecordingScanner implements Scanner {
+    readonly type = ChannelType.UDP;
+    readonly forgotten = new Array<readonly ServerAddress[]>();
+    readonly identities = new Array<CommissionableDeviceIdentity | undefined>();
 
+    async findCommissionableDevicesContinuously(): Promise<CommissionableDevice[]> {
+        return [];
+    }
+
+    getDiscoveredCommissionableDevices(): CommissionableDevice[] {
+        return [];
+    }
+
+    cancelCommissionableDeviceDiscovery() {}
+
+    forgetCommissionedDevice(addresses: readonly ServerAddress[], identity?: CommissionableDeviceIdentity) {
+        this.forgotten.push(addresses);
+        this.identities.push(identity);
+    }
+
+    async close() {}
+}
+
+class ForgetFailingScanner extends ForgetRecordingScanner {
+    override forgetCommissionedDevice(): void {
+        throw new ImplementationError("Scanner cannot forget");
+    }
+}
+
+/** Fails once PASE is established, so the device never closes its commissioning window. */
+class FailingCommissioningFlow extends ControllerCommissioningFlow {
+    override async executeCommissioning(): Promise<void> {
+        throw new CommissioningError("Commissioning step failed");
+    }
+}
+
+describe("ClientNode", () => {
     before(() => {
         MockTime.init();
     });
@@ -297,6 +351,120 @@ describe("ClientNode", function () {
         // The one-time post-commission read populated cluster state and endpoint structure without a manual reconnect
         expect(peer1.maybeStateOf(BasicInformationBehavior)?.vendorName).equals("Matter.js Test Vendor");
         expect(peer1.parts.size).equals(1);
+    });
+
+    /** An uncommissioned pair whose device records where each packet to its Matter port goes. */
+    async function pairRecordingPaseDestinations(site: MockSite) {
+        const { controller, device } = await site.addUncommissionedPair();
+
+        const controllerCrypto = controller.env.get(Crypto) as MockCrypto;
+        const deviceCrypto = device.env.get(Crypto) as MockCrypto;
+
+        const paseDestinations = new Array<string>();
+
+        // Retransmits reuse their exchange, so the number of exchanges is the number of PASE attempts
+        const pbkdfExchanges = new Set<number>();
+
+        const deviceNetwork = device.env.get(Network) as MockNetwork;
+        deviceNetwork.simulator.router.intercept((packet, route) => {
+            if (packet.kind === "udp" && packet.destPort === 5540) {
+                paseDestinations.push(packet.destAddress);
+                const decoded = MessageCodec.decodePacket(packet.payload);
+                if (decoded.header.sessionId === 0) {
+                    const { payloadHeader } = MessageCodec.decodePayload(decoded);
+                    if (
+                        payloadHeader.protocolId === SECURE_CHANNEL_PROTOCOL_ID &&
+                        payloadHeader.messageType === SecureMessageType.PbkdfParamRequest
+                    ) {
+                        pbkdfExchanges.add(payloadHeader.exchangeId);
+                    }
+                }
+            }
+            route(packet);
+        });
+
+        await controller.start();
+
+        /** Runs `action` with entropic crypto on both nodes; deterministic crypto makes their session IDs collide. */
+        async function withEntropicCrypto<T>(action: () => Promise<T>) {
+            controllerCrypto.entropic = deviceCrypto.entropic = true;
+            try {
+                return await MockTime.resolve(action(), { macrotasks: true });
+            } finally {
+                controllerCrypto.entropic = deviceCrypto.entropic = false;
+            }
+        }
+
+        return { controller, device, paseDestinations, pbkdfExchanges, withEntropicCrypto };
+    }
+
+    it("establishes PASE with the device's addresses in their ranked order", async () => {
+        await using site = new MockSite();
+        const { controller, device, paseDestinations, withEntropicCrypto } = await pairRecordingPaseDestinations(site);
+
+        const { passcode, discriminator } = device.state.commissioning;
+        await withEntropicCrypto(() => controller.peers.commission({ passcode, discriminator, timeout: Seconds(90) }));
+
+        // The device advertises a global IPv6 and an IPv4 address; IPv6 ranks first
+        expect(paseDestinations[0]).equals("abcd::2");
+    });
+
+    it("establishes PASE with the most desirable of the given addresses first", async () => {
+        await using site = new MockSite();
+        const { controller, device, paseDestinations, withEntropicCrypto } = await pairRecordingPaseDestinations(site);
+
+        const { paseSession } = await withEntropicCrypto(() =>
+            controller.env.get(ControllerCommissioner).establishPase({
+                addresses: [
+                    { type: "ble", peripheralAddress: "00:11:22:33:44:55" },
+                    { type: "udp", ip: "10.10.10.2", port: 5540 },
+                    { type: "udp", ip: "abcd::2", port: 5540 },
+                ],
+                passcode: device.state.commissioning.passcode,
+            }),
+        );
+        await paseSession.initiateClose();
+
+        expect(paseDestinations[0]).equals("abcd::2");
+    });
+
+    describe("with a wrong passcode", () => {
+        async function establishWithWrongPasscode(
+            addresses: ServerAddress[],
+            discoveryData?: EstablishPaseOptions["discoveryData"],
+        ) {
+            await using site = new MockSite();
+            const { controller, device, pbkdfExchanges, withEntropicCrypto } =
+                await pairRecordingPaseDestinations(site);
+
+            await expect(
+                withEntropicCrypto(() =>
+                    controller.env.get(ControllerCommissioner).establishPase({
+                        addresses,
+                        discoveryData,
+                        passcode: device.state.commissioning.passcode + 1,
+                    }),
+                ),
+            ).rejectedWith(PasscodeMismatchError);
+
+            return pbkdfExchanges.size;
+        }
+
+        const ipv6: ServerAddress = { type: "udp", ip: "abcd::2", port: 5540 };
+        const ipv4: ServerAddress = { type: "udp", ip: "10.10.10.2", port: 5540 };
+
+        it("tries a repeated address once", async () => {
+            expect(await establishWithWrongPasscode([ipv6, { ...ipv6 }])).equals(1);
+        });
+
+        it("stops after the first address of one discovered device", async () => {
+            expect(await establishWithWrongPasscode([ipv6, ipv4], { deviceIdentifier: "device-1" })).equals(1);
+        });
+
+        it("tries every address when the device identity is unknown", async () => {
+            expect(await establishWithWrongPasscode([ipv6, ipv4])).equals(2);
+            expect(await establishWithWrongPasscode([ipv6, ipv4], { deviceIdentifier: "" })).equals(2);
+        });
     });
 
     it("skips the post-commission read when autoStateInitialize is false", async () => {
@@ -599,6 +767,169 @@ describe("ClientNode", function () {
         );
 
         expect(device.state.commissioning.commissioned).equals(false);
+    });
+
+    it("tells the scanners to forget a device it commissioned", async () => {
+        await using site = new MockSite();
+        const controller = await site.addController();
+        const device = await site.addDevice({
+            commissioning: {
+                discriminator: 1234,
+                passcode: 22223333,
+            },
+        });
+
+        const controllerCrypto = controller.env.get(Crypto) as MockCrypto;
+        const deviceCrypto = device.env.get(Crypto) as MockCrypto;
+        controllerCrypto.entropic = deviceCrypto.entropic = true;
+
+        await controller.start();
+        await controller.act(agent => agent.load(ControllerBehavior));
+        const fabricConfig = await controller.act(agent => agent.get(ControllerBehavior).fabricAuthorityConfig);
+        const fabric = await controller.env.get(FabricAuthority).defaultFabric(fabricConfig);
+
+        const scanner = new ForgetRecordingScanner();
+        controller.env.get(ScannerSet).add(scanner);
+        const commissioner = controller.env.get(ControllerCommissioner);
+
+        const addresses = [{ ip: "abcd::2", port: 5540 }];
+        await MockTime.resolve(commissioner.commission({ fabric, passcode: 22223333, addresses }), {
+            macrotasks: true,
+        });
+
+        controllerCrypto.entropic = deviceCrypto.entropic = false;
+
+        expect(device.state.commissioning.commissioned).equals(true);
+        expect(scanner.forgotten).deep.equals([addresses]);
+    });
+
+    it("tells the scanners the identity of a device it discovered and commissioned", async () => {
+        await using site = new MockSite();
+        const { controller, device } = await site.addUncommissionedPair();
+
+        const controllerCrypto = controller.env.get(Crypto) as MockCrypto;
+        const deviceCrypto = device.env.get(Crypto) as MockCrypto;
+        controllerCrypto.entropic = deviceCrypto.entropic = true;
+
+        await controller.start();
+        const scanner = new ForgetRecordingScanner();
+        controller.env.get(ScannerSet).add(scanner);
+
+        const { passcode, discriminator } = device.state.commissioning;
+        const { vendorId, productId } = device.state.basicInformation;
+        await MockTime.resolve(controller.peers.commission({ passcode, discriminator, timeout: Seconds(90) }), {
+            macrotasks: true,
+        });
+
+        controllerCrypto.entropic = deviceCrypto.entropic = false;
+
+        expect(scanner.identities).deep.equals([{ D: discriminator, VP: `${vendorId}+${productId}` }]);
+    });
+
+    it("leaves a device the scanners know when commissioning it fails", async () => {
+        await using site = new MockSite();
+        const controller = await site.addController();
+        const device = await site.addDevice({
+            commissioning: {
+                discriminator: 1234,
+                passcode: 22223333,
+            },
+        });
+
+        const controllerCrypto = controller.env.get(Crypto) as MockCrypto;
+        const deviceCrypto = device.env.get(Crypto) as MockCrypto;
+        controllerCrypto.entropic = deviceCrypto.entropic = true;
+
+        await controller.start();
+        await controller.act(agent => agent.load(ControllerBehavior));
+        const fabricConfig = await controller.act(agent => agent.get(ControllerBehavior).fabricAuthorityConfig);
+        const fabric = await controller.env.get(FabricAuthority).defaultFabric(fabricConfig);
+
+        const scanner = new ForgetRecordingScanner();
+        controller.env.get(ScannerSet).add(scanner);
+        const commissioner = controller.env.get(ControllerCommissioner);
+
+        await MockTime.resolve(
+            expect(
+                commissioner.commission({
+                    fabric,
+                    passcode: 11112222,
+                    addresses: [{ ip: "abcd::2", port: 5540 }],
+                }),
+            ).rejected,
+            { macrotasks: true },
+        );
+
+        controllerCrypto.entropic = deviceCrypto.entropic = false;
+
+        expect(device.state.commissioning.commissioned).equals(false);
+        expect(scanner.forgotten).deep.equals([]);
+    });
+
+    it("leaves a device the scanners know when the commissioning steps fail", async () => {
+        await using site = new MockSite();
+        const controller = await site.addController();
+        const device = await site.addDevice({ commissioning: { discriminator: 1234, passcode: 22223333 } });
+
+        const controllerCrypto = controller.env.get(Crypto) as MockCrypto;
+        const deviceCrypto = device.env.get(Crypto) as MockCrypto;
+        controllerCrypto.entropic = deviceCrypto.entropic = true;
+
+        await controller.start();
+        await controller.act(agent => agent.load(ControllerBehavior));
+        const fabricConfig = await controller.act(agent => agent.get(ControllerBehavior).fabricAuthorityConfig);
+        const fabric = await controller.env.get(FabricAuthority).defaultFabric(fabricConfig);
+
+        const scanner = new ForgetRecordingScanner();
+        controller.env.get(ScannerSet).add(scanner);
+        const commissioner = controller.env.get(ControllerCommissioner);
+
+        await MockTime.resolve(
+            expect(
+                commissioner.commission({
+                    fabric,
+                    passcode: 22223333,
+                    addresses: [{ ip: "abcd::2", port: 5540 }],
+                    commissioningFlowImpl: FailingCommissioningFlow,
+                }),
+            ).rejectedWith("Commissioning step failed"),
+            { macrotasks: true },
+        );
+
+        controllerCrypto.entropic = deviceCrypto.entropic = false;
+
+        expect(scanner.forgotten).deep.equals([]);
+    });
+
+    it("commissions a device and tells the other scanners when one scanner fails to forget it", async () => {
+        await using site = new MockSite();
+        const controller = await site.addController();
+        const device = await site.addDevice({ commissioning: { discriminator: 1234, passcode: 22223333 } });
+
+        const controllerCrypto = controller.env.get(Crypto) as MockCrypto;
+        const deviceCrypto = device.env.get(Crypto) as MockCrypto;
+        controllerCrypto.entropic = deviceCrypto.entropic = true;
+
+        await controller.start();
+        await controller.act(agent => agent.load(ControllerBehavior));
+        const fabricConfig = await controller.act(agent => agent.get(ControllerBehavior).fabricAuthorityConfig);
+        const fabric = await controller.env.get(FabricAuthority).defaultFabric(fabricConfig);
+
+        const scanners = controller.env.get(ScannerSet);
+        scanners.add(new ForgetFailingScanner());
+        const recording = new ForgetRecordingScanner();
+        scanners.add(recording);
+        const commissioner = controller.env.get(ControllerCommissioner);
+
+        const addresses = [{ ip: "abcd::2", port: 5540 }];
+        await MockTime.resolve(commissioner.commission({ fabric, passcode: 22223333, addresses }), {
+            macrotasks: true,
+        });
+
+        controllerCrypto.entropic = deviceCrypto.entropic = false;
+
+        expect(device.state.commissioning.commissioned).equals(true);
+        expect(recording.forgotten).deep.equals([addresses]);
     });
 
     it("commissions via known-address flow even when first address has invalid credentials", async () => {
@@ -1865,7 +2196,7 @@ describe("ClientNode", function () {
 
         await MockTime.resolve(device.stop());
 
-        await serverEp1.erase();
+        await serverEp1.delete();
 
         const LiftTiltWc = WindowCoveringServer.with("Lift", "PositionAwareLift", "Tilt", "PositionAwareTilt").set({
             type: WindowCovering.WindowCoveringType.Unknown,
@@ -1913,6 +2244,89 @@ describe("ClientNode", function () {
         expect(newValue).equals(1200);
     });
 
+    it("reads a changes-omitted attribute from the peer while subscribed", async () => {
+        await using site = new MockSite();
+        const { controller } = await site.addCommissionedPair();
+        const peer1 = controller.peers.get("peer1")!;
+
+        const cached = peer1.stateOf(GeneralDiagnosticsClient).upTime;
+        await MockTime.advance(Seconds(100));
+
+        const { upTime } = await MockTime.resolve(peer1.getStateOf(GeneralDiagnosticsClient));
+
+        expect(Number(upTime)).greaterThanOrEqual(Number(cached) + 100);
+    });
+
+    it("omits version filters only for clusters in which the peer has a changes-omitted attribute", async () => {
+        await using site = new MockSite();
+        const { controller } = await site.addCommissionedPair({
+            device: {
+                type: ServerNode.RootEndpoint.with(
+                    PowerSourceServer.with("Battery").set({
+                        status: PowerSource.PowerSourceStatus.Active,
+                        order: 0,
+                        description: "Battery",
+                        batChargeLevel: PowerSource.BatChargeLevel.Ok,
+                        batReplacementNeeded: false,
+                        batReplaceability: PowerSource.BatReplaceability.Unspecified,
+                    }),
+                ),
+            },
+        });
+        const peer1 = controller.peers.get("peer1")!;
+        const { structure } = peer1.env.get(EndpointInitializer) as ClientEndpointInitializer;
+        const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+
+        const filteredClusters = (options?: { refreshChangesOmitted?: boolean }) =>
+            (structure.injectVersionFilters(request, options).dataVersionFilters ?? [])
+                .filter(({ path: { endpointId } }) => endpointId === 0)
+                .map(({ path: { clusterId } }) => clusterId);
+
+        expect(filteredClusters()).include.members([
+            GeneralDiagnosticsClient.cluster.id,
+            AccessControlClient.cluster.id,
+        ]);
+        expect(filteredClusters({ refreshChangesOmitted: true })).not.include(GeneralDiagnosticsClient.cluster.id);
+        expect(filteredClusters({ refreshChangesOmitted: true })).include(PowerSourceServer.cluster.id);
+    });
+
+    it("omits version filters for a cluster with changes-omitted attributes when the peer reports no AttributeList", async () => {
+        await using site = new MockSite();
+        const { controller } = await site.addCommissionedPair();
+        const peer1 = controller.peers.get("peer1")!;
+        const { structure } = peer1.env.get(EndpointInitializer) as ClientEndpointInitializer;
+        const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+
+        // Time Synchronization with an empty AttributeList and without UTCTime, its changes-omitted attribute
+        const timeSync = TimeSynchronizationClient.cluster.id;
+        const attr = (attributeId: number, value: unknown): ReadResult.Report => ({
+            kind: "attr-value",
+            path: { endpointId: EndpointNumber(0), clusterId: timeSync, attributeId: attributeId as AttributeId },
+            value,
+            version: 7,
+            tlv: TlvAny,
+        });
+        async function* report(): ReadResult {
+            yield [
+                attr(ClusterRevision.id, 2),
+                attr(FeatureMap.id, {}),
+                attr(AttributeList.id, []),
+                attr(AcceptedCommandList.id, []),
+                attr(GeneratedCommandList.id, []),
+                attr(TimeSynchronizationClient.cluster.attributes.granularity.id, 0),
+            ];
+        }
+        for await (const _chunk of structure.mutate(request, report()));
+
+        const filteredClusters = (options?: { refreshChangesOmitted?: boolean }) =>
+            (structure.injectVersionFilters(request, options).dataVersionFilters ?? [])
+                .filter(({ path: { endpointId } }) => endpointId === 0)
+                .map(({ path: { clusterId } }) => clusterId);
+
+        expect(filteredClusters()).include(timeSync);
+        expect(filteredClusters({ refreshChangesOmitted: true })).not.include(timeSync);
+    });
+
     it("exposes attributes added by a behavior replace", async () => {
         // *** SETUP ***
 
@@ -1943,7 +2357,7 @@ describe("ClientNode", function () {
         // *** REPLACE CLUSTER ADDING TILT ***
 
         await MockTime.resolve(device.stop());
-        await serverEp1.erase();
+        await serverEp1.delete();
 
         const LiftTiltWc = WindowCoveringServer.with("Lift", "PositionAwareLift", "Tilt", "PositionAwareTilt").set({
             type: WindowCovering.WindowCoveringType.Unknown,
@@ -2020,7 +2434,7 @@ describe("ClientNode", function () {
         // *** REPLACE CLUSTER ADDING TILT ***
 
         await MockTime.resolve(device.stop());
-        await serverEp1.erase();
+        await serverEp1.delete();
 
         const LiftTiltWc = WindowCoveringServer.with("Lift", "PositionAwareLift", "Tilt", "PositionAwareTilt").set({
             type: WindowCovering.WindowCoveringType.Unknown,
@@ -2100,7 +2514,7 @@ describe("ClientNode", function () {
 
         await MockTime.resolve(device.stop());
 
-        await serverEp1.erase();
+        await serverEp1.delete();
 
         // Nudge so version number changes, otherwise new endpoint won't sync
         device.env.set(Entropy, MockCrypto(0x20));
@@ -2171,7 +2585,7 @@ describe("ClientNode", function () {
         // *** REPLACE CLUSTER DROPPING TILT ***
 
         await MockTime.resolve(device.stop());
-        await serverEp1.erase();
+        await serverEp1.delete();
 
         const LiftWc = WindowCoveringServer.with("Lift", "PositionAwareLift").set({
             currentPositionLiftPercent100ths: 0,
@@ -2232,7 +2646,7 @@ describe("ClientNode", function () {
         // *** REMOVE THE CLUSTER ***
 
         await MockTime.resolve(device.stop());
-        await device.parts.get("part0")!.erase();
+        await device.parts.get("part0")!.delete();
         device.env.set(Entropy, MockCrypto(0x20));
         await device.add({ type: OnOffLightDevice, number: 1, id: "part0b" });
 
@@ -2245,7 +2659,7 @@ describe("ClientNode", function () {
         // *** RESTORE THE CLUSTER ***
 
         await MockTime.resolve(device.stop());
-        await device.parts.get("part0b")!.erase();
+        await device.parts.get("part0b")!.delete();
         device.env.set(Entropy, MockCrypto(0x40));
         await device.add({ type: OnOffLightDevice.with(LiftWc), number: 1, id: "part0c" });
 
@@ -2293,7 +2707,7 @@ describe("ClientNode", function () {
         }
 
         async function replaceDeviceEndpointWithoutOnOffTransition(device: ServerNode) {
-            await device.parts.get("part0")!.erase();
+            await device.parts.get("part0")!.delete();
 
             // Nudge so version number changes, otherwise new endpoint won't sync
             device.env.set(Entropy, MockCrypto(0x20));
@@ -3354,6 +3768,60 @@ describe("ClientNode", function () {
             const after = neoType();
             expect(after, "NEO should remain active").not.undefined;
             expect(after, "behavior must be rebuilt to reflect the new command set").not.equals(before);
+        });
+    });
+
+    describe("endpoint numbers", () => {
+        // Characterization
+        it("accepts a peer endpoint whose number a local endpoint holds", async () => {
+            await using site = new MockSite();
+            const { controller } = await site.addCommissionedPair();
+            await controller.add(OnOffLightDevice, { id: "local9", number: 9 });
+            const peer1 = controller.peers.get("peer1")!;
+
+            const peerEp9 = peer1.endpoints.require(9);
+
+            expect(peer1.endpoints.for(9)).equals(peerEp9);
+            expect(controller.endpoints.for(9)).not.equals(peerEp9);
+        });
+
+        it("adopts an endpoint created by require() when the peer reports it", async () => {
+            await using site = new MockSite();
+            const { controller, device } = await site.addCommissionedPair();
+            const peer1 = await subscribedPeer(controller, "peer1");
+            const sizeBefore = peer1.parts.size;
+
+            const required = peer1.endpoints.require(5);
+
+            const installed = new Promise<Endpoint>(resolve =>
+                peer1.env
+                    .get(ClientStructureEvents)
+                    .clusterInstalled(OnOffClient)
+                    .on(endpoint => {
+                        if (endpoint.number === 5) {
+                            resolve(endpoint);
+                        }
+                    }),
+            );
+            await device.add(OnOffLightDevice, { id: "late5", number: 5 });
+            const adopted = await MockTime.resolve(installed);
+
+            expect(adopted).equals(required);
+            expect(peer1.endpoints.for(5)).equals(required);
+            expect(peer1.parts.size).equals(sizeBefore + 1);
+            expect(required.stateOf(OnOffClient).onOff).equals(false);
+        });
+
+        it("refuses a duplicate number in a hand-built peer structure", async () => {
+            await using site = new MockSite();
+            const { controller } = await site.addCommissionedPair();
+            const peer1 = controller.peers.get("peer1")!;
+            const peerEp7 = peer1.endpoints.require(7);
+
+            const duplicate = new Endpoint({ id: "duplicate7", number: 7, type: peerEp7.type });
+
+            expect(() => peer1.parts.add(duplicate)).throws(IdentityConflictError);
+            expect(peer1.endpoints.for(7)).equals(peerEp7);
         });
     });
 });
