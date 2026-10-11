@@ -178,11 +178,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
             await this.resetWithMutex();
 
             // Reset persistent state
-            await this.resetStorage();
-
-            // The node's services outlive the reset, so what they hold for the state it discarded does not.  This is
-            // deliberately not part of resetStorage(), which an application may override
-            await this.resetServiceState();
+            await this.eraseStorageWithMutex();
 
             // Reset reverts node to inactive state; now reinitialize
             this.construction.start();
@@ -231,8 +227,16 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         await super.initialize();
     }
 
+    protected async eraseStorageWithMutex() {
+        await this.resetStorage();
+
+        // The node's services outlive the reset, so what they hold for the state it discarded does not.  This is
+        // deliberately not part of resetStorage(), which an application may override
+        await this.resetServiceState();
+    }
+
     /**
-     * By default, on factory reset we erase all stored data.
+     * By default, on factory reset and on {@link delete} we erase all stored data.
      *
      * If this is inappropriate for your application, you may override to alter the behavior.  Matter requires that all
      * "security- and privacy-related data and key material" is removed on factory reset.

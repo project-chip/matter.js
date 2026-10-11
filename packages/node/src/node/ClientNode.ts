@@ -224,6 +224,10 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         }
     }
 
+    /**
+     * Erase the data cached from the peer and initialize the node again.  Commissioning and connection settings stay.
+     * If the node was online it reconnects and reads the peer again.
+     */
     override async erase() {
         await this.lifecycle.mutex.produce(this.eraseWithMutex.bind(this));
     }
@@ -263,11 +267,28 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         await this.start();
     }
 
+    protected async eraseStorageWithMutex() {
+        const deletion = await this.env.get(EndpointInitializer).beginDeleteDescendant(this);
+        await deletion.wipe();
+    }
+
     protected async eraseWithMutex() {
-        await this.cancelWithMutex();
-        await super.resetWithMutex();
-        this.#cachedPeerAddress = undefined;
-        await this.env.get(EndpointInitializer).eraseDescendant(this);
+        try {
+            const isOnline = this.lifecycle.isOnline;
+            await this.cancelWithMutex();
+            await this.resetWithMutex();
+            await this.env.get(ClientNodeStore).eraseCaches();
+
+            this.construction.start();
+            if (isOnline && this.lifecycle.shouldBeOnline) {
+                await this.startWithMutex();
+            } else {
+                await this.construction.ready;
+            }
+        } catch (e) {
+            this.construction.crash();
+            throw e;
+        }
     }
 
     protected override async resetWithMutex() {

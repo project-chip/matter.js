@@ -93,7 +93,7 @@ export class EndpointLifecycle {
     }
 
     /**
-     * Emitted on factory reset.
+     * Emitted when the endpoint resets its in-memory state, for example on {@link Endpoint.erase} or a factory reset.
      */
     get reset() {
         return this.#reset;
@@ -153,6 +153,13 @@ export class EndpointLifecycle {
             status === Lifecycle.Status.Destroyed ||
             status === Lifecycle.Status.Crashed
         );
+    }
+
+    /**
+     * Whether the {@link Endpoint} began closing or deleting.
+     */
+    get isDestroying() {
+        return this.#destructionBegun;
     }
 
     /**
@@ -237,6 +244,9 @@ export class EndpointLifecycle {
                 break;
 
             case EndpointLifecycle.Change.Destroying:
+                if (this.#destructionBegun) {
+                    return;
+                }
                 this.#isReady = false;
                 this.#destructionBegun = true;
                 break;

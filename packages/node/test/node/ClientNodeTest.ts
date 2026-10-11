@@ -38,6 +38,8 @@ import { FabricOperationInProgressError } from "#node/client/Peers.js";
 import type { ClientNode } from "#node/ClientNode.js";
 import { ChangeNotificationService } from "#node/integration/ChangeNotificationService.js";
 import { ServerNode } from "#node/ServerNode.js";
+import { ClientNodeStore } from "#storage/client/ClientNodeStore.js";
+import { ServerNodeStore } from "#storage/server/ServerNodeStore.js";
 import {
     b$,
     Bytes,
@@ -1102,6 +1104,65 @@ describe("ClientNode", () => {
         expect(protocolPeer.lifetime.isClosed).true;
         expect(controller.env.get(PeerSet).has(protocolPeer)).false;
         expect(controller.env.get(SessionManager).findResumptionRecordByAddress(address)).undefined;
+    });
+
+    async function peerWithLightOn() {
+        const site = new MockSite();
+        const { controller, device } = await site.addCommissionedPair();
+        const peer1 = await subscribedPeer(controller, "peer1");
+        await MockTime.resolve(device.parts.get(1)!.setStateOf("onOff", { onOff: true }));
+        for (let wait = 0; peer1.parts.get("ep1")?.maybeStateOf("onOff")?.onOff !== true && wait < 100; wait++) {
+            await MockTime.resolve(MockTime.sleep("report pending", Millis(100)));
+        }
+        expect(peer1.parts.get("ep1")!.stateOf("onOff").onOff).equals(true);
+        return { site, controller, peer1 };
+    }
+
+    it("reconnects and reads the peer again after erase", async () => {
+        const { site, controller, peer1 } = await peerWithLightOn();
+        await using _site = site;
+        const address = peer1.state.commissioning.peerAddress;
+        expect(address).not.undefined;
+
+        await MockTime.resolve(peer1.erase());
+        await subscribedPeer(controller, "peer1");
+
+        expect(peer1.state.commissioning.peerAddress).deep.equals(address);
+        expect(peer1.lifecycle.isOnline).equals(true);
+        expect(peer1.parts.size).equals(1);
+        expect(peer1.parts.get("ep1")!.stateOf("onOff").onOff).equals(true);
+    });
+
+    it("keeps an offline peer offline and commissioned after erase and drops its cache", async () => {
+        const { site, peer1 } = await peerWithLightOn();
+        await using _site = site;
+        const address = peer1.state.commissioning.peerAddress;
+        await MockTime.resolve(peer1.disable());
+
+        await MockTime.resolve(peer1.erase());
+
+        expect(peer1.lifecycle.isOnline).equals(false);
+        expect(peer1.state.commissioning.peerAddress).deep.equals(address);
+        const ep1Store = [...peer1.env.get(ClientNodeStore).endpointStores].find(store => store.number === 1);
+        expect(ep1Store?.knownBehaviors.has("onOff") ?? false).equals(false);
+    });
+
+    it("emits Destroying once on delete", async () => {
+        await using site = new MockSite();
+        const { controller } = await site.addCommissionedPair();
+
+        const peer1 = controller.peers.get("peer1")!;
+        let destroying = 0;
+        peer1.lifecycle.changed.on((type, endpoint) => {
+            if (type === "destroying" && endpoint === peer1) {
+                destroying++;
+            }
+        });
+
+        await MockTime.resolve(peer1.delete());
+
+        expect(destroying).equals(1);
+        expect(controller.env.get(ServerNodeStore).clientStores.knownIds).not.contains(peer1.id);
     });
 
     it("rejects delete after destroyed", async () => {

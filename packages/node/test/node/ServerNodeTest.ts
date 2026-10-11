@@ -7,6 +7,7 @@
 import { Behavior } from "#behavior/Behavior.js";
 import { EventsBehavior } from "#behavior/system/events/EventsBehavior.js";
 import { AccessControlServer } from "#behaviors/access-control";
+import { BridgedDeviceBasicInformationServer } from "#behaviors/bridged-device-basic-information";
 import { DescriptorBehavior } from "#behaviors/descriptor";
 import { OnOffServer } from "#behaviors/on-off";
 import { PumpConfigurationAndControlServer } from "#behaviors/pump-configuration-and-control";
@@ -321,6 +322,124 @@ describe("ServerNode", () => {
         const text = LogFormat.formats.plain(Diagnostic.valueOf(controller));
 
         expect(text).contains(`${peer} ${peer.lifecycle.isOnline ? "online" : "offline"}`);
+    });
+
+    describe("delete", () => {
+        function destroyingOf(node: ServerNode) {
+            const destroying = new Array<string>();
+            node.lifecycle.changed.on((type, endpoint) => {
+                if (type === "destroying") {
+                    destroying.push(endpoint.toString());
+                }
+            });
+            return destroying;
+        }
+
+        it("emits Destroying once for an endpoint and its parts", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            const aggregator = await node.add(AggregatorEndpoint, {
+                id: "aggregator",
+                parts: [{ type: OnOffLightDevice, id: "child" }],
+            });
+            const destroying = destroyingOf(node);
+
+            await aggregator.delete();
+            await aggregator.close();
+
+            expect(destroying).deep.equals(["node0.aggregator", "node0.aggregator.child"]);
+        });
+
+        it("increases the ConfigurationVersion of the bridged endpoint above and only after removal", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            const aggregator = await node.add(AggregatorEndpoint, { id: "aggregator" });
+            const bridged = await aggregator.add(OnOffLightDevice.with(BridgedDeviceBasicInformationServer), {
+                id: "bridged",
+                bridgedDeviceBasicInformation: { configurationVersion: 5 },
+                parts: [{ type: OnOffLightDevice, id: "child" }],
+            });
+            const child = bridged.parts.require("child");
+            const childNumber = child.number;
+            const rootBefore = node.state.basicInformation.configurationVersion;
+            let listedWhenIncreased: boolean | undefined;
+            node.events.basicInformation.configurationVersion$Changed.on(() => {
+                listedWhenIncreased = bridged.state.descriptor.partsList.includes(childNumber);
+            });
+
+            await child.delete();
+
+            expect(bridged.stateOf(BridgedDeviceBasicInformationServer).configurationVersion).equals(6);
+            expect(node.state.basicInformation.configurationVersion).equals(rootBefore + 1);
+            expect(listedWhenIncreased).equals(false);
+        });
+
+        it("erases the storage of a deleted ServerNode", async () => {
+            await using site = new MockSite();
+            const id = "deletedNode";
+            const node = await site.addNode(undefined, { id, device: undefined, commissioning: { enabled: false } });
+            await node.add(new Endpoint(OnOffLightDevice, { id: "light", number: EndpointNumber(7) }));
+
+            await node.delete();
+
+            const reopened = await site.addNode(undefined, {
+                id,
+                device: undefined,
+                commissioning: { enabled: false },
+            });
+            const light = await reopened.add(new Endpoint(OnOffLightDevice, { id: "light" }));
+            expect(light.number).equals(1);
+        });
+
+        it("refuses deleting a ServerNode while it closes", async () => {
+            const node = await MockServerNode.createOnline(undefined, { device: undefined });
+
+            const closing = node.close();
+            await expect(node.delete()).rejectedWith(ImplementationError, /closes/);
+            await closing;
+        });
+
+        it("joins a second delete of a ServerNode", async () => {
+            const node = await MockServerNode.createOnline(undefined, { device: undefined });
+
+            const first = node.delete();
+            const second = node.delete();
+            await first;
+            await second;
+
+            expect(node.construction.status).equals(Lifecycle.Status.Destroyed);
+        });
+
+        it("increases the root ConfigurationVersion once", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            const light = await node.add(OnOffLightDevice, { id: "light" });
+            const before = node.state.basicInformation.configurationVersion;
+
+            await light.delete();
+
+            expect(node.state.basicInformation.configurationVersion).equals(before + 1);
+        });
+
+        it("of a ServerNode emits Destroying once and does not restart the node", async () => {
+            const node = await MockServerNode.createOnline(undefined, { device: undefined });
+            await node.add(OnOffLightDevice, { id: "light" });
+
+            const changes = new Array<string>();
+            node.lifecycle.changed.on((type, endpoint) => {
+                changes.push(`${type} ${endpoint}`);
+            });
+            for (const event of ["online", "offline", "ready"] as const) {
+                node.lifecycle[event].on(() => {
+                    changes.push(event);
+                });
+            }
+
+            await node.delete();
+
+            expect(changes.filter(change => change === "destroying node0")).deep.equals(["destroying node0"]);
+            const afterDestroying = changes.slice(changes.indexOf("destroying node0"));
+            expect(afterDestroying).not.contains("online");
+            expect(afterDestroying).not.contains("ready");
+            expect(afterDestroying.filter(change => change.startsWith("ready "))).deep.equals([]);
+        });
     });
 
     describe("operational port", () => {

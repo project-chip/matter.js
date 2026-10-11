@@ -28,7 +28,18 @@ export class ClientEndpointInitializer extends EndpointInitializer {
         this.#store = node.env.get(ClientNodeStore);
     }
 
-    async eraseDescendant(endpoint: Endpoint) {
+    async beginEraseDescendant(endpoint: Endpoint): Promise<EndpointInitializer.Erasure> {
+        return {
+            wipe: () => this.#eraseStore(endpoint),
+            finish: async () => {},
+        };
+    }
+
+    async beginDeleteDescendant(endpoint: Endpoint): Promise<EndpointInitializer.Erasure> {
+        return this.beginEraseDescendant(endpoint);
+    }
+
+    async #eraseStore(endpoint: Endpoint) {
         if (endpoint === this.#node) {
             await this.#store.erase();
             return;

@@ -11,6 +11,7 @@ import { NetworkBehavior } from "#behavior/system/network/NetworkBehavior.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { PartsBehavior } from "#behavior/system/parts/PartsBehavior.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
+import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
 import { Endpoints } from "#endpoint/properties/Endpoints.js";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
 import { MutableEndpoint } from "#endpoint/type/MutableEndpoint.js";
@@ -45,6 +46,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     #runtime?: NetworkRuntime;
     #startInProgress = false;
     #closeInProgress = false;
+    #deleting?: Promise<void>;
 
     constructor(config: Node.Configuration<T>) {
         const parentEnvironment = config.environment ?? config.owner?.env ?? Environment.default;
@@ -257,7 +259,50 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         );
     }
 
-    override async reset() {
+    /**
+     * Erase all persisted data of the node and destroy it.  Unlike {@link erase} the node does not restart.
+     */
+    override delete(): Promise<void> {
+        if (this.#deleting === undefined) {
+            this.#deleting = this.#deleteOnce().finally(() => {
+                this.#deleting = undefined;
+            });
+        }
+        return this.#deleting;
+    }
+
+    async #deleteOnce() {
+        this.construction.assert(this.toString());
+        if (this.#closeInProgress) {
+            throw new ImplementationError(`Cannot delete ${this} while it closes`);
+        }
+        this.#closeInProgress = true;
+        try {
+            this.lifecycle.targetState = "offline";
+            this.lifecycle.change(EndpointLifecycle.Change.Destroying);
+
+            // From here on reset() and close() would fail on the closed mutex, so the steps run directly
+            await this.lifecycle.mutex.close();
+            await MatterAggregateError.settleSeries(
+                [
+                    () => (this.#runtime ? this.cancelWithMutex() : undefined),
+                    () => this.resetWithMutex(),
+                    () => this.eraseStorageWithMutex(),
+                    () => this.closeWithMutex(),
+                ],
+                `Error deleting node ${this}`,
+            );
+        } finally {
+            this.#closeInProgress = false;
+        }
+    }
+
+    /**
+     * Erase the persisted data of the node.  Runs on {@link delete} and, on a server node, on factory reset.
+     */
+    protected abstract eraseStorageWithMutex(): Promise<void>;
+
+    protected override async reset() {
         await this.lifecycle.mutex.produce(this.resetWithMutex.bind(this));
     }
 

@@ -67,6 +67,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     #id?: string;
     #number?: EndpointNumber;
     #owner?: Endpoint;
+    #erasing?: Promise<void>;
     #agentType?: Agent.Type<T>;
     #behaviors: Behaviors;
     #lifecycle: EndpointLifecycle;
@@ -124,7 +125,8 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     /**
      * The owner of the endpoint.
      *
-     * Every endpoint but the root endpoint (the "server node") is owned by another endpoint.
+     * Every endpoint but the root endpoint (the "server node") is owned by another endpoint.  The owner can be set only
+     * once; remove an endpoint from its owner with {@link close} or {@link delete}.
      */
     get owner(): Endpoint | undefined {
         return this.#owner;
@@ -708,7 +710,9 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             return;
         }
         if (this.#owner) {
-            this.#container.remove(this);
+            throw new ImplementationError(
+                `Cannot change the owner of ${this}; remove the endpoint with close() or delete() instead`,
+            );
         }
 
         this.#owner = owner;
@@ -932,9 +936,9 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Perform "soft" reset of the endpoint, reverting all in-memory structures to uninitialized.
+     * Perform "soft" reset of the endpoint and its parts, reverting all in-memory structures to uninitialized.
      */
-    async reset() {
+    protected async reset() {
         using _resetting = this.construction.join("resetting");
 
         try {
@@ -944,7 +948,9 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             // Reset child parts
             {
                 using _parts = _resetting.join("parts");
-                await this.parts.reset();
+                for (const part of this.parts) {
+                    await part.reset();
+                }
             }
 
             // Reset behaviors
@@ -967,21 +973,86 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Perform "hard" reset of the endpoint, reverting all in-memory and persistent state to uninitialized.
+     * Erase all persisted data of the endpoint and its parts and restart them with their default values and the
+     * options they were created with.
+     *
+     * The endpoint keeps its ID and number and stays in the PartsList of its parent.  On a server node the
+     * ConfigurationVersion increases.  An endpoint whose parent has not started its parts yet is not restarted; the
+     * parent starts it.  A concurrent call joins the erase in progress.
+     *
+     * Throws {@link ImplementationError} if the endpoint is closing or closed.  A failing step is logged and the
+     * remaining steps still run.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 9.2.11
      */
-    async erase() {
-        await this.reset();
-        await this.env.get(EndpointInitializer).eraseDescendant(this);
+    erase(): Promise<void> {
+        if (this.#erasing === undefined) {
+            this.#erasing = this.#eraseOnce().finally(() => {
+                this.#erasing = undefined;
+            });
+        }
+        return this.#erasing;
+    }
+
+    async #eraseOnce() {
+        this.#assertErasable();
+        while (this.construction.status === Lifecycle.Status.Initializing) {
+            await this.construction.change;
+        }
+        this.#assertErasable();
+
+        const erasure = await this.env.get(EndpointInitializer).beginEraseDescendant(this);
+        const steps = [
+            () => this.reset(),
+            () => erasure.wipe(),
+            async () => {
+                if (!this.lifecycle.isDestroying && this.#owner?.lifecycle.isPartsReady) {
+                    this.construction.start();
+                    await this.construction;
+                }
+            },
+            async () => {
+                if (!this.lifecycle.isDestroying) {
+                    await erasure.finish();
+                }
+            },
+        ];
+        for (const step of steps) {
+            try {
+                await step();
+            } catch (e) {
+                logger.error(`Error erasing ${this}:`, e);
+            }
+        }
+    }
+
+    #assertErasable() {
+        if (this.lifecycle.isDestroying || this.construction.status === Lifecycle.Status.Destroyed) {
+            throw new ImplementationError(`Cannot erase ${this} because it is closing or closed`);
+        }
     }
 
     /**
-     * Erase all persisted data and destroy the endpoint.
+     * Erase all persisted data of the endpoint and its parts, release their endpoint numbers and destroy the endpoint.
+     * On a server node the ConfigurationVersion increases once the endpoint is removed.
+     *
+     * Every step runs even when an earlier one fails; failures reject with a {@link MatterAggregateError}.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 9.2.11
      */
     async delete() {
         this.construction.assert(this.toString());
         this.lifecycle.change(EndpointLifecycle.Change.Destroying);
-        await this.erase();
-        await this.close();
+        if (this.#erasing !== undefined) {
+            // The outcome of the erase reaches its own caller
+            await Promise.allSettled([this.#erasing]);
+        }
+
+        const deletion = await this.env.get(EndpointInitializer).beginDeleteDescendant(this);
+        await MatterAggregateError.settleSeries(
+            [() => this.reset(), () => deletion.wipe(), () => this.close(), () => deletion.finish()],
+            `Error deleting endpoint ${this}`,
+        );
     }
 
     /**
@@ -1009,13 +1080,19 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Destroy the endpoint and its parts.
+     * Destroy the endpoint and its parts.  Their persisted data and endpoint numbers stay, so an endpoint with the same
+     * ID that is added later gets the same number and data, unless another endpoint requested that number meanwhile.
+     * Use {@link delete} to remove the endpoint for good.
      *
      * Every teardown step runs even when an earlier one fails.  A failed deactivation rejects with a
      * {@link MatterAggregateError}; failures while destroying the endpoint, its parts and its behaviors are logged.
      */
     async close() {
         this.lifecycle.change(EndpointLifecycle.Change.Destroying);
+        if (this.#erasing !== undefined) {
+            // The outcome of the erase reaches its own caller
+            await Promise.allSettled([this.#erasing]);
+        }
         await MatterAggregateError.settleSeries(
             [
                 () => this.env.maybeGet(EndpointInitializer)?.deactivateDescendant(this),
