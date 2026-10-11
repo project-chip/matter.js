@@ -169,6 +169,41 @@ describe("Endpoint.erase", () => {
         expect(rootVersion(node)).equals(before + 1);
     });
 
+    it("increases the stored ConfigurationVersion of a crashed bridged endpoint below", async () => {
+        await using site = new MockSite();
+        const id = "eraseCrashedBridged";
+        const options = { id: "bridged", bridgedDeviceBasicInformation: { configurationVersion: 5 } };
+
+        {
+            const node = await site.addNode(undefined, { id, device: undefined, commissioning: { enabled: false } });
+            const aggregator = await node.add(new Endpoint(AggregatorEndpoint, { id: "aggregator" }));
+            const bridged = await aggregator.add(VersionedBridgedLightDevice, options);
+            await bridged.set({ bridgedDeviceBasicInformation: { configurationVersion: 9 } });
+            await node.close();
+        }
+
+        {
+            const node = await site.addNode(undefined, { id, device: undefined, commissioning: { enabled: false } });
+            const crashed = new Endpoint(VersionedBridgedLightDevice.with(FailingOnOffServer), {
+                ...options,
+                isEssential: false,
+            });
+            const aggregator = await node.add(new Endpoint(AggregatorEndpoint, { id: "aggregator" }));
+            await expect(aggregator.add(crashed)).rejectedWith(EndpointBehaviorsError);
+
+            await aggregator.erase();
+            await node.close();
+        }
+
+        {
+            const node = await site.addNode(undefined, { id, device: undefined, commissioning: { enabled: false } });
+            const aggregator = await node.add(new Endpoint(AggregatorEndpoint, { id: "aggregator" }));
+            const bridged = await aggregator.add(VersionedBridgedLightDevice, options);
+
+            expect(bridgedVersion(bridged)).equals(10);
+        }
+    });
+
     it("waits for an endpoint that is still initializing", async () => {
         let initializationStarted!: () => void;
         const started = new Promise<void>(resolve => (initializationStarted = resolve));

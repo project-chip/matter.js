@@ -210,11 +210,15 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
      * If the node is still available, you should use {@link decommission} to remove it properly from the fabric and only use
      * this method as fallback.  You should inform the user that manual factory-reset may be necessary.
      */
-    override async delete() {
+    override delete() {
+        return super.delete();
+    }
+
+    protected override async deleteOnce() {
         const address = this.peerAddress;
 
         try {
-            await super.delete();
+            await super.deleteOnce();
         } finally {
             // Ensure there is no remaining @matter/protocol Peer installed.  This may occur if deleted while still
             // commissioned, and must hold even when teardown fails or the peer outlives its fabric

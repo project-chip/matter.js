@@ -372,6 +372,68 @@ describe("ServerNode", () => {
             expect(listedWhenIncreased).equals(false);
         });
 
+        it("joins a concurrent delete of an endpoint", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            const light = await node.add(OnOffLightDevice, { id: "light" });
+            const before = node.state.basicInformation.configurationVersion;
+
+            await Promise.all([light.delete(), light.delete()]);
+
+            expect(node.state.basicInformation.configurationVersion).equals(before + 1);
+        });
+
+        it("refuses deleting an endpoint while it closes", async () => {
+            await using site = new MockSite();
+            const id = "deleteWhileClosing";
+            const node = await site.addNode(undefined, { id, device: undefined, commissioning: { enabled: false } });
+            const light = await node.add(new Endpoint(OnOffLightDevice, { id: "light" }));
+            const number = light.number;
+            await light.set({ onOff: { onOff: true } });
+
+            const closing = light.close();
+            await expect(light.delete()).rejectedWith(ImplementationError, /closing/);
+            await closing;
+            await node.close();
+
+            const reopened = await site.addNode(undefined, {
+                id,
+                device: undefined,
+                commissioning: { enabled: false },
+            });
+            const reAdded = await reopened.add(new Endpoint(OnOffLightDevice, { id: "light" }));
+            expect(reAdded.number).equals(number);
+            expect(reAdded.state.onOff.onOff).equals(true);
+        });
+
+        it("rejects when the reset of the endpoint fails and still removes it", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            const light = await node.add(OnOffLightDevice, { id: "light" });
+            light.lifecycle.reset.on(() => {
+                throw new ImplementationError("Reset refused for test");
+            });
+
+            await expect(light.delete()).rejected;
+
+            expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+            expect(node.endpoints.has(light)).equals(false);
+        });
+
+        it("rejects when the reset of a part fails and still removes the endpoint", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            const aggregator = await node.add(AggregatorEndpoint, {
+                id: "aggregator",
+                parts: [{ type: OnOffLightDevice, id: "child" }],
+            });
+            aggregator.parts.require("child").lifecycle.reset.on(() => {
+                throw new ImplementationError("Reset refused for test");
+            });
+
+            await expect(aggregator.delete()).rejected;
+
+            expect(aggregator.construction.status).equals(Lifecycle.Status.Destroyed);
+            expect(node.endpoints.has(aggregator)).equals(false);
+        });
+
         it("erases the storage of a deleted ServerNode", async () => {
             await using site = new MockSite();
             const id = "deletedNode";

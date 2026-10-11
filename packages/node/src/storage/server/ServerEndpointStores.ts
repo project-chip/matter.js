@@ -221,6 +221,13 @@ export class ServerEndpointStores {
     }
 
     /**
+     * The persisted value of a behavior property of {@link endpoint}, if its store exists and holds one.
+     */
+    async storedValueOf(endpoint: Endpoint, behaviorId: string, key: string) {
+        return this.#existingStoreFor(endpoint)?.storedValue(behaviorId, key);
+    }
+
+    /**
      * Erase storage for a single {@link Endpoint} and its parts and release the numbers their stores hold.
      */
     async eraseStoreForEndpoint(endpoint: Endpoint) {

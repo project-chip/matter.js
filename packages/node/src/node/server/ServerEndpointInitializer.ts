@@ -61,8 +61,12 @@ export class ServerEndpointInitializer extends EndpointInitializer {
     async beginEraseDescendant(endpoint: Endpoint): Promise<EndpointInitializer.Erasure> {
         // A wiped bridged endpoint restarts from storage, so its increased version is persisted with the wipe
         const presets = new Map<Endpoint, Record<string, Val.Struct>>();
+        const parts = new Array<Endpoint>();
         endpoint.visit(part => {
-            const version = bridgedConfigurationVersionOf(part);
+            parts.push(part);
+        });
+        for (const part of parts) {
+            const version = await this.#erasedConfigurationVersionOf(part);
             if (version !== undefined) {
                 presets.set(part, {
                     [BridgedDeviceBasicInformationServer.id]: {
@@ -70,7 +74,7 @@ export class ServerEndpointInitializer extends EndpointInitializer {
                     },
                 });
             }
-        });
+        }
 
         return {
             wipe: async () => {
@@ -80,6 +84,26 @@ export class ServerEndpointInitializer extends EndpointInitializer {
             },
             finish: () => increaseConfigurationVersion(endpoint.owner),
         };
+    }
+
+    /**
+     * The bridged ConfigurationVersion of an endpoint about to be erased: the live value of a running endpoint, else the
+     * persisted value, so a crashed endpoint does not restart with a lower version.
+     */
+    async #erasedConfigurationVersionOf(part: Endpoint) {
+        if (!part.behaviors.has(BridgedDeviceBasicInformationServer)) {
+            return;
+        }
+        const live = bridgedConfigurationVersionOf(part);
+        if (live !== undefined || !part.lifecycle.hasId) {
+            return live;
+        }
+        const stored = await this.#store.endpointStores.storedValueOf(
+            part,
+            BridgedDeviceBasicInformationServer.id,
+            "configurationVersion",
+        );
+        return typeof stored === "number" ? stored : undefined;
     }
 
     async beginDeleteDescendant(endpoint: Endpoint): Promise<EndpointInitializer.Erasure> {

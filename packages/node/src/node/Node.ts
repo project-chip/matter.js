@@ -46,7 +46,6 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     #runtime?: NetworkRuntime;
     #startInProgress = false;
     #closeInProgress = false;
-    #deleting?: Promise<void>;
 
     constructor(config: Node.Configuration<T>) {
         const parentEnvironment = config.environment ?? config.owner?.env ?? Environment.default;
@@ -262,16 +261,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     /**
      * Erase all persisted data of the node and destroy it.  Unlike {@link erase} the node does not restart.
      */
-    override delete(): Promise<void> {
-        if (this.#deleting === undefined) {
-            this.#deleting = this.#deleteOnce().finally(() => {
-                this.#deleting = undefined;
-            });
-        }
-        return this.#deleting;
-    }
-
-    async #deleteOnce() {
+    protected override async deleteOnce() {
         this.construction.assert(this.toString());
         if (this.#closeInProgress) {
             throw new ImplementationError(`Cannot delete ${this} while it closes`);

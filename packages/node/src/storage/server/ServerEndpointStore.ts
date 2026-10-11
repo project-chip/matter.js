@@ -6,7 +6,7 @@
 
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointStore } from "#storage/EndpointStore.js";
-import { ImplementationError, StorageContext } from "@matter/general";
+import { ImplementationError, StorageContext, SupportedStorageTypes } from "@matter/general";
 import type { Val } from "@matter/protocol";
 import { DatasourceStore } from "./DatasourceStore.js";
 
@@ -101,6 +101,17 @@ export class ServerEndpointStore extends EndpointStore {
         for (const behaviorId in values) {
             this.initialValues.set(behaviorId, { ...this.initialValues.get(behaviorId), ...values[behaviorId] });
         }
+    }
+
+    /**
+     * The persisted value of a behavior property, if one is stored.
+     */
+    async storedValue(behaviorId: string, key: string): Promise<SupportedStorageTypes | undefined> {
+        const context = this.storage.createContext(behaviorId);
+        if (!(await context.has(key))) {
+            return undefined;
+        }
+        return context.get(key);
     }
 
     async saveNumber() {

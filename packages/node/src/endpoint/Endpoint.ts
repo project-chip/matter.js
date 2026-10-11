@@ -68,6 +68,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     #number?: EndpointNumber;
     #owner?: Endpoint;
     #erasing?: Promise<void>;
+    #deleting?: Promise<void>;
     #agentType?: Agent.Type<T>;
     #behaviors: Behaviors;
     #lifecycle: EndpointLifecycle;
@@ -939,37 +940,42 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * Perform "soft" reset of the endpoint and its parts, reverting all in-memory structures to uninitialized.
      */
     protected async reset() {
-        using _resetting = this.construction.join("resetting");
-
         try {
-            // Revert lifecycle to uninitialized
-            this.lifecycle.resetting();
-
-            // Reset child parts
-            {
-                using _parts = _resetting.join("parts");
-                for (const part of this.parts) {
-                    await part.reset();
-                }
-            }
-
-            // Reset behaviors
-            {
-                using _behaviors = _resetting.join("behaviors");
-                await this.behaviors.close();
-            }
-
-            // Notify
-            {
-                using _lifecycle = _resetting.join("lifecycle");
-                await this.lifecycle.reset.emit();
-            }
-
-            // Set construction to inactive so we can restart
-            this.construction.setStatus(Lifecycle.Status.Inactive);
+            await this.#resetSteps();
         } catch (e) {
             logger.error(`Unhandled error during reset of ${this}`, e);
         }
+    }
+
+    async #resetSteps() {
+        using _resetting = this.construction.join("resetting");
+
+        // Revert lifecycle to uninitialized
+        this.lifecycle.resetting();
+
+        // Reset child parts
+        {
+            using _parts = _resetting.join("parts");
+            await MatterAggregateError.settleSeries(
+                [...this.parts].map(part => () => part.#resetSteps()),
+                `Error resetting parts of ${this}`,
+            );
+        }
+
+        // Reset behaviors
+        {
+            using _behaviors = _resetting.join("behaviors");
+            await this.behaviors.close();
+        }
+
+        // Notify
+        {
+            using _lifecycle = _resetting.join("lifecycle");
+            await this.lifecycle.reset.emit();
+        }
+
+        // Set construction to inactive so we can restart
+        this.construction.setStatus(Lifecycle.Status.Inactive);
     }
 
     /**
@@ -1034,14 +1040,31 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * Erase all persisted data of the endpoint and its parts, release their endpoint numbers and destroy the endpoint.
-     * On a server node the ConfigurationVersion increases once the endpoint is removed.
+     * For an endpoint of a server node the ConfigurationVersion increases once the endpoint is removed.  A node is
+     * erased and closed without restarting.
      *
-     * Every step runs even when an earlier one fails; failures reject with a {@link MatterAggregateError}.
+     * Every step runs even when an earlier one fails; failures reject with a {@link MatterAggregateError}.  A concurrent
+     * call joins the delete in progress.  Throws {@link ImplementationError} if the endpoint is closing.
      *
      * @see {@link MatterSpecification.v161.Core} § 9.2.11
      */
-    async delete() {
+    delete(): Promise<void> {
+        if (this.#deleting === undefined) {
+            this.#deleting = this.deleteOnce().finally(() => {
+                this.#deleting = undefined;
+            });
+        }
+        return this.#deleting;
+    }
+
+    /**
+     * Perform {@link delete}.  Concurrent calls of {@link delete} join a single run.
+     */
+    protected async deleteOnce() {
         this.construction.assert(this.toString());
+        if (this.lifecycle.isDestroying) {
+            throw new ImplementationError(`Cannot delete ${this} because it is closing`);
+        }
         this.lifecycle.change(EndpointLifecycle.Change.Destroying);
         if (this.#erasing !== undefined) {
             // The outcome of the erase reaches its own caller
@@ -1050,7 +1073,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
         const deletion = await this.env.get(EndpointInitializer).beginDeleteDescendant(this);
         await MatterAggregateError.settleSeries(
-            [() => this.reset(), () => deletion.wipe(), () => this.close(), () => deletion.finish()],
+            [() => this.#resetSteps(), () => deletion.wipe(), () => this.close(), () => deletion.finish()],
             `Error deleting endpoint ${this}`,
         );
     }
