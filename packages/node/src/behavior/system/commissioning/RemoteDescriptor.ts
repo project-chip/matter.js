@@ -116,8 +116,9 @@ export namespace RemoteDescriptor {
             }
         }
 
-        if (advertisedIntervals !== undefined) {
-            const { idleInterval, activeInterval, activeThreshold } = advertisedIntervals;
+        const intervals = advertisedIntervals && SessionIntervals.advertisable(advertisedIntervals);
+        if (intervals !== undefined) {
+            const { idleInterval, activeInterval, activeThreshold } = intervals;
 
             if (idleInterval !== undefined) {
                 result.SII = idleInterval;
