@@ -126,6 +126,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Commissioning skips a device whose advertised vendor or product ID contradicts the onboarding payload
     - Fix: Client reads return current values of changes-omitted attributes in all cases
     - Fix: A peer's endpoint tree follows each endpoint's `PartsList`, so bridged composed devices are structured correctly
+    - Fix: When several of a peer's endpoints claim the same endpoint in one read, its parent no longer depends on the order the peer reports them in
     - Fix: A peer's state drops attributes its `AttributeList` omits, records the peer's `ClusterRevision`, migrates values persisted under property names, and hides storage metadata
     - Fix: The remote API (WebSocket, MQTT) supports `add` on list attributes, validates peer writes as the peer does, and its change streams survive endpoint crashes and resets
     - Fix: Structs get defaults only for supported fields, in encoded units and as own copies; a write can no longer replace the prototype via `__proto__`
@@ -145,7 +146,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Enum values in a manufacturer range are accepted
     - Fix: Subscriptions send keep-alives on time, report concrete paths only for changed attributes, and report computed quieter attributes
     - Fix: Subscriptions, ICD active windows and diagnostics timers use the monotonic clock, so wall-clock steps no longer disturb them
-    - Fix: The Descriptor `PartsList` reports replacements, lists parts in order, follows `DeviceTypeList` changes, and names only a bridged node's own children
+    - Fix: The Descriptor `PartsList` reports replacements, lists parts in order, follows `DeviceTypeList` changes, and names every endpoint of the bridged device for a bridged node, as the specification requires
     - Fix: `DescriptorServer.addTags` and `addDeviceTypes` no longer add duplicates
     - Fix: Level Control and Color Control `Stop`, `*WithOnOff` and `RemainingTime` behave as specified; level coupling no longer fails or stays blocked on locked transactions
     - Fix: `Thermostat.Presets` writes are validated, stored, persisted and reported; atomic writes report every attribute and commit together
