@@ -552,8 +552,8 @@ export class SoftwareUpdateManager extends Behavior {
      * Returns a list of peers for which updates are available along with the collected update info.
      *
      * If `includeStoredUpdates` is set to true, locally stored/imported OTA images are considered as update candidates
-     * alongside the DCL. The DCL is always queried regardless; across all candidates the highest applicable and allowed
-     * version wins.
+     * alongside the DCL. The DCL is always queried regardless, unless the OTA service is offline; across all candidates
+     * the highest applicable and allowed version wins.
      */
     async queryUpdates(options: { peerToCheck?: ClientNode; includeStoredUpdates?: boolean } = {}) {
         const { peerToCheck, includeStoredUpdates = false } = options;
