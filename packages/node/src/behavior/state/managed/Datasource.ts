@@ -424,10 +424,9 @@ class DatasourceImpl implements Datasource, Datasource.ExternallyMutableStore.Co
     discardedStoreKeys?: string[];
 
     /**
-     * Values {@link Datasource.Options.migrate} changed, keyed by store key.  The next write persists them unless it
-     * writes the key itself.
+     * Store keys {@link Datasource.Options.migrate} changed.  The next persisted write stores their current values.
      */
-    migratedStoreValues?: Map<string, unknown>;
+    migratedStoreKeys?: Set<string>;
 
     storeFields: Set<string>;
     supervisionConfig?: GlobalConfig;
@@ -596,7 +595,13 @@ class DatasourceImpl implements Datasource, Datasource.ExternallyMutableStore.Co
 
         const migrated = deepCopy(values);
         try {
-            migrate(migrated);
+            const result: unknown = migrate(migrated);
+            if (MaybePromise.is(result)) {
+                Promise.resolve(result).then(undefined, error =>
+                    logger.warn(`Asynchronous migration of persisted values for ${this.location.path} failed:`, error),
+                );
+                throw new ImplementationError("Behavior.migrate must complete synchronously");
+            }
         } catch (e) {
             logger.warn(`Ignoring the migration of persisted values for ${this.location.path} because it failed:`, e);
             return stored;
@@ -604,7 +609,7 @@ class DatasourceImpl implements Datasource, Datasource.ExternallyMutableStore.Co
 
         for (const key of new Set([...Object.keys(values), ...Object.keys(migrated)])) {
             if (!isDeepEqual(values[key], migrated[key])) {
-                (this.migratedStoreValues ??= new Map()).set(key, migrated[key]);
+                (this.migratedStoreKeys ??= new Set()).add(key);
             }
         }
 
@@ -1152,11 +1157,11 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
             this.#stagedFeaturesKey = true;
         }
 
-        const { migratedStoreValues } = this.#internals;
-        if (migratedStoreValues !== undefined) {
-            for (const [key, value] of migratedStoreValues) {
+        const { migratedStoreKeys } = this.#internals;
+        if (migratedStoreKeys !== undefined) {
+            for (const key of migratedStoreKeys) {
                 if (!(key in stored)) {
-                    stored[key] = value;
+                    stored[key] = this.#values[key];
                 }
             }
             this.#stagedMigration = true;
@@ -1171,17 +1176,6 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
     commit2() {
         if (!this.#changes) {
             return;
-        }
-
-        // The key is only persisted once the store accepted the values it travelled with; claiming it in phase one
-        // would leave a failed write believing it landed, and no later write would stage it again
-        if (this.#stagedFeaturesKey) {
-            this.#internals.featuresKeyPersisted = true;
-            this.#stagedFeaturesKey = false;
-        }
-        if (this.#stagedMigration) {
-            this.#internals.migratedStoreValues = undefined;
-            this.#stagedMigration = false;
         }
 
         this.#adoptConcurrentChanges();
@@ -1220,6 +1214,17 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
     postCommit() {
         if (!this.#changes) {
             return;
+        }
+
+        // The store may write in its own phase two, and a failure there skips post-commit; claiming staged values any
+        // earlier would leave a failed write believing they landed, and no later write would stage them again
+        if (this.#stagedFeaturesKey) {
+            this.#internals.featuresKeyPersisted = true;
+            this.#stagedFeaturesKey = false;
+        }
+        if (this.#stagedMigration) {
+            this.#internals.migratedStoreKeys = undefined;
+            this.#stagedMigration = false;
         }
 
         const iterator = this.#changes.notifications[Symbol.iterator]();

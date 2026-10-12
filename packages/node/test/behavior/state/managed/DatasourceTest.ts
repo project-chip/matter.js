@@ -14,8 +14,12 @@ import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
 import { AccessControlServer } from "#behaviors/access-control";
 import {
     AsyncObservable,
+    Diagnostic,
     ImplementationError,
     isObject,
+    LogDestination,
+    Logger,
+    LogLevel,
     MaybePromise,
     MockCrypto,
     Observable,
@@ -92,6 +96,32 @@ function createStore(initialValues: Val.Struct = {}): Datasource.Store & { sets:
 
         sets: [],
     };
+}
+
+/**
+ * A store that writes in a participant's phase two, as the endpoint store does, and fails the first write there.
+ */
+function phaseTwoStore(initialValues: Val.Struct = {}) {
+    const sets = new Array<Val.Struct>();
+    let failNext = true;
+    const store: Datasource.Store = {
+        initialValues: { ...initialValues },
+
+        async set(transaction, values) {
+            transaction.addParticipants({
+                toString: () => "phase-two-store",
+
+                commit2() {
+                    if (failNext) {
+                        failNext = false;
+                        throw new StorageError("Write failed");
+                    }
+                    sets.push(values);
+                },
+            });
+        },
+    };
+    return { store, sets };
 }
 
 function createDatasource<const T extends StateType = typeof MyState>(
@@ -700,6 +730,17 @@ describe("Datasource", () => {
         expect("__features__" in sets[0]).true;
     });
 
+    it("stages the features key again after the store failed in phase two", async () => {
+        const { store, sets } = phaseTwoStore();
+        const ds = createDatasource({ store, supervisor: featuredSupervisor });
+
+        await expect(withReference(ds, ({ state }) => (state.foo = "rab"))).rejected;
+        await withReference(ds, ({ state }) => (state.foo = "woof"));
+
+        expect(sets.length).equals(1);
+        expect("__features__" in sets[0]).true;
+    });
+
     it("does not claim the features key for a cycle that stored nothing", async () => {
         const sets = new Array<Val.Struct>();
         let refuse = true;
@@ -1045,6 +1086,42 @@ describe("Datasource", () => {
             await withReference(ds, ({ state }) => (state.other = 2));
 
             expect(sets).deep.equals([{ other: 2, foo: "old", legacy: undefined }]);
+        });
+
+        it("stages the migrated values again after the store failed in phase two", async () => {
+            const { store, sets } = phaseTwoStore({ legacy: "old" });
+            const ds = createMigrated(store);
+
+            await expect(withReference(ds, ({ state }) => (state.other = 1))).rejected;
+            await withReference(ds, ({ state }) => (state.other = 2));
+
+            expect(sets).deep.equals([{ other: 2, foo: "old", legacy: undefined }]);
+        });
+
+        it("ignores an asynchronous migration and logs its rejection", async () => {
+            const warnings = new Array<string>();
+            Logger.destinations.capture = LogDestination({
+                add(message: Diagnostic.Message) {
+                    if (message.facility === "Datasource" && message.level === LogLevel.WARN) {
+                        warnings.push(String(message.values[0]));
+                    }
+                },
+            });
+            try {
+                const store = createStore({ legacy: "old", foo: "stored" });
+                const ds = createMigrated(store, async values => {
+                    moveLegacy(values);
+                    throw new StorageError("Broken migration");
+                });
+
+                await withReference(ds, ({ state }) => (state.other = 1));
+
+                expect(ds.view.foo).equals("stored");
+                expect(store.sets).deep.equals([{ other: 1 }]);
+                expect(warnings.some(warning => warning.startsWith("Asynchronous migration"))).true;
+            } finally {
+                delete Logger.destinations.capture;
+            }
         });
 
         it("does not claim the migrated values for a cycle that stored nothing", async () => {
