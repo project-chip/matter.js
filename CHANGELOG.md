@@ -107,6 +107,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: Cluster, attribute, command and event IDs of hosted clusters are validated when their server behavior initializes
     - Adjustment: `IdentifyServer` offers `TriggerEffect` only when the device type requires it or it is implemented or enabled
     - Adjustment: A server rejects an obsolete (`Z`) element; a client sends and decodes it
+    - Adjustment: A node's `ClusterProtocol.readState()` throws `ImplementationError` for a remote session without a transaction
     - Fix: `DclBehavior` boolean options set through environment variables are read as booleans
     - Fix: `.with()` on a behavior subclass that declares own attributes or commands replaces the default behavior instead of running next to it; an endpoint refuses two behaviors for the same cluster
     - Fix: Closing or factory resetting a node closes all its parts, peers and services even when one step fails, releases storage and mDNS, and erases leftover peers, CA key material and BDX blobs
@@ -167,6 +168,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Automatically assigned endpoint numbers count up from the highest number used so far or explicitly requested in options; after 0xFFFE they continue with the lowest free number instead of the invalid 0xFFFF
     - Fix: Deleting or erasing an endpoint frees the stored numbers of its whole subtree
     - Fix: An endpoint that sets a `number` in its options which a stored endpoint with another ID had before gets that number and logs a warning; the stored endpoint gets a new number when it is added again
+    - Fix: (@grzonu) Reading a peer's `BasicInformation` through `Peer` (on every read, subscribe and invoke) no longer leaves a state reference behind per access
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument

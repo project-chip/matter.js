@@ -34,7 +34,7 @@ import {
     Timer,
 } from "@matter/general";
 import { DeviceAttestationPkiRevocationDclSchema, RevocationTypeEnum } from "@matter/types";
-import { Paa, Pai } from "../certificate/kinds/AttestationCertificates.js";
+import { MlDsaAttestationDisabledError, Paa, Pai } from "../certificate/kinds/AttestationCertificates.js";
 import { Certificate } from "../certificate/kinds/Certificate.js";
 import { certificateSignatureOf, verifyCertificateSignature } from "../certificate/kinds/CertificateSignature.js";
 import { DclClient, MatterDclError, MatterDclResponseError } from "./DclClient.js";
@@ -49,6 +49,11 @@ function parseTrustStoreCertificate(der: Bytes, kind: DclCertificateService.Cert
     return kind === "PAA"
         ? Paa.fromAsn1(der).cert
         : Certificate.parseAsn1Certificate(der, Certificate.REQUIRED_EXTENSIONS);
+}
+
+/** A certificate that needs a disabled forward feature is expected configuration, not a fault worth reporting. */
+function skippedCertificateLogLevel(error: unknown) {
+    return error instanceof MlDsaAttestationDisabledError ? LogLevel.DEBUG : LogLevel.INFO;
 }
 
 function statedString(value: unknown, field: string, index: number) {
@@ -447,7 +452,7 @@ export class DclCertificateService {
         const metadata = this.#certificateIndex.get(normalizedId);
 
         const parseError = this.#certificateParseError(der, metadata?.kind);
-        if (parseError === undefined) {
+        if (parseError === undefined || parseError instanceof MlDsaAttestationDisabledError) {
             return der;
         }
 
@@ -494,7 +499,8 @@ export class DclCertificateService {
         try {
             parsed = parseTrustStoreCertificate(der, kind);
         } catch (error) {
-            logger.info(
+            logger.log(
+                skippedCertificateLogLevel(error),
                 `${source}: certificate cannot be used as a ${kind}, skipped`,
                 Diagnostic.dict({ skid: statedSkid }),
                 Diagnostic.errorMessage(asError(error)),
@@ -1318,7 +1324,11 @@ export class DclCertificateService {
 
             logger.debug(`Stored GitHub certificate`, Diagnostic.dict({ skid: subjectKeyId, filename }));
         } catch (error) {
-            logger.info(`Failed to fetch GitHub certificate ${filename}`, Diagnostic.errorMessage(asError(error)));
+            logger.log(
+                skippedCertificateLogLevel(error),
+                `Failed to fetch GitHub certificate ${filename}`,
+                Diagnostic.errorMessage(asError(error)),
+            );
         }
     }
 

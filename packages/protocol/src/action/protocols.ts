@@ -121,7 +121,11 @@ export interface ClusterProtocol {
     location: AccessControl.Location;
 
     /**
-     * Read-only state of the cluster
+     * Read-only state of the cluster.
+     *
+     * Without a {@link InteractionSession.transaction} the result is a shared view with local access.
+     *
+     * @throws ImplementationError for a session with a remote subject but no transaction
      */
     readState(session: InteractionSession): Val.ProtocolStruct;
 
