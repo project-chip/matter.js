@@ -152,6 +152,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: `SwitchServer` handles positions, long press and multi-press as specified and no longer leaks a reactor per press
     - Fix: OTA requestors send `NotifyUpdateApplied` after an update, keep `DelayedOnQuery` while a provider is busy, recover when `applyUpdate` fails, and skip an update without consent
     - Fix: OTA providers wait for the restart only after `DelayedActionTime`, and send that delay in seconds
+    - Fix: OTA providers let a requestor that sends `NewVersion` 0 apply the version of its update token, if consent for it exists
     - Fix: Group key, LeaveGroup and GroupcastTesting handling follows the specification; a failed multicast join is retried instead of failing
     - Fix: Group bindings resolve once a group key exists, and a disposed binding no longer resolves
     - Fix: `ServiceAreaServer` without the Maps feature no longer fails to initialize

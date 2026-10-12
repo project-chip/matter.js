@@ -1465,6 +1465,83 @@ describe("Ota", () => {
         await site[Symbol.asyncDispose]();
     }).timeout(10_000);
 
+    /** Drives one update to its apply, with the apply request rewritten as a non-compliant requestor sends it. */
+    async function applyRewritten(
+        rewrite: (
+            request: OtaSoftwareUpdateProvider.ApplyUpdateRequest,
+        ) => OtaSoftwareUpdateProvider.ApplyUpdateRequest,
+        { withdrawConsent = false } = {},
+    ) {
+        const data = { expectedOtaImage: Bytes.fromHex("") };
+        const { TestOtaRequestorServer } = InstrumentedOtaRequestorServer({ requestUserConsent: false }, data);
+
+        let peerAddress: PeerAddress | undefined;
+        let targetVersion: number | undefined;
+        const { queryImagePromise, applyUpdateRequestPromise, applyUpdateResponses, TestOtaProviderServer } =
+            InstrumentedOtaProviderServer(
+                { requestUserConsentForUpdate: false, notifyUpdateApplied: false },
+                {
+                    beforeApplyUpdateRequest: async agent => {
+                        if (withdrawConsent) {
+                            await agent.get(SoftwareUpdateManager).removeConsent(peerAddress!, targetVersion!);
+                        }
+                    },
+                    rewriteApplyUpdateRequest: rewrite,
+                },
+            );
+
+        const { site, device, controller, otaProvider } = await initOtaSite(
+            TestOtaProviderServer,
+            TestOtaRequestorServer,
+        );
+        await using _localSite = site;
+
+        const { otaImage, vendorId, productId, targetSoftwareVersion } = await addTestOtaImage(device, controller);
+        data.expectedOtaImage = Bytes.of(otaImage.image);
+        targetVersion = targetSoftwareVersion;
+        peerAddress = controller.peers.get("peer1")!.state.commissioning.peerAddress!;
+
+        await otaProvider.act(agent =>
+            agent
+                .get(SoftwareUpdateManager)
+                .forceUpdate(peerAddress!, { vendorId: VendorId(vendorId), productId, targetSoftwareVersion }),
+        );
+
+        await MockTime.resolve(queryImagePromise);
+        await MockTime.resolve(applyUpdateRequestPromise);
+        await MockTime.macrotasks;
+
+        return applyUpdateResponses.map(({ action }) => action);
+    }
+
+    it("applies the version of a known update token when the requestor asks for version 0", async () => {
+        expect(await applyRewritten(request => ({ ...request, newVersion: 0 }))).deep.equals([
+            OtaSoftwareUpdateProvider.ApplyUpdateAction.Proceed,
+        ]);
+    }).timeout(10_000);
+
+    it("refuses a version other than 0 that differs from its update token", async () => {
+        expect(await applyRewritten(request => ({ ...request, newVersion: request.newVersion + 1 }))).deep.equals([
+            OtaSoftwareUpdateProvider.ApplyUpdateAction.Discontinue,
+        ]);
+    }).timeout(10_000);
+
+    it("refuses version 0 for an update token it does not know", async () => {
+        expect(
+            await applyRewritten(request => ({
+                ...request,
+                updateToken: Bytes.fromHex("0102030405060708"),
+                newVersion: 0,
+            })),
+        ).deep.equals([OtaSoftwareUpdateProvider.ApplyUpdateAction.Discontinue]);
+    }).timeout(10_000);
+
+    it("refuses version 0 for a known update token once its consent is gone", async () => {
+        expect(await applyRewritten(request => ({ ...request, newVersion: 0 }), { withdrawConsent: true })).deep.equals(
+            [OtaSoftwareUpdateProvider.ApplyUpdateAction.Discontinue],
+        );
+    }).timeout(10_000);
+
     /** Drives one update to its apply with a provider whose `applyDelay` is `delay`. */
     async function applyWithDelay(delay: Duration) {
         const data = { expectedOtaImage: Bytes.fromHex("") };

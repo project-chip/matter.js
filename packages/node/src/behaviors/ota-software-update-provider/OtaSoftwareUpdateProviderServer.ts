@@ -408,12 +408,23 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
     override async applyUpdateRequest(
         request: OtaSoftwareUpdateProvider.ApplyUpdateRequest,
     ): Promise<OtaSoftwareUpdateProvider.ApplyUpdateResponse> {
-        const { updateToken, newVersion } = request;
+        const { updateToken } = request;
+        let { newVersion } = request;
         assertRemoteActor(this.context);
         const session = this.context.session;
         NodeSession.assert(session);
 
         const progressInfo = this.#inProgressDetailsForPeer(session.peerAddress, updateToken);
+
+        // An offered version is always above the requestor's current one, so 0 names no image we provided
+        if (newVersion === 0 && progressInfo?.versionToApply !== undefined) {
+            logger.info(
+                `OTA Update for Requestor`,
+                session.peerAddress,
+                `(${Bytes.toHex(updateToken)}) requests to apply version 0, using version ${progressInfo.versionToApply} of its update token`,
+            );
+            newVersion = progressInfo.versionToApply;
+        }
 
         const bdxProtocol = this.env.get(BdxProtocol);
         try {
@@ -427,7 +438,7 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
             logger.info("Error while closing BDX session for OTA update apply request, continuing anyway:", error);
         }
 
-        if (!this.#hasUpdateConsent(session.peerAddress, newVersion)) {
+        if (!(await this.#hasUpdateConsent(session.peerAddress, newVersion))) {
             this.#updateInProgressDetails(session.peerAddress, updateToken, OtaUpdateStatus.Cancelled, newVersion);
 
             return {
@@ -501,10 +512,12 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
         return this.endpoint.act(agent => agent.get(SoftwareUpdateManager).updateExistsFor(peerAddress, request));
     }
 
-    #hasUpdateConsent(peerAddress: PeerAddress, targetSoftwareVersion?: number) {
+    async #hasUpdateConsent(peerAddress: PeerAddress, targetSoftwareVersion?: number) {
         return (
             !!this.#inProgressDetailsForPeer(peerAddress)?.directConsentObtained ||
-            this.endpoint.act(agent => agent.get(SoftwareUpdateManager).hasConsent(peerAddress, targetSoftwareVersion))
+            (await this.endpoint.act(agent =>
+                agent.get(SoftwareUpdateManager).hasConsent(peerAddress, targetSoftwareVersion),
+            ))
         );
     }
 
