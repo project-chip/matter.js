@@ -27,10 +27,6 @@ export function DatasourceStore(
     return {
         initialValues,
 
-        migrated(patch: Val.Struct) {
-            endpointStore.migrated(behaviorId, patch);
-        },
-
         async set(transaction: Transaction, values: Val.Struct) {
             if (behaviorId === "__proto__") {
                 return;

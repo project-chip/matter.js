@@ -345,11 +345,11 @@ export abstract class Behavior {
     /**
      * Adjust persisted values whose stored format is incompatible with the current state.
      *
-     * Runs on the raw stored values before the behavior's state initializes, so keys need not exist in the schema.
-     * Changes are detected per top-level key by identity, so replace a value rather than mutating it.  The store
-     * persists the changes with the behavior's next write, so until then a migration also runs on values it already
-     * migrated and must leave those unchanged.  Does not run for the state of a peer's cluster, which only the peer
-     * provides.
+     * Runs on a copy of the stored values before the behavior's state initializes, so keys need not exist in the
+     * schema.  The behavior's next persisted write stores what changed, so until then a migration also runs on values it
+     * already migrated and must leave those unchanged.  If it throws, the stored values apply unchanged.
+     *
+     * Does not run for state that mirrors a peer, such as the attributes of a cluster client behavior.
      *
      * Subclasses inherit the migration.  An override should invoke `super.migrate(values)` first.
      */

@@ -15,9 +15,11 @@ import { AccessControlServer } from "#behaviors/access-control";
 import {
     AsyncObservable,
     ImplementationError,
+    isObject,
     MaybePromise,
     MockCrypto,
     Observable,
+    StorageError,
     UnsettledStateError,
 } from "@matter/general";
 import {
@@ -968,6 +970,177 @@ describe("Datasource", () => {
 
         expect(store.sets.length).equals(2);
         expect(store.sets[1]).deep.equals({ foo: "woof" });
+    });
+
+    describe("migration", () => {
+        class MigratedState {
+            foo = "bar";
+            other = 0;
+            volatile = "loud";
+        }
+
+        const migratedSupervisor = BehaviorSupervisor({
+            id: "myState",
+            State: MigratedState,
+
+            schema: new DatatypeModel({
+                name: "MyState",
+                type: "struct",
+
+                children: [
+                    FieldElement({ name: "foo", type: "string", quality: "N" }),
+                    FieldElement({ name: "other", type: "uint32", quality: "N" }),
+                    FieldElement({ name: "volatile", type: "string" }),
+                ],
+            }),
+        });
+
+        function moveLegacy(values: Val.Struct) {
+            if (values.legacy !== undefined) {
+                values.foo = values.legacy;
+                delete values.legacy;
+            }
+        }
+
+        function createMigrated(store: Datasource.Store, migrate: (values: Val.Struct) => void = moveLegacy) {
+            return createDatasource({ type: MigratedState, supervisor: migratedSupervisor, store, migrate });
+        }
+
+        it("persists the migrated values with the next write", async () => {
+            const store = createStore({ legacy: "old" });
+            const ds = createMigrated(store);
+            expect(ds.view.foo).equals("old");
+
+            await withReference(ds, ({ state }) => (state.other = 1));
+            await withReference(ds, ({ state }) => (state.other = 2));
+
+            expect(store.sets).deep.equals([{ other: 1, foo: "old", legacy: undefined }, { other: 2 }]);
+        });
+
+        it("does not overwrite a key the write sets itself", async () => {
+            const store = createStore({ legacy: "old" });
+            const ds = createMigrated(store);
+
+            await withReference(ds, ({ state }) => (state.foo = "new"));
+
+            expect(store.sets).deep.equals([{ foo: "new", legacy: undefined }]);
+        });
+
+        it("stages the migrated values again after the store rejected a write", async () => {
+            const sets = new Array<Val.Struct>();
+            let refuse = true;
+            const ds = createMigrated({
+                initialValues: { legacy: "old" },
+
+                async set(_transaction, values) {
+                    if (refuse) {
+                        throw new StorageError("Store is down");
+                    }
+                    sets.push(values);
+                },
+            });
+
+            await expect(withReference(ds, ({ state }) => (state.other = 1))).rejected;
+            refuse = false;
+            await withReference(ds, ({ state }) => (state.other = 2));
+
+            expect(sets).deep.equals([{ other: 2, foo: "old", legacy: undefined }]);
+        });
+
+        it("does not claim the migrated values for a cycle that stored nothing", async () => {
+            const sets = new Array<Val.Struct>();
+            let refuse = true;
+            const ds = createMigrated({
+                initialValues: { legacy: "old" },
+
+                async set(_transaction, values) {
+                    if (refuse) {
+                        throw new StorageError("Store is down");
+                    }
+                    sets.push(values);
+                },
+            });
+
+            await withReference(ds, async ({ state, context }) => {
+                state.other = 1;
+                await expect(context.transaction.commit()).rejected;
+                refuse = false;
+
+                state.volatile = "quiet";
+                await context.transaction.commit();
+
+                state.other = 2;
+                await context.transaction.commit();
+            });
+
+            expect(sets).deep.equals([{ other: 2, foo: "old", legacy: undefined }]);
+        });
+
+        it("persists a nested value the migration changed in place", async () => {
+            const store = createStore({ blob: { version: 1 } });
+            const ds = createMigrated(store, ({ blob }) => {
+                if (isObject(blob)) {
+                    blob.version = 2;
+                }
+            });
+
+            await withReference(ds, ({ state }) => (state.other = 1));
+
+            expect(store.sets).deep.equals([{ other: 1, blob: { version: 2 } }]);
+        });
+
+        it("hides store metadata from the migration", async () => {
+            const featuresKey = [...featuredSupervisor.supportedFeatures].join(",");
+            const store = createStore({ foo: "old", __features__: featuresKey });
+            const seen = new Array<string>();
+            const ds = createDatasource({
+                type: FeaturedState,
+                supervisor: featuredSupervisor,
+                store,
+                migrate: values => {
+                    seen.push(...Object.keys(values));
+                    for (const key in values) {
+                        delete values[key];
+                    }
+                },
+            });
+
+            await withReference(ds, ({ state }) => (state.foo = "new"));
+
+            expect(seen).deep.equals(["foo"]);
+            expect(store.sets).deep.equals([{ foo: "new" }]);
+        });
+
+        it("keeps the stored values when the migration fails", async () => {
+            const store = createStore({ legacy: "old", foo: "stored" });
+            const ds = createMigrated(store, () => {
+                throw new StorageError("Broken migration");
+            });
+
+            await withReference(ds, ({ state }) => (state.other = 1));
+
+            expect(ds.view.foo).equals("stored");
+            expect(store.sets).deep.equals([{ other: 1 }]);
+        });
+
+        it("does not migrate the values of a mirror", async () => {
+            let migrated = false;
+            const store: Datasource.ExternallyMutableStore = {
+                initialValues: { legacy: "old" },
+                version: 1,
+                async set() {},
+                async externalSet() {},
+            };
+            createDatasource({
+                type: MigratedState,
+                supervisor: migratedSupervisor,
+                primaryKey: "id",
+                store,
+                migrate: () => (migrated = true),
+            });
+
+            expect(migrated).false;
+        });
     });
 
     describe("store metadata", () => {

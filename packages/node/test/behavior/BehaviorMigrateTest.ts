@@ -5,8 +5,6 @@
  */
 
 import { Behavior } from "#behavior/Behavior.js";
-import { ServerBehaviorBacking } from "#behavior/internal/ServerBehaviorBacking.js";
-import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { CommissioningClient } from "#behavior/system/commissioning/CommissioningClient.js";
 import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
 import { OnOffLightDevice } from "#devices/on-off-light";
@@ -98,39 +96,6 @@ describe("Behavior.migrate", () => {
         await endpoint.setStateOf(ExtendedCounterBehavior, { other: 8 });
         expect(stored()).not.has.property("count");
         expect(stored()).deep.include({ total: 9 });
-    });
-
-    describe("on a backing", () => {
-        async function backingWith(store: Datasource.Store) {
-            const site = new MockSite();
-            const node = await site.addNode(undefined, { device: undefined, commissioning: { enabled: false } });
-            const endpoint = await node.add(new Endpoint(OnOffLightDevice.with(ExtendedCounterBehavior)));
-            const backing = new ServerBehaviorBacking(endpoint, ExtendedCounterBehavior, store);
-            backing.initializeDataSource();
-            return { site, backing };
-        }
-
-        it("hands the changes to a store that persists them", async () => {
-            const values = { count: 5, other: 3 };
-            const patches = new Array<Val.Struct>();
-            const { site } = await backingWith({
-                initialValues: values,
-                set: async () => {},
-                migrated: patch => patches.push(patch),
-            });
-            await using _site = site;
-
-            expect(values).deep.equals({ total: 5, other: 3 });
-            expect(patches).deep.equals([{ count: undefined, total: 5 }]);
-        });
-
-        it("does not run for a store that cannot persist the changes", async () => {
-            const values = { count: 5 };
-            const { site } = await backingWith({ initialValues: values, set: async () => {} });
-            await using _site = site;
-
-            expect(values).deep.equals({ count: 5 });
-        });
     });
 
     // Characterization

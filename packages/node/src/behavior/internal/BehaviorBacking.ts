@@ -25,9 +25,8 @@ import {
     Observable,
     Timer,
 } from "@matter/general";
-import type { Val } from "@matter/protocol";
 import type { ClusterId } from "@matter/types";
-import type { Behavior } from "../Behavior.js";
+import { Behavior } from "../Behavior.js";
 import { Reactor } from "../Reactor.js";
 import { Datasource } from "../state/managed/Datasource.js";
 import { BackingEvents } from "./BackingEvents.js";
@@ -123,33 +122,7 @@ export abstract class BehaviorBacking {
             return;
         }
 
-        this.#migrate();
         this.#datasource = Datasource(this.datasourceOptions);
-    }
-
-    #migrate() {
-        const { initialValues: values, migrated } = this.store;
-        if (values === undefined || migrated === undefined) {
-            return;
-        }
-
-        const before = { ...values };
-        this.#type.migrate(values);
-
-        let patch: Val.Struct | undefined;
-        for (const key in before) {
-            if (!(key in values)) {
-                (patch ??= {})[key] = undefined;
-            }
-        }
-        for (const key in values) {
-            if (values[key] !== before[key]) {
-                (patch ??= {})[key] = values[key];
-            }
-        }
-        if (patch !== undefined) {
-            migrated.call(this.store, patch);
-        }
     }
 
     /**
@@ -293,6 +266,7 @@ export abstract class BehaviorBacking {
             events: this.events as unknown as Datasource.Events,
             defaults: this.#endpoint.behaviors.defaultsFor(this.type),
             store: this.store,
+            migrate: this.#type.migrate === Behavior.migrate ? undefined : values => this.#type.migrate(values),
             owner: this.#endpoint,
             onChange: this.broadcastChanges.bind(this),
         };
