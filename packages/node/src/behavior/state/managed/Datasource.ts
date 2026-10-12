@@ -280,6 +280,12 @@ export namespace Datasource {
          * undefined are deleted.
          */
         set(transaction: Transaction, values: Val.Struct): Promise<void>;
+
+        /**
+         * Persist the changes {@link Behavior.migrate} made to {@link initialValues} with the next write.  Uses the
+         * same patch semantics as {@link set}.  {@link Behavior.migrate} only runs for a store that provides this.
+         */
+        migrated?(patch: Val.Struct): void;
     }
 
     /**

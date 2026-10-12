@@ -25,6 +25,7 @@ import {
     Observable,
     Timer,
 } from "@matter/general";
+import type { Val } from "@matter/protocol";
 import type { ClusterId } from "@matter/types";
 import type { Behavior } from "../Behavior.js";
 import { Reactor } from "../Reactor.js";
@@ -122,7 +123,33 @@ export abstract class BehaviorBacking {
             return;
         }
 
+        this.#migrate();
         this.#datasource = Datasource(this.datasourceOptions);
+    }
+
+    #migrate() {
+        const { initialValues: values, migrated } = this.store;
+        if (values === undefined || migrated === undefined) {
+            return;
+        }
+
+        const before = { ...values };
+        this.#type.migrate(values);
+
+        let patch: Val.Struct | undefined;
+        for (const key in before) {
+            if (!(key in values)) {
+                (patch ??= {})[key] = undefined;
+            }
+        }
+        for (const key in values) {
+            if (values[key] !== before[key]) {
+                (patch ??= {})[key] = values[key];
+            }
+        }
+        if (patch !== undefined) {
+            migrated.call(this.store, patch);
+        }
     }
 
     /**

@@ -25,8 +25,10 @@ import {
     Diagnostic,
     Duration,
     ImplementationError,
+    isObject,
     Logger,
     MatterError,
+    Millis,
     Minutes,
     NotImplementedError,
     Observable,
@@ -54,7 +56,7 @@ import {
     uint8,
     vendorId,
 } from "@matter/model";
-import type { ClientInteraction, PeerDescriptor, SupportedTransportsBitmap } from "@matter/protocol";
+import type { ClientInteraction, PeerDescriptor, SupportedTransportsBitmap, Val } from "@matter/protocol";
 import {
     CommissioningMode,
     ControllerCommissioner,
@@ -79,6 +81,7 @@ import {
     PeerAddress as ProtocolPeerAddress,
     SessionParameters as ProtocolSessionParameters,
     Read,
+    SessionIntervals,
     Subscribe,
 } from "@matter/protocol";
 import {
@@ -102,6 +105,10 @@ import { RemoteDescriptor } from "./RemoteDescriptor.js";
 
 const logger = Logger.get("CommissioningClient");
 
+function storedMillis(value: unknown) {
+    return typeof value === "number" ? Millis(value) : undefined;
+}
+
 /**
  * Client functionality related to commissioning.
  *
@@ -115,6 +122,33 @@ export class CommissioningClient extends Behavior {
     static override readonly early = true;
 
     static override readonly id = "commissioning";
+
+    /**
+     * Older versions stored a peer's session parameters under `sessionParameters`: the full effective set once a
+     * session existed, otherwise only the DNS-SD intervals.  The first becomes the reported set, the second the
+     * advertised intervals.  Values already under the new keys win.
+     */
+    static override migrate(values: Val.Struct) {
+        super.migrate(values);
+
+        const { sessionParameters } = values;
+        delete values.sessionParameters;
+        if (!isObject(sessionParameters)) {
+            return;
+        }
+
+        const { idleInterval, activeInterval, activeThreshold, ...rest } = sessionParameters;
+        if (Object.keys(rest).length) {
+            values.reportedSessionParameters ??= sessionParameters;
+            return;
+        }
+
+        values.advertisedIntervals ??= SessionIntervals.advertisable({
+            idleInterval: storedMillis(idleInterval),
+            activeInterval: storedMillis(activeInterval),
+            activeThreshold: storedMillis(activeThreshold),
+        });
+    }
 
     override initialize(options: { descriptor?: RemoteDescriptor }) {
         const descriptor = options?.descriptor;

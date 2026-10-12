@@ -37,6 +37,10 @@ describe("EndpointStore", () => {
             driver.set(["ep", "commissioning"], { sessionParameters: { idleInterval: 1234, activeInterval: 321 } });
             const store = new EndpointStore(new StorageContext(driver, ["ep"]));
             await store.load();
+            store.migrated("commissioning", {
+                sessionParameters: undefined,
+                advertisedIntervals: { idleInterval: 1234, activeInterval: 321 },
+            });
             return { driver, store };
         }
 
