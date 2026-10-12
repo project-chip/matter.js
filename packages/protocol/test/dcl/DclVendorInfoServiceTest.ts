@@ -348,9 +348,8 @@ describe("DclVendorInfoService", () => {
             // Construction should succeed even if DCL fetch fails (errors are caught and logged)
             await service.construction;
 
-            // Service initializes with no vendors when DCL fails (hardcoded vendors aren't added on error)
             const allVendors = service.vendors;
-            expect(allVendors.size).to.equal(0);
+            expect(allVendors.size).to.equal(5); // 0xfff1-0xfff4 + Nabu Casa
 
             await service.close();
         });

@@ -95,6 +95,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Device type requirements honor relaxed mandatory elements and revision-gated features
     - Enhancement: Adding endpoints under an aggregator is faster
     - Enhancement: In `strict` validation mode a cluster server refuses construction when a mandatory command throws `Behavior.unimplemented`
+    - Enhancement: `DclBehavior.offline` (`MATTER_DCL_OFFLINE`) keeps the DCL services it creates off the network
     - Adjustment: For a part of a server node, the `IdAssigned` and `NumberAssigned` lifecycle changes are emitted before `Installed`
     - Adjustment: `ChangeNotificationService.Change` has a new kind `"readable"`, emitted when an endpoint's state becomes readable; consumers that switch on kind must handle or ignore it
     - Adjustment: Device types with a mandatory client application cluster include `BindingServer`; `behaviors.require(BindingServer, options)` no longer sets its state (use `add()` or `setStateOf()`), and an own `BindingServer` implementation subclass must be declared with `.with()` on the endpoint on creation
@@ -105,6 +106,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: Cluster, attribute, command and event IDs of hosted clusters are validated when their server behavior initializes
     - Adjustment: `IdentifyServer` offers `TriggerEffect` only when the device type requires it or it is implemented or enabled
     - Adjustment: A server rejects an obsolete (`Z`) element; a client sends and decodes it
+    - Fix: `DclBehavior` boolean options set through environment variables are read as booleans
     - Fix: `.with()` on a behavior subclass that declares own attributes or commands replaces the default behavior instead of running next to it; an endpoint refuses two behaviors for the same cluster
     - Fix: Closing or factory resetting a node closes all its parts, peers and services even when one step fails, releases storage and mDNS, and erases leftover peers, CA key material and BDX blobs
     - Fix: A peer reporting a session idle or active interval above one hour in its CASE/PASE session parameters no longer fails validation when these are stored
@@ -197,11 +199,13 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: PASE throws `PasscodeMismatchError` on a wrong passcode to allow better user guidance
     - Enhancement: Interactions can be aborted via `ClientRequest.abort`
     - Enhancement: `ClientRequest.largeMessage` requires a TCP-backed session for any interaction
-    - Enhancement: `DclCertificateService` can run `offline` and accepts extra revocation information (`installRevocations()`, `revocations`)
+    - Enhancement: `DclCertificateService`, `DclVendorInfoService` and `DclOtaUpdateService` can run `offline`. Use data seeds to have a basic set of details
+    - Enhancement: `DclCertificateService`accepts extra revocation information (`installRevocations()`, `revocations`)
     - Enhancement: A custom `BleScannerClient` may report `listeningTime` and `isPeripheralReachable()`, so stale or unreachable peripherals are not offered for commissioning
     - Enhancement: Network profiles can define BDX transfer delays separately via `bdxAdditionalMrpDelay`
     - Enhancement: `NodeSession.reportedParameters` holds the session parameters the peer sent, without fallbacks
     - Adjustment: `DclVendorInfo` is a deprecated alias of `VendorDclSchema`
+    - Adjustment: `DclVendorInfoService` always provides the built-in test vendors and no longer stores them
     - Fix: DNS-SD discovery ignores malformed or out-of-range `D`, `CM`, `VP`, `DT`, `PH`, `T` and `ICD` values
     - Fix: Commissioning tries addresses in ranked order and once each, moves on faster, and stops on a wrong passcode
     - Fix: Commissioning continues when the device rejects or does not answer ScanNetworks
