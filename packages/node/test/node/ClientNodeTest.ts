@@ -1078,6 +1078,20 @@ describe("ClientNode", () => {
         expect(sessions.findResumptionRecordByAddress(address)).undefined;
     });
 
+    it("reads a peer's basic information through one shared state reference", async () => {
+        await using site = new MockSite();
+        const { controller } = await site.addCommissionedPair();
+
+        const address = controller.peers.get("peer1")!.peerAddress!;
+        const protocolPeer = controller.env.get(PeerSet).get(address)!;
+
+        const first = protocolPeer.basicInformation;
+        expect(first).not.undefined;
+        for (let i = 0; i < 10; i++) {
+            expect(protocolPeer.basicInformation).equals(first);
+        }
+    });
+
     it("closes the protocol peer when the node's address is cleared", async () => {
         await using site = new MockSite();
         const { controller } = await site.addCommissionedPair();
@@ -3907,7 +3921,7 @@ const PEER1_STATE = {
     parts: {},
     index: {},
     commissioning: {
-        longIdleTimeOperatingMode: false,
+        longIdleTimeOperatingMode: undefined,
         peerAddress: { fabricIndex: 1, nodeId: expect.BIGINT },
         addresses: [
             {
@@ -3945,7 +3959,9 @@ const PEER1_STATE = {
         rotatingIdentifier: undefined,
         pairingHint: 0x21,
         pairingInstructions: undefined,
-        sessionParameters: {
+        advertisedIntervals: undefined,
+        tcpUnsupported: undefined,
+        reportedSessionParameters: {
             activeInterval: 300,
             activeThreshold: 4000,
             dataModelRevision: Specification.DATA_MODEL_REVISION,
@@ -3959,7 +3975,7 @@ const PEER1_STATE = {
                 tcpServer: false,
             },
         },
-        tcpSupport: 0,
+        tcpSupport: undefined,
     },
     network: {
         autoSubscribe: true,

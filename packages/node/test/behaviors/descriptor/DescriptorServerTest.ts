@@ -246,9 +246,7 @@ describe("DescriptorServer", () => {
     });
 
     describe("composition", () => {
-        it("lists every descendant for an aggregator and only children for a bridged node", async () => {
-            // A bridged node carries IndexBehavior as root and aggregator do, but composes a tree
-            // (Matter Core § 9.2.3), so only its own children belong in its list
+        it("lists every descendant for an aggregator and a bridged node and only children for a light", async () => {
             await using node = await MockServerNode.create({
                 number: 0,
                 parts: [
@@ -279,7 +277,7 @@ describe("DescriptorServer", () => {
             const light = [...bridgedNode.parts][0];
 
             expect(aggregator.stateOf(DescriptorBehavior).partsList).deep.equals([2, 3, 4]);
-            expect(bridgedNode.stateOf(DescriptorBehavior).partsList).deep.equals([3]);
+            expect(bridgedNode.stateOf(DescriptorBehavior).partsList).deep.equals([3, 4]);
             expect(light.stateOf(DescriptorBehavior).partsList).deep.equals([4]);
         });
 
@@ -324,13 +322,17 @@ describe("DescriptorServer", () => {
 
         it("lists every descendant once a full-family device type is added at runtime", async () => {
             await using tree = await createBridgedNodeTree();
-            const { node, bridgedNode } = tree;
-            expect(bridgedNode.stateOf(DescriptorBehavior).partsList).deep.equals([3]);
+            const { node, aggregator } = tree;
+            await aggregator.set({
+                descriptor: { deviceTypeList: [{ deviceType: OnOffLightDevice.deviceType, revision: 1 }] },
+            });
+            await node.env.get(NodeActivity).inactive;
+            expect(aggregator.stateOf(DescriptorBehavior).partsList).deep.equals([2]);
 
-            await bridgedNode.act(agent => agent.get(DescriptorServer).addDeviceTypes("Aggregator"));
+            await aggregator.act(agent => agent.get(DescriptorServer).addDeviceTypes("Aggregator"));
             await node.env.get(NodeActivity).inactive;
 
-            expect(bridgedNode.stateOf(DescriptorBehavior).partsList).deep.equals([3, 4]);
+            expect(aggregator.stateOf(DescriptorBehavior).partsList).deep.equals([2, 3, 4]);
         });
 
         it("lists only children once the full-family device type is replaced at runtime", async () => {
@@ -339,7 +341,7 @@ describe("DescriptorServer", () => {
             expect(aggregator.stateOf(DescriptorBehavior).partsList).deep.equals([2, 3, 4]);
 
             await aggregator.set({
-                descriptor: { deviceTypeList: [{ deviceType: BridgedNodeEndpoint.deviceType, revision: 1 }] },
+                descriptor: { deviceTypeList: [{ deviceType: OnOffLightDevice.deviceType, revision: 1 }] },
             });
             await node.env.get(NodeActivity).inactive;
 

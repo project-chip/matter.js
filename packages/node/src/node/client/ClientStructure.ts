@@ -1303,16 +1303,17 @@ export class ClientStructure {
             placedAny = false;
             for (const [part, claimants] of [...this.#partClaims]) {
                 // Nothing is reparented: an endpoint the peer has already placed keeps its parent, and
-                // Matter has no operation that would move it (Core § 9.2.3's single-parent requirement)
+                // Matter has no operation that would move it (Core § 9.2.7.3's single-parent requirement)
                 if (this.#ownerOf(part) !== undefined) {
                     this.#partClaims.delete(part);
                     continue;
                 }
 
-                const owner = this.#ownerFor(part, claimants);
-                if (owner === undefined || !this.#isPlaced(owner)) {
+                const decision = this.#ownerFor(claimants);
+                if (decision === undefined || !this.#isPlaced(decision.owner)) {
                     continue;
                 }
+                const { owner, contenders } = decision;
 
                 this.#partClaims.delete(part);
 
@@ -1321,6 +1322,15 @@ export class ClientStructure {
                 // an endpoint that scan has already passed over.
                 if (!this.#isOnTheNode(part)) {
                     continue;
+                }
+
+                if (contenders.length) {
+                    logger.warn(
+                        `Taking ${owner.endpoint} as the parent of ${part.endpoint}:`,
+                        `the peer also named it a part of ${contenders
+                            .map(claimant => claimant.endpoint.toString())
+                            .join(", ")}, and an endpoint has a single parent`,
+                    );
                 }
 
                 part.pendingOwner = owner;
@@ -1341,7 +1351,7 @@ export class ClientStructure {
     /**
      * Whether the peer's root names `structure`, so far as the root has said.
      *
-     * A root endpoint composes its `PartsList` of every descendant (Matter Core § 9.2.3), so an
+     * A root endpoint composes its `PartsList` of every descendant (Matter Core § 9.2.8), so an
      * endpoint the root does not name is not a descendant of the node at all — whether it has gone
      * away or was never part of the tree the peer describes. Until the root has reported a list there
      * is nothing to judge against and every endpoint is taken as present.
@@ -1356,8 +1366,11 @@ export class ClientStructure {
         return rootParts === undefined || rootParts.has(structure.endpoint.number);
     }
 
-    /** The claimant that owns `part`, or `undefined` while that cannot be told from what has arrived. */
-    #ownerFor(part: EndpointStructure, claimants: Set<EndpointStructure>) {
+    /**
+     * The claimant that owns a part, with the claimants that conflict with that choice, or `undefined` while that
+     * cannot be told from what has arrived.
+     */
+    #ownerFor(claimants: Set<EndpointStructure>) {
         const ordinary = new Array<EndpointStructure>();
         const fullFamily = new Array<EndpointStructure>();
         for (const claimant of claimants) {
@@ -1378,36 +1391,71 @@ export class ClientStructure {
             (this.#isFullFamily(claimant) ? fullFamily : ordinary).push(claimant);
         }
 
-        if (ordinary.length) {
-            if (ordinary.length > 1) {
-                logger.warn(
-                    `Taking ${ordinary[0].endpoint} as the parent of ${part.endpoint}:`,
-                    `the peer also named it a part of ${ordinary
-                        .slice(1)
-                        .map(claimant => claimant.endpoint.toString())
-                        .join(", ")}, and an endpoint has a single parent`,
-                );
-            }
-            return ordinary[0];
+        // A list of children names nothing further down, so a claimant composing one is closer to the part than any
+        // full-family claimant
+        const candidates = ordinary.length ? ordinary : fullFamily;
+        if (!candidates.length) {
+            return undefined;
         }
 
-        // The innermost full-family claimant, which is the one the others also name
-        const innermost = fullFamily.find(
-            candidate =>
-                !fullFamily.some(
-                    other => other !== candidate && this.#partsListOf.get(candidate)?.has(other.endpoint.number),
-                ),
-        );
+        const owner = this.#closestClaimant(candidates, [...ordinary, ...fullFamily]);
+        if (!ordinary.length && !this.#partsAccountedFor(owner)) {
+            return undefined;
+        }
 
-        return innermost !== undefined && this.#partsAccountedFor(innermost) ? innermost : undefined;
+        // Every other full-family claimant of a valid peer is an ancestor of the owner and names it
+        const contenders = ordinary.length
+            ? ordinary.filter(claimant => claimant !== owner)
+            : fullFamily.filter(
+                  claimant => claimant !== owner && !this.#partsListOf.get(claimant)?.has(owner.endpoint.number),
+              );
+
+        return { owner, contenders };
+    }
+
+    /**
+     * The candidate closest to the part they all claim: the one naming the fewest of the other claimants, then the one
+     * with the shorter `PartsList`, then the one with the lower endpoint number.
+     *
+     * The choice depends on the lists, not on the order they arrived in.  The matterjs-server Python client ranks by
+     * the same criteria.
+     */
+    #closestClaimant(candidates: EndpointStructure[], claimants: EndpointStructure[]) {
+        const rank = (candidate: EndpointStructure) => {
+            const parts = this.#partsListOf.get(candidate);
+            return [
+                claimants.filter(other => other !== candidate && parts?.has(other.endpoint.number)).length,
+                parts?.size ?? 0,
+                candidate.endpoint.number,
+            ];
+        };
+
+        let closest = candidates[0];
+        let closestRank = rank(closest);
+        for (const candidate of candidates.slice(1)) {
+            const candidateRank = rank(candidate);
+            const index = candidateRank.findIndex((value, i) => value !== closestRank[i]);
+            if (index !== -1 && candidateRank[index] < closestRank[index]) {
+                closest = candidate;
+                closestRank = candidateRank;
+            }
+        }
+        return closest;
     }
 
     /**
      * Whether every endpoint `structure` names has reported a `PartsList` of its own, which is what
-     * makes the parts it names and nobody else's its own children.
+     * makes the parts it names and nobody else's its own children.  An endpoint the root no longer
+     * names reports nothing more, so it is not waited for.
      */
     #partsAccountedFor(structure: EndpointStructure) {
+        const root = this.#endpoints.get(ROOT_ENDPOINT_NUMBER);
+        const rootParts = root === undefined ? undefined : this.#partsListOf.get(root);
         for (const partNo of this.#partsListOf.get(structure) ?? []) {
+            if (rootParts !== undefined && !rootParts.has(partNo)) {
+                continue;
+            }
+
             const part = this.#endpoints.get(partNo);
             if (part === undefined || this.#partsListOf.get(part) === undefined) {
                 return false;

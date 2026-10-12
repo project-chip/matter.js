@@ -17,6 +17,7 @@ import {
     Environment,
     Hours,
     MemoryStorageDriver,
+    Millis,
     Minutes,
     Seconds,
     StandardCrypto,
@@ -108,6 +109,13 @@ async function setup() {
 
 describe("RebootResubscribeArmer", () => {
     beforeEach(() => MockTime.reset());
+
+    it("gives a device the apply delay, capped at a day, plus three minutes to return", () => {
+        expect(RebootResubscribeArmer.returnTimeout()).equals(Minutes(3));
+        expect(RebootResubscribeArmer.returnTimeout(Minutes(10))).equals(Minutes(13));
+        expect(RebootResubscribeArmer.returnTimeout(Hours(48))).equals(Hours(24) + Minutes(3));
+        expect(RebootResubscribeArmer.returnTimeout(Millis(-5))).equals(Minutes(3));
+    });
 
     it("closes older sessions when the armed device returns", async () => {
         const { armer, createSession, sessionLives, whenClosed } = await setup();

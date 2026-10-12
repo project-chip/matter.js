@@ -11,7 +11,7 @@ import {
     DeviceAttestationValidator,
 } from "#certificate/DeviceAttestationValidator.js";
 import { DeviceCertification } from "#certificate/DeviceCertification.js";
-import { Dac, Paa, Pai } from "#certificate/kinds/AttestationCertificates.js";
+import { Dac, MlDsaAttestationDisabledError, Paa, Pai } from "#certificate/kinds/AttestationCertificates.js";
 import { Certificate } from "#certificate/kinds/Certificate.js";
 import { CertificatePublicKey, MlDsaSignature } from "#certificate/kinds/CertificateSignature.js";
 import { CertificationDeclaration } from "#certificate/kinds/CertificationDeclaration.js";
@@ -32,6 +32,9 @@ import {
     EcdsaSignature,
     Environment,
     ImplementationError,
+    LogFormat,
+    Logger,
+    LogLevel,
     MlDsa,
     MockFetch,
     MockStorageService,
@@ -631,7 +634,7 @@ describe("PQC Phase 1 attestation certificates while forward Matter features are
 
     for (const [name, parse] of annexH) {
         it(`rejects ${name}`, () => {
-            expect(() => parse(der(name))).throws(CertificateError, NOT_SUPPORTED);
+            expect(() => parse(der(name))).throws(MlDsaAttestationDisabledError, NOT_SUPPORTED);
         });
     }
 
@@ -691,7 +694,7 @@ describe("PQC Phase 1 attestation certificates while forward Matter features are
             await service.construction;
 
             await expect(service.addCertificate(der("paaMlDsa65"), "PAA")).rejectedWith(
-                CertificateError,
+                MlDsaAttestationDisabledError,
                 NOT_SUPPORTED,
             );
         });
@@ -721,19 +724,56 @@ describe("PQC Phase 1 attestation certificates while forward Matter features are
                 },
                 updateInterval: null,
             });
-            await service.construction;
+            const logs = await captureLogs(() => service!.construction);
 
             expect(service.getCertificate(PAA_MLDSA65_SKID)).undefined;
             expect(service.getCertificate(PAA_NOVID_SKID)).not.undefined;
+            expect(levelsOf(logs, NOT_SUPPORTED)).deep.equals([LogLevel.DEBUG]);
         });
 
         it("does not store an ML-DSA PAA fetched from the DCL", async () => {
             mockDclRootCertificate(fetchMock, der("paaMlDsa65"), PAA_MLDSA65_SKID);
             service = new DclCertificateService(environment);
-            await service.construction;
+            const logs = await captureLogs(() => service!.construction);
 
             expect(fetchMock.getCallLog().some(({ url }) => url.includes("/dcl/pki/certificates/"))).true;
             expect(service.getCertificate(PAA_MLDSA65_SKID)).undefined;
+            expect(levelsOf(logs, NOT_SUPPORTED)).deep.equals([LogLevel.DEBUG]);
+        });
+
+        it("returns a stored ML-DSA PAA without a recovery re-fetch", async () => {
+            mockDclRootCertificate(fetchMock);
+            service = new DclCertificateService(environment, { updateInterval: null });
+            await service.construction;
+            {
+                using _enabled = MockForwardFeatures.enableAll();
+                await service.addCertificate(der("paaMlDsa65"), "PAA", { isProduction: true });
+            }
+
+            fetchMock.clearCallLog();
+            let result: Bytes = new Uint8Array();
+            const logs = await captureLogs(async () => {
+                result = await service!.getCertificateAsDer(PAA_MLDSA65_SKID);
+            });
+
+            expect(Bytes.areEqual(result, der("paaMlDsa65"))).true;
+            expect(fetchMock.getCallLog()).length(0);
+            expect(logs.filter(({ level }) => level >= LogLevel.NOTICE)).length(0);
+        });
+
+        it("does not store an ML-DSA PAA fetched from GitHub", async () => {
+            const filename = "Chip-Development-PAA-ML-DSA-65-Cert.der";
+            fetchMock.addResponse("/dcl/pki/root-certificates", {
+                approvedRootCertificates: { schemaVersion: 0, certs: [] },
+            });
+            mockGithubTree(fetchMock, ["credentials", "development", "paa-root-certs"], filename, der("paaMlDsa65"));
+            fetchMock.install();
+            service = new DclCertificateService(environment, { fetchTestCertificates: true });
+            const logs = await captureLogs(() => service!.construction);
+
+            expect(fetchMock.getCallLog().some(({ url }) => url.endsWith("/mock-tree/blob"))).true;
+            expect(service.getCertificate(PAA_MLDSA65_SKID)).undefined;
+            expect(levelsOf(logs, NOT_SUPPORTED)).deep.equals([LogLevel.DEBUG]);
         });
     });
 });
@@ -741,6 +781,40 @@ describe("PQC Phase 1 attestation certificates while forward Matter features are
 const PAA_MLDSA65_SKID = "0CE26FC8F0E9CC09DE243E2C1E1D41E47BB2A7A9";
 const NOT_SUPPORTED = /ML-DSA attestation certificates are not supported/;
 const PAA_NOVID_SKID = "785CE705B86B8F4E6FC793AA60CB43EA696882D5";
+
+async function captureLogs(fn: () => Promise<unknown>) {
+    const dest = Logger.destinations.default;
+    const { format, write } = dest;
+    const captured = new Array<{ level: LogLevel; message: string }>();
+    try {
+        dest.format = LogFormat.formats.plain;
+        dest.write = (message, { level }) => {
+            captured.push({ level, message });
+        };
+        await fn();
+        return captured;
+    } finally {
+        dest.format = format;
+        dest.write = write;
+    }
+}
+
+/** Serve a GitHub git tree that holds only {@link content} as {@link filename} below {@link path}. */
+function mockGithubTree(fetchMock: MockFetch, path: string[], filename: string, content: Bytes) {
+    const base = "https://api.github.com/mock-tree";
+    let url = "git/trees/master";
+    for (const [index, name] of path.entries()) {
+        const next = `${base}/${index}`;
+        fetchMock.addResponse(url, { tree: [{ path: name, type: "tree", url: next }] });
+        url = next;
+    }
+    fetchMock.addResponse(url, { tree: [{ path: filename, type: "blob", url: `${base}/blob` }] });
+    fetchMock.addResponse(`${base}/blob`, content, { binary: true });
+}
+
+function levelsOf(logs: { level: LogLevel; message: string }[], pattern: RegExp) {
+    return logs.filter(({ message }) => pattern.test(message)).map(({ level }) => level);
+}
 
 /** Serve a DCL root certificate list with {@link paaDer} as its only entry, or an empty list without it. */
 function mockDclRootCertificate(fetchMock: MockFetch, paaDer?: Bytes, skid?: string) {
