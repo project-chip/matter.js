@@ -330,6 +330,7 @@ export namespace ClusterBehavior {
         readonly defaults: ClusterState.Type<N, B>;
         readonly supervisor: RootSupervisor;
         readonly dependencies?: Iterable<Behavior.Type>;
+        readonly migrate: typeof Behavior.migrate;
         supports: typeof ClusterBehavior.supports;
         readonly ExtensionInterface: ExtensionInterfaceOf<B>;
         readonly lockOnInvoke: boolean;

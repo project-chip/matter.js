@@ -27,6 +27,7 @@ import {
     MockFetch,
     Observable,
     Seconds,
+    Time,
     Timestamp,
 } from "@matter/general";
 import { MockSite, subscribedPeer } from "@matter/node/testing";
@@ -257,6 +258,12 @@ describe("Ota", () => {
             data.expectedOtaImage = Bytes.of(otaImage.image);
 
             const peerAddress = controller.peers.get("peer1")!.state.commissioning.peerAddress!;
+            const outcomes = new Array<"done" | "failed">();
+            await otaProvider.act(agent => {
+                const { events } = agent.get(SoftwareUpdateManager);
+                events.updateDone.on(() => void outcomes.push("done"));
+                events.updateFailed.on(() => void outcomes.push("failed"));
+            });
             await otaProvider.act(agent =>
                 agent
                     .get(SoftwareUpdateManager)
@@ -288,6 +295,7 @@ describe("Ota", () => {
                 transitions,
                 versionsApplied,
                 persisted,
+                outcomes,
             };
         } catch (error) {
             if (restarted !== undefined) {
@@ -309,6 +317,7 @@ describe("Ota", () => {
             transitions,
             versionsApplied,
             persisted,
+            outcomes,
         } = await applyUpdateThenRestart(target => target);
         await using _localSite = site;
 
@@ -337,6 +346,11 @@ describe("Ota", () => {
             ]);
             expect(versionsApplied.map(({ softwareVersion }) => softwareVersion)).deep.equals([targetSoftwareVersion]);
             expect(requestor.stateOf(TestOtaRequestorServer).updateInProgressDetails).equals(null);
+
+            // Past the restart deadline the controller has resubscribed to the new version; it stays a success
+            await MockTime.advance(Minutes(5));
+            await MockTime.macrotasks;
+            expect(outcomes).deep.equals(["done"]);
         } finally {
             await MockTime.resolve(restarted.close());
         }
@@ -368,7 +382,7 @@ describe("Ota", () => {
         }
     }).timeout(10_000);
 
-    it("returns to idle, forgets the update and asks the provider again when applying it fails", async () => {
+    it("returns to idle, forgets the update and asks the provider again on the next announcement when applying it fails", async () => {
         const data = { expectedOtaImage: Bytes.fromHex("") };
         const { applyUpdatePromise, TestOtaRequestorServer } = InstrumentedOtaRequestorServer(
             { requestUserConsent: false },
@@ -434,6 +448,11 @@ describe("Ota", () => {
         expect(stored?.updateInProgressDetails ?? null).equals(null);
 
         // With the file gone the next attempt asks the provider rather than applying from disk
+        await otaProvider.act(agent =>
+            agent
+                .get(SoftwareUpdateManager)
+                .forceUpdate(peerAddress, { vendorId: VendorId(vendorId), productId, targetSoftwareVersion }),
+        );
         await MockTime.resolve(nextPromise);
         expect(transitions.at(-1)?.newState).equals(OtaSoftwareUpdateRequestor.UpdateState.Querying);
     }).timeout(10_000);
@@ -1355,7 +1374,7 @@ describe("Ota", () => {
         await otaProvider.act(agent => {
             const su = agent.get(SoftwareUpdateManager);
             const entry = su.internal.updateQueue[0];
-            entry.lastProgressUpdateTime = Timestamp(1000);
+            entry.lastProgressUpdateTime = Time.nowMs;
             entry.lastProgressStatus = OtaUpdateStatus.Downloading;
         });
 
@@ -1672,9 +1691,6 @@ describe("Ota", () => {
     }).timeout(10_000);
 
     it("Apply failure detected when startUp fires after Applying state", async () => {
-        // This test verifies the status ordering fix: previousProgressStatus is saved BEFORE the
-        // clearing block in #onSoftwareVersionChanged, so the Applying check on startUp works correctly.
-
         const { TestOtaProviderServer } = InstrumentedOtaProviderServer({ requestUserConsentForUpdate: false });
         const { TestOtaRequestorServer } = InstrumentedOtaRequestorServer({ requestUserConsent: false });
 
@@ -1708,7 +1724,7 @@ describe("Ota", () => {
             const su = agent.get(SoftwareUpdateManager);
             const entry = su.internal.updateQueue[0];
             entry.lastProgressStatus = OtaUpdateStatus.Applying;
-            entry.lastProgressUpdateTime = Timestamp(1000);
+            entry.lastProgressUpdateTime = Time.nowMs;
         });
 
         // Await teardown and re-prime on the sustained subscription — the startUp handler only runs
@@ -1734,6 +1750,153 @@ describe("Ota", () => {
         // Queue entry should have been removed since update failed
         const queue = await otaProvider.act(agent => agent.get(SoftwareUpdateManager).queuedUpdates);
         expect(queue).length(0);
+    }).timeout(10_000);
+
+    /**
+     * Queues an update the device has been allowed to apply but that it never acts on: it does not query again and
+     * does not restart.
+     */
+    async function applyWithoutRestart(
+        options: { applyDelay?: Duration; targetSoftwareVersion?: number; status?: OtaUpdateStatus } = {},
+    ) {
+        const { TestOtaProviderServer } = InstrumentedOtaProviderServer({ requestUserConsentForUpdate: false });
+        const { TestOtaRequestorServer } = InstrumentedOtaRequestorServer({ requestUserConsent: false });
+        const { site, device, controller, otaProvider } = await initOtaSite(
+            TestOtaProviderServer,
+            TestOtaRequestorServer,
+        );
+
+        const { vendorId, productId, targetSoftwareVersion } = await addTestOtaImage(device, controller);
+        const peerAddress = (await subscribedPeer(controller, "peer1")).state.commissioning.peerAddress!;
+        const failed = new Array<PeerAddress>();
+        await otaProvider.act(agent => {
+            const manager = agent.get(SoftwareUpdateManager);
+            manager.events.updateFailed.on(peer => {
+                failed.push(peer);
+            });
+            manager.internal.announcements!.announceOtaProvider = async () => {};
+        });
+
+        await otaProvider.act(agent =>
+            agent
+                .get(SoftwareUpdateManager)
+                .addUpdateConsent(peerAddress, { vendorId: VendorId(vendorId), productId, targetSoftwareVersion }),
+        );
+        await otaProvider.act(agent => {
+            const manager = agent.get(SoftwareUpdateManager);
+            if (options.targetSoftwareVersion !== undefined) {
+                manager.internal.updateQueue[0].targetSoftwareVersion = options.targetSoftwareVersion;
+            }
+            manager.onOtaStatusChange(
+                peerAddress,
+                options.status ?? OtaUpdateStatus.Applying,
+                targetSoftwareVersion,
+                options.applyDelay,
+            );
+        });
+
+        // Steps let the mock network deliver reports in between, so the subscription stays up
+        const runFor = async (duration: Duration) => {
+            for (let elapsed = 0; elapsed < duration; elapsed += Seconds(10)) {
+                await MockTime.advance(Seconds(10));
+                await MockTime.macrotasks;
+            }
+        };
+        const queued = () => otaProvider.act(agent => agent.get(SoftwareUpdateManager).queuedUpdates);
+
+        const deadline = Time.nowMs + RebootResubscribeArmer.returnTimeout(options.applyDelay);
+        const resubscribed = { afterDeadline: 0 };
+        controller.peers
+            .get("peer1")!
+            .eventsOf(NetworkClient)
+            .subscriptionStatusChanged.on(isActive => {
+                if (isActive && Time.nowMs >= deadline) {
+                    resubscribed.afterDeadline++;
+                }
+            });
+
+        return { site, device, controller, peerAddress, failed, runFor, queued, resubscribed };
+    }
+
+    for (const { applyDelay, wait } of [
+        { applyDelay: undefined, wait: Minutes(4) },
+        { applyDelay: Minutes(2), wait: Minutes(6) },
+    ]) {
+        it(`fails an applied update when the node resubscribes with its previous version (apply delay ${Duration.format(applyDelay ?? 0)})`, async () => {
+            const { site, failed, runFor } = await applyWithoutRestart({ applyDelay });
+            await using _localSite = site;
+
+            // The reboot armer forces a resubscription once it stops waiting for the restart
+            await runFor(wait);
+
+            expect(failed).length(1);
+        }).timeout(10_000);
+    }
+
+    it("keeps an applied update when the node resubscribes at or above the target version", async () => {
+        const { site, failed, runFor, queued, resubscribed } = await applyWithoutRestart({ targetSoftwareVersion: 0 });
+        await using _localSite = site;
+
+        await runFor(Minutes(4));
+
+        expect(resubscribed.afterDeadline).greaterThan(0);
+        expect(failed).length(0);
+        expect(await queued()).length(1);
+    }).timeout(10_000);
+
+    for (const { when, applyDelay, before } of [
+        { when: "before its restart deadline", applyDelay: undefined, before: Seconds(0) },
+        { when: "during its apply delay", applyDelay: Minutes(30), before: Minutes(4) },
+    ]) {
+        it(`keeps an applied update while the controller resubscribes ${when}`, async () => {
+            const { site, controller, peerAddress, failed, runFor, queued } = await applyWithoutRestart({ applyDelay });
+            await using _localSite = site;
+            let resubscribed = 0;
+            controller.peers
+                .get("peer1")!
+                .eventsOf(NetworkClient)
+                .subscriptionStatusChanged.on(isActive => {
+                    if (isActive) {
+                        resubscribed++;
+                    }
+                });
+
+            await runFor(before);
+            controller.env.get(ClientSubscriptions).closeForPeer(peerAddress);
+            await runFor(Minutes(2));
+
+            expect(resubscribed).greaterThan(0);
+            expect(failed).length(0);
+            expect(await queued()).length(1);
+        }).timeout(10_000);
+    }
+
+    it("keeps an applied update when the node goes away as the restart deadline passes", async () => {
+        const { site, device, failed, runFor, queued } = await applyWithoutRestart();
+        await using _localSite = site;
+
+        // Still subscribed when the reboot armer closes the subscription at the deadline, then unreachable
+        await runFor(Seconds(170));
+        await MockTime.resolve(device.stop());
+        await runFor(Minutes(2));
+
+        expect(failed).length(0);
+        expect(await queued()).length(1);
+    }).timeout(10_000);
+
+    it("keeps an update that waits for its apply when the controller resubscribes", async () => {
+        const { site, controller, peerAddress, failed, runFor, queued, resubscribed } = await applyWithoutRestart({
+            status: OtaUpdateStatus.WaitForApply,
+        });
+        await using _localSite = site;
+
+        await runFor(Minutes(4));
+        controller.env.get(ClientSubscriptions).closeForPeer(peerAddress);
+        await runFor(Minutes(2));
+
+        expect(resubscribed.afterDeadline).greaterThan(0);
+        expect(failed).length(0);
+        expect(await queued()).length(1);
     }).timeout(10_000);
 
     it("triggerUpdateOnNode skips announcement when BDX session is active", async () => {
@@ -2453,12 +2616,12 @@ describe("Ota", () => {
                 .addUpdateConsent(peerAddress, { vendorId: VendorId(vendorId), productId, targetSoftwareVersion });
         });
 
-        // Set entry to Applying state (so startUp would normally trigger updateFailed if NOT suppressed)
+        // Set entry to WaitForApply state (so startUp would normally trigger updateFailed if NOT suppressed)
         await otaProvider.act(agent => {
             const su = agent.get(SoftwareUpdateManager);
             const entry = su.internal.updateQueue[0];
-            entry.lastProgressStatus = OtaUpdateStatus.Applying;
-            entry.lastProgressUpdateTime = 1000 as Timestamp;
+            entry.lastProgressStatus = OtaUpdateStatus.WaitForApply;
+            entry.lastProgressUpdateTime = Time.nowMs;
         });
 
         const updateFailedEvents: PeerAddress[] = [];
@@ -2548,7 +2711,7 @@ describe("Ota", () => {
             const su = agent.get(SoftwareUpdateManager);
             const entry = su.internal.updateQueue[0];
             entry.lastProgressStatus = OtaUpdateStatus.Applying;
-            entry.lastProgressUpdateTime = 1000 as Timestamp;
+            entry.lastProgressUpdateTime = Time.nowMs;
         });
 
         const updateFailedEvents: PeerAddress[] = [];

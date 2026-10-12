@@ -246,6 +246,12 @@ export namespace Datasource {
         store?: Store | ExternallyMutableStore;
 
         /**
+         * Adjusts persisted values in an outdated format, see {@link Behavior.migrate}.  Does not apply to values that
+         * mirror a remote node.
+         */
+        migrate?: (values: Val.Struct) => void;
+
+        /**
          * The object that owns the datasource.  This is passed as the "owner" parameter to {@link Val.Dynamic}.
          */
         owner?: any;
@@ -417,6 +423,11 @@ class DatasourceImpl implements Datasource, Datasource.ExternallyMutableStore.Co
      */
     discardedStoreKeys?: string[];
 
+    /**
+     * Store keys {@link Datasource.Options.migrate} changed.  The next persisted write stores their current values.
+     */
+    migratedStoreKeys?: Set<string>;
+
     storeFields: Set<string>;
     supervisionConfig?: GlobalConfig;
 
@@ -456,6 +467,9 @@ class DatasourceImpl implements Datasource, Datasource.ExternallyMutableStore.Co
         }
 
         let storedValues = options.store?.initialValues;
+        if (storedValues !== undefined && options.migrate !== undefined && !this.mirrorsRemote) {
+            storedValues = this.#migrate(options.migrate, storedValues);
+        }
 
         if (options.supervisor.featureMap.children.length) {
             this.featuresKey = [...options.supervisor.supportedFeatures].join(",");
@@ -570,6 +584,36 @@ class DatasourceImpl implements Datasource, Datasource.ExternallyMutableStore.Co
         if (this.store) {
             this.store.initialValues = undefined;
         }
+    }
+
+    #migrate(migrate: (values: Val.Struct) => void, stored: Val.Struct) {
+        const values: Val.Struct = {};
+        const metadata: Val.Struct = {};
+        for (const key in stored) {
+            (isMetadataKey(key) ? metadata : values)[key] = stored[key];
+        }
+
+        const migrated = deepCopy(values);
+        try {
+            const result: unknown = migrate(migrated);
+            if (MaybePromise.is(result)) {
+                Promise.resolve(result).then(undefined, error =>
+                    logger.warn(`Asynchronous migration of persisted values for ${this.location.path} failed:`, error),
+                );
+                throw new ImplementationError("Behavior.migrate must complete synchronously");
+            }
+        } catch (e) {
+            logger.warn(`Ignoring the migration of persisted values for ${this.location.path} because it failed:`, e);
+            return stored;
+        }
+
+        for (const key of new Set([...Object.keys(values), ...Object.keys(migrated)])) {
+            if (!isDeepEqual(values[key], migrated[key])) {
+                (this.migratedStoreKeys ??= new Set()).add(key);
+            }
+        }
+
+        return { ...migrated, ...metadata };
     }
 
     // -- Datasource interface --
@@ -851,6 +895,7 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
     #values: Val.Struct;
     #baseValues: Val.Struct | undefined;
     #stagedFeaturesKey = false;
+    #stagedMigration = false;
     #precommitValues: Val.Struct | undefined;
     #changes: CommitChanges | undefined;
     #expired = false;
@@ -1089,6 +1134,7 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
     commit1() {
         // Staging is per commit: a claim from a cycle the store refused must not be honoured by a later one
         this.#stagedFeaturesKey = false;
+        this.#stagedMigration = false;
 
         this.#computePostCommitChanges();
 
@@ -1111,6 +1157,16 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
             this.#stagedFeaturesKey = true;
         }
 
+        const { migratedStoreKeys } = this.#internals;
+        if (migratedStoreKeys !== undefined) {
+            for (const key of migratedStoreKeys) {
+                if (!(key in stored)) {
+                    stored[key] = this.#values[key];
+                }
+            }
+            this.#stagedMigration = true;
+        }
+
         return this.#internals.store?.set(this.#session.transaction, stored);
     }
 
@@ -1120,13 +1176,6 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
     commit2() {
         if (!this.#changes) {
             return;
-        }
-
-        // The key is only persisted once the store accepted the values it travelled with; claiming it in phase one
-        // would leave a failed write believing it landed, and no later write would stage it again
-        if (this.#stagedFeaturesKey) {
-            this.#internals.featuresKeyPersisted = true;
-            this.#stagedFeaturesKey = false;
         }
 
         this.#adoptConcurrentChanges();
@@ -1165,6 +1214,17 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
     postCommit() {
         if (!this.#changes) {
             return;
+        }
+
+        // The store may write in its own phase two, and a failure there skips post-commit; claiming staged values any
+        // earlier would leave a failed write believing they landed, and no later write would stage them again
+        if (this.#stagedFeaturesKey) {
+            this.#internals.featuresKeyPersisted = true;
+            this.#stagedFeaturesKey = false;
+        }
+        if (this.#stagedMigration) {
+            this.#internals.migratedStoreKeys = undefined;
+            this.#stagedMigration = false;
         }
 
         const iterator = this.#changes.notifications[Symbol.iterator]();

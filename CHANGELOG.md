@@ -82,6 +82,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Groupcast cluster (`GroupcastServer`) and AccessControl `Auxiliary` feature; group commands via `ClientGroup` endpoints and group bindings
     - Feature: `ServerNode.RootEndpoint` includes `GroupcastServer` and selects the AccessControl `Auxiliary` feature by default; use `ServerNode.RootEndpointWithoutGroupcast` to opt out. A node type with its own AccessControl server must select `Auxiliary` (e.g. `.with("Extension", "Auxiliary")`), and a Group ACL entry without targets no longer grants access on endpoint 0
     - Feature: `Behavior.reactorTimer()` and `Behavior.periodicReactorTimer()` create timers that stop when the behavior closes
+    - Feature: A behavior adjusts persisted values in an older format via the static `Behavior.migrate()`; the result is stored with its next write
     - Feature: `Behavior.markChanged()` reports an attribute a behavior computes on read to subscriptions
     - Feature: `DoorLockServer` supports schedule users, `ExpiringUser`, `DisposableUser` and `ForcedUser`, and a lock implementation drives hardware via `handleLockOperation`
     - Feature: `OtaSoftwareUpdateProviderServer` state `applyDelay` sets the `DelayedActionTime` for an apply
@@ -153,6 +154,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: OTA requestors send `NotifyUpdateApplied` after an update, keep `DelayedOnQuery` while a provider is busy, recover when `applyUpdate` fails, and skip an update without consent
     - Fix: OTA providers wait for the restart only after `DelayedActionTime`, and send that delay in seconds
     - Fix: OTA providers let a requestor apply only the version its known update token names; `NewVersion` 0 selects that version
+    - Fix: An OTA update fails when the device still reports a version below the target once the controller resubscribes after the restart deadline, instead of being re-announced after every stall
     - Fix: Group key, LeaveGroup and GroupcastTesting handling follows the specification; a failed multicast join is retried instead of failing
     - Fix: Group bindings resolve once a group key exists, and a disposed binding no longer resolves
     - Fix: `ServiceAreaServer` without the Maps feature no longer fails to initialize
@@ -202,6 +204,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: PASE throws `PasscodeMismatchError` on a wrong passcode to allow better user guidance
     - Enhancement: Interactions can be aborted via `ClientRequest.abort`
     - Enhancement: `ClientRequest.largeMessage` requires a TCP-backed session for any interaction
+    - Enhancement: `RebootResubscribeArmer.returnTimeout()` returns how long an armed peer has to return once it was allowed to apply
     - Enhancement: `DclCertificateService`, `DclVendorInfoService` and `DclOtaUpdateService` can run `offline`. Use data seeds to have a basic set of details
     - Enhancement: `DclCertificateService`accepts extra revocation information (`installRevocations()`, `revocations`)
     - Enhancement: A custom `BleScannerClient` may report `listeningTime` and `isPeripheralReachable()`, so stale or unreachable peripherals are not offered for commissioning
