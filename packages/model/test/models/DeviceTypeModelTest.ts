@@ -42,8 +42,8 @@ describe("DeviceTypeModel", () => {
     });
 
     describe("effectiveComposition", () => {
-        it("answers full-family for the two device types the specification names", () => {
-            for (const name of ["RootNode", "Aggregator"]) {
+        it("answers full-family for the device types the specification names", () => {
+            for (const name of ["RootNode", "Aggregator", "BridgedNode"]) {
                 const deviceType = MatterModel.standard.deviceTypes.require(name, DeviceTypeModel);
                 expect(deviceType.effectiveComposition, name).equals(EndpointComposition.FullFamily);
             }
