@@ -77,6 +77,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: Adding an endpoint with the number of an erased endpoint that is still a part of its parent is refused
     - Breaking: An essential endpoint whose initialization fails in `add()` is closed instead of reset, so the same instance cannot be added again
     - Breaking: `CommissioningClient` state `sessionParameters` is replaced by `reportedSessionParameters`, `advertisedIntervals` and `tcpUnsupported`; stored values migrate
+    - Breaking: `WebRtcTransportRequestorServer.removeSession()` takes a session key (id, fabric, peer node) instead of the id
     - Deprecation: `ClientNodeInteraction.localStateFor()` will be removed in 0.19
     - Feature: Finalized the `ClientNode` API for controllers: `ServerNode.peers.commissioned`, `ClientNode.disable()`/`enable()`, connection state, split commissioning (`finalizeCommissioning` hands off discovery data and PASE session parameters to `peers.completeCommissioning`), opening commissioning windows on peers and more; see [Controller migration guide](docs/MIGRATION_CONTROLLER_018.md)
     - Feature: Groupcast cluster (`GroupcastServer`) and AccessControl `Auxiliary` feature; group commands via `ClientGroup` endpoints and group bindings
@@ -108,6 +109,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: `IdentifyServer` offers `TriggerEffect` only when the device type requires it or it is implemented or enabled
     - Adjustment: A server rejects an obsolete (`Z`) element; a client sends and decodes it
     - Adjustment: A node's `ClusterProtocol.readState()` throws `ImplementationError` for a remote session without a transaction
+    - Fix: `WebRtcTransportRequestorServer` keeps sessions of different peers with the same session id apart
     - Fix: `DclBehavior` boolean options set through environment variables are read as booleans
     - Fix: `.with()` on a behavior subclass that declares own attributes or commands replaces the default behavior instead of running next to it; an endpoint refuses two behaviors for the same cluster
     - Fix: Closing or factory resetting a node closes all its parts, peers and services even when one step fails, releases storage and mDNS, and erases leftover peers, CA key material and BDX blobs

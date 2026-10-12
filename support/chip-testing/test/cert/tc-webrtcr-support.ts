@@ -614,7 +614,7 @@ export async function establishSession(
 
     const id = mode === "solicit" ? await solicitOffer(session) : await provideOfferFor(session);
     if (id !== expected) {
-        await session.requestor.removeSession(expected);
+        await session.requestor.removeSession(session.ref, expected);
         throw new CertCheckFailedError(
             `The provider minted session ${id} where ${expected} was registered ahead of it, so its signaling for ` +
                 "that session could not be accepted and this run cannot establish one",
@@ -752,7 +752,7 @@ export async function endSession(session: CameraSession, id: number, reason: num
         ),
     );
 
-    await session.requestor.removeSession(id);
+    await session.requestor.removeSession(session.ref, id);
 }
 
 /** Records the sessions the DUT's requestor cluster holds, which `CurrentSessions` reports. */
@@ -942,7 +942,7 @@ export async function expectControlAccepted(
     if (control !== expected) {
         // Registering after the response cannot win the race this pre-registration exists for, so the
         // control can no longer witness anything about the DUT
-        await session.requestor.removeSession(expected);
+        await session.requestor.removeSession(session.ref, expected);
         throw new CertCheckFailedError(
             `The provider minted session ${control} where ${expected} was registered ahead of it, so this run ` +
                 "cannot establish whether the DUT accepts a session it holds",

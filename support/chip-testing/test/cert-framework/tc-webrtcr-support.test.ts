@@ -232,12 +232,12 @@ describe("expectControlAccepted", () => {
 
     it("throws rather than blaming the DUT where the provider minted another id", async () => {
         const { cx, checks } = fakeContext();
-        const removed = new Array<number>();
+        const removed = new Array<string>();
         const session = fakeSession(
             fakeRequestor({
                 upsertSession: async () => {},
-                removeSession: async id => {
-                    removed.push(id);
+                removeSession: async (peer, id) => {
+                    removed.push(`${peer}/${id}`);
                 },
             }),
         );
@@ -246,7 +246,7 @@ describe("expectControlAccepted", () => {
             CertCheckFailedError,
             /minted session 11 where 8 was registered/,
         );
-        expect(removed).deep.equal([8]);
+        expect(removed).deep.equal([`${REF}/8`]);
         expect(checks).deep.equal([]);
     });
 });
@@ -282,19 +282,19 @@ describe("establishSession", () => {
 
     it("raises rather than blaming the DUT where the provider minted another id", async () => {
         const { cx, checks } = fakeContext();
-        const removed = new Array<number>();
+        const removed = new Array<string>();
         const session = fakeSession(
             fakeRequestor({
                 upsertSession: async () => {},
-                removeSession: async id => {
-                    removed.push(id);
+                removeSession: async (peer, id) => {
+                    removed.push(`${peer}/${id}`);
                 },
             }),
             fakeCertNode({ invoke: async () => ({ webRtcSessionId: 4 }) }),
         );
 
         await expect(establishSession(session, "solicit")).rejectedWith(CertCheckFailedError, /minted session 4/);
-        expect(removed).deep.equal([0]);
+        expect(removed).deep.equal([`${REF}/0`]);
         expect(checks).deep.equal([]);
         void cx;
     });
@@ -379,11 +379,11 @@ describe("expectSessions", () => {
 describe("endSession", () => {
     it("tells the provider and stops the requestor reporting it", async () => {
         const invoked = new Array<string>();
-        const removed = new Array<number>();
+        const removed = new Array<string>();
         const session = fakeSession(
             fakeRequestor({
-                removeSession: async id => {
-                    removed.push(id);
+                removeSession: async (peer, id) => {
+                    removed.push(`${peer}/${id}`);
                 },
             }),
             fakeCertNode({
@@ -397,7 +397,7 @@ describe("endSession", () => {
         await endSession(session, 5, 2);
 
         expect(invoked).deep.equal(["endSession"]);
-        expect(removed).deep.equal([5]);
+        expect(removed).deep.equal([`${REF}/5`]);
     });
 });
 

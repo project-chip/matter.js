@@ -985,7 +985,7 @@ describe("InProcessControllerAdapter WebRTC requestor", () => {
 
         expect(await requestor!.sessions()).to.deep.equal([{ id: 7, videoStreamId: 42, audioStreamId: null }]);
 
-        await requestor!.removeSession(7);
+        await requestor!.removeSession(peer, 7);
         expect(await requestor!.sessions()).to.deep.equal([]);
     });
 
