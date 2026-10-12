@@ -421,7 +421,7 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
             logger.info(
                 `OTA Update for Requestor`,
                 session.peerAddress,
-                `(${Bytes.toHex(updateToken)}) requests to apply version 0, using version ${progressInfo.versionToApply} of its update token`,
+                `(${Bytes.toHex(updateToken)}) adjusted version to apply from 0 to ${progressInfo.versionToApply} for known update token`,
             );
             newVersion = progressInfo.versionToApply;
         }
