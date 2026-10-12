@@ -21,7 +21,8 @@ const DEFAULT_REBOOT_RESUBSCRIBE_GRACE = Seconds(30);
  * How long we wait, beyond the delay the device was given before it applies, for an armed device to apply, restart and
  * re-establish a session before assuming it restarted silently and forcing recovery.  A device applying an update has normally
  * rebooted and returned within this window, so it is a backstop rather than the common path; kept short so a
- * silently-restarted device recovers well before the full subscription liveness timeout.
+ * silently-restarted device recovers well before the full subscription liveness timeout.  The OTA provider also counts
+ * an update as failed when the device still reports its old version after this window.
  */
 const EXPECTED_RETURN_TIMEOUT = Minutes(3);
 
@@ -88,10 +89,18 @@ export class RebootResubscribeArmer {
 
         state.returnTimer = Time.getTimer(
             "Reboot return deadline",
-            Millis(Math.min(Math.max(applyDelay, 0), MAX_APPLY_DELAY) + EXPECTED_RETURN_TIMEOUT),
+            RebootResubscribeArmer.returnTimeout(applyDelay),
             () => this.#onReturnTimeout(peerAddress),
         );
         state.returnTimer.start();
+    }
+
+    /**
+     * How long after it was allowed to apply with `applyDelay` an armed device has to return before the armer assumes it
+     * restarted silently and forces a resubscription.  The delay counts up to a day, as a requestor may cap a longer one.
+     */
+    static returnTimeout(applyDelay: Duration = Millis(0)) {
+        return Millis(Math.min(Math.max(applyDelay, 0), MAX_APPLY_DELAY) + EXPECTED_RETURN_TIMEOUT);
     }
 
     disarm(peerAddress: PeerAddress) {
