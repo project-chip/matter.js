@@ -1309,10 +1309,11 @@ export class ClientStructure {
                     continue;
                 }
 
-                const owner = this.#ownerFor(part, claimants);
-                if (owner === undefined || !this.#isPlaced(owner)) {
+                const decision = this.#ownerFor(claimants);
+                if (decision === undefined || !this.#isPlaced(decision.owner)) {
                     continue;
                 }
+                const { owner, contenders } = decision;
 
                 this.#partClaims.delete(part);
 
@@ -1321,6 +1322,15 @@ export class ClientStructure {
                 // an endpoint that scan has already passed over.
                 if (!this.#isOnTheNode(part)) {
                     continue;
+                }
+
+                if (contenders.length) {
+                    logger.warn(
+                        `Taking ${owner.endpoint} as the parent of ${part.endpoint}:`,
+                        `the peer also named it a part of ${contenders
+                            .map(claimant => claimant.endpoint.toString())
+                            .join(", ")}, and an endpoint has a single parent`,
+                    );
                 }
 
                 part.pendingOwner = owner;
@@ -1356,8 +1366,11 @@ export class ClientStructure {
         return rootParts === undefined || rootParts.has(structure.endpoint.number);
     }
 
-    /** The claimant that owns `part`, or `undefined` while that cannot be told from what has arrived. */
-    #ownerFor(part: EndpointStructure, claimants: Set<EndpointStructure>) {
+    /**
+     * The claimant that owns a part, with the claimants that conflict with that choice, or `undefined` while that
+     * cannot be told from what has arrived.
+     */
+    #ownerFor(claimants: Set<EndpointStructure>) {
         const ordinary = new Array<EndpointStructure>();
         const fullFamily = new Array<EndpointStructure>();
         for (const claimant of claimants) {
@@ -1396,16 +1409,8 @@ export class ClientStructure {
             : fullFamily.filter(
                   claimant => claimant !== owner && !this.#partsListOf.get(claimant)?.has(owner.endpoint.number),
               );
-        if (contenders.length && this.#isPlaced(owner)) {
-            logger.warn(
-                `Taking ${owner.endpoint} as the parent of ${part.endpoint}:`,
-                `the peer also named it a part of ${contenders
-                    .map(claimant => claimant.endpoint.toString())
-                    .join(", ")}, and an endpoint has a single parent`,
-            );
-        }
 
-        return owner;
+        return { owner, contenders };
     }
 
     /**

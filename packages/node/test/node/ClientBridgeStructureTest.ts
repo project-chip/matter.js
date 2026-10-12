@@ -14,6 +14,7 @@ import { BridgedNodeEndpoint } from "#endpoints/bridged-node";
 import type { ClientEndpointInitializer } from "#node/client/ClientEndpointInitializer.js";
 import { ClientStructureEvents } from "#node/client/ClientStructureEvents.js";
 import { ServerNode } from "#node/ServerNode.js";
+import { Diagnostic, LogDestination, Logger, LogLevel } from "@matter/general";
 import { AcceptedCommandList, AttributeList, ClusterRevision, FeatureMap, GeneratedCommandList } from "@matter/model";
 import { MockSite } from "@matter/node/testing";
 import { Read, ReadResult } from "@matter/protocol";
@@ -1235,6 +1236,45 @@ describe("a peer that bridges a device of several endpoints", () => {
             ).deep.equals({ 10: 0, 11: 0, 12: 10 });
         });
     }
+
+    async function warningsAfter(...reports: ReadResult.Report[][]) {
+        const warnings = new Array<string>();
+        Logger.destinations.capture = LogDestination({
+            add(message: Diagnostic.Message) {
+                if (message.facility === "ClientStructure" && message.level === LogLevel.WARN) {
+                    warnings.push(message.values.map(String).join(" "));
+                }
+            },
+        });
+        try {
+            await parentsAfter(...reports);
+        } finally {
+            delete Logger.destinations.capture;
+        }
+        return warnings;
+    }
+
+    it("warns once about the other claimants of an endpoint it places", async () => {
+        const warnings = await warningsAfter(
+            [descriptorAttr(0, Descriptor.attributes.partsList.id, [10, 11, 12], 10)],
+            descriptorReports(10, LIGHT_DEVICE_TYPE, 3, [12], 10),
+            descriptorReports(11, LIGHT_DEVICE_TYPE, 3, [12], 10),
+            descriptorReports(12, LIGHT_DEVICE_TYPE, 3, [], 10),
+        );
+        expect(warnings.length).equals(1);
+        expect(warnings[0]).match(/^Taking .*ep10 as the parent of .*ep12: the peer also named it a part of .*ep11,/);
+    });
+
+    it("does not warn about an endpoint the root no longer names", async () => {
+        expect(
+            await warningsAfter(
+                [descriptorAttr(0, Descriptor.attributes.partsList.id, [10, 11], 10)],
+                descriptorReports(10, LIGHT_DEVICE_TYPE, 3, [12], 10),
+                descriptorReports(11, LIGHT_DEVICE_TYPE, 3, [12], 10),
+                descriptorReports(12, LIGHT_DEVICE_TYPE, 3, [], 10),
+            ),
+        ).deep.equals([]);
+    });
 
     // The bridge the matterjs-server tests run against, including a bridged node of the one-endpoint
     // pattern that nevertheless lists parts
