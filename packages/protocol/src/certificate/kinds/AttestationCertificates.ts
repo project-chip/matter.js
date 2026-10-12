@@ -19,12 +19,19 @@ import { MatterCertificate } from "./definitions/base.js";
  */
 export abstract class AttestationBaseCertificate<CT extends MatterCertificate> extends Certificate<CT> {}
 
-/** @throws CertificateError for an ML-DSA certificate while PQC Phase 1 is not enabled */
+/**
+ * Thrown when an attestation certificate uses ML-DSA while the "pqc-phase-1" forward feature is not enabled.
+ *
+ * The certificate may be valid; this build is configured not to accept it.
+ */
+export class MlDsaAttestationDisabledError extends CertificateError {}
+
+/** @throws MlDsaAttestationDisabledError for an ML-DSA certificate while PQC Phase 1 is not enabled */
 function parseAttestationCertificate(asn1: Bytes, requiredExtensions: string[]) {
     const cert = Certificate.parseAsn1Certificate(asn1, requiredExtensions, { postQuantum: true });
     const mlDsa = cert.mlDsaSignature ?? cert.mlDsaPublicKey?.parameterSet;
     if (mlDsa !== undefined && !Specification.isForwardFeatureEnabled("pqc-phase-1")) {
-        throw new CertificateError(
+        throw new MlDsaAttestationDisabledError(
             `ML-DSA attestation certificates are not supported: this certificate uses ${mlDsa} and PQC Phase 1 is not enabled`,
         );
     }
