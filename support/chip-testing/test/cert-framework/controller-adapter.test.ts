@@ -997,7 +997,13 @@ describe("InProcessControllerAdapter WebRTC requestor", () => {
         const peer = await commissionPeer();
 
         const requestor = adapter.webRtcRequestor!;
-        await requestor.upsertSession({ id: 3, peer, peerEndpointId: 1, streamUsage: StreamUsage.Recording });
+        await requestor.upsertSession({
+            id: 3,
+            peer,
+            peerEndpointId: 1,
+            streamUsage: StreamUsage.Recording,
+            videoStreamId: 42,
+        });
         await adapter.node(peer).decommission();
 
         await requestor.removeSession(peer, 3);
