@@ -52,6 +52,24 @@ const mockVendorsPage2 = {
     pagination: {},
 };
 
+/** Replaces the installed fetch mock by one that holds every request until `settle` is called. */
+function gateFetch() {
+    const mockedFetch = globalThis.fetch;
+    let started!: () => void;
+    const fetchStarted = new Promise<void>(resolve => (started = resolve));
+    let settle!: (failure?: Error) => void;
+    const gate = new Promise<Error | undefined>(resolve => (settle = resolve));
+    globalThis.fetch = async (...args: Parameters<typeof fetch>) => {
+        started();
+        const failure = await gate;
+        if (failure) {
+            throw failure;
+        }
+        return mockedFetch(...args);
+    };
+    return { fetchStarted, settle };
+}
+
 describe("DclVendorInfoService", () => {
     let environment: Environment;
     let fetchMock: MockFetch;
@@ -384,6 +402,69 @@ describe("DclVendorInfoService", () => {
 
             // Should not throw when calling update after close
             await service.update();
+        });
+
+        it("leaves no update timer running when closed during the startup fetch", async () => {
+            fetchMock.addResponse("/dcl/vendorinfo/vendors", { vendorInfo: [] });
+            fetchMock.install();
+            const { fetchStarted, settle } = gateFetch();
+
+            const service = new DclVendorInfoService(environment, { updateInterval: Minutes.one });
+            await fetchStarted;
+
+            const closing = service.close();
+            settle();
+            await closing;
+
+            expect(MockTime.timerCountFor("DCL Vendor Info Update")).to.equal(0);
+        });
+
+        it("stops the timer and closes storage when the in-flight fetch fails during close()", async () => {
+            const storageService = new MockStorageService(environment);
+            fetchMock.addResponse("/dcl/vendorinfo/vendors", { vendorInfo: [] });
+            fetchMock.install();
+
+            const service = new DclVendorInfoService(environment, { updateInterval: Minutes.one });
+            await service.construction;
+            expect(MockTime.timerCountFor("DCL Vendor Info Update")).to.equal(1);
+
+            const { fetchStarted, settle } = gateFetch();
+            const updating = service.update();
+            await fetchStarted;
+
+            const closing = service.close();
+            settle(new Error("network down"));
+            await closing;
+            await updating;
+
+            expect(MockTime.timerCountFor("DCL Vendor Info Update")).to.equal(0);
+            expect(storageService.store("vendors").initialized).to.equal(false);
+        });
+
+        it("resolves concurrent close() calls only after cleanup is done", async () => {
+            const storageService = new MockStorageService(environment);
+            fetchMock.addResponse("/dcl/vendorinfo/vendors", { vendorInfo: [] });
+            fetchMock.install();
+
+            const service = new DclVendorInfoService(environment, { updateInterval: Minutes.one });
+            await service.construction;
+
+            const { fetchStarted, settle } = gateFetch();
+            const updating = service.update();
+            await fetchStarted;
+
+            let resolved = 0;
+            const first = service.close().then(() => resolved++);
+            const second = service.close().then(() => resolved++);
+            await MockTime.macrotask;
+            expect(resolved).to.equal(0);
+
+            settle();
+            await Promise.all([first, second, updating]);
+
+            expect(resolved).to.equal(2);
+            expect(MockTime.timerCountFor("DCL Vendor Info Update")).to.equal(0);
+            expect(storageService.store("vendors").initialized).to.equal(false);
         });
 
         it("uses custom update interval", async () => {

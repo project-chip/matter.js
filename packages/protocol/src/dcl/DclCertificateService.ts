@@ -895,10 +895,12 @@ export class DclCertificateService {
      */
     async close() {
         this.#closed = true;
-        this.#updateTimer?.stop();
         await this.#revocationCache.close();
         await this.#construction.close(async () => {
-            await this.#fetchPromise;
+            this.#updateTimer?.stop();
+            this.#updateTimer = undefined;
+            // update() logs a failed fetch; close only waits for it to settle
+            await Promise.allSettled([this.#fetchPromise]);
             await this.#storageManager?.close();
         });
     }

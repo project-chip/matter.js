@@ -21,6 +21,7 @@ import {
     ClassExtends,
     Crypto,
     CRYPTO_PBKDF_ITERATIONS_MIN,
+    deepCopy,
     Diagnostic,
     Duration,
     ImplementationError,
@@ -428,6 +429,8 @@ export class CommissioningClient extends Behavior {
             this.state.peerAddress = undefined;
             this.state.commissionedAt = undefined;
             this.state.fabricIndexOnPeer = undefined;
+            this.state.reportedSessionParameters = undefined;
+            this.state.tcpUnsupported = undefined;
 
             await this.context.transaction.commit();
 
@@ -551,7 +554,11 @@ export class CommissioningClient extends Behavior {
      * If you override, matter.js commissions to the point where commissioning over PASE is complete.  You must then
      * complete commissioning yourself by connecting to the device and invoking the "CommissioningComplete" command.
      */
-    protected async finalizeCommissioning(_address: ProtocolPeerAddress, _discoveryData?: DiscoveryData) {
+    protected async finalizeCommissioning(
+        _address: ProtocolPeerAddress,
+        _discoveryData?: DiscoveryData,
+        _sessionParameters?: Partial<ProtocolSessionParameters>,
+    ) {
         throw new NotImplementedError();
     }
 
@@ -694,6 +701,8 @@ export class CommissioningClient extends Behavior {
             operationalAddress: OperationalAddress.from(this.state.addresses?.find(a => ServerAddress.isIp(a))),
             discoveryData: RemoteDescriptor.fromLongForm(this.state),
             caseAuthenticatedTags: this.state.caseAuthenticatedTags,
+            reportedSessionParameters: deepCopy(this.state.reportedSessionParameters),
+            tcpUnsupported: this.state.tcpUnsupported,
         });
 
         peer.interaction = node.interaction as ClientInteraction;
@@ -714,9 +723,10 @@ export class CommissioningClient extends Behavior {
         await transaction.addResources(this);
         await transaction.begin();
 
-        if (peer.sessionParameters) {
-            this.state.sessionParameters = peer.sessionParameters;
+        if (peer.descriptor.reportedSessionParameters !== undefined) {
+            this.state.reportedSessionParameters = peer.descriptor.reportedSessionParameters;
         }
+        this.state.tcpUnsupported = peer.descriptor.tcpUnsupported;
 
         const {
             descriptor: { discoveryData, operationalAddress, caseAuthenticatedTags },
@@ -816,6 +826,22 @@ export namespace CommissioningClient {
 
         @field(uint16.extend({ constraint: "2" }))
         tcpServer?: boolean;
+    }
+
+    /**
+     * Session intervals a node advertises via DNS-SD (SII, SAI and SAT).
+     *
+     * @see {@link MatterSpecification.v161.Core} § 4.3.4
+     */
+    export class AdvertisedIntervals {
+        @field(1, duration.extend({ constraint: "max 3600000" }))
+        idleInterval?: Duration;
+
+        @field(2, duration.extend({ constraint: "max 3600000" }))
+        activeInterval?: Duration;
+
+        @field(3, duration.extend({ constraint: "max 65535" }))
+        activeThreshold?: Duration;
     }
 
     /**
@@ -1033,10 +1059,23 @@ export namespace CommissioningClient {
         pairingInstructions?: string;
 
         /**
-         * The remote node's session intervals.
+         * The session parameters the remote node reported in its most recent session.
          */
         @field(SessionParameters, nonvolatile)
-        sessionParameters?: SessionParameters;
+        reportedSessionParameters?: SessionParameters;
+
+        /**
+         * The session intervals the remote node advertises via DNS-SD.
+         */
+        @field(AdvertisedIntervals, nonvolatile)
+        advertisedIntervals?: AdvertisedIntervals;
+
+        /**
+         * Set when a TCP session to the remote node reported no TCP server support; a later session reporting it clears
+         * the flag.
+         */
+        @field(bool, nonvolatile)
+        tcpUnsupported?: boolean;
 
         /**
          * TCP support bitmap.
@@ -1195,14 +1234,19 @@ export namespace CommissioningClient {
          * finalization and must drive it to completion before resolving: resolve on success, throw on failure.
          * `commission()` resolves or rejects with this hook's outcome — a throw rolls the commissioning back.
          *
-         * For a delegated/split flow, hand `address.nodeId` and `discoveryData` to the controller that will finish
-         * (typically a separate, network-side controller sharing this fabric) and **await** its
-         * `serverNode.peers.completeCommissioning(nodeId, discoveryData)` from within this hook. Do not return before
-         * that completes: the PASE session is held open across the hook and the device's failsafe stays armed until
-         * "CommissioningComplete" arrives, so returning early leaves the device mid-commission and it reverts,
-         * discarding the freshly issued NOC. See docs/MIGRATION_CONTROLLER_018.md for the full recipe.
+         * For a delegated/split flow, hand `address.nodeId`, `discoveryData` and `sessionParameters` (those the device
+         * reported over PASE) to the controller that will finish (typically a separate, network-side controller sharing
+         * this fabric) and **await** its `serverNode.peers.completeCommissioning(nodeId, discoveryData,
+         * sessionParameters)` from within this hook. Do not return before that completes: the PASE session is held
+         * open across the hook and the device's failsafe stays armed until "CommissioningComplete" arrives, so
+         * returning early leaves the device mid-commission and it reverts, discarding the freshly issued NOC. See
+         * docs/MIGRATION_CONTROLLER_018.md for the full recipe.
          */
-        finalizeCommissioning?: (address: ProtocolPeerAddress, discoveryData?: DiscoveryData) => Promise<void>;
+        finalizeCommissioning?: (
+            address: ProtocolPeerAddress,
+            discoveryData?: DiscoveryData,
+            sessionParameters?: Partial<ProtocolSessionParameters>,
+        ) => Promise<void>;
 
         /**
          * Timing overrides for the step-18 CASE reconnect.
