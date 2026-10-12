@@ -9,7 +9,7 @@ import { NetworkCommissioningServer } from "#behaviors/network-commissioning";
 import { OnOffServer } from "#behaviors/on-off";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { MutableEndpoint } from "#endpoint/type/MutableEndpoint.js";
-import { MaybePromise } from "@matter/general";
+import { ImplementationError, MaybePromise } from "@matter/general";
 import {
     AcceptedCommandList,
     AttributeElement,
@@ -22,7 +22,7 @@ import {
     Specification,
 } from "@matter/model";
 import { interaction, MockServerNode } from "@matter/node/testing";
-import { Fabric } from "@matter/protocol";
+import { AccessControl as ProtocolAccessControl, Fabric, Subject } from "@matter/protocol";
 import {
     AttributeId,
     BitmapSchema,
@@ -30,6 +30,8 @@ import {
     ClusterType,
     CommandId,
     EndpointNumber,
+    FabricIndex,
+    NodeId,
     Status,
     TlvAny,
     TlvArray,
@@ -411,7 +413,7 @@ describe("ProtocolServiceTest", () => {
         await node.close();
     });
 
-    it("shares one state reference between reads that bring no session properties", async () => {
+    it("shares one state reference between local reads without a transaction", async () => {
         const node = await MockServerNode.createOnline();
 
         const nodeLabel = BasicInformation.attributes.nodeLabel.id;
@@ -421,10 +423,29 @@ describe("ProtocolServiceTest", () => {
         for (let i = 0; i < 10; i++) {
             expect(basicInformation!.readState({})).equals(first);
         }
+        expect(basicInformation!.readState({ abort: new AbortController().signal, fabricFiltered: false })).equals(
+            first,
+        );
 
         await node.set({ basicInformation: { nodeLabel: "relabelled" } });
         expect(first[nodeLabel]).equals("relabelled");
         expect(basicInformation!.readState({})[nodeLabel]).equals("relabelled");
+
+        await node.close();
+    });
+
+    it("requires a transaction to read cluster state for a remote subject", async () => {
+        const node = await MockServerNode.createOnline();
+
+        const basicInformation = node.protocol[0]?.[BasicInformation.id];
+        expect(basicInformation).not.undefined;
+        expect(() =>
+            basicInformation!.readState({
+                fabric: FabricIndex(1),
+                subject: Subject.Node({ id: NodeId(1) }),
+                authorityAt: () => ProtocolAccessControl.Authority.Granted,
+            }),
+        ).throws(ImplementationError, /remote subject/);
 
         await node.close();
     });

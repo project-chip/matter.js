@@ -376,7 +376,20 @@ class ClusterState implements ClusterProtocol {
     }
 
     readState(session: InteractionSession): Val.ProtocolStruct {
-        return this.#datasource.reference(readStateSession(session));
+        // A reference lives until its session's transaction closes, so a session without one would never release it
+        if (session.transaction === undefined) {
+            if (hasRemoteActor(session)) {
+                throw new ImplementationError(`${this} state for a remote subject must be read with a transaction`);
+            }
+            return this.#datasource.view;
+        }
+
+        const { interactionComplete: _ic, ...readOnly } = LocalActorContext.ReadOnly;
+        const supervisorSession: ValueSupervisor.Session = {
+            ...readOnly,
+            ...session,
+        };
+        return this.#datasource.reference(supervisorSession);
     }
 
     async openForWrite(session: InteractionSession): Promise<Val.ProtocolStruct> {
@@ -395,22 +408,6 @@ class ClusterState implements ClusterProtocol {
     inspect() {
         return this.toString();
     }
-}
-
-let emptyReadStateSession: ValueSupervisor.Session | undefined;
-
-function readStateSession(session: InteractionSession): ValueSupervisor.Session {
-    const isEmpty = Reflect.ownKeys(session).length === 0;
-    if (isEmpty && emptyReadStateSession) {
-        return emptyReadStateSession;
-    }
-
-    const { interactionComplete: _ic, ...readOnly } = LocalActorContext.ReadOnly;
-    const supervisorSession: ValueSupervisor.Session = { ...readOnly, ...session };
-    if (isEmpty) {
-        emptyReadStateSession = supervisorSession;
-    }
-    return supervisorSession;
 }
 
 const behaviorCache = new WeakMap<Behavior.Type, Map<string, ClusterTypeProtocol | undefined>>();
