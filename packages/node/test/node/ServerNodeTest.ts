@@ -502,7 +502,7 @@ describe("ServerNode", () => {
             const node = await MockServerNode.createOnline(undefined, { device: undefined });
 
             const closing = node.close();
-            await expect(node.delete()).rejectedWith(ImplementationError, /closes/);
+            await expect(node.delete()).rejectedWith(ImplementationError, /closing/);
             await closing;
         });
 

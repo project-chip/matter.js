@@ -45,7 +45,6 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     #environment: Environment;
     #runtime?: NetworkRuntime;
     #startInProgress = false;
-    #closeInProgress = false;
 
     constructor(config: Node.Configuration<T>) {
         const parentEnvironment = config.environment ?? config.owner?.env ?? Environment.default;
@@ -239,17 +238,15 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
      * Take the node offline and destroy it.  Returns at once while the node already closes or is being deleted.
      */
     override async close() {
-        if (this.#closeInProgress) {
+        const { lifecycle } = this;
+        if (lifecycle.phase === "deleting" || lifecycle.phase === "closing") {
             return;
         }
-        this.#closeInProgress = true;
-        try {
-            this.lifecycle.targetState = "offline";
-            await this.lifecycle.mutex.close();
+        await lifecycle.begin("closing", async () => {
+            lifecycle.targetState = "offline";
+            await lifecycle.mutex.close();
             await this.closeWithMutex();
-        } finally {
-            this.#closeInProgress = false;
-        }
+        });
     }
 
     protected override async closeWithMutex() {
@@ -265,28 +262,19 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
      * Erase all persisted data of the node and destroy it.  Unlike {@link erase} the node does not restart.
      */
     protected override async deleteOnce() {
-        this.construction.assert(this.toString());
-        if (this.#closeInProgress) {
-            throw new ImplementationError(`Cannot delete ${this} while it closes`);
-        }
-        this.#closeInProgress = true;
-        try {
-            this.lifecycle.targetState = "offline";
-            this.lifecycle.change(EndpointLifecycle.Change.Destroying);
+        this.lifecycle.targetState = "offline";
+        this.lifecycle.change(EndpointLifecycle.Change.Destroying);
 
-            await this.lifecycle.mutex.close();
-            await MatterAggregateError.settleSeries(
-                [
-                    () => (this.#runtime ? this.cancelWithMutex() : undefined),
-                    () => this.resetWithMutex(),
-                    () => this.eraseStorageWithMutex(),
-                    () => this.closeWithMutex(),
-                ],
-                `Error deleting node ${this}`,
-            );
-        } finally {
-            this.#closeInProgress = false;
-        }
+        await this.lifecycle.mutex.close();
+        await MatterAggregateError.settleSeries(
+            [
+                () => (this.#runtime ? this.cancelWithMutex() : undefined),
+                () => this.resetWithMutex(),
+                () => this.eraseStorageWithMutex(),
+                () => this.closeWithMutex(),
+            ],
+            `Error deleting node ${this}`,
+        );
     }
 
     /**

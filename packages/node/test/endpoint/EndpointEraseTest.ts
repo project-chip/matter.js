@@ -325,6 +325,63 @@ describe("Endpoint.erase", () => {
         expect(node.endpoints.has(light)).equals(false);
     });
 
+    it("increases the ConfigurationVersion once for an endpoint deleted while it is erased", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(OnOffLightDevice, { id: "light" });
+        const before = rootVersion(node);
+
+        const erasing = light.erase();
+        await light.delete();
+        await erasing;
+
+        expect(rootVersion(node)).equals(before + 1);
+    });
+
+    it("rejects an erase whose endpoint is deleted before the erase begins", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(OnOffLightDevice, { id: "light" });
+        let release!: () => void;
+        light.lifecycle.mutex.run(new Promise<void>(resolve => (release = resolve)));
+
+        const erasing = light.erase();
+        const deleting = light.delete();
+        release();
+
+        await expect(erasing).rejectedWith(ImplementationError, /being deleted/);
+        await deleting;
+        expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+    });
+
+    it("completes an erase that has not begun when the endpoint is closed", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(OnOffLightDevice, { id: "light" });
+        const before = rootVersion(node);
+        let release!: () => void;
+        light.lifecycle.mutex.run(new Promise<void>(resolve => (release = resolve)));
+
+        const erasing = light.erase();
+        const closing = light.close();
+        release();
+        await erasing;
+        await closing;
+
+        expect(rootVersion(node)).equals(before + 1);
+        expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+    });
+
+    it("waits for a close queued behind an erase when closing again after the erase", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(OnOffLightDevice, { id: "light" });
+
+        const erasing = light.erase();
+        const closing = light.close();
+        await erasing;
+        await light.close();
+
+        expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+        await closing;
+    });
+
     it("finishes an erase in progress before closing", async () => {
         await using node = await MockServerNode.createOnline(undefined, { device: undefined });
         const light = await node.add(OnOffLightDevice, { id: "light" });
@@ -424,4 +481,75 @@ describe("Endpoint.erase", () => {
 
         await expect(light.erase()).rejectedWith(ImplementationError, /closing or closed/);
     });
+});
+
+describe("Endpoint lifecycle verbs", () => {
+    type Verb = "erase" | "delete" | "close";
+
+    const cases: Array<{
+        first: Verb;
+        second: Verb;
+        rejects: boolean;
+        phases: [afterFirst: string, afterSecond: string, settled: string];
+        destroyed: boolean;
+    }> = [
+        { first: "erase", second: "erase", rejects: false, phases: ["erasing", "erasing", "idle"], destroyed: false },
+        {
+            first: "erase",
+            second: "delete",
+            rejects: false,
+            phases: ["erasing", "deleting", "deleting"],
+            destroyed: true,
+        },
+        { first: "erase", second: "close", rejects: false, phases: ["erasing", "closing", "closing"], destroyed: true },
+        {
+            first: "delete",
+            second: "erase",
+            rejects: true,
+            phases: ["deleting", "deleting", "deleting"],
+            destroyed: true,
+        },
+        {
+            first: "delete",
+            second: "delete",
+            rejects: false,
+            phases: ["deleting", "deleting", "deleting"],
+            destroyed: true,
+        },
+        {
+            first: "delete",
+            second: "close",
+            rejects: false,
+            phases: ["deleting", "deleting", "deleting"],
+            destroyed: true,
+        },
+        { first: "close", second: "erase", rejects: true, phases: ["closing", "closing", "closing"], destroyed: true },
+        { first: "close", second: "delete", rejects: true, phases: ["closing", "closing", "closing"], destroyed: true },
+        { first: "close", second: "close", rejects: false, phases: ["closing", "closing", "closing"], destroyed: true },
+    ];
+
+    for (const { first, second, rejects, phases, destroyed } of cases) {
+        it(`${second} while ${first} runs ${rejects ? "throws" : "completes"}`, async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            const light = await node.add(OnOffLightDevice, { id: "light" });
+
+            const firstDone = light[first]();
+            expect(light.lifecycle.phase).equals(phases[0]);
+            const secondDone = light[second]();
+            expect(light.lifecycle.phase).equals(phases[1]);
+
+            if (rejects) {
+                await expect(secondDone).rejectedWith(ImplementationError, /closing/);
+            } else {
+                await secondDone;
+                if (destroyed && second !== "erase") {
+                    expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+                }
+            }
+            await firstDone;
+
+            expect(light.lifecycle.phase).equals(phases[2]);
+            expect(light.construction.status).equals(destroyed ? Lifecycle.Status.Destroyed : Lifecycle.Status.Active);
+        });
+    }
 });

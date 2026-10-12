@@ -22,7 +22,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: `Crypto` creates, signs and verifies ML-DSA-44 and ML-DSA-65 (FIPS 204) keys, natively on Node.js where available and via `@noble/post-quantum` otherwise
     - Enhancement: Log messages name the environment they come from (`Diagnostic.Message.origin`), shown in brackets after the facility
     - Enhancement: Added `TransportClosedError` for an operation on a transport connection that is already closed
-    - Enhancement: Added `Mutex.isClosed`
     - Enhancement: Storage drivers state how long dirty values may be buffered via `StorageDriver.writeCoalescingInterval`
     - Fix: DNS-SD discovery ignores the known-answer records of mDNS queries, so a controller no longer dials a node through the wrong interface
     - Fix: DNS-SD honors the cache-flush bit and goodbyes after a re-announcement, ignores invalid SRV records, resolves A/AAAA for the SRV target host, and keeps an mDNS message that has one unreadable record

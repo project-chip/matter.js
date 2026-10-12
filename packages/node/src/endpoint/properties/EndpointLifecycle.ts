@@ -44,6 +44,8 @@ export class EndpointLifecycle {
     #configurationVersionChanged = Observable<[]>(error => this.emitError("configurationVersionChanged", error));
     #queuedUpdates?: Array<EndpointLifecycle.Change>;
     #mutex: Mutex;
+    #phase: EndpointLifecycle.Phase = "idle";
+    #operation?: Promise<void>;
 
     /**
      * Emitted when an endpoint is installed into an initialized owner.
@@ -244,6 +246,43 @@ export class EndpointLifecycle {
     }
 
     /**
+     * The lifecycle verb in progress.  "erasing" lasts while {@link Endpoint.erase} runs.  "deleting" and "closing" start
+     * when {@link Endpoint.delete} or {@link Endpoint.close} is called and stay for good.
+     */
+    get phase() {
+        return this.#phase;
+    }
+
+    /**
+     * The promise of the verb in progress.  A repeated call of the same verb joins it.
+     *
+     * @internal
+     */
+    get operation() {
+        return this.#operation;
+    }
+
+    /**
+     * Enter {@link phase} and run {@link operation} as the verb in progress.
+     *
+     * @internal
+     */
+    begin(phase: EndpointLifecycle.Phase, operation: () => Promise<void>) {
+        this.#phase = phase;
+        const promise = operation().finally(() => {
+            if (this.#operation !== promise) {
+                return;
+            }
+            this.#operation = undefined;
+            if (this.#phase === "erasing") {
+                this.#phase = "idle";
+            }
+        });
+        this.#operation = promise;
+        return promise;
+    }
+
+    /**
      * Bubble a lifecycle change event from a child.
      */
     bubble(type: EndpointLifecycle.Change, endpoint: Endpoint) {
@@ -337,6 +376,8 @@ export class EndpointLifecycle {
 }
 
 export namespace EndpointLifecycle {
+    export type Phase = "idle" | "erasing" | "deleting" | "closing";
+
     export enum Change {
         Installed = "installed",
         Ready = "ready",

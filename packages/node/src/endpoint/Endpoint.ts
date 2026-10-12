@@ -67,8 +67,6 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     #id?: string;
     #number?: EndpointNumber;
     #owner?: Endpoint;
-    #erasing?: Promise<void>;
-    #deleting?: Promise<void>;
     #agentType?: Agent.Type<T>;
     #behaviors: Behaviors;
     #lifecycle: EndpointLifecycle;
@@ -999,25 +997,22 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      *
      * @see {@link MatterSpecification.v161.Core} § 9.2.11
      */
-    erase(): Promise<void> {
-        if (this.#erasing === undefined) {
-            this.#erasing = this.#eraseOnce().finally(() => {
-                this.#erasing = undefined;
-            });
+    async erase() {
+        const { lifecycle } = this;
+        if (lifecycle.phase === "erasing") {
+            return await lifecycle.operation;
         }
-        return this.#erasing;
-    }
-
-    async #eraseOnce() {
         this.#assertErasable();
-        await this.lifecycle.mutex.produce(() => this.#eraseWithMutex());
+        await lifecycle.begin("erasing", () => lifecycle.mutex.produce(() => this.#eraseWithMutex()));
     }
 
     async #eraseWithMutex() {
         while (this.construction.status === Lifecycle.Status.Initializing) {
             await this.construction.change;
         }
-        this.#assertErasable();
+        if (this.lifecycle.phase === "deleting") {
+            throw new ImplementationError(`Cannot erase ${this} because it is being deleted`);
+        }
 
         const erasure = await this.env.get(EndpointInitializer).beginEraseDescendant(this);
         const steps = [
@@ -1025,13 +1020,17 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             () => erasure.wipe(),
             async () => {
                 const owner = this.#owner;
-                if (!this.lifecycle.isDestroying && owner?.lifecycle.isPartsReady && !owner.lifecycle.isDestroying) {
+                if (
+                    this.lifecycle.phase !== "deleting" &&
+                    owner?.lifecycle.isPartsReady &&
+                    !owner.lifecycle.isDestroying
+                ) {
                     this.construction.start();
                     await this.construction;
                 }
             },
             async () => {
-                if (!this.lifecycle.isDestroying) {
+                if (this.lifecycle.phase !== "deleting") {
                     await erasure.finish();
                 }
             },
@@ -1046,11 +1045,8 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     #assertErasable() {
-        if (
-            this.lifecycle.isDestroying ||
-            this.lifecycle.mutex.isClosed ||
-            this.construction.status === Lifecycle.Status.Destroyed
-        ) {
+        const { phase } = this.lifecycle;
+        if (phase === "deleting" || phase === "closing") {
             throw new ImplementationError(`Cannot erase ${this} because it is closing or closed`);
         }
     }
@@ -1065,28 +1061,26 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      *
      * @see {@link MatterSpecification.v161.Core} § 9.2.11
      */
-    delete(): Promise<void> {
-        if (this.#deleting === undefined) {
-            this.#deleting = this.deleteOnce().finally(() => {
-                this.#deleting = undefined;
-            });
+    async delete() {
+        const { lifecycle } = this;
+        if (lifecycle.phase === "deleting" && lifecycle.operation !== undefined) {
+            return await lifecycle.operation;
         }
-        return this.#deleting;
+        if (lifecycle.phase === "deleting" || lifecycle.phase === "closing") {
+            this.construction.assert(this.toString());
+            throw new ImplementationError(`Cannot delete ${this} because it is closing`);
+        }
+        if (lifecycle.phase === "idle") {
+            this.construction.assert(this.toString());
+        }
+        await lifecycle.begin("deleting", () => this.deleteOnce());
     }
 
     /**
-     * Perform {@link delete}.  Concurrent calls of {@link delete} join a single run.
+     * Perform {@link delete}.  Runs once {@link EndpointLifecycle.phase} is "deleting".
      */
     protected async deleteOnce() {
-        if (this.#erasing === undefined) {
-            this.construction.assert(this.toString());
-        }
         const { mutex } = this.lifecycle;
-        if (this.lifecycle.isDestroying || mutex.isClosed) {
-            throw new ImplementationError(`Cannot delete ${this} because it is closing`);
-        }
-
-        // Marked before queueing so an erase in progress skips its restart and version increase
         this.lifecycle.change(EndpointLifecycle.Change.Destroying);
         const deleting = mutex.produce(() => this.#deleteWithMutex());
         await Promise.all([deleting, mutex.close()]);
@@ -1136,13 +1130,19 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * {@link MatterAggregateError}; failures while destroying the endpoint, its parts and its behaviors are logged.
      */
     async close() {
-        const { mutex } = this.lifecycle;
-        if (mutex.isClosed) {
-            await mutex.close();
+        const { lifecycle } = this;
+        if (lifecycle.phase === "deleting" || lifecycle.phase === "closing") {
+            try {
+                await lifecycle.operation;
+            } catch (e) {
+                logger.debug(`Close of ${this} joined a delete or close that failed:`, e);
+            }
             return;
         }
-        const closing = mutex.produce(() => this.closeWithMutex());
-        await Promise.all([closing, mutex.close()]);
+        await lifecycle.begin("closing", async () => {
+            const closing = lifecycle.mutex.produce(() => this.closeWithMutex());
+            await Promise.all([closing, lifecycle.mutex.close()]);
+        });
     }
 
     protected async closeWithMutex() {
