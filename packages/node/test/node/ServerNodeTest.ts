@@ -551,6 +551,159 @@ describe("ServerNode", () => {
         });
     });
 
+    describe("lifecycle verbs", () => {
+        type Verb = "erase" | "delete" | "close";
+
+        const cases: Array<{
+            first: Verb;
+            second: Verb;
+            rejects: boolean;
+            phases: [afterFirst: string, afterSecond: string, settled: string];
+            destroyed: boolean;
+        }> = [
+            {
+                first: "erase",
+                second: "erase",
+                rejects: false,
+                phases: ["erasing", "erasing", "idle"],
+                destroyed: false,
+            },
+            {
+                first: "erase",
+                second: "delete",
+                rejects: false,
+                phases: ["erasing", "deleting", "deleting"],
+                destroyed: true,
+            },
+            {
+                first: "erase",
+                second: "close",
+                rejects: false,
+                phases: ["erasing", "closing", "closing"],
+                destroyed: true,
+            },
+            {
+                first: "delete",
+                second: "erase",
+                rejects: true,
+                phases: ["deleting", "deleting", "deleting"],
+                destroyed: true,
+            },
+            {
+                first: "delete",
+                second: "delete",
+                rejects: false,
+                phases: ["deleting", "deleting", "deleting"],
+                destroyed: true,
+            },
+            {
+                first: "delete",
+                second: "close",
+                rejects: false,
+                phases: ["deleting", "deleting", "deleting"],
+                destroyed: true,
+            },
+            {
+                first: "close",
+                second: "erase",
+                rejects: true,
+                phases: ["closing", "closing", "closing"],
+                destroyed: true,
+            },
+            {
+                first: "close",
+                second: "delete",
+                rejects: true,
+                phases: ["closing", "closing", "closing"],
+                destroyed: true,
+            },
+            {
+                first: "close",
+                second: "close",
+                rejects: false,
+                phases: ["closing", "closing", "closing"],
+                destroyed: true,
+            },
+        ];
+
+        for (const { first, second, rejects, phases, destroyed } of cases) {
+            it(`${second} while ${first} runs ${rejects ? "throws" : "completes"}`, async () => {
+                await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+
+                const firstDone = node[first]();
+                expect(node.lifecycle.phase).equals(phases[0]);
+                const secondDone = node[second]();
+                expect(node.lifecycle.phase).equals(phases[1]);
+
+                if (rejects) {
+                    await expect(secondDone).rejectedWith(ImplementationError, /closing/);
+                } else {
+                    await secondDone;
+                    if (destroyed && second !== "erase") {
+                        expect(node.construction.status).equals(Lifecycle.Status.Destroyed);
+                    }
+                }
+                await firstDone;
+
+                expect(node.lifecycle.phase).equals(phases[2]);
+                expect(node.construction.status).equals(
+                    destroyed ? Lifecycle.Status.Destroyed : Lifecycle.Status.Active,
+                );
+            });
+        }
+
+        it("waits for a delete in progress when closing the node", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            let deleted = false;
+
+            const deleting = node.delete().then(() => {
+                deleted = true;
+            });
+            // Bypass the MockTime pump of MockServerNode.close, which would let the delete finish meanwhile
+            await ServerNode.prototype.close.call(node);
+
+            expect(deleted).equals(true);
+            await deleting;
+        });
+
+        it("does not restart a node that is deleted while it is erased", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            let restarted = false;
+            let deleting: Promise<void> | undefined;
+            node.lifecycle.offline.on(() => {
+                deleting ??= node.delete();
+            });
+            node.construction.change.on(status => {
+                if (status === Lifecycle.Status.Active) {
+                    restarted = true;
+                }
+            });
+
+            await node.erase();
+            await deleting;
+
+            expect(deleting).not.undefined;
+            expect(restarted).equals(false);
+            expect(node.construction.status).equals(Lifecycle.Status.Destroyed);
+        });
+
+        it("does not bring a node online again that is closed while it is erased", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            let online = false;
+
+            const erasing = node.erase();
+            const closing = node.close();
+            node.lifecycle.online.on(() => {
+                online = true;
+            });
+            await erasing;
+            await closing;
+
+            expect(online).equals(false);
+            expect(node.construction.status).equals(Lifecycle.Status.Destroyed);
+        });
+    });
+
     describe("operational port", () => {
         it("binds the standard Matter port for a commissionable node without an explicit port", async () => {
             const node = await MockServerNode.createOnline({
@@ -861,6 +1014,17 @@ describe("ServerNode", () => {
             await MockTime.resolve(resets[0], { macrotasks: true });
 
             await node.close();
+        });
+
+        it("does not reset a node that closes while it waits for its last session", async () => {
+            const { node, contextOptions } = await commissioning.commission();
+            const resets = watchErase(node);
+            await openOperationalSession(node);
+            await removeFabric(node, contextOptions);
+
+            await node.close();
+
+            expect(resets.length).equals(0);
         });
 
         it("stays commissioned when another fabric remains", async () => {

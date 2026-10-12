@@ -214,11 +214,11 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         return super.delete();
     }
 
-    protected override async deleteOnce() {
+    protected override async deleteWithMutex() {
         const address = this.peerAddress;
 
         try {
-            await super.deleteOnce();
+            await super.deleteWithMutex();
         } finally {
             // Ensure there is no remaining @matter/protocol Peer installed.  This may occur if deleted while still
             // commissioned, and must hold even when teardown fails or the peer outlives its fabric
@@ -232,8 +232,8 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
      * Erase the data cached from the peer and initialize the node again.  Commissioning and connection settings stay.
      * If the node was online it reconnects and reads the peer again.
      */
-    override async erase() {
-        await this.lifecycle.mutex.produce(this.eraseWithMutex.bind(this));
+    override erase() {
+        return super.erase();
     }
 
     /**
@@ -276,12 +276,15 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         await deletion.wipe();
     }
 
-    protected async eraseWithMutex() {
+    protected override async eraseWithMutex() {
         try {
             const isOnline = this.lifecycle.isOnline;
             await this.cancelWithMutex();
             await this.reset();
             await this.env.get(ClientNodeStore).eraseCaches();
+            if (this.lifecycle.phase === "deleting") {
+                return;
+            }
 
             this.construction.start();
             if (isOnline && this.lifecycle.shouldBeOnline) {

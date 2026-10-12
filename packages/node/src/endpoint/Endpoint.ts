@@ -989,8 +989,8 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * The endpoint keeps its ID and number and stays in the PartsList of its parent.  On a server node the
      * ConfigurationVersion increases.  An endpoint whose parent has not started its parts yet is not restarted; the
      * parent starts it.  A concurrent call joins the erase in progress.  A {@link close} called meanwhile runs once the
-     * erase is done.  A {@link delete} called meanwhile removes the endpoint once the erase is done.  The erase then
-     * skips a restart that has not begun yet, or throws {@link ImplementationError} if it has not begun its reset yet.
+     * erase is done.  A {@link delete} called meanwhile removes the endpoint once the erase is done; the erase skips
+     * the steps that have not begun yet.
      *
      * Throws {@link ImplementationError} if the endpoint is closing or closed.  A failing step is logged and the
      * remaining steps still run.
@@ -1003,15 +1003,23 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             return await lifecycle.operation;
         }
         this.#assertErasable();
-        await lifecycle.begin("erasing", () => lifecycle.mutex.produce(() => this.#eraseWithMutex()));
+        await lifecycle.begin("erasing", () =>
+            lifecycle.mutex.produce(async () => {
+                // The delete wipes the data as well
+                if (lifecycle.phase !== "deleting") {
+                    await this.eraseWithMutex();
+                }
+            }),
+        );
     }
 
-    async #eraseWithMutex() {
+    /**
+     * Perform {@link erase} while holding the lifecycle mutex.  Skips the restart once {@link EndpointLifecycle.phase}
+     * is "deleting".
+     */
+    protected async eraseWithMutex() {
         while (this.construction.status === Lifecycle.Status.Initializing) {
             await this.construction.change;
-        }
-        if (this.lifecycle.phase === "deleting") {
-            throw new ImplementationError(`Cannot erase ${this} because it is being deleted`);
         }
 
         const erasure = await this.env.get(EndpointInitializer).beginEraseDescendant(this);
@@ -1073,20 +1081,17 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         if (lifecycle.phase === "idle") {
             this.construction.assert(this.toString());
         }
-        await lifecycle.begin("deleting", () => this.deleteOnce());
+        await lifecycle.begin("deleting", async () => {
+            lifecycle.change(EndpointLifecycle.Change.Destroying);
+            const deleting = lifecycle.mutex.produce(() => this.deleteWithMutex());
+            await Promise.all([deleting, lifecycle.mutex.close()]);
+        });
     }
 
     /**
-     * Perform {@link delete}.  Runs once {@link EndpointLifecycle.phase} is "deleting".
+     * Perform {@link delete} while holding the lifecycle mutex.
      */
-    protected async deleteOnce() {
-        const { mutex } = this.lifecycle;
-        this.lifecycle.change(EndpointLifecycle.Change.Destroying);
-        const deleting = mutex.produce(() => this.#deleteWithMutex());
-        await Promise.all([deleting, mutex.close()]);
-    }
-
-    async #deleteWithMutex() {
+    protected async deleteWithMutex() {
         const deletion = await this.env.get(EndpointInitializer).beginDeleteDescendant(this);
         await MatterAggregateError.settleSeries(
             [() => this.resetWithMutex(), () => deletion.wipe(), () => this.closeWithMutex(), () => deletion.finish()],

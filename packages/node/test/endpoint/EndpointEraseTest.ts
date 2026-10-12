@@ -337,9 +337,14 @@ describe("Endpoint.erase", () => {
         expect(rootVersion(node)).equals(before + 1);
     });
 
-    it("rejects an erase whose endpoint is deleted before the erase begins", async () => {
+    it("skips an erase whose endpoint is deleted before the erase begins", async () => {
         await using node = await MockServerNode.createOnline(undefined, { device: undefined });
         const light = await node.add(OnOffLightDevice, { id: "light" });
+        const before = rootVersion(node);
+        let resets = 0;
+        light.lifecycle.reset.on(() => {
+            resets++;
+        });
         let release!: () => void;
         light.lifecycle.mutex.run(new Promise<void>(resolve => (release = resolve)));
 
@@ -347,8 +352,10 @@ describe("Endpoint.erase", () => {
         const deleting = light.delete();
         release();
 
-        await expect(erasing).rejectedWith(ImplementationError, /being deleted/);
+        await erasing;
         await deleting;
+        expect(resets).equals(1);
+        expect(rootVersion(node)).equals(before + 1);
         expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
     });
 

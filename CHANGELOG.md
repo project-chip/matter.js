@@ -174,7 +174,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Adding an endpoint below one of its own descendants fails with `ImplementationError` instead of creating a cycle
     - Fix: An endpoint created with `ClientNodeEndpoints.require()` on a running `ClientNode` is reused when the peer later reports that endpoint
     - Fix: `delete()` emits the `Destroying` lifecycle change once
-    - Fix: `erase()`, `delete()` and `close()` of an endpoint run one after another; `close()` waits for an erase or delete in progress
+    - Fix: `erase()`, `delete()` and `close()` of an endpoint or node run one after another; `close()` waits for an erase or delete in progress, and a repeated call joins the one in progress
     - Fix: A factory reset completes and restarts the node when its in-memory reset fails
     - Fix: An endpoint without a `number` no longer gets a number that another endpoint of the node sets in its options but is not yet added, so adding that endpoint later no longer fails
     - Fix: An endpoint refused for its number is not listed in `PartsList` and is not reported as deleted

@@ -13,6 +13,13 @@ import { AsyncObservable, Observable } from "@matter/general";
  * Extended lifecycle information that only applies to root endpoints.
  */
 export class NodeLifecycle extends EndpointLifecycle {
+    override begin(phase: EndpointLifecycle.Phase, operation: () => Promise<void>) {
+        if (phase === "deleting" || phase === "closing") {
+            this.targetState = "offline";
+        }
+        return super.begin(phase, operation);
+    }
+
     #online = AsyncObservable<[context: ActionContext]>();
     #goingOffline = AsyncObservable<[context: ActionContext]>();
     #offline = AsyncObservable<[context: ActionContext]>();

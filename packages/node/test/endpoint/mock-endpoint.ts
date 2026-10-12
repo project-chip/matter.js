@@ -60,11 +60,13 @@ export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
      * Closes the endpoint and, if the endpoint created its own node, that node.
      */
     override async close() {
-        try {
+        const node = this.#ownedNode;
+        // The owned node closes this endpoint as one of its parts, which calls close() again
+        if (node === undefined || node.lifecycle.phase === "closing" || node.lifecycle.phase === "deleting") {
             await super.close();
-        } finally {
-            await this.#ownedNode?.close();
+            return;
         }
+        await node.close();
     }
 
     captureEvents<T extends Behavior.Type>(type: T, options?: { names?: Array<keyof InstanceType<T["Events"]>> }) {

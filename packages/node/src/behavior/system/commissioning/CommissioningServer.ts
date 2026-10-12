@@ -21,7 +21,6 @@ import {
     Logger,
     MatterFlowError,
     Mutex,
-    MutexClosedError,
     Observable,
 } from "@matter/general";
 import { DatatypeModel, FieldElement } from "@matter/model";
@@ -197,7 +196,11 @@ export class CommissioningServer extends Behavior {
         }
 
         this.#endPendingReset();
-        this.env.runtime.add((this.endpoint as ServerNode).erase().catch(e => MutexClosedError.accept(e)));
+        const node = this.endpoint as ServerNode;
+        if (node.lifecycle.phase === "closing" || node.lifecycle.phase === "deleting") {
+            return;
+        }
+        this.env.runtime.add(node.erase());
     }
 
     #endPendingReset() {

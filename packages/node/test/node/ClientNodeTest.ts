@@ -49,6 +49,7 @@ import {
     deepCopy,
     Entropy,
     ImplementationError,
+    Lifecycle,
     MatterAggregateError,
     Millis,
     Minutes,
@@ -1173,6 +1174,28 @@ describe("ClientNode", () => {
 
         const ep1Store = [...peer1.env.get(ClientNodeStore).endpointStores].find(store => store.number === 1);
         expect(ep1Store?.knownBehaviors.has("onOff") ?? false).equals(false);
+    });
+
+    it("does not restart a peer that is deleted while it is erased", async () => {
+        const { site, controller, peer1 } = await peerWithLightOn();
+        await using _site = site;
+        const address = peer1.peerAddress!;
+        await MockTime.resolve(peer1.disable());
+        let deleting: Promise<void> | undefined;
+        peer1.lifecycle.reset.on(() => {
+            deleting ??= peer1.delete();
+        });
+        let restarted = false;
+        peer1.lifecycle.ready.on(() => {
+            restarted = true;
+        });
+
+        await MockTime.resolve(peer1.erase());
+        await MockTime.resolve(deleting);
+
+        expect(restarted).equals(false);
+        expect(peer1.construction.status).equals(Lifecycle.Status.Destroyed);
+        expect(controller.env.get(PeerSet).has(address)).false;
     });
 
     it("emits Destroying once on delete", async () => {

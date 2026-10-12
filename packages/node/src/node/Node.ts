@@ -11,7 +11,6 @@ import { NetworkBehavior } from "#behavior/system/network/NetworkBehavior.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { PartsBehavior } from "#behavior/system/parts/PartsBehavior.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
 import { Endpoints } from "#endpoint/properties/Endpoints.js";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
 import { MutableEndpoint } from "#endpoint/type/MutableEndpoint.js";
@@ -234,21 +233,6 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         );
     }
 
-    /**
-     * Take the node offline and destroy it.  Returns at once while the node already closes or is being deleted.
-     */
-    override async close() {
-        const { lifecycle } = this;
-        if (lifecycle.phase === "deleting" || lifecycle.phase === "closing") {
-            return;
-        }
-        await lifecycle.begin("closing", async () => {
-            lifecycle.targetState = "offline";
-            await lifecycle.mutex.close();
-            await this.closeWithMutex();
-        });
-    }
-
     protected override async closeWithMutex() {
         // The runtime is not designed to operate with a node that is shutting down so destroy it before performing
         // actual close
@@ -261,11 +245,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     /**
      * Erase all persisted data of the node and destroy it.  Unlike {@link erase} the node does not restart.
      */
-    protected override async deleteOnce() {
-        this.lifecycle.targetState = "offline";
-        this.lifecycle.change(EndpointLifecycle.Change.Destroying);
-
-        await this.lifecycle.mutex.close();
+    protected override async deleteWithMutex() {
         await MatterAggregateError.settleSeries(
             [
                 () => (this.#runtime ? this.cancelWithMutex() : undefined),

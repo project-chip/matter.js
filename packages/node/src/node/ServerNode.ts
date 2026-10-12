@@ -158,10 +158,10 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      */
     override async erase() {
         using _erasing = this.construction.join("erasing");
-        await this.lifecycle.mutex.produce(this.eraseWithMutex.bind(this));
+        await super.erase();
     }
 
-    protected async eraseWithMutex() {
+    protected override async eraseWithMutex() {
         try {
             await this.construction;
 
@@ -179,6 +179,10 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
             // Reset persistent state
             await this.eraseStorageWithMutex();
+
+            if (this.lifecycle.phase === "deleting") {
+                return;
+            }
 
             // Reset reverts node to inactive state; now reinitialize
             this.construction.start();
