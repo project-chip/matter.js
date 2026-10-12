@@ -26,7 +26,6 @@ import {
     EnhancedSetupFlowOptionsSchema,
     TypeFromBitmapSchema,
     VendorDclSchema,
-    VendorId,
 } from "@matter/types";
 import { PairingHintBitmapSchema } from "../advertisement/PairingHintBitmap.js";
 import { DclClient, MatterDclError, MatterDclResponseError } from "./DclClient.js";
@@ -137,6 +136,29 @@ export type ProductInfo = {
 };
 
 /**
+ * Vendors known without the DCL: the test vendor IDs of the specification (0xFFF1–0xFFF4) and Nabu Casa. A DCL record
+ * for the same vendor ID takes precedence.
+ */
+const STATIC_VENDORS: readonly VendorInfo[] = [
+    ...[0xfff1, 0xfff2, 0xfff3, 0xfff4].map(vendorId => ({
+        vendorId,
+        vendorName: "Test Vendor",
+        companyLegalName: "Test Vendor Inc.",
+        companyPreferredName: "Test Vendor",
+        vendorLandingPageUrl: "https://test.example.com",
+        creator: "System",
+    })),
+    {
+        vendorId: 4939,
+        vendorName: "Nabu Casa",
+        companyLegalName: "Nabu Casa, Inc.",
+        companyPreferredName: "Nabu Casa",
+        vendorLandingPageUrl: "https://www.nabucasa.com",
+        creator: "System",
+    },
+];
+
+/**
  * Implements a service to manage DCL vendor information as a singleton in the environment and so will be shared by
  * multiple nodes if relevant. It is mainly relevant for controller use cases.
  * The service supports fetching vendor information from the CSA production DCL instance.
@@ -160,6 +182,7 @@ export class DclVendorInfoService {
                 source: options.dclConfig?.url ?? DclConfig.production.url,
                 interval:
                     options.updateInterval === null ? "disabled" : Duration.format(options.updateInterval ?? Days.one),
+                flags: Diagnostic.asFlags({ offline: options.offline }),
             }),
         );
 
@@ -170,9 +193,10 @@ export class DclVendorInfoService {
             if (options.seed?.vendors) {
                 await this.#consumeVendorSeed(options.seed.vendors);
             }
+            this.#addStaticVendors();
             await this.update();
 
-            if (options.updateInterval !== null) {
+            if (!options.offline && options.updateInterval !== null) {
                 // Start periodic update timer
                 const updateInterval = options.updateInterval ?? Days.one;
                 this.#updateTimer = Time.getPeriodicTimer("DCL Vendor Info Update", updateInterval, () =>
@@ -184,6 +208,11 @@ export class DclVendorInfoService {
 
     get construction() {
         return this.#construction;
+    }
+
+    /** Whether the service runs {@link DclVendorInfoService.Options.offline}. */
+    get offline() {
+        return this.#options.offline ?? false;
     }
 
     /**
@@ -203,10 +232,11 @@ export class DclVendorInfoService {
     }
 
     /**
-     * Update vendor information from DCL.
+     * Update vendor information from DCL. Does nothing when the service is
+     * {@link DclVendorInfoService.Options.offline}.
      */
     async update() {
-        if (this.#closed || !this.#storage) {
+        if (this.#closed || !this.#storage || this.#options.offline) {
             return;
         }
 
@@ -228,10 +258,11 @@ export class DclVendorInfoService {
 
     /**
      * Fetch product details for a given vendor ID and product ID from DCL.
-     * Returns undefined if the product is not found or the service is closed.
+     * Returns undefined if the product is not found or the service is closed or
+     * {@link DclVendorInfoService.Options.offline}.
      */
     async productInfoFor(vendorId: number, productId: number): Promise<ProductInfo | undefined> {
-        if (this.#closed) {
+        if (this.#closed || this.#options.offline) {
             return undefined;
         }
         try {
@@ -321,6 +352,18 @@ export class DclVendorInfoService {
     }
 
     /**
+     * Add the {@link STATIC_VENDORS} the index does not hold yet. They are not stored, and the index is never cleared
+     * after this, so they stay available whether or not the DCL is reachable.
+     */
+    #addStaticVendors() {
+        for (const vendor of STATIC_VENDORS) {
+            if (!this.#vendorIndex.has(vendor.vendorId)) {
+                this.#vendorIndex.set(vendor.vendorId, { ...vendor });
+            }
+        }
+    }
+
+    /**
      * Fetch vendor information from DCL and store it.
      */
     async #fetchVendorsFromDcl(storage: StorageContext) {
@@ -330,34 +373,6 @@ export class DclVendorInfoService {
         const vendors = await dclClient.fetchAllVendors(this.#options);
 
         logger.info(`Fetched ${vendors.length} vendors from DCL`);
-
-        // Add hardcoded test vendors if not present
-        const hardcodedVendors: VendorDclSchema[] = [
-            ...[0xfff1, 0xfff2, 0xfff3, 0xfff4].map(vendorID => ({
-                vendorID: VendorId(vendorID),
-                vendorName: "Test Vendor",
-                companyLegalName: "Test Vendor Inc.",
-                companyPreferredName: "Test Vendor",
-                vendorLandingPageURL: "https://test.example.com",
-                creator: "System",
-                schemaVersion: 0,
-            })),
-            {
-                vendorID: VendorId(4939),
-                vendorName: "Nabu Casa",
-                companyLegalName: "Nabu Casa, Inc.",
-                companyPreferredName: "Nabu Casa",
-                vendorLandingPageURL: "https://www.nabucasa.com",
-                creator: "System",
-                schemaVersion: 0,
-            },
-        ];
-
-        for (const hardcoded of hardcodedVendors) {
-            if (!vendors.find(v => v.vendorID === hardcoded.vendorID)) {
-                vendors.push(hardcoded);
-            }
-        }
 
         // Convert DCL format to internal format and update index
         const vendorsToStore: VendorInfo[] = [];
@@ -370,7 +385,7 @@ export class DclVendorInfoService {
         // Store all vendors as an array
         await storage.set("vendors", vendorsToStore);
 
-        logger.info(`Stored ${this.#vendorIndex.size} vendors`);
+        logger.info(`Stored ${vendorsToStore.length} vendors`);
     }
 
     /**
@@ -441,12 +456,12 @@ export class DclVendorInfoService {
      * Close the service and stop periodic updates.
      */
     async close() {
-        if (this.#closed) return;
         this.#closed = true;
         await this.#construction.close(async () => {
-            await this.#fetchPromise;
             this.#updateTimer?.stop();
             this.#updateTimer = undefined;
+            // update() logs a failed fetch; close only waits for it to settle
+            await Promise.allSettled([this.#fetchPromise]);
             await this.#storageManager?.close();
         });
     }
@@ -463,7 +478,20 @@ export namespace DclVendorInfoService {
         /** DCL config for production endpoint. Defaults to DclConfig.production. */
         dclConfig?: DclConfig;
 
-        /** Pre-populate storage from snapshot when stored vendor count is less than seed.expectedCount. Network update still runs after. */
+        /**
+         * Pre-populate storage from snapshot when stored vendor count is less than seed.expectedCount. Network update
+         * still runs after unless `offline`.
+         */
         seed?: { vendors?: SeedSource<VendorSeedEntry> };
+
+        /**
+         * Reaches no network at all: no vendor update, neither at start nor periodically, and no product lookup.
+         * Vendor information is whatever storage and `seed` carried plus the built-in test vendors, and a product
+         * reads as absent.
+         *
+         * For a deployment with no route to the ledger, and for short-lived test processes that must not depend on
+         * it.
+         */
+        offline?: boolean;
     }
 }

@@ -90,4 +90,29 @@ export namespace SessionIntervals {
 
         return resolved;
     }
+
+    /**
+     * Keep the intervals a DNS-SD advertisement can carry and drop the others.  Undefined when none remains.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 4.3.4
+     */
+    export function advertisable(intervals: Partial<SessionIntervals>): Partial<SessionIntervals> | undefined {
+        const { idleInterval, activeInterval, activeThreshold } = intervals;
+        const result: Partial<SessionIntervals> = {};
+        if (isAdvertisable(idleInterval, 0, maxAdvertisedInterval)) {
+            result.idleInterval = idleInterval;
+        }
+        if (isAdvertisable(activeInterval, 0, maxAdvertisedInterval)) {
+            result.activeInterval = activeInterval;
+        }
+        // DiscoveryData treats an SAT of 0 as absent, so a stored 0 must not apply either
+        if (isAdvertisable(activeThreshold, 1, maxActiveThreshold)) {
+            result.activeThreshold = activeThreshold;
+        }
+        return Object.keys(result).length ? result : undefined;
+    }
+}
+
+function isAdvertisable(value: Duration | undefined, min: number, max: Duration): value is Duration {
+    return value !== undefined && Number.isInteger(value) && value >= min && value <= max;
 }
