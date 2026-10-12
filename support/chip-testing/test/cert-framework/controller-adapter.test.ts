@@ -989,6 +989,21 @@ describe("InProcessControllerAdapter WebRTC requestor", () => {
         expect(await requestor!.sessions()).to.deep.equal([]);
     });
 
+    it("drops a session whose peer was decommissioned since it was registered", async function () {
+        this.timeout(60_000);
+
+        adapter = new InProcessControllerAdapter("webrtc-gone", { webRtcRequestor: true });
+        await adapter.start();
+        const peer = await commissionPeer();
+
+        const requestor = adapter.webRtcRequestor!;
+        await requestor.upsertSession({ id: 3, peer, peerEndpointId: 1, streamUsage: StreamUsage.Recording });
+        await adapter.node(peer).decommission();
+
+        await requestor.removeSession(peer, 3);
+        expect(await requestor.sessions()).to.deep.equal([]);
+    });
+
     it("refuses a node reference it did not mint rather than registering a session against a wrong peer", async function () {
         this.timeout(20_000);
 
