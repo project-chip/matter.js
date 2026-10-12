@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const BridgedNodeDt = DeviceType(
-    { name: "BridgedNode", id: 0x13, classification: "utility" },
+    { name: "BridgedNode", id: 0x13, classification: "utility", composition: "full-family" },
     Requirement(
         { name: "Descriptor", id: 0x1d, element: "serverCluster" },
         Requirement({ name: "DeviceTypeList", default: [ { deviceType: 19, revision: 3 } ], element: "attribute" })

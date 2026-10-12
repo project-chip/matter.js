@@ -239,8 +239,9 @@ export class DescriptorServer extends DescriptorBehavior {
                 numbers.splice(pos, 1);
             }
         } else if (endpoint.hasParts) {
-            // No IndexBehavior, just direct descendents
+            // Direct descendants only, limited to those the node's index admitted
             numbers = [...endpoint.parts]
+                .filter(part => IndexBehavior.isIndexed(part))
                 .map(endpoint => endpoint.maybeNumber)
                 .filter((n): n is EndpointNumber => n !== undefined);
         } else {
@@ -254,10 +255,9 @@ export class DescriptorServer extends DescriptorBehavior {
 
     /**
      * Whether this endpoint's device type composes its `PartsList` of every descendant rather than of
-     * its own children (Matter Core § 9.2.3).
+     * its own children (Matter Core § 9.2.7).
      *
-     * {@link IndexBehavior} is how the flat list is obtained, not what decides it is wanted: the
-     * behavior is installed on bridged nodes too, which compose a tree.
+     * {@link IndexBehavior} is how the flat list is obtained, not what decides it is wanted.
      */
     get #composesFullFamily() {
         const deviceTypes = this.state.deviceTypeList.length

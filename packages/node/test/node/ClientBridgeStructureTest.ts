@@ -14,6 +14,7 @@ import { BridgedNodeEndpoint } from "#endpoints/bridged-node";
 import type { ClientEndpointInitializer } from "#node/client/ClientEndpointInitializer.js";
 import { ClientStructureEvents } from "#node/client/ClientStructureEvents.js";
 import { ServerNode } from "#node/ServerNode.js";
+import { Diagnostic, LogDestination, Logger, LogLevel } from "@matter/general";
 import { AcceptedCommandList, AttributeList, ClusterRevision, FeatureMap, GeneratedCommandList } from "@matter/model";
 import { MockSite } from "@matter/node/testing";
 import { Read, ReadResult } from "@matter/protocol";
@@ -1065,5 +1066,245 @@ describe("a peer that reports an aggregator below an aggregator", () => {
         );
 
         expect(treeOf(peer)).deep.equals(NESTED_BRIDGE_TREE.filter(path => !path.endsWith(`/ep${dropped}`)));
+    });
+});
+
+const BRIDGED_NODE_DEVICE_TYPE = 0x0013;
+const REFRIGERATOR_DEVICE_TYPE = 0x0070;
+const CABINET_DEVICE_TYPE = 0x0071;
+const LIGHT_DEVICE_TYPE = 0x0100;
+const HUMIDITY_SENSOR_DEVICE_TYPE = 0x0307;
+
+function deviceTypes(...ids: number[]) {
+    return ids.map(deviceType => ({ deviceType, revision: 1 }));
+}
+
+describe("a peer that bridges a device of several endpoints", () => {
+    before(() => {
+        MockTime.init();
+    });
+
+    async function peerOf() {
+        const site = new MockSite();
+        const { controller } = await site.addCommissionedPair({ device: { type: ServerNode.RootEndpoint } });
+        const peer = controller.peers.get("peer1")!;
+        const structure = (peer.env.get(EndpointInitializer) as ClientEndpointInitializer).structure;
+        const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+        return { site, peer, structure, request };
+    }
+
+    /** Each endpoint's number, mapped to the number of its parent. */
+    function parentsOf(peer: Endpoint) {
+        const parents: Record<number, number> = {};
+        const walk = (endpoint: Endpoint) => {
+            for (const part of endpoint.parts) {
+                parents[part.number] = endpoint.number;
+                walk(part);
+            }
+        };
+        walk(peer);
+        return parents;
+    }
+
+    async function parentsAfter(...reports: ReadResult.Report[][]) {
+        const { site, peer, structure, request } = await peerOf();
+        await using _site = site;
+        await drain(structure.mutate(request, readResult(...reports)));
+        return parentsOf(peer);
+    }
+
+    it("puts a part of a bridged composed device below that device", async () => {
+        expect(
+            await parentsAfter(
+                [descriptorAttr(0, Descriptor.attributes.partsList.id, [1, 41, 42, 43], 10)],
+                descriptorReports(1, AggregatorEndpoint.deviceType, 2, [41, 42, 43], 10),
+                descriptorReports(41, BRIDGED_NODE_DEVICE_TYPE, 3, [42, 43], 10),
+                descriptorReports(42, REFRIGERATOR_DEVICE_TYPE, 2, [43], 10),
+                descriptorReports(43, CABINET_DEVICE_TYPE, 3, [], 10),
+            ),
+        ).deep.equals({ 1: 0, 41: 1, 42: 41, 43: 42 });
+    });
+
+    // Not what the specification asks of a bridged node, but a peer may still report it
+    it("reads a bridged node that lists only its children the same way", async () => {
+        expect(
+            await parentsAfter(
+                [descriptorAttr(0, Descriptor.attributes.partsList.id, [1, 41, 42, 43], 10)],
+                descriptorReports(1, AggregatorEndpoint.deviceType, 2, [41, 42, 43], 10),
+                descriptorReports(41, BRIDGED_NODE_DEVICE_TYPE, 3, [42], 10),
+                descriptorReports(42, REFRIGERATOR_DEVICE_TYPE, 2, [43], 10),
+                descriptorReports(43, CABINET_DEVICE_TYPE, 3, [], 10),
+            ),
+        ).deep.equals({ 1: 0, 41: 1, 42: 41, 43: 42 });
+    });
+
+    // A bridged node lists every endpoint of the bridged device (Matter Device Library § 2.5.6), so its list says
+    // less about who owns a part than a list of children does
+    it("prefers an endpoint listing its children over a bridged node as the parent", async () => {
+        expect(
+            await parentsAfter(
+                [descriptorAttr(0, Descriptor.attributes.partsList.id, [1, 41, 42, 43], 10)],
+                descriptorReports(1, AggregatorEndpoint.deviceType, 2, [41, 42, 43], 10),
+                descriptorReports(41, BRIDGED_NODE_DEVICE_TYPE, 3, [43], 10),
+                descriptorReports(42, LIGHT_DEVICE_TYPE, 3, [43], 10),
+                descriptorReports(43, LIGHT_DEVICE_TYPE, 3, [], 10),
+            ),
+        ).deep.equals({ 1: 0, 41: 1, 42: 1, 43: 42 });
+    });
+
+    it("does not wait for an endpoint the root no longer names", async () => {
+        expect(
+            await parentsAfter(
+                [descriptorAttr(0, Descriptor.attributes.partsList.id, [1, 41, 42], 10)],
+                descriptorReports(1, AggregatorEndpoint.deviceType, 2, [41, 42], 10),
+                descriptorReports(41, BRIDGED_NODE_DEVICE_TYPE, 3, [42, 43], 10),
+                descriptorReports(42, LIGHT_DEVICE_TYPE, 3, [], 10),
+            ),
+        ).deep.equals({ 1: 0, 41: 1, 42: 41 });
+    });
+
+    // Two endpoints that each name a part in a list of their own children break the single-parent rule.
+    // The parent must not depend on which of them the peer reports first.
+    for (const order of ["ascending", "descending"]) {
+        it(`takes the claimant naming the fewest other claimants as the parent, reported ${order}`, async () => {
+            const claimants = [
+                descriptorReports(10, LIGHT_DEVICE_TYPE, 3, [11, 12], 10),
+                descriptorReports(11, LIGHT_DEVICE_TYPE, 3, [12, 13, 14], 10),
+            ];
+            if (order === "descending") {
+                claimants.reverse();
+            }
+            expect(
+                await parentsAfter(
+                    [descriptorAttr(0, Descriptor.attributes.partsList.id, [10, 11, 12, 13, 14], 10)],
+                    ...claimants,
+                    ...[12, 13, 14].map(number => descriptorReports(number, LIGHT_DEVICE_TYPE, 3, [], 10)),
+                ),
+            ).deep.equals({ 10: 0, 11: 10, 12: 11, 13: 11, 14: 11 });
+        });
+
+        it(`takes the claimant with the shorter list as the parent, reported ${order}`, async () => {
+            const claimants = [
+                descriptorReports(10, LIGHT_DEVICE_TYPE, 3, [12, 13], 10),
+                descriptorReports(11, LIGHT_DEVICE_TYPE, 3, [12], 10),
+            ];
+            if (order === "descending") {
+                claimants.reverse();
+            }
+            expect(
+                await parentsAfter(
+                    [descriptorAttr(0, Descriptor.attributes.partsList.id, [10, 11, 12, 13], 10)],
+                    ...claimants,
+                    descriptorReports(12, LIGHT_DEVICE_TYPE, 3, [], 10),
+                    descriptorReports(13, LIGHT_DEVICE_TYPE, 3, [], 10),
+                ),
+            ).deep.equals({ 10: 0, 11: 0, 12: 11, 13: 10 });
+        });
+
+        it(`takes the bridged node with the lower number as the parent, reported ${order}`, async () => {
+            const claimants = [
+                descriptorReports(41, BRIDGED_NODE_DEVICE_TYPE, 3, [43], 10),
+                descriptorReports(42, BRIDGED_NODE_DEVICE_TYPE, 3, [43], 10),
+            ];
+            if (order === "descending") {
+                claimants.reverse();
+            }
+            expect(
+                await parentsAfter(
+                    [descriptorAttr(0, Descriptor.attributes.partsList.id, [1, 41, 42, 43], 10)],
+                    descriptorReports(1, AggregatorEndpoint.deviceType, 2, [41, 42, 43], 10),
+                    ...claimants,
+                    descriptorReports(43, LIGHT_DEVICE_TYPE, 3, [], 10),
+                ),
+            ).deep.equals({ 1: 0, 41: 1, 42: 1, 43: 41 });
+        });
+
+        it(`takes the claimant with the lower number as the parent, reported ${order}`, async () => {
+            const claimants = [
+                descriptorReports(10, LIGHT_DEVICE_TYPE, 3, [12], 10),
+                descriptorReports(11, LIGHT_DEVICE_TYPE, 3, [12], 10),
+            ];
+            if (order === "descending") {
+                claimants.reverse();
+            }
+            expect(
+                await parentsAfter(
+                    [descriptorAttr(0, Descriptor.attributes.partsList.id, [10, 11, 12], 10)],
+                    ...claimants,
+                    descriptorReports(12, LIGHT_DEVICE_TYPE, 3, [], 10),
+                ),
+            ).deep.equals({ 10: 0, 11: 0, 12: 10 });
+        });
+    }
+
+    async function warningsAfter(...reports: ReadResult.Report[][]) {
+        const warnings = new Array<string>();
+        Logger.destinations.capture = LogDestination({
+            add(message: Diagnostic.Message) {
+                if (message.facility === "ClientStructure" && message.level === LogLevel.WARN) {
+                    warnings.push(message.values.map(String).join(" "));
+                }
+            },
+        });
+        try {
+            await parentsAfter(...reports);
+        } finally {
+            delete Logger.destinations.capture;
+        }
+        return warnings;
+    }
+
+    it("warns once about the other claimants of an endpoint it places", async () => {
+        const warnings = await warningsAfter(
+            [descriptorAttr(0, Descriptor.attributes.partsList.id, [10, 11, 12], 10)],
+            descriptorReports(10, LIGHT_DEVICE_TYPE, 3, [12], 10),
+            descriptorReports(11, LIGHT_DEVICE_TYPE, 3, [12], 10),
+            descriptorReports(12, LIGHT_DEVICE_TYPE, 3, [], 10),
+        );
+        expect(warnings.length).equals(1);
+        expect(warnings[0]).match(/^Taking .*ep10 as the parent of .*ep12: the peer also named it a part of .*ep11,/);
+    });
+
+    it("does not warn about an endpoint the root no longer names", async () => {
+        expect(
+            await warningsAfter(
+                [descriptorAttr(0, Descriptor.attributes.partsList.id, [10, 11], 10)],
+                descriptorReports(10, LIGHT_DEVICE_TYPE, 3, [12], 10),
+                descriptorReports(11, LIGHT_DEVICE_TYPE, 3, [12], 10),
+                descriptorReports(12, LIGHT_DEVICE_TYPE, 3, [], 10),
+            ),
+        ).deep.equals([]);
+    });
+
+    // The bridge the matterjs-server tests run against, including a bridged node of the one-endpoint
+    // pattern that nevertheless lists parts
+    it("places every endpoint of a bridge with bridged nodes of both patterns", async () => {
+        const sensor = TemperatureSensorDevice.deviceType;
+        const aggregator = AggregatorEndpoint.deviceType;
+        expect(
+            await parentsAfter(
+                [
+                    descriptorAttr(
+                        0,
+                        Descriptor.attributes.partsList.id,
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                        10,
+                    ),
+                ],
+                descriptorReports(1, LIGHT_DEVICE_TYPE, 3, [], 10),
+                descriptorReports(2, aggregator, 2, [3, 4, 5, 6, 7, 8, 9, 10, 11], 10),
+                descriptorReports(3, deviceTypes(LIGHT_DEVICE_TYPE, BRIDGED_NODE_DEVICE_TYPE), 0, [], 10),
+                descriptorReports(4, deviceTypes(sensor, BRIDGED_NODE_DEVICE_TYPE), 0, [5, 6], 10),
+                descriptorReports(5, sensor, 2, [], 10),
+                descriptorReports(6, HUMIDITY_SENSOR_DEVICE_TYPE, 2, [], 10),
+                descriptorReports(7, deviceTypes(aggregator, BRIDGED_NODE_DEVICE_TYPE), 0, [8, 9, 10, 11], 10),
+                descriptorReports(8, deviceTypes(LIGHT_DEVICE_TYPE, BRIDGED_NODE_DEVICE_TYPE), 0, [], 10),
+                descriptorReports(9, deviceTypes(sensor, BRIDGED_NODE_DEVICE_TYPE), 0, [], 10),
+                descriptorReports(10, LIGHT_DEVICE_TYPE, 3, [], 10),
+                descriptorReports(11, LIGHT_DEVICE_TYPE, 3, [], 10),
+                descriptorReports(12, aggregator, 2, [13], 10),
+                descriptorReports(13, deviceTypes(LIGHT_DEVICE_TYPE, BRIDGED_NODE_DEVICE_TYPE), 0, [], 10),
+            ),
+        ).deep.equals({ 1: 0, 2: 0, 12: 0, 3: 2, 4: 2, 7: 2, 5: 4, 6: 4, 8: 7, 9: 7, 10: 7, 11: 7, 13: 12 });
     });
 });

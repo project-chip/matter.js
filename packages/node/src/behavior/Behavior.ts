@@ -19,6 +19,7 @@ import {
     Transaction,
 } from "@matter/general";
 import { ClassSemantics, Schema, Semantics } from "@matter/model";
+import type { Val } from "@matter/protocol";
 import type { BehaviorBacking } from "./internal/BehaviorBacking.js";
 import { declaredSchemaOf, setDeclaredSchema } from "./internal/DeclaredSchema.js";
 import { Reactor } from "./Reactor.js";
@@ -342,6 +343,19 @@ export abstract class Behavior {
     }
 
     /**
+     * Adjust persisted values whose stored format is incompatible with the current state.
+     *
+     * Runs on a copy of the stored values before the behavior's state initializes, so keys need not exist in the
+     * schema.  The behavior's next persisted write stores what changed, so until then a migration also runs on values it
+     * already migrated and must leave those unchanged.  If it throws, the stored values apply unchanged.
+     *
+     * Does not run for state that mirrors a peer, such as the attributes of a cluster client behavior.
+     *
+     * Subclasses inherit the migration.  An override should invoke `super.migrate(values)` first.
+     */
+    static migrate(_values: Val.Struct): void {}
+
+    /**
      * Explicitly reference other {@link Behavior}s as dependencies, ensuring this behavior is destroyed first.
      *
      * This probably won't be commonly necessary.  If it is we can instrument Agent to collect dependencies
@@ -486,6 +500,7 @@ export namespace Behavior {
         readonly set: typeof Behavior.set;
         readonly supports: typeof Behavior.supports;
         readonly defaults: Record<string, any>;
+        readonly migrate: typeof Behavior.migrate;
 
         readonly schema: Schema.Struct;
         readonly early: boolean;

@@ -5,7 +5,6 @@
  */
 
 import type { Message } from "#codec/MessageCodec.js";
-import { DiscoveryData } from "#common/Scanner.js";
 import type { ExchangeManager } from "#protocol/ExchangeManager.js";
 import { MRP } from "#protocol/MRP.js";
 import { ChannelStatusResponseError } from "#securechannel/SecureChannelMessenger.js";
@@ -610,10 +609,7 @@ export async function PeerConnection(
                               if (params.supportedTransports.tcpServer !== false) {
                                   return;
                               }
-                              const advertisedByMdns =
-                                  (DiscoveryData(peer.service.parameters).T ?? peer.descriptor.discoveryData?.T)
-                                      ?.tcpServer === true;
-                              if (advertisedByMdns) {
+                              if (peer.advertisedTransports?.tcpServer === true) {
                                   return;
                               }
                               peer.markTcpUnsupported();

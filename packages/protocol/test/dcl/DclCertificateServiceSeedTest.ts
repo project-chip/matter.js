@@ -270,4 +270,42 @@ describe("DclCertificateService seed", () => {
         expect(service.certificates.length).to.equal(0);
         await service.close();
     });
+
+    it("offline: getOrFetchCertificate serves the seed and fetches nothing it lacks", async () => {
+        fetchMock.addResponse("on.dcl.csa-iot.org/dcl/pki/root-certificates", EMPTY_DCL_RESPONSE);
+        fetchMock.install();
+
+        const service = new DclCertificateService(environment, {
+            seed: { paaRoots: makeSeedSource([makePaaEntry(TestCert_PAA_NoVID_Cert, SKID_NO_VID)]) },
+            offline: true,
+        });
+        await service.construction;
+
+        expect((await service.getOrFetchCertificate(SKID_NO_VID))?.subjectKeyId).equal(SKID_NO_VID);
+        expect(await service.getOrFetchCertificate(SKID_FFF1)).equal(undefined);
+        expect(fetchMock.getCallLog()).deep.equal([]);
+
+        await service.close();
+    });
+
+    it("offline: getOrFetchCertificate fetches nothing for a held certificate the trust policy filters out", async () => {
+        fetchMock.addResponse("on.dcl.csa-iot.org/dcl/pki/root-certificates", EMPTY_DCL_RESPONSE);
+        fetchMock.install();
+
+        const service = new DclCertificateService(environment, {
+            seed: {
+                paaRoots: makeSeedSource([{ ...makePaaEntry(TestCert_PAA_NoVID_Cert, SKID_NO_VID), kind: "test" }]),
+            },
+            fetchTestCertificates: true,
+            acceptTestCertificates: false,
+            offline: true,
+        });
+        await service.construction;
+
+        expect(service.certificates.map(({ subjectKeyId }) => subjectKeyId)).deep.equal([SKID_NO_VID]);
+        expect(await service.getOrFetchCertificate(SKID_NO_VID)).equal(undefined);
+        expect(fetchMock.getCallLog()).deep.equal([]);
+
+        await service.close();
+    });
 });
