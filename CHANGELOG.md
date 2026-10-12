@@ -154,6 +154,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: `SwitchServer` handles positions, long press and multi-press as specified and no longer leaks a reactor per press
     - Fix: OTA requestors send `NotifyUpdateApplied` after an update, keep `DelayedOnQuery` while a provider is busy, recover when `applyUpdate` fails, and skip an update without consent
     - Fix: OTA providers wait for the restart only after `DelayedActionTime`, and send that delay in seconds
+    - Fix: An OTA update fails when the device still reports a version below the target once the controller resubscribes after the restart deadline, instead of being re-announced after every stall
     - Fix: Group key, LeaveGroup and GroupcastTesting handling follows the specification; a failed multicast join is retried instead of failing
     - Fix: Group bindings resolve once a group key exists, and a disposed binding no longer resolves
     - Fix: `ServiceAreaServer` without the Maps feature no longer fails to initialize
@@ -203,6 +204,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: PASE throws `PasscodeMismatchError` on a wrong passcode to allow better user guidance
     - Enhancement: Interactions can be aborted via `ClientRequest.abort`
     - Enhancement: `ClientRequest.largeMessage` requires a TCP-backed session for any interaction
+    - Enhancement: `RebootResubscribeArmer.returnTimeout()` returns how long an armed peer has to return once it was allowed to apply
     - Enhancement: `DclCertificateService`, `DclVendorInfoService` and `DclOtaUpdateService` can run `offline`. Use data seeds to have a basic set of details
     - Enhancement: `DclCertificateService`accepts extra revocation information (`installRevocations()`, `revocations`)
     - Enhancement: A custom `BleScannerClient` may report `listeningTime` and `isPeripheralReachable()`, so stale or unreachable peripherals are not offered for commissioning
