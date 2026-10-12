@@ -26,7 +26,7 @@ import {
     Timer,
 } from "@matter/general";
 import type { ClusterId } from "@matter/types";
-import type { Behavior } from "../Behavior.js";
+import { Behavior } from "../Behavior.js";
 import { Reactor } from "../Reactor.js";
 import { Datasource } from "../state/managed/Datasource.js";
 import { BackingEvents } from "./BackingEvents.js";
@@ -266,6 +266,7 @@ export abstract class BehaviorBacking {
             events: this.events as unknown as Datasource.Events,
             defaults: this.#endpoint.behaviors.defaultsFor(this.type),
             store: this.store,
+            migrate: this.#type.migrate === Behavior.migrate ? undefined : values => this.#type.migrate(values),
             owner: this.#endpoint,
             onChange: this.broadcastChanges.bind(this),
         };

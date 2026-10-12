@@ -5,7 +5,6 @@
  */
 
 import type { Datasource } from "#behavior/state/managed/Datasource.js";
-import { Migration } from "#behavior/state/migrations/index.js";
 import { MaybePromise, StorageContext, StorageDriver, SupportedStorageTypes } from "@matter/general";
 import { Val } from "@matter/protocol";
 
@@ -16,8 +15,6 @@ export class EndpointStore {
     protected initialValues = new Map<string, Val.Struct>();
 
     #storage: StorageContext;
-
-    #migratedValues = new Map<string, Val.Struct>();
 
     #knownBehaviors = new Set<string>();
 
@@ -51,9 +48,6 @@ export class EndpointStore {
      *
      * When {@link sharedTx} is provided, writes go through it and the caller owns the transaction lifecycle (no
      * commit/dispose here).
-     *
-     * A behavior's first write in an own transaction also persists what a {@link Migration} changed on load; a write in
-     * a shared transaction replaces the migrated values of the keys it writes.
      */
     async set(values: Record<string, undefined | Val.Struct>, sharedTx?: StorageDriver.Transaction) {
         const ownTx = sharedTx === undefined;
@@ -70,20 +64,8 @@ export class EndpointStore {
             const txContext = new StorageContext(tx, this.storage.thisContexts);
 
             for (const behaviorId in values) {
-                let behaviorValues = values[behaviorId];
+                const behaviorValues = values[behaviorId];
                 const behaviorStorage = txContext.createContext(behaviorId);
-
-                const migrated = this.#migratedValues.get(behaviorId);
-                if (migrated !== undefined && behaviorValues !== undefined) {
-                    if (ownTx) {
-                        behaviorValues = { ...migrated, ...behaviorValues };
-                    } else {
-                        // The caller owns the commit, so only drop what this newer write supersedes
-                        for (const key in behaviorValues) {
-                            delete migrated[key];
-                        }
-                    }
-                }
 
                 if (behaviorValues === undefined) {
                     if (this.knownBehaviors.has(behaviorId)) {
@@ -117,9 +99,6 @@ export class EndpointStore {
                 const committed = tx.commit();
                 if (MaybePromise.is(committed)) {
                     await committed;
-                }
-                for (const behaviorId in values) {
-                    this.#migratedValues.delete(behaviorId);
                 }
             }
         } catch (e) {
@@ -161,11 +140,6 @@ export class EndpointStore {
                     behaviorValues[key] = value;
                 }
             }
-
-            const migrated = Migration.migrate(behaviorId, behaviorValues);
-            if (migrated !== undefined) {
-                this.#migratedValues.set(behaviorId, migrated);
-            }
         }
     }
 
@@ -173,7 +147,6 @@ export class EndpointStore {
      * Remove all persisted information for the {@link Endpoint}.
      */
     erase() {
-        this.#migratedValues.clear();
         return this.storage.clearAll();
     }
 
@@ -181,7 +154,6 @@ export class EndpointStore {
      * Remove all persisted information for a single behavior on the {@link Endpoint}.
      */
     eraseStoreForBehavior(behaviorId: string) {
-        this.#migratedValues.delete(behaviorId);
         return this.storage.createContext(behaviorId).clearAll();
     }
 
