@@ -13,8 +13,8 @@ import { Behavior } from "../../Behavior.js";
 /**
  * This behavior indexes all descendants of a {@link Endpoint} by number.
  *
- * IndexBehavior should only be present on root and aggregator parts as its presence causes the endpoint's PartsList
- * attribute to reflect a flat namespace as required by the Matter standard.
+ * The Descriptor's PartsList of an endpoint whose device type names every descendant (root node, aggregator, bridged
+ * node) is built from this index, so those endpoints need it.
  *
  * Only installed endpoints are indexed.
  */
