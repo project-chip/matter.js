@@ -235,6 +235,9 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         );
     }
 
+    /**
+     * Take the node offline and destroy it.  Returns at once while the node already closes or is being deleted.
+     */
     override async close() {
         if (this.#closeInProgress) {
             return;
@@ -249,11 +252,11 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         }
     }
 
-    protected async closeWithMutex() {
+    protected override async closeWithMutex() {
         // The runtime is not designed to operate with a node that is shutting down so destroy it before performing
         // actual close
         await MatterAggregateError.settleSeries(
-            [() => (this.#runtime ? this.cancelWithMutex() : undefined), () => super.close()],
+            [() => (this.#runtime ? this.cancelWithMutex() : undefined), () => super.closeWithMutex()],
             `Error closing node ${this}`,
         );
     }
@@ -271,7 +274,6 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
             this.lifecycle.targetState = "offline";
             this.lifecycle.change(EndpointLifecycle.Change.Destroying);
 
-            // From here on reset() and close() would fail on the closed mutex, so the steps run directly
             await this.lifecycle.mutex.close();
             await MatterAggregateError.settleSeries(
                 [
@@ -291,14 +293,6 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
      * Erase the persisted data of the node.  Runs on {@link delete} and, on a server node, on factory reset.
      */
     protected abstract eraseStorageWithMutex(): Promise<void>;
-
-    protected override async reset() {
-        await this.lifecycle.mutex.produce(this.resetWithMutex.bind(this));
-    }
-
-    protected async resetWithMutex() {
-        return super.reset();
-    }
 
     /**
      * Create the network runtime.

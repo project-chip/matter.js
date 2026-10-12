@@ -280,7 +280,7 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         try {
             const isOnline = this.lifecycle.isOnline;
             await this.cancelWithMutex();
-            await this.resetWithMutex();
+            await this.reset();
             await this.env.get(ClientNodeStore).eraseCaches();
 
             this.construction.start();

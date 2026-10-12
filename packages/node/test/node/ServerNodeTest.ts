@@ -434,6 +434,53 @@ describe("ServerNode", () => {
             expect(node.endpoints.has(aggregator)).equals(false);
         });
 
+        it("waits for a delete in progress when closing", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            const light = await node.add(OnOffLightDevice, { id: "light" });
+
+            const deleting = light.delete();
+            const closing = light.close();
+            await deleting;
+            await closing;
+
+            expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+            expect(node.endpoints.has(light)).equals(false);
+        });
+
+        it("rejects delete when the reset of a ServerNode fails and still erases its storage", async () => {
+            await using site = new MockSite();
+            const id = "resetFailsOnDelete";
+            const node = await site.addNode(undefined, { id, device: undefined, commissioning: { enabled: false } });
+            await node.add(new Endpoint(OnOffLightDevice, { id: "light", number: EndpointNumber(7) }));
+            node.lifecycle.reset.on(() => {
+                throw new ImplementationError("Reset refused for test");
+            });
+
+            await expect(node.delete()).rejected;
+
+            const reopened = await site.addNode(undefined, {
+                id,
+                device: undefined,
+                commissioning: { enabled: false },
+            });
+            const light = await reopened.add(new Endpoint(OnOffLightDevice, { id: "light" }));
+            expect(light.number).equals(1);
+        });
+
+        it("restores defaults on factory reset when the reset of the ServerNode fails", async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            const light = await node.add(OnOffLightDevice, { id: "light" });
+            await light.set({ onOff: { onOff: true } });
+            node.lifecycle.reset.on(() => {
+                throw new ImplementationError("Reset refused for test");
+            });
+
+            await node.erase();
+
+            expect(node.construction.status).equals(Lifecycle.Status.Active);
+            expect(light.state.onOff.onOff).equals(false);
+        });
+
         it("erases the storage of a deleted ServerNode", async () => {
             await using site = new MockSite();
             const id = "deletedNode";

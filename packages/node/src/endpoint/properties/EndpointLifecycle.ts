@@ -13,6 +13,7 @@ import {
     ImplementationError,
     Lifecycle,
     Logger,
+    Mutex,
     Observable,
 } from "@matter/general";
 import type { Endpoint } from "../Endpoint.js";
@@ -42,6 +43,7 @@ export class EndpointLifecycle {
     #reset = AsyncObservable<[]>();
     #configurationVersionChanged = Observable<[]>(error => this.emitError("configurationVersionChanged", error));
     #queuedUpdates?: Array<EndpointLifecycle.Change>;
+    #mutex: Mutex;
 
     /**
      * Emitted when an endpoint is installed into an initialized owner.
@@ -217,6 +219,7 @@ export class EndpointLifecycle {
     constructor(endpoint: Endpoint, isEssential?: boolean) {
         this.#endpoint = endpoint;
         this.#isEssential = isEssential ?? true;
+        this.#mutex = new Mutex(endpoint);
 
         // Bubble crash events
         endpoint.construction.change.on(status => {
@@ -224,6 +227,20 @@ export class EndpointLifecycle {
                 this.change(EndpointLifecycle.Change.Crashed);
             }
         });
+    }
+
+    /**
+     * Mutex for protecting lifecycle transitions such as erase, delete and close.
+     *
+     * Methods that implement complex async lifecycle transitions use this mutex to ensure conflicting operations cannot
+     * intermingle.  Closing or deleting closes the mutex.  Erasing or deleting an ancestor resets this endpoint without
+     * taking this mutex.
+     *
+     * Generally methods that hold this mutex have a protected "*WithMutex" variant.  This allows for nesting of logic
+     * that requires the mutex without causing deadlock.
+     */
+    get mutex() {
+        return this.#mutex;
     }
 
     /**

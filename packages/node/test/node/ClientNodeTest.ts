@@ -1147,6 +1147,20 @@ describe("ClientNode", () => {
         expect(ep1Store?.knownBehaviors.has("onOff") ?? false).equals(false);
     });
 
+    it("drops the cache of an offline peer on erase when its reset fails", async () => {
+        const { site, peer1 } = await peerWithLightOn();
+        await using _site = site;
+        await MockTime.resolve(peer1.disable());
+        peer1.lifecycle.reset.on(() => {
+            throw new ImplementationError("Reset refused for test");
+        });
+
+        await MockTime.resolve(peer1.erase());
+
+        const ep1Store = [...peer1.env.get(ClientNodeStore).endpointStores].find(store => store.number === 1);
+        expect(ep1Store?.knownBehaviors.has("onOff") ?? false).equals(false);
+    });
+
     it("emits Destroying once on delete", async () => {
         await using site = new MockSite();
         const { controller } = await site.addCommissionedPair();

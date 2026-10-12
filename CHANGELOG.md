@@ -22,6 +22,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: `Crypto` creates, signs and verifies ML-DSA-44 and ML-DSA-65 (FIPS 204) keys, natively on Node.js where available and via `@noble/post-quantum` otherwise
     - Enhancement: Log messages name the environment they come from (`Diagnostic.Message.origin`), shown in brackets after the facility
     - Enhancement: Added `TransportClosedError` for an operation on a transport connection that is already closed
+    - Enhancement: Added `Mutex.isClosed`
     - Enhancement: Storage drivers state how long dirty values may be buffered via `StorageDriver.writeCoalescingInterval`
     - Fix: DNS-SD discovery ignores the known-answer records of mDNS queries, so a controller no longer dials a node through the wrong interface
     - Fix: DNS-SD honors the cache-flush bit and goodbyes after a re-announcement, ignores invalid SRV records, resolves A/AAAA for the SRV target host, and keeps an mDNS message that has one unreadable record
@@ -165,6 +166,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Adding an endpoint below one of its own descendants fails with `ImplementationError` instead of creating a cycle
     - Fix: An endpoint created with `ClientNodeEndpoints.require()` on a running `ClientNode` is reused when the peer later reports that endpoint
     - Fix: `delete()` emits the `Destroying` lifecycle change once
+    - Fix: `erase()`, `delete()` and `close()` of an endpoint run one after another; `close()` waits for an erase or delete in progress
+    - Fix: A factory reset completes and restarts the node when its in-memory reset fails
     - Fix: An endpoint without a `number` no longer gets a number that another endpoint of the node sets in its options but is not yet added, so adding that endpoint later no longer fails
     - Fix: An endpoint refused for its number is not listed in `PartsList` and is not reported as deleted
     - Fix: Automatically assigned endpoint numbers count up from the highest number used so far or explicitly requested in options; after 0xFFFE they continue with the lowest free number instead of the invalid 0xFFFF

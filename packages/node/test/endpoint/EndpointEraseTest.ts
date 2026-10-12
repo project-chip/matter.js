@@ -325,6 +325,80 @@ describe("Endpoint.erase", () => {
         expect(node.endpoints.has(light)).equals(false);
     });
 
+    it("finishes an erase in progress before closing", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(OnOffLightDevice, { id: "light" });
+        const before = rootVersion(node);
+
+        const erasing = light.erase();
+        const closing = light.close();
+        await erasing;
+        await closing;
+
+        expect(rootVersion(node)).equals(before + 1);
+        expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+    });
+
+    it("throws while the endpoint is closing after an earlier erase", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(OnOffLightDevice, { id: "light" });
+        await light.erase();
+
+        const closing = light.close();
+        await expect(light.erase()).rejectedWith(ImplementationError, /closing or closed/);
+        await closing;
+    });
+
+    it("does not restart an endpoint whose parent closes while it is erased", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const aggregator = await node.add(AggregatorEndpoint, {
+            id: "aggregator",
+            parts: [{ type: OnOffLightDevice, id: "child" }],
+        });
+        const child = aggregator.parts.require("child");
+        let restarted = false;
+        child.lifecycle.ready.on(() => {
+            restarted = true;
+        });
+
+        const erasing = child.erase();
+        const closing = aggregator.close();
+        await erasing;
+        await closing;
+
+        expect(restarted).equals(false);
+        expect(child.construction.status).equals(Lifecycle.Status.Destroyed);
+    });
+
+    it("deletes an endpoint after an erase that already reset it", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(OnOffLightDevice, { id: "light" });
+
+        let deleting: Promise<void> | undefined;
+        light.construction.change.on(status => {
+            if (status === Lifecycle.Status.Inactive && deleting === undefined) {
+                deleting = light.delete();
+            }
+        });
+        await light.erase();
+        await deleting;
+
+        expect(deleting).not.undefined;
+        expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+        expect(node.endpoints.has(light)).equals(false);
+    });
+
+    it("refuses deleting an endpoint whose close waits for an erase", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(OnOffLightDevice, { id: "light" });
+
+        const erasing = light.erase();
+        const closing = light.close();
+        await expect(light.delete()).rejectedWith(ImplementationError, /closing/);
+        await erasing;
+        await closing;
+    });
+
     it("increases the root ConfigurationVersion when the bridged endpoint above crashed", async () => {
         await using node = await MockServerNode.createOnline(undefined, { device: undefined });
         const aggregator = await node.add(AggregatorEndpoint, { id: "aggregator" });

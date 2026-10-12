@@ -175,7 +175,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
             this.statusUpdate("resetting to factory defaults");
 
             // Reset in-memory state
-            await this.resetWithMutex();
+            await this.reset();
 
             // Reset persistent state
             await this.eraseStorageWithMutex();

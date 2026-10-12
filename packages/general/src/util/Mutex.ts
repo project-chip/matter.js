@@ -32,6 +32,13 @@ export class Mutex implements PromiseLike<unknown> {
     }
 
     /**
+     * True once {@link close} was called; new tasks are refused from then on.
+     */
+    get isClosed() {
+        return this.#closed;
+    }
+
+    /**
      * Prevent new tasks and wait for remaining tasks to complete.
      */
     async close() {

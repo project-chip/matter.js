@@ -941,41 +941,47 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     protected async reset() {
         try {
-            await this.#resetSteps();
+            await this.resetWithMutex();
         } catch (e) {
             logger.error(`Unhandled error during reset of ${this}`, e);
         }
     }
 
-    async #resetSteps() {
+    /**
+     * Perform {@link reset} and reject with the failures instead of logging them.  Every step runs and the endpoint
+     * becomes inactive even when a step fails, so it can restart.  The caller holds the lifecycle mutex of this endpoint
+     * or of an ancestor.
+     */
+    protected async resetWithMutex() {
         using _resetting = this.construction.join("resetting");
 
         // Revert lifecycle to uninitialized
         this.lifecycle.resetting();
 
-        // Reset child parts
-        {
-            using _parts = _resetting.join("parts");
+        try {
             await MatterAggregateError.settleSeries(
-                [...this.parts].map(part => () => part.#resetSteps()),
-                `Error resetting parts of ${this}`,
+                [
+                    async () => {
+                        using _parts = _resetting.join("parts");
+                        await MatterAggregateError.settleSeries(
+                            [...this.parts].map(part => () => part.resetWithMutex()),
+                            `Error resetting parts of ${this}`,
+                        );
+                    },
+                    async () => {
+                        using _behaviors = _resetting.join("behaviors");
+                        await this.behaviors.close();
+                    },
+                    async () => {
+                        using _lifecycle = _resetting.join("lifecycle");
+                        await this.lifecycle.reset.emit();
+                    },
+                ],
+                `Error resetting ${this}`,
             );
+        } finally {
+            this.construction.setStatus(Lifecycle.Status.Inactive);
         }
-
-        // Reset behaviors
-        {
-            using _behaviors = _resetting.join("behaviors");
-            await this.behaviors.close();
-        }
-
-        // Notify
-        {
-            using _lifecycle = _resetting.join("lifecycle");
-            await this.lifecycle.reset.emit();
-        }
-
-        // Set construction to inactive so we can restart
-        this.construction.setStatus(Lifecycle.Status.Inactive);
     }
 
     /**
@@ -984,7 +990,9 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      *
      * The endpoint keeps its ID and number and stays in the PartsList of its parent.  On a server node the
      * ConfigurationVersion increases.  An endpoint whose parent has not started its parts yet is not restarted; the
-     * parent starts it.  A concurrent call joins the erase in progress.
+     * parent starts it.  A concurrent call joins the erase in progress.  A {@link close} called meanwhile runs once the
+     * erase is done.  A {@link delete} called meanwhile removes the endpoint once the erase is done.  The erase then
+     * skips a restart that has not begun yet, or throws {@link ImplementationError} if it has not begun its reset yet.
      *
      * Throws {@link ImplementationError} if the endpoint is closing or closed.  A failing step is logged and the
      * remaining steps still run.
@@ -1002,6 +1010,10 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
     async #eraseOnce() {
         this.#assertErasable();
+        await this.lifecycle.mutex.produce(() => this.#eraseWithMutex());
+    }
+
+    async #eraseWithMutex() {
         while (this.construction.status === Lifecycle.Status.Initializing) {
             await this.construction.change;
         }
@@ -1012,7 +1024,8 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             () => this.reset(),
             () => erasure.wipe(),
             async () => {
-                if (!this.lifecycle.isDestroying && this.#owner?.lifecycle.isPartsReady) {
+                const owner = this.#owner;
+                if (!this.lifecycle.isDestroying && owner?.lifecycle.isPartsReady && !owner.lifecycle.isDestroying) {
                     this.construction.start();
                     await this.construction;
                 }
@@ -1033,7 +1046,11 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     #assertErasable() {
-        if (this.lifecycle.isDestroying || this.construction.status === Lifecycle.Status.Destroyed) {
+        if (
+            this.lifecycle.isDestroying ||
+            this.lifecycle.mutex.isClosed ||
+            this.construction.status === Lifecycle.Status.Destroyed
+        ) {
             throw new ImplementationError(`Cannot erase ${this} because it is closing or closed`);
         }
     }
@@ -1061,19 +1078,24 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * Perform {@link delete}.  Concurrent calls of {@link delete} join a single run.
      */
     protected async deleteOnce() {
-        this.construction.assert(this.toString());
-        if (this.lifecycle.isDestroying) {
+        if (this.#erasing === undefined) {
+            this.construction.assert(this.toString());
+        }
+        const { mutex } = this.lifecycle;
+        if (this.lifecycle.isDestroying || mutex.isClosed) {
             throw new ImplementationError(`Cannot delete ${this} because it is closing`);
         }
-        this.lifecycle.change(EndpointLifecycle.Change.Destroying);
-        if (this.#erasing !== undefined) {
-            // The outcome of the erase reaches its own caller
-            await Promise.allSettled([this.#erasing]);
-        }
 
+        // Marked before queueing so an erase in progress skips its restart and version increase
+        this.lifecycle.change(EndpointLifecycle.Change.Destroying);
+        const deleting = mutex.produce(() => this.#deleteWithMutex());
+        await Promise.all([deleting, mutex.close()]);
+    }
+
+    async #deleteWithMutex() {
         const deletion = await this.env.get(EndpointInitializer).beginDeleteDescendant(this);
         await MatterAggregateError.settleSeries(
-            [() => this.#resetSteps(), () => deletion.wipe(), () => this.close(), () => deletion.finish()],
+            [() => this.resetWithMutex(), () => deletion.wipe(), () => this.closeWithMutex(), () => deletion.finish()],
             `Error deleting endpoint ${this}`,
         );
     }
@@ -1107,15 +1129,24 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * ID that is added later gets the same number and data, unless another endpoint requested that number meanwhile.
      * Use {@link delete} to remove the endpoint for good.
      *
+     * An {@link erase} in progress completes first.  A call during {@link delete} or another close waits for it, runs no
+     * step itself and does not report its failures.
+     *
      * Every teardown step runs even when an earlier one fails.  A failed deactivation rejects with a
      * {@link MatterAggregateError}; failures while destroying the endpoint, its parts and its behaviors are logged.
      */
     async close() {
-        this.lifecycle.change(EndpointLifecycle.Change.Destroying);
-        if (this.#erasing !== undefined) {
-            // The outcome of the erase reaches its own caller
-            await Promise.allSettled([this.#erasing]);
+        const { mutex } = this.lifecycle;
+        if (mutex.isClosed) {
+            await mutex.close();
+            return;
         }
+        const closing = mutex.produce(() => this.closeWithMutex());
+        await Promise.all([closing, mutex.close()]);
+    }
+
+    protected async closeWithMutex() {
+        this.lifecycle.change(EndpointLifecycle.Change.Destroying);
         await MatterAggregateError.settleSeries(
             [
                 () => this.env.maybeGet(EndpointInitializer)?.deactivateDescendant(this),
