@@ -77,6 +77,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: Adding an endpoint with the number of an erased endpoint that is still a part of its parent is refused
     - Breaking: An essential endpoint whose initialization fails in `add()` is closed instead of reset, so the same instance cannot be added again
     - Breaking: `erase()` on an endpoint restarts it with its default values and options and keeps its endpoint number; on a server node the ConfigurationVersion increases
+    - Breaking: `erase()` of an endpoint or node rejects with a `MatterAggregateError` when a step fails instead of logging the failure
     - Breaking: `ServerNode.delete()` erases the node's storage and closes the node; it no longer restarts the node first
     - Breaking: `ClientNode.erase()` keeps the commissioning state and reconnects when the node was online
     - Breaking: `Endpoint.reset()` and `Node.reset()` are protected, and `EndpointContainer.reset()` is removed

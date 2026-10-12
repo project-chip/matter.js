@@ -231,6 +231,9 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
     /**
      * Erase the data cached from the peer and initialize the node again.  Commissioning and connection settings stay.
      * If the node was online it reconnects and reads the peer again.
+     *
+     * Rejects with a {@link MatterAggregateError} if a step fails.  A failed reset still erases the cache and
+     * initializes the node again; a failure to disconnect, erase the cache or restart leaves the node crashed.
      */
     override erase() {
         return super.erase();
@@ -277,24 +280,33 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
     }
 
     protected override async eraseWithMutex() {
+        const errors = new Array<unknown>();
         try {
             const isOnline = this.lifecycle.isOnline;
             await this.cancelWithMutex();
-            await this.reset();
-            await this.env.get(ClientNodeStore).eraseCaches();
-            if (this.lifecycle.phase === "deleting") {
-                return;
+            try {
+                await this.resetWithMutex();
+            } catch (e) {
+                errors.push(e);
             }
 
-            this.construction.start();
-            if (isOnline && this.lifecycle.shouldBeOnline) {
-                await this.startWithMutex();
-            } else {
-                await this.construction.ready;
+            await this.env.get(ClientNodeStore).eraseCaches();
+
+            if (this.lifecycle.phase !== "deleting") {
+                this.construction.start();
+                if (isOnline && this.lifecycle.shouldBeOnline) {
+                    await this.startWithMutex();
+                } else {
+                    await this.construction.ready;
+                }
             }
         } catch (e) {
             this.construction.crash();
-            throw e;
+            errors.push(e);
+        }
+
+        if (errors.length) {
+            throw new MatterAggregateError(errors, `Error erasing ${this}`);
         }
     }
 

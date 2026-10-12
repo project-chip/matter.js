@@ -1162,18 +1162,22 @@ describe("ClientNode", () => {
         expect(ep1Store?.knownBehaviors.has("onOff") ?? false).equals(false);
     });
 
-    it("drops the cache of an offline peer on erase when its reset fails", async () => {
+    it("drops the cache of an offline peer and rejects on erase when its reset fails", async () => {
         const { site, peer1 } = await peerWithLightOn();
         await using _site = site;
+        const address = peer1.state.commissioning.peerAddress;
         await MockTime.resolve(peer1.disable());
         peer1.lifecycle.reset.on(() => {
             throw new ImplementationError("Reset refused for test");
         });
 
-        await MockTime.resolve(peer1.erase());
+        await expect(MockTime.resolve(peer1.erase())).rejectedWith(MatterAggregateError, /Error erasing/);
+
+        expect(peer1.state.commissioning.peerAddress).deep.equals(address);
 
         const ep1Store = [...peer1.env.get(ClientNodeStore).endpointStores].find(store => store.number === 1);
         expect(ep1Store?.knownBehaviors.has("onOff") ?? false).equals(false);
+        expect(peer1.construction.status).equals(Lifecycle.Status.Active);
     });
 
     it("does not restart a peer that is deleted while it is erased", async () => {

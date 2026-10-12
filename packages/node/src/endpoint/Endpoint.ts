@@ -992,8 +992,8 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * erase is done.  A {@link delete} called meanwhile removes the endpoint once the erase is done; the erase skips
      * the steps that have not begun yet.
      *
-     * Throws {@link ImplementationError} if the endpoint is closing or closed.  A failing step is logged and the
-     * remaining steps still run.
+     * Throws {@link ImplementationError} if the endpoint is closing or closed.  Rejects with a
+     * {@link MatterAggregateError} if a step fails; the remaining steps still run.
      *
      * @see {@link MatterSpecification.v161.Core} § 9.2.11
      */
@@ -1023,33 +1023,29 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         }
 
         const erasure = await this.env.get(EndpointInitializer).beginEraseDescendant(this);
-        const steps = [
-            () => this.reset(),
-            () => erasure.wipe(),
-            async () => {
-                const owner = this.#owner;
-                if (
-                    this.lifecycle.phase !== "deleting" &&
-                    owner?.lifecycle.isPartsReady &&
-                    !owner.lifecycle.isDestroying
-                ) {
-                    this.construction.start();
-                    await this.construction;
-                }
-            },
-            async () => {
-                if (this.lifecycle.phase !== "deleting") {
-                    await erasure.finish();
-                }
-            },
-        ];
-        for (const step of steps) {
-            try {
-                await step();
-            } catch (e) {
-                logger.error(`Error erasing ${this}:`, e);
-            }
-        }
+        await MatterAggregateError.settleSeries(
+            [
+                () => this.resetWithMutex(),
+                () => erasure.wipe(),
+                async () => {
+                    const owner = this.#owner;
+                    if (
+                        this.lifecycle.phase !== "deleting" &&
+                        owner?.lifecycle.isPartsReady &&
+                        !owner.lifecycle.isDestroying
+                    ) {
+                        this.construction.start();
+                        await this.construction;
+                    }
+                },
+                async () => {
+                    if (this.lifecycle.phase !== "deleting") {
+                        await erasure.finish();
+                    }
+                },
+            ],
+            `Error erasing ${this}`,
+        );
     }
 
     #assertErasable() {

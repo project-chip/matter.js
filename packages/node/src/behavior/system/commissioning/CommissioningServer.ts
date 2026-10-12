@@ -200,7 +200,16 @@ export class CommissioningServer extends Behavior {
         if (node.lifecycle.phase === "closing" || node.lifecycle.phase === "deleting") {
             return;
         }
-        this.env.runtime.add(node.erase());
+        this.env.runtime.add(this.#factoryReset(node));
+    }
+
+    async #factoryReset(node: ServerNode) {
+        try {
+            await node.erase();
+        } catch (e) {
+            // A node the reset left crashed stops the runtime on its own
+            logger.warn(`Factory reset of ${node} after its last fabric left completed with errors:`, e);
+        }
     }
 
     #endPendingReset() {

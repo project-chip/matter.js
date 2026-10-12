@@ -50,6 +50,7 @@ import {
     LogLevel,
     MemoryBlobStorageDriver,
     MemoryStorageDriver,
+    MatterAggregateError,
     MdnsSocket,
     MockCrypto,
     MockFilesystem,
@@ -467,7 +468,7 @@ describe("ServerNode", () => {
             expect(light.number).equals(1);
         });
 
-        it("restores defaults on factory reset when the reset of the ServerNode fails", async () => {
+        it("restores defaults and rejects on factory reset when the reset of the ServerNode fails", async () => {
             await using node = await MockServerNode.createOnline(undefined, { device: undefined });
             const light = await node.add(OnOffLightDevice, { id: "light" });
             await light.set({ onOff: { onOff: true } });
@@ -475,7 +476,7 @@ describe("ServerNode", () => {
                 throw new ImplementationError("Reset refused for test");
             });
 
-            await node.erase();
+            await expect(node.erase()).rejectedWith(MatterAggregateError, /factory reset/);
 
             expect(node.construction.status).equals(Lifecycle.Status.Active);
             expect(light.state.onOff.onOff).equals(false);
@@ -1025,6 +1026,55 @@ describe("ServerNode", () => {
             await node.close();
 
             expect(resets.length).equals(0);
+        });
+
+        it("keeps the runtime running when the reset after the last fabric fails but the node restarts", async () => {
+            const { node, contextOptions } = await commissioning.commission();
+            const resets = watchErase(node);
+            const commissionerExchange = await armFailsafe(node);
+            let crashes = 0;
+            node.env.runtime.crashed.on(() => {
+                crashes++;
+            });
+            node.lifecycle.reset.on(() => {
+                throw new ImplementationError("Reset refused for test");
+            });
+
+            await removeFabric(node, contextOptions);
+            await node.online({ exchange: commissionerExchange, command: true }, async agent => {
+                await agent.generalCommissioning.armFailSafe({ expiryLengthSeconds: 0, breadcrumb: 0 });
+            });
+            expect(resets.length).equals(1);
+            await expect(MockTime.resolve(resets[0], { macrotasks: true })).rejectedWith(MatterAggregateError);
+            await MockTime.resolve(Promise.resolve(), { macrotasks: true });
+
+            expect(crashes).equals(0);
+            expect(node.construction.status).equals(Lifecycle.Status.Active);
+
+            await node.close();
+        });
+
+        it("crashes the runtime when the reset after the last fabric leaves the node crashed", async () => {
+            const { node, contextOptions } = await commissioning.commission();
+            const resets = watchErase(node);
+            const commissionerExchange = await armFailsafe(node);
+            let crashes = 0;
+            node.env.runtime.crashed.on(() => {
+                crashes++;
+            });
+            node.env.get(FabricManager).clear = async () => {
+                throw new ImplementationError("Storage erase refused for test");
+            };
+
+            await removeFabric(node, contextOptions);
+            await node.online({ exchange: commissionerExchange, command: true }, async agent => {
+                await agent.generalCommissioning.armFailSafe({ expiryLengthSeconds: 0, breadcrumb: 0 });
+            });
+            expect(resets.length).equals(1);
+            await expect(MockTime.resolve(resets[0], { macrotasks: true })).rejectedWith(MatterAggregateError);
+            await MockTime.resolve(Promise.resolve(), { macrotasks: true });
+
+            expect(crashes).equals(1);
         });
 
         it("stays commissioned when another fabric remains", async () => {
@@ -1580,7 +1630,7 @@ describe("ServerNode", () => {
         await node.start();
         expect(refused.construction.error).instanceOf(IdentityConflictError);
 
-        await refused.erase();
+        await expect(refused.erase()).rejectedWith(MatterAggregateError, /Error erasing/);
 
         const added = new Array<number>();
         for (let i = 0; i < 4; i++) {

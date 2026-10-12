@@ -12,7 +12,15 @@ import { OnOffLightDevice } from "#devices/on-off-light";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointBehaviorsError } from "#endpoint/errors.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
-import { ImplementationError, Lifecycle, LogDestination, Logger, LogFormat, LogLevel } from "@matter/general";
+import {
+    ImplementationError,
+    Lifecycle,
+    LogDestination,
+    Logger,
+    LogFormat,
+    LogLevel,
+    MatterAggregateError,
+} from "@matter/general";
 import { MockServerNode, MockSite } from "@matter/node/testing";
 
 const VersionedBridgedLightDevice = OnOffLightDevice.with(BridgedDeviceBasicInformationServer);
@@ -44,6 +52,14 @@ async function captureErrors<T>(actor: () => Promise<T>) {
     } finally {
         delete Logger.destinations.capture;
     }
+}
+
+function messagesOf(error: unknown): string[] {
+    if (!(error instanceof Error)) {
+        return [String(error)];
+    }
+    const nested = error instanceof AggregateError ? error.errors : [];
+    return [error.message, ...[...nested, error.cause].filter(e => e !== undefined).flatMap(messagesOf)];
 }
 
 class FailingOnOffServer extends OnOffServer {
@@ -232,16 +248,45 @@ describe("Endpoint.erase", () => {
         expect(light.lifecycle.isReady).equals(true);
     });
 
-    it("logs a failing restart and still increases the ConfigurationVersion", async () => {
+    it("rejects on a failing restart and still increases the ConfigurationVersion", async () => {
         await using node = await MockServerNode.createOnline(undefined, { device: undefined });
         const failing = new Endpoint(OnOffLightDevice.with(FailingOnOffServer), { id: "failing", isEssential: false });
         await expect(node.add(failing)).rejectedWith(EndpointBehaviorsError);
         expect(failing.construction.status).equals(Lifecycle.Status.Crashed);
         const before = rootVersion(node);
 
-        const { errors } = await captureErrors(() => failing.erase());
+        const failure = await failing.erase().then(
+            () => undefined,
+            (e: unknown) => e,
+        );
 
-        expect(errors.join("\n")).match(/Initialization refused for test/);
+        expect(failure).instanceOf(MatterAggregateError);
+        expect(messagesOf(failure).join("\n")).match(/Initialization refused for test/);
+
+        expect(rootVersion(node)).equals(before + 1);
+    });
+
+    it("rejects on a failing reset and still wipes and restarts the endpoint", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(OnOffLightDevice, { id: "light" });
+        await light.set({ onOff: { onOff: true } });
+        const before = rootVersion(node);
+        light.lifecycle.reset.on(() => {
+            throw new ImplementationError("Reset refused for test");
+        });
+
+        const { result, errors } = await captureErrors(() =>
+            light.erase().then(
+                () => undefined,
+                (e: unknown) => e,
+            ),
+        );
+
+        expect(result).instanceOf(MatterAggregateError);
+        expect(messagesOf(result).join("\n")).match(/Reset refused for test/);
+        expect(errors).deep.equals([]);
+        expect(light.lifecycle.isReady).equals(true);
+        expect(light.state.onOff.onOff).equals(false);
         expect(rootVersion(node)).equals(before + 1);
     });
 

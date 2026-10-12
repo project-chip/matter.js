@@ -16,16 +16,7 @@ import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { ServerNodeStore } from "#storage/server/ServerNodeStore.js";
 import type { Environment } from "@matter/general";
-import {
-    asyncNew,
-    Construction,
-    Diagnostic,
-    DiagnosticSource,
-    errorOf,
-    Identity,
-    MatterAggregateError,
-    MatterError,
-} from "@matter/general";
+import { asyncNew, Construction, Diagnostic, DiagnosticSource, Identity, MatterAggregateError } from "@matter/general";
 import {
     FabricManager,
     Interactable,
@@ -47,12 +38,7 @@ import { ServerEnvironment } from "./server/ServerEnvironment.js";
 /**
  * Thrown when there is an error during factory reset.
  */
-class FactoryResetError extends MatterError {
-    constructor(message: string, cause: any) {
-        super(message);
-        this.cause = errorOf(cause);
-    }
-}
+class FactoryResetError extends MatterAggregateError {}
 
 /**
  * A server-side Matter {@link Node}.
@@ -155,6 +141,9 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     /**
      * Perform a factory reset of the node.
+     *
+     * Rejects with a {@link MatterAggregateError} if a step fails.  A failed reset still erases the storage and
+     * restarts the node; a failure to go offline, erase the storage or restart leaves the node crashed.
      */
     override async erase() {
         using _erasing = this.construction.join("erasing");
@@ -162,40 +151,42 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     }
 
     protected override async eraseWithMutex() {
+        const errors = new Array<unknown>();
         try {
             await this.construction;
 
-            // Go offline before performing reset
             const isOnline = this.lifecycle.isOnline;
             if (isOnline) {
                 await this.cancelWithMutex();
             }
 
-            // Inform user
             this.statusUpdate("resetting to factory defaults");
-
-            // Reset in-memory state
-            await this.reset();
-
-            // Reset persistent state
-            await this.eraseStorageWithMutex();
-
-            if (this.lifecycle.phase === "deleting") {
-                return;
+            try {
+                await this.resetWithMutex();
+            } catch (e) {
+                errors.push(e);
             }
 
-            // Reset reverts node to inactive state; now reinitialize
-            this.construction.start();
+            await this.eraseStorageWithMutex();
 
-            // Go back online if we were online at time of reset and should still be online, otherwise just await reinitialization
-            if (isOnline && this.lifecycle.shouldBeOnline) {
-                await this.startWithMutex();
-            } else {
-                await this.construction.ready;
+            if (this.lifecycle.phase !== "deleting") {
+                // Reset reverts node to inactive state; now reinitialize
+                this.construction.start();
+
+                // Go back online if we were online at time of reset and should still be online, otherwise just await reinitialization
+                if (isOnline && this.lifecycle.shouldBeOnline) {
+                    await this.startWithMutex();
+                } else {
+                    await this.construction.ready;
+                }
             }
         } catch (e) {
             this.construction.crash();
-            throw new FactoryResetError(`Error during factory reset of ${this}`, e);
+            errors.push(e);
+        }
+
+        if (errors.length) {
+            throw new FactoryResetError(errors, `Error during factory reset of ${this}`);
         }
     }
 
