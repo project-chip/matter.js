@@ -83,6 +83,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: `Endpoint.reset()`, `Node.reset()` and `EndpointContainer.reset()` are removed; use `erase()`
     - Breaking: Changing the `owner` of an endpoint that already has one, also by adding it to another endpoint, throws; remove the endpoint with `close()` or `delete()` first
     - Breaking: `EndpointInitializer.eraseDescendant()` is replaced by `beginEraseDescendant()` and `beginDeleteDescendant()`
+    - Breaking: `erase()` and `delete()` throw `DestroyedDependencyError` while the endpoint or an ancestor of the same node is closing or being deleted
     - Breaking: `CommissioningClient` state `sessionParameters` is replaced by `reportedSessionParameters`, `advertisedIntervals` and `tcpUnsupported`; stored values migrate
     - Deprecation: `ClientNodeInteraction.localStateFor()` will be removed in 0.19
     - Feature: Finalized the `ClientNode` API for controllers: `ServerNode.peers.commissioned`, `ClientNode.disable()`/`enable()`, connection state, split commissioning (`finalizeCommissioning` hands off discovery data and PASE session parameters to `peers.completeCommissioning`), opening commissioning windows on peers and more; see [Controller migration guide](docs/MIGRATION_CONTROLLER_018.md)
@@ -104,6 +105,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Adding endpoints under an aggregator is faster
     - Enhancement: In `strict` validation mode a cluster server refuses construction when a mandatory command throws `Behavior.unimplemented`
     - Enhancement: Deleting an endpoint increases the ConfigurationVersion of its bridged device, or else of the node
+    - Enhancement: A lifecycle operation of a node or endpoint that waits 10 seconds for another one logs a warning naming both
     - Enhancement: `DclBehavior.offline` (`MATTER_DCL_OFFLINE`) keeps the DCL services it creates off the network
     - Adjustment: For a part of a server node, the `IdAssigned` and `NumberAssigned` lifecycle changes are emitted before `Installed`
     - Adjustment: `ChangeNotificationService.Change` has a new kind `"readable"`, emitted when an endpoint's state becomes readable; consumers that switch on kind must handle or ignore it
@@ -175,7 +177,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Adding an endpoint below one of its own descendants fails with `ImplementationError` instead of creating a cycle
     - Fix: An endpoint created with `ClientNodeEndpoints.require()` on a running `ClientNode` is reused when the peer later reports that endpoint
     - Fix: `delete()` emits the `Destroying` lifecycle change once
-    - Fix: `erase()`, `delete()` and `close()` of an endpoint or node run one after another; `close()` waits for an erase or delete in progress, and a repeated call joins the one in progress
+    - Fix: `erase()`, `delete()` and `close()` of the endpoints of one node run one after another; `close()` waits for an erase or delete in progress, and a repeated call joins the one in progress
     - Fix: A factory reset completes and restarts the node when its in-memory reset fails
     - Fix: An endpoint without a `number` no longer gets a number that another endpoint of the node sets in its options but is not yet added, so adding that endpoint later no longer fails
     - Fix: An endpoint refused for its number is not listed in `PartsList` and is not reported as deleted
