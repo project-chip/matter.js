@@ -13,7 +13,8 @@ import type { DeviceTypeValidation } from "./DeviceTypeValidation.js";
  * Thrown when a pass refuses one or more endpoints: for a new misplaced singleton, and for any other new violation in
  * mode `"strict"`.
  *
- * Its {@link errors} are the new violations of every refused endpoint, in the order the pass judged them. A refused
+ * Its {@link errors} are the new violations of every refused endpoint, except those flagged
+ * {@link DeviceTypeViolation.assertedAtRoot}, in the order the pass judged them. A refused
  * endpoint need not be the one being constructed, such as a sibling the new endpoint makes a duplicate. The message
  * names the refused endpoints, the first refused first. The singleton check before an endpoint's behaviors initialize
  * stops at the first misplacing endpoint in tree order and names only that one.
