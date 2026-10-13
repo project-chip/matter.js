@@ -472,21 +472,22 @@ describe("OtaRequestorTestInstance", () => {
                 ],
             });
 
-            // A wait that only timed out would still find both answers in the record, so the time it
-            // took is what shows the Discontinue settled it
-            const applyTimeoutMs = 20_000;
-            const before = Time.nowUs;
-            const transfer = await node.serveOtaUpdate({ expectApply: true, applyTimeoutMs });
-            expect(Time.nowUs - before, "the wait settled on the Discontinue").below(applyTimeoutMs);
+            const transfer = await node.serveOtaUpdate({ expectApply: true, applyTimeoutMs: 20_000 });
+            const returnedAt = Time.nowUs;
 
             expect(transfer.applyAcknowledged, "the apply was refused").equal(false);
+            const applies = transfer.exchanges.applyUpdate;
             expect(
-                transfer.exchanges.applyUpdate.map(({ response }) => response.action),
+                applies.map(({ response }) => response.action),
                 "the ApplyUpdateRequest answers the provider recorded",
             ).deep.equal([
                 OtaSoftwareUpdateProvider.ApplyUpdateAction.AwaitNextAction,
                 OtaSoftwareUpdateProvider.ApplyUpdateAction.Discontinue,
             ]);
+
+            // A wait that only timed out would still find both answers in the record, so how soon the
+            // call returned after the Discontinue is what shows that answer settled it
+            expect(returnedAt - applies[1].receivedAtMs, "the wait settled on the Discontinue").below(5_000);
         } catch (error) {
             bodyFailure = error;
         }
