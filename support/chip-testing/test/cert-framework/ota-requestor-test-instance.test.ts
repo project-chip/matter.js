@@ -472,9 +472,12 @@ describe("OtaRequestorTestInstance", () => {
                 ],
             });
 
-            // Beyond the test's own timeout, so a wait that only times out fails the test instead of
-            // reading a record that caught up in the meantime
-            const transfer = await node.serveOtaUpdate({ expectApply: true, applyTimeoutMs: 120_000 });
+            // A wait that only timed out would still find both answers in the record, so the time it
+            // took is what shows the Discontinue settled it
+            const applyTimeoutMs = 20_000;
+            const before = Time.nowUs;
+            const transfer = await node.serveOtaUpdate({ expectApply: true, applyTimeoutMs });
+            expect(Time.nowUs - before, "the wait settled on the Discontinue").below(applyTimeoutMs);
 
             expect(transfer.applyAcknowledged, "the apply was refused").equal(false);
             expect(
