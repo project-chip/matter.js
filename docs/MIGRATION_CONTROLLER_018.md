@@ -136,13 +136,12 @@ Legacy `controller.discoverCommissionableDevices(identifierData, discoveryCapabi
 `serverNode.peers.discover(options)`, which returns a `ContinuousDiscovery`:
 
 ```ts
-import { ChannelType, Seconds } from "@matter/general";
+import { Seconds } from "@matter/general";
 
 const discovery = serverNode.peers.discover({
     longDiscriminator: 3840,          // or { shortDiscriminator } / { vendorId } / { productId } / { deviceType }, or {} for all
     timeout: Seconds(120),            // omit to search until you call discovery.stop()
-    scannerFilter: scanner =>         // optional: restrict transports (default: all)
-        scanner.type === ChannelType.UDP || scanner.type === ChannelType.BLE,
+    discoveryCapabilities: { ble: true }, // optional: BLE only where named; IP network always (default: all)
 });
 
 // `discovered` fires per (re-)advertisement — the same device can fire repeatedly, so dedupe:

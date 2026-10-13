@@ -1635,12 +1635,12 @@ skips a discovered device whose advertised vendor or product id disagrees with t
 naming another vendor finds nothing and chip-tool gives up after its 30s discovery budget. It is
 false for matter.js too: `resolveCommissioningTarget` hands the code's `vendorId`/`productId` to
 `peers.commission`, whose discovery passes over a device whose advertisement disagrees, and the attempt
-ends in `DiscoveryError` after `giveUpAfterMs`. **The plan's expected outcome admits both
+ends in `DeviceNotDiscoveredError` after `giveUpAfterMs`. **The plan's expected outcome admits both
 outcomes** — terminate, "unless the user is made fully aware of the security risks" — so the step
 records which happened instead of asserting one.
 
-Two things the step's evidence has to say, and did not until it was made to. A `DiscoveryError` or a
-chip-tool command failure is what termination looks like, but so is a TH that stopped advertising, so
+Two things the step's evidence has to say, and did not until it was made to. A `DiscoveryError` other than
+`NoDiscoveryTransportError`, or a chip-tool command failure, is what termination looks like, but so is a TH that stopped advertising, so
 `recordVendorOutcome` proves the TH is advertising commissionable immediately before each attempt (the
 `restoreCommissioningMode` that precedes it only does so for a code that follows an onboarding). And
 one of `TEST_VENDOR_IDS` is the vendor id a harness TH advertises for itself, so that code is step 1's
