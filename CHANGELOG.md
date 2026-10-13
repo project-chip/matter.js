@@ -176,8 +176,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: An endpoint that sets a `number` in its options which a stored endpoint with another ID had before gets that number and logs a warning; the stored endpoint gets a new number when it is added again
     - Fix: (@grzonu) Reading a peer's `BasicInformation` through `Peer` (on every read, subscribe and invoke) no longer leaves a state reference behind per access
     - Fix: A subscription that ends while the node keeps running, e.g. because its session was closed, is no longer re-established after a restart; re-establishment tries the newest stored subscription of a peer first
-    - Fix: Device type validation counts a utility component device type, such as Power Source, that the composing endpoint lists in its own `DeviceTypeList` and judges that endpoint by the component's nested requirements
-    - Fix: `DeviceTypeViolationError.endpoint` is no longer an own enumerable property, so test runners that serialize the error no longer run out of memory
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument
