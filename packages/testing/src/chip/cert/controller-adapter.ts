@@ -711,8 +711,8 @@ export interface ServeOtaUpdateOptions {
      * How long to keep recording after the OTA exchange settles, in milliseconds, for a case asserting
      * what the node did *not* send in that window.
      *
-     * The waits above end on what the *provider* decided — it allowed an apply, or it refused one and
-     * gave up on the update — which a node it refused has not yet had time to react to. A case reading
+     * The waits above end on what the *provider* decided — it allowed an apply, or it refused one —
+     * which a node it refused has not yet had time to react to. A case reading
      * the record at that point states what the node had not done yet rather than what it did not do, so
      * a case whose claim is a negative names the window here and checks
      * {@link OtaBdxTransfer.observedMs} against it.
