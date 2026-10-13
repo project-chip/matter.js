@@ -80,6 +80,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: An essential endpoint whose initialization fails in `add()` is closed instead of reset, so the same instance cannot be added again
     - Breaking: `CommissioningClient` state `sessionParameters` is replaced by `reportedSessionParameters`, `advertisedIntervals` and `tcpUnsupported`; stored values migrate
     - Breaking: `WebRtcTransportRequestorServer.removeSession()` takes a session key (id, fabric, peer node) instead of the id
+    - Breaking: The remote API `code` of a status error is its id, as the HTTP `Error-Code` header already was: `status-response` becomes the status id (such as `not-found`), and `path` becomes the expanded id (such as `constraint-error+door-lock`) for a write rejection
     - Deprecation: `ClientNodeInteraction.localStateFor()` will be removed in 0.19
     - Feature: Finalized the `ClientNode` API for controllers: `ServerNode.peers.commissioned`, `ClientNode.disable()`/`enable()`, connection state, split commissioning (`finalizeCommissioning` hands off discovery data and PASE session parameters to `peers.completeCommissioning`), opening commissioning windows on peers and more; see [Controller migration guide](docs/MIGRATION_CONTROLLER_018.md)
     - Feature: Groupcast cluster (`GroupcastServer`) and AccessControl `Auxiliary` feature; group commands via `ClientGroup` endpoints and group bindings
@@ -100,6 +101,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Adding endpoints under an aggregator is faster
     - Enhancement: In `strict` validation mode a cluster server refuses construction when a mandatory command throws `Behavior.unimplemented`
     - Enhancement: `DclBehavior.offline` (`MATTER_DCL_OFFLINE`) keeps the DCL services it creates off the network
+    - Enhancement: In split commissioning, a `CommissioningError` for a failed `CommissioningComplete` carries the status as `cause`
+    - Enhancement: `EndpointReadFailure` carries `received` for a status the device sent
+    - Enhancement: A client command raises a `ReceivedStatusResponseError` for a status the device sent
     - Adjustment: For a part of a server node, the `IdAssigned` and `NumberAssigned` lifecycle changes are emitted before `Installed`
     - Adjustment: `ChangeNotificationService.Change` has a new kind `"readable"`, emitted when an endpoint's state becomes readable; consumers that switch on kind must handle or ignore it
     - Adjustment: Device types with a mandatory client application cluster include `BindingServer`; `behaviors.require(BindingServer, options)` no longer sets its state (use `add()` or `setStateOf()`), and an own `BindingServer` implementation subclass must be declared with `.with()` on the endpoint on creation
@@ -177,6 +181,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: An endpoint that sets a `number` in its options which a stored endpoint with another ID had before gets that number and logs a warning; the stored endpoint gets a new number when it is added again
     - Fix: (@grzonu) Reading a peer's `BasicInformation` through `Peer` (on every read, subscribe and invoke) no longer leaves a state reference behind per access
     - Fix: A subscription that ends while the node keeps running, e.g. because its session was closed, is no longer re-established after a restart; re-establishment tries the newest stored subscription of a peer first
+    - Fix: `VendorIdVerification.verify()` returns `undefined` when the device rejects the signing request
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument
@@ -209,6 +214,10 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Groupcast support (Matter 1.6.1) for multicast group sessions
     - Feature: `DclClient.fetchComplianceInfo()` reads a software version's compliance record, used by OTA update checks
     - Feature: PASE throws `PasscodeMismatchError` on a wrong passcode to allow better user guidance
+    - Feature: `PathError`, `ReceivedPathError`, `AggregatePathError` and `ExpandedStatus` are exported
+    - Feature: Invoke, write, read and event status entries carry `received` when they were decoded from the peer
+    - Feature: `ResultStatus.errorOf()` turns a status entry into the matching local or received error
+    - Enhancement: `WriteResult.assertSuccess()` and the commissioning commands raise a `ReceivedStatusResponseError` for a status the peer sent
     - Enhancement: Interactions can be aborted via `ClientRequest.abort`
     - Enhancement: `ClientRequest.largeMessage` requires a TCP-backed session for any interaction
     - Enhancement: `RebootResubscribeArmer.returnTimeout()` returns how long an armed peer has to return once it was allowed to apply
@@ -219,6 +228,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: `NodeSession.reportedParameters` holds the session parameters the peer sent, without fallbacks
     - Adjustment: `DclVendorInfo` is a deprecated alias of `VendorDclSchema`
     - Adjustment: `DclVendorInfoService` always provides the built-in test vendors and no longer stores them
+    - Adjustment: The error for a whole-interaction StatusResponse is the received class of its status, with a message like `Received error status NotFound (code 139)`
     - Fix: DNS-SD discovery ignores malformed or out-of-range `D`, `CM`, `VP`, `DT`, `PH`, `T` and `ICD` values
     - Fix: Commissioning tries addresses in ranked order and once each, moves on faster, and stops on a wrong passcode
     - Fix: Commissioning continues when the device rejects or does not answer ScanNetworks
@@ -266,19 +276,26 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: Onboarding payload vendor and product ID are `undefined` where not stated
     - Deprecation: The `ClusterType()` compat layer and the generated `Cluster`, `Complete` and `<Name>Cluster` aliases will be removed in 0.19
     - Feature: Added the `ClusterLookup` namespace for cluster element name/ID resolution
+    - Feature: Added `StatusResponseError.received`, `ReceivedStatusResponse` and `ReceivedStatusResponseError.create()`; each received class extends the local class for its status
+    - Feature: Added `StatusResponseError.idOf()`, the id of a status
     - Feature: Added `VendorId.isOperational()`, `CaseAuthenticatedTag.isValid()` and `NodeId.isValidCaseAuthenticatedTag()`
     - Enhancement: ID validators name the legal range in their error message
     - Adjustment: A legacy `ClusterType()` cluster enforces the bounds of 64-bit attributes
+    - Adjustment: A status error's `id` is the id of its status however it is built: `constraint` and `dynamic-constraint` from `create()` become `constraint-error` and `dynamic-constraint-error`, `received-status-response` becomes the status id, and `unknown-status-response` and `status-response` for an unknown code become `unknown-<code>`
+    - Adjustment: `is()` on a `StatusResponseError` subclass matches only that subclass, so `ReceivedStatusResponseError.is()` no longer matches a local status
+    - Adjustment: A received status class is named `Received<Status>`, such as `ReceivedNotFound`
     - Fix: A cluster-specific `status` field is typed `Status | <Cluster>.StatusCode`
     - Fix: ID validators refuse values that are not 32-bit unsigned integers
     - Fix: Bitmap classes apply member defaults and full member widths
     - Fix: TLV schemas carry computed bounds, nullable 64-bit integers reserve the null value correctly, and fully qualified 4-octet tags decode
     - Fix: Onboarding payloads decode Base38 correctly and reject invalid vendor IDs, product IDs and manual codes
     - Fix: `Cluster.with()` rejects unknown features and returns one frozen namespace per selection
+    - Fix: `StatusResponseError.create()` returns an `UnknownStatusResponseError` for an unknown code instead of throwing it, and its message names the code
 
 - @project-chip/matter.js
     - Deprecation: The legacy controller API is deprecated and will be removed in 0.19; use `ServerNode.peers` / `ClientNode` (see [Controller migration guide](docs/MIGRATION_CONTROLLER_018.md))
     - Feature: `CommissioningController` accepts `clientCacheFlushInterval`
+    - Enhancement: A status the device returns for a legacy `InteractionClient` invoke raises a `ReceivedStatusResponseError` with the message `Received non-success result (code <status>)`
     - Enhancement: `InteractionClient` options take an `abort` signal
     - Fix: `InteractionClient` sends a timed write only when requested or required, so group writes work
     - Fix: A closed `PairedNode` starts no interaction, and closing nodes or the controller completes even when a step fails

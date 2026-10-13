@@ -1357,6 +1357,48 @@ describe("InteractionProtocol", () => {
             expect(closed).equals(true);
         });
 
+        it("does not answer the subscriber's error status for the initial report with a status", async () => {
+            const fabric = await node.addFabric();
+
+            const sent = new Array<number>();
+            let closed = false;
+            const exchange = await createDummyMessageExchange(
+                node,
+                { fabric },
+                false,
+                false,
+                messageType => {
+                    sent.push(messageType);
+                    if (messageType === MessageType.ReportData) {
+                        return {
+                            messageType: MessageType.StatusResponse,
+                            payload: TlvStatusResponse.encode({
+                                status: Status.Failure,
+                                interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                            }),
+                        };
+                    }
+                },
+                undefined,
+                () => {
+                    closed = true;
+                },
+            );
+            await interactionProtocol.handleSubscribeRequest(
+                exchange,
+                {
+                    ...INVALID_SUBSCRIBE_REQUEST,
+                    attributeRequests: [READ_REQUEST.attributeRequests![0]],
+                    eventRequests: undefined,
+                },
+                new InteractionServerMessenger(exchange),
+                interaction.BarelyMockedMessage,
+            );
+
+            expect(sent).deep.equals([MessageType.ReportData]);
+            expect(closed).equals(true);
+        });
+
         it("rejects a subscribe exceeding the path ceiling with PathsExhausted", async () => {
             const attributeRequests = Array.from(
                 { length: 10_001 },

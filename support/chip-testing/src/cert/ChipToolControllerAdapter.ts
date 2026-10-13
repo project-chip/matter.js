@@ -15,7 +15,7 @@ import {
     UnexpectedDataError,
 } from "@matter/main";
 import { OperationalCredentials, OtaSoftwareUpdateRequestor } from "@matter/main/clusters";
-import { getOperationalDeviceQname } from "@matter/main/protocol";
+import { getOperationalDeviceQname, ResultStatus } from "@matter/main/protocol";
 import { FabricId, GlobalFabricId, NodeId, statedIdentifier, Status, StatusResponseError } from "@matter/main/types";
 import { ClusterModel, CommandModel, ValueModel } from "@matter/model";
 import type {
@@ -452,6 +452,14 @@ function codeOf(status: ChipStatus, operation: string): Status {
     return status.code;
 }
 
+/** The error for a status chip-tool decoded from a `StatusIB` the device sent. */
+function deviceStatusError(status: ChipGlobalStatus, operation: string, message?: string) {
+    return ResultStatus.errorOf(
+        { status: codeOf(status.status, operation), clusterStatus: status.clusterStatus, received: true },
+        message,
+    );
+}
+
 function numberOf(entry: Record<string, unknown>, key: string): number | undefined {
     const value = entry[key];
     if (typeof value === "number") {
@@ -850,9 +858,8 @@ const PAYLOAD_FAILURE = /Run command failure: src\/setup_payload\//;
 function assertNoFailure(reply: ChipReply, operation: string) {
     const [global] = reply.globalStatuses;
     if (global !== undefined) {
-        const code = codeOf(global.status, operation);
-        if (code !== Status.Failure || global.clusterStatus !== undefined) {
-            throw new StatusResponseError(`chip-tool ${operation} failed`, code, global.clusterStatus);
+        if (codeOf(global.status, operation) !== Status.Failure || global.clusterStatus !== undefined) {
+            throw deviceStatusError(global, operation, `chip-tool ${operation} failed`);
         }
         throw new ChipToolCommandError(
             `chip-tool ${operation} failed with a bare Failure, which says nothing about whether the device answered`,
@@ -874,11 +881,7 @@ function assertCommandSucceeded(reply: ChipReply, operation: string) {
     }
     const [status] = reply.statuses;
     if (status !== undefined) {
-        throw new StatusResponseError(
-            `chip-tool ${operation} failed`,
-            codeOf(status.status, operation),
-            status.clusterStatus,
-        );
+        throw deviceStatusError(status, operation, `chip-tool ${operation} failed`);
     }
 }
 
@@ -995,7 +998,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
         assertNoFailure(reply, operation);
         const [status] = reply.statuses;
         if (status !== undefined) {
-            throw StatusResponseError.create(codeOf(status.status, operation), undefined, status.clusterStatus);
+            throw deviceStatusError(status, operation);
         }
 
         const [response] = reply.responses;
@@ -1065,11 +1068,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
             // necessarily this read's answer.
             const status = statusFor(reply.statuses, { endpoint, cluster, attribute });
             if (status !== undefined) {
-                throw new StatusResponseError(
-                    `readAttribute ${JSON.stringify(path)} failed`,
-                    codeOf(status.status, "readAttribute"),
-                    status.clusterStatus,
-                );
+                throw deviceStatusError(status, "readAttribute", `readAttribute ${JSON.stringify(path)} failed`);
             }
             const value = reply.values.find(
                 entry => entry.endpoint === endpoint && entry.cluster === cluster && entry.attribute === attribute,
@@ -1102,10 +1101,10 @@ class ChipToolCertNodeApi implements CertNodeApi {
 
         const refused = attributeStatusFor(reply.statuses, paths);
         if (refused !== undefined) {
-            throw new StatusResponseError(
+            throw deviceStatusError(
+                refused.status,
+                "readAttributes",
                 `readAttributes ${JSON.stringify(refused.path)} failed`,
-                codeOf(refused.status.status, "readAttributes"),
-                refused.status.clusterStatus,
             );
         }
 
@@ -1123,11 +1122,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
 
         const status = statusFor(reply.statuses, { endpoint, cluster, attribute });
         if (status !== undefined) {
-            throw new StatusResponseError(
-                `writeAttribute ${JSON.stringify(path)} failed`,
-                codeOf(status.status, "writeAttribute"),
-                status.clusterStatus,
-            );
+            throw deviceStatusError(status, "writeAttribute", `writeAttribute ${JSON.stringify(path)} failed`);
         }
     }
 
@@ -1244,11 +1239,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
 
         const refused = eventStatusFor(reply.statuses, paths);
         if (refused !== undefined) {
-            throw new StatusResponseError(
-                `readEvents ${JSON.stringify(refused.path)} failed`,
-                codeOf(refused.status.status, "readEvents"),
-                refused.status.clusterStatus,
-            );
+            throw deviceStatusError(refused.status, "readEvents", `readEvents ${JSON.stringify(refused.path)} failed`);
         }
 
         return toEventEntries(reply.events.filter(entry => paths.some(path => eventPathCovers(path, entry))));
@@ -1728,11 +1719,7 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
             // statuses are per-item, as in a read, and leave the subscription established.
             const status = statusFor(reply.statuses, { endpoint, cluster, attribute });
             if (status !== undefined) {
-                throw new StatusResponseError(
-                    `subscribe ${JSON.stringify(path)} failed`,
-                    codeOf(status.status, "subscribe"),
-                    status.clusterStatus,
-                );
+                throw deviceStatusError(status, "subscribe", `subscribe ${JSON.stringify(path)} failed`);
             }
         }
 
@@ -1769,10 +1756,10 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
         // step that has already failed on this rejection. They reach the controller log instead.
         const refused = eventStatusFor(reply.statuses, paths);
         if (refused !== undefined) {
-            throw new StatusResponseError(
+            throw deviceStatusError(
+                refused.status,
+                "subscribeEvents",
                 `subscribeEvents ${JSON.stringify(refused.path)} failed`,
-                codeOf(refused.status.status, "subscribeEvents"),
-                refused.status.clusterStatus,
             );
         }
 

@@ -58,6 +58,7 @@ import {
     Peer,
     PeerAddress,
     PeerLeftError,
+    ResultStatus,
     SessionManager,
     SessionParameters,
 } from "@matter/protocol";
@@ -309,6 +310,9 @@ export class Peers extends EndpointContainer<ClientNode> {
                         if (entry.kind === "cmd-status" && entry.status !== Status.Success) {
                             throw new CommissioningError(
                                 `CommissioningComplete failed for ${nodeId}: status ${entry.status}`,
+                                {
+                                    cause: ResultStatus.errorOf(entry),
+                                },
                             );
                         }
                         if (entry.kind === "cmd-response") {

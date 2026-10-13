@@ -11,6 +11,8 @@ import { Specification } from "@matter/model";
 import {
     EndpointNumber,
     ReadRequest,
+    ReceivedStatusResponse,
+    ReceivedStatusResponseError,
     Status,
     SubscribeRequest,
     TlvDataReport,
@@ -18,6 +20,7 @@ import {
     TlvStatusResponse,
     TlvSubscribeRequest,
     TlvSubscribeResponse,
+    UnknownStatusResponseError,
 } from "@matter/types";
 import { createDummyMessageExchange } from "./interaction-utils.js";
 
@@ -100,6 +103,53 @@ describe("InteractionClientMessenger", () => {
 
         expect(request).to.deep.equal(requestData);
     });
+
+    for (const [status, type, message] of [
+        [
+            Status.UnsupportedAccess,
+            ReceivedStatusResponse.UnsupportedAccessError,
+            "Received error status UnsupportedAccess",
+        ],
+        [Status.Success, ReceivedStatusResponse.SuccessError, "Received status response Success"],
+        [0x7777 as Status, UnknownStatusResponseError, "Received error status unknown"],
+    ] as const) {
+        it(`throws a received error when the peer answers a read with a StatusResponse ${status}`, async () => {
+            const exchange = await createDummyMessageExchange(false, false, messageType => {
+                expect(messageType).to.equal(MessageType.ReadRequest);
+                return {
+                    payload: TlvStatusResponse.encode({
+                        status,
+                        interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    }),
+                    messageType: MessageType.StatusResponse,
+                };
+            });
+            const messenger = new InteractionClientMessenger(exchange);
+
+            await messenger.sendReadRequest({
+                interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                isFabricFiltered: true,
+                attributeRequests: [{}],
+            });
+
+            const error = await (async () => {
+                try {
+                    for await (const _report of messenger.readDataReports());
+                } catch (error) {
+                    return error;
+                }
+                expect.fail("readDataReports did not throw");
+            })();
+
+            expect(error).instanceOf(type);
+            expect(error).instanceOf(ReceivedStatusResponseError);
+            if (!(error instanceof Error)) {
+                expect.fail(`expected an Error, got ${error}`);
+            }
+            expect(error.message).contains(message);
+            expect(error.message).match(new RegExp(`\\(code ${status}\\)$`));
+        });
+    }
 
     it("reads attributes with too many dataVersionFilters", async () => {
         let request: ReadRequest | undefined = undefined;

@@ -409,7 +409,8 @@ export class ClientInteraction<
                     },
                     status,
                     clusterStatus,
-                };
+                    received: true,
+                } satisfies WriteResult.AttributeStatus;
             },
         ) as Awaited<WriteResult<T>>;
 
@@ -555,6 +556,7 @@ export class ClientInteraction<
                         commandRef,
                         status,
                         clusterStatus,
+                        received: true,
                     });
                 }
             }
