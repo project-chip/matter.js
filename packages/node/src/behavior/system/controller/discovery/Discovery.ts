@@ -39,6 +39,7 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
     #callerAbort?: Abort;
     #localError?: Error;
     #unusableDevices = new Set<string>();
+    #preparing = new Set<Promise<void>>();
     #scannerCount?: number;
     #scannerErrors = new Array<Error>();
     #isStopped = false;
@@ -283,11 +284,7 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
                 scanner
                     .findCommissionableDevicesContinuously(
                         identifier,
-                        descriptor => {
-                            this.#found(descriptor, factory, id).catch(error =>
-                                this.#localFailure(descriptor.deviceIdentifier, error),
-                            );
-                        },
+                        descriptor => this.#prepare(descriptor, factory, id),
                         undefined,
                         cancelSignal,
                     )
@@ -301,7 +298,33 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
             promise = withTimeout(this.#options.timeout, promise, this.stop.bind(this));
         }
 
-        promise.then(this.#afterDiscovery.bind(this)).catch(this.#reject);
+        promise
+            .then(() => this.#prepared())
+            .then(this.#afterDiscovery.bind(this))
+            .catch(this.#reject);
+    }
+
+    /**
+     * Prepares a device a scanner reported.  Discovery completes only after every preparation settled, so the outcome
+     * sees each found device or its error.
+     */
+    #prepare(descriptor: CommissionableDevice, factory: ClientNodeFactory, id: string | undefined) {
+        const preparation = this.#tryFound(descriptor, factory, id).finally(() => this.#preparing.delete(preparation));
+        this.#preparing.add(preparation);
+    }
+
+    async #tryFound(descriptor: CommissionableDevice, factory: ClientNodeFactory, id: string | undefined) {
+        try {
+            await this.#found(descriptor, factory, id);
+        } catch (error) {
+            this.#localFailure(descriptor.deviceIdentifier, error);
+        }
+    }
+
+    async #prepared() {
+        while (this.#preparing.size) {
+            await Promise.all(this.#preparing);
+        }
     }
 
     /**

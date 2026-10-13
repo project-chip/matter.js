@@ -17,7 +17,7 @@ import { InstanceDiscovery } from "#behavior/system/controller/discovery/Instanc
 import { ClientNodeFactory } from "#node/client/ClientNodeFactory.js";
 import type { ClientNode } from "#node/ClientNode.js";
 import type { ServerNode } from "#node/ServerNode.js";
-import { ImplementationError, LogLevel, Seconds } from "@matter/general";
+import { ImplementationError, LogLevel, Seconds, Time } from "@matter/general";
 import { MockServerNode } from "@matter/node/testing";
 import { PeerCommunicationError, type PeerAddress, ScannerSet } from "@matter/protocol";
 import {
@@ -25,6 +25,7 @@ import {
     configure,
     DEVICE,
     DEVICE_B,
+    deferred,
     settle,
     TestDiscovery,
     untilAborted,
@@ -192,6 +193,50 @@ describe("DiscoveryError kinds", () => {
 
                 expect(error).instanceOf(ImplementationError);
                 expect(error).to.have.property("message", "Node construction 1 failed");
+            } finally {
+                await node.close();
+            }
+        });
+
+        it("waits for a device still being prepared when the scan ends", async () => {
+            const node = await MockServerNode.createOnline();
+            try {
+                await configure(node, [DEVICE]);
+                const real = node.env.get(ClientNodeFactory);
+                const known = real.create({ environment: node.env, commissioning: { descriptor: DEVICE } });
+                await known.construction.ready;
+                node.env.set(ClientNodeFactory, new KnownNodeFactory(real, known));
+
+                // Holding the commissioning state keeps the discovery's refresh of the known node waiting
+                const release = deferred();
+                const held = deferred();
+                const holder = known.act(async agent => {
+                    const { transaction } = agent.context;
+                    await transaction.addResources(agent.commissioning);
+                    await transaction.begin();
+                    held.resolve();
+                    await release.promise;
+                });
+                await MockTime.resolve(held.promise, { macrotasks: true });
+
+                const discovery = new InstanceDiscovery(node, { timeout: Seconds(5) });
+                let settled = false;
+                const outcome = discovery.then(
+                    result => {
+                        settled = true;
+                        return result;
+                    },
+                    (error: unknown) => {
+                        settled = true;
+                        return error;
+                    },
+                );
+                await MockTime.resolve(Time.sleep("past the discovery timeout", Seconds(6)), { macrotasks: true });
+                expect(settled).equals(false);
+
+                release.resolve();
+                await MockTime.resolve(holder, { macrotasks: true });
+                expect(await MockTime.resolve(outcome, { macrotasks: true })).equals(known);
             } finally {
                 await node.close();
             }
