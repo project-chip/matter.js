@@ -535,12 +535,34 @@ function componentsOf<E>(
 
 /**
  * The endpoints that may fill {@link component}: those of the composing endpoint's composition scope that list the
- * component device type.
+ * component device type, preceded by the composing endpoint itself when the component is a utility device type it
+ * lists.
  *
  * The device type ID must match exactly, so an endpoint of a device type that derives from the component is not a
  * candidate.
+ *
+ * @see {@link MatterSpecification.v161.Core} § 9.2.1
  */
 function candidatesOf<E>(facts: ResolvedEndpoint<E>, component: Component, pass: DeviceTypeValidationPass<E>) {
+    const below = candidatesBelow(facts, component, pass);
+    return listsUtility(facts, component) ? [facts, ...below] : below;
+}
+
+/**
+ * Whether {@link facts}'s endpoint lists {@link component} and the component is a utility device type, which an
+ * endpoint may carry beside its application device type.
+ *
+ * @see {@link MatterSpecification.v161.Core} § 9.2.1
+ */
+function listsUtility<E>(facts: ResolvedEndpoint<E>, component: Component) {
+    const { deviceType } = component;
+    return (
+        deviceType.classification === DeviceClassification.Utility &&
+        facts.deviceTypes.some(({ id }) => id === deviceType.id)
+    );
+}
+
+function candidatesBelow<E>(facts: ResolvedEndpoint<E>, component: Component, pass: DeviceTypeValidationPass<E>) {
     const { index } = pass;
     const nodeEndpoint =
         index && facts.composesFullFamily ? ConditionAssertions.nodeEndpointOf(facts.endpoint, pass) : undefined;
@@ -840,11 +862,12 @@ interface ChoiceMember {
 }
 
 /**
- * Report {@link facts}'s endpoint where it fills a component requirement of an endpoint that composes it but
- * satisfies the nested requirements of none of its instances. A tolerated instance the endpoint satisfies is enough,
- * but only an applying instance makes the endpoint a component to judge. The violation names the instance it comes
- * closest to and carries the composing device type.
+ * Report {@link facts}'s endpoint where it fills a component requirement of an endpoint that composes it, or of its
+ * own device type for a utility device type it lists, but satisfies the nested requirements of none of its instances.
+ * A tolerated instance the endpoint satisfies is enough, but only an applying instance makes the endpoint a component
+ * to judge. The violation names the instance it comes closest to and carries the composing device type.
  *
+ * @see {@link MatterSpecification.v161.Core} § 9.2.1
  * @see {@link MatterSpecification.v161.Core} § 9.2.3
  */
 function checkComponentOf<E>(
@@ -854,21 +877,20 @@ function checkComponentOf<E>(
     pass: DeviceTypeValidationPass<E>,
 ) {
     const own = new Set(facts.deviceTypes.map(deviceType => deviceType.id));
-    if (!own.size || facts.isNodeEndpoint) {
+    if (!own.size) {
         return;
     }
 
-    for (
-        let composer = pass.facts.parentOf(facts.endpoint);
-        composer !== undefined;
-        composer = pass.facts.parentOf(composer)
-    ) {
-        const composerFacts = ResolvedEndpoint.of(composer, pass);
+    for (let current: E | undefined = facts.endpoint; current !== undefined; current = pass.facts.parentOf(current)) {
+        const composer = current;
+        const isSelf = composer === facts.endpoint;
+        const composerFacts = isSelf ? facts : ResolvedEndpoint.of(composer, pass);
         const conditions = collection.conditionsOf(composer);
 
         const filled = composerFacts.deviceTypes.flatMap(deviceType =>
             componentsOf(composer, deviceType, conditions, pass).flatMap(component => {
-                const instances = own.has(component.deviceType.id)
+                const fills = isSelf ? listsUtility(facts, component) : own.has(component.deviceType.id);
+                const instances = fills
                     ? component.instances.filter(instance => applies(instance) || isTolerated(instance))
                     : [];
                 return instances.some(applies) ? [{ deviceType, component, instances }] : [];
@@ -876,7 +898,7 @@ function checkComponentOf<E>(
         );
 
         // Checked before the scope walk, so the many children of an aggregator do not each walk its whole family
-        if (filled.length && composerFacts.composes(facts.endpoint)) {
+        if (filled.length && (isSelf || composerFacts.composes(facts.endpoint))) {
             for (const { deviceType, component, instances } of filled) {
                 const failures = instances.map(({ requirement }) =>
                     failuresOf(facts, requirement, deviceType, collection, pass),
