@@ -201,7 +201,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: Sending a group message without a usable key fails with `NoUsableGroupKeyError` (`GroupKeySetMissingError` or `GroupKeyNotStartedError`)
     - Breaking: `DclClient` maps DCL records to their schema types (empty values become `undefined`, `otaFileSize` is a `bigint`) and ignores records with unsupported schema versions
     - Breaking: `PeerDescriptor.sessionParameters` is replaced by `reportedSessionParameters`, which holds only what the peer reported; `Peer.sessionParameters` provides the effective values
-    - Breaking: The unused `PeerDescriptor.dataModelRevision` is removed; `Peer.sessionParameters` provides the effective data model revision
     - Breaking: The discovery data handed to `finalizeCommissioning` no longer carries the PASE session intervals; they come as the new third argument `sessionParameters`
     - Deprecation: The legacy `DecodedDataReport` types and `normalize*` helpers, `Invoke.LegacyCommandRequest`, `Specifier.ClusterTypeCommand` and `SessionManager.owner` will be removed in 0.19
     - Feature: Groupcast support (Matter 1.6.1) for multicast group sessions
