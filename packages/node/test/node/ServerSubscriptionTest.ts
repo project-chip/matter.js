@@ -28,7 +28,15 @@ import {
     ProtocolMocks,
     SessionManager,
 } from "@matter/protocol";
-import { AttributeId, AttributePath, ClusterId, EndpointNumber, EventPath } from "@matter/types";
+import {
+    AttributeId,
+    AttributePath,
+    ClusterId,
+    EndpointNumber,
+    EventPath,
+    Status,
+    StatusResponseError,
+} from "@matter/types";
 import { BasicInformation } from "@matter/types/clusters/basic-information";
 import { IcdManagement } from "@matter/types/clusters/icd-management";
 import { LIT_CONFIG } from "./icd-helpers.js";
@@ -181,6 +189,95 @@ describe("ServerSubscription", () => {
         // Generic path: min(configured 3 min, ceiling 60 s) + up to 10 s randomization, never idleModeDuration.
         expect(subscription.maxInterval).to.be.at.least(Seconds(60));
         expect(subscription.maxInterval).to.be.below(Seconds(70));
+
+        await MockTime.resolve(node.close());
+    });
+
+    it("terminates on close() but not on closeForShutdown()", async () => {
+        const node = await MockServerNode.createOnline();
+
+        const closed = await createSubscription(node, () => ({}) as any);
+        closed.activate();
+        await closed.close();
+
+        const shutDown = await createSubscription(node, () => ({}) as any);
+        shutDown.activate();
+        await shutDown.closeForShutdown();
+        await shutDown.close();
+
+        expect(closed.isTerminated).is.true;
+        expect(shutDown.isTerminated).is.false;
+
+        await MockTime.resolve(node.close());
+    });
+
+    it("terminates when the peer refuses a report sent during a shutdown close", async () => {
+        const node = await MockServerNode.createOnline();
+
+        const sendBlocker = new DataReadQueue<void>();
+        const subscription = await createSubscription(
+            node,
+            () =>
+                ({
+                    maxPayloadSize: 1200,
+                    async send() {
+                        await sendBlocker.read();
+                    },
+                    async close() {},
+                }) as unknown as MessageExchange,
+        );
+        subscription.activate();
+
+        // A report is in flight when the shutdown close starts
+        await MockTime.advance(200);
+        const closing = subscription.closeForShutdown();
+        sendBlocker.close(new StatusResponseError("Invalid subscription", Status.InvalidSubscription));
+        await MockTime.resolve(closing);
+
+        expect(subscription.isTerminated).is.true;
+
+        await MockTime.resolve(node.close());
+    });
+
+    it("keeps a subscription that joins a session closing for shutdown", async () => {
+        const node = await MockServerNode.createOnline();
+
+        const first = await createSubscription(node, () => ({}) as any);
+        const session = first.session as NodeSession;
+        first.activate();
+        await MockTime.resolve(session.closeSubscriptionsForShutdown());
+
+        const late = await createSubscription(node, () => ({}) as any, { session });
+        late.activate();
+        await MockTime.resolve(session.closeSubscriptions());
+
+        expect(first.isTerminated).is.false;
+        expect(late.isTerminated).is.false;
+
+        await MockTime.resolve(node.close());
+    });
+
+    it("terminates when the peer answers a report with an error status", async () => {
+        const node = await MockServerNode.createOnline();
+
+        const subscription = await createSubscription(
+            node,
+            () =>
+                ({
+                    maxPayloadSize: 1200,
+                    async send() {
+                        throw new StatusResponseError("Busy", Status.Busy);
+                    },
+                    async close() {},
+                }) as unknown as MessageExchange,
+        );
+        const session = subscription.session as NodeSession;
+        subscription.activate();
+
+        await MockTime.advance(200);
+
+        expect(subscription.isTerminated).is.true;
+        expect([...session.subscriptions]).is.empty;
 
         await MockTime.resolve(node.close());
     });

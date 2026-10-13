@@ -124,6 +124,7 @@ describe("ExchangeManager", () => {
             async close(_flushViaSession, exchange) {
                 closedWith.push(exchange);
             },
+            async closeForShutdown() {},
         });
 
         // Peer loss ignores sessions created no earlier than the failing exchange

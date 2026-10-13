@@ -101,6 +101,7 @@ describe("SecureSession", () => {
                 async close(_flushViaSession, exchange) {
                     received.push(exchange);
                 },
+                async closeForShutdown() {},
             });
 
             await session.handlePeerLoss({ cause: new Error("unresponsive"), currentExchange });
