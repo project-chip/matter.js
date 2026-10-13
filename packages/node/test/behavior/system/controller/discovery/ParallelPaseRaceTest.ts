@@ -93,7 +93,7 @@ describe("ParallelPaseDiscovery race", () => {
 
             const startedAt = new Array<number>();
             const discovery = new TestDiscovery(node, { timeout: Seconds(5) }, async (_win, signal) => {
-                startedAt.push(Time.nowMs);
+                startedAt.push(Time.nowUs);
                 await untilAborted(signal);
             });
             await MockTime.resolve(settle(discovery), { macrotasks: true });
@@ -134,11 +134,11 @@ describe("ParallelPaseDiscovery race", () => {
             const discovery = new TestDiscovery(node, { timeout: Millis(1500) }, (_win, signal) =>
                 untilAborted(signal),
             );
-            const startedAt = Time.nowMs;
+            const startedAt = Time.nowUs;
             await MockTime.resolve(settle(discovery), { macrotasks: true });
 
             expect(discovery.started).equals(2);
-            expect(Time.nowMs - startedAt).lessThan(2000);
+            expect(Time.nowUs - startedAt).lessThan(2000);
         } finally {
             await node.close();
         }
