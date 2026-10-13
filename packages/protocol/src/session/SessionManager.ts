@@ -615,8 +615,9 @@ export class SessionManager {
     }
 
     /**
-     * Removes all Peer sessions but keeps subscriptions intact because they could be refreshed on restart when the
-     * device supports persistent subscriptions.
+     * Removes all Peer sessions without first closing the subscriptions the peer holds on them; those end when the
+     * sessions close.  Our own subscriptions to the peer belong to the peer, not to a session, so a peer that persists
+     * subscriptions can refresh them after its restart.
      *
      * @param asOf sessions created at or after this instant are kept; on the clock of {@link Time.nowUs} like
      * {@link Session.createdAt}, not a wall-clock time.  Defaults to now.
@@ -1060,7 +1061,7 @@ export class SessionManager {
         const context: PeerLossContext = { cause: new ShutdownError("Session closed by node shutdown") };
 
         const closePromises = this.#sessions.map(async session => {
-            await session.closeSubscriptions(true);
+            await session.closeSubscriptionsForShutdown();
 
             // TODO - some CHIP tests (CASERecovery for one) expect us to exit without closing the session and will fail
             // if we end gracefully.  Not clear why this behavior would be desirable as it leads to a timeout when the
