@@ -650,6 +650,7 @@ class OtaExchangeRecording {
     #observers = new ObserverGroup();
     #queried = createPromise<void>();
     #notified = createPromise<void>();
+    #applyDecided = createPromise<boolean>();
 
     private constructor(provider: Endpoint, peer: string) {
         this.#provider = provider;
@@ -677,10 +678,34 @@ class OtaExchangeRecording {
                 if (exchanges.notifyUpdateApplied.length > 0) {
                     recording.#notified.resolver();
                 }
+                const lastApply = exchanges.applyUpdate.at(-1);
+                if (
+                    lastApply !== undefined &&
+                    lastApply.response.action !== OtaSoftwareUpdateProvider.ApplyUpdateAction.AwaitNextAction
+                ) {
+                    recording.#applyDecided.resolver(
+                        lastApply.response.action === OtaSoftwareUpdateProvider.ApplyUpdateAction.Proceed,
+                    );
+                }
             });
         });
 
         return recording;
+    }
+
+    /**
+     * Resolves once the provider has recorded an `ApplyUpdateRequest` it answered other than with
+     * `AwaitNextAction`: true where it answered `Proceed`, false where it refused or `timeout` passed first.
+     *
+     * Settles only once that answer is in the record, so a `read()` that follows contains it.
+     */
+    async awaitApplyDecision(timeout: Duration) {
+        const expiry = Time.sleep("cert OTA apply", timeout);
+        try {
+            return await Promise.race([this.#applyDecided.promise, expiry.then(() => false)]);
+        } finally {
+            expiry.cancel();
+        }
     }
 
     /** Resolves once the provider has recorded a `NotifyUpdateApplied`, or once `timeout` has passed. */
@@ -1791,17 +1816,6 @@ class InProcessCertNodeApi implements CertNodeApi {
             // updates has to be able to say which exchanges belong to the second.
             const recording = await OtaExchangeRecording.open(provider, peerAddress);
 
-            // Armed before the transfer starts, not after it ends: the peer asks to apply as soon as the
-            // last block lands, and an observer attached afterwards can miss its own event.
-            const applied =
-                options?.expectApply === false
-                    ? undefined
-                    : await this.#applyAllowed(
-                          provider,
-                          peerAddress,
-                          options?.applyTimeoutMs === undefined ? OTA_APPLY_TIMEOUT : Millis(options.applyTimeoutMs),
-                      );
-
             try {
                 return await this.#serveStagedImage(
                     provider,
@@ -1809,14 +1823,10 @@ class InProcessCertNodeApi implements CertNodeApi {
                     identity,
                     softwareVersion,
                     fileSize,
-                    applied,
                     recording,
                     options,
                 );
             } finally {
-                // The transfer rejecting is the path that leaves these attached: a node that never opened
-                // one never reaches the settled() that would otherwise close them.
-                applied?.close();
                 recording.close();
             }
         });
@@ -1828,7 +1838,6 @@ class InProcessCertNodeApi implements CertNodeApi {
         identity: PeerOtaIdentity,
         softwareVersion: number,
         fileSize: number,
-        applied: { settled: () => Promise<boolean>; close: () => void } | undefined,
         recording: OtaExchangeRecording,
         options?: ServeOtaUpdateOptions,
     ): Promise<OtaBdxTransfer> {
@@ -1852,7 +1861,12 @@ class InProcessCertNodeApi implements CertNodeApi {
         // ApplyUpdateRequest, and a provider that goes away before answering leaves the peer waiting
         // out its own unreachable-peer budget. The caller tears this controller down when the case
         // ends, so the exchange has to be over before this resolves.
-        const applyAcknowledged = applied === undefined ? false : await applied.settled();
+        const applyAcknowledged =
+            options?.expectApply === false
+                ? false
+                : await recording.awaitApplyDecision(
+                      options?.applyTimeoutMs === undefined ? OTA_APPLY_TIMEOUT : Millis(options.applyTimeoutMs),
+                  );
 
         if (applyAcknowledged && options?.notifyAppliedTimeoutMs !== undefined) {
             await recording.awaitNotifyApplied(Millis(options.notifyAppliedTimeoutMs));
@@ -1951,47 +1965,6 @@ class InProcessCertNodeApi implements CertNodeApi {
         });
 
         return provider;
-    }
-
-    /**
-     * Watches for this provider allowing `peerAddress` to apply what it downloaded, which is the last
-     * thing the peer needs from it.
-     *
-     * Resolves rather than rejecting when the peer never asks: the image was still served, which is
-     * what the BDX cases are about, and `applyAcknowledged` reports what happened instead.
-     */
-    async #applyAllowed(provider: Endpoint, peerAddress: PeerAddress, timeout: Duration) {
-        const observers = new ObserverGroup();
-        const { promise, resolver } = createPromise<boolean>();
-
-        await provider.act(agent => {
-            const events = agent.get(SoftwareUpdateManager).events;
-            observers.on(events.updateApplying, peer => {
-                if (PeerAddress.is(peer, peerAddress)) {
-                    resolver(true);
-                }
-            });
-            observers.on(events.updateFailed, peer => {
-                if (PeerAddress.is(peer, peerAddress)) {
-                    resolver(false);
-                }
-            });
-        });
-
-        // Arming and awaiting are two calls: the observers attach before the transfer and settle after
-        // it, and a single awaited promise would collapse both into one wait on the wrong side of it.
-        return {
-            settled: async () => {
-                const expiry = Time.sleep("cert OTA apply", timeout);
-                try {
-                    return await Promise.race([promise, expiry.then(() => false)]);
-                } finally {
-                    expiry.cancel();
-                }
-            },
-
-            close: () => observers.close(),
-        };
     }
 
     /**

@@ -3266,9 +3266,9 @@ boot reported after the mark is gone. Time the wait on the TH instead. A live *a
 the wait is fine; it is the event log that does not survive.
 
 **The waits `serveOtaUpdate` offers end on what the provider decided, which is not a window the DUT
-has been watched for.** `applyTimeoutMs` settles as soon as the provider allows an apply *or gives up
-on the update* — and refusing with `Discontinue` withdraws the update's consent, which is giving up, so
-the wait ends before the requestor has reacted to anything. A step whose claim is that the DUT sent
+has been watched for.** `applyTimeoutMs` settles as soon as the provider has recorded its answer to an
+`ApplyUpdateRequest` other than `AwaitNextAction` — `Proceed` or `Discontinue` — so the wait ends before
+the requestor has reacted to anything. A step whose claim is that the DUT sent
 nothing asks for `observeAfterMs` and checks `OtaBdxTransfer.observedMs` against the window it claims,
 exactly as the query side checks `observedMs` from `announceOtaProvider`. Measuring the step's own
 runtime is how to tell the two apart: raising the window should raise the runtime by the same amount.
