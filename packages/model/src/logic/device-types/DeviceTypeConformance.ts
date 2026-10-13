@@ -48,7 +48,6 @@ export namespace DeviceTypeConformance {
             pass,
         );
         const conditions = collection.conditionsOf(endpoint);
-        const rootAsserted = collection.rootAssertedOf(endpoint);
 
         for (const { name, suggestion } of ConditionAssertions.unknownNames(endpoint, pass)) {
             violations.push({
@@ -62,18 +61,23 @@ export namespace DeviceTypeConformance {
             });
         }
 
-        const deviceTypes = [...facts.deviceTypes];
-        if (deviceTypes.length) {
-            // Every device type derives from Base, so its requirements apply once per endpoint rather than once per
-            // device type
-            deviceTypes.push(...lookupsFor(model).baseDeviceTypes);
-        }
-
-        for (const deviceType of deviceTypes) {
-            const waived = deviceType.classification === DeviceClassification.Base ? baseWaiversOf(facts, pass) : NONE;
-            const context = { violations, facts, deviceType, conditions, rootAsserted, pass, waived };
-            checkClusters(context, lookupsFor(model).requirementsOf(deviceType));
-            checkComposition(context, collection);
+        const judged = checkDeviceTypes(facts, conditions, collection, pass, true);
+        const rootAsserted = collection.rootAssertedOf(endpoint);
+        if (rootAsserted.size) {
+            // A requirement only Root assertions make mandatory is one whose violation goes away without them
+            const unasserted = new Set([...conditions].filter(name => !rootAsserted.has(name)));
+            const binding = new Set(
+                checkDeviceTypes(facts, unasserted, collection, pass, false).map(DeviceTypeViolation.keyOf),
+            );
+            for (const violation of judged) {
+                violations.push(
+                    binding.has(DeviceTypeViolation.keyOf(violation))
+                        ? violation
+                        : { ...violation, assertedAtRoot: true },
+                );
+            }
+        } else {
+            violations.push(...judged);
         }
 
         checkComponentOf(violations, facts, collection, pass);
@@ -139,7 +143,6 @@ export namespace DeviceTypeConformance {
                     facts,
                     deviceType,
                     conditions,
-                    rootAsserted: NONE,
                     pass,
                     waived,
                 };
@@ -244,6 +247,41 @@ export namespace DeviceTypeConformance {
 }
 
 /**
+ * The violations of the cluster and component requirements of the device types of the endpoint {@link facts}
+ * describe, and of Base, judged with {@link conditions} true.
+ *
+ * @param memoize whether {@link conditions} are the endpoint's own, so the component requirements judged with them
+ * may be shared with other checks of the pass
+ */
+function checkDeviceTypes<E>(
+    facts: ResolvedEndpoint<E>,
+    conditions: Set<string>,
+    collection: ConditionAssertions.Collection<E>,
+    pass: DeviceTypeValidationPass<E>,
+    memoize: boolean,
+) {
+    const lookups = lookupsFor(pass.model);
+    const violations = new Array<DeviceTypeViolation>();
+    const deviceTypes = [...facts.deviceTypes];
+    if (deviceTypes.length) {
+        // Every device type derives from Base, so its requirements apply once per endpoint rather than once per
+        // device type
+        deviceTypes.push(...lookups.baseDeviceTypes);
+    }
+
+    for (const deviceType of deviceTypes) {
+        const waived = deviceType.classification === DeviceClassification.Base ? baseWaiversOf(facts, pass) : NONE;
+        const context = { violations, facts, deviceType, conditions, pass, waived };
+        checkClusters(context, lookups.requirementsOf(deviceType));
+        const components = memoize
+            ? componentsOf(facts.endpoint, deviceType, conditions, pass)
+            : groupComponents(deviceType, conditions, pass);
+        checkComposition(context, components, collection);
+    }
+    return violations;
+}
+
+/**
  * The IDs of the component device types the device types of {@link endpoint} require.
  */
 function componentIdsOf<E>(endpoint: E, pass: DeviceTypeValidationPass<E>) {
@@ -277,13 +315,6 @@ interface Context<E> {
     facts: ResolvedEndpoint<E>;
     deviceType: DeviceTypeModel;
     conditions: Set<string>;
-
-    /**
-     * The names among {@link conditions} that hold only because a device type in the node scope asserts them at the
-     * `Root` location.
-     */
-    rootAsserted: ReadonlySet<string>;
-
     pass: DeviceTypeValidationPass<E>;
 
     /**
@@ -351,8 +382,7 @@ function checkCluster<E>(context: Context<E>, requirement: RequirementModel, sid
 
         judge(
             context,
-            nested,
-            trueNames,
+            applicabilityOf(nested, trueNames, pass),
             present,
             referent,
             `${path}.${referent.name}`,
@@ -379,8 +409,7 @@ function judgeCluster<E>(context: Context<E>, requirement: RequirementModel, sid
     const path = side === "client" ? `client:${cluster.name}` : cluster.name;
     const departure = judge(
         context,
-        requirement,
-        context.conditions,
+        applicabilityOf(requirement, context.conditions, pass),
         name !== undefined,
         cluster,
         path,
@@ -391,24 +420,21 @@ function judgeCluster<E>(context: Context<E>, requirement: RequirementModel, sid
 }
 
 /**
- * Record the violation that {@link requirement}, judged with {@link trueNames} true, and {@link present} amount to for
- * {@link definition}, the model of the required cluster or element, and answer its kind, undefined when there is none.
+ * Record the violation {@link applicability} and {@link present} amount to for {@link definition}, the model of the
+ * required cluster or element, and answer its kind, undefined when there is none.
  */
 function judge<E>(
-    context: Context<E>,
-    requirement: RequirementModel,
-    trueNames: Set<string>,
+    { violations, deviceType, waived }: Context<E>,
+    applicability: Conformance.Applicability,
     present: boolean,
     definition: Model,
-    path: string,
+    requirement: string,
     subject: string,
 ): DeviceTypeViolation.Kind | undefined {
-    const { violations, deviceType, waived, pass } = context;
-    if (waived.has(path)) {
+    if (waived.has(requirement)) {
         return;
     }
 
-    const applicability = applicabilityOf(requirement, trueNames, pass);
     let kind: DeviceTypeViolation.Kind;
     let detail: string;
     if (applicability === Conformance.Applicability.Mandatory && !present && !isProvisional(definition)) {
@@ -426,29 +452,8 @@ function judge<E>(
         return;
     }
 
-    const violation: DeviceTypeViolation = { deviceType: deviceType.name, requirement: path, kind, detail };
-    violations.push(kind === "missing" ? withRootFlag(context, requirement, trueNames, violation) : violation);
+    violations.push({ deviceType: deviceType.name, requirement, kind, detail });
     return kind;
-}
-
-/**
- * {@link violation} of the mandatory {@link requirement}, flagged {@link DeviceTypeViolation.assertedAtRoot} when the
- * requirement is not mandatory once the conditions asserted at the `Root` location are false.
- */
-function withRootFlag<E>(
-    { rootAsserted, pass }: Context<E>,
-    requirement: RequirementModel,
-    trueNames: Set<string>,
-    violation: DeviceTypeViolation,
-): DeviceTypeViolation {
-    if (!rootAsserted.size) {
-        return violation;
-    }
-    const unasserted = new Set([...trueNames].filter(name => !rootAsserted.has(name)));
-    if (applicabilityOf(requirement, unasserted, pass) === Conformance.Applicability.Mandatory) {
-        return violation;
-    }
-    return { ...violation, assertedAtRoot: true };
 }
 
 /**
@@ -539,10 +544,22 @@ function componentsOf<E>(
 ): Component[] {
     const byDeviceType = pass.components.get(composing, () => new Map());
     let found = byDeviceType.get(deviceType);
-    if (found !== undefined) {
-        return found;
+    if (found === undefined) {
+        found = groupComponents(deviceType, conditions, pass);
+        byDeviceType.set(deviceType, found);
     }
+    return found;
+}
 
+/**
+ * The component requirements of {@link deviceType} grouped by component device type, each with its applicability
+ * under {@link conditions}.
+ */
+function groupComponents<E>(
+    deviceType: DeviceTypeModel,
+    conditions: Set<string>,
+    pass: DeviceTypeValidationPass<E>,
+): Component[] {
     const lookups = lookupsFor(pass.model);
     const byId = new Map<number, Component>();
     for (const requirement of lookups.requirementsOf(deviceType)) {
@@ -563,9 +580,7 @@ function componentsOf<E>(
         }
     }
 
-    found = [...byId.values()];
-    byDeviceType.set(deviceType, found);
-    return found;
+    return [...byId.values()];
 }
 
 /**
@@ -648,7 +663,7 @@ function failuresOf<E>(
         violations = new Array<DeviceTypeViolation>();
         const conditions = collection.conditionsOf(candidate.endpoint);
         checkClusters(
-            { violations, facts: candidate, deviceType: composing, conditions, rootAsserted: NONE, pass, waived: NONE },
+            { violations, facts: candidate, deviceType: composing, conditions, pass, waived: NONE },
             lookupsFor(pass.model).requirementsOf(instance),
         );
         byInstance.set(instance, violations);
@@ -667,9 +682,12 @@ function failuresOf<E>(
  *
  * @see {@link MatterSpecification.v161.Core} § 9.2.3
  */
-function checkComposition<E>(context: Context<E>, collection: ConditionAssertions.Collection<E>) {
-    const { violations, facts, deviceType, conditions, pass } = context;
-    const components = componentsOf(facts.endpoint, deviceType, conditions, pass);
+function checkComposition<E>(
+    context: Context<E>,
+    components: Component[],
+    collection: ConditionAssertions.Collection<E>,
+) {
+    const { violations, facts, deviceType, pass } = context;
     const candidates = new Map<Component, ResolvedEndpoint<E>[]>();
 
     for (const component of components) {
@@ -701,8 +719,7 @@ function checkComposition<E>(context: Context<E>, collection: ConditionAssertion
  * Report a number of endpoints of {@link component} outside the range an applying requirement's constraint states.
  * A mandatory requirement that states none implies at least one; an optional one is judged only once there is one.
  */
-function checkCount<E>(context: Context<E>, component: Component, count: number) {
-    const { violations, deviceType, conditions } = context;
+function checkCount<E>({ violations, deviceType }: Context<E>, component: Component, count: number) {
     for (const { requirement, applicability } of component.instances) {
         let range;
         if (applicability === Conformance.Applicability.Mandatory) {
@@ -715,17 +732,12 @@ function checkCount<E>(context: Context<E>, component: Component, count: number)
             continue;
         }
 
-        const violation: DeviceTypeViolation = {
+        violations.push({
             deviceType: deviceType.name,
             requirement: `device:${component.deviceType.name}`,
             kind: "instanceCount",
             detail: `Component device type ${component.deviceType.name} requires ${describeRange(range)} endpoint(s) in the composition; found ${count}`,
-        };
-        violations.push(
-            applicability === Conformance.Applicability.Mandatory
-                ? withRootFlag(context, requirement, conditions, violation)
-                : violation,
-        );
+        });
     }
 }
 
@@ -734,12 +746,11 @@ function checkCount<E>(context: Context<E>, component: Component, count: number)
  * one left unmatched with what it requires that no candidate offers. Other instances may go unfilled.
  */
 function checkInstances<E>(
-    context: Context<E>,
+    { violations, deviceType, pass }: Context<E>,
     component: Component,
     candidates: ResolvedEndpoint<E>[],
     collection: ConditionAssertions.Collection<E>,
 ) {
-    const { violations, deviceType, conditions, pass } = context;
     const mandatory = component.instances
         .filter(({ applicability }) => applicability === Conformance.Applicability.Mandatory)
         .map(({ requirement }) => requirement);
@@ -767,14 +778,12 @@ function checkInstances<E>(
             reason = "no candidate satisfies it";
         }
 
-        violations.push(
-            withRootFlag(context, instance, conditions, {
-                deviceType: deviceType.name,
-                requirement: pathOf(component, instance),
-                kind: "instanceCount",
-                detail: `No endpoint fills ${subject}: ${reason}`,
-            }),
-        );
+        violations.push({
+            deviceType: deviceType.name,
+            requirement: pathOf(component, instance),
+            kind: "instanceCount",
+            detail: `No endpoint fills ${subject}: ${reason}`,
+        });
     });
 }
 

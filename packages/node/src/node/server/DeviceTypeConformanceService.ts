@@ -473,7 +473,8 @@ export class DeviceTypeConformanceService implements DeviceTypeValidation {
     }
 
     /**
-     * The violations of {@link endpoint} not reported before, and the keys of all it violates now. Undefined for an
+     * The violations of {@link endpoint} not reported before or reported only as flagged
+     * {@link DeviceTypeViolation.assertedAtRoot}, and the keys of all it violates now. Undefined for an
      * endpoint in no node scope, which is not judged.
      */
     #judge(endpoint: Endpoint, pass: DeviceTypeValidationPass<Endpoint>) {
@@ -485,7 +486,11 @@ export class DeviceTypeConformanceService implements DeviceTypeValidation {
 
         const current = new Map(violations.map(violation => [DeviceTypeViolation.keyOf(violation), violation]));
         const previous = this.#reported.get(endpoint);
-        const fresh = violations.filter(violation => !previous?.has(DeviceTypeViolation.keyOf(violation)));
+        // A violation that loses its Root-assertion flag now binds, so it is reported again
+        const fresh = violations.filter(violation => {
+            const reported = previous?.get(DeviceTypeViolation.keyOf(violation));
+            return reported === undefined || (reported.assertedAtRoot === true && !violation.assertedAtRoot);
+        });
 
         return { fresh, current };
     }
@@ -743,7 +748,7 @@ interface Judged {
 }
 
 /**
- * The violations {@link violations} as a log list.
+ * {@link violations} as a log list.
  */
 function describe(violations: DeviceTypeViolation[]) {
     return Diagnostic.list(

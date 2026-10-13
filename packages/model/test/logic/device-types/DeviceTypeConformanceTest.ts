@@ -715,10 +715,13 @@ describe("DeviceTypeConformance with a utility component on the composing endpoi
 const FED_HUB_ID = 0xfff1_0030;
 const FEED_ID = 0xfff1_0031;
 const FEEDER_ID = 0xfff1_0032;
+const STRICT_ID = 0xfff1_0033;
 
 /**
- * A model whose node device type Hub requires a Feed with the Lighting feature on its OnOff under its condition Fed,
- * which Feeder asserts at the Root. Hub forbids the Lighting feature on its own optional OnOff.
+ * A model whose node device type Hub requires at most one Feed with the Lighting feature on its OnOff, mandatory under
+ * its condition Fed, which Feeder asserts at the Root, and optional otherwise. Strict requires the same Feed whatever
+ * holds.
+ * Hub forbids the Lighting feature on its own optional OnOff.
  */
 function rootAssertionFixtureModel() {
     const featureMap = FeatureMap.clone();
@@ -734,7 +737,7 @@ function rootAssertionFixtureModel() {
                 new RequirementModel({ name: "LT", element: "feature", conformance: "X" }),
             ),
             new RequirementModel(
-                { name: "Feed", id: FEED_ID, element: "deviceType", conformance: "Fed" },
+                { name: "Feed", id: FEED_ID, element: "deviceType", conformance: "Fed, O", constraint: "max 1" },
                 new RequirementModel(
                     { name: "OnOff", id: ON_OFF_ID, element: "serverCluster", conformance: "M" },
                     new RequirementModel({ name: "LT", element: "feature", conformance: "M" }),
@@ -742,6 +745,16 @@ function rootAssertionFixtureModel() {
             ),
         ),
         new DeviceTypeModel({ name: "Feed", id: FEED_ID, classification: "utility" }),
+        new DeviceTypeModel(
+            { name: "Strict", id: STRICT_ID, classification: "simple" },
+            new RequirementModel(
+                { name: "Feed", id: FEED_ID, element: "deviceType", conformance: "M" },
+                new RequirementModel(
+                    { name: "OnOff", id: ON_OFF_ID, element: "serverCluster", conformance: "M" },
+                    new RequirementModel({ name: "LT", element: "feature", conformance: "M" }),
+                ),
+            ),
+        ),
         new DeviceTypeModel(
             { name: "Feeder", id: FEEDER_ID, classification: "simple" },
             new RequirementModel({
@@ -759,7 +772,7 @@ function rootAssertionFixtureModel() {
 }
 
 describe("DeviceTypeConformance with conditions asserted at the Root", () => {
-    it("does not flag a disallowed element on a node endpoint with Root assertions", () => {
+    it("keeps a disallowed element unflagged, as no condition disallows", () => {
         const model = rootAssertionFixtureModel();
         const hub = endpoint("hub", FED_HUB_ID, { servers: [onOffOf(model, { lighting: true })] });
         endpoint("feeder", FEEDER_ID, { parent: hub });
@@ -780,6 +793,33 @@ describe("DeviceTypeConformance with conditions asserted at the Root", () => {
         expect(found.map(({ kind, requirement, assertedAtRoot }) => [kind, requirement, assertedAtRoot])).deep.equals([
             ["instanceCount", "device:Feed#1", true],
         ]);
+    });
+
+    it("does not flag a count the requirement violates also when optional", () => {
+        const model = rootAssertionFixtureModel();
+        const hub = endpoint("hub", FED_HUB_ID);
+        endpoint("feed1", FEED_ID, { parent: hub, servers: [onOffOf(model, { lighting: true })] });
+        endpoint("feed2", FEED_ID, { parent: hub, servers: [onOffOf(model, { lighting: true })] });
+        endpoint("feeder", FEEDER_ID, { parent: hub });
+
+        const found = DeviceTypeConformance.check(hub, new DeviceTypeValidationPass(new FakeFacts(), model));
+        expect(found.map(({ kind, requirement, assertedAtRoot }) => [kind, requirement, assertedAtRoot])).deep.equals([
+            ["instanceCount", "device:Feed", undefined],
+        ]);
+    });
+
+    it("does not flag a violation another device type of the endpoint requires whatever holds", () => {
+        const model = rootAssertionFixtureModel();
+        const hub = endpoint("hub", [FED_HUB_ID, STRICT_ID]);
+        endpoint("feed", FEED_ID, { parent: hub, servers: [onOffOf(model)] });
+        endpoint("feeder", FEEDER_ID, { parent: hub });
+
+        const found = DeviceTypeConformance.check(hub, new DeviceTypeValidationPass(new FakeFacts(), model));
+        expect(
+            found
+                .filter(({ requirement }) => requirement === "device:Feed#1")
+                .map(({ deviceType, assertedAtRoot }) => [deviceType, assertedAtRoot]),
+        ).deep.equals([["Hub", undefined]]);
     });
 
     it("flags the node endpoint's violations that only a Root assertion makes mandatory", () => {
