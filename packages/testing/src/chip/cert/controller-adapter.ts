@@ -1376,12 +1376,12 @@ export interface WebRtcRequestorApi {
 
     /**
      * Registers a session the case has established with a provider, so the provider's later signaling
-     * for that id is accepted. Re-registering an id replaces the entry.
+     * for that id is accepted. Re-registering an id for the same peer replaces the entry.
      */
     upsertSession(session: WebRtcSessionSpec): Promise<void>;
 
-    /** Stops tracking a session. No-op where the id is unknown. */
-    removeSession(id: number): Promise<void>;
+    /** Stops tracking the session with this id held with `peer`. No-op where there is none. */
+    removeSession(peer: CertNodeRef, id: number): Promise<void>;
 
     /** The sessions the cluster tracks, which is what a refusal was judged against. */
     sessions(): Promise<readonly WebRtcSessionRecord[]>;
