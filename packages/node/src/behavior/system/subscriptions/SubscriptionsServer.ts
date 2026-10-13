@@ -185,6 +185,27 @@ export class SubscriptionsServer extends Behavior {
     }
 
     /**
+     * Re-establishment re-adds subscriptions newest first.  Put them back in creation order, which the next
+     * re-establishment depends on, with subscriptions added since this run started after them.
+     */
+    async #restoreCreationOrder(formerSubscriptions: PeerSubscription[]) {
+        const formerIndex = new Map(formerSubscriptions.map(({ subscriptionId }, index) => [subscriptionId, index]));
+        const orderOf = ({ subscriptionId }: PeerSubscription) =>
+            formerIndex.get(subscriptionId) ?? formerSubscriptions.length;
+
+        const current = this.state.subscriptions;
+        const ordered = [...current].sort((a, b) => orderOf(a) - orderOf(b));
+        if (ordered.every(({ subscriptionId }, index) => subscriptionId === current[index].subscriptionId)) {
+            return;
+        }
+
+        await this.context.transaction.addResources(this);
+        await this.context.transaction.begin();
+        this.state.subscriptions = ordered;
+        await this.context.transaction.commit();
+    }
+
+    /**
      * Start recording the subscriptions of a new run of the node.  The subscriptions recorded so far become the former
      * subscriptions that {@link reestablishFormerSubscriptions} re-establishes.
      *
@@ -268,7 +289,9 @@ export class SubscriptionsServer extends Behavior {
                         return;
                     }
 
-                    for (const subscription of peerSubscriptions) {
+                    // Newest first: an older entry is likelier the one the peer dropped, and InvalidSubscription ends
+                    // this peer's loop
+                    for (const subscription of peerSubscriptions.reverse()) {
                         const { subscriptionId } = subscription;
                         if (peerStopList.has(peerAddress)) {
                             logger.debug(
@@ -313,6 +336,8 @@ export class SubscriptionsServer extends Behavior {
         } finally {
             interactionServer.subscriptionEstablishmentStarted.off(blockHandler);
         }
+
+        await this.#restoreCreationOrder(formerSubscriptions);
 
         logger.info(
             `Reestablished ${successfulReEstablishments.length}${successfulReEstablishments.length ? ` (${successfulReEstablishments.join(",")})` : ""} of ${formerSubscriptions.length} former subscriptions successfully`,
