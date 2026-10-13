@@ -35,6 +35,7 @@ import {
     DatafileRoot,
     Diagnostic,
     DiagnosticPresentation,
+    DestroyedDependencyError,
     DiagnosticSource,
     DnsCodec,
     DnsMessage,
@@ -56,6 +57,7 @@ import {
     MockFilesystem,
     MockNetwork,
     MockUdpSocket,
+    MutexClosedError,
     Network,
     NetworkError,
     NetworkSimulator,
@@ -392,7 +394,7 @@ describe("ServerNode", () => {
             await light.set({ onOff: { onOff: true } });
 
             const closing = light.close();
-            await expect(light.delete()).rejectedWith(ImplementationError, /closing/);
+            await expect(light.delete()).rejectedWith(DestroyedDependencyError, /is closing, so .* cannot be deleted/);
             await closing;
             await node.close();
 
@@ -476,7 +478,7 @@ describe("ServerNode", () => {
                 throw new ImplementationError("Reset refused for test");
             });
 
-            await expect(node.erase()).rejectedWith(MatterAggregateError, /factory reset/);
+            await expect(node.erase()).rejectedWith(MatterAggregateError, /Error erasing node0/);
 
             expect(node.construction.status).equals(Lifecycle.Status.Active);
             expect(light.state.onOff.onOff).equals(false);
@@ -503,7 +505,7 @@ describe("ServerNode", () => {
             const node = await MockServerNode.createOnline(undefined, { device: undefined });
 
             const closing = node.close();
-            await expect(node.delete()).rejectedWith(ImplementationError, /closing/);
+            await expect(node.delete()).rejectedWith(DestroyedDependencyError, /is closing, so it cannot be deleted/);
             await closing;
         });
 
@@ -554,6 +556,16 @@ describe("ServerNode", () => {
 
     describe("lifecycle verbs", () => {
         type Verb = "erase" | "delete" | "close";
+
+        for (const verb of ["close", "delete"] as const) {
+            it(`refuses to start a node after ${verb}`, async () => {
+                const node = await MockServerNode.createOnline();
+
+                await node[verb]();
+
+                await expect(node.start()).rejectedWith(MutexClosedError);
+            });
+        }
 
         const cases: Array<{
             first: Verb;
@@ -637,7 +649,7 @@ describe("ServerNode", () => {
                 expect(node.lifecycle.phase).equals(phases[1]);
 
                 if (rejects) {
-                    await expect(secondDone).rejectedWith(ImplementationError, /closing/);
+                    await expect(secondDone).rejectedWith(DestroyedDependencyError, /so it cannot be (erased|deleted)/);
                 } else {
                     await secondDone;
                     if (destroyed && second !== "erase") {
@@ -1888,7 +1900,7 @@ describe("ServerNode", () => {
             throw new ImplementationError("Cannot clear events");
         };
 
-        await MockTime.resolve(expect(controller.erase()).rejectedWith("Error during factory reset"), {
+        await MockTime.resolve(expect(controller.erase()).rejectedWith("Error erasing controller1"), {
             macrotasks: true,
         });
 

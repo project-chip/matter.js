@@ -61,8 +61,7 @@ export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
      */
     override async close() {
         const node = this.#ownedNode;
-        // The owned node closes this endpoint as one of its parts, which calls close() again
-        if (node === undefined || node.lifecycle.phase === "closing" || node.lifecycle.phase === "deleting") {
+        if (node === undefined) {
             await super.close();
             return;
         }

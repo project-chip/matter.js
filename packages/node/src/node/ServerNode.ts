@@ -36,11 +36,6 @@ import { IdentityService } from "./server/IdentityService.js";
 import { ServerEnvironment } from "./server/ServerEnvironment.js";
 
 /**
- * Thrown when there is an error during factory reset.
- */
-class FactoryResetError extends MatterAggregateError {}
-
-/**
  * A server-side Matter {@link Node}.
  *
  * The Matter specification often refers to server-side nodes as "devices".
@@ -150,44 +145,9 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         await super.erase();
     }
 
-    protected override async eraseWithMutex() {
-        const errors = new Array<unknown>();
-        try {
-            await this.construction;
-
-            const isOnline = this.lifecycle.isOnline;
-            if (isOnline) {
-                await this.cancelWithMutex();
-            }
-
-            this.statusUpdate("resetting to factory defaults");
-            try {
-                await this.resetWithMutex();
-            } catch (e) {
-                errors.push(e);
-            }
-
-            await this.eraseStorageWithMutex();
-
-            if (this.lifecycle.phase !== "deleting") {
-                // Reset reverts node to inactive state; now reinitialize
-                this.construction.start();
-
-                // Go back online if we were online at time of reset and should still be online, otherwise just await reinitialization
-                if (isOnline && this.lifecycle.shouldBeOnline) {
-                    await this.startWithMutex();
-                } else {
-                    await this.construction.ready;
-                }
-            }
-        } catch (e) {
-            this.construction.crash();
-            errors.push(e);
-        }
-
-        if (errors.length) {
-            throw new FactoryResetError(errors, `Error during factory reset of ${this}`);
-        }
+    protected override async eraseDataWithMutex() {
+        this.statusUpdate("resetting to factory defaults");
+        await this.eraseStorageWithMutex();
     }
 
     /**

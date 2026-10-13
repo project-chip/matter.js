@@ -252,7 +252,7 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         // A disabled node should be offline; setting this before teardown also lets the connection-state engine settle
         // straight to Disconnected instead of flashing Reconnecting as the subscription drops.
         this.lifecycle.targetState = "offline";
-        await this.lifecycle.mutex.produce(async () => {
+        await this.lifecycle.mutex.hold(`disabling ${this}`, async () => {
             // Drop the subscription before flipping isDisabled so the connection-state engine cannot momentarily read
             // Connected while disabling (subscriptionActive is checked ahead of isDisabled).
             await this.cancelWithMutex();
@@ -279,35 +279,8 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         await deletion.wipe();
     }
 
-    protected override async eraseWithMutex() {
-        const errors = new Array<unknown>();
-        try {
-            const isOnline = this.lifecycle.isOnline;
-            await this.cancelWithMutex();
-            try {
-                await this.resetWithMutex();
-            } catch (e) {
-                errors.push(e);
-            }
-
-            await this.env.get(ClientNodeStore).eraseCaches();
-
-            if (this.lifecycle.phase !== "deleting") {
-                this.construction.start();
-                if (isOnline && this.lifecycle.shouldBeOnline) {
-                    await this.startWithMutex();
-                } else {
-                    await this.construction.ready;
-                }
-            }
-        } catch (e) {
-            this.construction.crash();
-            errors.push(e);
-        }
-
-        if (errors.length) {
-            throw new MatterAggregateError(errors, `Error erasing ${this}`);
-        }
+    protected override async eraseDataWithMutex() {
+        await this.env.get(ClientNodeStore).eraseCaches();
     }
 
     protected override async resetWithMutex() {

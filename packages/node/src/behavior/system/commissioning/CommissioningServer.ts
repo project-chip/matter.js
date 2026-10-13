@@ -197,7 +197,7 @@ export class CommissioningServer extends Behavior {
 
         this.#endPendingReset();
         const node = this.endpoint as ServerNode;
-        if (node.lifecycle.phase === "closing" || node.lifecycle.phase === "deleting") {
+        if (node.lifecycle.isTerminal) {
             return;
         }
         this.env.runtime.add(this.#factoryReset(node));

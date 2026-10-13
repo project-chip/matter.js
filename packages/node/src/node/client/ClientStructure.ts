@@ -18,6 +18,7 @@ import type { Node } from "#node/Node.js";
 import { DatasourceCache } from "#storage/client/DatasourceCache.js";
 import {
     capitalize,
+    DestroyedDependencyError,
     Diagnostic,
     hex,
     InternalError,
@@ -1156,6 +1157,11 @@ export class ClientStructure {
         try {
             await endpoint.delete();
         } catch (e) {
+            // The node or an ancestor is closing or being deleted and destroys the endpoint itself
+            if (e instanceof DestroyedDependencyError) {
+                logger.debug(`Not erasing peer endpoint ${endpoint}:`, e.message);
+                return;
+            }
             logger.warn(`Error erasing peer endpoint ${endpoint}:`, e);
         }
     }

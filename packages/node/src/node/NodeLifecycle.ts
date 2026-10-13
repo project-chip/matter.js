@@ -7,19 +7,13 @@
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
+import { LifecycleMutex } from "#endpoint/properties/LifecycleMutex.js";
 import { AsyncObservable, Observable } from "@matter/general";
 
 /**
  * Extended lifecycle information that only applies to root endpoints.
  */
 export class NodeLifecycle extends EndpointLifecycle {
-    override begin(phase: EndpointLifecycle.Phase, operation: () => Promise<void>) {
-        if (phase === "deleting" || phase === "closing") {
-            this.targetState = "offline";
-        }
-        return super.begin(phase, operation);
-    }
-
     #online = AsyncObservable<[context: ActionContext]>();
     #goingOffline = AsyncObservable<[context: ActionContext]>();
     #offline = AsyncObservable<[context: ActionContext]>();
@@ -29,9 +23,12 @@ export class NodeLifecycle extends EndpointLifecycle {
     #onlineAt?: Date;
     #isCommissioned = false;
     #targetState: "online" | "offline" = "offline";
+    #mutex: LifecycleMutex;
 
     constructor(endpoint: Endpoint) {
         super(endpoint);
+
+        this.#mutex = new LifecycleMutex(endpoint);
 
         this.#online.on(() => {
             this.#onlineAt = new Date();
@@ -113,15 +110,35 @@ export class NodeLifecycle extends EndpointLifecycle {
         return this.#decommissioned;
     }
 
+    /**
+     * Mutex for protecting node lifecycle transitions.
+     *
+     * {@link Node.start}, {@link Node.stop} and the lifecycle verbs of the node hold this mutex.  The verbs of the
+     * node's other endpoints do not; they hold {@link treeMutex}, which the verbs of the node take after this one.
+     *
+     * Generally methods that hold this mutex have a protected "*WithMutex" variant.  This allows for nesting of logic
+     * that requires the mutex without causing deadlock.
+     */
+    get mutex() {
+        return this.#mutex;
+    }
+
+    override get ownsTreeMutex() {
+        return true;
+    }
+
     set targetState(state: "online" | "offline") {
         this.#targetState = state;
     }
 
+    /**
+     * Whether the node should be online: it was started, not stopped, and no close or delete was requested.
+     */
     get shouldBeOnline() {
-        return this.#targetState === "online";
+        return this.#targetState === "online" && !this.isTerminal;
     }
 
     get shouldBeOffline() {
-        return this.#targetState === "offline";
+        return !this.shouldBeOnline;
     }
 }

@@ -80,7 +80,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: `erase()` of an endpoint or node rejects with a `MatterAggregateError` when a step fails instead of logging the failure
     - Breaking: `ServerNode.delete()` erases the node's storage and closes the node; it no longer restarts the node first
     - Breaking: `ClientNode.erase()` keeps the commissioning state and reconnects when the node was online
-    - Breaking: `Endpoint.reset()` and `Node.reset()` are protected, and `EndpointContainer.reset()` is removed
+    - Breaking: `Endpoint.reset()`, `Node.reset()` and `EndpointContainer.reset()` are removed; use `erase()`
     - Breaking: Changing the `owner` of an endpoint that already has one, also by adding it to another endpoint, throws; remove the endpoint with `close()` or `delete()` first
     - Breaking: `EndpointInitializer.eraseDescendant()` is replaced by `beginEraseDescendant()` and `beginDeleteDescendant()`
     - Breaking: `CommissioningClient` state `sessionParameters` is replaced by `reportedSessionParameters`, `advertisedIntervals` and `tcpUnsupported`; stored values migrate

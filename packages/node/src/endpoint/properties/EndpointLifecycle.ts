@@ -13,10 +13,10 @@ import {
     ImplementationError,
     Lifecycle,
     Logger,
-    Mutex,
     Observable,
 } from "@matter/general";
 import type { Endpoint } from "../Endpoint.js";
+import { LifecycleMutex } from "./LifecycleMutex.js";
 
 const logger = Logger.get("PartLifecycle");
 
@@ -43,7 +43,7 @@ export class EndpointLifecycle {
     #reset = AsyncObservable<[]>();
     #configurationVersionChanged = Observable<[]>(error => this.emitError("configurationVersionChanged", error));
     #queuedUpdates?: Array<EndpointLifecycle.Change>;
-    #mutex: Mutex;
+    #treeMutex?: LifecycleMutex;
     #phase: EndpointLifecycle.Phase = "idle";
     #operation?: Promise<void>;
 
@@ -160,13 +160,6 @@ export class EndpointLifecycle {
     }
 
     /**
-     * Whether the {@link Endpoint} began closing or deleting.
-     */
-    get isDestroying() {
-        return this.#destructionBegun;
-    }
-
-    /**
      * Throw if the {@link Endpoint} {@link isGone}: {@link CrashedDependencyError} if its construction crashed,
      * {@link DestroyedDependencyError} once it began closing or deleting.
      */
@@ -221,7 +214,6 @@ export class EndpointLifecycle {
     constructor(endpoint: Endpoint, isEssential?: boolean) {
         this.#endpoint = endpoint;
         this.#isEssential = isEssential ?? true;
-        this.#mutex = new Mutex(endpoint);
 
         // Bubble crash events
         endpoint.construction.change.on(status => {
@@ -232,25 +224,44 @@ export class EndpointLifecycle {
     }
 
     /**
-     * Mutex for protecting lifecycle transitions such as erase, delete and close.
+     * Mutex that {@link Endpoint.erase}, {@link Endpoint.delete} and {@link Endpoint.close} hold, so a verb never
+     * overlaps with a verb on an ancestor or a part.  All endpoints of a node share the tree mutex of the node; an
+     * endpoint without a node uses its own.  It is not held while a node starts or stops.
      *
-     * Methods that implement complex async lifecycle transitions use this mutex to ensure conflicting operations cannot
-     * intermingle.  Closing or deleting closes the mutex.  Erasing or deleting an ancestor resets this endpoint without
-     * taking this mutex.
-     *
-     * Generally methods that hold this mutex have a protected "*WithMutex" variant.  This allows for nesting of logic
-     * that requires the mutex without causing deadlock.
+     * @internal
      */
-    get mutex() {
-        return this.#mutex;
+    get treeMutex(): LifecycleMutex {
+        const owner = this.ownsTreeMutex ? undefined : this.#endpoint.owner;
+        return owner?.lifecycle.treeMutex ?? (this.#treeMutex ??= new LifecycleMutex(this.#endpoint));
+    }
+
+    /**
+     * Whether {@link treeMutex} belongs to this endpoint rather than to its node.
+     *
+     * @internal
+     */
+    get ownsTreeMutex() {
+        return this.#endpoint.owner === undefined;
     }
 
     /**
      * The lifecycle verb in progress.  "erasing" lasts while {@link Endpoint.erase} runs.  "deleting" and "closing" start
      * when {@link Endpoint.delete} or {@link Endpoint.close} is called and stay for good.
+     *
+     * @internal
      */
     get phase() {
         return this.#phase;
+    }
+
+    /**
+     * Whether a {@link Endpoint.delete} or {@link Endpoint.close} was requested.  Later calls of
+     * {@link Endpoint.erase} and {@link Endpoint.delete} are refused; an erase called before still runs.
+     *
+     * @internal
+     */
+    get isTerminal() {
+        return this.#phase === "deleting" || this.#phase === "closing";
     }
 
     /**

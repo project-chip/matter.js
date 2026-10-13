@@ -23,6 +23,7 @@ import {
     Environment,
     Identity,
     ImplementationError,
+    Lifecycle,
     Logger,
     MatterAggregateError,
 } from "@matter/general";
@@ -119,7 +120,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         try {
             this.lifecycle.targetState = "online";
 
-            await this.lifecycle.mutex.produce(this.startWithMutex.bind(this));
+            await this.lifecycle.mutex.hold(`starting ${this}`, () => this.startWithMutex());
         } catch (error) {
             this.lifecycle.targetState = "offline";
             throw error;
@@ -191,7 +192,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
      */
     async stop() {
         this.lifecycle.targetState = "offline";
-        await this.lifecycle.mutex.produce(this.cancelWithMutex.bind(this));
+        await this.lifecycle.mutex.hold(`stopping ${this}`, () => this.cancelWithMutex());
     }
 
     /**
@@ -233,11 +234,73 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         );
     }
 
+    /**
+     * Run the step of a lifecycle verb of the node while holding the node mutex.  After a close or delete the mutex
+     * closes, so the node does not start or stop again.
+     */
+    protected override async withLifecycleMutex(step: () => Promise<void>) {
+        const { mutex } = this.lifecycle;
+        const running = mutex.hold(`${this.lifecycle.phase} ${this}`, step);
+        if (this.lifecycle.isTerminal) {
+            await Promise.all([running, mutex.close()]);
+        } else {
+            await running;
+        }
+    }
+
+    /**
+     * Perform {@link erase} while holding the node mutex.  The node goes offline, then resets, erases the data
+     * {@link eraseDataWithMutex} covers and initializes again while holding the tree mutex.  Then it goes online
+     * again if it was online.
+     *
+     * A failed reset is collected and the remaining steps still run.  Any other failure crashes the node.
+     */
+    protected override async eraseWithMutex() {
+        const errors = new Array<unknown>();
+        try {
+            while (this.construction.status === Lifecycle.Status.Initializing) {
+                await this.construction.change;
+            }
+
+            const isOnline = this.lifecycle.isOnline;
+            await this.cancelWithMutex();
+
+            await this.lifecycle.treeMutex.hold(`erasing ${this}`, async () => {
+                try {
+                    await this.resetWithMutex();
+                } catch (e) {
+                    errors.push(e);
+                }
+
+                await this.eraseDataWithMutex();
+
+                if (this.lifecycle.phase !== "deleting") {
+                    this.construction.start();
+                    await this.construction.ready;
+                }
+            });
+
+            if (isOnline && this.lifecycle.shouldBeOnline) {
+                await this.startWithMutex();
+            }
+        } catch (e) {
+            this.construction.crash();
+            errors.push(e);
+        }
+
+        if (errors.length) {
+            throw new MatterAggregateError(errors, `Error erasing ${this}`);
+        }
+    }
+
     protected override async closeWithMutex() {
         // The runtime is not designed to operate with a node that is shutting down so destroy it before performing
         // actual close
         await MatterAggregateError.settleSeries(
-            [() => (this.#runtime ? this.cancelWithMutex() : undefined), () => super.closeWithMutex()],
+            [
+                () => (this.#runtime ? this.cancelWithMutex() : undefined),
+                () => this.lifecycle.treeMutex.hold(`closing ${this}`, () => super.closeWithMutex()),
+            ],
             `Error closing node ${this}`,
         );
     }
@@ -249,12 +312,27 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         await MatterAggregateError.settleSeries(
             [
                 () => (this.#runtime ? this.cancelWithMutex() : undefined),
-                () => this.resetWithMutex(),
-                () => this.eraseStorageWithMutex(),
-                () => this.closeWithMutex(),
+                () =>
+                    this.lifecycle.treeMutex.hold(`deleting ${this}`, () =>
+                        MatterAggregateError.settleSeries(
+                            [
+                                () => this.resetWithMutex(),
+                                () => this.eraseStorageWithMutex(),
+                                () => super.closeWithMutex(),
+                            ],
+                            `Error erasing and destroying node ${this}`,
+                        ),
+                    ),
             ],
             `Error deleting node ${this}`,
         );
+    }
+
+    /**
+     * Erase the data {@link erase} drops.  Defaults to all persisted data of the node.
+     */
+    protected eraseDataWithMutex() {
+        return this.eraseStorageWithMutex();
     }
 
     /**

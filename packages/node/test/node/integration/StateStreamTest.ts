@@ -87,8 +87,8 @@ async function settle(changes: StateStream.Change[]) {
  * Exposes the reset of an endpoint without the restart {@link Endpoint.erase} performs.
  */
 class ResettableEndpoint<T extends EndpointType = EndpointType> extends Endpoint<T> {
-    override async reset() {
-        await super.reset();
+    async reset() {
+        await this.lifecycle.treeMutex.hold(`resetting ${this}`, () => this.resetWithMutex());
     }
 }
 
