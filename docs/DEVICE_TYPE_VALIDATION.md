@@ -33,7 +33,10 @@ endpoint lists at least one such device type:
 - **Component device types.** The number of endpoints of each required component device type (one distinct
   endpoint per instance), choice conformance across component requirements that share a choice, and — on the
   component endpoint itself — that it satisfies the nested requirements of at least one instance it can fill. A
-  `Descendant` condition requirement is checked the same way, against how many endpoints it reaches.
+  utility component device type (such as Power Source or Electrical Sensor) that the composing endpoint lists in its
+  own `DeviceTypeList` counts that endpoint as one of its endpoints (Core § 9.2.1), as the Device Library examples
+  show for Heat Pump and Solar Power. A `Descendant` condition requirement is checked the same way, against how many
+  endpoints it reaches.
 - **Singleton placement.** A server cluster that a device type in the node scope declares a singleton
   (Core § 7.7.3) must appear only on an endpoint that declares it, or on an endpoint whose own device types list
   that cluster as a server cluster, with any conformance. So a bridged node may carry the RootNode singletons

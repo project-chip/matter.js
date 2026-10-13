@@ -48,7 +48,7 @@ export class DeviceTypeConformanceError extends MatterAggregateError {
  * constructs, or one it asks {@link DeviceTypeValidation.validate} to judge.
  */
 export class DeviceTypeViolationError extends ImplementationError {
-    readonly endpoint: Endpoint;
+    readonly #endpoint: Endpoint;
     readonly violation: DeviceTypeViolation;
 
     constructor(endpoint: Endpoint, violation: DeviceTypeViolation) {
@@ -59,7 +59,16 @@ export class DeviceTypeViolationError extends ImplementationError {
                 Diagnostic.squash(deviceType, " ", Diagnostic.strong(requirement), ": ", detail),
             ),
         );
-        this.endpoint = endpoint;
+        this.#endpoint = endpoint;
         this.violation = violation;
+    }
+
+    /**
+     * The refused endpoint.
+     *
+     * A getter, not an own enumerable property, so error serializers of test runners do not walk the whole node graph.
+     */
+    get endpoint(): Endpoint {
+        return this.#endpoint;
     }
 }
