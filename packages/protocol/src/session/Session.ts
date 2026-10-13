@@ -310,9 +310,9 @@ export abstract class Session {
     /**
      * Force-close the session.
      *
-     * This ends the session's subscriptions for good unless {@link PeerLossContext.keepSubscriptions} is set, and
-     * closes exchanges without notifying peers.  It places the session in a closing state so no further exchanges are
-     * accepted.
+     * This ends the session's subscriptions for good and closes exchanges without notifying peers.  With
+     * {@link PeerLossContext.keepSubscriptions} the subscriptions end only when the session closes.  It places the
+     * session in a closing state so no further exchanges are accepted.
      *
      * TODO refactor when moving subscriptions away from sessions
      */

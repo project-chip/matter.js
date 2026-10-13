@@ -26,6 +26,7 @@ import {
     PeerAddressSet,
     PeerSet,
     Subscription,
+    SubscriptionId,
     TransientPeerCommunicationError,
 } from "@matter/protocol";
 import { Status, StatusResponseError } from "@matter/types";
@@ -169,18 +170,19 @@ export class SubscriptionsServer extends Behavior {
 
     #subscriptionCancelled(subscription: Subscription): MaybePromise {
         if (subscription.isTerminated && this.state.persistenceEnabled !== false) {
-            const { subscriptionId: id } = subscription;
-            const subscriptionIndex = this.state.subscriptions.findIndex(({ subscriptionId }) => id === subscriptionId);
-            if (subscriptionIndex !== -1) {
-                return this.#removeSubscriptionIndex(subscriptionIndex);
-            }
+            return this.#removeSubscription(subscription.subscriptionId);
         }
     }
 
-    async #removeSubscriptionIndex(index: number) {
+    async #removeSubscription(id: SubscriptionId) {
         await this.context.transaction.addResources(this);
         await this.context.transaction.begin();
-        this.state.subscriptions.splice(index, 1);
+
+        // Look up only under the lock: a concurrent removal shifts the indices
+        const index = this.state.subscriptions.findIndex(({ subscriptionId }) => id === subscriptionId);
+        if (index !== -1) {
+            this.state.subscriptions.splice(index, 1);
+        }
         await this.context.transaction.commit();
     }
 

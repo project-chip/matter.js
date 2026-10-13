@@ -107,6 +107,24 @@ describe("SubscriptionsServer", () => {
         expect(storedIdsOf(device)).not.includes(subscriptionId);
     });
 
+    it("drops every stored subscription of a session the peer closes", async () => {
+        await using site = new MockSite();
+        const { controller, device } = await site.addCommissionedPair();
+        const peer1 = await subscribedPeer(controller, "peer1");
+        const request: ClientSubscribe = { ...Subscribe({ attributes: [{}] }), sustain: false };
+        await MockTime.resolve(peer1.interaction.subscribe(request));
+        const created = storedIdsOf(device);
+        expect(created).length(2);
+
+        const peerAddress = peer1.stateOf(CommissioningClient).peerAddress!;
+        for (const session of controller.env.get(SessionManager).sessionsFor(peerAddress)) {
+            await MockTime.resolve(session.initiateClose());
+        }
+        await MockTime.resolve(MockTime.sleep("close handled", Millis(100)));
+
+        expect(storedIdsOf(device).filter(id => created.includes(id))).deep.equals([]);
+    });
+
     it("drops the stored subscription when the node closes the session while it keeps running", async () => {
         await using site = new MockSite();
         const { controller, device } = await site.addCommissionedPair();
