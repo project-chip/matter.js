@@ -942,6 +942,9 @@ export class ServerSubscription implements Subscription {
                 logger.info(`Subscription ${this.idStr} update failed:`, error);
             }
 
+            // The peer refused the report, which ends the subscription even during a shutdown close
+            this.#isTerminated = true;
+
             using _canceling = lifetime?.join("canceling");
             await this.#closeFromUpdate();
         } finally {

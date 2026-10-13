@@ -211,6 +211,34 @@ describe("ServerSubscription", () => {
         await MockTime.resolve(node.close());
     });
 
+    it("terminates when the peer refuses a report sent during a shutdown close", async () => {
+        const node = await MockServerNode.createOnline();
+
+        const sendBlocker = new DataReadQueue<void>();
+        const subscription = await createSubscription(
+            node,
+            () =>
+                ({
+                    maxPayloadSize: 1200,
+                    async send() {
+                        await sendBlocker.read();
+                    },
+                    async close() {},
+                }) as unknown as MessageExchange,
+        );
+        subscription.activate();
+
+        // A report is in flight when the shutdown close starts
+        await MockTime.advance(200);
+        const closing = subscription.closeForShutdown();
+        sendBlocker.close(new StatusResponseError("Invalid subscription", Status.InvalidSubscription));
+        await MockTime.resolve(closing);
+
+        expect(subscription.isTerminated).is.true;
+
+        await MockTime.resolve(node.close());
+    });
+
     it("keeps a subscription that joins a session closing for shutdown", async () => {
         const node = await MockServerNode.createOnline();
 
