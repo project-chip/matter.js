@@ -55,7 +55,7 @@ export class EndpointContainer<T extends Endpoint = Endpoint>
 
         if (endpoint.owner !== undefined && endpoint.owner !== this.#owner) {
             throw new ImplementationError(
-                `Cannot add ${endpoint} to ${this.#owner} because it belongs to ${endpoint.owner}; remove it with close() or delete() first`,
+                `Cannot add ${endpoint} to ${this.#owner} because it belongs to ${endpoint.owner}; an endpoint cannot move, so close or delete it and add a new endpoint`,
             );
         }
 
@@ -80,7 +80,7 @@ export class EndpointContainer<T extends Endpoint = Endpoint>
     }
 
     /**
-     * Remove an endpoint from the container when it is destroyed.
+     * Remove an endpoint from the container when it is destroyed or its add fails.
      *
      * @internal
      */
@@ -152,7 +152,7 @@ export class EndpointContainer<T extends Endpoint = Endpoint>
         }
     }
 
-    protected get owner() {
+    protected get owner(): Endpoint {
         return this.#owner;
     }
 

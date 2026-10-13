@@ -197,6 +197,8 @@ export class CommissioningServer extends Behavior {
 
         this.#endPendingReset();
         const node = this.endpoint as ServerNode;
+
+        // Adding a worker to a runtime that shuts down revives the runtime
         if (node.lifecycle.isTerminal) {
             return;
         }
@@ -204,11 +206,26 @@ export class CommissioningServer extends Behavior {
     }
 
     async #factoryReset(node: ServerNode) {
+        let crashed = false;
+        const watchCrash = (status: Lifecycle.Status) => {
+            if (status === Lifecycle.Status.Crashed) {
+                crashed = true;
+            }
+        };
+        node.construction.change.on(watchCrash);
         try {
             await node.erase();
         } catch (e) {
-            // A node the reset left crashed stops the runtime on its own
-            logger.warn(`Factory reset of ${node} after its last fabric left completed with errors:`, e);
+            if (crashed) {
+                // The crashed node stops the runtime without logging why
+                logger.error(`Factory reset of ${node} after its last fabric left failed:`, e);
+            } else if (node.lifecycle.isTerminal) {
+                logger.debug(`Factory reset of ${node} after its last fabric left ended as the node closes:`, e);
+            } else {
+                logger.warn(`Factory reset of ${node} after its last fabric left completed with errors:`, e);
+            }
+        } finally {
+            node.construction.change.off(watchCrash);
         }
     }
 

@@ -77,13 +77,15 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: Adding an endpoint with the number of an erased endpoint that is still a part of its parent is refused
     - Breaking: An essential endpoint whose initialization fails in `add()` is closed instead of reset, so the same instance cannot be added again
     - Breaking: `erase()` on an endpoint restarts it with its default values and options and keeps its endpoint number; on a server node the ConfigurationVersion increases
-    - Breaking: `erase()` of an endpoint or node rejects with a `MatterAggregateError` when a step fails instead of logging the failure
+    - Breaking: `erase()` of an endpoint or node rejects with a `MatterAggregateError` when a step fails; a failed storage erase leaves the endpoint or node crashed, and so does a node that cannot go offline before or online after the erase
     - Breaking: `ServerNode.delete()` erases the node's storage and closes the node; it no longer restarts the node first
     - Breaking: `ClientNode.erase()` keeps the commissioning state and reconnects when the node was online
-    - Breaking: `Endpoint.reset()`, `Node.reset()` and `EndpointContainer.reset()` are removed; use `erase()`
-    - Breaking: Changing the `owner` of an endpoint that already has one, also by adding it to another endpoint, throws; remove the endpoint with `close()` or `delete()` first
-    - Breaking: `EndpointInitializer.eraseDescendant()` is replaced by `beginEraseDescendant()` and `beginDeleteDescendant()`
-    - Breaking: `erase()` and `delete()` throw `DestroyedDependencyError` while the endpoint or an ancestor of the same node is closing or being deleted
+    - Breaking: `Endpoint.reset()`, `Node.reset()` and `EndpointContainer.reset()` are removed; `erase()` resets and also wipes the persisted data
+    - Breaking: Changing the `owner` of an endpoint that already has one, also by adding it to another endpoint, throws; an endpoint cannot move, so close or delete it and add a new one
+    - Breaking: `EndpointInitializer.eraseDescendant()` is replaced by `prepareEraseDescendant()` and `prepareDeleteDescendant()`
+    - Breaking: `erase()` and `delete()` throw `DestroyedDependencyError` once a close of the endpoint, or a close or delete of an ancestor of the same node, was requested; `erase()` also once a delete was requested
+    - Breaking: `start()` of a node whose close or delete was requested throws `DestroyedDependencyError` instead of `MutexClosedError`, and `stop()` does nothing
+    - Breaking: `NodeLifecycle.mutex` is internal and no longer a `Mutex`
     - Breaking: `CommissioningClient` state `sessionParameters` is replaced by `reportedSessionParameters`, `advertisedIntervals` and `tcpUnsupported`; stored values migrate
     - Deprecation: `ClientNodeInteraction.localStateFor()` will be removed in 0.19
     - Feature: Finalized the `ClientNode` API for controllers: `ServerNode.peers.commissioned`, `ClientNode.disable()`/`enable()`, connection state, split commissioning (`finalizeCommissioning` hands off discovery data and PASE session parameters to `peers.completeCommissioning`), opening commissioning windows on peers and more; see [Controller migration guide](docs/MIGRATION_CONTROLLER_018.md)
@@ -104,10 +106,11 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Device type requirements honor relaxed mandatory elements and revision-gated features
     - Enhancement: Adding endpoints under an aggregator is faster
     - Enhancement: In `strict` validation mode a cluster server refuses construction when a mandatory command throws `Behavior.unimplemented`
-    - Enhancement: Deleting an endpoint increases the ConfigurationVersion of its bridged device, or else of the node
+    - Enhancement: `delete()` also removes an endpoint or node that crashed
     - Enhancement: A lifecycle operation of a node or endpoint that waits 10 seconds for another one logs a warning naming both
     - Enhancement: `DclBehavior.offline` (`MATTER_DCL_OFFLINE`) keeps the DCL services it creates off the network
     - Adjustment: For a part of a server node, the `IdAssigned` and `NumberAssigned` lifecycle changes are emitted before `Installed`
+    - Adjustment: The `Destroying` lifecycle change is emitted when `close()` or `delete()` is called, so a node emits it before it goes offline
     - Adjustment: `ChangeNotificationService.Change` has a new kind `"readable"`, emitted when an endpoint's state becomes readable; consumers that switch on kind must handle or ignore it
     - Adjustment: Device types with a mandatory client application cluster include `BindingServer`; `behaviors.require(BindingServer, options)` no longer sets its state (use `add()` or `setStateOf()`), and an own `BindingServer` implementation subclass must be declared with `.with()` on the endpoint on creation
     - Adjustment: A binding entry resolves only once something observes `binding.established`, and is ignored for the OTA Provider and WebRTC Transport clients
@@ -177,6 +180,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Adding an endpoint below one of its own descendants fails with `ImplementationError` instead of creating a cycle
     - Fix: An endpoint created with `ClientNodeEndpoints.require()` on a running `ClientNode` is reused when the peer later reports that endpoint
     - Fix: `delete()` emits the `Destroying` lifecycle change once
+    - Fix: Deleting an endpoint of a server node increases the ConfigurationVersion of the nearest bridged endpoint above it and of the node, or only of the node when there is none
     - Fix: `erase()`, `delete()` and `close()` of the endpoints of one node run one after another; `close()` waits for an erase or delete in progress, and a repeated call joins the one in progress
     - Fix: A factory reset completes and restarts the node when its in-memory reset fails
     - Fix: An endpoint without a `number` no longer gets a number that another endpoint of the node sets in its options but is not yet added, so adding that endpoint later no longer fails

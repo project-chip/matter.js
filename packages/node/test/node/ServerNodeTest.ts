@@ -57,7 +57,6 @@ import {
     MockFilesystem,
     MockNetwork,
     MockUdpSocket,
-    MutexClosedError,
     Network,
     NetworkError,
     NetworkSimulator,
@@ -184,8 +183,8 @@ describe("ServerNode", () => {
                 ["partsReady", "node0"],
                 ["partsReady"],
                 ["online"],
-                ["offline"],
                 ["destroying", "node0"],
+                ["offline"],
                 ["destroying", "node0.part0"],
                 ["destroyed", "node0.part0"],
                 ["destroyed", "node0"],
@@ -212,8 +211,8 @@ describe("ServerNode", () => {
                 ["ready", "node0.part0"],
                 ["partsReady", "node0.part0"],
                 ["online"],
-                ["offline"],
                 ["destroying", "node0"],
+                ["offline"],
                 ["destroying", "node0.part0"],
                 ["destroyed", "node0.part0"],
                 ["destroyed", "node0"],
@@ -240,8 +239,8 @@ describe("ServerNode", () => {
                 ["installed", "node0.part0"],
                 ["ready", "node0.part0"],
                 ["partsReady", "node0.part0"],
-                ["offline"],
                 ["destroying", "node0"],
+                ["offline"],
                 ["destroying", "node0.part0"],
                 ["destroyed", "node0.part0"],
                 ["destroyed", "node0"],
@@ -563,7 +562,10 @@ describe("ServerNode", () => {
 
                 await node[verb]();
 
-                await expect(node.start()).rejectedWith(MutexClosedError);
+                await expect(node.start()).rejectedWith(
+                    DestroyedDependencyError,
+                    /is closing or closed, so it cannot start/,
+                );
             });
         }
 
@@ -644,9 +646,9 @@ describe("ServerNode", () => {
                 await using node = await MockServerNode.createOnline(undefined, { device: undefined });
 
                 const firstDone = node[first]();
-                expect(node.lifecycle.phase).equals(phases[0]);
+                expect(node.lifecycle.isTerminal).equals(phases[0] === "deleting" || phases[0] === "closing");
                 const secondDone = node[second]();
-                expect(node.lifecycle.phase).equals(phases[1]);
+                expect(node.lifecycle.isTerminal).equals(phases[1] === "deleting" || phases[1] === "closing");
 
                 if (rejects) {
                     await expect(secondDone).rejectedWith(DestroyedDependencyError, /so it cannot be (erased|deleted)/);
@@ -658,7 +660,7 @@ describe("ServerNode", () => {
                 }
                 await firstDone;
 
-                expect(node.lifecycle.phase).equals(phases[2]);
+                expect(node.lifecycle.isTerminal).equals(phases[2] === "deleting" || phases[2] === "closing");
                 expect(node.construction.status).equals(
                     destroyed ? Lifecycle.Status.Destroyed : Lifecycle.Status.Active,
                 );
@@ -890,6 +892,24 @@ describe("ServerNode", () => {
     });
 
     describe("removes a fabric while another session holds the fail-safe", () => {
+        function captureCommissioningLogs() {
+            const logged = new Array<{ level: LogLevel; text: string }>();
+            Logger.destinations.capture = LogDestination({
+                format: LogFormat.formats.plain,
+                write(text, message) {
+                    if (message.level >= LogLevel.WARN && message.facility === "Commissioning") {
+                        logged.push({ level: message.level, text });
+                    }
+                },
+            });
+            return {
+                logged,
+                [Symbol.dispose]() {
+                    delete Logger.destinations.capture;
+                },
+            };
+        }
+
         /** Records the factory resets of `node`; each entry settles when its reset is done. */
         function watchErase(node: MockServerNode) {
             const erase = node.erase.bind(node);
@@ -1032,12 +1052,20 @@ describe("ServerNode", () => {
         it("does not reset a node that closes while it waits for its last session", async () => {
             const { node, contextOptions } = await commissioning.commission();
             const resets = watchErase(node);
+            let reset = false;
+            node.lifecycle.reset.on(() => {
+                reset = true;
+            });
             await openOperationalSession(node);
             await removeFabric(node, contextOptions);
+            using capture = captureCommissioningLogs();
 
             await node.close();
+            await Promise.allSettled(resets);
 
             expect(resets.length).equals(0);
+            expect(reset).equals(false);
+            expect(capture.logged).deep.equals([]);
         });
 
         it("keeps the runtime running when the reset after the last fabric fails but the node restarts", async () => {
@@ -1051,6 +1079,7 @@ describe("ServerNode", () => {
             node.lifecycle.reset.on(() => {
                 throw new ImplementationError("Reset refused for test");
             });
+            using capture = captureCommissioningLogs();
 
             await removeFabric(node, contextOptions);
             await node.online({ exchange: commissionerExchange, command: true }, async agent => {
@@ -1062,8 +1091,31 @@ describe("ServerNode", () => {
 
             expect(crashes).equals(0);
             expect(node.construction.status).equals(Lifecycle.Status.Active);
+            expect(capture.logged.map(({ level }) => level)).deep.equals([LogLevel.WARN]);
 
             await node.close();
+        });
+
+        it("logs no warning when the node closes during a failing reset after the last fabric", async () => {
+            const { node, contextOptions } = await commissioning.commission();
+            const resets = watchErase(node);
+            const commissionerExchange = await armFailsafe(node);
+            let closing: Promise<void> | undefined;
+            node.lifecycle.reset.on(() => {
+                closing ??= node.close();
+                throw new ImplementationError("Reset refused for test");
+            });
+            using capture = captureCommissioningLogs();
+
+            await removeFabric(node, contextOptions);
+            await node.online({ exchange: commissionerExchange, command: true }, async agent => {
+                await agent.generalCommissioning.armFailSafe({ expiryLengthSeconds: 0, breadcrumb: 0 });
+            });
+            expect(resets.length).equals(1);
+            await expect(MockTime.resolve(resets[0], { macrotasks: true })).rejectedWith(MatterAggregateError);
+            await MockTime.resolve(closing!, { macrotasks: true });
+
+            expect(capture.logged).deep.equals([]);
         });
 
         it("crashes the runtime when the reset after the last fabric leaves the node crashed", async () => {
@@ -1077,6 +1129,7 @@ describe("ServerNode", () => {
             node.env.get(FabricManager).clear = async () => {
                 throw new ImplementationError("Storage erase refused for test");
             };
+            using capture = captureCommissioningLogs();
 
             await removeFabric(node, contextOptions);
             await node.online({ exchange: commissionerExchange, command: true }, async agent => {
@@ -1087,6 +1140,7 @@ describe("ServerNode", () => {
             await MockTime.resolve(Promise.resolve(), { macrotasks: true });
 
             expect(crashes).equals(1);
+            expect(capture.logged.map(({ level }) => level)).deep.equals([LogLevel.ERROR]);
         });
 
         it("stays commissioned when another fabric remains", async () => {
@@ -1789,6 +1843,97 @@ describe("ServerNode", () => {
         expect(() => ca.rootCert).throws();
         const { publicKey } = await controller.env.get(Crypto).createKeyPair();
         await expect(ca.generateNoc(publicKey, FabricId(1), NodeId(1))).rejected;
+    });
+
+    it("crashes and erases nothing when it cannot go offline for a factory reset", async () => {
+        await using node = await MockServerNode.createOnline();
+        let resets = 0;
+        node.lifecycle.reset.on(() => {
+            resets++;
+        });
+        node.lifecycle.goingOffline.on(() => {
+            throw new ImplementationError("Going offline refused for test");
+        });
+
+        await expect(MockTime.resolve(node.erase(), { macrotasks: true })).rejectedWith(MatterAggregateError);
+
+        expect(resets).equals(0);
+        expect(node.construction.status).not.equals(Lifecycle.Status.Active);
+    });
+
+    it("crashes when it cannot go online again after a factory reset", async () => {
+        await using node = await MockServerNode.createOnline();
+        let erased = false;
+        node.lifecycle.reset.on(() => {
+            erased = true;
+        });
+        node.lifecycle.online.on(() => {
+            if (erased) {
+                throw new ImplementationError("Going online refused for test");
+            }
+        });
+
+        await expect(MockTime.resolve(node.erase(), { macrotasks: true })).rejectedWith(MatterAggregateError);
+
+        expect(node.construction.status).not.equals(Lifecycle.Status.Active);
+    });
+
+    it("reports a failed reset of a factory reset in one error", async () => {
+        await using node = await MockServerNode.createOnline();
+        node.lifecycle.reset.on(() => {
+            throw new ImplementationError("Reset refused for test");
+        });
+
+        const error = await MockTime.resolve(node.erase(), { macrotasks: true }).then(
+            () => undefined,
+            (e: unknown) => e,
+        );
+
+        if (!(error instanceof MatterAggregateError)) {
+            expect.fail(`Expected a MatterAggregateError, got ${error}`);
+        }
+        expect(error.message).equals("Error erasing node0");
+        expect(error.errors.map(e => (e instanceof Error ? e.message : String(e)))).not.contains("Error erasing node0");
+    });
+
+    it("factory resets a node that is still initializing", async () => {
+        const node = new MockServerNode();
+        expect(node.construction.status).equals(Lifecycle.Status.Initializing);
+
+        await MockTime.resolve(node.erase(), { macrotasks: true });
+
+        expect(node.construction.status).equals(Lifecycle.Status.Active);
+        await node.close();
+    });
+
+    it("does nothing when stopping a closed node", async () => {
+        const node = await MockServerNode.createOnline();
+        await node.close();
+
+        await node.stop();
+
+        expect(node.construction.status).equals(Lifecycle.Status.Destroyed);
+    });
+
+    it("stays down when a factory reset cannot erase the storage", async () => {
+        await using node = await MockServerNode.createOnline();
+        node.env.get(FabricManager).clear = async () => {
+            throw new ImplementationError("Storage erase refused for test");
+        };
+
+        const error = await MockTime.resolve(node.erase(), { macrotasks: true }).then(
+            () => undefined,
+            (e: unknown) => e,
+        );
+
+        const messages = (e: unknown): string[] =>
+            e instanceof MatterAggregateError
+                ? e.errors.flatMap(messages)
+                : [e instanceof Error ? e.message : String(e)];
+        expect(error).instanceOf(MatterAggregateError);
+        expect(messages(error)).deep.equals(["Storage erase refused for test"]);
+        expect(node.construction.status).not.equals(Lifecycle.Status.Active);
+        expect(node.lifecycle.isOnline).equals(false);
     });
 
     it("factory reset closes the fabric authority the node owns", async () => {

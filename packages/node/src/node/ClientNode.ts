@@ -12,6 +12,7 @@ import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { Agent } from "#endpoint/Agent.js";
 import { ClientNodeEndpoints } from "#endpoint/properties/ClientNodeEndpoints.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
+import { awaitLifecycleOperation } from "#endpoint/properties/LifecycleMutex.js";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
 import { MutableEndpoint } from "#endpoint/type/MutableEndpoint.js";
 import { ClientCacheBuffer } from "#storage/client/ClientCacheBuffer.js";
@@ -229,11 +230,12 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
     }
 
     /**
-     * Erase the data cached from the peer and initialize the node again.  Commissioning and connection settings stay.
-     * If the node was online it reconnects and reads the peer again.
+     * Erase the data cached from the peer and initialize the node again if it was started.  Commissioning and connection
+     * settings stay.  If the node was online it reconnects and reads the peer again.
      *
      * Rejects with a {@link MatterAggregateError} if a step fails.  A failed reset still erases the cache and
-     * initializes the node again; a failure to disconnect, erase the cache or restart leaves the node crashed.
+     * initializes the node again.  The node crashes if it cannot disconnect first, in which case nothing is erased, if
+     * the cache erase fails, or if it cannot reconnect.
      */
     override erase() {
         return super.erase();
@@ -245,6 +247,7 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
      * This shuts down any active connections and prevents future connections until re-enabled.
      */
     async disable() {
+        this.assertNotTerminal("disable");
         if (this.state.network.isDisabled) {
             return;
         }
@@ -274,13 +277,18 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         await this.start();
     }
 
-    protected async eraseStorageWithMutex() {
-        const deletion = await this.env.get(EndpointInitializer).beginDeleteDescendant(this);
-        await deletion.wipe();
+    /**
+     * Erase drops what the node cached from the peer and keeps its commissioning and connection settings.
+     */
+    /**
+     * Delete erases the store of the node itself, also when the node crashed before it installed its initializer.
+     */
+    protected override async prepareDelete(): Promise<EndpointInitializer.Erasure> {
+        return { wipe: () => this.store.erase() };
     }
 
-    protected override async eraseDataWithMutex() {
-        await this.env.get(ClientNodeStore).eraseCaches();
+    protected override async prepareErase(): Promise<EndpointInitializer.Erasure> {
+        return { wipe: () => this.env.get(ClientNodeStore).eraseCaches() };
     }
 
     protected override async resetWithMutex() {
@@ -334,17 +342,34 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         actorOrPurpose: string | ((agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>),
         actor?: (agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>,
     ): MaybePromise<R> {
+        const act = (): MaybePromise<R> => (super.act as any)(actorOrPurpose, actor);
+        const ready = this.#readyToAct();
+        return ready === undefined ? act() : ready.then(act);
+    }
+
+    /**
+     * Start an inactive node so it can act.  Returns a promise if the node is not ready yet.  A node that is closing or
+     * being deleted must not come back.  While a lifecycle verb is in progress the node waits for it, whatever its
+     * outcome, and checks again, as an erase restarts a started node itself.
+     */
+    #readyToAct(): Promise<void> | undefined {
         if (this.construction.status === Lifecycle.Status.Inactive) {
-            // Between the reset and the close of a deletion; restarting would revive a node that is going away
             this.lifecycle.assertNotGone();
+
+            const operation = this.lifecycleOperation;
+            if (operation !== undefined) {
+                return awaitLifecycleOperation(`acting on ${this}`, `a lifecycle operation of ${this}`, operation).then(
+                    () => this.#readyToAct(),
+                    () => this.#readyToAct(),
+                );
+            }
+
             this.construction.start();
         }
 
         if (this.construction.status === Lifecycle.Status.Initializing) {
-            return this.construction.then(() => (super.act as any)(actorOrPurpose, actor));
+            return this.construction.then(() => {});
         }
-
-        return (super.act as any)(actorOrPurpose, actor);
     }
 
     get interaction(): Interactable<ActionContext> {

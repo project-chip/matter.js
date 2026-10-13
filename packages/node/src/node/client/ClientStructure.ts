@@ -23,7 +23,6 @@ import {
     hex,
     InternalError,
     isDeepEqual,
-    Lifecycle,
     Logger,
     MaybePromise,
     Mutex,
@@ -1148,21 +1147,15 @@ export class ClientStructure {
             }
         }
 
-        // Skip deletion if the endpoint was already destroyed, e.g. because a parent endpoint was erased first and
-        // recursively closed its children
-        if (endpoint.construction.status === Lifecycle.Status.Destroyed) {
-            return;
-        }
-
         try {
             await endpoint.delete();
         } catch (e) {
-            // The node or an ancestor is closing or being deleted and destroys the endpoint itself
+            // The endpoint is closed already, or it, the node or an ancestor is closing or being deleted
             if (e instanceof DestroyedDependencyError) {
-                logger.debug(`Not erasing peer endpoint ${endpoint}:`, e.message);
+                logger.debug(`Not deleting peer endpoint ${endpoint}:`, e.message);
                 return;
             }
-            logger.warn(`Error erasing peer endpoint ${endpoint}:`, e);
+            logger.warn(`Error deleting peer endpoint ${endpoint}:`, e);
         }
     }
 
@@ -1273,6 +1266,12 @@ export class ClientStructure {
      * fall out of it.
      */
     async #applyPendingChanges() {
+        // A node whose close or delete was requested takes no new structure; its parts are destroyed with it
+        if (this.#node.lifecycle.isTerminal) {
+            this.#pendingChanges.clear();
+            return;
+        }
+
         this.#resolvePartClaims();
 
         for (const [endpoint, change] of this.#pendingChanges.entries()) {

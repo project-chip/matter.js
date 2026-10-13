@@ -58,7 +58,7 @@ export class ServerEndpointInitializer extends EndpointInitializer {
         endpoint.env.get(DeviceTypeConformanceService).constructing(endpoint);
     }
 
-    async beginEraseDescendant(endpoint: Endpoint): Promise<EndpointInitializer.Erasure> {
+    async prepareEraseDescendant(endpoint: Endpoint): Promise<EndpointInitializer.Erasure> {
         // A wiped bridged endpoint restarts from storage, so its increased version is persisted with the wipe
         const presets = new Map<Endpoint, Record<string, Val.Struct>>();
         const parts = new Array<Endpoint>();
@@ -106,7 +106,7 @@ export class ServerEndpointInitializer extends EndpointInitializer {
         return typeof stored === "number" ? stored : undefined;
     }
 
-    async beginDeleteDescendant(endpoint: Endpoint): Promise<EndpointInitializer.Erasure> {
+    async prepareDeleteDescendant(endpoint: Endpoint): Promise<EndpointInitializer.Erasure> {
         const owner = endpoint.owner;
         return {
             wipe: async () => {

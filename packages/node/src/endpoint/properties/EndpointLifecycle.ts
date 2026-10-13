@@ -44,8 +44,6 @@ export class EndpointLifecycle {
     #configurationVersionChanged = Observable<[]>(error => this.emitError("configurationVersionChanged", error));
     #queuedUpdates?: Array<EndpointLifecycle.Change>;
     #treeMutex?: LifecycleMutex;
-    #phase: EndpointLifecycle.Phase = "idle";
-    #operation?: Promise<void>;
 
     /**
      * Emitted when an endpoint is installed into an initialized owner.
@@ -145,7 +143,7 @@ export class EndpointLifecycle {
     /**
      * Has the {@link Endpoint} begun closing or deleting, or has its construction crashed?  A closing or deleted endpoint
      * does not become readable again; a crashed one may be restarted.  Unlike "not {@link isReadable}", this is false
-     * while the endpoint initializes or while a reset runs outside of a deletion.
+     * while the endpoint initializes or while a reset runs outside of a delete or close.
      */
     get isGone() {
         if (this.#destructionBegun) {
@@ -225,8 +223,9 @@ export class EndpointLifecycle {
 
     /**
      * Mutex that {@link Endpoint.erase}, {@link Endpoint.delete} and {@link Endpoint.close} hold, so a verb never
-     * overlaps with a verb on an ancestor or a part.  All endpoints of a node share the tree mutex of the node; an
-     * endpoint without a node uses its own.  It is not held while a node starts or stops.
+     * overlaps with a verb on an ancestor or a part of the same node.  All endpoints of a node share the tree mutex of
+     * the node, and the endpoints of a tree not added to a node share the mutex of its topmost endpoint.  It is not held
+     * while a node starts or stops.
      *
      * @internal
      */
@@ -241,56 +240,26 @@ export class EndpointLifecycle {
      * @internal
      */
     get ownsTreeMutex() {
-        return this.#endpoint.owner === undefined;
+        return this.isNode || this.#endpoint.owner === undefined;
     }
 
     /**
-     * The lifecycle verb in progress.  "erasing" lasts while {@link Endpoint.erase} runs.  "deleting" and "closing" start
-     * when {@link Endpoint.delete} or {@link Endpoint.close} is called and stay for good.
+     * Whether the {@link Endpoint} is the root of a node.
      *
      * @internal
      */
-    get phase() {
-        return this.#phase;
+    get isNode() {
+        return false;
     }
 
     /**
-     * Whether a {@link Endpoint.delete} or {@link Endpoint.close} was requested.  Later calls of
-     * {@link Endpoint.erase} and {@link Endpoint.delete} are refused; an erase called before still runs.
+     * Whether a {@link Endpoint.delete} or {@link Endpoint.close} was requested.  The endpoint does not restart and
+     * refuses a later {@link Endpoint.erase}, and a later {@link Endpoint.delete} unless it joins the delete in progress.
      *
      * @internal
      */
     get isTerminal() {
-        return this.#phase === "deleting" || this.#phase === "closing";
-    }
-
-    /**
-     * The promise of the verb in progress.  A repeated call of the same verb joins it.
-     *
-     * @internal
-     */
-    get operation() {
-        return this.#operation;
-    }
-
-    /**
-     * Enter {@link phase} and run {@link operation} as the verb in progress.
-     *
-     * @internal
-     */
-    begin(phase: EndpointLifecycle.Phase, operation: () => Promise<void>) {
-        this.#phase = phase;
-        const promise = operation().finally(() => {
-            if (this.#operation !== promise) {
-                return;
-            }
-            this.#operation = undefined;
-            if (this.#phase === "erasing") {
-                this.#phase = "idle";
-            }
-        });
-        this.#operation = promise;
-        return promise;
+        return this.#destructionBegun;
     }
 
     /**
@@ -387,8 +356,6 @@ export class EndpointLifecycle {
 }
 
 export namespace EndpointLifecycle {
-    export type Phase = "idle" | "erasing" | "deleting" | "closing";
-
     export enum Change {
         Installed = "installed",
         Ready = "ready",

@@ -116,14 +116,16 @@ export class NodeLifecycle extends EndpointLifecycle {
      * {@link Node.start}, {@link Node.stop} and the lifecycle verbs of the node hold this mutex.  The verbs of the
      * node's other endpoints do not; they hold {@link treeMutex}, which the verbs of the node take after this one.
      *
-     * Generally methods that hold this mutex have a protected "*WithMutex" variant.  This allows for nesting of logic
-     * that requires the mutex without causing deadlock.
+     * {@link Node.startWithMutex} and {@link Node.cancelWithMutex} expect this mutex; the other "*WithMutex" methods
+     * expect {@link treeMutex}.
+     *
+     * @internal
      */
     get mutex() {
         return this.#mutex;
     }
 
-    override get ownsTreeMutex() {
+    override get isNode() {
         return true;
     }
 

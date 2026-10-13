@@ -30,15 +30,15 @@ export abstract class EndpointInitializer {
     initializeDescendant(_endpoint: Endpoint) {}
 
     /**
-     * Prepare {@link Endpoint.erase} of an endpoint and its parts.  Runs before the endpoint resets, while its state is
-     * still readable.  The wipe keeps the endpoint numbers.
+     * Prepare {@link Endpoint.erase} of an endpoint and its parts.  Runs before the endpoint resets; the endpoint may
+     * have crashed.  The wipe keeps the endpoint numbers.
      */
-    abstract beginEraseDescendant(_endpoint: Endpoint): Promise<EndpointInitializer.Erasure>;
+    abstract prepareEraseDescendant(_endpoint: Endpoint): Promise<EndpointInitializer.Erasure>;
 
     /**
      * Prepare {@link Endpoint.delete} of an endpoint and its parts.  The wipe releases their endpoint numbers.
      */
-    abstract beginDeleteDescendant(_endpoint: Endpoint): Promise<EndpointInitializer.Erasure>;
+    abstract prepareDeleteDescendant(_endpoint: Endpoint): Promise<EndpointInitializer.Erasure>;
 
     /**
      * Invoked when a {@link Endpoint} closes; its storage and number reservation stay
@@ -82,8 +82,9 @@ export namespace EndpointInitializer {
         wipe(): Promise<void>;
 
         /**
-         * Complete the erase or delete.  Runs last, also when an earlier step failed or the restart was skipped.
+         * Complete the erase or delete.  Runs last, also when an earlier step failed or the restart was skipped, but not
+         * for an erase that a delete took over.
          */
-        finish(): Promise<void>;
+        finish?(): Promise<void>;
     }
 }

@@ -376,16 +376,15 @@ describe("device type validation after construction", () => {
             await node.close();
         });
 
-        it("judges the owner between the closes when an endpoint closes just before its owner", async () => {
+        it("judges only above the owner when an endpoint and its owner close together, endpoint first", async () => {
             const node = await createNode();
             const { fridge, cabinets } = await addRefrigerator(node, { cabinets: 1 });
 
             using recording = recordingChecks();
             const logged = await captureLogOf(() => Promise.all([cabinets[0].close(), fridge.close()]));
 
-            // The closes run one after the other, so the fridge is briefly judged without its cabinet
-            expect(recording.judged).deep.equals([fridge, node, node]);
-            expect(logged.length).equals(1);
+            expect(recording.judged).deep.equals([node]);
+            expect(logged).deep.equals([]);
             expect(serviceOf(node).violationsOf(fridge)).deep.equals([]);
 
             await node.close();

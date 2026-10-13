@@ -285,7 +285,7 @@ describe("Parts", () => {
             await using node = await MockServerNode.createOnline(undefined, { device: undefined });
             const part = await node.add(OnOffLightDevice, { id: "part", number: 5 });
 
-            expect(() => (part.owner = undefined)).throws(ImplementationError, /close\(\) or delete\(\)/);
+            expect(() => (part.owner = undefined)).throws(ImplementationError, /an endpoint cannot move/);
 
             expect(part.owner).equals(node);
             expect(node.parts.has(part)).true;
@@ -297,7 +297,7 @@ describe("Parts", () => {
             const part = await node.add(OnOffLightDevice, { id: "part", number: 5 });
             const other = await node.add(AggregatorEndpoint, { id: "other" });
 
-            expect(() => (part.owner = other)).throws(ImplementationError, /close\(\) or delete\(\)/);
+            expect(() => (part.owner = other)).throws(ImplementationError, /an endpoint cannot move/);
 
             expect(part.owner).equals(node);
             expect(other.parts.has(part)).false;
@@ -308,7 +308,7 @@ describe("Parts", () => {
             const part = await node.add(OnOffLightDevice, { id: "part", number: 5 });
             const other = await node.add(AggregatorEndpoint, { id: "other" });
 
-            await expect(other.add(part)).rejectedWith(ImplementationError, /close\(\) or delete\(\)/);
+            await expect(other.add(part)).rejectedWith(ImplementationError, /an endpoint cannot move/);
 
             expect(part.owner).equals(node);
             expect(other.parts.has(part)).false;

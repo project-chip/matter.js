@@ -11,6 +11,7 @@ import { OnOffServer } from "#behaviors/on-off";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointBehaviorsError } from "#endpoint/errors.js";
+import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import {
     DestroyedDependencyError,
@@ -56,6 +57,10 @@ async function captureErrors<T>(actor: () => Promise<T>) {
     }
 }
 
+function isTerminal(phase: string) {
+    return phase === "deleting" || phase === "closing";
+}
+
 function captureLifecycleWarnings() {
     const warnings = new Array<string>();
     Logger.destinations.capture = LogDestination({
@@ -97,10 +102,37 @@ function messagesOf(error: unknown): string[] {
     return [error.message, ...[...nested, error.cause].filter(e => e !== undefined).flatMap(messagesOf)];
 }
 
+class UnpreparedEndpoint extends Endpoint {
+    protected override prepareErase(): Promise<EndpointInitializer.Erasure> {
+        throw new ImplementationError("Preparation refused for test");
+    }
+
+    protected override prepareDelete(): Promise<EndpointInitializer.Erasure> {
+        throw new ImplementationError("Preparation refused for test");
+    }
+}
+
+class CountingEndpoint extends Endpoint {
+    closes = 0;
+
+    protected override async closeWithMutex() {
+        this.closes++;
+        await super.closeWithMutex();
+    }
+}
+
 class FailingOnOffServer extends OnOffServer {
     override initialize() {
         throw new ImplementationError("Initialization refused for test");
     }
+}
+
+async function nodeWithNestedLight() {
+    const node = await MockServerNode.createOnline(undefined, { device: undefined });
+    const light = new Endpoint(OnOffLightDevice, { id: "light" });
+    const parent = new Endpoint(OnOffLightDevice, { id: "parent", parts: [light] });
+    await node.add(parent);
+    return { node, parent, light };
 }
 
 describe("Endpoint.erase", () => {
@@ -325,6 +357,204 @@ describe("Endpoint.erase", () => {
         expect(rootVersion(node)).equals(before + 1);
     });
 
+    it("restarts an endpoint erased while its parent still starts its other parts", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        let release!: () => void;
+        const released = new Promise<void>(resolve => (release = resolve));
+        class SlowOnOffServer extends OnOffServer {
+            override async initialize() {
+                await released;
+            }
+        }
+        const first = new Endpoint(OnOffLightDevice, { id: "first" });
+        const slow = new Endpoint(OnOffLightDevice.with(SlowOnOffServer), { id: "slow" });
+        const adding = node.add(new Endpoint(AggregatorEndpoint, { id: "parent", parts: [first, slow] }));
+        while (first.construction.status !== Lifecycle.Status.Active) {
+            await first.construction.change;
+        }
+
+        await first.erase();
+        release();
+        await adding;
+
+        expect(first.construction.status).equals(Lifecycle.Status.Active);
+    });
+
+    it("does not restart a part whose close waits behind the erase of its parent", async () => {
+        const { node, parent, light } = await nodeWithNestedLight();
+        await using _node = node;
+        const reset = blockReset(parent);
+        let readies = 0;
+        light.lifecycle.ready.on(() => {
+            readies++;
+        });
+
+        const erasing = parent.erase();
+        await reset.entered;
+        const closing = light.close();
+        reset.release();
+        await erasing;
+        await closing;
+
+        expect(readies).equals(0);
+        expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+        expect(parent.construction.status).equals(Lifecycle.Status.Active);
+    });
+
+    it("deletes an endpoint once it finished initializing", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        let release!: () => void;
+        const released = new Promise<void>(resolve => (release = resolve));
+        class SlowOnOffServer extends OnOffServer {
+            override async initialize() {
+                await released;
+            }
+        }
+        const light = new Endpoint(OnOffLightDevice.with(SlowOnOffServer), { id: "light" });
+        const adding = node.add(light);
+        while (light.construction.status !== Lifecycle.Status.Initializing) {
+            await light.construction.change;
+        }
+
+        const deleting = light.delete();
+        release();
+        await adding;
+        await deleting;
+
+        expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+    });
+
+    it("destroys an endpoint whose delete cannot prepare its storage", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(new UnpreparedEndpoint(OnOffLightDevice, { id: "light" }));
+
+        await expect(light.delete()).rejectedWith(MatterAggregateError, /Error deleting/);
+
+        expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+    });
+
+    it("leaves an endpoint untouched when its erase cannot prepare its storage", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(new UnpreparedEndpoint(OnOffLightDevice, { id: "light" }));
+        let resets = 0;
+        light.lifecycle.reset.on(() => {
+            resets++;
+        });
+
+        await expect(light.erase()).rejectedWith(MatterAggregateError, /Error erasing/);
+
+        expect(resets).equals(0);
+        expect(light.construction.status).equals(Lifecycle.Status.Active);
+    });
+
+    it("refuses to erase an endpoint that was never added to a node", async () => {
+        const light = new Endpoint(OnOffLightDevice, { id: "light" });
+
+        await expect(light.erase()).rejectedWith(ImplementationError, /never added to a node/);
+    });
+
+    it("resets a part whose delete waits behind the erase of its parent once", async () => {
+        const { node, parent, light } = await nodeWithNestedLight();
+        await using _node = node;
+        const reset = blockReset(parent);
+        let resets = 0;
+        light.lifecycle.reset.on(() => {
+            resets++;
+        });
+
+        const erasing = parent.erase();
+        await reset.entered;
+        const deleting = light.delete();
+        reset.release();
+        await erasing;
+        await deleting;
+
+        expect(resets).equals(1);
+        expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+    });
+
+    it("does not close a part again that its owner destroyed while the close of the part waited", async () => {
+        const { node, parent } = await nodeWithNestedLight();
+        await using _node = node;
+        const part = new CountingEndpoint(OnOffLightDevice, { id: "counted" });
+        await parent.add(part);
+        const reset = blockReset(parent);
+
+        const erasing = parent.erase();
+        await reset.entered;
+        const closingParent = parent.close();
+        const closingPart = part.close();
+        reset.release();
+        await erasing;
+        await closingParent;
+        await closingPart;
+
+        expect(part.closes).equals(0);
+        expect(part.construction.status).equals(Lifecycle.Status.Destroyed);
+    });
+
+    it("refuses to add a part to an endpoint whose close was requested", async () => {
+        const { node, parent } = await nodeWithNestedLight();
+        await using _node = node;
+        const reset = blockReset(parent);
+
+        const erasing = parent.erase();
+        await reset.entered;
+        const closing = parent.close();
+
+        expect(() => parent.parts.add(new Endpoint(OnOffLightDevice, { id: "late" }))).throws(
+            DestroyedDependencyError,
+            /cannot be added/,
+        );
+        reset.release();
+        await erasing;
+        await closing;
+    });
+
+    it("refuses to add a node as a part", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const other = new MockServerNode();
+
+        await expect(node.add(other)).rejectedWith(ImplementationError, /a node cannot be a part/);
+        await other.close();
+    });
+
+    it("deletes an endpoint that crashed", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(OnOffLightDevice, { id: "light", isEssential: false });
+        const number = light.number;
+        light.construction.crash();
+
+        await light.delete();
+
+        expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+        const again = await node.add(OnOffLightDevice, { id: "light" });
+        expect(again.number).not.equals(number);
+    });
+
+    it("refuses to delete an endpoint that was never added to a node", async () => {
+        const light = new Endpoint(OnOffLightDevice, { id: "light" });
+
+        await expect(light.delete()).rejectedWith(ImplementationError, /never added to a node/);
+    });
+
+    it("refuses an erase of a crashed endpoint whose close waits with DestroyedDependencyError", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        const light = await node.add(OnOffLightDevice, { id: "light", isEssential: false });
+        light.construction.crash();
+        let release!: () => void;
+        const blocking = light.lifecycle.treeMutex.hold(
+            "blocking",
+            () => new Promise<void>(resolve => (release = resolve)),
+        );
+        const closing = light.close();
+
+        await expect(light.erase()).rejectedWith(DestroyedDependencyError, /is closing, so it cannot be erased/);
+        release();
+        await blocking;
+        await closing;
+    });
+
     it("only wipes the storage of an endpoint whose parent has not started its parts", async () => {
         await using site = new MockSite();
         const id = "eraseUnderCrashedParent";
@@ -458,6 +688,30 @@ describe("Endpoint.erase", () => {
         expect(capture.warnings[0]).contains("closing node0.light has waited 10s for erasing node0; possible deadlock");
     });
 
+    for (const verb of ["start", "stop"] as const) {
+        it(`warns naming both operations when a ${verb} of the node waits for its erase`, async () => {
+            await using node = await MockServerNode.createOnline(undefined, {
+                device: undefined,
+                online: verb === "stop",
+            });
+            const reset = blockReset(node);
+            using capture = captureLifecycleWarnings();
+
+            const erasing = node.erase();
+            await reset.entered;
+            const waiting = node[verb]();
+            await MockTime.advance(Seconds(10));
+            reset.release();
+            await erasing;
+            await waiting;
+
+            expect(capture.warnings).length(1);
+            expect(capture.warnings[0]).contains(
+                `${verb === "start" ? "starting" : "stopping"} node0 has waited 10s for erasing node0; possible deadlock`,
+            );
+        });
+    }
+
     it("warns when an erase joins the erase in progress for 10 seconds", async () => {
         await using node = await MockServerNode.createOnline(undefined, { device: undefined });
         const light = await node.add(OnOffLightDevice, { id: "light" });
@@ -507,12 +761,16 @@ describe("Endpoint.erase", () => {
             resets++;
         });
         let release!: () => void;
-        light.lifecycle.treeMutex.run(new Promise<void>(resolve => (release = resolve)));
+        const blocking = light.lifecycle.treeMutex.hold(
+            "blocking",
+            () => new Promise<void>(resolve => (release = resolve)),
+        );
 
         const erasing = light.erase();
         const deleting = light.delete();
         release();
 
+        await blocking;
         await erasing;
         await deleting;
         expect(resets).equals(1);
@@ -525,11 +783,15 @@ describe("Endpoint.erase", () => {
         const light = await node.add(OnOffLightDevice, { id: "light" });
         const before = rootVersion(node);
         let release!: () => void;
-        light.lifecycle.treeMutex.run(new Promise<void>(resolve => (release = resolve)));
+        const blocking = light.lifecycle.treeMutex.hold(
+            "blocking",
+            () => new Promise<void>(resolve => (release = resolve)),
+        );
 
         const erasing = light.erase();
         const closing = light.close();
         release();
+        await blocking;
         await erasing;
         await closing;
 
@@ -702,9 +964,9 @@ describe("Endpoint lifecycle verbs", () => {
             const light = await node.add(OnOffLightDevice, { id: "light" });
 
             const firstDone = light[first]();
-            expect(light.lifecycle.phase).equals(phases[0]);
+            expect(light.lifecycle.isTerminal).equals(isTerminal(phases[0]));
             const secondDone = light[second]();
-            expect(light.lifecycle.phase).equals(phases[1]);
+            expect(light.lifecycle.isTerminal).equals(isTerminal(phases[1]));
 
             if (rejects) {
                 await expect(secondDone).rejectedWith(DestroyedDependencyError, /so it cannot be (erased|deleted)/);
@@ -716,7 +978,7 @@ describe("Endpoint lifecycle verbs", () => {
             }
             await firstDone;
 
-            expect(light.lifecycle.phase).equals(phases[2]);
+            expect(light.lifecycle.isTerminal).equals(isTerminal(phases[2]));
             expect(light.construction.status).equals(destroyed ? Lifecycle.Status.Destroyed : Lifecycle.Status.Active);
         });
     }
@@ -738,25 +1000,17 @@ describe("Endpoint lifecycle verbs", () => {
 });
 
 describe("Endpoint lifecycle verbs of parts", () => {
-    async function nodeWithNestedLight() {
-        const node = await MockServerNode.createOnline(undefined, { device: undefined });
-        const light = new Endpoint(OnOffLightDevice, { id: "light" });
-        const parent = new Endpoint(OnOffLightDevice, { id: "parent", parts: [light] });
-        await node.add(parent);
-        return { node, parent, light };
-    }
-
     it("starts the erase of a part after the erase of its parent is done", async () => {
         const { node, parent, light } = await nodeWithNestedLight();
         await using _node = node;
-        const parentPhases = new Array<string>();
+        const parentReady = new Array<boolean>();
         light.lifecycle.reset.on(() => {
-            parentPhases.push(parent.lifecycle.phase);
+            parentReady.push(parent.lifecycle.isReady);
         });
 
         await Promise.all([parent.erase(), light.erase()]);
 
-        expect(parentPhases).deep.equals(["erasing", "idle"]);
+        expect(parentReady).deep.equals([false, true]);
         expect(light.lifecycle.isReady).equals(true);
     });
 
@@ -767,6 +1021,7 @@ describe("Endpoint lifecycle verbs of parts", () => {
 
         expect(parent.construction.status).equals(Lifecycle.Status.Destroyed);
         expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
+        expect(light.lifecycle.isTerminal).equals(true);
     });
 
     it("throws when erasing or deleting a part while its node closes", async () => {

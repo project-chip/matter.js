@@ -138,16 +138,29 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * Perform a factory reset of the node.
      *
      * Rejects with a {@link MatterAggregateError} if a step fails.  A failed reset still erases the storage and
-     * restarts the node; a failure to go offline, erase the storage or restart leaves the node crashed.
+     * restarts the node.  The node crashes if it cannot go offline first, in which case nothing is erased, if the storage
+     * erase fails, or if it cannot go online again.
      */
     override async erase() {
         using _erasing = this.construction.join("erasing");
         await super.erase();
     }
 
-    protected override async eraseDataWithMutex() {
-        this.statusUpdate("resetting to factory defaults");
-        await this.eraseStorageWithMutex();
+    /**
+     * A factory reset erases the storage of the node and its endpoints at once, so the endpoint initializer does not
+     * take part.
+     */
+    protected override async prepareErase(): Promise<EndpointInitializer.Erasure> {
+        return {
+            wipe: async () => {
+                this.statusUpdate("resetting to factory defaults");
+                await this.#eraseStorage();
+            },
+        };
+    }
+
+    protected override async prepareDelete(): Promise<EndpointInitializer.Erasure> {
+        return { wipe: () => this.#eraseStorage() };
     }
 
     /**
@@ -182,7 +195,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         await super.initialize();
     }
 
-    protected async eraseStorageWithMutex() {
+    async #eraseStorage() {
         await this.resetStorage();
 
         // The node's services outlive the reset, so what they hold for the state it discarded does not.  This is
@@ -191,7 +204,9 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     }
 
     /**
-     * By default, on factory reset and on {@link delete} we erase all stored data.
+     * By default, on factory reset and on {@link delete} we erase all stored data.  Runs after the endpoints of the node
+     * reset, while the node holds its lifecycle mutexes, so it must not await {@link start}, {@link stop} or a lifecycle
+     * verb of the node or one of its endpoints.
      *
      * If this is inappropriate for your application, you may override to alter the behavior.  Matter requires that all
      * "security- and privacy-related data and key material" is removed on factory reset.

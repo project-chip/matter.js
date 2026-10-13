@@ -47,6 +47,7 @@ import {
     createPromise,
     Crypto,
     deepCopy,
+    DestroyedDependencyError,
     Entropy,
     ImplementationError,
     Lifecycle,
@@ -1180,6 +1181,73 @@ describe("ClientNode", () => {
         expect(peer1.construction.status).equals(Lifecycle.Status.Active);
     });
 
+    it("runs an action called while the peer is erased once the erase is done", async () => {
+        const { site, peer1 } = await peerWithLightOn();
+        await using _site = site;
+        await MockTime.resolve(peer1.disable());
+        const store = peer1.env.get(ClientNodeStore);
+        const eraseCaches = store.eraseCaches.bind(store);
+        let acting: Promise<Lifecycle.Status> | undefined;
+        store.eraseCaches = async () => {
+            acting = Promise.resolve(peer1.act(() => peer1.construction.status));
+            await eraseCaches();
+        };
+
+        await MockTime.resolve(peer1.erase());
+
+        expect(await MockTime.resolve(acting!)).equals(Lifecycle.Status.Active);
+        expect(peer1.construction.status).equals(Lifecycle.Status.Active);
+    });
+
+    it("runs an action called while the peer is erased also when the erase fails", async () => {
+        const { site, peer1 } = await peerWithLightOn();
+        await using _site = site;
+        await MockTime.resolve(peer1.disable());
+        peer1.lifecycle.reset.on(() => {
+            throw new ImplementationError("Reset refused for test");
+        });
+        const store = peer1.env.get(ClientNodeStore);
+        const eraseCaches = store.eraseCaches.bind(store);
+        let acting: Promise<Lifecycle.Status> | undefined;
+        store.eraseCaches = async () => {
+            acting = Promise.resolve(peer1.act(() => peer1.construction.status));
+            await eraseCaches();
+        };
+
+        await expect(MockTime.resolve(peer1.erase())).rejectedWith(MatterAggregateError);
+
+        expect(await MockTime.resolve(acting!)).equals(Lifecycle.Status.Active);
+    });
+
+    it("stays down and offline when the erase cannot drop the cache of an online peer", async () => {
+        const { site, peer1 } = await peerWithLightOn();
+        await using _site = site;
+        peer1.env.get(ClientNodeStore).eraseCaches = async () => {
+            throw new ImplementationError("Cache erase refused for test");
+        };
+
+        const error = await MockTime.resolve(peer1.erase()).then(
+            () => undefined,
+            (e: unknown) => e,
+        );
+
+        const messages = (e: unknown): string[] =>
+            e instanceof MatterAggregateError
+                ? e.errors.flatMap(messages)
+                : [e instanceof Error ? e.message : String(e)];
+        expect(messages(error)).deep.equals(["Cache erase refused for test"]);
+        expect(peer1.construction.status).equals(Lifecycle.Status.Crashed);
+        expect(peer1.lifecycle.isOnline).equals(false);
+    });
+
+    it("refuses to disable a closed peer", async () => {
+        const { site, peer1 } = await peerWithLightOn();
+        await using _site = site;
+        await MockTime.resolve(peer1.close());
+
+        await expect(peer1.disable()).rejectedWith(DestroyedDependencyError, /cannot disable/);
+    });
+
     it("does not restart a peer that is deleted while it is erased", async () => {
         const { site, controller, peer1 } = await peerWithLightOn();
         await using _site = site;
@@ -1228,7 +1296,7 @@ describe("ClientNode", () => {
 
         await MockTime.resolve(peer1.decommission());
 
-        await expect(MockTime.resolve(peer1.delete())).rejectedWith("is closed");
+        await expect(MockTime.resolve(peer1.delete())).rejectedWith("is deleted");
     });
 
     it("writes attributes on commit", async () => {
