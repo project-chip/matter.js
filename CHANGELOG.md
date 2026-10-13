@@ -23,6 +23,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Log messages name the environment they come from (`Diagnostic.Message.origin`), shown in brackets after the facility
     - Enhancement: Added `TransportClosedError` for an operation on a transport connection that is already closed
     - Enhancement: Storage drivers state how long dirty values may be buffered via `StorageDriver.writeCoalescingInterval`
+    - Adjustment: The default log format is plain text instead of ANSI; set `log.format` or `Logger.format` to choose another
     - Fix: DNS-SD discovery ignores the known-answer records of mDNS queries, so a controller no longer dials a node through the wrong interface
     - Fix: DNS-SD honors the cache-flush bit and goodbyes after a re-announcement, ignores invalid SRV records, resolves A/AAAA for the SRV target host, and keeps an mDNS message that has one unreadable record
     - Fix: Crypto auto-detection uses Node.js-style crypto only where it offers SHA-256 and `aes-128-ccm`, otherwise falls back to `StandardCrypto`, and no longer breaks the package import when nothing usable is found
@@ -34,6 +35,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: The `Symbol.metadata` polyfill no longer conflicts with `lib.esnext.decorators` in the published declarations
     - Fix: `IpService` reports a change when a newer TXT record of a service drops a key
     - Fix: DNS-SD TXT keys are matched regardless of case, as RFC 6763 requires, so a device advertising `sii=` instead of `SII=` is no longer ignored
+    - Fix: `WebSocketClient` no longer loses a message the server sends right after the connection opens, and `connect()` rejects when the socket closes before it opens
 
 - @matter/model
     - Breaking: Provisional elements are always treated as optional
@@ -187,6 +189,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument
     - Adjustment: `SqliteStorageDriver` and `JsonFileStorageDriver` report a `writeCoalescingInterval` of `Instant`
+    - Adjustment: Console logs are plain text unless stdout and stderr are terminals; set `log.format` (`MATTER_LOG_FORMAT`) to force a format
     - Fix: Bun and Deno use standard crypto where Node.js crypto lacks SHA-256 or `aes-128-ccm`
     - Fix: `--storage-clear`/`MATTER_STORAGE_CLEAR` clears the storage on start again
     - Fix: `FileStorageDriver.contexts()` lists only contexts that hold keys
