@@ -35,12 +35,13 @@ describe("NodeJsEnvironment", () => {
                 [
                     "--input-type=module",
                     "-e",
-                    'import { Logger } from "@matter/general"; process.stdout.write(Logger.format);',
+                    'import { Logger } from "@matter/general"; process.stdout.write(`\\nformat=${Logger.format}\\n`);',
                 ],
                 { encoding: "utf8" },
             );
 
-            expect(output).equal("plain");
+            // Importing may log first, for example crypto detection on Bun
+            expect(/^format=(.*)$/m.exec(output)?.[1]).equal("plain");
         });
 
         it("uses ANSI when stdout and stderr are terminals", () => {
