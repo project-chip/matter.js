@@ -7,6 +7,7 @@
 import type { SustainedClientSubscribe } from "#action/client/subscription/ClientSubscribe.js";
 import { Read } from "#action/request/Read.js";
 import { Subscribe } from "#action/request/Subscribe.js";
+import { EventNumberTracker } from "#action/response/EventNumberTracker.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import type { ActiveSubscription } from "#action/response/SubscribeResult.js";
 import type { IcdPeerWakefulness } from "#icd/IcdPeerWakefulness.js";
@@ -27,7 +28,7 @@ import {
     Seconds,
     Time,
 } from "@matter/general";
-import { type NodeId, SubscribeResponse } from "@matter/types";
+import { type EventNumber, type NodeId, SubscribeResponse } from "@matter/types";
 import { ClientSubscription } from "./ClientSubscription.js";
 import { PeerSubscription } from "./PeerSubscription.js";
 
@@ -44,6 +45,10 @@ const logger = Logger.get("ClientSubscription");
  * is read live via the {@link SustainedSubscription.Configuration#wakefulness} provider, so a peer registered after
  * construction is honored on the loop's next iteration.  A runtime SIT⇄LIT operating-mode flip recreates the
  * subscription so its intervals are renegotiated for the new mode.
+ *
+ * Each replacement subscription requests only events above {@link maxEventNumber}.  When our own processing of a
+ * report fails, the failure is logged, the events pulled from the report before the failure count as seen and the
+ * subscription continues.
  *
  * TODO - need to make underlying exchange provider abortable and work out how the retry schedule at this level
  *   interacts with the MDNS and secure protocol retries.  Will require some refactoring at lower levels.  Leaving
@@ -64,6 +69,8 @@ export class SustainedSubscription extends ClientSubscription {
     #subscriptionHold?: Disposable;
     #active = AsyncObservableValue(false);
     #inactive = AsyncObservableValue(true);
+    #maxEventNumber?: EventNumber;
+    #localFailureLogged = false;
 
     constructor(config: SustainedSubscription.Configuration) {
         super(config);
@@ -94,13 +101,28 @@ export class SustainedSubscription extends ClientSubscription {
         return this.#inactive;
     }
 
+    /**
+     * The highest event number of the results this subscription processed, or undefined before the first event.  An
+     * event counts once {@link SustainedClientSubscribe.updated} pulled it and settled for its result.  The number
+     * never decreases.  Until it is set, requests carry the `eventFilters` the request and its `refreshRequest` give.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 8.9.3.1
+     */
+    get maxEventNumber() {
+        return this.#maxEventNumber;
+    }
+
     async #run() {
         // Do we trust the session to work? Initially yes
         let sessionTrusted = true;
 
-        const updated = this.#request.updated?.bind(this.#request);
+        const consumer = this.#request.updated?.bind(this.#request);
+        const updated = consumer && ((result: ReadResult) => this.#deliver(result, consumer));
 
-        let { bootstrapWithRead, refreshRequest } = this.#request;
+        let { bootstrapWithRead } = this.#request;
+        const { refreshRequest } = this.#request;
+        const refresh = (request: SustainedClientSubscribe) =>
+            this.#requestNewEvents(refreshRequest === undefined ? request : refreshRequest(request));
         let needToRefreshRequest = false;
 
         // After a failed send to an await-mode LIT peer we must wait for a fresh wake signal rather than retry within
@@ -179,9 +201,8 @@ export class SustainedSubscription extends ClientSubscription {
                 // Subscribe
                 for (const retry of this.#retries) {
                     try {
-                        if (needToRefreshRequest && refreshRequest !== undefined) {
-                            // Update request
-                            request = refreshRequest(request);
+                        if (needToRefreshRequest) {
+                            request = refresh(request);
                         }
                         needToRefreshRequest = true; // We do a read or subscription request now, so we might have got data, even partial
                         if (bootstrapWithRead) {
@@ -197,10 +218,7 @@ export class SustainedSubscription extends ClientSubscription {
                             }
 
                             bootstrapWithRead = false;
-                            if (refreshRequest !== undefined) {
-                                // Update request because read was successful
-                                request = refreshRequest(request);
-                            }
+                            request = refresh(request);
                         }
                         const subscription = await this.#subscribe(request, this.abort);
                         this.#subscription = subscription;
@@ -307,6 +325,53 @@ export class SustainedSubscription extends ClientSubscription {
                 await subscription.close();
             }
         }
+    }
+
+    async #deliver(result: ReadResult, consumer: (result: ReadResult) => Promise<void>) {
+        const eventNumbers = new EventNumberTracker();
+        const report = new PeerReport(result);
+        try {
+            await consumer(eventNumbers.observe(report.read()));
+        } catch (error) {
+            if (report.failed) {
+                throw error;
+            }
+            this.#logLocalFailure("Processing a report", error);
+        } finally {
+            await this.#raiseMaxEventNumber(eventNumbers.value);
+        }
+    }
+
+    async #raiseMaxEventNumber(number: EventNumber | undefined) {
+        if (number === undefined || (this.#maxEventNumber !== undefined && number <= this.#maxEventNumber)) {
+            return;
+        }
+        this.#maxEventNumber = number;
+        try {
+            await this.#request.maxEventNumberChanged?.(number);
+        } catch (error) {
+            this.#logLocalFailure("Handling the event number of a report", error);
+        }
+    }
+
+    /**
+     * A peer can trigger a failure of our own processing with every report, so only the first one is a warning.
+     */
+    #logLocalFailure(what: string, error: unknown) {
+        const message = `${what} from ${this.peer} failed; the subscription continues:`;
+        if (this.#localFailureLogged) {
+            logger.debug(message, error);
+            return;
+        }
+        this.#localFailureLogged = true;
+        logger.warn(message, error);
+    }
+
+    #requestNewEvents(request: SustainedClientSubscribe): SustainedClientSubscribe {
+        if (this.#maxEventNumber === undefined) {
+            return request;
+        }
+        return { ...request, eventFilters: [{ eventMin: this.#maxEventNumber + 1n }] };
     }
 
     /** Report that we no longer hold an established subscription.  Callers gate this on {@link active} being set. */
@@ -497,4 +562,45 @@ export namespace SustainedSubscription {
 
         jitterFactor: 0.25,
     };
+}
+
+/**
+ * A report as received from the peer, noting whether receiving or decoding it failed as opposed to processing it.
+ */
+class PeerReport {
+    #result: ReadResult;
+    failed = false;
+
+    constructor(result: ReadResult) {
+        this.#result = result;
+    }
+
+    async *read(): ReadResult {
+        try {
+            for await (const chunk of this.#result) {
+                yield Symbol.iterator in chunk ? this.#readReports(chunk) : this.#readReportsAsync(chunk);
+            }
+        } catch (error) {
+            this.failed = true;
+            throw error;
+        }
+    }
+
+    *#readReports(reports: Iterable<ReadResult.Report>) {
+        try {
+            yield* reports;
+        } catch (error) {
+            this.failed = true;
+            throw error;
+        }
+    }
+
+    async *#readReportsAsync(reports: AsyncIterable<ReadResult.Report>) {
+        try {
+            yield* reports;
+        } catch (error) {
+            this.failed = true;
+            throw error;
+        }
+    }
 }

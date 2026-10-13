@@ -389,9 +389,7 @@ export class CommissioningClient extends Behavior {
             (this.state.fabricIndexOnPeer === undefined &&
                 !node.maybeStateOf(OperationalCredentialsClient)?.currentFabricIndex)
         ) {
-            const fabricFilter = ClientStructure.isFabricFiltered(
-                this.agent.get(NetworkClient).state.defaultSubscription,
-            );
+            const fabricFilter = node.env.get(ClientStructure).cacheFabricFiltered;
             for await (const _chunk of node.interaction.read(
                 Read(
                     { fabricFilter },
@@ -1206,7 +1204,8 @@ export namespace CommissioningClient {
          * ```
          *
          * Note that certain clusters like Descriptor and Basic Information contain critical operational data. If your
-         * read omits them then the node will only be partially functional once initialized.
+         * read omits them then the node will only be partially functional once initialized.  A built read is sent as
+         * given; see {@link NetworkClient.State.defaultSubscription}.
          */
         defaultSubscription?: Subscribe;
 

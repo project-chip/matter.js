@@ -687,7 +687,7 @@ describe("InProcessControllerAdapter", () => {
         await waitFor(() => updates.length > 0);
         expect(updates).lengthOf(1);
 
-        // A read re-broadcasts what it answers with, which the observation must not take for a new event
+        // The events a read returns must not reach an observation
         await node.readEvents([{ endpoint: 1, cluster: BOOLEAN_STATE.id, event: STATE_CHANGE_EVENT.id }]);
 
         expect(updates).lengthOf(1);
