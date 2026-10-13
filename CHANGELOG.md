@@ -279,6 +279,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A CASE pairing failure reaches the caller
     - Fix: A peer's effective session parameters take the specification default for a value its session left out, and apply the LIT minimum idle interval only when the peer gave no SII
     - Fix: A peer's discovery data drops the session intervals, TCP support and ICD mode its operational advertisement no longer carries
+    - Fix: A closed `SustainedSubscription` no longer reports itself active, whatever phase the close interrupts
 
 - @matter/react-native
     - Fix: `ReactNativeBle.scanner` returns the same `BleScanner` on every access

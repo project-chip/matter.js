@@ -174,6 +174,75 @@ describe("SustainedSubscription", () => {
             await MockTime.resolve(subscription.done!, { macrotasks: true });
         });
 
+        it("never reports active when closed during the retry backoff", async () => {
+            let subscribeCount = 0;
+            const subscription = build({
+                subscribe: async () => {
+                    subscribeCount++;
+                    throw new Error("transient failure");
+                },
+            });
+            const activeEmits = new Array<boolean>();
+            const inactiveEmits = new Array<boolean>();
+            subscription.active.on(value => void activeEmits.push(value));
+            subscription.inactive.on(value => void inactiveEmits.push(value));
+
+            await flush();
+            expect(subscribeCount).equal(1);
+
+            subscription.close();
+            await MockTime.resolve(subscription.done!, { macrotasks: true });
+            await flush();
+
+            expect(subscribeCount).equal(1);
+            expect(activeEmits).deep.equal([]);
+            expect(inactiveEmits).deep.equal([]);
+            expect(subscription.active.value).equal(false);
+            expect(subscription.inactive.value).equal(true);
+        });
+
+        it("never reports active when closed while the subscribe is in flight and then succeeds", async () => {
+            let peerSubClosed = 0;
+            let finishSubscribe: (() => void) | undefined;
+            const subscription = build({
+                subscribe: () =>
+                    new Promise<PeerSubscription>(resolve => {
+                        finishSubscribe = () => resolve(fakePeerSub(() => peerSubClosed++));
+                    }),
+            });
+            const activeEmits = new Array<boolean>();
+            subscription.active.on(value => void activeEmits.push(value));
+
+            await flush();
+            subscription.close();
+            finishSubscribe?.();
+            await MockTime.resolve(subscription.done!, { macrotasks: true });
+            await flush();
+
+            expect(activeEmits).deep.equal([]);
+            expect(subscription.active.value).equal(false);
+            expect(peerSubClosed).equal(1);
+        });
+
+        it("reports not live when closed while the active observers run", async () => {
+            const subscription = build();
+            const activeEmits = new Array<boolean>();
+            subscription.active.on(value => {
+                activeEmits.push(value);
+                if (value) {
+                    subscription.close();
+                }
+            });
+
+            await flush();
+            await MockTime.resolve(subscription.done!, { macrotasks: true });
+            await flush();
+
+            expect(activeEmits).deep.equal([true, false]);
+            expect(subscription.active.value).equal(false);
+            expect(subscription.inactive.value).equal(true);
+        });
+
         it("probes after a subscription loss before resubscribing", async () => {
             let probeCount = 0;
             let lastRequest: SustainedClientSubscribe | undefined;
@@ -658,6 +727,42 @@ describe("SustainedSubscription", () => {
 
             subscription.close();
             await MockTime.resolve(subscription.done!, { macrotasks: true });
+        });
+
+        it("reports not live when closed while a mode-flip recreate tears down the old subscription", async () => {
+            const wakefulness = litWakefulness();
+
+            let releaseClose: (() => void) | undefined;
+            let subscribeCount = 0;
+            const subscription = build({
+                wakefulness: () => wakefulness,
+                subscribe: async () => {
+                    subscribeCount++;
+                    const sub = fakePeerSub();
+                    if (subscribeCount === 1) {
+                        sub.close = () => new Promise<void>(resolve => (releaseClose = resolve));
+                    }
+                    return sub;
+                },
+            });
+
+            wakefulness.noteActive();
+            await flush();
+            expect(subscription.active.value).equal(true);
+
+            // The LIT->SIT flip starts the recreate, which waits on the old subscription's close.
+            wakefulness.requiresAwait = false;
+            await flush();
+            expect(releaseClose).not.equal(undefined);
+            expect(subscription.active.value).equal(true);
+
+            subscription.close();
+            releaseClose?.();
+            await MockTime.resolve(subscription.done!, { macrotasks: true });
+            await flush();
+
+            expect(subscription.active.value).equal(false);
+            expect(subscription.inactive.value).equal(true);
         });
 
         it("recreates on the icdLit network profile, then reverts to the default on a later loss", async () => {

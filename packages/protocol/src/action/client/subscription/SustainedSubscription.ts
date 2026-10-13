@@ -268,12 +268,13 @@ export class SustainedSubscription extends ClientSubscription {
                     }
                 }
 
+                if (this.abort.aborted) {
+                    break;
+                }
+
                 // A LIT park-failure exits the retry loop without a subscription; loop back to await the next wake
                 // signal.
                 if (awaitFreshSignal) {
-                    if (this.abort.aborted) {
-                        break;
-                    }
                     continue;
                 }
 
@@ -323,6 +324,19 @@ export class SustainedSubscription extends ClientSubscription {
                 this.subscriptionId = ClientSubscription.NO_SUBSCRIPTION;
                 this.#releaseSubscriptionHold();
                 await subscription.close();
+            }
+
+            // Every exit, including an abort inside a mode-flip recreate or the active observers, leaves us not live.
+            if (this.#active.value) {
+                try {
+                    await this.#reportNotLive();
+                } catch (e) {
+                    // Do not mask an error that is already propagating out of #run
+                    logger.warn(
+                        `Observer failed while ${this.peer} subscription stopped:`,
+                        Diagnostic.errorMessage(asError(e)),
+                    );
+                }
             }
         }
     }
