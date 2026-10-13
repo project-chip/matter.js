@@ -168,6 +168,35 @@ describe("Discovery interruption", () => {
             }
         });
 
+        it("rejects with the cancel reason when the node fails to start after the cancel", async () => {
+            const node = await MockServerNode.createOnline();
+            try {
+                await configure(node, [DEVICE]);
+                await node.stop();
+
+                const startCalled = deferred();
+                const startDone = deferred();
+                node.start = async () => {
+                    startCalled.resolve();
+                    await startDone.promise;
+                    throw new ImplementationError("Node failed to start");
+                };
+
+                const discovery = new TestDiscovery(node, { timeout: Seconds(30) }, winner());
+                const outcome = settle(discovery);
+                await MockTime.resolve(startCalled.promise, { macrotasks: true });
+
+                const reason = new ImplementationError("Caller gave up");
+                discovery.cancel(reason);
+                startDone.resolve();
+
+                expect(await MockTime.resolve(outcome, { macrotasks: true })).equals(reason);
+                expect(discovery.started).equals(0);
+            } finally {
+                await node.close();
+            }
+        });
+
         it("does not start an attempt for a device that is handed over after the cancel", async () => {
             const node = await MockServerNode.createOnline();
             try {

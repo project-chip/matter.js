@@ -68,7 +68,12 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
             this.#isStopped = true;
             this.#callerAbort?.close();
             this.#owner.env.get(ActiveDiscoveries).delete(this);
-            reject!(cause);
+            // An accepted interruption decides every rejection, whichever phase fails afterwards
+            const reason = this.#abortReason;
+            if (reason !== undefined && cause !== reason) {
+                logger.debug(`${this} was interrupted, so it reports the interruption instead of:`, cause);
+            }
+            reject!(reason ?? cause);
             this.#resolveSettled?.();
         };
 
@@ -402,14 +407,10 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
     }
 
     /**
-     * Prefers the real cause over an outcome that only reports its symptom.  An interruption decides every outcome
-     * without a result.  A "not discovered" outcome gives way to a found device that could not be used, a scanner
+     * Prefers the real cause over an outcome that only reports its symptom.  A "not discovered" outcome gives way to a found device that could not be used, a scanner
      * that failed, or a controller with no scanner to find anything with.
      */
     #failure(error: unknown) {
-        if (this.#abortReason) {
-            return this.#abortReason;
-        }
         if (!(error instanceof DeviceNotDiscoveredError)) {
             return error;
         }
