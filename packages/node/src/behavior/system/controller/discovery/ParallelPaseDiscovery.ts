@@ -151,6 +151,17 @@ export abstract class ParallelPaseDiscovery<W> extends Discovery<W> {
     }
 
     /**
+     * Ending discovery before a candidate has won, also through the timeout, closes the race at once so no attempt can
+     * win while the scan winds down.
+     */
+    override stop() {
+        if (!this.#paseWon) {
+            this.#abort.abort();
+        }
+        super.stop();
+    }
+
+    /**
      * Before a candidate has won, an interruption aborts every attempt so none can win afterwards.  After the win the
      * winner's operation is not interrupted, and the discovery completes with the winner or the winner's error.
      */

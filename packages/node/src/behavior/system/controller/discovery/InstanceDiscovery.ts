@@ -23,6 +23,10 @@ export class InstanceDiscovery extends Discovery<ClientNode> {
     }
 
     protected onDiscovered(node: ClientNode) {
+        // The first node found is the result; devices still being prepared when it arrives do not replace it
+        if (this.#result !== undefined) {
+            return;
+        }
         this.#result = node;
         this.stop();
     }

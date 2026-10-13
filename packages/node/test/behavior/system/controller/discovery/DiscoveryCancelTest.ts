@@ -130,6 +130,25 @@ describe("Discovery interruption", () => {
             }
         });
 
+        it("refuses a PASE win after the discovery timeout, before the scan has ended", async () => {
+            const node = await MockServerNode.createOnline();
+            try {
+                // The scan outlives the timeout, so the race must be closed by the timeout itself
+                const scanner = await configure(node, [DEVICE], { ignoresStop: true });
+
+                const { attempt, started, won } = lateWinner(Seconds(2));
+                const discovery = new TestDiscovery(node, { timeout: Seconds(1) }, attempt);
+                const outcome = settle(discovery);
+                await MockTime.resolve(started, { macrotasks: true });
+
+                expect(await MockTime.resolve(won, { macrotasks: true })).equals(false);
+                scanner.fail(new ImplementationError("Scan ends"));
+                expect(await MockTime.resolve(outcome, { macrotasks: true })).instanceOf(Error);
+            } finally {
+                await node.close();
+            }
+        });
+
         it("honours the caller's abort signal like a cancel", async () => {
             const node = await MockServerNode.createOnline();
             try {

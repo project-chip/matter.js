@@ -90,6 +90,29 @@ function useFactory(node: ServerNode, factory: (real: ClientNodeFactory) => Clie
     node.env.set(ClientNodeFactory, factory(node.env.get(ClientNodeFactory)));
 }
 
+/** Records the nodes it creates, in order. */
+class RecordingNodeFactory extends ClientNodeFactory {
+    readonly created = new Array<ClientNode>();
+
+    constructor(readonly real: ClientNodeFactory) {
+        super();
+    }
+
+    find() {
+        return undefined;
+    }
+
+    create(options: ClientNode.Options, peerAddress?: PeerAddress) {
+        const node = this.real.create(options, peerAddress);
+        this.created.push(node);
+        return node;
+    }
+
+    get nodes() {
+        return this.real.nodes;
+    }
+}
+
 describe("DiscoveryError kinds", () => {
     beforeEach(() => {
         MockTime.init();
@@ -193,6 +216,23 @@ describe("DiscoveryError kinds", () => {
 
                 expect(error).instanceOf(ImplementationError);
                 expect(error).to.have.property("message", "Node construction 1 failed");
+            } finally {
+                await node.close();
+            }
+        });
+
+        it("keeps the first node found when further devices finish their preparation later", async () => {
+            const node = await MockServerNode.createOnline();
+            try {
+                await configure(node, [DEVICE, DEVICE_B]);
+                const factory = new RecordingNodeFactory(node.env.get(ClientNodeFactory));
+                node.env.set(ClientNodeFactory, factory);
+
+                const discovery = new InstanceDiscovery(node, { timeout: Seconds(5) });
+                const result = await MockTime.resolve(discovery, { macrotasks: true });
+
+                expect(factory.created.length).equals(2);
+                expect(result).equals(factory.created[0]);
             } finally {
                 await node.close();
             }
