@@ -2409,9 +2409,14 @@ class InProcessWebRtcRequestorApi implements WebRtcRequestorApi {
         );
     }
 
-    async removeSession(id: number): Promise<void> {
+    async removeSession(peer: CertNodeRef, id: number): Promise<void> {
+        const peerNodeId = this.#nodeIdOf(peer);
         await runTagged(this.#adapterId, async () =>
-            this.#node.act(agent => agent.get(WebRtcTransportRequestorServer).removeSession(id)),
+            this.#node.act(agent =>
+                agent
+                    .get(WebRtcTransportRequestorServer)
+                    .removeSession({ id, fabricIndex: this.#fabric.fabricIndex, peerNodeId }),
+            ),
         );
     }
 
@@ -2484,13 +2489,7 @@ class InProcessWebRtcRequestorApi implements WebRtcRequestorApi {
      * refuse everything the real peer sends.
      */
     #peerNodeIdOf(ref: CertNodeRef): NodeId {
-        let nodeId: NodeId;
-        try {
-            nodeId = NodeId(BigInt(ref));
-        } catch (cause) {
-            throw new ImplementationError(`Node reference "${ref}" is not one this adapter minted`, { cause });
-        }
-
+        const nodeId = this.#nodeIdOf(ref);
         if (this.#controller.peers.get(this.#fabric.addressOf(nodeId)) === undefined) {
             throw new NoCommissionedPeerError(
                 `Controller "${this.#adapterId}" has no commissioned peer with node id ${nodeId} to hold a WebRTC ` +
@@ -2499,6 +2498,14 @@ class InProcessWebRtcRequestorApi implements WebRtcRequestorApi {
         }
 
         return nodeId;
+    }
+
+    #nodeIdOf(ref: CertNodeRef): NodeId {
+        try {
+            return NodeId(BigInt(ref));
+        } catch (cause) {
+            throw new ImplementationError(`Node reference "${ref}" is not one this adapter minted`, { cause });
+        }
     }
 
     #record(
