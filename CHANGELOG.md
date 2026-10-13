@@ -34,6 +34,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: The `Symbol.metadata` polyfill no longer conflicts with `lib.esnext.decorators` in the published declarations
     - Fix: `IpService` reports a change when a newer TXT record of a service drops a key
     - Fix: DNS-SD TXT keys are matched regardless of case, as RFC 6763 requires, so a device advertising `sii=` instead of `SII=` is no longer ignored
+    - Fix: `WebSocketClient` no longer loses a message the server sends right after the connection opens, and `connect()` rejects when the socket closes before it opens
 
 - @matter/model
     - Breaking: Provisional elements are always treated as optional
