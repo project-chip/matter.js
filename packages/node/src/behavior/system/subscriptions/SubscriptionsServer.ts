@@ -175,15 +175,7 @@ export class SubscriptionsServer extends Behavior {
     }
 
     async #removeSubscription(id: SubscriptionId) {
-        await this.context.transaction.addResources(this);
-        await this.context.transaction.begin();
-
-        // Look up only under the lock: a concurrent removal shifts the indices
-        const index = this.state.subscriptions.findIndex(({ subscriptionId }) => id === subscriptionId);
-        if (index !== -1) {
-            this.state.subscriptions.splice(index, 1);
-        }
-        await this.context.transaction.commit();
+        await this.#updateStored(subscriptions => subscriptions.filter(({ subscriptionId }) => subscriptionId !== id));
     }
 
     /**
@@ -195,15 +187,17 @@ export class SubscriptionsServer extends Behavior {
         const orderOf = ({ subscriptionId }: PeerSubscription) =>
             formerIndex.get(subscriptionId) ?? formerSubscriptions.length;
 
-        const current = this.state.subscriptions;
-        const ordered = [...current].sort((a, b) => orderOf(a) - orderOf(b));
-        if (ordered.every(({ subscriptionId }, index) => subscriptionId === current[index].subscriptionId)) {
-            return;
-        }
+        await this.#updateStored(subscriptions => [...subscriptions].sort((a, b) => orderOf(a) - orderOf(b)));
+    }
 
+    /**
+     * Change the stored subscriptions outside a locked reactor.  The list is read only under the lock, because adds
+     * and removals of other subscriptions commit while this waits for it.
+     */
+    async #updateStored(update: (subscriptions: readonly PeerSubscription[]) => PeerSubscription[]) {
         await this.context.transaction.addResources(this);
         await this.context.transaction.begin();
-        this.state.subscriptions = ordered;
+        this.state.subscriptions = update(this.state.subscriptions);
         await this.context.transaction.commit();
     }
 
