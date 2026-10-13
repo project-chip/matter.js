@@ -942,7 +942,7 @@ describe("DnssdNames", () => {
             expect(parameters.get("SII")).equal("5000");
         });
 
-        it("first-wins on duplicate keys per RFC 6763 §6.4", async () => {
+        it("first-wins on duplicate keys, ignoring case, per RFC 6763 §6.4", async () => {
             await using site = new MockSite();
             const { client, server } = await site.addPair();
 
@@ -973,14 +973,20 @@ describe("DnssdNames", () => {
                         recordType: DnsRecordType.TXT,
                         recordClass: DnsRecordClass.IN,
                         ttl: Hours(1),
-                        value: [Bytes.fromString("foo=first"), Bytes.fromString("foo=second")],
+                        value: [
+                            Bytes.fromString("foo=first"),
+                            Bytes.fromString("FOO=second"),
+                            Bytes.fromString("foo=third"),
+                        ],
                     },
                 ],
                 additionalRecords: [],
             });
             await MockTime.resolve(discovered);
 
-            expect(client.names.get(qname).parameters.get("foo")).equal("first");
+            const { parameters } = client.names.get(qname);
+            expect(parameters.get("FOO")).equal("first");
+            expect([...parameters.keys()]).deep.equals(["foo"]);
         });
 
         it("ignores TXT entries with empty keys per RFC 6763 §6.4", async () => {
@@ -1237,6 +1243,20 @@ describe("DnssdNames", () => {
                 ["b", "2"],
                 ["a", "1"],
             ]);
+        });
+
+        it("lets the newer record's key win over an older one that differs only in case", async () => {
+            await using site = new MockSite();
+            const { client, server } = await discoverName(site);
+
+            const qname = qnameOf(1);
+
+            await MockTime.advance(Minutes(1));
+            await server.mdns.send(txtPacket(qname, ["A=2"], false));
+            await MockTime.advance(Seconds(1));
+            await MockTime.advance(10);
+
+            expect([...client.names.get(qname).parameters]).deep.equals([["A", "2"]]);
         });
 
         it("keeps every record of a type that arrives in the flushing packet", async () => {
