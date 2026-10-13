@@ -62,6 +62,7 @@ export namespace DeviceTypeValidation {
     export interface ValidateOptions {
         /**
          * Whether an endpoint with a new misplaced singleton, or with any new violation in mode `"strict"`, throws.
+         * A violation flagged {@link DeviceTypeViolation.assertedAtRoot} never throws.
          * Defaults to true. Off, those violations log and are recorded like any other, a misplaced singleton included.
          * The node judges changes after construction with it off.
          *

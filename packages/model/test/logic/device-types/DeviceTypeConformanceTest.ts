@@ -23,7 +23,7 @@ import {
 } from "#index.js";
 import { ConditionAssertions, conditionScopeOf, StructuralCondition } from "#logic/device-types/ConditionAssertions.js";
 import { ImplementationError, InternalError } from "@matter/general";
-import { endpoint, FakeEndpoint, FakeFacts, standardDeviceType } from "./fake-facts.js";
+import { endpoint, FakeEndpoint, FakeFacts, standardCluster, standardDeviceType } from "./fake-facts.js";
 
 const ROOT_ID = 0x16;
 const LIGHT_ID = 0xfff1_0001;
@@ -709,6 +709,107 @@ describe("DeviceTypeConformance with a utility component on the composing endpoi
                 .filter(detail => detail.startsWith("Component device type"));
             expect(counts, composing.name).deep.equals([]);
         }
+    });
+});
+
+const FED_HUB_ID = 0xfff1_0030;
+const FEED_ID = 0xfff1_0031;
+const FEEDER_ID = 0xfff1_0032;
+
+/**
+ * A model whose node device type Hub requires a Feed with the Lighting feature on its OnOff under its condition Fed,
+ * which Feeder asserts at the Root. Hub forbids the Lighting feature on its own optional OnOff.
+ */
+function rootAssertionFixtureModel() {
+    const featureMap = FeatureMap.clone();
+    featureMap.children = [new FieldModel({ name: "LT", title: "Lighting", constraint: "0" })];
+
+    const model = new MatterModel(
+        {},
+        new DeviceTypeModel(
+            { name: "Hub", id: FED_HUB_ID, classification: "node" },
+            new ConditionModel({ name: "Fed" }),
+            new RequirementModel(
+                { name: "OnOff", id: ON_OFF_ID, element: "serverCluster", conformance: "O" },
+                new RequirementModel({ name: "LT", element: "feature", conformance: "X" }),
+            ),
+            new RequirementModel(
+                { name: "Feed", id: FEED_ID, element: "deviceType", conformance: "Fed" },
+                new RequirementModel(
+                    { name: "OnOff", id: ON_OFF_ID, element: "serverCluster", conformance: "M" },
+                    new RequirementModel({ name: "LT", element: "feature", conformance: "M" }),
+                ),
+            ),
+        ),
+        new DeviceTypeModel({ name: "Feed", id: FEED_ID, classification: "utility" }),
+        new DeviceTypeModel(
+            { name: "Feeder", id: FEEDER_ID, classification: "simple" },
+            new RequirementModel({
+                name: "Fed",
+                type: "Hub.Fed",
+                element: "condition",
+                conformance: "M",
+                location: "Root",
+            }),
+        ),
+        new ClusterModel({ name: "OnOff", id: ON_OFF_ID, children: [featureMap] }),
+    );
+    model.finalize();
+    return model;
+}
+
+describe("DeviceTypeConformance with conditions asserted at the Root", () => {
+    it("does not flag a disallowed element on a node endpoint with Root assertions", () => {
+        const model = rootAssertionFixtureModel();
+        const hub = endpoint("hub", FED_HUB_ID, { servers: [onOffOf(model, { lighting: true })] });
+        endpoint("feeder", FEEDER_ID, { parent: hub });
+
+        const found = DeviceTypeConformance.check(hub, new DeviceTypeValidationPass(new FakeFacts(), model));
+        const disallowed = found.find(({ kind }) => kind === "disallowed");
+        expect(disallowed?.requirement).equals("OnOff.LT");
+        expect(disallowed?.assertedAtRoot).undefined;
+    });
+
+    it("flags an unfilled component instance that only a Root assertion makes mandatory", () => {
+        const model = rootAssertionFixtureModel();
+        const hub = endpoint("hub", FED_HUB_ID);
+        endpoint("feed", FEED_ID, { parent: hub, servers: [onOffOf(model)] });
+        endpoint("feeder", FEEDER_ID, { parent: hub });
+
+        const found = DeviceTypeConformance.check(hub, new DeviceTypeValidationPass(new FakeFacts(), model));
+        expect(found.map(({ kind, requirement, assertedAtRoot }) => [kind, requirement, assertedAtRoot])).deep.equals([
+            ["instanceCount", "device:Feed#1", true],
+        ]);
+    });
+
+    it("flags the node endpoint's violations that only a Root assertion makes mandatory", () => {
+        const root = endpoint("root", standardDeviceType("RootNode"), {
+            servers: [standardCluster("TimeSynchronization", {})],
+        });
+        endpoint("camera", standardDeviceType("Camera"), { parent: root });
+
+        const found = DeviceTypeConformance.check(root, new DeviceTypeValidationPass(new FakeFacts(), Matter));
+        const flagged = found.filter(({ assertedAtRoot }) => assertedAtRoot).map(({ requirement }) => requirement);
+        expect(flagged).deep.equals([
+            "TimeSynchronization.TSC",
+            "TimeSynchronization.NTPC",
+            "TimeSynchronization.TZ",
+            "client:TimeSynchronization",
+            "TlsCertificateManagement",
+            "TlsClientManagement",
+            "device:PowerSource",
+        ]);
+        expect(found.find(({ requirement }) => requirement === "BasicInformation")?.assertedAtRoot).undefined;
+    });
+
+    it("does not flag a requirement the node endpoint states the condition for itself", () => {
+        const root = endpoint("root", standardDeviceType("RootNode"), { stated: ["PowerSourceCond"] });
+        endpoint("camera", standardDeviceType("Camera"), { parent: root });
+
+        const found = DeviceTypeConformance.check(root, new DeviceTypeValidationPass(new FakeFacts(), Matter));
+        const powerSource = found.find(({ requirement }) => requirement === "device:PowerSource");
+        expect(powerSource?.kind).equals("instanceCount");
+        expect(powerSource?.assertedAtRoot).undefined;
     });
 });
 

@@ -81,6 +81,11 @@ other value fails the node's construction with an `ImplementationError` as the c
   whole node scope, except those other endpoints still being constructed. So a strict refusal can name an endpoint other than the
   one added, such as its parent when the addition breaks the parent's composition. Changes after construction are
   still only logged.
+- **Root assertions**. In every mode, a violation of a requirement that applies only because a device type asserts a
+  condition at the `Root` location is logged at debug level and never refused, and carries `assertedAtRoot`. This
+  covers every such assertion, for example the time synchronization, TLS and Power Source requirements Camera places
+  on the Root Node and the Groupcast requirements of OnOff Light. matter.js does not implement every cluster these
+  conditions require, and whether a Bridged Node is a node scope of its own is not settled in the specification.
 - **`off`**. The node checks no device types on its own, neither at construction nor after it, and keeps nothing
   between checks. Only the misplaced-singleton check before an endpoint's behaviors initialize still runs, because a
   behavior that works only on the root endpoint otherwise fails with an untyped error.
