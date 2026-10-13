@@ -12,6 +12,7 @@ import {
     ImplementationError,
     InternalError,
     Millis,
+    NoDiscoveryTransportError,
     Seconds,
     Time,
     Verhoeff,
@@ -1109,9 +1110,12 @@ export async function chipToolDiscoveryGaveUp(log: LogFollower, from: number): P
  * An {@link OnboardingPayloadRefusedError} is the opposite outcome — the controller rejected the code
  * before it looked for anything, and these steps generate a well-formed one. It is not a subclass of
  * either accepted error today, and the guard is what keeps that true if it becomes one.
+ *
+ * A {@link NoDiscoveryTransportError} is a {@link DiscoveryError}, but it means the controller had no
+ * scanner and never looked, so it is not a give-up either.
  */
 export function isCommissioningGiveUp(error: unknown): boolean {
-    if (error instanceof OnboardingPayloadRefusedError) {
+    if (error instanceof OnboardingPayloadRefusedError || error instanceof NoDiscoveryTransportError) {
         return false;
     }
     return (

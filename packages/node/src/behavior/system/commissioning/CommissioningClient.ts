@@ -1165,8 +1165,8 @@ export namespace CommissioningClient {
         commissioningFlowImpl?: ClassExtends<ControllerCommissioningFlow>;
 
         /**
-         * Abort signal for cancellation.  When fired during PASE establishment, cancels the PASE attempt.
-         * In parallel commissioning scenarios this fires once a winner is found, stopping remaining candidates.
+         * Abort signal for cancellation.  With {@link ClientNode#commission} it cancels the PASE attempt.  With
+         * `peers.commission()` it cancels the whole discovery as `Discovery.Options.abort` describes.
          */
         abort?: AbortSignal;
 
