@@ -25,6 +25,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Storage drivers state how long dirty values may be buffered via `StorageDriver.writeCoalescingInterval`
     - Adjustment: The default log format is plain text instead of ANSI; set `log.format` or `Logger.format` to choose another
     - Fix: DNS-SD discovery ignores the known-answer records of mDNS queries, so a controller no longer dials a node through the wrong interface
+    - Fix: (@grzonu) DNS-SD queries send known answers with their remaining TTL and omit those past half their TTL
     - Fix: DNS-SD honors the cache-flush bit and goodbyes after a re-announcement, ignores invalid SRV records, resolves A/AAAA for the SRV target host, and keeps an mDNS message that has one unreadable record
     - Fix: Crypto auto-detection uses Node.js-style crypto only where it offers SHA-256 and `aes-128-ccm`, otherwise falls back to `StandardCrypto`, and no longer breaks the package import when nothing usable is found
     - Fix: `StandardCrypto` supports computation of SHA3-256, SHA-512/224 and SHA-512/256 on every runtime
