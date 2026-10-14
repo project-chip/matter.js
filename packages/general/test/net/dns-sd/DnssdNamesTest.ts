@@ -1618,6 +1618,15 @@ describe("DnssdNames", () => {
             }
         });
 
+        it("round a partial second of remaining TTL up", async () => {
+            await using site = new MockSite();
+
+            for (const query of await queryAfter(site, Millis(Minutes(10) - 500))) {
+                expect(query.answers.length).equals(1);
+                expect(query.answers[0].ttl).equals(Millis(ttl - Minutes(10) + Seconds(1)));
+            }
+        });
+
         it("leave out a record past half its TTL so the responder refreshes it", async () => {
             await using site = new MockSite();
 
