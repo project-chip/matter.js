@@ -21,7 +21,9 @@ class UnwritableStore implements Datasource.ExternallyMutableStore {
 
     async set() {}
 
-    async externalSet() {}
+    async externalSet() {
+        return {};
+    }
 
     async forgetVersion() {
         throw new StorageFailedError("Storage refused the write");
@@ -40,6 +42,7 @@ class GatedStore implements Datasource.ExternallyMutableStore {
 
     async externalSet(values: Val.StructMap) {
         this.written.push(values);
+        return {};
     }
 
     forgetting = false;
@@ -71,6 +74,7 @@ class RecordingStore implements Datasource.ExternallyMutableStore {
         if (typeof version === "number") {
             this.version = version;
         }
+        return {};
     }
 
     async forgetVersion() {

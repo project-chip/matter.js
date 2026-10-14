@@ -27,6 +27,7 @@ function recordingStructure(node: MockServerNode) {
                     for (const [key, value] of incoming) {
                         values[String(key)] = value;
                     }
+                    return {};
                 },
                 forgetVersion: async () => {},
             };

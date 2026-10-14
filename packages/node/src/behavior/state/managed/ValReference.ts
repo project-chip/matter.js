@@ -44,8 +44,11 @@ export interface ValReference<T extends Val = Val> {
      * Then runs the specified mutator to make the actual changes.
      *
      * @param mutator the mutation logic, may freely modify {@link value}
+     * @param member the key of the member of {@link value} the mutation assigns.  The root reference records it as
+     * assigned.  A nested reference passes its own key to its parent instead, so the root always records the
+     * top-level member
      */
-    change(mutator: () => void): void;
+    change(mutator: () => void, member: string | number): void;
 
     /**
      * Refresh any internal cache from the referenced container.

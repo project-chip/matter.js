@@ -7,45 +7,12 @@
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { ClientCacheBuffer } from "#storage/client/ClientCacheBuffer.js";
 import { DatasourceCache } from "#storage/client/DatasourceCache.js";
-import { Lifetime, MemoryStorageDriver, Seconds, StorageDriver, Transaction } from "@matter/general";
+import { RemoteWriteParticipant } from "#storage/client/RemoteWriteParticipant.js";
+import { InternalError, Lifetime, MemoryStorageDriver, Seconds, StorageDriver, Transaction } from "@matter/general";
 import { Val } from "@matter/protocol";
-import { EndpointNumber } from "@matter/types";
-
-function createCache(options?: {
-    buffer?: ClientCacheBuffer;
-    localWriter?: {
-        persistInTransaction: (...args: any[]) => Promise<void>;
-        persist: (...args: any[]) => Promise<void>;
-    };
-}) {
-    return new DatasourceCache({
-        writer: (() => {}) as any,
-        nodeId: "test-peer",
-        endpointNumber: EndpointNumber(1),
-        behaviorId: "test",
-        localWriter: options?.localWriter as any,
-        buffer: options?.buffer,
-    });
-}
-
-function attrs(entries: Record<string, unknown>): Val.StructMap {
-    return new Map(Object.entries(entries));
-}
-
-/** A localWriter that records persist calls without touching the transaction's type-safe set() */
-function trackingWriter() {
-    const persisted: Val.Struct[] = [];
-    return {
-        persisted,
-        persistInTransaction: async (_tx: any, _ep: any, _bid: any, vals: Val.Struct) => {
-            persisted.push(vals);
-        },
-        persist: async (_ep: any, _bid: any, vals: Val.Struct) => {
-            persisted.push(vals);
-        },
-        erase: async () => {},
-    };
-}
+import { AttributeId, ClusterId, EndpointNumber, Status, StatusResponseError } from "@matter/types";
+import { captureWarningsOf } from "../endpoint/validation/validation-helpers.js";
+import { attrs, createCache, gatedWriter, recordingConsumer, trackingWriter } from "./cache-test-helpers.js";
 
 /** A localWriter that always throws */
 function failingWriter(message = "No endpoint store for endpoint 1") {
@@ -88,7 +55,7 @@ describe("DatasourceCache error handling", () => {
             const mockConsumer = {
                 releaseValues: () => ({}),
                 readValues: () => ({}),
-                integrateExternalChange: async () => {},
+                integrate: () => undefined,
             } as any;
             cache.consumer = mockConsumer;
             cache.reclaimValues();
@@ -101,7 +68,7 @@ describe("DatasourceCache error handling", () => {
             cache.consumer = {
                 releaseValues: () => ({}),
                 readValues: () => ({}),
-                integrateExternalChange: async () => {},
+                integrate: () => undefined,
             } as any;
             await cache.externalSet(attrs({ onOff: true }));
             expect(dirty).length(1);
@@ -117,7 +84,7 @@ describe("DatasourceCache error handling", () => {
                 readValues: () => ({}),
                 snapshot: () => ({}),
                 releaseValues: () => ({}),
-                integrateExternalChange: async () => {},
+                integrate: () => undefined,
             } satisfies Datasource.ExternallyMutableStore.Consumer;
 
             await cache.externalSet(attrs({ __version__: 5 }));
@@ -147,10 +114,11 @@ describe("DatasourceCache error handling", () => {
                 },
                 snapshot: () => ({ ...stored }),
                 releaseValues: () => ({ ...stored }),
-                integrateExternalChange: async values => {
+                integrate: values => {
                     for (const [key, value] of values) {
                         stored[String(key)] = value;
                     }
+                    return undefined;
                 },
             } satisfies Datasource.ExternallyMutableStore.Consumer;
 
@@ -167,7 +135,7 @@ describe("DatasourceCache error handling", () => {
                 readValues: () => ({}),
                 snapshot: () => ({}),
                 releaseValues: () => ({}),
-                integrateExternalChange: async () => {},
+                integrate: () => undefined,
             };
         }
 
@@ -247,6 +215,235 @@ describe("DatasourceCache error handling", () => {
 
             await transaction.resolve(undefined);
         });
+    });
+});
+
+describe("settlement errors", () => {
+    it("runs every release at conclusion and logs one that fails", async () => {
+        const participant = new RemoteWriteParticipant(
+            async () => [
+                {
+                    kind: "attr-status",
+                    path: { endpointId: EndpointNumber(1), clusterId: ClusterId(6), attributeId: AttributeId(0) },
+                    status: Status.Success,
+                },
+                {
+                    kind: "attr-status",
+                    path: { endpointId: EndpointNumber(1), clusterId: ClusterId(8), attributeId: AttributeId(0) },
+                    status: Status.Success,
+                },
+            ],
+            "peer1",
+        );
+        const released = new Array<string>();
+        const receiver = (name: string, fail: boolean) => ({
+            settleAccepted: async () => ({
+                release: async () => {
+                    if (fail) {
+                        throw new Error(`${name} release failure`);
+                    }
+                    released.push(name);
+                },
+                persistFailure: undefined,
+            }),
+        });
+        participant.set(EndpointNumber(1), "6", { "0": true }, receiver("first", true), 0);
+        participant.set(EndpointNumber(1), "8", { "0": 1 }, receiver("second", false), 0);
+
+        await participant.commit1();
+        const warnings = await captureWarningsOf(() => participant.conclusion());
+
+        expect(released).deep.equals(["second"]);
+        expect(warnings.map(({ text }) => text).join("\n")).contains("first release failure");
+    });
+
+    it("applies a report whose persist failed and lets it outrank an older write", async () => {
+        const cache = createCache({
+            localWriter: {
+                persistInTransaction: async () => {},
+                persist: async () => {
+                    throw new Error("persist failure");
+                },
+            },
+        });
+        const { integrated, consumer } = recordingConsumer();
+        cache.consumer = consumer;
+
+        const { persistFailure } = await cache.externalSet(attrs({ "1": "reported" }));
+        expect(persistFailure).instanceOf(Error);
+        await cache.settleAccepted({ "1": "accepted" }, 0);
+
+        expect(integrated).deep.equals([{ "1": "reported" }]);
+    });
+
+    it("applies and announces an accepted value whose persist failed, and reports the failure", async () => {
+        const cache = createCache({
+            localWriter: {
+                persistInTransaction: async () => {},
+                persist: async () => {
+                    throw new Error("persist failure");
+                },
+            },
+        });
+        const { values, announced, consumer } = recordingConsumer();
+        cache.consumer = consumer;
+
+        const { release, persistFailure } = await cache.settleAccepted({ "1": "accepted" }, 0);
+        await release();
+
+        expect(values).deep.equals({ "1": "accepted" });
+        expect(announced).deep.equals([{ "1": "accepted" }]);
+        expect(persistFailure).instanceOf(Error);
+    });
+
+    it("persists a settlement queued behind one whose persist failed", async () => {
+        let failing = true;
+        const persisted = new Array<Val.Struct>();
+        const cache = createCache({
+            localWriter: {
+                persistInTransaction: async () => {},
+                persist: async (_ep: unknown, _bid: unknown, values: Val.Struct) => {
+                    if (failing) {
+                        failing = false;
+                        throw new Error("persist failure");
+                    }
+                    persisted.push(values);
+                },
+            },
+        });
+        const { integrated, consumer } = recordingConsumer();
+        cache.consumer = consumer;
+
+        expect((await cache.externalSet(attrs({ "1": "first" }))).persistFailure).instanceOf(Error);
+        await cache.externalSet(attrs({ "1": "second" }));
+
+        expect(persisted).deep.equals([{ "1": "second" }]);
+        expect(integrated).deep.equals([{ "1": "first" }, { "1": "second" }]);
+    });
+
+    it("does not persist a settlement queued behind another once the cache is discarded", async () => {
+        const writer = gatedWriter();
+        const cache = createCache({ localWriter: writer });
+        cache.consumer = recordingConsumer().consumer;
+
+        const first = cache.externalSet(attrs({ "1": "first" }));
+        const second = cache.externalSet(attrs({ "1": "second" }));
+        await MockTime.yield();
+        cache.discard();
+        writer.pending[0].finish();
+        await Promise.all([first, second]);
+
+        expect(writer.pending).length(1);
+        expect(writer.stored).deep.equals({ "1": "first" });
+    });
+
+    it("does not apply a value when the cache is discarded while persisting it", async () => {
+        let cache: DatasourceCache | undefined;
+        cache = createCache({
+            localWriter: {
+                persistInTransaction: async () => {},
+                persist: async () => {
+                    cache?.discard();
+                },
+            },
+        });
+        const { integrated, consumer } = recordingConsumer();
+        cache.consumer = consumer;
+
+        await cache.externalSet(attrs({ "1": "reported" }));
+
+        expect(integrated).deep.equals([]);
+    });
+
+    it("refuses a second write of the same cluster in one commit", () => {
+        const participant = new RemoteWriteParticipant(async () => [], "peer1");
+        const receiver = { settleAccepted: async () => ({ release: async () => {} }) };
+        participant.set(EndpointNumber(1), "6", { "0": true }, receiver, 0);
+
+        expect(() => participant.set(EndpointNumber(1), "6", { "0": false }, receiver, 0)).throws(InternalError);
+    });
+
+    it("logs a value it failed to settle and still fails a declined write", async () => {
+        const participant = new RemoteWriteParticipant(
+            async () => [
+                {
+                    kind: "attr-status",
+                    path: { endpointId: EndpointNumber(1), clusterId: ClusterId(6), attributeId: AttributeId(0) },
+                    status: Status.Success,
+                },
+                {
+                    kind: "attr-status",
+                    path: { endpointId: EndpointNumber(1), clusterId: ClusterId(8), attributeId: AttributeId(0) },
+                    status: Status.ConstraintError,
+                },
+            ],
+            "peer1",
+        );
+        const settled = new Array<Val.Struct>();
+        participant.set(
+            EndpointNumber(1),
+            "6",
+            { "0": true },
+            {
+                settleAccepted: async () => {
+                    throw new Error("settle failure");
+                },
+            },
+            0,
+        );
+        participant.set(
+            EndpointNumber(1),
+            "8",
+            { "0": 1 },
+            {
+                settleAccepted: async values => {
+                    settled.push(values);
+                    return { release: async () => {} };
+                },
+            },
+            0,
+        );
+
+        let caught: unknown;
+        const warnings = await captureWarningsOf(async () => {
+            caught = await participant.commit1().then(
+                () => undefined,
+                (e: unknown) => e,
+            );
+        });
+
+        expect(caught).instanceOf(StatusResponseError);
+        expect(settled).deep.equals([{}]);
+        expect(warnings.map(({ text }) => text).join("\n")).contains("settle failure");
+    });
+
+    it("logs an accepted value it failed to persist and still succeeds", async () => {
+        const participant = new RemoteWriteParticipant(
+            async () => [
+                {
+                    kind: "attr-status",
+                    path: { endpointId: EndpointNumber(1), clusterId: ClusterId(6), attributeId: AttributeId(0) },
+                    status: Status.Success,
+                },
+            ],
+            "peer1",
+        );
+        participant.set(
+            EndpointNumber(1),
+            "6",
+            { "0": true },
+            {
+                settleAccepted: async () => ({
+                    release: async () => {},
+                    persistFailure: new Error("persist failure"),
+                }),
+            },
+            0,
+        );
+
+        const warnings = await captureWarningsOf(() => participant.commit1());
+
+        expect(warnings.map(({ text }) => text).join("\n")).contains("persist failure");
     });
 });
 

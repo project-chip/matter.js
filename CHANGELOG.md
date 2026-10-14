@@ -19,6 +19,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: The composed OnOff device example creates as many endpoints as `--num` asks for (default 2)
 
 - @matter/general
+    - Breaking: A transaction commit that fails in phase one rejects with the participant's error, or an aggregate of several, instead of `FinalizationError`
     - Feature: `Crypto` creates, signs and verifies ML-DSA-44 and ML-DSA-65 (FIPS 204) keys, natively on Node.js where available and via `@noble/post-quantum` otherwise
     - Enhancement: Log messages name the environment they come from (`Diagnostic.Message.origin`), shown in brackets after the facility
     - Enhancement: Added `TransportClosedError` for an operation on a transport connection that is already closed
@@ -73,7 +74,10 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: `LevelControlServer.couple()` takes the target level as third argument; overrides must pass it
     - Breaking: `SoftwareUpdateManager.addUpdateConsent()` and `forceUpdate()` take the update as an object
     - Breaking: An unreported client node attribute reads its default (or the specification fallback) when mandatory and `undefined` otherwise; configured options and environment variables no longer seed client node state
-    - Breaking: Changing any attribute of a client node sends a write to the peer; attributes the peer cannot express are declined locally
+    - Breaking: Assigning any attribute of a client node sends a write to the peer, also when the value is unchanged; attributes the peer cannot express are declined locally
+    - Breaking: `$Changed` for a value a `ClientNode` write set is released when the transaction ends, carries no writing transaction, and may fire after `act()` resolves
+    - Breaking: `stateChanged` does not fire for a value a `ClientNode` write set
+    - Breaking: When a device declines a `ClientNode` write, the whole transaction rolls back
     - Breaking: `discoveryCapabilities` moved from `CommissioningClient.CommissioningOptions` to `Discovery.Options`, declare such options as `CommissioningDiscovery.Options`; `Discovery.Options.scannerFilter` is removed
     - Breaking: A commissionable advertisement with vendor or product ID 0 reports it as `undefined`
     - Breaking: Commissioning or decommissioning a node that is gone rejects with `DestroyedDependencyError` or `CrashedDependencyError`, and a concurrent attempt with `FabricOperationInProgressError`
@@ -123,6 +127,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: `IdentifyServer` offers `TriggerEffect` only when the device type requires it or it is implemented or enabled
     - Adjustment: A server rejects an obsolete (`Z`) element; a client sends and decodes it
     - Adjustment: A node's `ClusterProtocol.readState()` throws `ImplementationError` for a remote session without a transaction
+    - Adjustment: A `ClientNode` takes a written attribute value locally only once the device accepts it
+    - Fix: A `ClientNode` no longer emits `$Changed` with an outdated value for an attribute a transaction did not touch, when a report changed it during the transaction
     - Fix: `WebRtcTransportRequestorServer` keeps sessions of different peers with the same session id apart
     - Fix: `DclBehavior` boolean options set through environment variables are read as booleans
     - Fix: `.with()` on a behavior subclass that declares own attributes or commands replaces the default behavior instead of running next to it; an endpoint refuses two behaviors for the same cluster
