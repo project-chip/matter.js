@@ -19,12 +19,12 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: The composed OnOff device example creates as many endpoints as `--num` asks for (default 2)
 
 - @matter/general
+    - Breaking: A transaction commit that fails in phase one rejects with the participant's error, or an aggregate of several, instead of `FinalizationError`
     - Feature: `Crypto` creates, signs and verifies ML-DSA-44 and ML-DSA-65 (FIPS 204) keys, natively on Node.js where available and via `@noble/post-quantum` otherwise
     - Enhancement: Log messages name the environment they come from (`Diagnostic.Message.origin`), shown in brackets after the facility
     - Enhancement: Added `TransportClosedError` for an operation on a transport connection that is already closed
     - Enhancement: Storage drivers state how long dirty values may be buffered via `StorageDriver.writeCoalescingInterval`
     - Adjustment: The default log format is plain text instead of ANSI; set `log.format` or `Logger.format` to choose another
-    - Adjustment: A transaction commit that fails in phase one rejects with the participant's error, or an aggregate of several, instead of `FinalizationError`
     - Fix: DNS-SD discovery ignores the known-answer records of mDNS queries, so a controller no longer dials a node through the wrong interface
     - Fix: (@grzonu) DNS-SD queries send known answers with their remaining TTL and omit those past half their TTL
     - Fix: DNS-SD honors the cache-flush bit and goodbyes after a re-announcement, ignores invalid SRV records, resolves A/AAAA for the SRV target host, and keeps an mDNS message that has one unreadable record
@@ -75,6 +75,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: `SoftwareUpdateManager.addUpdateConsent()` and `forceUpdate()` take the update as an object
     - Breaking: An unreported client node attribute reads its default (or the specification fallback) when mandatory and `undefined` otherwise; configured options and environment variables no longer seed client node state
     - Breaking: Changing any attribute of a client node sends a write to the peer; attributes the peer cannot express are declined locally
+    - Breaking: `$Changed` for a value a `ClientNode` write set fires when the transaction ends and carries no writing transaction
+    - Breaking: `stateChanged` does not fire for a value a `ClientNode` write set
     - Breaking: `discoveryCapabilities` moved from `CommissioningClient.CommissioningOptions` to `Discovery.Options`, declare such options as `CommissioningDiscovery.Options`; `Discovery.Options.scannerFilter` is removed
     - Breaking: A commissionable advertisement with vendor or product ID 0 reports it as `undefined`
     - Breaking: Commissioning or decommissioning a node that is gone rejects with `DestroyedDependencyError` or `CrashedDependencyError`, and a concurrent attempt with `FabricOperationInProgressError`
@@ -126,8 +128,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: A node's `ClusterProtocol.readState()` throws `ImplementationError` for a remote session without a transaction
     - Adjustment: A `ClientNode` attribute write reaches the device also when its local copy already holds the value
     - Adjustment: A `ClientNode` takes a written attribute value locally only once the device accepts it
-    - Adjustment: `$Changed` for a value a `ClientNode` write set fires when the transaction ends and carries no writing transaction
-    - Adjustment: `stateChanged` does not fire for a value a `ClientNode` write set
     - Adjustment: When a device declines a `ClientNode` write, the whole transaction rolls back
     - Fix: A `ClientNode` no longer emits `$Changed` with an outdated value for an attribute a transaction did not touch, when a report changed it during the transaction
     - Fix: `WebRtcTransportRequestorServer` keeps sessions of different peers with the same session id apart

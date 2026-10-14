@@ -50,13 +50,18 @@ export class RemoteWriteParticipant implements Transaction.Participant {
     }
 
     /**
-     * Add an attribute update to the write request.  {@link receiver} settles the values the peer accepts.
+     * Add an attribute update to the write request.
+     *
+     * @param receiver settles the values the peer accepts
+     * @param epoch the receiver's epoch when this write is queued, so it can tell a value the peer settled afterwards
+     * from one that predates the write
      */
     set(
         endpointNumber: EndpointNumber,
         behaviorId: string,
         values: Val.Struct,
-        receiver: RemoteWriteParticipant.Settlement,
+        receiver: RemoteWriteParticipant.Receiver,
+        epoch: number,
     ) {
         const key = writeKey(endpointNumber, behaviorId);
         if (this.#pending.has(key)) {
@@ -64,7 +69,7 @@ export class RemoteWriteParticipant implements Transaction.Participant {
         }
 
         this.#request.push({ number: endpointNumber, behaviorId, values });
-        this.#pending.set(key, { ...receiver, values });
+        this.#pending.set(key, { receiver, epoch, values });
     }
 
     async commit1() {
@@ -99,10 +104,10 @@ export class RemoteWriteParticipant implements Transaction.Participant {
             try {
                 const { release, persistFailure } = await receiver.settleAccepted(accepted, epoch);
                 this.#releases.push(release);
-                if (persistFailure) {
+                if (persistFailure !== undefined) {
                     logger.warn(
                         `Failed to persist values ${this.#name} wrote to ${key}; the device and the local cache hold them:`,
-                        persistFailure.error,
+                        persistFailure,
                     );
                 }
             } catch (e) {
@@ -164,32 +169,19 @@ export namespace RemoteWriteParticipant {
         release: () => Promise<void>;
 
         /**
-         * Set when the values could not be persisted locally.
+         * The error that kept the values from being persisted locally, if any.  A failure thrown as `undefined` is not
+         * reported.
          */
-        persistFailure?: PersistFailure;
-    }
-
-    export interface PersistFailure {
-        error: unknown;
+        persistFailure?: unknown;
     }
 
     /**
-     * What the caller of {@link RemoteWriteParticipant.set} supplies to settle the values the peer accepts.
+     * The values of one cluster a transaction writes, with the receiver that settles those the peer accepts and its
+     * epoch when the write was queued.
      */
-    export interface Settlement {
+    export interface PendingWrite {
         receiver: Receiver;
-
-        /**
-         * The receiver's epoch when this write was queued, so it can tell a value the peer settled afterwards from
-         * one that predates the write.
-         */
         epoch: number;
-    }
-
-    /**
-     * The values of one cluster a transaction writes, with the receiver that settles those the peer accepts.
-     */
-    export interface PendingWrite extends Settlement {
         values: Val.Struct;
     }
 }

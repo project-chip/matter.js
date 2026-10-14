@@ -81,18 +81,7 @@ describe("DatasourceCache settlement order", () => {
         const accepted = cache.settleAccepted({ "1": "accepted" }, 0);
         const report = cache.externalSet(attrs({ "1": "reported" }));
 
-        // Each round waits for the next persist to start, then finishes the newest unfinished one, so an older persist
-        // finishes after a newer one whenever the cache lets both run at once
-        const finished = new Set<number>();
-        while (finished.size < 2) {
-            for (let i = 0; i < 10 && writer.pending.length === finished.size; i++) {
-                await MockTime.yield();
-            }
-            const newest = writer.pending.length - 1;
-            const index = finished.has(newest) ? writer.pending.findIndex((_, i) => !finished.has(i)) : newest;
-            writer.pending[index].finish();
-            finished.add(index);
-        }
+        await writer.finishNewestFirst(2);
         await Promise.all([accepted, report]);
 
         const restarted = new DatasourceCache({
@@ -152,5 +141,18 @@ describe("DatasourceCache settlement order", () => {
         await Promise.all([first, second]);
 
         expect(log).deep.equals(["start first", "end first", "start second", "end second"]);
+    });
+
+    it("stores a forgotten version after a settlement that arrived before", async () => {
+        const writer = gatedWriter();
+        const cache = createCache({ localWriter: writer });
+        cache.consumer = recordingConsumer().consumer;
+
+        const report = cache.externalSet(attrs({ "1": "reported", __version__: 5 }));
+        const forgotten = cache.forgetVersion();
+        await writer.finishNewestFirst(2);
+        await Promise.all([report, forgotten]);
+
+        expect(writer.stored[DatasourceCache.VERSION_KEY]).equals(-1);
     });
 });

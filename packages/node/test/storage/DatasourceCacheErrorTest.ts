@@ -231,7 +231,8 @@ describe("settlement errors", () => {
         const { integrated, consumer } = recordingConsumer();
         cache.consumer = consumer;
 
-        await expect(cache.externalSet(attrs({ "1": "reported" }))).rejectedWith("persist failure");
+        const { persistFailure } = await cache.externalSet(attrs({ "1": "reported" }));
+        expect(persistFailure).instanceOf(Error);
         await cache.settleAccepted({ "1": "accepted" }, 0);
 
         expect(integrated).deep.equals([{ "1": "reported" }]);
@@ -254,7 +255,7 @@ describe("settlement errors", () => {
 
         expect(values).deep.equals({ "1": "accepted" });
         expect(announced).deep.equals([{ "1": "accepted" }]);
-        expect(persistFailure?.error).instanceOf(Error);
+        expect(persistFailure).instanceOf(Error);
     });
 
     it("persists a settlement queued behind one whose persist failed", async () => {
@@ -275,7 +276,7 @@ describe("settlement errors", () => {
         const { integrated, consumer } = recordingConsumer();
         cache.consumer = consumer;
 
-        await expect(cache.externalSet(attrs({ "1": "first" }))).rejectedWith("persist failure");
+        expect((await cache.externalSet(attrs({ "1": "first" }))).persistFailure).instanceOf(Error);
         await cache.externalSet(attrs({ "1": "second" }));
 
         expect(persisted).deep.equals([{ "1": "second" }]);
@@ -319,11 +320,9 @@ describe("settlement errors", () => {
     it("refuses a second write of the same cluster in one commit", () => {
         const participant = new RemoteWriteParticipant(async () => [], "peer1");
         const receiver = { settleAccepted: async () => ({ release: async () => {} }) };
-        participant.set(EndpointNumber(1), "6", { "0": true }, { receiver, epoch: 0 });
+        participant.set(EndpointNumber(1), "6", { "0": true }, receiver, 0);
 
-        expect(() => participant.set(EndpointNumber(1), "6", { "0": false }, { receiver, epoch: 0 })).throws(
-            InternalError,
-        );
+        expect(() => participant.set(EndpointNumber(1), "6", { "0": false }, receiver, 0)).throws(InternalError);
     });
 
     it("logs a value it failed to settle and still fails a declined write", async () => {
@@ -348,27 +347,23 @@ describe("settlement errors", () => {
             "6",
             { "0": true },
             {
-                receiver: {
-                    settleAccepted: async () => {
-                        throw new Error("settle failure");
-                    },
+                settleAccepted: async () => {
+                    throw new Error("settle failure");
                 },
-                epoch: 0,
             },
+            0,
         );
         participant.set(
             EndpointNumber(1),
             "8",
             { "0": 1 },
             {
-                receiver: {
-                    settleAccepted: async values => {
-                        settled.push(values);
-                        return { release: async () => {} };
-                    },
+                settleAccepted: async values => {
+                    settled.push(values);
+                    return { release: async () => {} };
                 },
-                epoch: 0,
             },
+            0,
         );
 
         let caught: unknown;
@@ -400,14 +395,12 @@ describe("settlement errors", () => {
             "6",
             { "0": true },
             {
-                receiver: {
-                    settleAccepted: async () => ({
-                        release: async () => {},
-                        persistFailure: { error: new Error("persist failure") },
-                    }),
-                },
-                epoch: 0,
+                settleAccepted: async () => ({
+                    release: async () => {},
+                    persistFailure: new Error("persist failure"),
+                }),
             },
+            0,
         );
 
         const warnings = await captureWarningsOf(() => participant.commit1());

@@ -106,10 +106,7 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
             participant = new RemoteWriteParticipant(this.#writer, this.#nodeId);
             transaction.addParticipants(participant);
         }
-        (participant as RemoteWriteParticipant).set(this.#endpointNumber, this.#behaviorId, values, {
-            receiver: this,
-            epoch: this.#epoch,
-        });
+        (participant as RemoteWriteParticipant).set(this.#endpointNumber, this.#behaviorId, values, this, this.#epoch);
     }
 
     async settleAccepted(values: Val.Struct, epoch: number) {
@@ -137,15 +134,13 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
         return { release, persistFailure };
     }
 
-    async externalSet(values: Val.StructMap) {
+    async externalSet(values: Val.StructMap): Promise<Datasource.ExternallyMutableStore.Applied> {
         const { announce, persistFailure } = await this.#settle(values);
         if (announce !== undefined) {
             this.#announcements.push({ open: true, announce });
             await this.#drain();
         }
-        if (persistFailure) {
-            throw persistFailure.error;
-        }
+        return { persistFailure };
     }
 
     /**
@@ -155,10 +150,7 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
      *
      * Returns the announcement of the changes, if any, and the persist failure, if any.
      */
-    async #settle(values: Val.StructMap): Promise<{
-        announce?: () => Promise<void>;
-        persistFailure?: RemoteWriteParticipant.PersistFailure;
-    }> {
+    async #settle(values: Val.StructMap): Promise<{ announce?: () => Promise<void>; persistFailure?: unknown }> {
         const epoch = ++this.#epoch;
         for (const key of values.keys()) {
             const id = String(key);
@@ -167,13 +159,13 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
             }
         }
 
-        let persistFailure: RemoteWriteParticipant.PersistFailure | undefined;
+        let persistFailure: unknown;
         try {
             if (!(await this.#persist(values))) {
                 return {};
             }
         } catch (error) {
-            persistFailure = { error };
+            persistFailure = error;
         }
         if (this.#erased || this.#reclaimed) {
             return { persistFailure };
@@ -236,21 +228,33 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
             }
             this.#buffer.markDirty(this);
         } else {
-            const localWriter = this.#localWriter;
-            if (localWriter) {
-                const valuesStruct = Object.fromEntries(values) as Val.Struct;
-                const persisting = this.#persisted.then(() => {
-                    if (!this.#erased) {
-                        return localWriter.persist(this.#endpointNumber, this.#behaviorId, valuesStruct);
-                    }
-                });
-                // Only orders later persists; the caller receives this one's failure below
-                this.#persisted = persisting.then(undefined, () => {});
-                await persisting;
-            }
+            const valuesStruct = Object.fromEntries(values) as Val.Struct;
+            await this.#persistInOrder(localWriter =>
+                localWriter.persist(this.#endpointNumber, this.#behaviorId, valuesStruct),
+            );
         }
 
         return true;
+    }
+
+    /**
+     * Run {@link write} after every persist requested before it, unless this cache is erased by then.
+     */
+    async #persistInOrder(write: (localWriter: LocalWriter) => Promise<void>) {
+        const localWriter = this.#localWriter;
+        if (!localWriter) {
+            return;
+        }
+
+        const persisting = this.#persisted.then(() => {
+            if (!this.#erased) {
+                return write(localWriter);
+            }
+        });
+
+        // Only orders later persists; the caller receives this one's failure
+        this.#persisted = persisting.then(undefined, () => {});
+        await persisting;
     }
 
     #seed(values: Val.StructMap) {
@@ -296,9 +300,11 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
         // A flush that is running may have taken the old version already; it must land before the unknown version does
         await this.#buffer?.settled();
 
-        await this.#localWriter?.persist(this.#endpointNumber, this.#behaviorId, {
-            [DatasourceCache.VERSION_KEY]: Datasource.UNKNOWN_VERSION,
-        });
+        await this.#persistInOrder(localWriter =>
+            localWriter.persist(this.#endpointNumber, this.#behaviorId, {
+                [DatasourceCache.VERSION_KEY]: Datasource.UNKNOWN_VERSION,
+            }),
+        );
     }
 
     get erased() {

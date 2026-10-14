@@ -934,7 +934,9 @@ describe("Datasource", () => {
                 initialValues: { plain: 1, __features__: featuresKeyOf(gatedSupervisor()) },
                 version: 1,
                 async set() {},
-                async externalSet() {},
+                async externalSet() {
+                    return {};
+                },
                 async forgetVersion() {},
             };
             createDatasource({ type: GatedState, supervisor: gatedSupervisor("GATE"), primaryKey: "id", store });
@@ -1208,7 +1210,9 @@ describe("Datasource", () => {
                 initialValues: { legacy: "old" },
                 version: 1,
                 async set() {},
-                async externalSet() {},
+                async externalSet() {
+                    return {};
+                },
                 async forgetVersion() {},
             };
             createDatasource({
@@ -1260,6 +1264,7 @@ describe("Datasource", () => {
                     this.version = version;
                 }
                 await this.consumer?.integrate(values)?.();
+                return {};
             }
         }
 
@@ -1371,7 +1376,9 @@ describe("Datasource", () => {
 
             async forgetVersion() {}
 
-            async externalSet() {}
+            async externalSet() {
+                return {};
+            }
         }
 
         it("sends an unchanged assignment without a change, a version step or stateChanged", async () => {
@@ -1457,6 +1464,81 @@ describe("Datasource", () => {
 
             expect(others).deep.equals(["qux"]);
             expect(warnings.map(({ text }) => text).join("\n")).contains("broadcast failure");
+        });
+
+        describe("nested writes", () => {
+            class NestedState {
+                compound: { subfield: number } = { subfield: 0 };
+                bits: { flag: boolean } = { flag: false };
+                items: number[] = [];
+            }
+
+            const nestedSupervisor = BehaviorSupervisor({
+                id: "nestedState",
+                State: NestedState,
+
+                schema: new ClusterModel({
+                    id: 0xfff1_fc98,
+                    name: "NestedState",
+
+                    children: [
+                        AttributeElement({
+                            id: 4,
+                            name: "Compound",
+                            type: "struct",
+                            children: [FieldElement({ id: 0, name: "Subfield", type: "int8" })],
+                        }),
+                        AttributeElement({
+                            id: 5,
+                            name: "Bits",
+                            type: "map8",
+                            children: [FieldElement({ name: "Flag", constraint: "0" })],
+                        }),
+                        AttributeElement({
+                            id: 6,
+                            name: "Items",
+                            type: "list",
+                            children: [FieldElement({ name: "entry", type: "uint8" })],
+                        }),
+                    ],
+                }),
+            });
+
+            async function sentBy(mutate: (state: NestedState) => void) {
+                const store = new RecordingMirrorStore({ 4: { subfield: 0 }, 5: { flag: false }, 6: [1, 2] });
+                const ds = createDatasource({
+                    type: NestedState,
+                    supervisor: nestedSupervisor,
+                    primaryKey: "id",
+                    store,
+                });
+                await withReference(ds, ({ state }) => mutate(state));
+                return store.sets.map(set => Object.keys(set));
+            }
+
+            it("sends a struct field's write as its attribute", async () => {
+                expect(
+                    await sentBy(state => {
+                        state.compound.subfield = 7;
+                    }),
+                ).deep.equals([["4"]]);
+            });
+
+            it("sends a bitmap bit's write as its attribute", async () => {
+                expect(
+                    await sentBy(state => {
+                        state.bits.flag = true;
+                    }),
+                ).deep.equals([["5"]]);
+            });
+
+            it("sends a list entry's write as its attribute", async () => {
+                expect(
+                    await sentBy(state => {
+                        state.items[1] = 9;
+                    }),
+                ).deep.equals([["6"]]);
+            });
         });
 
         it("does not make a sent attribute the store does not hold local", async () => {

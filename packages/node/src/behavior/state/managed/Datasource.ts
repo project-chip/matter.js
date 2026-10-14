@@ -295,10 +295,11 @@ export namespace Datasource {
         /**
          * Apply changes from an external source.
          *
-         * Uses the same semantics as {@link set}.  Resolves once the values are applied.  Their change notifications
-         * may follow later, when notifications of an earlier change are still held; do not await them.
+         * Uses the same semantics as {@link set}.  Resolves once the values are applied, also when storing them locally
+         * failed; the result then carries that failure for the caller to report.  Their change notifications may follow
+         * later, when notifications of an earlier change are still held; do not await them.
          */
-        externalSet(values: Val.StructMap): Promise<void>;
+        externalSet(values: Val.StructMap): Promise<ExternallyMutableStore.Applied>;
 
         /**
          * The datasource consuming this store's data.  Installed by the datasource when it binds to the store.
@@ -338,6 +339,17 @@ export namespace Datasource {
     }
 
     export namespace ExternallyMutableStore {
+        /**
+         * The result of {@link ExternallyMutableStore.externalSet}.
+         */
+        export interface Applied {
+            /**
+             * The error that kept the values from being stored locally, if any.  A failure thrown as `undefined` is
+             * not reported.
+             */
+            persistFailure?: unknown;
+        }
+
         export function is(store?: Store | ExternallyMutableStore): store is ExternallyMutableStore {
             return store !== undefined && "externalSet" in store;
         }
@@ -349,8 +361,8 @@ export namespace Datasource {
             /**
              * Apply externally-sourced values to the datasource's managed state now.
              *
-             * Returns the function that announces the changes, or undefined if nothing changed.  It logs every failure
-             * rather than throwing.
+             * Returns the function that announces the changes, or undefined if nothing changed.  It logs a failing
+             * {@link Datasource.Options.onChange} rather than throwing; event observers handle their own errors.
              */
             integrate(values: Val.StructMap): undefined | (() => Promise<void>);
 

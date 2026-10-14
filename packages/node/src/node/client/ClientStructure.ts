@@ -483,9 +483,6 @@ export class ClientStructure {
     }
 
     /**
-     * A peer can trigger the same local failure with every report, so only the first one per node is a warning.
-     */
-    /**
      * A peer can trigger the same local failure with every report, so only the first of each kind is a warning; a
      * different kind, such as storage refusing writes after an observer failed, warns again.
      */
@@ -529,8 +526,11 @@ export class ClientStructure {
                     this.#pruneUnlistedAttributes(cluster, values);
                     this.#invalidateOnDefinitionChange(cluster, values);
 
-                    await cluster.store.externalSet(values);
+                    const { persistFailure } = await cluster.store.externalSet(values);
                     this.#synchronizeCluster(endpoint, cluster, clustersWithData);
+                    if (persistFailure !== undefined) {
+                        this.#localFailed(persistFailure);
+                    }
                     break;
                 }
 
@@ -682,8 +682,11 @@ export class ClientStructure {
         this.#pruneUnlistedAttributes(cluster, attrs.values);
         this.#invalidateOnDefinitionChange(cluster, attrs.values);
 
-        await cluster.store.externalSet(attrs.values);
+        const { persistFailure } = await cluster.store.externalSet(attrs.values);
         this.#synchronizeCluster(endpoint, cluster, clustersWithData);
+        if (persistFailure !== undefined) {
+            this.#localFailed(persistFailure);
+        }
     }
 
     /**

@@ -85,5 +85,22 @@ export function gatedWriter() {
             await promise;
             Object.assign(stored, values);
         },
+
+        /**
+         * Finish {@link count} persists.  Each round waits for the next persist to start, then finishes the newest
+         * unfinished one, so an older persist finishes after a newer one whenever the cache lets both run at once.
+         */
+        async finishNewestFirst(count: number) {
+            const finished = new Set<number>();
+            while (finished.size < count) {
+                for (let i = 0; i < 10 && pending.length === finished.size; i++) {
+                    await MockTime.yield();
+                }
+                const newest = pending.length - 1;
+                const index = finished.has(newest) ? pending.findIndex((_, i) => !finished.has(i)) : newest;
+                pending[index].finish();
+                finished.add(index);
+            }
+        },
     };
 }

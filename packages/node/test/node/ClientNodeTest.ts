@@ -2588,14 +2588,13 @@ describe("ClientNode", () => {
                 throw new Error("persist failure");
             };
 
-            await expect(
-                seedPeerCache(
-                    peer1,
-                    peer1,
-                    BasicInformationClient,
-                    new Map([[BasicInformation.attributes.nodeLabel.id, otherLabel]]),
-                ),
-            ).rejectedWith("persist failure");
+            const { persistFailure } = await seedPeerCache(
+                peer1,
+                peer1,
+                BasicInformationClient,
+                new Map([[BasicInformation.attributes.nodeLabel.id, otherLabel]]),
+            );
+            expect(persistFailure).instanceOf(Error);
 
             expect(peer1.stateOf(BasicInformationClient).nodeLabel).equals(otherLabel);
             expect(transitions).deep.equals([[initialLabel, otherLabel]]);
@@ -4660,6 +4659,34 @@ describe("ClientNode", () => {
 
             expect(peer1.endpoints.for(9)).equals(peerEp9);
             expect(controller.endpoints.for(9)).not.equals(peerEp9);
+        });
+
+        it("builds the structure of a reported endpoint whose values it fails to persist, and warns once", async () => {
+            await using site = new MockSite();
+            const { controller, device } = await site.addCommissionedPair();
+            const peer1 = await subscribedPeer(controller, "peer1");
+
+            peer1.env.get(ClientNodeStore).localWriter.persist = async () => {
+                throw new Error("persist failure");
+            };
+
+            const installed = new Promise<Endpoint>(resolve =>
+                peer1.env
+                    .get(ClientStructureEvents)
+                    .clusterInstalled(OnOffClient)
+                    .on(endpoint => {
+                        if (endpoint.number === 5) {
+                            resolve(endpoint);
+                        }
+                    }),
+            );
+            const warnings = await captureWarningsOf(async () => {
+                await device.add(OnOffLightDevice, { id: "late5", number: 5 });
+                await MockTime.resolve(installed);
+            });
+
+            expect(peer1.endpoints.for(5)?.stateOf(OnOffClient).onOff).equals(false);
+            expect(warnings.filter(({ text }) => text.includes("failed locally"))).length(1);
         });
 
         it("adopts an endpoint created by require() when the peer reports it", async () => {

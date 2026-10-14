@@ -519,7 +519,7 @@ export async function seedPeerCache(
         throw new InternalError(`${endpoint}.${type.id} is not active on ${peer.id}`);
     }
 
-    await structure.storeForRemote(endpoint, type).externalSet(values);
+    return await structure.storeForRemote(endpoint, type).externalSet(values);
 }
 
 /**
