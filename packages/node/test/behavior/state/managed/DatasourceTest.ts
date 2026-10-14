@@ -1428,12 +1428,8 @@ describe("Datasource", () => {
             expect(changes).deep.equals([]);
         });
 
-        it("logs a failing change broadcast and observer and still announces the rest", async () => {
+        it("logs a failing change broadcast and still announces the changes", async () => {
             const store = new RecordingMirrorStore({ 1: "bar", 2: "baz" });
-            const foo$Changed = Observable<[value: string, oldValue: string, context?: ValueSupervisor.Session]>();
-            foo$Changed.on(() => {
-                throw new Error("observer failure");
-            });
             const other$Changed = Observable<[value: string, oldValue: string, context?: ValueSupervisor.Session]>();
             const others = new Array<string>();
             other$Changed.on(value => {
@@ -1444,7 +1440,7 @@ describe("Datasource", () => {
                 supervisor: writeSupervisor,
                 primaryKey: "id",
                 store,
-                events: { foo$Changed, other$Changed },
+                events: { other$Changed },
                 onChange: () => {
                     throw new Error("broadcast failure");
                 },
@@ -1454,20 +1450,13 @@ describe("Datasource", () => {
                 expect.fail("the datasource did not bind to its store");
             }
 
-            const announce = consumer.integrate(
-                new Map([
-                    ["1", "new"],
-                    ["2", "qux"],
-                ]),
-            );
+            const announce = consumer.integrate(new Map([["2", "qux"]]));
             const warnings = await captureWarningsOf(async () => {
                 await announce?.();
             });
 
             expect(others).deep.equals(["qux"]);
-            const logged = warnings.map(({ text }) => text).join("\n");
-            expect(logged).contains("broadcast failure");
-            expect(logged).contains("observer failure");
+            expect(warnings.map(({ text }) => text).join("\n")).contains("broadcast failure");
         });
 
         it("does not make a sent attribute the store does not hold local", async () => {

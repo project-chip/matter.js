@@ -11,7 +11,7 @@ import { RemoteDescriptor } from "#behavior/system/commissioning/RemoteDescripto
 import { ControllerBehavior } from "#behavior/system/controller/ControllerBehavior.js";
 import { DiscoveryError } from "#behavior/system/controller/discovery/DiscoveryError.js";
 import { NetworkClient } from "#behavior/system/network/NetworkClient.js";
-import { AccessControlClient, AccessControlServer } from "#behaviors/access-control";
+import { AccessControlClient } from "#behaviors/access-control";
 import { BasicInformationBehavior, BasicInformationClient, BasicInformationServer } from "#behaviors/basic-information";
 import {
     BooleanStateConfigurationClient,
@@ -38,6 +38,7 @@ import { FabricOperationInProgressError } from "#node/client/Peers.js";
 import type { ClientNode } from "#node/ClientNode.js";
 import { ChangeNotificationService } from "#node/integration/ChangeNotificationService.js";
 import { ServerNode } from "#node/ServerNode.js";
+import { ClientNodeStore } from "#storage/client/ClientNodeStore.js";
 import { DatasourceCache } from "#storage/client/DatasourceCache.js";
 import {
     b$,
@@ -1675,14 +1676,15 @@ describe("ClientNode", () => {
             return { site, peer1, device };
         }
 
-        function countInteractions(
-            device: ServerNode,
-            type: typeof BasicInformationServer | typeof AccessControlServer,
-        ) {
+        /** Counts the Write Requests {@link peer} sends. */
+        function countWrites(peer: ClientNode) {
             const counter = { count: 0 };
-            device.eventsOf(type).interactionEnd.on(() => {
+            const { interaction } = peer;
+            const write = interaction.write.bind(interaction);
+            interaction.write = request => {
                 counter.count++;
-            });
+                return write(request);
+            };
             return counter;
         }
 
@@ -1690,7 +1692,7 @@ describe("ClientNode", () => {
             const { site, peer1, device } = await setup();
             await using _site = site;
 
-            const writes = countInteractions(device, BasicInformationServer);
+            const writes = countWrites(peer1);
             const observed = new Array<string>();
             peer1.eventsOf(BasicInformationClient).nodeLabel$Changed.on(value => {
                 observed.push(value);
@@ -1726,7 +1728,7 @@ describe("ClientNode", () => {
         });
 
         it("writes a list twice and the device receives both writes", async () => {
-            const { site, peer1, device } = await setup();
+            const { site, peer1 } = await setup();
             await using _site = site;
 
             const [admin] = peer1.stateOf(AccessControlClient).acl;
@@ -1747,7 +1749,7 @@ describe("ClientNode", () => {
                 },
             ];
 
-            const writes = countInteractions(device, AccessControlServer);
+            const writes = countWrites(peer1);
             await MockTime.resolve(peer1.setStateOf(AccessControlClient, { acl }));
             expect(writes.count).equals(1);
             const written = peer1.stateOf(AccessControlClient).acl;
@@ -1758,10 +1760,10 @@ describe("ClientNode", () => {
         });
 
         it("does not send an assignment refused locally", async () => {
-            const { site, peer1, device } = await setup();
+            const { site, peer1 } = await setup();
             await using _site = site;
 
-            const writes = countInteractions(device, BasicInformationServer);
+            const writes = countWrites(peer1);
             let refusal: unknown;
             await MockTime.resolve(
                 peer1.act(agent => {
@@ -1818,7 +1820,7 @@ describe("ClientNode", () => {
             const { site, peer1, device } = await setup();
             await using _site = site;
 
-            const writes = countInteractions(device, BasicInformationServer);
+            const writes = countWrites(peer1);
             await seedPeerCache(
                 peer1,
                 peer1,
@@ -2557,6 +2559,47 @@ describe("ClientNode", () => {
                 expect(peer2.stateOf(BasicInformationClient).vendorName).equals(originalVendorName);
             });
         }
+
+        it("applies and announces an accepted value whose local persist failed", async () => {
+            const { site, peer1, device, transitions } = await setup();
+            await using _site = site;
+
+            peer1.env.get(ClientNodeStore).localWriter.persist = async () => {
+                throw new Error("persist failure");
+            };
+
+            const warnings = await captureWarningsOf(() =>
+                MockTime.resolve(peer1.setStateOf(BasicInformationClient, { nodeLabel: writtenLabel }), {
+                    macrotasks: true,
+                }),
+            );
+
+            expect(device.stateOf(BasicInformationServer).nodeLabel).equals(writtenLabel);
+            expect(peer1.stateOf(BasicInformationClient).nodeLabel).equals(writtenLabel);
+            expect(transitions).deep.equals([[initialLabel, writtenLabel]]);
+            expect(warnings.map(({ text }) => text).join("\n")).contains("persist failure");
+        });
+
+        it("applies a report whose local persist failed", async () => {
+            const { site, peer1, transitions } = await setup();
+            await using _site = site;
+
+            peer1.env.get(ClientNodeStore).localWriter.persist = async () => {
+                throw new Error("persist failure");
+            };
+
+            await expect(
+                seedPeerCache(
+                    peer1,
+                    peer1,
+                    BasicInformationClient,
+                    new Map([[BasicInformation.attributes.nodeLabel.id, otherLabel]]),
+                ),
+            ).rejectedWith("persist failure");
+
+            expect(peer1.stateOf(BasicInformationClient).nodeLabel).equals(otherLabel);
+            expect(transitions).deep.equals([[initialLabel, otherLabel]]);
+        });
 
         it("lets an observer of the accepted value write", async () => {
             const { site, peer1, device } = await setup();

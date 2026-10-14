@@ -936,7 +936,7 @@ class Tx implements Transaction, Transaction.Finalization {
         let errored: undefined | Array<ParticipantError>;
         let asyncCommits: undefined | Promise<void>[];
         for (const participant of this.participants) {
-            // The caller receives the error, so this is no place to judge how alarming it is
+            // Debug only: the caller receives the error
             const handleParticipantError = (error: unknown) => {
                 logger.debug(`Error committing ${participant} (phase one):`, error);
                 (errored ??= []).push({ participant, error });

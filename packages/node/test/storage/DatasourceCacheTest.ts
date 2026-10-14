@@ -1,0 +1,156 @@
+/**
+ * @license
+ * Copyright 2022-2026 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { Datasource } from "#behavior/state/managed/Datasource.js";
+import { DatasourceCache } from "#storage/client/DatasourceCache.js";
+import { createPromise } from "@matter/general";
+import { Val } from "@matter/protocol";
+import { EndpointNumber } from "@matter/types";
+import { attrs, createCache, gatedWriter, recordingConsumer, trackingWriter } from "./cache-test-helpers.js";
+
+describe("DatasourceCache settlement order", () => {
+    it("does not let a write answered later override one accepted since it was queued", async () => {
+        const cache = createCache();
+        const { integrated, consumer } = recordingConsumer();
+        cache.consumer = consumer;
+
+        // Both queued at epoch 0; the later write is answered first
+        await cache.settleAccepted({ "1": "later" }, 0);
+        await cache.settleAccepted({ "1": "earlier" }, 0);
+
+        expect(integrated).deep.equals([{ "1": "later" }]);
+    });
+
+    it("applies an accepted value at once and announces it, and what follows, on release", async () => {
+        const cache = createCache();
+        const { values, announced, consumer } = recordingConsumer();
+        cache.consumer = consumer;
+
+        const { release } = await cache.settleAccepted({ "1": "accepted" }, 0);
+        await cache.externalSet(attrs({ "1": "reported" }));
+
+        expect(values).deep.equals({ "1": "reported" });
+        expect(announced).deep.equals([]);
+
+        await release();
+
+        expect(announced).deep.equals([{ "1": "accepted" }, { "1": "reported" }]);
+    });
+
+    it("keeps a report still persisting over an older write answered meanwhile", async () => {
+        const writer = gatedWriter();
+        const cache = createCache({ localWriter: writer });
+        const { integrated, consumer } = recordingConsumer();
+        cache.consumer = consumer;
+
+        const report = cache.externalSet(attrs({ "1": "reported" }));
+        await cache.settleAccepted({ "1": "accepted" }, 0);
+        writer.pending[0].finish();
+        await report;
+
+        expect(writer.pending).length(1);
+        expect(integrated).deep.equals([{ "1": "reported" }]);
+    });
+
+    it("keeps a report that arrives while an accepted value persists", async () => {
+        const writer = gatedWriter();
+        const cache = createCache({ localWriter: writer });
+        const { integrated, consumer } = recordingConsumer();
+        cache.consumer = consumer;
+
+        const accepted = cache.settleAccepted({ "1": "accepted" }, 0);
+        const report = cache.externalSet(attrs({ "1": "reported" }));
+        await MockTime.yield();
+        writer.pending[0].finish();
+        await accepted;
+        await MockTime.yield();
+        writer.pending[1].finish();
+        await report;
+
+        expect(integrated).deep.equals([{ "1": "reported" }]);
+    });
+
+    it("stores the latest settlement of a key when an older one would finish persisting last", async () => {
+        const writer = gatedWriter();
+        const cache = createCache({ localWriter: writer });
+        cache.consumer = recordingConsumer().consumer;
+
+        const accepted = cache.settleAccepted({ "1": "accepted" }, 0);
+        const report = cache.externalSet(attrs({ "1": "reported" }));
+
+        // Each round waits for the next persist to start, then finishes the newest unfinished one, so an older persist
+        // finishes after a newer one whenever the cache lets both run at once
+        const finished = new Set<number>();
+        while (finished.size < 2) {
+            for (let i = 0; i < 10 && writer.pending.length === finished.size; i++) {
+                await MockTime.yield();
+            }
+            const newest = writer.pending.length - 1;
+            const index = finished.has(newest) ? writer.pending.findIndex((_, i) => !finished.has(i)) : newest;
+            writer.pending[index].finish();
+            finished.add(index);
+        }
+        await Promise.all([accepted, report]);
+
+        const restarted = new DatasourceCache({
+            writer: async () => [],
+            nodeId: "test-peer",
+            endpointNumber: EndpointNumber(1),
+            behaviorId: "test",
+            initialValues: { ...writer.stored },
+        });
+        expect(restarted.initialValues?.["1"]).equals("reported");
+    });
+
+    it("persists nothing when the device accepted nothing", async () => {
+        const writer = trackingWriter();
+        const cache = createCache({ localWriter: writer });
+        cache.consumer = recordingConsumer().consumer;
+
+        await cache.settleAccepted({}, 0);
+
+        expect(writer.persisted).deep.equals([]);
+    });
+
+    it("settles an accepted value into the seed while no consumer is attached", async () => {
+        const cache = createCache();
+
+        const { release } = await cache.settleAccepted({ "1": "accepted" }, 0);
+        await release();
+
+        expect(cache.initialValues).deep.equals({ "1": "accepted" });
+    });
+
+    it("announces one change at a time when settlements arrive during an announcement", async () => {
+        const cache = createCache();
+        const log = new Array<string>();
+        const { promise: firstHeld, resolver: releaseFirst } = createPromise<void>();
+        cache.consumer = {
+            readValues: () => ({}),
+            snapshot: () => ({}),
+            releaseValues: () => ({}),
+            integrate: (changes: Val.StructMap) => {
+                const value = String(changes.get("1"));
+                return async () => {
+                    log.push(`start ${value}`);
+                    if (value === "first") {
+                        await firstHeld;
+                    }
+                    log.push(`end ${value}`);
+                };
+            },
+        } satisfies Datasource.ExternallyMutableStore.Consumer;
+
+        const first = cache.externalSet(attrs({ "1": "first" }));
+        await MockTime.yield();
+        const second = cache.externalSet(attrs({ "1": "second" }));
+        await MockTime.yield();
+        releaseFirst();
+        await Promise.all([first, second]);
+
+        expect(log).deep.equals(["start first", "end first", "start second", "end second"]);
+    });
+});

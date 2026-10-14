@@ -436,6 +436,9 @@ class DatasourceImpl implements Datasource, Datasource.ExternallyMutableStore.Co
      */
     migratedStoreKeys?: Set<string>;
 
+    /**
+     * Keys of the members a persisted store keeps.  A mirror sends what a session assigned instead.
+     */
     storeFields: Set<string>;
     supervisionConfig?: GlobalConfig;
 
@@ -840,13 +843,8 @@ class DatasourceImpl implements Datasource, Datasource.ExternallyMutableStore.Co
 
             for (const name of changedProps) {
                 const event = this.changedEventFor(name);
-                if (!event?.isObserved) {
-                    continue;
-                }
-                try {
+                if (event?.isObserved) {
                     await event.emit(changes.get(name), oldValues!.get(name));
-                } catch (e) {
-                    logger.warn(`Error announcing a change of ${this.location.path}.${name}:`, e);
                 }
             }
         };
@@ -1070,7 +1068,21 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
             this.#refreshSubrefs();
         }
 
-        // Perform the mutation
+        if (this.#internals.mirrorsRemote) {
+            this.#mutateRecording(mutator, member);
+        } else {
+            mutator();
+        }
+
+        // Refresh subrefs referencing any mutated values
+        this.#refreshSubrefs();
+    }
+
+    /**
+     * Run {@link mutator} and record {@link member} as assigned, for a mirror, which sends what was assigned rather
+     * than what changed.
+     */
+    #mutateRecording(mutator: () => void, member: string | number) {
         const outermost = this.#pendingAssigned === undefined;
         const pending = (this.#pendingAssigned ??= new Set());
         try {
@@ -1087,9 +1099,6 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
                 assigned.add(key);
             }
         }
-
-        // Refresh subrefs referencing any mutated values
-        this.#refreshSubrefs();
     }
 
     refresh() {

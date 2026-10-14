@@ -8,54 +8,11 @@ import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { ClientCacheBuffer } from "#storage/client/ClientCacheBuffer.js";
 import { DatasourceCache } from "#storage/client/DatasourceCache.js";
 import { RemoteWriteParticipant } from "#storage/client/RemoteWriteParticipant.js";
-import {
-    createPromise,
-    InternalError,
-    Lifetime,
-    MemoryStorageDriver,
-    Seconds,
-    StorageDriver,
-    Transaction,
-} from "@matter/general";
+import { InternalError, Lifetime, MemoryStorageDriver, Seconds, StorageDriver, Transaction } from "@matter/general";
 import { Val } from "@matter/protocol";
 import { AttributeId, ClusterId, EndpointNumber, Status, StatusResponseError } from "@matter/types";
 import { captureWarningsOf } from "../endpoint/validation/validation-helpers.js";
-
-function createCache(options?: {
-    buffer?: ClientCacheBuffer;
-    localWriter?: {
-        persistInTransaction: (...args: any[]) => Promise<void>;
-        persist: (...args: any[]) => Promise<void>;
-    };
-}) {
-    return new DatasourceCache({
-        writer: (() => {}) as any,
-        nodeId: "test-peer",
-        endpointNumber: EndpointNumber(1),
-        behaviorId: "test",
-        localWriter: options?.localWriter as any,
-        buffer: options?.buffer,
-    });
-}
-
-function attrs(entries: Record<string, unknown>): Val.StructMap {
-    return new Map(Object.entries(entries));
-}
-
-/** A localWriter that records persist calls without touching the transaction's type-safe set() */
-function trackingWriter() {
-    const persisted: Val.Struct[] = [];
-    return {
-        persisted,
-        persistInTransaction: async (_tx: any, _ep: any, _bid: any, vals: Val.Struct) => {
-            persisted.push(vals);
-        },
-        persist: async (_ep: any, _bid: any, vals: Val.Struct) => {
-            persisted.push(vals);
-        },
-        erase: async () => {},
-    };
-}
+import { attrs, createCache, gatedWriter, recordingConsumer, trackingWriter } from "./cache-test-helpers.js";
 
 /** A localWriter that always throws */
 function failingWriter(message = "No endpoint store for endpoint 1") {
@@ -261,77 +218,8 @@ describe("DatasourceCache error handling", () => {
     });
 });
 
-describe("settlements", () => {
-    /** A consumer that applies values to {@link values} and records each announcement when it runs. */
-    function recordingConsumer() {
-        const values: Val.Struct = {};
-        const integrated = new Array<Val.Struct>();
-        const announced = new Array<Val.Struct>();
-        const consumer = {
-            readValues: () => ({}),
-            snapshot: () => ({ ...values }),
-            releaseValues: () => ({ ...values }),
-            integrate: (changes: Val.StructMap) => {
-                const change = Object.fromEntries(changes);
-                Object.assign(values, change);
-                integrated.push(change);
-                return async () => {
-                    announced.push(change);
-                };
-            },
-        } satisfies Datasource.ExternallyMutableStore.Consumer;
-        return { values, integrated, announced, consumer };
-    }
-
-    it("does not let a write answered later override one accepted since it was queued", async () => {
-        const cache = createCache();
-        const { integrated, consumer } = recordingConsumer();
-        cache.consumer = consumer;
-
-        // Both queued at epoch 0; the later write is answered first
-        await cache.settleAccepted({ "1": "later" }, 0);
-        await cache.settleAccepted({ "1": "earlier" }, 0);
-
-        expect(integrated).deep.equals([{ "1": "later" }]);
-    });
-
-    it("applies an accepted value at once and announces it, and what follows, on release", async () => {
-        const cache = createCache();
-        const { values, announced, consumer } = recordingConsumer();
-        cache.consumer = consumer;
-
-        const release = await cache.settleAccepted({ "1": "accepted" }, 0);
-        await cache.externalSet(attrs({ "1": "reported" }));
-
-        expect(values).deep.equals({ "1": "reported" });
-        expect(announced).deep.equals([]);
-
-        await release();
-
-        expect(announced).deep.equals([{ "1": "accepted" }, { "1": "reported" }]);
-    });
-
-    /**
-     * A local writer whose every persist waits until the test lets it finish, then patches {@link stored} like
-     * storage does.
-     */
-    function gatedWriter() {
-        const stored: Val.Struct = {};
-        const pending = new Array<{ values: Val.Struct; finish: () => void }>();
-        return {
-            stored,
-            pending,
-            persistInTransaction: async () => {},
-            persist: async (_ep: unknown, _bid: unknown, values: Val.Struct) => {
-                const { promise, resolver } = createPromise<void>();
-                pending.push({ values, finish: resolver });
-                await promise;
-                Object.assign(stored, values);
-            },
-        };
-    }
-
-    it("lets a report that failed to persist outrank an older write", async () => {
+describe("settlement errors", () => {
+    it("applies a report whose persist failed and lets it outrank an older write", async () => {
         const cache = createCache({
             localWriter: {
                 persistInTransaction: async () => {},
@@ -346,71 +234,27 @@ describe("settlements", () => {
         await expect(cache.externalSet(attrs({ "1": "reported" }))).rejectedWith("persist failure");
         await cache.settleAccepted({ "1": "accepted" }, 0);
 
-        expect(integrated).deep.equals([]);
-    });
-
-    it("keeps a report still persisting over an older write answered meanwhile", async () => {
-        const writer = gatedWriter();
-        const cache = createCache({ localWriter: writer });
-        const { integrated, consumer } = recordingConsumer();
-        cache.consumer = consumer;
-
-        const report = cache.externalSet(attrs({ "1": "reported" }));
-        await cache.settleAccepted({ "1": "accepted" }, 0);
-        writer.pending[0].finish();
-        await report;
-
-        expect(writer.pending).length(1);
         expect(integrated).deep.equals([{ "1": "reported" }]);
     });
 
-    it("keeps a report that arrives while an accepted value persists", async () => {
-        const writer = gatedWriter();
-        const cache = createCache({ localWriter: writer });
-        const { integrated, consumer } = recordingConsumer();
-        cache.consumer = consumer;
-
-        const accepted = cache.settleAccepted({ "1": "accepted" }, 0);
-        const report = cache.externalSet(attrs({ "1": "reported" }));
-        await MockTime.yield();
-        writer.pending[0].finish();
-        await accepted;
-        await MockTime.yield();
-        writer.pending[1].finish();
-        await report;
-
-        expect(integrated).deep.equals([{ "1": "reported" }]);
-    });
-
-    it("stores the latest settlement of a key when an older one would finish persisting last", async () => {
-        const writer = gatedWriter();
-        const cache = createCache({ localWriter: writer });
-        cache.consumer = recordingConsumer().consumer;
-
-        const accepted = cache.settleAccepted({ "1": "accepted" }, 0);
-        const report = cache.externalSet(attrs({ "1": "reported" }));
-
-        // Let each persist finish as late as possible relative to the ones that arrived after it
-        const finished = new Set<number>();
-        while (finished.size < 2) {
-            for (let i = 0; i < 10 && writer.pending.length === finished.size; i++) {
-                await MockTime.yield();
-            }
-            const newest = writer.pending.length - 1;
-            const index = finished.has(newest) ? writer.pending.findIndex((_, i) => !finished.has(i)) : newest;
-            writer.pending[index].finish();
-            finished.add(index);
-        }
-        await Promise.all([accepted, report]);
-
-        const restarted = new DatasourceCache({
-            writer: async () => [],
-            nodeId: "test-peer",
-            endpointNumber: EndpointNumber(1),
-            behaviorId: "test",
-            initialValues: { ...writer.stored },
+    it("applies and announces an accepted value whose persist failed, and reports the failure", async () => {
+        const cache = createCache({
+            localWriter: {
+                persistInTransaction: async () => {},
+                persist: async () => {
+                    throw new Error("persist failure");
+                },
+            },
         });
-        expect(restarted.initialValues?.["1"]).equals("reported");
+        const { values, announced, consumer } = recordingConsumer();
+        cache.consumer = consumer;
+
+        const { release, persistFailure } = await cache.settleAccepted({ "1": "accepted" }, 0);
+        await release();
+
+        expect(values).deep.equals({ "1": "accepted" });
+        expect(announced).deep.equals([{ "1": "accepted" }]);
+        expect(persistFailure?.error).instanceOf(Error);
     });
 
     it("persists a settlement queued behind one whose persist failed", async () => {
@@ -435,7 +279,7 @@ describe("settlements", () => {
         await cache.externalSet(attrs({ "1": "second" }));
 
         expect(persisted).deep.equals([{ "1": "second" }]);
-        expect(integrated).deep.equals([{ "1": "second" }]);
+        expect(integrated).deep.equals([{ "1": "first" }, { "1": "second" }]);
     });
 
     it("does not persist a settlement queued behind another once the cache is discarded", async () => {
@@ -452,55 +296,6 @@ describe("settlements", () => {
 
         expect(writer.pending).length(1);
         expect(writer.stored).deep.equals({ "1": "first" });
-    });
-
-    it("persists nothing when the device accepted nothing", async () => {
-        const writer = trackingWriter();
-        const cache = createCache({ localWriter: writer });
-        cache.consumer = recordingConsumer().consumer;
-
-        await cache.settleAccepted({}, 0);
-
-        expect(writer.persisted).deep.equals([]);
-    });
-
-    it("settles an accepted value into the seed while no consumer is attached", async () => {
-        const cache = createCache();
-
-        const release = await cache.settleAccepted({ "1": "accepted" }, 0);
-        await release();
-
-        expect(cache.initialValues).deep.equals({ "1": "accepted" });
-    });
-
-    it("announces one change at a time when settlements arrive during an announcement", async () => {
-        const cache = createCache();
-        const log = new Array<string>();
-        const { promise: firstHeld, resolver: releaseFirst } = createPromise<void>();
-        cache.consumer = {
-            readValues: () => ({}),
-            snapshot: () => ({}),
-            releaseValues: () => ({}),
-            integrate: (changes: Val.StructMap) => {
-                const value = String(changes.get("1"));
-                return async () => {
-                    log.push(`start ${value}`);
-                    if (value === "first") {
-                        await firstHeld;
-                    }
-                    log.push(`end ${value}`);
-                };
-            },
-        } satisfies Datasource.ExternallyMutableStore.Consumer;
-
-        const first = cache.externalSet(attrs({ "1": "first" }));
-        await MockTime.yield();
-        const second = cache.externalSet(attrs({ "1": "second" }));
-        await MockTime.yield();
-        releaseFirst();
-        await Promise.all([first, second]);
-
-        expect(log).deep.equals(["start first", "end first", "start second", "end second"]);
     });
 
     it("does not apply a value when the cache is discarded while persisting it", async () => {
@@ -523,7 +318,7 @@ describe("settlements", () => {
 
     it("refuses a second write of the same cluster in one commit", () => {
         const participant = new RemoteWriteParticipant(async () => [], "peer1");
-        const receiver = { settleAccepted: async () => async () => {} };
+        const receiver = { settleAccepted: async () => ({ release: async () => {} }) };
         participant.set(EndpointNumber(1), "6", { "0": true }, { receiver, epoch: 0 });
 
         expect(() => participant.set(EndpointNumber(1), "6", { "0": false }, { receiver, epoch: 0 })).throws(
@@ -569,7 +364,7 @@ describe("settlements", () => {
                 receiver: {
                     settleAccepted: async values => {
                         settled.push(values);
-                        return async () => {};
+                        return { release: async () => {} };
                     },
                 },
                 epoch: 0,
@@ -587,6 +382,37 @@ describe("settlements", () => {
         expect(caught).instanceOf(StatusResponseError);
         expect(settled).deep.equals([{}]);
         expect(warnings.map(({ text }) => text).join("\n")).contains("settle failure");
+    });
+
+    it("logs an accepted value it failed to persist and still succeeds", async () => {
+        const participant = new RemoteWriteParticipant(
+            async () => [
+                {
+                    kind: "attr-status",
+                    path: { endpointId: EndpointNumber(1), clusterId: ClusterId(6), attributeId: AttributeId(0) },
+                    status: Status.Success,
+                },
+            ],
+            "peer1",
+        );
+        participant.set(
+            EndpointNumber(1),
+            "6",
+            { "0": true },
+            {
+                receiver: {
+                    settleAccepted: async () => ({
+                        release: async () => {},
+                        persistFailure: { error: new Error("persist failure") },
+                    }),
+                },
+                epoch: 0,
+            },
+        );
+
+        const warnings = await captureWarningsOf(() => participant.commit1());
+
+        expect(warnings.map(({ text }) => text).join("\n")).contains("persist failure");
     });
 });
 

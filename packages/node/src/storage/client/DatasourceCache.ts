@@ -35,7 +35,8 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
 
     /**
      * The tail of the unbuffered persists.  Storage takes patches, so they run one after another in arrival order:
-     * the last patch stored for a key must be its latest settlement.
+     * the last patch stored for a key must be its latest settlement.  It never rejects; each persist's own caller
+     * receives its failure.
      */
     #persisted: Promise<void> = Promise.resolve();
 
@@ -46,7 +47,8 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
 
     /**
      * The arrival {@link #epoch} of the peer's latest word on each attribute.  A settlement counts from its arrival,
-     * also while it persists and also when it fails to: it still shows that the device's value changed.
+     * also while it persists.  Its values apply in memory even when persisting them fails: memory always follows the
+     * device, and only the stored copy lags until the next settlement.
      */
     #settledAt = new Map<string, number>();
 
@@ -118,38 +120,45 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
             }
         }
         if (!accepted.size) {
-            return nothingToRelease;
+            return { release: nothingToRelease };
         }
 
-        const announce = await this.#settle(accepted);
+        const { announce, persistFailure } = await this.#settle(accepted);
         if (announce === undefined) {
-            return nothingToRelease;
+            return { release: nothingToRelease, persistFailure };
         }
 
         const entry = { open: false, announce };
         this.#announcements.push(entry);
-        return async () => {
+        const release = async () => {
             entry.open = true;
             await this.#drain();
         };
+        return { release, persistFailure };
     }
 
     async externalSet(values: Val.StructMap) {
-        const announce = await this.#settle(values);
+        const { announce, persistFailure } = await this.#settle(values);
         if (announce !== undefined) {
             this.#announcements.push({ open: true, announce });
             await this.#drain();
+        }
+        if (persistFailure) {
+            throw persistFailure.error;
         }
     }
 
     /**
      * Stamp values the peer settled with their arrival epoch, persist them, and apply those no later settlement has
-     * claimed meanwhile.  A report that confirms a value we already hold is stamped too: it leaves no other trace, and
-     * it still outranks a write in flight.
+     * claimed meanwhile, also when persisting failed.  A report that confirms a value we already hold is stamped too:
+     * it leaves no other trace, and it still outranks a write in flight.
      *
-     * Returns the announcement of the changes, if any.
+     * Returns the announcement of the changes, if any, and the persist failure, if any.
      */
-    async #settle(values: Val.StructMap) {
+    async #settle(values: Val.StructMap): Promise<{
+        announce?: () => Promise<void>;
+        persistFailure?: RemoteWriteParticipant.PersistFailure;
+    }> {
         const epoch = ++this.#epoch;
         for (const key of values.keys()) {
             const id = String(key);
@@ -158,8 +167,16 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
             }
         }
 
-        if (!(await this.#persist(values)) || this.#erased || this.#reclaimed) {
-            return;
+        let persistFailure: RemoteWriteParticipant.PersistFailure | undefined;
+        try {
+            if (!(await this.#persist(values))) {
+                return {};
+            }
+        } catch (error) {
+            persistFailure = { error };
+        }
+        if (this.#erased || this.#reclaimed) {
+            return { persistFailure };
         }
 
         const current = new Map<string, Val>();
@@ -170,14 +187,15 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
             }
         }
         if (!current.size) {
-            return;
+            return { persistFailure };
         }
 
         if (this.#consumer) {
-            return this.#consumer.integrate(current);
+            return { announce: this.#consumer.integrate(current), persistFailure };
         }
 
         this.#seed(current);
+        return { persistFailure };
     }
 
     /**
@@ -226,7 +244,8 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
                         return localWriter.persist(this.#endpointNumber, this.#behaviorId, valuesStruct);
                     }
                 });
-                this.#persisted = persisting.catch(() => {});
+                // Only orders later persists; the caller receives this one's failure below
+                this.#persisted = persisting.then(undefined, () => {});
                 await persisting;
             }
         }

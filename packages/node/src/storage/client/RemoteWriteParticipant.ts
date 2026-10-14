@@ -39,7 +39,7 @@ export class RemoteWriteParticipant implements Transaction.Participant {
     #request: RemoteWriter.Request = [];
     #writer: RemoteWriter;
     #name: string;
-    #pending = new Map<string, RemoteWriteParticipant.Write>();
+    #pending = new Map<string, RemoteWriteParticipant.PendingWrite>();
     #releases = new Array<() => Promise<void>>();
 
     /**
@@ -56,7 +56,7 @@ export class RemoteWriteParticipant implements Transaction.Participant {
         endpointNumber: EndpointNumber,
         behaviorId: string,
         values: Val.Struct,
-        receiver: RemoteWriteParticipant.ReceiverInput,
+        receiver: RemoteWriteParticipant.Settlement,
     ) {
         const key = writeKey(endpointNumber, behaviorId);
         if (this.#pending.has(key)) {
@@ -97,7 +97,14 @@ export class RemoteWriteParticipant implements Transaction.Participant {
             const failed = failedByCluster.get(key);
             const accepted = Object.fromEntries(Object.entries(values).filter(([id]) => !failed?.has(id)));
             try {
-                this.#releases.push(await receiver.settleAccepted(accepted, epoch));
+                const { release, persistFailure } = await receiver.settleAccepted(accepted, epoch);
+                this.#releases.push(release);
+                if (persistFailure) {
+                    logger.warn(
+                        `Failed to persist values ${this.#name} wrote to ${key}; the device and the local cache hold them:`,
+                        persistFailure.error,
+                    );
+                }
             } catch (e) {
                 logger.warn(`Failed to settle values ${this.#name} wrote to ${key} in the local cache:`, e);
             }
@@ -141,16 +148,35 @@ export namespace RemoteWriteParticipant {
     export interface Receiver {
         /**
          * Settle {@link values}, except for an attribute the peer settled after {@link epoch}: what the device
-         * reported while the write was in flight outranks the write.  Returns the function that releases the change
-         * notifications.
+         * reported while the write was in flight outranks the write.  The values apply in memory even when persisting
+         * them fails.
          */
-        settleAccepted(values: Val.Struct, epoch: number): Promise<() => Promise<void>>;
+        settleAccepted(values: Val.Struct, epoch: number): Promise<Settled>;
+    }
+
+    /**
+     * The result of {@link Receiver.settleAccepted}.
+     */
+    export interface Settled {
+        /**
+         * Releases the change notifications of the settled values.
+         */
+        release: () => Promise<void>;
+
+        /**
+         * Set when the values could not be persisted locally.
+         */
+        persistFailure?: PersistFailure;
+    }
+
+    export interface PersistFailure {
+        error: unknown;
     }
 
     /**
      * What the caller of {@link RemoteWriteParticipant.set} supplies to settle the values the peer accepts.
      */
-    export interface ReceiverInput {
+    export interface Settlement {
         receiver: Receiver;
 
         /**
@@ -163,7 +189,7 @@ export namespace RemoteWriteParticipant {
     /**
      * The values of one cluster a transaction writes, with the receiver that settles those the peer accepts.
      */
-    export interface Write extends ReceiverInput {
+    export interface PendingWrite extends Settlement {
         values: Val.Struct;
     }
 }
