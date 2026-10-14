@@ -95,6 +95,7 @@ import {
     EndpointNumber,
     FabricIndex,
     NodeId,
+    ReceivedStatusResponseError,
     SECURE_CHANNEL_PROTOCOL_ID,
     SecureMessageType,
     Status,
@@ -1406,7 +1407,7 @@ describe("ClientNode", () => {
             // The rejection is the device's write-response status, not a local ValidateError, proving the value was
             // forwarded to the device rather than rejected during local validation (which would throw before any
             // exchange and never contact the device).
-            expect(caught).instanceOf(StatusResponseError);
+            expect(caught).instanceOf(ReceivedStatusResponseError);
             expect(caught).not.instanceOf(ValidateError);
             expect((caught as StatusResponseError).code).equals(Status.ConstraintError);
 
@@ -1453,7 +1454,7 @@ describe("ClientNode", () => {
                 }),
             );
 
-            expect(caught).instanceOf(StatusResponseError);
+            expect(caught).instanceOf(ReceivedStatusResponseError);
             expect((caught as StatusResponseError).code).equals(Status.ConstraintError);
 
             // The accepted write committed on the server; the rejected one did not.
@@ -1476,7 +1477,7 @@ describe("ClientNode", () => {
             const aggregate = caught as MatterAggregateError;
             expect(aggregate.errors).lengthOf(2);
             for (const inner of aggregate.errors) {
-                expect(inner).instanceOf(StatusResponseError);
+                expect(inner).instanceOf(ReceivedStatusResponseError);
             }
             const codes = (aggregate.errors as StatusResponseError[]).map(e => e.code);
             expect(codes).contains(Status.ConstraintError);
@@ -1602,7 +1603,7 @@ describe("ClientNode", () => {
                 peer1.setStateOf(BasicInformationClient, { vendorName: "Overwritten Vendor" }),
             );
 
-            expect(caught).instanceOf(StatusResponseError);
+            expect(caught).instanceOf(ReceivedStatusResponseError);
             expect((caught as StatusResponseError).code).equals(Status.UnsupportedWrite);
             // The forward notification is queued but never emitted, because a commit-phase-two rejection skips the
             // transaction's post-commit phase.  What remains is compensation's restore, which travels the same path a
@@ -1625,6 +1626,7 @@ describe("ClientNode", () => {
             );
 
             expect(caught).instanceOf(StatusResponseError);
+            expect(caught).not.instanceOf(ReceivedStatusResponseError);
             expect((caught as StatusResponseError).code).equals(Status.UnsupportedWrite);
             expect(peer1.stateOf("basicInformation").clusterRevision).equals(originalRevision);
         });

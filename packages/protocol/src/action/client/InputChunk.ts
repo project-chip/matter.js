@@ -330,6 +330,7 @@ function buildAttrStatus(
         path: { nodeId, endpointId, clusterId, attributeId },
         status: src.status.status ?? Status.Failure,
         clusterStatus: src.status.clusterStatus,
+        received: true,
     };
 }
 
@@ -428,5 +429,6 @@ function buildEventStatus(src: TypeFromSchema<typeof TlvEventStatus>): ReadResul
         path: { nodeId, endpointId, clusterId, eventId },
         status: status.status ?? Status.Failure,
         clusterStatus: status.clusterStatus,
+        received: true,
     };
 }

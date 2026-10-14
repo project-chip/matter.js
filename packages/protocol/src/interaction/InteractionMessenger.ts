@@ -207,9 +207,9 @@ class InteractionMessenger {
         if (messageType !== MessageType.StatusResponse) return;
         const { status } = TlvStatusResponse.decode(payload);
         if (status !== Status.Success)
-            throw new ReceivedStatusResponseError(
-                `Received error status: ${Status[status]}(${status})${logHint ? ` (${logHint})` : ""}`,
+            throw ReceivedStatusResponseError.create(
                 status,
+                `Received error status ${Status[status] ?? "unknown"}${logHint ? ` (${logHint})` : ""}`,
             );
     }
 
@@ -919,7 +919,10 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         if (receivedMessageType !== messageType) {
             if (receivedMessageType === MessageType.StatusResponse) {
                 const statusCode = TlvStatusResponse.decode(message.payload).status;
-                throw new ReceivedStatusResponseError(`Received status response ${statusCode}`, statusCode);
+                throw ReceivedStatusResponseError.create(
+                    statusCode,
+                    `Received status response ${Status[statusCode] ?? "unknown"}`,
+                );
             }
             throw new MatterFlowError(
                 `Received unexpected message type ${receivedMessageType.toString(16)}. Expected ${messageType.toString(

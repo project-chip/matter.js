@@ -33,6 +33,7 @@ import {
     PeerSet,
     Read,
     ReadResult,
+    ResultStatus,
     SecureSession,
     Subscribe,
     Write,
@@ -1151,13 +1152,8 @@ export class InteractionClient {
                     return chunk.data as CommandResponse<C>;
                 }
 
-                const resultCode = chunk.status;
-                if (resultCode !== Status.Success) {
-                    throw new StatusResponseError(
-                        `Received non-success result: ${resultCode}`,
-                        resultCode ?? Status.Failure,
-                        chunk.clusterStatus,
-                    );
+                if (chunk.status !== Status.Success) {
+                    throw ResultStatus.errorOf(chunk, "Received non-success result");
                 }
                 return undefined as CommandResponse<C>; // ResponseType is void
             }
