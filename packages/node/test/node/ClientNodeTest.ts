@@ -47,6 +47,7 @@ import {
     deepCopy,
     Entropy,
     ImplementationError,
+    InternalError,
     MatterAggregateError,
     Millis,
     Minutes,
@@ -1292,6 +1293,17 @@ describe("ClientNode", () => {
         }
     }
 
+    /**
+     * Settles with the rejection of {@link promise}, or undefined.  The rejection is handled at once, so one that
+     * arrives while the test still advances time is not reported as unhandled.
+     */
+    function rejectionOf(promise: unknown) {
+        return Promise.resolve(promise).then(
+            () => undefined,
+            (error: unknown) => error ?? new InternalError("Promise rejected without a reason"),
+        );
+    }
+
     async function captureRejection(write: () => unknown) {
         let caught: unknown;
         try {
@@ -1768,16 +1780,13 @@ describe("ClientNode", () => {
 
             await device.close();
 
-            const caught = await captureRejection(async () => {
-                const write = ep1Client.setStateOf(OnOffClient, { startUpOnOff: OnOff.StartUpOnOff.Toggle });
-                for (let i = 0; i < 80; i++) {
-                    await MockTime.advance(Seconds(1));
-                    await MockTime.macrotask;
-                }
-                await write;
-            });
+            const caught = rejectionOf(ep1Client.setStateOf(OnOffClient, { startUpOnOff: OnOff.StartUpOnOff.Toggle }));
+            for (let i = 0; i < 80; i++) {
+                await MockTime.advance(Seconds(1));
+                await MockTime.macrotask;
+            }
 
-            expect(caught).not.undefined;
+            expect(await MockTime.resolve(caught)).not.undefined;
             expect(ep1Client.stateOf(OnOffClient).startUpOnOff).equals(before);
         });
 
@@ -1790,33 +1799,30 @@ describe("ClientNode", () => {
 
             await device.close();
 
-            const caught = await captureRejection(async () => {
-                const write = ep1Client.setStateOf(OnOffClient, { startUpOnOff: OnOff.StartUpOnOff.Toggle });
+            const caught = rejectionOf(ep1Client.setStateOf(OnOffClient, { startUpOnOff: OnOff.StartUpOnOff.Toggle }));
 
-                // Let the write reach the wire before the report lands, or the value is already canonical and there is
-                // nothing left to send
-                for (let i = 0; i < 3; i++) {
-                    await MockTime.advance(Millis(100));
-                    await MockTime.macrotask;
-                }
+            // Let the write reach the wire before the report lands, or the value is already canonical and there is
+            // nothing left to send
+            for (let i = 0; i < 3; i++) {
+                await MockTime.advance(Millis(100));
+                await MockTime.macrotask;
+            }
 
-                // The device applied the write and reported it; only the write response was lost.  A report carrying
-                // the value we already hold is discarded as unchanged, so this is the sole record that it arrived.
-                await seedPeerCache(
-                    peer1,
-                    ep1Client,
-                    OnOffClient,
-                    new Map([[OnOff.Complete.attributes.startUpOnOff.id, OnOff.StartUpOnOff.Toggle]]),
-                );
+            // The device applied the write and reported it; only the write response was lost.  A report carrying
+            // the value we already hold is discarded as unchanged, so this is the sole record that it arrived.
+            await seedPeerCache(
+                peer1,
+                ep1Client,
+                OnOffClient,
+                new Map([[OnOff.Complete.attributes.startUpOnOff.id, OnOff.StartUpOnOff.Toggle]]),
+            );
 
-                for (let i = 0; i < 80; i++) {
-                    await MockTime.advance(Seconds(1));
-                    await MockTime.macrotask;
-                }
-                await write;
-            });
+            for (let i = 0; i < 80; i++) {
+                await MockTime.advance(Seconds(1));
+                await MockTime.macrotask;
+            }
 
-            expect(caught).not.undefined;
+            expect(await MockTime.resolve(caught)).not.undefined;
             expect(ep1Client.stateOf(OnOffClient).startUpOnOff).equals(OnOff.StartUpOnOff.Toggle);
         });
 
@@ -2291,7 +2297,7 @@ describe("ClientNode", () => {
         });
         const peer1 = controller.peers.get("peer1")!;
         const { structure } = peer1.env.get(EndpointInitializer) as ClientEndpointInitializer;
-        const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+        const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
 
         const filteredClusters = (options?: { refreshChangesOmitted?: boolean }) =>
             (structure.injectVersionFilters(request, options).dataVersionFilters ?? [])
@@ -2311,7 +2317,7 @@ describe("ClientNode", () => {
         const { controller } = await site.addCommissionedPair();
         const peer1 = controller.peers.get("peer1")!;
         const { structure } = peer1.env.get(EndpointInitializer) as ClientEndpointInitializer;
-        const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+        const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
 
         // Time Synchronization with an empty AttributeList and without UTCTime, its changes-omitted attribute
         const timeSync = TimeSynchronizationClient.cluster.id;
@@ -2885,7 +2891,7 @@ describe("ClientNode", () => {
                 yield reports;
             }
 
-            const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+            const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
             for await (const _chunk of structure.mutate(request, result())) {
                 // Drain
             }
@@ -3444,7 +3450,7 @@ describe("ClientNode", () => {
             const initializer = peer1.env.get(EndpointInitializer) as ClientEndpointInitializer;
             const structure = initializer.structure;
 
-            const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+            const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
 
             const neoBehaviorId = () => {
                 const endpoint = structure.endpointFor(EP1);
@@ -3479,7 +3485,7 @@ describe("ClientNode", () => {
 
             const initializer = peer1.env.get(EndpointInitializer) as ClientEndpointInitializer;
             const structure = initializer.structure;
-            const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+            const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
 
             const neoActive = () => {
                 const endpoint = structure.endpointFor(EP1);
@@ -3522,7 +3528,7 @@ describe("ClientNode", () => {
 
             const initializer = peer1.env.get(EndpointInitializer) as ClientEndpointInitializer;
             const structure = initializer.structure;
-            const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+            const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
 
             const neoStorageKeys = () =>
                 Object.keys(site.storageFor("controller1")).filter(key => key.includes(NEO.toString()));
@@ -3560,7 +3566,7 @@ describe("ClientNode", () => {
 
             const initializer = peer1.env.get(EndpointInitializer) as ClientEndpointInitializer;
             const structure = initializer.structure;
-            const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+            const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
 
             const neoActive = () => {
                 const endpoint = structure.endpointFor(EP1);
@@ -3590,7 +3596,7 @@ describe("ClientNode", () => {
             const { controller } = await site.addCommissionedPair();
             const peer1 = await subscribedPeer(controller, "peer1");
             const structure = (peer1.env.get(EndpointInitializer) as ClientEndpointInitializer).structure;
-            const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+            const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
 
             const neoType = () => {
                 const endpoint = structure.endpointFor(EP1);
@@ -3622,7 +3628,7 @@ describe("ClientNode", () => {
             const { controller } = await site.addCommissionedPair();
             const peer1 = await subscribedPeer(controller, "peer1");
             const structure = (peer1.env.get(EndpointInitializer) as ClientEndpointInitializer).structure;
-            const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+            const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
 
             const neoType = () => {
                 const endpoint = structure.endpointFor(EP1);
@@ -3651,7 +3657,7 @@ describe("ClientNode", () => {
             const { controller } = await site.addCommissionedPair();
             const peer1 = await subscribedPeer(controller, "peer1");
             const structure = (peer1.env.get(EndpointInitializer) as ClientEndpointInitializer).structure;
-            const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+            const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
 
             await drain(structure.mutate(request, readResult(descriptorServerListReport(10))));
 
@@ -3705,7 +3711,7 @@ describe("ClientNode", () => {
             const { controller } = await site.addCommissionedPair();
             const peer1 = await subscribedPeer(controller, "peer1");
             const structure = (peer1.env.get(EndpointInitializer) as ClientEndpointInitializer).structure;
-            const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+            const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
 
             await drain(structure.mutate(request, readResult(descriptorServerListReport(10))));
 
@@ -3759,7 +3765,7 @@ describe("ClientNode", () => {
             const { controller } = await site.addCommissionedPair();
             const peer1 = await subscribedPeer(controller, "peer1");
             const structure = (peer1.env.get(EndpointInitializer) as ClientEndpointInitializer).structure;
-            const request = Read({ attributes: [{}], fabricFilter: structure.subscribedFabricFiltered });
+            const request = Read({ attributes: [{}], fabricFilter: structure.cacheFabricFiltered });
 
             const neoType = () => {
                 const endpoint = structure.endpointFor(EP1);
