@@ -200,6 +200,20 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
         this.#version = Datasource.UNKNOWN_VERSION;
     }
 
+    async forgetVersion() {
+        if (this.#erased) {
+            return;
+        }
+        this.#version = Datasource.UNKNOWN_VERSION;
+
+        // A flush that is running may have taken the old version already; it must land before the unknown version does
+        await this.#buffer?.settled();
+
+        await this.#localWriter?.persist(this.#endpointNumber, this.#behaviorId, {
+            [DatasourceCache.VERSION_KEY]: Datasource.UNKNOWN_VERSION,
+        });
+    }
+
     get erased() {
         return this.#erased;
     }

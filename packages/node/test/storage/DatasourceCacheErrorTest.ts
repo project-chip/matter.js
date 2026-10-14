@@ -161,6 +161,57 @@ describe("DatasourceCache error handling", () => {
         });
     });
 
+    describe("forgetVersion", () => {
+        function versionOnly(): Datasource.ExternallyMutableStore.Consumer {
+            return {
+                readValues: () => ({}),
+                snapshot: () => ({}),
+                releaseValues: () => ({}),
+                integrateExternalChange: async () => {},
+            };
+        }
+
+        it("persists the unknown version after a running flush that took the old version", async () => {
+            const writes = new Array<string>();
+            let releaseFlush!: () => void;
+            const flushReleased = new Promise<void>(resolve => (releaseFlush = resolve));
+            let flushStarted!: () => void;
+            const flushing = new Promise<void>(resolve => (flushStarted = resolve));
+            const localWriter = {
+                persistInTransaction: async (_tx: unknown, _ep: unknown, _bid: unknown, values: Val.Struct) => {
+                    flushStarted();
+                    await flushReleased;
+                    writes.push(`flushed ${values.__version__}`);
+                },
+                persist: async (_ep: unknown, _bid: unknown, values: Val.Struct) => {
+                    writes.push(`persisted ${values.__version__}`);
+                },
+            };
+            const buffer = new ClientCacheBuffer(MemoryStorageDriver.create(), Seconds(60));
+            const cache = createCache({ buffer, localWriter });
+            cache.consumer = versionOnly();
+            await cache.externalSet(attrs({ __version__: 5 }));
+
+            const flushed = buffer.flush();
+            await flushing;
+            const forgotten = cache.forgetVersion();
+            releaseFlush();
+            await Promise.all([flushed, forgotten]);
+
+            expect(writes).deep.equals(["flushed 5", `persisted ${Datasource.UNKNOWN_VERSION}`]);
+        });
+
+        it("persists nothing once erased", async () => {
+            const localWriter = trackingWriter();
+            const cache = createCache({ localWriter });
+            await cache.erase();
+
+            await cache.forgetVersion();
+
+            expect(localWriter.persisted).deep.equals([]);
+        });
+    });
+
     describe("restoreDirtyKeys", () => {
         it("is a no-op after erase", async () => {
             const cache = createCache();

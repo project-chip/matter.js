@@ -373,6 +373,7 @@ export class BasicObservable<T extends any[] = any[], R = void> implements Obser
                             try {
                                 result = await result;
                             } catch (e) {
+                                result = undefined;
                                 this.handleError(asError(e), observer);
                             }
                         }

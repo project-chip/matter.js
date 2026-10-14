@@ -37,6 +37,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: `IpService` reports a change when a newer TXT record of a service drops a key
     - Fix: DNS-SD TXT keys are matched regardless of case, as RFC 6763 requires, so a device advertising `sii=` instead of `SII=` is no longer ignored
     - Fix: `WebSocketClient` no longer loses a message the server sends right after the connection opens, and `connect()` rejects when the socket closes before it opens
+    - Fix: An observer failure that the observable's error handler takes no longer skips the remaining observers of an asynchronous emit
 
 - @matter/model
     - Breaking: Provisional elements are always treated as optional
@@ -83,6 +84,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: `CommissioningClient` state `sessionParameters` is replaced by `reportedSessionParameters`, `advertisedIntervals` and `tcpUnsupported`; stored values migrate
     - Breaking: `WebRtcTransportRequestorServer.removeSession()` takes a session key (id, fabric, peer node) instead of the id
     - Breaking: The remote API `code` of a status error is its id, as the HTTP `Error-Code` header already was: `status-response` becomes the status id (such as `not-found`), and `path` becomes the expanded id (such as `constraint-error+door-lock`) for a write rejection
+    - Breaking: Only a `ClientNode`'s default subscription and its read after commissioning emit peer events to its event observers and change notifications; other `ClientNode` reads and subscriptions return events in their result only, except those of the legacy `PairedNode` API
+    - Breaking: A built `Read`/`Subscribe` as `defaultSubscription` is sent as given, including its fabric filter; to keep Leave handling, a built request needs the Basic Information attributes and events and the Operational Credentials `fabrics` attribute; without them the node notices a device going offline only through the subscription timeout and does not see a fabric Leave
     - Deprecation: `ClientNodeInteraction.localStateFor()` will be removed in 0.19
     - Feature: Finalized the `ClientNode` API for controllers: `ServerNode.peers.commissioned`, `ClientNode.disable()`/`enable()`, connection state, split commissioning (`finalizeCommissioning` hands off discovery data and PASE session parameters to `peers.completeCommissioning`), opening commissioning windows on peers and more; see [Controller migration guide](docs/MIGRATION_CONTROLLER_018.md)
     - Feature: Groupcast cluster (`GroupcastServer`) and AccessControl `Auxiliary` feature; group commands via `ClientGroup` endpoints and group bindings
@@ -108,6 +111,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: In split commissioning, a `CommissioningError` for a failed `CommissioningComplete` carries the status as `cause`
     - Enhancement: `EndpointReadFailure` carries `received` for a status the device sent
     - Enhancement: A client command raises a `ReceivedStatusResponseError` for a status the device sent
+    - Enhancement: `includeKnownVersions` on `ClientNode` subscriptions skips injecting cached data versions, also when a sustained subscription resubscribes
     - Adjustment: For a part of a server node, the `IdAssigned` and `NumberAssigned` lifecycle changes are emitted before `Installed`
     - Adjustment: `ChangeNotificationService.Change` has a new kind `"readable"`, emitted when an endpoint's state becomes readable; consumers that switch on kind must handle or ignore it
     - Adjustment: Device types with a mandatory client application cluster include `BindingServer`; `behaviors.require(BindingServer, options)` no longer sets its state (use `add()` or `setStateOf()`), and an own `BindingServer` implementation subclass must be declared with `.with()` on the endpoint on creation
@@ -142,6 +146,14 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A scanner that fails while other scanners still run is logged; `discover()` resolves with what it found, and `locate()`, `commission()` and `pase()` report it as `DiscoveryAggregateError` only where they found nothing
     - Fix: Commissioning skips a device whose advertised vendor or product ID contradicts the onboarding payload
     - Fix: Client reads return current values of changes-omitted attributes in all cases
+    - Fix: Client reads and subscriptions no longer add cached data versions to the caller's `dataVersionFilters` array
+    - Fix: A caller's own data version filter for a cluster is sent alone instead of together with the cached version for that cluster
+    - Fix: Client subscriptions with a fabric filter other than the cache's get no cached data versions injected
+    - Fix: Only the default subscription and its read after commissioning advance a peer's stored event number, so reads and other subscriptions no longer make it skip events
+    - Fix: A `ClientNode`'s cache follows the fabric filter its default subscription sends and forgets its cached data versions when that filter changes, also across a restart; a cache stored before this version keeps its versions
+    - Fix: A local failure while a `ClientNode` processes a report, such as a throwing change or event observer, no longer fails the read or skips the remaining events; it warns once per node and kind of failure, then logs at debug level
+    - Fix: A sustained `ClientNode` subscription applies the caller's own `refreshRequest` when it resubscribes
+    - Fix: A `ClientNode` runs at most one default subscription and reports it as not subscribed whenever it ends
     - Fix: A peer's endpoint tree follows each endpoint's `PartsList`, so bridged composed devices are structured correctly
     - Fix: When several of a peer's endpoints claim the same endpoint in one read, its parent no longer depends on the order the peer reports them in
     - Fix: A peer's state drops attributes its `AttributeList` omits, records the peer's `ClusterRevision`, migrates values persisted under property names, and hides storage metadata
@@ -236,10 +248,12 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: A custom `BleScannerClient` may report `listeningTime` and `isPeripheralReachable()`, so stale or unreachable peripherals are not offered for commissioning
     - Enhancement: Network profiles can define BDX transfer delays separately via `bdxAdditionalMrpDelay`
     - Enhancement: `NodeSession.reportedParameters` holds the session parameters the peer sent, without fallbacks
+    - Adjustment: Once a sustained subscription processed an event, it replaces the `eventFilters` a `refreshRequest` returns
     - Adjustment: `DclVendorInfo` is a deprecated alias of `VendorDclSchema`
     - Adjustment: `DclVendorInfoService` always provides the built-in test vendors and no longer stores them
     - Adjustment: The error for a whole-interaction StatusResponse is the received class of its status, with a message like `Received error status NotFound (code 139)`
     - Fix: DNS-SD discovery ignores malformed or out-of-range `D`, `CM`, `VP`, `DT`, `PH`, `T` and `ICD` values
+    - Fix: A sustained subscription logs a failure of its own processing of a report and continues, counting the events received before the failure as seen
     - Fix: Commissioning tries addresses in ranked order and once each, moves on faster, and stops on a wrong passcode
     - Fix: Commissioning continues when the device rejects or does not answer ScanNetworks
     - Fix: The commissioning PASE session stays open on a missing response and is closed on every commissioning exit

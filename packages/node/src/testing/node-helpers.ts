@@ -7,16 +7,8 @@
 import type { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { BasicInformationBehavior } from "#behaviors/basic-information";
-import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
-import {
-    ClientEndpointInitializer,
-    ClientNode,
-    CommissioningServer,
-    Endpoint,
-    InteractionServer,
-    NetworkClient,
-    ServerNode,
-} from "#index.js";
+import { ClientNode, CommissioningServer, Endpoint, InteractionServer, NetworkClient, ServerNode } from "#index.js";
+import { ClientStructure } from "#node/client/ClientStructure.js";
 import { Bytes, Crypto, type Environment, InternalError, Millis, Seconds } from "@matter/general";
 import { Specification } from "@matter/model";
 import {
@@ -534,12 +526,7 @@ export async function seedPeerCache(
  * The client structure of a client node, for tests that feed it reports directly.
  */
 export function clientStructureOf(peer: ClientNode) {
-    const initializer = peer.env.get(EndpointInitializer);
-    if (!(initializer instanceof ClientEndpointInitializer)) {
-        throw new InternalError(`Node ${peer.id} is not a client node`);
-    }
-
-    return initializer.structure;
+    return peer.env.get(ClientStructure);
 }
 
 /**
