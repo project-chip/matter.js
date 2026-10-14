@@ -243,6 +243,72 @@ describe("SustainedSubscription", () => {
             expect(subscription.inactive.value).equal(true);
         });
 
+        it("never reports active when an inactive observer closes the subscription while going live", async () => {
+            const subscription = build();
+            const activeEmits = new Array<boolean>();
+            const inactiveEmits = new Array<boolean>();
+            subscription.active.on(value => void activeEmits.push(value));
+            subscription.inactive.on(value => {
+                inactiveEmits.push(value);
+                if (!value) {
+                    subscription.close();
+                }
+            });
+
+            await flush();
+            await MockTime.resolve(subscription.done!, { macrotasks: true });
+            await flush();
+
+            expect(activeEmits).deep.equal([]);
+            expect(inactiveEmits).deep.equal([false, true]);
+            expect(subscription.active.value).equal(false);
+            expect(subscription.inactive.value).equal(true);
+        });
+
+        it("ends not live and rejects done when an inactive observer throws while going live", async () => {
+            const subscription = build();
+            const failure = new Error("inactive observer failed going live");
+            const activeEmits = new Array<boolean>();
+            subscription.active.on(value => void activeEmits.push(value));
+            subscription.inactive.on(value => {
+                // The second failure, while stopping, must not replace the first as the outcome of done
+                throw value ? new Error("inactive observer failed stopping") : failure;
+            });
+            const outcome = subscription.done!.then(
+                () => undefined,
+                (e: unknown) => e,
+            );
+
+            await flush();
+            expect(await MockTime.resolve(outcome, { macrotasks: true })).equal(failure);
+
+            expect(activeEmits).deep.equal([]);
+            expect(subscription.active.value).equal(false);
+            expect(subscription.inactive.value).equal(true);
+            subscription.close();
+        });
+
+        it("still reports inactive when an active observer throws during the final not-live update", async () => {
+            const subscription = build();
+            const inactiveEmits = new Array<boolean>();
+            subscription.inactive.on(value => void inactiveEmits.push(value));
+            subscription.active.on(value => {
+                if (value) {
+                    subscription.close();
+                } else {
+                    throw new Error("active observer failed");
+                }
+            });
+
+            await flush();
+            await MockTime.resolve(subscription.done!, { macrotasks: true });
+            await flush();
+
+            expect(inactiveEmits).deep.equal([false, true]);
+            expect(subscription.active.value).equal(false);
+            expect(subscription.inactive.value).equal(true);
+        });
+
         it("probes after a subscription loss before resubscribing", async () => {
             let probeCount = 0;
             let lastRequest: SustainedClientSubscribe | undefined;
