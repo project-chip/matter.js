@@ -934,6 +934,7 @@ describe("Datasource", () => {
                 version: 1,
                 async set() {},
                 async externalSet() {},
+                async forgetVersion() {},
             };
             createDatasource({ type: GatedState, supervisor: gatedSupervisor("GATE"), primaryKey: "id", store });
 
@@ -1207,6 +1208,7 @@ describe("Datasource", () => {
                 version: 1,
                 async set() {},
                 async externalSet() {},
+                async forgetVersion() {},
             };
             createDatasource({
                 type: MigratedState,
@@ -1248,6 +1250,8 @@ describe("Datasource", () => {
             }
 
             async set() {}
+
+            async forgetVersion() {}
 
             async externalSet(values: Val.StructMap) {
                 const version = values.get("__version__");

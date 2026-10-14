@@ -499,6 +499,8 @@ export class InteractionClient {
             }),
             abort,
             includeKnownVersions: !dataVersionFilters,
+            // Legacy listeners are fed from the node's change notifications
+            emitEvents: true,
             [Diagnostic.value]: () =>
                 Diagnostic.dict({
                     attributes: attributeRequests?.length
@@ -987,6 +989,8 @@ export class InteractionClient {
 
         const subscribe = await (this.#interaction as ClientNodeInteraction).subscribe({
             abort,
+            // Legacy listeners are fed from the node's change notifications
+            emitEvents: true,
             ...Subscribe({
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                 attributes: attributeRequests,

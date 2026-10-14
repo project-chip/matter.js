@@ -321,6 +321,11 @@ export namespace Datasource {
         invalidateVersion?(): void;
 
         /**
+         * Forget the version in memory and in storage.  Resolves once storage holds the unknown version.
+         */
+        forgetVersion(): Promise<void>;
+
+        /**
          * Reclaim values from the datasource so a rebuilt datasource re-seeds from live data rather than defaults.
          */
         reclaimValues?(): void;
