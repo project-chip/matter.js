@@ -293,11 +293,13 @@ export namespace Datasource {
      */
     export interface ExternallyMutableStore extends Store {
         /**
-         * Apply changes from an external source.
+         * Apply values the peer reported.
          *
-         * Uses the same semantics as {@link set}.  Resolves once the values are applied, also when storing them locally
-         * failed; the result then carries that failure for the caller to report.  Their change notifications may follow
-         * later, when notifications of an earlier change are still held; do not await them.
+         * Uses the same patch semantics as {@link set}, but the values are the peer's own and take effect at once.  On a
+         * mirror, {@link set} instead proposes values to the peer and leaves the local values unchanged until the peer
+         * accepts them, so never route a report through {@link set}.  Resolves once the values are applied, also when
+         * storing them locally failed; the result then carries that failure for the caller to report.  Their change
+         * notifications may follow later, when notifications of an earlier change are still held; do not await them.
          */
         externalSet(values: Val.StructMap): Promise<ExternallyMutableStore.Applied>;
 
