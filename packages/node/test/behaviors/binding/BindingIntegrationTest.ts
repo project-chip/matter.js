@@ -427,9 +427,9 @@ describe("Binding integration", () => {
                 // A report just before the loss starts the subscription timeout
                 await switchLight(lightNode, resolution, true);
                 isolation.on = true;
-                const lostAt = Time.nowMs;
+                const lostAt = Time.nowUs;
                 await MockTime.resolve(subscription.inactive);
-                expect(Time.nowMs - lostAt).at.least(Seconds(maxInterval));
+                expect(Time.nowUs - lostAt).at.least(Seconds(maxInterval));
                 expect(statuses).deep.equals([false]);
 
                 entropic(true);

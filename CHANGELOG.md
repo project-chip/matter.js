@@ -150,6 +150,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Client subscriptions with a fabric filter other than the cache's get no cached data versions injected
     - Fix: Only the default subscription and its read after commissioning advance a peer's stored event number, so reads and other subscriptions no longer make it skip events
     - Fix: A `ClientNode`'s cache follows the fabric filter its default subscription sends and forgets its cached data versions when that filter changes, also across a restart; a cache stored before this version keeps its versions
+    - Fix: A local failure while a `ClientNode` processes a report, such as a throwing change or event observer, no longer fails the read or skips the remaining events; it warns once per node and kind of failure, then logs at debug level
     - Fix: A sustained `ClientNode` subscription applies the caller's own `refreshRequest` when it resubscribes
     - Fix: A `ClientNode` runs at most one default subscription and reports it as not subscribed whenever it ends
     - Fix: A peer's endpoint tree follows each endpoint's `PartsList`, so bridged composed devices are structured correctly
@@ -246,7 +247,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: A custom `BleScannerClient` may report `listeningTime` and `isPeripheralReachable()`, so stale or unreachable peripherals are not offered for commissioning
     - Enhancement: Network profiles can define BDX transfer delays separately via `bdxAdditionalMrpDelay`
     - Enhancement: `NodeSession.reportedParameters` holds the session parameters the peer sent, without fallbacks
-    - Enhancement: A sustained subscription tracks the highest event number it processed (`maxEventNumber`, `maxEventNumberChanged`) and resubscribes for the events above it
     - Adjustment: Once a sustained subscription processed an event, it replaces the `eventFilters` a `refreshRequest` returns
     - Adjustment: `DclVendorInfo` is a deprecated alias of `VendorDclSchema`
     - Adjustment: `DclVendorInfoService` always provides the built-in test vendors and no longer stores them

@@ -7,7 +7,7 @@
 import { NetworkClient } from "#behavior/system/network/NetworkClient.js";
 import { AccessControlClient } from "#behaviors/access-control";
 import { BasicInformationClient } from "#behaviors/basic-information";
-import { OnOffClient } from "#behaviors/on-off";
+import { OnOffClient, OnOffServer } from "#behaviors/on-off";
 import { ClientNodeInteraction } from "#node/client/ClientNodeInteraction.js";
 import type { ClientNode } from "#node/ClientNode.js";
 import { ServerNode } from "#node/ServerNode.js";
@@ -501,6 +501,45 @@ describe("ClientSubscribe", () => {
 
             expect(filteredClusters(restarted, true)).to.have.members(before);
             expect(restarted.env.get(ClientNodeStore).cacheFabricFiltered).true;
+        });
+
+        it("applies reports of a sustained subscription by the fabric filter its refreshRequest returned", async () => {
+            await using site = new MockSite();
+            const { controller, device } = await site.addCommissionedPair();
+            const peer = await subscribedPeer(controller, "peer1");
+            await MockTime.resolve(peer.set({ network: { autoSubscribe: false } }));
+            const onOff = { endpointId: EndpointNumber(1), clusterId: OnOffClient.cluster.id };
+
+            let reportedOn!: () => void;
+            const reported = new Promise<void>(resolve => (reportedOn = resolve));
+            const request: ClientSubscribe = {
+                ...Subscribe({ attributes: [onOff], fabricFilter: false }),
+                sustain: true,
+                bootstrapWithRead: true,
+                refreshRequest: previous => ({ ...previous, isFabricFiltered: true }),
+                updated: async data => {
+                    for await (const chunk of data) {
+                        for await (const report of chunk) {
+                            if (report.kind === "attr-value" && report.value === true) {
+                                reportedOn();
+                            }
+                        }
+                    }
+                },
+            };
+            const subscription = await MockTime.resolve(peer.interaction.subscribe(request));
+            if (!(subscription instanceof SustainedSubscription)) {
+                expect.fail("Expected a sustained subscription");
+            }
+            await MockTime.resolve(subscription.active);
+            expect(peer.parts.get("ep1")!.stateOf(OnOffClient).onOff).false;
+
+            await MockTime.resolve(device.parts.get(1)!.setStateOf(OnOffServer, { onOff: true }));
+            await MockTime.resolve(reported, { macrotasks: true });
+            await settle(controller, device, peer);
+            subscription.close();
+
+            expect(peer.parts.get("ep1")!.stateOf(OnOffClient).onOff).true;
         });
 
         it("applies data of an interaction that started before a switch to unfiltered without its version", async () => {

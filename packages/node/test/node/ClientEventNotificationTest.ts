@@ -17,6 +17,7 @@ import type { ClientNode } from "#node/ClientNode.js";
 import { ChangeNotificationService } from "#node/integration/ChangeNotificationService.js";
 import { ServerNode } from "#node/ServerNode.js";
 import {
+    Crypto,
     Diagnostic,
     isObject,
     Lifecycle,
@@ -24,6 +25,7 @@ import {
     Logger,
     LogLevel,
     MatterError,
+    MockCrypto,
     Seconds,
 } from "@matter/general";
 import { FeatureBitmap } from "@matter/model";
@@ -51,6 +53,11 @@ import { Switch } from "@matter/types/clusters/switch";
 
 class ReportAbortedError extends MatterError {}
 class ObserverFailedError extends MatterError {}
+class OtherObserverFailedError extends MatterError {}
+
+function isMockCrypto(crypto: Crypto): crypto is MockCrypto {
+    return "entropic" in crypto;
+}
 
 describe("Client Event Notification", () => {
     before(() => MockTime.init());
@@ -426,6 +433,87 @@ describe("Client Event Notification", () => {
             await stored(peer, observed[0]);
             expect(peer.behaviors.internalsOf(NetworkClient).activeSubscription).equals(subscription);
             expect(subscription.active.value).true;
+        });
+
+        it("warns once per node and kind of failure when a change observer fails for each event report", async () => {
+            await using site = new MockSite();
+            const { peer, press, observed, settle } = await switchPair(site);
+            const subscription = sustained(peer.behaviors.internalsOf(NetworkClient).activeSubscription);
+
+            let presses = 0;
+            peer.env.get(ChangeNotificationService).change.on(change => {
+                if (isPress(change)) {
+                    presses++;
+                    if (presses === 4) {
+                        throw new OtherObserverFailedError("change observer threw differently");
+                    }
+                    throw new ObserverFailedError("change observer threw");
+                }
+            });
+
+            const failures = new Array<{ level: LogLevel; text: string }>();
+            Logger.destinations.capture = LogDestination({
+                add(message: Diagnostic.Message) {
+                    const text = message.values.join(" ");
+                    if (text.includes("change observer threw")) {
+                        failures.push({ level: message.level, text });
+                    }
+                },
+            });
+            try {
+                for (let count = 1; count <= 4; count++) {
+                    await press();
+                    await until(() => observed.length >= count);
+                    await settle();
+                }
+            } finally {
+                delete Logger.destinations.capture;
+            }
+
+            expect(failures.map(({ level }) => level)).deep.equals([
+                LogLevel.WARN,
+                LogLevel.DEBUG,
+                LogLevel.DEBUG,
+                LogLevel.WARN,
+            ]);
+            expect(failures.every(({ text }) => text.includes("failed locally"))).true;
+            expect(observed.length).equals(4);
+            await stored(peer, observed[3]);
+            expect(peer.behaviors.internalsOf(NetworkClient).activeSubscription).equals(subscription);
+            expect(subscription.active.value).true;
+        });
+
+        it("commissions a node while a change observer fails for each event", async () => {
+            await using site = new MockSite();
+            const { controller, device } = await site.addUncommissionedPair({
+                device: { type: ServerNode.RootEndpoint.with(MomentarySwitchServer) },
+            });
+
+            let failed = 0;
+            controller.env.get(ChangeNotificationService).change.on(change => {
+                if (change.kind === "event") {
+                    failed++;
+                    throw new ObserverFailedError("change observer threw");
+                }
+            });
+
+            const cryptos = [controller.env.get(Crypto), device.env.get(Crypto)].filter(isMockCrypto);
+            expect(cryptos.length).equals(2);
+            for (const crypto of cryptos) {
+                crypto.entropic = true;
+            }
+            await MockTime.resolve(controller.start());
+            const { passcode, discriminator } = device.state.commissioning;
+            const peer = await MockTime.resolve(
+                controller.peers.commission({ passcode, discriminator, timeout: Seconds(90) }),
+                { macrotasks: true },
+            );
+            for (const crypto of cryptos) {
+                crypto.entropic = false;
+            }
+
+            expect(failed).greaterThan(0);
+            expect(peer.lifecycle.isCommissioned).true;
         });
 
         it("ignores events and event numbers of a replaced default subscription", async () => {
@@ -942,6 +1030,38 @@ describe("Client Event Notification", () => {
                     );
 
                     expect(emitted).deep.equals([]);
+                } finally {
+                    structure.eventEmitter = emitter;
+                }
+            });
+
+            it("emits every event of an interaction when observers fail for some of them", async () => {
+                await using site = new MockSite();
+                const { controller } = await site.addCommissionedPair();
+                const peer = await subscribedPeer(controller, "peer1");
+                const structure = clientStructureOf(peer);
+
+                const emitted = new Array<EventNumber>();
+                const emitter = structure.eventEmitter;
+                structure.eventEmitter = async occurrence => {
+                    emitted.push(occurrence.number);
+                    if (occurrence.number !== EventNumber(101)) {
+                        throw new ObserverFailedError(`observer failed for event ${occurrence.number}`);
+                    }
+                };
+                try {
+                    async function* changes(): ReadResult {
+                        yield [eventOn(0, 1), onOffValue(), eventOn(1, 100), eventOn(1, 101)];
+                    }
+                    await MockTime.resolve(
+                        consume(
+                            structure.mutate(Read({ attributes: [{}], events: [{}] }), changes(), {
+                                emitEvents: true,
+                            }),
+                        ),
+                    );
+
+                    expect(emitted).deep.equals([EventNumber(1), EventNumber(100), EventNumber(101)]);
                 } finally {
                     structure.eventEmitter = emitter;
                 }

@@ -154,6 +154,7 @@ export class ClientStructure {
     #composition = new Map<EndpointStructure, EndpointComposition>();
     #events: ClientStructureEvents;
     #changed = Observable<[void]>();
+    #localFailureKinds = new Set<unknown>();
     #commandFactory?: ClusterBehaviorType.CommandFactory;
 
     /**
@@ -325,7 +326,8 @@ export class ClientStructure {
      *
      * Data versions do not depend on the fabric filter, but cached values of fabric-scoped data do.  So when the cache
      * was filled under the other filter, every cached data version becomes unknown while values stay, and the next
-     * full report refreshes them.  A cache without a recorded filter keeps its versions.
+     * full report refreshes them.  A cache without a recorded filter is trusted to hold data of the first filter
+     * adopted, which is the configured default subscription's, so that filter is recorded and the versions stay.
      *
      * Each change of the filter starts a new {@link epoch}.  An interaction that started before the change records no
      * data version; its data is still applied if it was received before the change or matches the new filter, and
@@ -374,6 +376,10 @@ export class ClientStructure {
      * The interaction's events also go to the node's event observers while {@link options.emitEvents} is true or
      * returns true, and {@link options.eventEmitted} receives the number of each.  {@link options.epoch} defaults to
      * the current {@link epoch}.
+     *
+     * A local failure to apply data, persist it or notify an event observer is logged and does not stop the processing
+     * of the interaction's other data and events; it never rejects the iteration.  Failures of {@link changes} itself
+     * and of applying structural changes still reject.
      */
     async *mutate(
         request: Read,
@@ -392,7 +398,6 @@ export class ClientStructure {
         // Serial FIFO for deferred persist/emit so Status.Success is not gated on internal and consumer data processing.
         // Ordering is preserved by insertion order; the Mutex runs one job at a time.
         const queue = new Mutex(this);
-        const jobErrors = new Array<unknown>();
         let pendingJobs = 0;
         const q: MutateContext = {
             endpointsWithData: new Set<EndpointNumber>(),
@@ -407,8 +412,7 @@ export class ClientStructure {
                     try {
                         await job();
                     } catch (error) {
-                        jobErrors.push(error);
-                        logger.warn("Deferred data report job failed:", error);
+                        this.#localFailed(error);
                     } finally {
                         pendingJobs--;
                     }
@@ -463,10 +467,6 @@ export class ClientStructure {
             await queue;
         }
 
-        if (jobErrors.length) {
-            logger.warn(`${jobErrors.length} deferred data report job(s) failed during interaction`);
-        }
-
         // We don't apply structural changes until we've processed all attribute data if a.) listeners might otherwise
         // see partially initialized endpoints, or b.) the change requires an async operation
         await this.#applyPendingChanges();
@@ -474,8 +474,29 @@ export class ClientStructure {
         // Likewise, we don't emit events until we've applied all structural changes
         this.#emitPendingStructureEvents();
         for (const occurrence of q.delayedEvents) {
-            await this.#emitOccurrence(occurrence, q);
+            try {
+                await this.#emitOccurrence(occurrence, q);
+            } catch (error) {
+                this.#localFailed(error);
+            }
         }
+    }
+
+    /**
+     * A peer can trigger the same local failure with every report, so only the first one per node is a warning.
+     */
+    /**
+     * A peer can trigger the same local failure with every report, so only the first of each kind is a warning; a
+     * different kind, such as storage refusing writes after an observer failed, warns again.
+     */
+    #localFailed(error: unknown) {
+        const kind = error instanceof Error ? error.constructor : typeof error;
+        if (this.#localFailureKinds.has(kind)) {
+            logger.debug(`Processing data reported by ${this.#node} failed locally:`, error);
+            return;
+        }
+        this.#localFailureKinds.add(kind);
+        logger.warn(`Processing data reported by ${this.#node} failed locally; repeats log at debug level:`, error);
     }
 
     /**

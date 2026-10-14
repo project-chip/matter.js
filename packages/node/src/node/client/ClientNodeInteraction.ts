@@ -40,6 +40,7 @@ import {
     PeerAddress,
     PeerSet,
     PhysicalDeviceProperties,
+    type Read,
     ReadResult,
     ShutdownError,
     Val,
@@ -136,8 +137,11 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
         const callerRefresh = request.sustain ? request.refreshRequest : undefined;
         const { dataVersionFilters } = request;
 
-        // Reports record data versions under the cache epoch their request was built in
-        let epoch = this.#structure.epoch;
+        // Reports are applied by the paths, fabric filter and cache epoch of the request that produced them
+        let sent: { request: Read; epoch: ClientStructure.Epoch } = {
+            request,
+            epoch: this.#structure.epoch,
+        };
 
         // ICD network routing for the subscription is applied by SustainedSubscription, not here.
         const intermediateRequest: ClientSubscribe = {
@@ -154,7 +158,11 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
 
             updated: async data => {
                 const { emitEvents, eventEmitted } = request;
-                const result = this.#structure.mutate(request, data, { emitEvents, eventEmitted, epoch });
+                const result = this.#structure.mutate(sent.request, data, {
+                    emitEvents,
+                    eventEmitted,
+                    epoch: sent.epoch,
+                });
                 if (request.updated) {
                     await request.updated(result);
                 } else {
@@ -164,9 +172,11 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
 
             // Starts from the caller's own filters so versions injected into an earlier request do not accumulate
             refreshRequest: previous => {
-                epoch = this.#structure.epoch;
+                const epoch = this.#structure.epoch;
                 const base = { ...previous, dataVersionFilters };
-                return withKnownVersions(callerRefresh === undefined ? base : callerRefresh(base));
+                const refreshed = withKnownVersions(callerRefresh === undefined ? base : callerRefresh(base));
+                sent = { request: refreshed, epoch };
+                return refreshed;
             },
 
             closed: request.closed?.bind(request),

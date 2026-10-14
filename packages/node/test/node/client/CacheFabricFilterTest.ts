@@ -237,6 +237,43 @@ describe("cache fabric filter", () => {
         }
     });
 
+    describe("without a recorded filter", () => {
+        async function unrecorded(node: MockServerNode) {
+            const store = new RecordingStore();
+            const cacheRecord = new Record();
+            cacheRecord.cacheFabricFiltered = undefined;
+            const structure = new ClientStructure(node, () => store, { cacheRecord });
+            await structure.applyWireChanges([
+                {
+                    kind: "update",
+                    node: node.id,
+                    endpoint: EndpointNumber(1),
+                    version: 5,
+                    behavior: "identify",
+                    changes: { identifyTime: 7 },
+                },
+            ]);
+            return { store, cacheRecord, structure };
+        }
+
+        for (const fabricFiltered of [true, false]) {
+            it(`keeps data versions and records the adopted filter ${fabricFiltered ? "with" : "without"} fabric filter`, async () => {
+                const node = await MockServerNode.createOnline();
+                try {
+                    const { store, cacheRecord, structure } = await unrecorded(node);
+
+                    await structure.adoptFabricFilter(fabricFiltered);
+
+                    expect(store.version).equals(5);
+                    expect(cacheRecord.recorded).deep.equals([fabricFiltered]);
+                    expect(structure.cacheFabricFiltered).equals(fabricFiltered);
+                } finally {
+                    await node.close();
+                }
+            });
+        }
+    });
+
     it("records no version for data applied while the switch still forgets other clusters", async () => {
         const node = await MockServerNode.createOnline();
         try {
