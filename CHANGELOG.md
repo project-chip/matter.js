@@ -199,6 +199,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: `--storage-clear`/`MATTER_STORAGE_CLEAR` clears the storage on start again
     - Fix: `FileStorageDriver.contexts()` lists only contexts that hold keys
     - Fix: `NodeJsUdpSocket.create()` closes the socket when it cannot configure it
+    - Fix: An IPv4 UDP socket bound to a network interface joins multicast groups on that interface instead of the default-route interface, so IPv4 mDNS on a multi-homed host receives answers
 
 - @matter/nodejs-ble
     - Enhancement: `NobleBleClient` reports its actual scan time as `BleScannerClient.listeningTime`

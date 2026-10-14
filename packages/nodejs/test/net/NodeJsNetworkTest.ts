@@ -157,10 +157,48 @@ describe("NodeJsNetwork", () => {
     });
 
     describe("getMembershipMulticastInterfaces", () => {
-        it("returns [undefined] for IPv4", () => {
+        it("returns [undefined] for IPv4 without an interface", () => {
             const interfaces = NodeJsNetwork.getMembershipMulticastInterfaces(undefined, true);
 
             expect(interfaces).deep.equal([undefined]);
+        });
+
+        it("returns the IPv4 address of the specified interface", () => {
+            const allInterfaces = networkInterfaces();
+            const interfaceName = Object.keys(allInterfaces).find(name => {
+                const info = allInterfaces[name];
+                return info && info.some(i => i.family === "IPv4");
+            });
+
+            if (interfaceName) {
+                const zone = NodeJsNetwork.getNetInterfaceZoneIpv6(interfaceName);
+                if (zone) {
+                    const interfaces = NodeJsNetwork.getMembershipMulticastInterfaces(zone, true);
+
+                    expect(interfaces).deep.equal([NodeJsNetwork.getMulticastInterfaceIpv4(interfaceName)]);
+                }
+            }
+        });
+
+        it("returns no IPv4 interface for an interface without IPv4", () => {
+            const allInterfaces = networkInterfaces();
+            const interfaceName = Object.keys(allInterfaces).find(name => {
+                const info = allInterfaces[name];
+                return info && info.every(i => i.family !== "IPv4");
+            });
+
+            if (interfaceName) {
+                const zone = NodeJsNetwork.getNetInterfaceZoneIpv6(interfaceName);
+                if (zone) {
+                    expect(NodeJsNetwork.getMembershipMulticastInterfaces(zone, true)).deep.equal([]);
+                }
+            }
+        });
+
+        it("returns no IPv4 interface for an unknown interface", () => {
+            const interfaces = NodeJsNetwork.getMembershipMulticastInterfaces("nonexistent-interface-12345", true);
+
+            expect(interfaces).deep.equal([]);
         });
 
         it("returns IPv6 interfaces with zone suffix", () => {

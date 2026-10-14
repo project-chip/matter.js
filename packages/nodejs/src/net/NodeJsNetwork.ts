@@ -48,7 +48,25 @@ export class NodeJsNetwork extends Network {
         ipv4: boolean,
     ): (string | undefined)[] {
         if (ipv4) {
-            return [undefined];
+            if (netInterfaceOrZone === undefined) {
+                return [undefined];
+            }
+            // IPv4 group memberships select the interface by one of its addresses; joining without one lets the
+            // kernel use the default-route interface, which on a multi-homed host is not the configured one
+            const multicastInterfaces = Object.entries(networkInterfaces()).flatMap(([netIf, netIfInfo]) => {
+                if (netIfInfo === undefined) {
+                    return [];
+                }
+                if (this.getNetInterfaceZoneIpv6Internal(netIf, netIfInfo) !== netInterfaceOrZone) {
+                    return [];
+                }
+                const ipv4Info = netIfInfo.find(info => familyIs(4, info));
+                return ipv4Info === undefined ? [] : [ipv4Info.address];
+            });
+            if (multicastInterfaces.length === 0) {
+                logger.warn(`No IPv4 multicast interface found for interface ${netInterfaceOrZone}.`);
+            }
+            return multicastInterfaces;
         } else {
             const multicastInterfaces = Object.entries(networkInterfaces()).flatMap(([netIf, netIfInfo]) => {
                 if (netIfInfo === undefined) {
