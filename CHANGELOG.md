@@ -91,6 +91,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: `Behavior.markChanged()` reports an attribute a behavior computes on read to subscriptions
     - Feature: `DoorLockServer` supports schedule users, `ExpiringUser`, `DisposableUser` and `ForcedUser`, and a lock implementation drives hardware via `handleLockOperation`
     - Feature: `OtaSoftwareUpdateProviderServer` state `applyDelay` sets the `DelayedActionTime` for an apply
+    - Feature: `Discovery.Options.abort` cancels `locate()`, `discover()` and `pase()` like `cancel()`
+    - Enhancement: `locate()`, `commission()` and `pase()` report a discovery that found or reached no device as `DeviceNotDiscoveredError`, `DiscoveryIncompleteError` or `NoDiscoveryTransportError`, all subtypes of `DiscoveryError`; failed attempts or scanners stay `DiscoveryAggregateError`, and `discover()` still resolves with what it found
     - Enhancement: The commissioning test harness (`MockSite`, `MockServerNode`, …) is exported at `@matter/node/testing`
     - Enhancement: Added `EndpointLifecycle.isReadable` and `isGone`
     - Enhancement: (@RaHehl) `ClientNode.openEnhancedCommissioningWindow` also returns the passcode, discriminator, vendor and product ID and timeout
@@ -132,6 +134,11 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Fabric-sensitive list reads return only the accessing fabric's entries in all cases, removing a fabric deletes its entries, and local writes of fabric-scoped entries need a `fabricIndex`
     - Fix: When a server cluster's features change, only persisted values that fail validation are dropped
     - Fix: A failed or deleted `ClientNode` (decommission, load failure, concurrent discovery) no longer causes duplicate peers or unhandled errors; decommissioning closes the protocol peer and deletes its resumption record
+    - Fix: `peers.commission()` honours its `abort` option, which it ignored before
+    - Fix: A cancel, an abort, a timeout or the failure of every scanner before a candidate won PASE aborts every attempt and refuses a later PASE win, and the discovery settles once the attempts have finished
+    - Fix: A discovery canceled before a candidate won PASE rejects with the cancel reason, and `locate()`, `commission()` and `pase()` report a found device that cannot be set up with its own error instead of `DiscoveryError`
+    - Fix: A scanner failure no longer fails a discovery whose candidate already won PASE, which before rejected while the device went on commissioning
+    - Fix: A scanner that fails while other scanners still run is logged; `discover()` resolves with what it found, and `locate()`, `commission()` and `pase()` report it as `DiscoveryAggregateError` only where they found nothing
     - Fix: Commissioning skips a device whose advertised vendor or product ID contradicts the onboarding payload
     - Fix: Client reads return current values of changes-omitted attributes in all cases
     - Fix: A peer's endpoint tree follows each endpoint's `PartsList`, so bridged composed devices are structured correctly

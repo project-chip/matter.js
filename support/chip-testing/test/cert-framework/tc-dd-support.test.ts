@@ -6,10 +6,11 @@
 
 import {
     DiscoveryAggregateError,
-    DiscoveryError,
+    DeviceNotDiscoveredError,
     ImplementationError,
     InternalError,
     Millis,
+    NoDiscoveryTransportError,
     UnexpectedDataError,
 } from "@matter/main";
 import type {
@@ -39,6 +40,7 @@ import {
     flowName,
     flowTitle,
     CommissioningRefusals,
+    isCommissioningGiveUp,
     manualPairingCode,
     manualPairingCodeDigits,
     ON_NETWORK_ONLY,
@@ -298,7 +300,9 @@ describe("CommissioningRefusals", () => {
     });
 
     it("accepts a give-up on a well-formed code naming a device that is not there", async () => {
-        const cx = contextWith(() => Promise.reject(new DiscoveryError("No commissionable device was discovered")));
+        const cx = contextWith(() =>
+            Promise.reject(new DeviceNotDiscoveredError("No commissionable device was discovered")),
+        );
         const refusals = new CommissioningRefusals(BUDGETS);
 
         await giveUp(cx, refusals);
@@ -320,7 +324,7 @@ describe("CommissioningRefusals", () => {
         let attempts = 0;
         const cx = contextWith(() => {
             attempts++;
-            return Promise.reject(new DiscoveryError("No commissionable device was discovered"));
+            return Promise.reject(new DeviceNotDiscoveredError("No commissionable device was discovered"));
         });
         const refusals = new CommissioningRefusals(BUDGETS);
         const notAdvertising = async () => {
@@ -623,7 +627,7 @@ describe("recordVendorOutcome", () => {
     it("records the DUT giving up on the code, and which vendor id the code named", async () => {
         const refusals = new CommissioningRefusals(BUDGET);
         const cx = contextWith(async () => {
-            throw new DiscoveryError("No commissionable device was discovered");
+            throw new DeviceNotDiscoveredError("No commissionable device was discovered");
         });
         const commissioned = new CommissionedRefs();
 
@@ -1441,7 +1445,7 @@ describe("restoreCommissioningMode, through recordVendorOutcome", () => {
     it("resets the TH and gives up the ref before the next attempt", async () => {
         const fixture = new UnpairFixture("chip-local", {
             backchannel: () => fixture.push(CHIP_SETUP_QR_CODE, CHIP_ADVERTISING_COMMISSIONABLE),
-            commission: () => Promise.reject(new DiscoveryError("No commissionable device was discovered")),
+            commission: () => Promise.reject(new DeviceNotDiscoveredError("No commissionable device was discovered")),
         });
         const probed = new Array<string>();
 
@@ -1688,6 +1692,22 @@ describe("recordManualParse", () => {
     });
 });
 
+describe("isCommissioningGiveUp", () => {
+    it("counts a discovery that ended without the device as a give-up", () => {
+        expect(isCommissioningGiveUp(new DeviceNotDiscoveredError("No commissionable device was discovered"))).equals(
+            true,
+        );
+    });
+
+    it("does not count a controller that had no scanner to look with", () => {
+        expect(isCommissioningGiveUp(new NoDiscoveryTransportError("no scanner is installed"))).equals(false);
+    });
+
+    it("does not count a refused onboarding payload", () => {
+        expect(isCommissioningGiveUp(new OnboardingPayloadRefusedError("bad code"))).equals(false);
+    });
+});
+
 describe("chipToolDiscoveryGaveUp", () => {
     const COMMAND = "[1791234767.118] [14468:64976200:main] [TOO] Command: pairing code 4099 33331712336";
     const BROWSING = "[1791234767.121] [14468:64976223:chip] [DIS] Browsing for: _matterc._udp,_S14 on local domain";
@@ -1767,7 +1787,7 @@ describe("recordDiscriminatorHonored", () => {
         const fixture = fixtureFor(async target => {
             asked.push(target.qrPairingCode ?? "");
             budgets.push(target.giveUpAfterMs);
-            throw new DiscoveryError("no commissionable device was discovered");
+            throw new DeviceNotDiscoveredError("no commissionable device was discovered");
         });
 
         const probed = new Array<string>();
@@ -1803,7 +1823,7 @@ describe("recordDiscriminatorHonored", () => {
         const commissioned = new Array<string>();
         const fixture = fixtureFor(async target => {
             commissioned.push(target.qrPairingCode ?? "");
-            throw new DiscoveryError("no commissionable device was discovered");
+            throw new DeviceNotDiscoveredError("no commissionable device was discovered");
         });
 
         await expect(
