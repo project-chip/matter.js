@@ -14,11 +14,8 @@ import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
 import { AccessControlServer } from "#behaviors/access-control";
 import {
     AsyncObservable,
-    Diagnostic,
     ImplementationError,
     isObject,
-    LogDestination,
-    Logger,
     LogLevel,
     MaybePromise,
     MockCrypto,
@@ -35,6 +32,7 @@ import {
     FieldElement,
     FieldModel,
 } from "@matter/model";
+import { captureLog } from "@matter/node/testing";
 import { AccessControl, Val } from "@matter/protocol";
 import { EndpointNumber, FabricIndex, NodeId } from "@matter/types";
 import { AccessControl as AccessControlCluster } from "@matter/types/clusters/access-control";
@@ -1103,29 +1101,18 @@ describe("Datasource", () => {
         });
 
         it("ignores an asynchronous migration and logs its rejection", async () => {
-            const warnings = new Array<string>();
-            Logger.destinations.capture = LogDestination({
-                add(message: Diagnostic.Message) {
-                    if (message.facility === "Datasource" && message.level === LogLevel.WARN) {
-                        warnings.push(String(message.values[0]));
-                    }
-                },
+            using log = captureLog(LogLevel.WARN);
+            const store = createStore({ legacy: "old", foo: "stored" });
+            const ds = createMigrated(store, async values => {
+                moveLegacy(values);
+                throw new StorageError("Broken migration");
             });
-            try {
-                const store = createStore({ legacy: "old", foo: "stored" });
-                const ds = createMigrated(store, async values => {
-                    moveLegacy(values);
-                    throw new StorageError("Broken migration");
-                });
 
-                await withReference(ds, ({ state }) => (state.other = 1));
+            await withReference(ds, ({ state }) => (state.other = 1));
 
-                expect(ds.view.foo).equals("stored");
-                expect(store.sets).deep.equals([{ other: 1 }]);
-                expect(warnings.some(warning => warning.startsWith("Asynchronous migration"))).true;
-            } finally {
-                delete Logger.destinations.capture;
-            }
+            expect(ds.view.foo).equals("stored");
+            expect(store.sets).deep.equals([{ other: 1 }]);
+            expect(log.messages.some(message => message.includes("Asynchronous migration"))).true;
         });
 
         it("does not claim the migrated values for a cycle that stored nothing", async () => {

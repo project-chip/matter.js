@@ -90,6 +90,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: The remote API `code` of a status error is its id, as the HTTP `Error-Code` header already was: `status-response` becomes the status id (such as `not-found`), and `path` becomes the expanded id (such as `constraint-error+door-lock`) for a write rejection
     - Breaking: Only a `ClientNode`'s default subscription and its read after commissioning emit peer events to its event observers and change notifications; other `ClientNode` reads and subscriptions return events in their result only, except those of the legacy `PairedNode` API
     - Breaking: A built `Read`/`Subscribe` as `defaultSubscription` is sent as given, including its fabric filter; to keep Leave handling, a built request needs the Basic Information attributes and events and the Operational Credentials `fabrics` attribute; without them the node notices a device going offline only through the subscription timeout and does not see a fabric Leave
+    - Breaking: `CommissioningServer.handleFabricChange()` is `async`
     - Deprecation: `ClientNodeInteraction.localStateFor()` will be removed in 0.19
     - Feature: Finalized the `ClientNode` API for controllers: `ServerNode.peers.commissioned`, `ClientNode.disable()`/`enable()`, connection state, split commissioning (`finalizeCommissioning` hands off discovery data and PASE session parameters to `peers.completeCommissioning`), opening commissioning windows on peers and more; see [Controller migration guide](docs/MIGRATION_CONTROLLER_018.md)
     - Feature: Groupcast cluster (`GroupcastServer`) and AccessControl `Auxiliary` feature; group commands via `ClientGroup` endpoints and group bindings
@@ -210,6 +211,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: (@grzonu) Reading a peer's `BasicInformation` through `Peer` (on every read, subscribe and invoke) no longer leaves a state reference behind per access
     - Fix: A subscription that ends while the node keeps running, e.g. because its session was closed, is no longer re-established after a restart; re-establishment tries the newest stored subscription of a peer first
     - Fix: `VendorIdVerification.verify()` returns `undefined` when the device rejects the signing request
+    - Fix: A fabric change waits for the commissioning state instead of failing with `synchronous-transaction-conflict` when another transaction holds it
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument
@@ -289,6 +291,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A peer's effective session parameters take the specification default for a value its session left out, and apply the LIT minimum idle interval only when the peer gave no SII
     - Fix: A peer's discovery data drops the session intervals, TCP support and ICD mode its operational advertisement no longer carries
     - Fix: A closed `SustainedSubscription` always ends not live, whatever phase the close interrupts and even when an `active`/`inactive` observer throws
+    - Fix: `FabricAuthority.createFabric()` resolves once the new fabric is persisted, rejects when persisting fails, and no longer reports the new fabric as replaced
 
 - @matter/react-native
     - Fix: `ReactNativeBle.scanner` returns the same `BleScanner` on every access
