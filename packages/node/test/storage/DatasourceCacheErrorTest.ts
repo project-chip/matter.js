@@ -311,16 +311,22 @@ describe("settlements", () => {
         expect(announced).deep.equals([{ "1": "accepted" }, { "1": "reported" }]);
     });
 
-    /** A local writer whose every persist waits until the test lets it finish. */
+    /**
+     * A local writer whose every persist waits until the test lets it finish, then patches {@link stored} like
+     * storage does.
+     */
     function gatedWriter() {
+        const stored: Val.Struct = {};
         const pending = new Array<{ values: Val.Struct; finish: () => void }>();
         return {
+            stored,
             pending,
             persistInTransaction: async () => {},
             persist: async (_ep: unknown, _bid: unknown, values: Val.Struct) => {
                 const { promise, resolver } = createPromise<void>();
                 pending.push({ values, finish: resolver });
                 await promise;
+                Object.assign(stored, values);
             },
         };
     }
@@ -366,12 +372,86 @@ describe("settlements", () => {
 
         const accepted = cache.settleAccepted({ "1": "accepted" }, 0);
         const report = cache.externalSet(attrs({ "1": "reported" }));
-        writer.pending[1].finish();
-        await report;
+        await MockTime.yield();
         writer.pending[0].finish();
         await accepted;
+        await MockTime.yield();
+        writer.pending[1].finish();
+        await report;
 
         expect(integrated).deep.equals([{ "1": "reported" }]);
+    });
+
+    it("stores the latest settlement of a key when an older one would finish persisting last", async () => {
+        const writer = gatedWriter();
+        const cache = createCache({ localWriter: writer });
+        cache.consumer = recordingConsumer().consumer;
+
+        const accepted = cache.settleAccepted({ "1": "accepted" }, 0);
+        const report = cache.externalSet(attrs({ "1": "reported" }));
+
+        // Let each persist finish as late as possible relative to the ones that arrived after it
+        const finished = new Set<number>();
+        while (finished.size < 2) {
+            for (let i = 0; i < 10 && writer.pending.length === finished.size; i++) {
+                await MockTime.yield();
+            }
+            const newest = writer.pending.length - 1;
+            const index = finished.has(newest) ? writer.pending.findIndex((_, i) => !finished.has(i)) : newest;
+            writer.pending[index].finish();
+            finished.add(index);
+        }
+        await Promise.all([accepted, report]);
+
+        const restarted = new DatasourceCache({
+            writer: async () => [],
+            nodeId: "test-peer",
+            endpointNumber: EndpointNumber(1),
+            behaviorId: "test",
+            initialValues: { ...writer.stored },
+        });
+        expect(restarted.initialValues?.["1"]).equals("reported");
+    });
+
+    it("persists a settlement queued behind one whose persist failed", async () => {
+        let failing = true;
+        const persisted = new Array<Val.Struct>();
+        const cache = createCache({
+            localWriter: {
+                persistInTransaction: async () => {},
+                persist: async (_ep: unknown, _bid: unknown, values: Val.Struct) => {
+                    if (failing) {
+                        failing = false;
+                        throw new Error("persist failure");
+                    }
+                    persisted.push(values);
+                },
+            },
+        });
+        const { integrated, consumer } = recordingConsumer();
+        cache.consumer = consumer;
+
+        await expect(cache.externalSet(attrs({ "1": "first" }))).rejectedWith("persist failure");
+        await cache.externalSet(attrs({ "1": "second" }));
+
+        expect(persisted).deep.equals([{ "1": "second" }]);
+        expect(integrated).deep.equals([{ "1": "second" }]);
+    });
+
+    it("does not persist a settlement queued behind another once the cache is discarded", async () => {
+        const writer = gatedWriter();
+        const cache = createCache({ localWriter: writer });
+        cache.consumer = recordingConsumer().consumer;
+
+        const first = cache.externalSet(attrs({ "1": "first" }));
+        const second = cache.externalSet(attrs({ "1": "second" }));
+        await MockTime.yield();
+        cache.discard();
+        writer.pending[0].finish();
+        await Promise.all([first, second]);
+
+        expect(writer.pending).length(1);
+        expect(writer.stored).deep.equals({ "1": "first" });
     });
 
     it("persists nothing when the device accepted nothing", async () => {

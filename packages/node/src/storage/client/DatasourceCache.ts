@@ -34,6 +34,12 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
     #dirtyKeys = new Set<string>();
 
     /**
+     * The tail of the unbuffered persists.  Storage takes patches, so they run one after another in arrival order:
+     * the last patch stored for a key must be its latest settlement.
+     */
+    #persisted: Promise<void> = Promise.resolve();
+
+    /**
      * Counts settlements as they arrive: each report, and each answer that accepts a write.
      */
     #epoch = 0;
@@ -212,8 +218,17 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
             }
             this.#buffer.markDirty(this);
         } else {
-            const valuesStruct = Object.fromEntries(values) as Val.Struct;
-            await this.#localWriter?.persist(this.#endpointNumber, this.#behaviorId, valuesStruct);
+            const localWriter = this.#localWriter;
+            if (localWriter) {
+                const valuesStruct = Object.fromEntries(values) as Val.Struct;
+                const persisting = this.#persisted.then(() => {
+                    if (!this.#erased) {
+                        return localWriter.persist(this.#endpointNumber, this.#behaviorId, valuesStruct);
+                    }
+                });
+                this.#persisted = persisting.catch(() => {});
+                await persisting;
+            }
         }
 
         return true;
