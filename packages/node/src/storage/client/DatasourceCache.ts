@@ -13,12 +13,17 @@ import type { LocalWriter } from "./LocalWriter.js";
 import { RemoteWriteParticipant } from "./RemoteWriteParticipant.js";
 import type { RemoteWriter } from "./RemoteWriter.js";
 
+const nothingToRelease = async () => {};
+
 /**
  * The default implementation of {@link Datasource.ExternallyMutableStore}.
  *
  * This implements storage for attribute values for a single cluster loaded from peers.
+ *
+ * The peer is the only writer of these values.  Its reports and its answers to our writes are settlements that enter
+ * through one path, in one sequence: {@link externalSet} and {@link settleAccepted}.
  */
-export class DatasourceCache implements Datasource.ExternallyMutableStore, RemoteWriteParticipant.Compensator {
+export class DatasourceCache implements Datasource.ExternallyMutableStore, RemoteWriteParticipant.Receiver {
     #writer: RemoteWriter;
     #nodeId: string;
     #endpointNumber: EndpointNumber;
@@ -27,8 +32,25 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
     #buffer?: ClientCacheBuffer;
     #version: number;
     #dirtyKeys = new Set<string>();
-    #reportEpoch = 0;
-    #reportedAt = new Map<string, number>();
+
+    /**
+     * Counts settlements as they arrive: each report, and each answer that accepts a write.
+     */
+    #epoch = 0;
+
+    /**
+     * The arrival {@link #epoch} of the peer's latest word on each attribute.  A settlement counts from its arrival,
+     * also while it persists and also when it fails to: it still shows that the device's value changed.
+     */
+    #settledAt = new Map<string, number>();
+
+    /**
+     * Change announcements in the order the changes were settled.  An entry stays closed until the transaction that
+     * settled it ends; every entry behind it waits.
+     */
+    #announcements = new Array<{ open: boolean; announce: () => Promise<void> }>();
+    #draining = false;
+
     #erased = false;
     #reclaimed = false;
     #consumer?: Datasource.ExternallyMutableStore.Consumer;
@@ -76,76 +98,107 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
             participant = new RemoteWriteParticipant(this.#writer, this.#nodeId);
             transaction.addParticipants(participant);
         }
-        const previousValues = this.#consumer?.readValues(new Set(Object.keys(values))) ?? {};
         (participant as RemoteWriteParticipant).set(this.#endpointNumber, this.#behaviorId, values, {
-            compensator: this,
-            previousValues,
-            reportEpoch: this.#reportEpoch,
+            receiver: this,
+            epoch: this.#epoch,
         });
     }
 
-    /**
-     * Restores local cache values whose remote write the peer did not accept.
-     *
-     * Only restores keys that:
-     *   - had a captured pre-write value (skip if the snapshot doesn't know the prior state), AND
-     *   - still hold the value we attempted to write (skip if a concurrent subscription update already moved on), AND
-     *   - the peer has said nothing about the attribute since the write was queued.
-     */
-    async compensate(
-        failedAttributeIds: Set<string>,
-        previousValues: Val.Struct,
-        writtenValues: Val.Struct,
-        reportEpoch: number,
-    ) {
-        if (this.#erased || this.#reclaimed || !this.#consumer) {
-            return;
+    async settleAccepted(values: Val.Struct, epoch: number) {
+        const accepted = new Map<string, Val>();
+        for (const id in values) {
+            if ((this.#settledAt.get(id) ?? -1) <= epoch) {
+                accepted.set(id, values[id]);
+            }
+        }
+        if (!accepted.size) {
+            return nothingToRelease;
         }
 
-        const restore = new Map<string, Val>();
-        const current = this.#consumer.readValues(failedAttributeIds);
-        for (const id of failedAttributeIds) {
-            if (!(id in previousValues)) {
-                continue;
-            }
-            // Datasource keeps user values by reference; integrateExternalChange only replaces the
-            // reference when a subscription actually changed the value, so a different ref here means
-            // a real concurrent update arrived.
-            if (current[id] !== writtenValues[id]) {
-                continue;
-            }
-            // The device defines its own state: anything it reported while the write was in flight outranks our
-            // pre-write snapshot.  A report carrying the value we wrote is discarded as unchanged, so it leaves the
-            // reference alone and the check above cannot see it — this is its only trace.
-            if ((this.#reportedAt.get(id) ?? -1) > reportEpoch) {
-                continue;
-            }
-            restore.set(id, previousValues[id]);
+        const announce = await this.#settle(accepted);
+        if (announce === undefined) {
+            return nothingToRelease;
         }
 
-        if (restore.size) {
-            // Our own undo, not something the peer said, so it must not count as a report
-            await this.#applyExternal(restore);
-        }
+        const entry = { open: false, announce };
+        this.#announcements.push(entry);
+        return async () => {
+            entry.open = true;
+            await this.#drain();
+        };
     }
 
     async externalSet(values: Val.StructMap) {
-        // Note what the peer spoke about, even where the value is unchanged: that is the only trace a report leaves
-        // when it confirms a value we already hold, and compensation of an unanswered write depends on it
-        const epoch = ++this.#reportEpoch;
+        const announce = await this.#settle(values);
+        if (announce !== undefined) {
+            this.#announcements.push({ open: true, announce });
+            await this.#drain();
+        }
+    }
+
+    /**
+     * Stamp values the peer settled with their arrival epoch, persist them, and apply those no later settlement has
+     * claimed meanwhile.  A report that confirms a value we already hold is stamped too: it leaves no other trace, and
+     * it still outranks a write in flight.
+     *
+     * Returns the announcement of the changes, if any.
+     */
+    async #settle(values: Val.StructMap) {
+        const epoch = ++this.#epoch;
         for (const key of values.keys()) {
             const id = String(key);
             if (!id.startsWith("__")) {
-                this.#reportedAt.set(id, epoch);
+                this.#settledAt.set(id, epoch);
             }
         }
 
-        await this.#applyExternal(values);
+        if (!(await this.#persist(values)) || this.#erased || this.#reclaimed) {
+            return;
+        }
+
+        const current = new Map<string, Val>();
+        for (const [key, value] of values) {
+            const id = String(key);
+            if (id.startsWith("__") || this.#settledAt.get(id) === epoch) {
+                current.set(id, value);
+            }
+        }
+        if (!current.size) {
+            return;
+        }
+
+        if (this.#consumer) {
+            return this.#consumer.integrate(current);
+        }
+
+        this.#seed(current);
     }
 
-    async #applyExternal(values: Val.StructMap) {
-        if (this.#erased || this.#reclaimed) {
+    /**
+     * Emit the open announcements at the head of the queue.  A running drain picks up what opens meanwhile.  A caller
+     * does not wait for its own entry: it may sit behind a closed one.
+     */
+    async #drain() {
+        if (this.#draining) {
             return;
+        }
+
+        this.#draining = true;
+        try {
+            while (this.#announcements[0]?.open) {
+                await this.#announcements.shift()!.announce();
+            }
+        } finally {
+            this.#draining = false;
+        }
+    }
+
+    /**
+     * Record values in local storage.  Returns false if this cache no longer takes values.
+     */
+    async #persist(values: Val.StructMap) {
+        if (this.#erased || this.#reclaimed) {
+            return false;
         }
 
         const versionVal = values.get(DatasourceCache.VERSION_KEY);
@@ -163,14 +216,14 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
             await this.#localWriter?.persist(this.#endpointNumber, this.#behaviorId, valuesStruct);
         }
 
-        if (this.consumer) {
-            await this.consumer.integrateExternalChange(values);
-        } else {
-            if (!this.initialValues) {
-                this.initialValues = {};
-            }
-            Object.assign(this.initialValues, Object.fromEntries(values));
+        return true;
+    }
+
+    #seed(values: Val.StructMap) {
+        if (!this.initialValues) {
+            this.initialValues = {};
         }
+        Object.assign(this.initialValues, Object.fromEntries(values));
     }
 
     /**

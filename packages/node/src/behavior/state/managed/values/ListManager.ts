@@ -148,7 +148,7 @@ class ListProxyHandler implements ProxyHandler<Val.List> {
         if (length > 65535) {
             throw new WriteError(this.reference.location, `Index ${length} is greater than allowed maximum of 65535`);
         }
-        this.reference.change(() => (this.writeVal().length = length));
+        this.reference.change(() => (this.writeVal().length = length), "length");
     }
 
     protected hasEntry(index: number) {
@@ -220,7 +220,7 @@ class ListProxyHandler implements ProxyHandler<Val.List> {
         // Unwrap incoming managed values (including nested)
         value = Internal.unmanage(value);
 
-        this.reference.change(() => (this.writeVal()[index] = value));
+        this.reference.change(() => (this.writeVal()[index] = value), index);
     }
 
     protected getIteratorFn(): Val.List[typeof Symbol.iterator] {
@@ -395,7 +395,7 @@ class FabricFilteredListProxyHandler extends ListProxyHandler {
                     );
                 }
             }
-        });
+        }, "length");
     }
 
     protected override getIteratorFn(): Val.List[typeof Symbol.iterator] {

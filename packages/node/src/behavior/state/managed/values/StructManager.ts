@@ -290,7 +290,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                         throw e;
                     }
                 }
-            });
+            }, key);
         },
     };
 

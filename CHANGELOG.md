@@ -24,6 +24,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Added `TransportClosedError` for an operation on a transport connection that is already closed
     - Enhancement: Storage drivers state how long dirty values may be buffered via `StorageDriver.writeCoalescingInterval`
     - Adjustment: The default log format is plain text instead of ANSI; set `log.format` or `Logger.format` to choose another
+    - Adjustment: A transaction commit that fails in phase one rejects with the participant's error, or an aggregate of several, instead of `FinalizationError`
     - Fix: DNS-SD discovery ignores the known-answer records of mDNS queries, so a controller no longer dials a node through the wrong interface
     - Fix: (@grzonu) DNS-SD queries send known answers with their remaining TTL and omit those past half their TTL
     - Fix: DNS-SD honors the cache-flush bit and goodbyes after a re-announcement, ignores invalid SRV records, resolves A/AAAA for the SRV target host, and keeps an mDNS message that has one unreadable record
@@ -123,6 +124,12 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: `IdentifyServer` offers `TriggerEffect` only when the device type requires it or it is implemented or enabled
     - Adjustment: A server rejects an obsolete (`Z`) element; a client sends and decodes it
     - Adjustment: A node's `ClusterProtocol.readState()` throws `ImplementationError` for a remote session without a transaction
+    - Adjustment: A `ClientNode` attribute write reaches the device also when its local copy already holds the value
+    - Adjustment: A `ClientNode` takes a written attribute value locally only once the device accepts it
+    - Adjustment: `$Changed` for a value a `ClientNode` write set fires when the transaction ends and carries no writing transaction
+    - Adjustment: `stateChanged` does not fire for a value a `ClientNode` write set
+    - Adjustment: When a device declines a `ClientNode` write, the whole transaction rolls back
+    - Fix: A `ClientNode` no longer emits `$Changed` with an outdated value for an attribute a transaction did not touch, when a report changed it during the transaction
     - Fix: `WebRtcTransportRequestorServer` keeps sessions of different peers with the same session id apart
     - Fix: `DclBehavior` boolean options set through environment variables are read as booleans
     - Fix: `.with()` on a behavior subclass that declares own attributes or commands replaces the default behavior instead of running next to it; an endpoint refuses two behaviors for the same cluster
