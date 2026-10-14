@@ -6,5 +6,6 @@
 
 export * from "./InvokeResult.js";
 export * from "./ReadResult.js";
+export * from "./ResultStatus.js";
 export * from "./SubscribeResult.js";
 export * from "./WriteResult.js";

@@ -77,6 +77,7 @@ import {
     ReadResult,
     SessionClosedError,
     Subscribe,
+    ResultStatus,
     Write,
     WriteResult,
 } from "@matter/main/protocol";
@@ -91,7 +92,6 @@ import {
     GroupId,
     NodeId,
     Status,
-    StatusResponseError,
     VendorId,
 } from "@matter/main/types";
 import { AttributeModel } from "@matter/model";
@@ -954,10 +954,9 @@ function assertNoConcreteAttributeStatus(
                 path.attribute === attributeId,
         );
         if (requested) {
-            throw new StatusResponseError(
+            throw ResultStatus.errorOf(
+                status,
                 `${operation} ${JSON.stringify({ endpoint: endpointId, cluster: clusterId, attribute: attributeId })} failed`,
-                status.status,
-                status.clusterStatus,
             );
         }
     }
@@ -982,10 +981,9 @@ function assertNoConcreteEventStatus(paths: EventPathSpec[], statuses: ReadResul
                 path.event === eventId,
         );
         if (requested) {
-            throw new StatusResponseError(
+            throw ResultStatus.errorOf(
+                status,
                 `${operation} ${JSON.stringify({ endpoint: endpointId, cluster: clusterId, event: eventId })} failed`,
-                status.status,
-                status.clusterStatus,
             );
         }
     }
@@ -1346,7 +1344,7 @@ class InProcessCertNodeApi implements CertNodeApi {
                     switch (entry.kind) {
                         case "cmd-status":
                             if (entry.status !== Status.Success) {
-                                throw StatusResponseError.create(entry.status, undefined, entry.clusterStatus);
+                                throw ResultStatus.errorOf(entry);
                             }
                             return undefined;
 
@@ -1438,11 +1436,7 @@ class InProcessCertNodeApi implements CertNodeApi {
             }
             if (isConcretePath(path)) {
                 if (statuses.length) {
-                    throw new StatusResponseError(
-                        `readAttribute ${JSON.stringify(path)} failed`,
-                        statuses[0].status,
-                        statuses[0].clusterStatus,
-                    );
+                    throw ResultStatus.errorOf(statuses[0], `readAttribute ${JSON.stringify(path)} failed`);
                 }
                 if (values.length === 0) {
                     throw new InternalError(`readAttribute ${JSON.stringify(path)} returned no data`);

@@ -30,7 +30,7 @@ import {
     UninitializedDependencyError,
 } from "@matter/general";
 import { ClusterModel, DataModelPath } from "@matter/model";
-import { Read, Val } from "@matter/protocol";
+import { Read, ReadResult, Val } from "@matter/protocol";
 import { AttributeId, ClusterId, EndpointNumber, FabricIndex, Status } from "@matter/types";
 import { RootEndpoint } from "../endpoints/root.js";
 import { Agent } from "./Agent.js";
@@ -1255,7 +1255,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
                             }
                         }
                     } else if (report.kind === "attr-status" && report.status !== Status.Success) {
-                        failed.push({ path: report.path, status: report.status, clusterStatus: report.clusterStatus });
+                        failed.push(readFailureOf(report));
                     }
                 }
             }
@@ -1278,7 +1278,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             for await (const chunk of stream) {
                 for await (const report of chunk) {
                     if (report.kind === "attr-status" && report.status !== Status.Success) {
-                        failed.push({ path: report.path, status: report.status, clusterStatus: report.clusterStatus });
+                        failed.push(readFailureOf(report));
                     }
                 }
             }
@@ -1548,3 +1548,7 @@ export type StateSliceOf<T extends EndpointType, S> = S extends undefined
                   >
                 : never;
       };
+
+function readFailureOf({ path, status, clusterStatus, received }: ReadResult.AttributeStatus): EndpointReadFailure {
+    return { path, status, clusterStatus, received };
+}
