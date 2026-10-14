@@ -129,6 +129,8 @@ export class FabricAuthority {
 
     /**
      * Create new fabric under our control.
+     *
+     * When persisting fails, this rejects and the fabric stays in memory; it is not rolled back.
      */
     async createFabric(config: FabricAuthorityConfiguration) {
         const rootNodeId = config.adminNodeId ?? NodeId.randomOperationalNodeId(this.#fabrics.crypto);
@@ -168,7 +170,7 @@ export class FabricAuthority {
         const fabric = await fabricBuilder.build(index);
         this.#fabrics.addFabric(fabric);
 
-        fabric.persist();
+        await fabric.persist(false);
 
         logger.debug(`Created new controller fabric ${index}`);
         await this.#fabricAdded.emit(fabric);
