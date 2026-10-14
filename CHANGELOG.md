@@ -178,6 +178,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: `DescriptorServer.addTags` and `addDeviceTypes` no longer add duplicates
     - Fix: Level Control and Color Control `Stop`, `*WithOnOff` and `RemainingTime` behave as specified; level coupling no longer fails or stays blocked on locked transactions
     - Fix: `Thermostat.Presets` writes are validated, stored, persisted and reported; atomic writes report every attribute and commit together
+    - Fix: Thermostat atomic-write `BeginWrite` rejects an invalid request with `INVALID_COMMAND` before reporting per-attribute statuses
     - Fix: (@Luligu, @lboue) `DoorLockServer` credential handling uses correct indices, status codes and user creation
     - Fix: `SwitchServer` handles positions, long press and multi-press as specified and no longer leaks a reactor per press
     - Fix: OTA requestors send `NotifyUpdateApplied` after an update, keep `DelayedOnQuery` while a provider is busy, recover when `applyUpdate` fails, and skip an update without consent
