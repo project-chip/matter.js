@@ -25,6 +25,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Storage drivers state how long dirty values may be buffered via `StorageDriver.writeCoalescingInterval`
     - Adjustment: The default log format is plain text instead of ANSI; set `log.format` or `Logger.format` to choose another
     - Fix: DNS-SD discovery ignores the known-answer records of mDNS queries, so a controller no longer dials a node through the wrong interface
+    - Fix: (@grzonu) DNS-SD queries send known answers with their remaining TTL and omit those past half their TTL
     - Fix: DNS-SD honors the cache-flush bit and goodbyes after a re-announcement, ignores invalid SRV records, resolves A/AAAA for the SRV target host, and keeps an mDNS message that has one unreadable record
     - Fix: Crypto auto-detection uses Node.js-style crypto only where it offers SHA-256 and `aes-128-ccm`, otherwise falls back to `StandardCrypto`, and no longer breaks the package import when nothing usable is found
     - Fix: `StandardCrypto` supports computation of SHA3-256, SHA-512/224 and SHA-512/256 on every runtime
@@ -212,6 +213,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: `--storage-clear`/`MATTER_STORAGE_CLEAR` clears the storage on start again
     - Fix: `FileStorageDriver.contexts()` lists only contexts that hold keys
     - Fix: `NodeJsUdpSocket.create()` closes the socket when it cannot configure it
+    - Fix: (@grzonu) An IPv4 UDP socket bound to a network interface joins multicast groups on that interface instead of the default-route interface
 
 - @matter/nodejs-ble
     - Enhancement: `NobleBleClient` reports its actual scan time as `BleScannerClient.listeningTime`
@@ -280,6 +282,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A CASE pairing failure reaches the caller
     - Fix: A peer's effective session parameters take the specification default for a value its session left out, and apply the LIT minimum idle interval only when the peer gave no SII
     - Fix: A peer's discovery data drops the session intervals, TCP support and ICD mode its operational advertisement no longer carries
+    - Fix: A closed `SustainedSubscription` always ends not live, whatever phase the close interrupts and even when an `active`/`inactive` observer throws
 
 - @matter/react-native
     - Fix: `ReactNativeBle.scanner` returns the same `BleScanner` on every access

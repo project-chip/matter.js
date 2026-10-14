@@ -22,6 +22,7 @@ import {
     Hours,
     ImplementationError,
     Logger,
+    MatterAggregateError,
     Observable,
     Observer,
     RetrySchedule,
@@ -160,19 +161,19 @@ export class SustainedSubscription extends ClientSubscription {
                 // live.
                 const wakefulnessBefore = this.#wakefulness?.();
                 if (wakefulnessBefore?.requiresAwait) {
-                    // Gate on active: on the initial park (active already false) this await must be skipped, else the
-                    // added microtask would let a synchronous wake signal race ahead of the observer registration below.
+                    // Gate on #isNotLive: on the initial park this await must be skipped, else the added microtask would
+                    // let a synchronous wake signal race ahead of the observer registration below.
                     if (awaitFreshSignal) {
-                        if (this.#active.value) {
-                            await this.#reportNotLive();
+                        if (!this.#isNotLive) {
+                            await this.#setLive(false);
                         }
                         await this.#nextWake(wakefulnessBefore);
                         awaitFreshSignal = false;
                     } else if (!wakefulnessBefore.awake.value) {
-                        if (this.#active.value) {
-                            await this.#reportNotLive();
+                        if (!this.#isNotLive) {
+                            await this.#setLive(false);
                         }
-                        // Re-check after the #reportNotLive await: a wake that landed during it is the edge we would
+                        // Re-check after the #setLive await: a wake that landed during it is the edge we would
                         // park for, and #awaitAwake's observer only fires on the *next* emit, so skip the park.
                         if (!wakefulnessBefore.awake.value) {
                             await this.#awaitAwake(wakefulnessBefore);
@@ -238,8 +239,8 @@ export class SustainedSubscription extends ClientSubscription {
                         }
 
                         // A mode-flip recreate whose subscribe failed is about to park/retry with no subscription held.
-                        if (this.#active.value) {
-                            await this.#reportNotLive();
+                        if (!this.#isNotLive) {
+                            await this.#setLive(false);
                         }
 
                         // An await-mode LIT peer has no timed retry: park for the next fresh wake signal instead.
@@ -268,17 +269,17 @@ export class SustainedSubscription extends ClientSubscription {
                     }
                 }
 
+                if (this.abort.aborted) {
+                    break;
+                }
+
                 // A LIT park-failure exits the retry loop without a subscription; loop back to await the next wake
                 // signal.
                 if (awaitFreshSignal) {
-                    if (this.abort.aborted) {
-                        break;
-                    }
                     continue;
                 }
 
-                await this.#inactive.emit(false);
-                await this.#active.emit(true);
+                await this.#setLive(true);
                 if (this.abort.aborted) {
                     break;
                 }
@@ -288,7 +289,7 @@ export class SustainedSubscription extends ClientSubscription {
                 if (!modeFlipped) {
                     // Genuine loss: report not-live so consumers re-establish.  A deliberate mode-flip recreate keeps
                     // active until it either re-establishes (no-op, no churn) or has to park/retry (reported there).
-                    await this.#reportNotLive();
+                    await this.#setLive(false);
                 }
 
                 // If aborted, then we're done
@@ -323,6 +324,14 @@ export class SustainedSubscription extends ClientSubscription {
                 this.subscriptionId = ClientSubscription.NO_SUBSCRIPTION;
                 this.#releaseSubscriptionHold();
                 await subscription.close();
+            }
+
+            // Every exit, including an abort or observer failure while going live, leaves us not live.
+            try {
+                await this.#setLive(false);
+            } catch (e) {
+                // Logged, not thrown: this finally must not replace the outcome #run is already returning or throwing
+                logger.warn(`Observer failed while ${this.peer} subscription stopped:`, e);
             }
         }
     }
@@ -374,10 +383,67 @@ export class SustainedSubscription extends ClientSubscription {
         return { ...request, eventFilters: [{ eventMin: this.#maxEventNumber + 1n }] };
     }
 
-    /** Report that we no longer hold an established subscription.  Callers gate this on {@link active} being set. */
-    async #reportNotLive() {
-        await this.#active.emit(false);
-        await this.#inactive.emit(true);
+    /** True when {@link active} and {@link inactive} both report not live. */
+    get #isNotLive() {
+        return !this.#active.value && !!this.#inactive.value;
+    }
+
+    /**
+     * Update {@link active} and {@link inactive} together.  An observable stores its new value before its observers
+     * run, so an observer that throws does not undo that value.
+     *
+     * Going live emits both values even if already live, so a re-established subscription is announced again.  It
+     * stops at the first observer failure or when the subscription was closed meanwhile; #run then ends, and its
+     * finally goes back to not live.
+     *
+     * Going not live emits only the values that change, and attempts both even if an observer fails.
+     *
+     * Observer failures are rethrown after the update, as one error or as a {@link MatterAggregateError}.
+     */
+    async #setLive(live: boolean) {
+        const errors = new Array<unknown>();
+
+        if (live) {
+            const steps: [AsyncObservableValue, boolean][] = [
+                [this.#inactive, false],
+                [this.#active, true],
+            ];
+            for (const [observable, value] of steps) {
+                if (errors.length || this.abort.aborted) {
+                    break;
+                }
+                try {
+                    await observable.emit(value);
+                } catch (e) {
+                    errors.push(e);
+                }
+            }
+        } else {
+            const steps: [AsyncObservableValue, boolean][] = [
+                [this.#active, false],
+                [this.#inactive, true],
+            ];
+            for (const [observable, value] of steps) {
+                if (observable.value === value) {
+                    continue;
+                }
+                try {
+                    await observable.emit(value);
+                } catch (e) {
+                    errors.push(e);
+                }
+            }
+        }
+
+        if (errors.length === 1) {
+            throw errors[0];
+        }
+        if (errors.length) {
+            throw new MatterAggregateError(
+                errors,
+                `Observers failed while ${this.peer} subscription went ${live ? "live" : "not live"}`,
+            );
+        }
     }
 
     #releaseSubscriptionHold() {
