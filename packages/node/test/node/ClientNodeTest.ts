@@ -2600,6 +2600,62 @@ describe("ClientNode", () => {
             expect(transitions).deep.equals([[initialLabel, otherLabel]]);
         });
 
+        it("lets a post-commit observer await a write of the same client cluster in another transaction", async () => {
+            const { site, controller, peer1, transitions } = await setup();
+            await using _site = site;
+
+            controller.eventsOf(BasicInformationServer).nodeLabel$Changed.on(async () => {
+                await peer1.setStateOf(BasicInformationClient, { nodeLabel: otherLabel });
+            });
+
+            await MockTime.resolve(
+                peer1.act(agent => {
+                    agent.get(BasicInformationClient).state.nodeLabel = writtenLabel;
+                    controller.agentFor(agent.context).get(BasicInformationServer).state.nodeLabel = "Trigger";
+                }),
+                { macrotasks: true },
+            );
+
+            expect(peer1.stateOf(BasicInformationClient).nodeLabel).equals(otherLabel);
+            expect(transitions).deep.equals([
+                [initialLabel, writtenLabel],
+                [writtenLabel, otherLabel],
+            ]);
+        });
+
+        it("announces every cluster of a write when an observer of one throws", async () => {
+            const { site, peer1, transitions } = await setup();
+            await using _site = site;
+
+            const ep1Client = peer1.parts.get("ep1")!;
+            ep1Client.eventsOf(OnOffClient).startUpOnOff$Changed.on(() => {
+                throw new Error("observer failure");
+            });
+
+            await captureWarningsOf(() =>
+                MockTime.resolve(
+                    peer1.act(agent => {
+                        agent.get(BasicInformationClient).state.nodeLabel = writtenLabel;
+                        ep1Client.agentFor(agent.context).get(OnOffClient).state.startUpOnOff =
+                            OnOff.StartUpOnOff.Toggle;
+                    }),
+                    { macrotasks: true },
+                ),
+            );
+            await seedPeerCache(
+                peer1,
+                peer1,
+                BasicInformationClient,
+                new Map([[BasicInformation.attributes.nodeLabel.id, otherLabel]]),
+            );
+
+            expect(ep1Client.stateOf(OnOffClient).startUpOnOff).equals(OnOff.StartUpOnOff.Toggle);
+            expect(transitions).deep.equals([
+                [initialLabel, writtenLabel],
+                [writtenLabel, otherLabel],
+            ]);
+        });
+
         it("lets an observer of the accepted value write", async () => {
             const { site, peer1, device } = await setup();
             await using _site = site;

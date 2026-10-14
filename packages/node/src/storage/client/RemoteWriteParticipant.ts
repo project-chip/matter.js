@@ -123,7 +123,11 @@ export class RemoteWriteParticipant implements Transaction.Participant {
         this.#releases = [];
 
         for (const release of releases) {
-            await release();
+            try {
+                await release();
+            } catch (e) {
+                logger.warn(`Failed to announce values ${this.#name} wrote:`, e);
+            }
         }
     }
 
@@ -164,7 +168,9 @@ export namespace RemoteWriteParticipant {
      */
     export interface Settled {
         /**
-         * Releases the change notifications of the settled values.
+         * Releases the change notifications of the settled values.  They are announced in settlement order, after the
+         * announcements of earlier changes of the cluster, including those held until their own transaction ends, so
+         * they may complete after this resolves.
          */
         release: () => Promise<void>;
 

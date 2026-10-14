@@ -74,9 +74,10 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: `LevelControlServer.couple()` takes the target level as third argument; overrides must pass it
     - Breaking: `SoftwareUpdateManager.addUpdateConsent()` and `forceUpdate()` take the update as an object
     - Breaking: An unreported client node attribute reads its default (or the specification fallback) when mandatory and `undefined` otherwise; configured options and environment variables no longer seed client node state
-    - Breaking: Changing any attribute of a client node sends a write to the peer; attributes the peer cannot express are declined locally
-    - Breaking: `$Changed` for a value a `ClientNode` write set fires when the transaction ends and carries no writing transaction
+    - Breaking: Assigning any attribute of a client node sends a write to the peer, also when the value is unchanged; attributes the peer cannot express are declined locally
+    - Breaking: `$Changed` for a value a `ClientNode` write set is released when the transaction ends, carries no writing transaction, and may fire after `act()` resolves
     - Breaking: `stateChanged` does not fire for a value a `ClientNode` write set
+    - Breaking: When a device declines a `ClientNode` write, the whole transaction rolls back
     - Breaking: `discoveryCapabilities` moved from `CommissioningClient.CommissioningOptions` to `Discovery.Options`, declare such options as `CommissioningDiscovery.Options`; `Discovery.Options.scannerFilter` is removed
     - Breaking: A commissionable advertisement with vendor or product ID 0 reports it as `undefined`
     - Breaking: Commissioning or decommissioning a node that is gone rejects with `DestroyedDependencyError` or `CrashedDependencyError`, and a concurrent attempt with `FabricOperationInProgressError`
@@ -126,9 +127,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: `IdentifyServer` offers `TriggerEffect` only when the device type requires it or it is implemented or enabled
     - Adjustment: A server rejects an obsolete (`Z`) element; a client sends and decodes it
     - Adjustment: A node's `ClusterProtocol.readState()` throws `ImplementationError` for a remote session without a transaction
-    - Adjustment: A `ClientNode` attribute write reaches the device also when its local copy already holds the value
     - Adjustment: A `ClientNode` takes a written attribute value locally only once the device accepts it
-    - Adjustment: When a device declines a `ClientNode` write, the whole transaction rolls back
     - Fix: A `ClientNode` no longer emits `$Changed` with an outdated value for an attribute a transaction did not touch, when a report changed it during the transaction
     - Fix: `WebRtcTransportRequestorServer` keeps sessions of different peers with the same session id apart
     - Fix: `DclBehavior` boolean options set through environment variables are read as booleans

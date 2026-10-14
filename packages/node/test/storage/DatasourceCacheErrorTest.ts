@@ -219,6 +219,44 @@ describe("DatasourceCache error handling", () => {
 });
 
 describe("settlement errors", () => {
+    it("runs every release at conclusion and logs one that fails", async () => {
+        const participant = new RemoteWriteParticipant(
+            async () => [
+                {
+                    kind: "attr-status",
+                    path: { endpointId: EndpointNumber(1), clusterId: ClusterId(6), attributeId: AttributeId(0) },
+                    status: Status.Success,
+                },
+                {
+                    kind: "attr-status",
+                    path: { endpointId: EndpointNumber(1), clusterId: ClusterId(8), attributeId: AttributeId(0) },
+                    status: Status.Success,
+                },
+            ],
+            "peer1",
+        );
+        const released = new Array<string>();
+        const receiver = (name: string, fail: boolean) => ({
+            settleAccepted: async () => ({
+                release: async () => {
+                    if (fail) {
+                        throw new Error(`${name} release failure`);
+                    }
+                    released.push(name);
+                },
+                persistFailure: undefined,
+            }),
+        });
+        participant.set(EndpointNumber(1), "6", { "0": true }, receiver("first", true), 0);
+        participant.set(EndpointNumber(1), "8", { "0": 1 }, receiver("second", false), 0);
+
+        await participant.commit1();
+        const warnings = await captureWarningsOf(() => participant.conclusion());
+
+        expect(released).deep.equals(["second"]);
+        expect(warnings.map(({ text }) => text).join("\n")).contains("first release failure");
+    });
+
     it("applies a report whose persist failed and lets it outrank an older write", async () => {
         const cache = createCache({
             localWriter: {

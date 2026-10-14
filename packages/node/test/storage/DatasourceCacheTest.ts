@@ -155,4 +155,76 @@ describe("DatasourceCache settlement order", () => {
 
         expect(writer.stored[DatasourceCache.VERSION_KEY]).equals(-1);
     });
+
+    it("resolves a release while an earlier announcement still runs, and announces in settlement order", async () => {
+        const cache = createCache();
+        const announced = new Array<string>();
+        const { promise: held, resolver: lift } = createPromise<void>();
+        cache.consumer = {
+            readValues: () => ({}),
+            snapshot: () => ({}),
+            releaseValues: () => ({}),
+            integrate: (changes: Val.StructMap) => {
+                const value = String(changes.get("1"));
+                return async () => {
+                    if (value === "reported") {
+                        await held;
+                    }
+                    announced.push(value);
+                };
+            },
+        } satisfies Datasource.ExternallyMutableStore.Consumer;
+
+        const report = cache.externalSet(attrs({ "1": "reported" }));
+        await MockTime.yield();
+        const { release } = await cache.settleAccepted({ "1": "accepted" }, 1);
+        await release();
+
+        expect(announced).deep.equals([]);
+
+        lift();
+        await report;
+
+        expect(announced).deep.equals(["reported", "accepted"]);
+    });
+
+    it("announces later settlements after an announcement that throws", async () => {
+        const cache = createCache();
+        const announced = new Array<string>();
+        cache.consumer = {
+            readValues: () => ({}),
+            snapshot: () => ({}),
+            releaseValues: () => ({}),
+            integrate: (changes: Val.StructMap) => {
+                const value = String(changes.get("1"));
+                return () => {
+                    if (value === "first") {
+                        throw new Error("announcement failure");
+                    }
+                    announced.push(value);
+                };
+            },
+        } satisfies Datasource.ExternallyMutableStore.Consumer;
+
+        const { release } = await cache.settleAccepted({ "1": "first" }, 0);
+        const report = cache.externalSet(attrs({ "1": "second" }));
+        await report;
+        await release();
+        await cache.externalSet(attrs({ "1": "third" }));
+
+        expect(announced).deep.equals(["second", "third"]);
+    });
+
+    it("does not hold a new consumer's reports behind an announcement of the reclaimed one", async () => {
+        const cache = createCache();
+        cache.consumer = recordingConsumer().consumer;
+        await cache.settleAccepted({ "1": "accepted" }, 0);
+
+        cache.reclaimValues();
+        const { announced, consumer } = recordingConsumer();
+        cache.consumer = consumer;
+        await cache.externalSet(attrs({ "1": "reported" }));
+
+        expect(announced).deep.equals([{ "1": "reported" }]);
+    });
 });

@@ -1435,8 +1435,12 @@ describe("Datasource", () => {
             expect(changes).deep.equals([]);
         });
 
-        it("logs a failing change broadcast and still announces the changes", async () => {
+        it("logs a failing change broadcast and observer and still announces the rest", async () => {
             const store = new RecordingMirrorStore({ 1: "bar", 2: "baz" });
+            const foo$Changed = Observable<[value: string, oldValue: string, context?: ValueSupervisor.Session]>();
+            foo$Changed.on(() => {
+                throw new Error("observer failure");
+            });
             const other$Changed = Observable<[value: string, oldValue: string, context?: ValueSupervisor.Session]>();
             const others = new Array<string>();
             other$Changed.on(value => {
@@ -1447,7 +1451,7 @@ describe("Datasource", () => {
                 supervisor: writeSupervisor,
                 primaryKey: "id",
                 store,
-                events: { other$Changed },
+                events: { foo$Changed, other$Changed },
                 onChange: () => {
                     throw new Error("broadcast failure");
                 },
@@ -1457,13 +1461,20 @@ describe("Datasource", () => {
                 expect.fail("the datasource did not bind to its store");
             }
 
-            const announce = consumer.integrate(new Map([["2", "qux"]]));
+            const announce = consumer.integrate(
+                new Map([
+                    ["1", "new"],
+                    ["2", "qux"],
+                ]),
+            );
             const warnings = await captureWarningsOf(async () => {
                 await announce?.();
             });
 
             expect(others).deep.equals(["qux"]);
-            expect(warnings.map(({ text }) => text).join("\n")).contains("broadcast failure");
+            const logged = warnings.map(({ text }) => text).join("\n");
+            expect(logged).contains("broadcast failure");
+            expect(logged).contains("observer failure");
         });
 
         describe("nested writes", () => {
@@ -1566,7 +1577,7 @@ describe("Datasource", () => {
             expect(store.sets).deep.equals([{ 1: "bar" }, { 2: "qux" }]);
         });
 
-        it("does not send a fabric-scoped list whose assignment failed and was caught", async () => {
+        it("does not send a fabric-scoped list whose assignment failed and was caught, also with a later assignment", async () => {
             const entry = {
                 privilege: AccessControlCluster.AccessControlEntryPrivilege.Administer,
                 authMode: AccessControlCluster.AccessControlEntryAuthMode.Case,
@@ -1591,10 +1602,11 @@ describe("Datasource", () => {
                 } catch (e) {
                     refusal = e;
                 }
+                state.extension = [];
             });
 
             expect(refusal).not.undefined;
-            expect(store.sets).deep.equals([]);
+            expect(store.sets.map(set => Object.keys(set))).deep.equals([["1"]]);
         });
     });
 

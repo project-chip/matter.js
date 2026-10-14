@@ -5,13 +5,15 @@
  */
 
 import { Datasource } from "#behavior/state/managed/Datasource.js";
-import { InternalError, StorageDriver, Transaction } from "@matter/general";
+import { InternalError, Logger, MaybePromise, StorageDriver, Transaction } from "@matter/general";
 import { Val } from "@matter/protocol";
 import { EndpointNumber } from "@matter/types";
 import type { ClientCacheBuffer } from "./ClientCacheBuffer.js";
 import type { LocalWriter } from "./LocalWriter.js";
 import { RemoteWriteParticipant } from "./RemoteWriteParticipant.js";
 import type { RemoteWriter } from "./RemoteWriter.js";
+
+const logger = Logger.get("DatasourceCache");
 
 const nothingToRelease = async () => {};
 
@@ -56,7 +58,7 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
      * Change announcements in the order the changes were settled.  An entry stays closed until the transaction that
      * settled it ends; every entry behind it waits.
      */
-    #announcements = new Array<{ open: boolean; announce: () => Promise<void> }>();
+    #announcements = new Array<{ open: boolean; announce: () => MaybePromise<void> }>();
     #draining = false;
 
     #erased = false;
@@ -109,7 +111,7 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
         (participant as RemoteWriteParticipant).set(this.#endpointNumber, this.#behaviorId, values, this, this.#epoch);
     }
 
-    async settleAccepted(values: Val.Struct, epoch: number) {
+    async settleAccepted(values: Val.Struct, epoch: number): Promise<RemoteWriteParticipant.Settled> {
         const accepted = new Map<string, Val>();
         for (const id in values) {
             if ((this.#settledAt.get(id) ?? -1) <= epoch) {
@@ -117,7 +119,7 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
             }
         }
         if (!accepted.size) {
-            return { release: nothingToRelease };
+            return { release: nothingToRelease, persistFailure: undefined };
         }
 
         const { announce, persistFailure } = await this.#settle(accepted);
@@ -150,7 +152,10 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
      *
      * Returns the announcement of the changes, if any, and the persist failure, if any.
      */
-    async #settle(values: Val.StructMap): Promise<{ announce?: () => Promise<void>; persistFailure?: unknown }> {
+    async #settle(values: Val.StructMap): Promise<{
+        announce: undefined | (() => MaybePromise<void>);
+        persistFailure: unknown;
+    }> {
         const epoch = ++this.#epoch;
         for (const key of values.keys()) {
             const id = String(key);
@@ -159,27 +164,38 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
             }
         }
 
-        let persistFailure: unknown;
-        try {
-            if (!(await this.#persist(values))) {
-                return {};
-            }
-        } catch (error) {
-            persistFailure = error;
-        }
         if (this.#erased || this.#reclaimed) {
-            return { persistFailure };
+            return { announce: undefined, persistFailure: undefined };
         }
 
-        const current = new Map<string, Val>();
-        for (const [key, value] of values) {
-            const id = String(key);
-            if (id.startsWith("__") || this.#settledAt.get(id) === epoch) {
-                current.set(id, value);
+        const versionVal = values.get(DatasourceCache.VERSION_KEY);
+        if (typeof versionVal === "number") {
+            this.#version = versionVal;
+        }
+
+        let persistFailure: unknown;
+        if (this.#buffer) {
+            for (const key of values.keys()) {
+                this.#dirtyKeys.add(String(key));
+            }
+            this.#buffer.markDirty(this);
+        } else if (this.#localWriter) {
+            const valuesStruct = Object.fromEntries(values) as Val.Struct;
+            try {
+                await this.#persistInOrder(localWriter =>
+                    localWriter.persist(this.#endpointNumber, this.#behaviorId, valuesStruct),
+                );
+            } catch (error) {
+                persistFailure = error;
+            }
+            if (this.#erased || this.#reclaimed) {
+                return { announce: undefined, persistFailure };
             }
         }
-        if (!current.size) {
-            return { persistFailure };
+
+        const current = this.#stillOwned(values, epoch);
+        if (current === undefined) {
+            return { announce: undefined, persistFailure };
         }
 
         if (this.#consumer) {
@@ -187,12 +203,43 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
         }
 
         this.#seed(current);
-        return { persistFailure };
+        return { announce: undefined, persistFailure };
     }
 
     /**
-     * Emit the open announcements at the head of the queue.  A running drain picks up what opens meanwhile.  A caller
-     * does not wait for its own entry: it may sit behind a closed one.
+     * The part of {@link values} no settlement that arrived after {@link epoch} has claimed: {@link values} itself
+     * unless one has, undefined if nothing is left.
+     */
+    #stillOwned(values: Val.StructMap, epoch: number) {
+        let owned: Val.StructMap | undefined;
+        for (const key of values.keys()) {
+            const id = String(key);
+            if (id.startsWith("__") || this.#settledAt.get(id) === epoch) {
+                owned?.set(id, values.get(key));
+            } else if (owned === undefined) {
+                owned = new Map();
+                for (const [earlier, value] of values) {
+                    if (earlier === key) {
+                        break;
+                    }
+                    owned.set(String(earlier), value);
+                }
+            }
+        }
+        if (owned === undefined) {
+            return values;
+        }
+        return owned.size ? owned : undefined;
+    }
+
+    /**
+     * Emit the open announcements at the head of the queue, one drain at a time.  A caller that finds a drain running
+     * returns, and that drain announces what opens meanwhile.  A caller never waits for its own entry: the observer
+     * holding the queue may be the one awaiting this caller.  For the same reason, a post-commit observer of a writing
+     * transaction must not await a change of the same cluster that sits behind the transaction's own closed entry; it
+     * opens only when that transaction ends.
+     *
+     * An announcement logs its own failures; the catch here only keeps a failure from stranding the entries behind it.
      */
     async #drain() {
         if (this.#draining) {
@@ -202,39 +249,15 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
         this.#draining = true;
         try {
             while (this.#announcements[0]?.open) {
-                await this.#announcements.shift()!.announce();
+                try {
+                    await this.#announcements.shift()!.announce();
+                } catch (e) {
+                    logger.warn(`Error announcing changes of ${this.#nodeId} endpoint ${this.#endpointNumber}:`, e);
+                }
             }
         } finally {
             this.#draining = false;
         }
-    }
-
-    /**
-     * Record values in local storage.  Returns false if this cache no longer takes values.
-     */
-    async #persist(values: Val.StructMap) {
-        if (this.#erased || this.#reclaimed) {
-            return false;
-        }
-
-        const versionVal = values.get(DatasourceCache.VERSION_KEY);
-        if (typeof versionVal === "number") {
-            this.#version = versionVal;
-        }
-
-        if (this.#buffer) {
-            for (const key of values.keys()) {
-                this.#dirtyKeys.add(String(key));
-            }
-            this.#buffer.markDirty(this);
-        } else {
-            const valuesStruct = Object.fromEntries(values) as Val.Struct;
-            await this.#persistInOrder(localWriter =>
-                localWriter.persist(this.#endpointNumber, this.#behaviorId, valuesStruct),
-            );
-        }
-
-        return true;
     }
 
     /**
@@ -274,6 +297,7 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
         }
 
         this.#reclaimed = true;
+        this.#announcements.length = 0;
 
         // Don't clear dirty state here — the buffer will flush remaining dirty data during shutdown.  After
         // reclaimValues the data lives in initialValues, and flush() reads from there as a fallback.
@@ -316,6 +340,7 @@ export class DatasourceCache implements Datasource.ExternallyMutableStore, Remot
      */
     discard() {
         this.#erased = true;
+        this.#announcements.length = 0;
         this.#dirtyKeys.clear();
         this.#buffer?.removeDirty(this);
     }

@@ -362,9 +362,9 @@ export namespace Datasource {
              * Apply externally-sourced values to the datasource's managed state now.
              *
              * Returns the function that announces the changes, or undefined if nothing changed.  It logs a failing
-             * {@link Datasource.Options.onChange} rather than throwing; event observers handle their own errors.
+             * {@link Datasource.Options.onChange} or event emit and goes on; it never throws.
              */
-            integrate(values: Val.StructMap): undefined | (() => Promise<void>);
+            integrate(values: Val.StructMap): undefined | (() => MaybePromise<void>);
 
             /**
              * Read current values for the specified keys.
@@ -458,9 +458,7 @@ class DatasourceImpl implements Datasource, Datasource.ExternallyMutableStore.Co
      * True when {@link store} is a {@link Datasource.ExternallyMutableStore}, i.e. the values mirror a remote node and
      * {@link Datasource.ExternallyMutableStore.set} conveys changes to that node rather than to local persistence.
      */
-    get mirrorsRemote() {
-        return Datasource.ExternallyMutableStore.is(this.store);
-    }
+    readonly mirrorsRemote: boolean;
 
     observedInteractions?: Set<
         | NonNullable<ValueSupervisor.RemoteActorSession["interactionComplete"]>
@@ -477,6 +475,7 @@ class DatasourceImpl implements Datasource, Datasource.ExternallyMutableStore.Co
         this.location = options.location;
         this.entropy = options.entropy;
         this.store = options.store;
+        this.mirrorsRemote = Datasource.ExternallyMutableStore.is(options.store);
         this.owner = options.owner;
         this.onChange = options.onChange;
         this.primaryKey = options.primaryKey === "id" ? "id" : "name";
@@ -846,19 +845,52 @@ class DatasourceImpl implements Datasource, Datasource.ExternallyMutableStore.Co
 
         const changedProps = Array.from(changes.keys());
 
-        return async () => {
-            try {
-                await this.onChange?.(changedProps);
-            } catch (e) {
-                logger.warn(`Error broadcasting changes of ${this.location.path}:`, e);
-            }
-
-            for (const name of changedProps) {
+        const announceRest = (from: number): MaybePromise<void> => {
+            for (let i = from; i < changedProps.length; i++) {
+                const name = changedProps[i];
                 const event = this.changedEventFor(name);
-                if (event?.isObserved) {
-                    await event.emit(changes.get(name), oldValues!.get(name));
+                if (!event?.isObserved) {
+                    continue;
+                }
+                const failed = (e: unknown) => {
+                    logger.warn(`Error announcing a change of ${this.location.path}.${name}:`, e);
+                };
+                try {
+                    const result = event.emit(changes.get(name), oldValues!.get(name));
+                    if (MaybePromise.is(result)) {
+                        return Promise.resolve(result).then(
+                            () => announceRest(i + 1),
+                            e => {
+                                failed(e);
+                                return announceRest(i + 1);
+                            },
+                        );
+                    }
+                } catch (e) {
+                    failed(e);
                 }
             }
+        };
+
+        return (): MaybePromise<void> => {
+            const broadcastFailed = (e: unknown) => {
+                logger.warn(`Error broadcasting changes of ${this.location.path}:`, e);
+            };
+            try {
+                const result = this.onChange?.(changedProps);
+                if (MaybePromise.is(result)) {
+                    return Promise.resolve(result).then(
+                        () => announceRest(0),
+                        e => {
+                            broadcastFailed(e);
+                            return announceRest(0);
+                        },
+                    );
+                }
+            } catch (e) {
+                broadcastFailed(e);
+            }
+            return announceRest(0);
         };
     }
 
@@ -911,6 +943,11 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
      * call succeeds, as a failing assignment undoes the nested ones it made first.
      */
     #pendingAssigned: Set<string> | undefined;
+
+    /**
+     * Whether the outermost {@link change} is running, so a nested one only notes its member as pending.
+     */
+    #mutating = false;
 
     #expired = false;
     #internals: DatasourceImpl;
@@ -1095,18 +1132,28 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
      * than what changed.
      */
     #mutateRecording(mutator: () => void, member: string | number) {
-        const outermost = this.#pendingAssigned === undefined;
-        const pending = (this.#pendingAssigned ??= new Set());
+        if (this.#mutating) {
+            mutator();
+            (this.#pendingAssigned ??= new Set()).add(String(member));
+            return;
+        }
+
+        this.#mutating = true;
         try {
             mutator();
-            pending.add(String(member));
+        } catch (e) {
+            // A failing assignment undoes the nested ones it made first
+            this.#pendingAssigned = undefined;
+            throw e;
         } finally {
-            if (outermost) {
-                this.#pendingAssigned = undefined;
-            }
+            this.#mutating = false;
         }
-        if (outermost) {
-            const assigned = (this.#assigned ??= new Set());
+
+        const assigned = (this.#assigned ??= new Set());
+        assigned.add(String(member));
+        const pending = this.#pendingAssigned;
+        if (pending !== undefined) {
+            this.#pendingAssigned = undefined;
             for (const key of pending) {
                 assigned.add(key);
             }
@@ -1376,16 +1423,20 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
         }
 
         const { storeFields } = this.#internals;
-        const changes: CommitChanges = { notifications: [], changeList: new Set() };
+        let changes: CommitChanges | undefined;
         let stored: Val.Struct | undefined;
 
         for (const name in this.#values) {
-            if (this.#noteIfChanged(name, changes) && storeFields.has(name)) {
-                (stored ??= {})[name] = this.#values[name];
+            const noted = this.#noteIfChanged(name, changes);
+            if (noted !== undefined) {
+                changes = noted;
+                if (storeFields.has(name)) {
+                    (stored ??= {})[name] = this.#values[name];
+                }
             }
         }
 
-        if (changes.changeList.size) {
+        if (changes) {
             this.#internals.advanceVersion();
 
             if (this.#internals.events.stateChanged?.isObserved) {
@@ -1401,13 +1452,18 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
         return stored;
     }
 
-    #noteIfChanged(name: string, changes: CommitChanges) {
+    /**
+     * Note {@link name} in {@link changes}, created on the first change, if its value changed.  Returns the changes
+     * then, otherwise undefined.
+     */
+    #noteIfChanged(name: string, changes: CommitChanges | undefined) {
         const newval = this.#values[name];
         const oldval = this.#internals.values[name];
         if (oldval === newval || isDeepEqual(newval, oldval)) {
-            return false;
+            return;
         }
 
+        changes ??= { notifications: [], changeList: new Set() };
         changes.changeList.add(name);
 
         const event = this.#internals.changedEventFor(name);
@@ -1418,7 +1474,7 @@ class RootReference implements ValReference<Val.Struct>, Transaction.Participant
             });
         }
 
-        return true;
+        return changes;
     }
 }
 
