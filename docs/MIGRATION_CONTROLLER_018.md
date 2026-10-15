@@ -569,7 +569,9 @@ the device; basic throws `ImplementationError` if the peer's `AdministratorCommi
 ## "Is the node ready?"
 
 Legacy `initialized` / `localInitializationDone` / `remoteInitializationDone` → `clientNode.lifecycle.isSeeded`
-(the peer's structure has been read: BasicInformation present and more than just the root endpoint), with
+(the peer's structure has been read: BasicInformation present and every endpoint the root's PartsList names
+installed, which includes a peer with only its root endpoint; a node built by hand without a root PartsList needs an
+endpoint beyond the root), with
 `lifecycle.seeded` emitting once on the false→true transition.
 
 `await lifecycle.seeded` never resolves for a peer that is offline, so bound the wait — legacy
