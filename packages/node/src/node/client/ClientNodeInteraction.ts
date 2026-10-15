@@ -217,7 +217,9 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
      * When the number of commands exceeds the peer's MaxPathsPerInvoke limit (or 1 for older nodes),
      * commands are split across multiple parallel exchanges automatically by ClientInteraction.
      *
-     * Single commands may be automatically batched with other commands invoked in the same timer tick.
+     * Single commands may be automatically batched with other commands for the same network invoked in the same
+     * timer tick.  A command with per-request options, such as an expected processing time, is sent on its own and
+     * may reach the peer before batched commands invoked earlier.
      */
     async *invoke(request: ClientInvoke, context?: ActionContext): DecodedInvokeResult {
         // For commands, by default ignore the queue because the user is responsible for managing that themselves
