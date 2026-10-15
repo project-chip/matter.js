@@ -212,6 +212,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A subscription that ends while the node keeps running, e.g. because its session was closed, is no longer re-established after a restart; re-establishment tries the newest stored subscription of a peer first
     - Fix: `VendorIdVerification.verify()` returns `undefined` when the device rejects the signing request
     - Fix: A fabric change waits for the commissioning state instead of failing with `synchronous-transaction-conflict` when another transaction holds it
+    - Fix: A peer that exposes only its root endpoint now becomes seeded
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument

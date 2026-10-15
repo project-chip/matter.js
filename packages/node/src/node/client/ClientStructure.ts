@@ -154,6 +154,7 @@ export class ClientStructure {
     #composition = new Map<EndpointStructure, EndpointComposition>();
     #events: ClientStructureEvents;
     #changed = Observable<[void]>();
+    #applying = 0;
     #localFailureKinds = new Set<unknown>();
     #commandFactory?: ClusterBehaviorType.CommandFactory;
 
@@ -176,6 +177,22 @@ export class ClientStructure {
 
     get changed() {
         return this.#changed;
+    }
+
+    /**
+     * True while structural changes are being applied and announced, when the endpoint tree and its behaviors may be
+     * only partly installed.
+     */
+    get isApplying() {
+        return this.#applying > 0;
+    }
+
+    /**
+     * Whether the peer has reported the Descriptor list `attribute` (DeviceTypeList or PartsList) of `endpoint`, from
+     * the wire or from the cache of an earlier report.
+     */
+    isDescriptorListReported(endpoint: EndpointNumber, attribute: AttributeId) {
+        return this.#endpoints.get(endpoint)?.reportedLists?.has(attribute) ?? false;
     }
 
     /**
@@ -219,6 +236,7 @@ export class ClientStructure {
             for (const id of knownBehaviors) {
                 const cluster = this.#clusterFor(endpoint, id);
                 this.#checkUnlistedSeedValues(cluster);
+                this.#noteReportedLists(endpoint, cluster, cluster.store.currentValues ?? {});
                 this.#synchronizeCluster(endpoint, cluster, new Set());
             }
         }
@@ -240,6 +258,7 @@ export class ClientStructure {
         }
 
         this.#emitPendingStructureEvents();
+        this.#announceApplied();
     }
 
     /**
@@ -469,10 +488,7 @@ export class ClientStructure {
 
         // We don't apply structural changes until we've processed all attribute data if a.) listeners might otherwise
         // see partially initialized endpoints, or b.) the change requires an async operation
-        await this.#applyPendingChanges();
-
-        // Likewise, we don't emit events until we've applied all structural changes
-        this.#emitPendingStructureEvents();
+        await this.#applyAndAnnounce();
         for (const occurrence of q.delayedEvents) {
             try {
                 await this.#emitOccurrence(occurrence, q);
@@ -527,6 +543,7 @@ export class ClientStructure {
                     this.#invalidateOnDefinitionChange(cluster, values);
 
                     const { persistFailure } = await cluster.store.externalSet(values);
+                    this.#noteReportedLists(endpoint, cluster, values);
                     this.#synchronizeCluster(endpoint, cluster, clustersWithData);
                     if (persistFailure !== undefined) {
                         this.#localFailed(persistFailure);
@@ -545,10 +562,7 @@ export class ClientStructure {
             }
         }
 
-        // Apply pending structural changes
-        await this.#applyPendingChanges();
-
-        this.#emitPendingStructureEvents();
+        await this.#applyAndAnnounce();
     }
 
     #mutateAttribute(
@@ -683,6 +697,7 @@ export class ClientStructure {
         this.#invalidateOnDefinitionChange(cluster, attrs.values);
 
         const { persistFailure } = await cluster.store.externalSet(attrs.values);
+        this.#noteReportedLists(endpoint, cluster, attrs.values);
         this.#synchronizeCluster(endpoint, cluster, clustersWithData);
         if (persistFailure !== undefined) {
             this.#localFailed(persistFailure);
@@ -948,6 +963,24 @@ export class ClientStructure {
                 attrs = cluster.store.currentValues ?? {};
             }
             this.#synchronizeDescriptor(structure, attrs, clustersWithData);
+        }
+    }
+
+    #noteReportedLists(structure: EndpointStructure, cluster: ClusterStructure, values: Val.StructMap | Val.Struct) {
+        if (cluster.id !== Descriptor.id) {
+            return;
+        }
+
+        const lists = [
+            [DEVICE_TYPE_LIST_ATTR_ID, DEVICE_TYPE_LIST_ATTR_NAME],
+            [PARTS_LIST_ATTR_ID, PARTS_LIST_ATTR_NAME],
+        ] as const;
+        for (const [id, name] of lists) {
+            const value =
+                values instanceof Map ? (values.get(id) ?? values.get(name)) : getStoreValue(values, id, name);
+            if (value !== undefined) {
+                (structure.reportedLists ??= new Set()).add(id);
+            }
         }
     }
 
@@ -1698,7 +1731,26 @@ export class ClientStructure {
                 }
             }
         }
+    }
+
+    /**
+     * Apply pending structural changes, then emit their events, so no listener sees a partly applied structure.
+     */
+    async #applyAndAnnounce() {
+        // A count because interactions are not serialized and one may apply while another awaits
+        this.#applying++;
+        try {
+            await this.#applyPendingChanges();
+            this.#emitPendingStructureEvents();
+        } finally {
+            this.#applying--;
+        }
+        this.#announceApplied();
+    }
+
+    #announceApplied() {
         this.#changed.emit();
+        this.#events.emitStructureApplied(this.#node);
     }
 
     async #emitOccurrence(occurrence: ReadResult.EventValue, q: MutateContext) {
@@ -1769,6 +1821,12 @@ interface EndpointStructure {
     pendingOwner?: EndpointStructure;
     endpoint: Endpoint;
     clusters: Map<ClusterId | string, ClusterStructure>;
+
+    /**
+     * The Descriptor lists the peer has reported for this endpoint.  A mandatory list it has not reported still reads
+     * as empty from the behavior's state.
+     */
+    reportedLists?: Set<AttributeId>;
 }
 
 interface ClusterStructure extends Partial<PeerBehavior.DiscoveredClusterShape> {
