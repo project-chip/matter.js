@@ -627,7 +627,7 @@ const supportsLit = IcdClient.litSupported(node);
 // operations:
 await node.act(agent => agent.get(IcdClient).register({ clientType, monitoredSubject, allowMultiAdmin, ignoredVendors }));
 await node.act(agent => agent.get(IcdClient).unregister());
-await node.act(agent => agent.get(IcdClient).forget());               // local-only forget, for an unreachable LIT peer
+await node.act(agent => agent.get(IcdClient).forget());               // local-only escape hatch; abandons any registration work in flight
 const promised = await node.act(agent => agent.get(IcdClient).stayActive(Millis(30000)));
 
 // events:
