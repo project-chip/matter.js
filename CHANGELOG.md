@@ -323,7 +323,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: ID validators refuse values that are not 32-bit unsigned integers
     - Fix: Bitmap classes apply member defaults and full member widths
     - Fix: TLV schemas carry computed bounds, nullable 64-bit integers reserve the null value correctly, and fully qualified 4-octet tags decode
-    - Fix: Onboarding payloads decode Base38 correctly and reject invalid vendor IDs, product IDs and manual codes
+    - Fix: Onboarding payloads decode Base38 correctly and reject invalid vendor IDs, product IDs and manual codes with `UnexpectedDataError`
     - Fix: `Cluster.with()` rejects unknown features and returns one frozen namespace per selection
     - Fix: `StatusResponseError.create()` returns an `UnknownStatusResponseError` for an unknown code instead of throwing it, and its message names the code
 
