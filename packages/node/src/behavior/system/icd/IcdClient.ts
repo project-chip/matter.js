@@ -831,7 +831,6 @@ export class IcdClient extends Behavior {
 
     #onCheckIn(checkIn: FabricIcd.ReceivedCheckIn) {
         const { counter, activeModeThreshold } = checkIn;
-        const { phase } = this.internal;
         // A reaction queued before the registration was cleared belongs to a receive path that is gone
         if (this.state.key === undefined) {
             return;
@@ -840,15 +839,15 @@ export class IcdClient extends Behavior {
         const entry = fed?.icd.peerFor(fed.nodeId);
 
         // Persist the advanced offset, and a key this Check-In confirmed, so a restart cannot restore an older baseline
-        // and accept this Check-In again
-        if (entry !== undefined && (phase.kind === "registered" || phase.kind === "refreshing")) {
+        // and accept this Check-In again; also while a teardown has not cleared the stored key yet
+        if (entry !== undefined) {
             this.#persistPeerEntry(entry);
         }
         this.state.lastCheckInReceivedAt = Time.nowMs;
         this.events.checkedIn.emit({ counter, activeModeThreshold });
 
-        // The baseline may have moved since the Check-In was decrypted, so FabricIcd answers for the current key
-        if (phase.kind === "registered" && fed !== undefined && fed.icd.refreshNeeded(fed.nodeId)) {
+        // A listener may have started a teardown, and the baseline may have moved since the Check-In was decrypted
+        if (this.internal.phase.kind === "registered" && fed !== undefined && fed.icd.refreshNeeded(fed.nodeId)) {
             const refreshing: IcdClient.OperationPhase = { kind: "refreshing", op: this.#operation() };
             this.#run(refreshing, () => this.#refreshKey(refreshing));
         }

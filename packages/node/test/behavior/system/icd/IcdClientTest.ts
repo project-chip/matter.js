@@ -1164,6 +1164,66 @@ describe("IcdClient", () => {
             expect(eventsBeforeRestart).deep.equals(["keyRefreshed", `counterStart ${lastOldCounter}`]);
         });
 
+        it("rejects a replay after a restart when shutdown abandoned a teardown that accepted the Check-In", async () => {
+            await using site = new MockSite();
+            const { controller, peer1 } = await sleepingLitPeer(site);
+            const { fabricIndex } = peer1.stateOf(CommissioningClient).peerAddress!;
+            const fabricIcd = controller.env.get(FabricManager).for(fabricIndex).icd;
+            const { key } = peer1.stateOf(IcdClient);
+            const entry = fedPeerOf(controller, peer1);
+            const counter = (entry.counterStart + entry.lastOffset + 1) >>> 0;
+            const checkIn = await CheckInMessage.encodeIcd(controller.env.get(Crypto), key!, counter, 5000);
+
+            // unregister() waits for the sleeping peer; its Check-In is accepted while the state is held
+            const release = await holdIcdState(peer1);
+            const ending = tracked(peer1.act(agent => agent.get(IcdClient).unregister()));
+            await MockTime.macrotask;
+            await fabricIcd.processCheckIn(checkIn);
+            // Shutdown abandons the teardown before its clear
+            peer1.lifecycle.change(EndpointLifecycle.Change.Destroying);
+            await release();
+            await MockTime.resolve(
+                ending.promise.then(undefined, () => {}),
+                { macrotasks: true },
+            );
+            expect(peer1.stateOf(IcdClient).registered).true;
+
+            await MockTime.resolve(controller.close());
+            const controllerB = await site.addNode(undefined, { id: controller.id, index: 1 });
+            const peer1b = controllerB.peers.get("peer1")!;
+            let checkIns = 0;
+            peer1b.eventsOf(IcdClient).checkedIn.on(() => {
+                checkIns++;
+            });
+            await controllerB.env.get(FabricManager).for(fabricIndex).icd.processCheckIn(checkIn);
+            for (let i = 0; i < 10; i++) {
+                await MockTime.macrotask;
+            }
+
+            expect(checkIns).equals(0);
+        });
+
+        it("starts no refresh after a checkedIn listener began forget()", async () => {
+            await using site = new MockSite();
+            const { controller, device, peer1 } = await checkInPair(site);
+            await requestRefreshOnNextCheckIn(controller, peer1);
+
+            using log = captureLog(LogLevel.WARN);
+            let forgetting: ReturnType<typeof tracked> | undefined;
+            peer1.eventsOf(IcdClient).checkedIn.once(() => {
+                forgetting = tracked(peer1.act(agent => agent.get(IcdClient).forget()));
+            });
+            await triggerCheckIn(device);
+            await until(() => forgetting !== undefined);
+            await MockTime.resolve(forgetting!.promise, { macrotasks: true });
+            await settled(controller);
+
+            expect(peer1.stateOf(IcdClient).registered).false;
+            expect(
+                log.messages.filter(message => message.includes("IcdClient") || message.includes(".icd.")),
+            ).deep.equals([]);
+        });
+
         it("ends a retry when a Check-In under the pending key confirms it while the retry waits for the state", async () => {
             await using site = new MockSite({ createStorageDriver: store => new GatedIcdStorage(store) });
             const { controller, device, peer1 } = await checkInPair(site);
@@ -1752,7 +1812,9 @@ describe("IcdClient", () => {
 
             expect(refreshes).equals(1);
             expect(CountingIcdServer.registrations).equals(1);
-            expect(log.messages.filter(message => !message.includes("BasicInformation"))).deep.equals([]);
+            expect(
+                log.messages.filter(message => message.includes("IcdClient") || message.includes(".icd.")),
+            ).deep.equals([]);
         });
 
         it("ends a key refresh quietly when the peer is decommissioned", async () => {

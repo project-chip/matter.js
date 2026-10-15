@@ -7,8 +7,12 @@
 import { OnOffClient, OnOffServer } from "#behaviors/on-off";
 import { ServerNode } from "#node/ServerNode.js";
 import {
+    AbortedError,
     ClosedError,
     createPromise,
+    InternalError,
+    MockNetwork,
+    Network,
     Duration,
     Minutes,
     Seconds,
@@ -875,6 +879,57 @@ describe("ClientInvoke", () => {
             expect(exchanges.length).equals(1);
             expect(exchanges[0].expectedProcessingTime).equals(Seconds(90));
         });
+    });
+
+    it("stops the batch exchange of a command whose acting context aborts", async () => {
+        await using site = new MockSite();
+        const { peer1, device } = await batchingPair(site);
+        const network = device.env.get(Network);
+        if (!(network instanceof MockNetwork)) {
+            throw new InternalError("Mock network required");
+        }
+        // The device answers nothing, so the controller retransmits the invoke until its exchange stops
+        let silenced = false;
+        network.simulator.router.intercept((packet, route) => {
+            if (silenced && network.shouldReceive(packet.sourceAddress)) {
+                return;
+            }
+            route(packet);
+        });
+        let invokesSent = 0;
+        const channelSend = MessageChannel.prototype.send;
+        MessageChannel.prototype.send = function (message, options) {
+            if (silenced && message.payloadHeader.messageType === MessageType.InvokeRequest) {
+                invokesSent++;
+            }
+            return channelSend.call(this, message, options);
+        };
+        try {
+            silenced = true;
+            const abort = new AbortController();
+            let caught: unknown;
+            const invoking = Promise.resolve(
+                peer1.endpoints.for(1).act("toggle", agent => agent.get(OnOffClient).toggle(), { abort: abort.signal }),
+            ).catch(error => (caught = error));
+            await MockTime.resolve(
+                (async () => {
+                    while (invokesSent === 0) {
+                        await MockTime.macrotask;
+                    }
+                })(),
+            );
+
+            abort.abort();
+            await MockTime.resolve(invoking);
+            expect(caught).instanceof(AbortedError);
+            const sentAtAbort = invokesSent;
+            await MockTime.advance(Seconds(10));
+            await MockTime.macrotask;
+
+            expect(invokesSent).equals(sentAtAbort);
+        } finally {
+            MessageChannel.prototype.send = channelSend;
+        }
     });
 
     it("correctly splits different-path commands when maxPathsPerInvoke is 1", async () => {
