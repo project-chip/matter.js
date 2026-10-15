@@ -910,7 +910,8 @@ export class ServerSubscription implements Subscription {
                 using _sending = lifetime?.join("sending keepalive");
                 await messenger.sendDataReport({
                     baseDataReport: {
-                        suppressResponse: true, // suppressResponse true for empty DataReports
+                        // Requested so the peer's INVALID_SUBSCRIPTION answer (Core § 8.5) is read on every transport
+                        suppressResponse: false,
                         subscriptionId: this.subscriptionId,
                         interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                     },
