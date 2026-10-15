@@ -711,8 +711,8 @@ export interface ServeOtaUpdateOptions {
      * How long to keep recording after the OTA exchange settles, in milliseconds, for a case asserting
      * what the node did *not* send in that window.
      *
-     * The waits above end on what the *provider* decided — it allowed an apply, or it refused one and
-     * gave up on the update — which a node it refused has not yet had time to react to. A case reading
+     * The waits above end on what the *provider* decided — it allowed an apply, or it refused one —
+     * which a node it refused has not yet had time to react to. A case reading
      * the record at that point states what the node had not done yet rather than what it did not do, so
      * a case whose claim is a negative names the window here and checks
      * {@link OtaBdxTransfer.observedMs} against it.
@@ -1376,12 +1376,12 @@ export interface WebRtcRequestorApi {
 
     /**
      * Registers a session the case has established with a provider, so the provider's later signaling
-     * for that id is accepted. Re-registering an id replaces the entry.
+     * for that id is accepted. Re-registering an id for the same peer replaces the entry.
      */
     upsertSession(session: WebRtcSessionSpec): Promise<void>;
 
-    /** Stops tracking a session. No-op where the id is unknown. */
-    removeSession(id: number): Promise<void>;
+    /** Stops tracking the session with this id held with `peer`. No-op where there is none. */
+    removeSession(peer: CertNodeRef, id: number): Promise<void>;
 
     /** The sessions the cluster tracks, which is what a refusal was judged against. */
     sessions(): Promise<readonly WebRtcSessionRecord[]>;

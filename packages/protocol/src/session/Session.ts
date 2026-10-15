@@ -310,8 +310,9 @@ export abstract class Session {
     /**
      * Force-close the session.
      *
-     * This terminates (potentially) subscriptions and exchanges without notifying peers.  It places the session in a
-     * closing state so no further exchanges are accepted.
+     * This ends the session's subscriptions for good and closes exchanges without notifying peers.  With
+     * {@link PeerLossContext.keepSubscriptions} the subscriptions end only when the session closes.  It places the
+     * session in a closing state so no further exchanges are accepted.
      *
      * TODO refactor when moving subscriptions away from sessions
      */
@@ -369,7 +370,17 @@ export abstract class Session {
         return !!this.#exchanges.size;
     }
 
+    /** End the session's subscriptions for good.  Returns how many were closed. */
     async closeSubscriptions(_flush = false, _currentExchange?: MessageExchange): Promise<number> {
+        return 0;
+    }
+
+    /**
+     * Flush and close the session's subscriptions because the node shuts down, keeping them eligible for
+     * re-establishment on the next start.  Subscriptions the session closes later are kept the same way.  Returns how
+     * many were closed.
+     */
+    async closeSubscriptionsForShutdown(): Promise<number> {
         return 0;
     }
 

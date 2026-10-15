@@ -6,7 +6,8 @@
 
 import { NodeJsNetwork } from "#net/NodeJsNetwork.js";
 import { InterfaceType } from "@matter/general";
-import { networkInterfaces } from "node:os";
+import { syncBuiltinESMExports } from "node:module";
+import os, { NetworkInterfaceInfo, networkInterfaces } from "node:os";
 
 describe("NodeJsNetwork", () => {
     let network: NodeJsNetwork;
@@ -157,10 +158,44 @@ describe("NodeJsNetwork", () => {
     });
 
     describe("getMembershipMulticastInterfaces", () => {
-        it("returns [undefined] for IPv4", () => {
+        it("returns [undefined] for IPv4 without an interface", () => {
             const interfaces = NodeJsNetwork.getMembershipMulticastInterfaces(undefined, true);
 
             expect(interfaces).deep.equal([undefined]);
+        });
+
+        it("returns the IPv4 address of the specified interface, not the default-route one", () => {
+            withInterfaces(
+                {
+                    wan0: [ipv4("192.168.1.10"), ipv6LinkLocal("fe80::1", 2)],
+                    lan0: [ipv4("10.0.0.5"), ipv6LinkLocal("fe80::2", 3)],
+                },
+                () => {
+                    const zone = NodeJsNetwork.getNetInterfaceZoneIpv6("lan0");
+
+                    expect(NodeJsNetwork.getMembershipMulticastInterfaces(zone, true)).deep.equal(["10.0.0.5"]);
+                },
+            );
+        });
+
+        it("returns no IPv4 interface for an interface without IPv4", () => {
+            withInterfaces(
+                {
+                    wan0: [ipv4("192.168.1.10"), ipv6LinkLocal("fe80::1", 2)],
+                    lan0: [ipv6LinkLocal("fe80::2", 3)],
+                },
+                () => {
+                    const zone = NodeJsNetwork.getNetInterfaceZoneIpv6("lan0");
+
+                    expect(NodeJsNetwork.getMembershipMulticastInterfaces(zone, true)).deep.equal([]);
+                },
+            );
+        });
+
+        it("returns no IPv4 interface for an unknown interface", () => {
+            const interfaces = NodeJsNetwork.getMembershipMulticastInterfaces("nonexistent-interface-12345", true);
+
+            expect(interfaces).deep.equal([]);
         });
 
         it("returns IPv6 interfaces with zone suffix", () => {
@@ -325,3 +360,38 @@ describe("NodeJsNetwork", () => {
         });
     });
 });
+
+function withInterfaces(interfaces: NodeJS.Dict<NetworkInterfaceInfo[]>, actor: () => void) {
+    const original = os.networkInterfaces;
+    os.networkInterfaces = () => interfaces;
+    syncBuiltinESMExports();
+    try {
+        actor();
+    } finally {
+        os.networkInterfaces = original;
+        syncBuiltinESMExports();
+    }
+}
+
+function ipv4(address: string): NetworkInterfaceInfo {
+    return {
+        address,
+        netmask: "255.255.255.0",
+        family: "IPv4",
+        mac: "00:00:00:00:00:00",
+        internal: false,
+        cidr: `${address}/24`,
+    };
+}
+
+function ipv6LinkLocal(address: string, scopeid: number): NetworkInterfaceInfo {
+    return {
+        address,
+        netmask: "ffff:ffff:ffff:ffff::",
+        family: "IPv6",
+        mac: "00:00:00:00:00:00",
+        internal: false,
+        cidr: `${address}/64`,
+        scopeid,
+    };
+}

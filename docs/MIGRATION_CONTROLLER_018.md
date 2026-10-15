@@ -136,13 +136,12 @@ Legacy `controller.discoverCommissionableDevices(identifierData, discoveryCapabi
 `serverNode.peers.discover(options)`, which returns a `ContinuousDiscovery`:
 
 ```ts
-import { ChannelType, Seconds } from "@matter/general";
+import { Seconds } from "@matter/general";
 
 const discovery = serverNode.peers.discover({
     longDiscriminator: 3840,          // or { shortDiscriminator } / { vendorId } / { productId } / { deviceType }, or {} for all
     timeout: Seconds(120),            // omit to search until you call discovery.stop()
-    scannerFilter: scanner =>         // optional: restrict transports (default: all)
-        scanner.type === ChannelType.UDP || scanner.type === ChannelType.BLE,
+    discoveryCapabilities: { ble: true }, // optional: BLE only where named; IP network always (default: all)
 });
 
 // `discovered` fires per (re-)advertisement — the same device can fire repeatedly, so dedupe:
@@ -296,7 +295,7 @@ state:
 | --- | --- |
 | `autoConnect` | `isDisabled` (**inverse**): `autoConnect: false` → `isDisabled: true`. Or use `clientNode.enable()` / `disable()`. |
 | `autoSubscribe` | `autoSubscribe` (same meaning) |
-| `subscribeAllAttributesAndEvents(opts)` / interval tuning | `defaultSubscription` (a `Subscribe` / `Subscribe.Options` carrying the interval floor/ceiling); the subscription re-applies automatically when you change it |
+| `subscribeAllAttributesAndEvents(opts)` / interval tuning | `defaultSubscription`: `Subscribe.Options` (interval floor/ceiling, filters) merged into the default wildcard subscription, or a built `Subscribe`/`Read` sent as given, with its paths and fabric filter; the node sets the event filter from the higher of the stored and the emitted event number, injects known data versions and defaults `keepSubscriptions` to false. To keep Leave handling, a built request needs the Basic Information attributes and events and the Operational Credentials `fabrics` attribute; without them the node notices a device going offline only through the subscription timeout and does not see a fabric Leave. The subscription re-applies automatically when you change it |
 | `node.connect()` | `clientNode.enable()` (subscription follows automatically) |
 | `node.disconnect()` | `clientNode.disable()` |
 | `node.reconnect()` / `triggerReconnect()` | not needed — `SustainedSubscription` re-establishes; observe `lifecycle.connectionState` |
@@ -437,7 +436,8 @@ for await (const chunk of node.interaction.read(Read({ attributes: [{ endpointId
 }
 ```
 
-(Events: pass `{ events: [...] }` and match `report.kind === "event-value"`.)
+(Events: pass `{ events: [...] }` and match `report.kind === "event-value"`.  Events a read or a subscription of
+your own returns reach only its result; they do not reach `eventsOf(...)` observers or `ChangeNotificationService`.)
 
 Name ↔ id conversion uses `ClusterLookup` from `@matter/types`, e.g.
 `ClusterLookup.attributeName(ClusterId(clusterId), attributeId, node.matter)` (also `attributeId`, `eventId`,
@@ -495,6 +495,10 @@ Mapping from the legacy flat bus:
 | `connectionAlive` | `NetworkClient` `subscriptionAlive`, or `lifecycle.connectionStateChanged` (connection, not a data change) |
 | `stateChanged` | `lifecycle.connectionStateChanged` (see Connection state) |
 | `initialized` / init-done flags | `lifecycle.isSeeded` / `seeded` (see "Is the node ready?") |
+
+`"event"` changes and the node's `eventsOf(...)` observers are fed only by the node's default subscription and
+its read after commissioning.  Without `autoSubscribe`, take events from the result of your own read or
+subscription.  The legacy `PairedNode` API still forwards the events of its own reads and subscriptions.
 
 For a single specific value you can instead `reactTo` that behavior's `<attr>$Changed` (or the behavior's
 own event) directly — fault-isolated and torn down with the behavior. That is the exception, not the
@@ -565,7 +569,9 @@ the device; basic throws `ImplementationError` if the peer's `AdministratorCommi
 ## "Is the node ready?"
 
 Legacy `initialized` / `localInitializationDone` / `remoteInitializationDone` → `clientNode.lifecycle.isSeeded`
-(the peer's structure has been read: BasicInformation present and more than just the root endpoint), with
+(the peer's structure has been read: BasicInformation present and every endpoint the root's PartsList names
+installed, which includes a peer with only its root endpoint; a node built by hand without a root PartsList needs an
+endpoint beyond the root), with
 `lifecycle.seeded` emitting once on the false→true transition.
 
 `await lifecycle.seeded` never resolves for a peer that is offline, so bound the wait — legacy

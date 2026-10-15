@@ -219,6 +219,7 @@ describe("InputChunk", () => {
             const chunks = await collect(report);
             expect(chunks.map(c => c.kind)).deep.equal(["attr-value", "attr-status"]);
             expect(chunks[1].kind === "attr-status" && chunks[1].status).equal(Status.UnsupportedAttribute);
+            expect(chunks[1].kind === "attr-status" && chunks[1].received).equal(true);
         });
 
         it("keeps adjacent same-cluster different-attribute entries from being lumped", async () => {
@@ -571,6 +572,7 @@ describe("InputChunk", () => {
             expect(only.kind).equal("event-status");
             if (only.kind !== "event-status") return;
             expect(only.status).equal(Status.Failure);
+            expect(only.received).equal(true);
             expect(only.clusterStatus).equal(clusterStatus);
         });
 

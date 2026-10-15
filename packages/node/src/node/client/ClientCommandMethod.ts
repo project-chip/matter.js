@@ -9,8 +9,8 @@ import { ActionContext } from "#behavior/context/ActionContext.js";
 import type { ClientNode } from "#node/ClientNode.js";
 import { Node } from "#node/Node.js";
 import type { CommandModel } from "@matter/model";
-import { ClientInteraction, Invoke } from "@matter/protocol";
-import { Status, StatusResponseError } from "@matter/types";
+import { ClientInteraction, Invoke, ResultStatus } from "@matter/protocol";
+import { Status } from "@matter/types";
 
 /**
  * Create the command method for a client behavior.
@@ -49,7 +49,7 @@ export function ClientCommandMethod(name: string, commandModel?: CommandModel) {
                     switch (entry.kind) {
                         case "cmd-status":
                             if (entry.status !== Status.Success) {
-                                throw StatusResponseError.create(entry.status, undefined, entry.clusterStatus);
+                                throw ResultStatus.errorOf(entry);
                             }
                             return;
 

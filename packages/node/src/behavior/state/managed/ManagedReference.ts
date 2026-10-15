@@ -173,7 +173,7 @@ export class ManagedReference implements ValReference {
 
             // Apply changes
             mutator();
-        });
+        }, this.#key);
     }
 
     refresh() {

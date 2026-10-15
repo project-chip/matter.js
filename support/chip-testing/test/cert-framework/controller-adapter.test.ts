@@ -687,7 +687,7 @@ describe("InProcessControllerAdapter", () => {
         await waitFor(() => updates.length > 0);
         expect(updates).lengthOf(1);
 
-        // A read re-broadcasts what it answers with, which the observation must not take for a new event
+        // The events a read returns must not reach an observation
         await node.readEvents([{ endpoint: 1, cluster: BOOLEAN_STATE.id, event: STATE_CHANGE_EVENT.id }]);
 
         expect(updates).lengthOf(1);
@@ -985,8 +985,29 @@ describe("InProcessControllerAdapter WebRTC requestor", () => {
 
         expect(await requestor!.sessions()).to.deep.equal([{ id: 7, videoStreamId: 42, audioStreamId: null }]);
 
-        await requestor!.removeSession(7);
+        await requestor!.removeSession(peer, 7);
         expect(await requestor!.sessions()).to.deep.equal([]);
+    });
+
+    it("drops a session whose peer was decommissioned since it was registered", async function () {
+        this.timeout(60_000);
+
+        adapter = new InProcessControllerAdapter("webrtc-gone", { webRtcRequestor: true });
+        await adapter.start();
+        const peer = await commissionPeer();
+
+        const requestor = adapter.webRtcRequestor!;
+        await requestor.upsertSession({
+            id: 3,
+            peer,
+            peerEndpointId: 1,
+            streamUsage: StreamUsage.Recording,
+            videoStreamId: 42,
+        });
+        await adapter.node(peer).decommission();
+
+        await requestor.removeSession(peer, 3);
+        expect(await requestor.sessions()).to.deep.equal([]);
     });
 
     it("refuses a node reference it did not mint rather than registering a session against a wrong peer", async function () {

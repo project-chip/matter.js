@@ -1635,12 +1635,12 @@ skips a discovered device whose advertised vendor or product id disagrees with t
 naming another vendor finds nothing and chip-tool gives up after its 30s discovery budget. It is
 false for matter.js too: `resolveCommissioningTarget` hands the code's `vendorId`/`productId` to
 `peers.commission`, whose discovery passes over a device whose advertisement disagrees, and the attempt
-ends in `DiscoveryError` after `giveUpAfterMs`. **The plan's expected outcome admits both
+ends in `DeviceNotDiscoveredError` after `giveUpAfterMs`. **The plan's expected outcome admits both
 outcomes** — terminate, "unless the user is made fully aware of the security risks" — so the step
 records which happened instead of asserting one.
 
-Two things the step's evidence has to say, and did not until it was made to. A `DiscoveryError` or a
-chip-tool command failure is what termination looks like, but so is a TH that stopped advertising, so
+Two things the step's evidence has to say, and did not until it was made to. A `DiscoveryError` other than
+`NoDiscoveryTransportError`, or a chip-tool command failure, is what termination looks like, but so is a TH that stopped advertising, so
 `recordVendorOutcome` proves the TH is advertising commissionable immediately before each attempt (the
 `restoreCommissioningMode` that precedes it only does so for a code that follows an onboarding). And
 one of `TEST_VENDOR_IDS` is the vendor id a harness TH advertises for itself, so that code is step 1's
@@ -3266,9 +3266,9 @@ boot reported after the mark is gone. Time the wait on the TH instead. A live *a
 the wait is fine; it is the event log that does not survive.
 
 **The waits `serveOtaUpdate` offers end on what the provider decided, which is not a window the DUT
-has been watched for.** `applyTimeoutMs` settles as soon as the provider allows an apply *or gives up
-on the update* — and refusing with `Discontinue` withdraws the update's consent, which is giving up, so
-the wait ends before the requestor has reacted to anything. A step whose claim is that the DUT sent
+has been watched for.** `applyTimeoutMs` settles as soon as the provider has recorded its answer to an
+`ApplyUpdateRequest` other than `AwaitNextAction` — `Proceed` or `Discontinue` — so the wait ends before
+the requestor has reacted to anything. A step whose claim is that the DUT sent
 nothing asks for `observeAfterMs` and checks `OtaBdxTransfer.observedMs` against the window it claims,
 exactly as the query side checks `observedMs` from `announceOtaProvider`. Measuring the step's own
 runtime is how to tell the two apart: raising the window should raise the runtime by the same amount.
@@ -3299,12 +3299,11 @@ and the subject restarts into it. What makes the steps after a restart see anyth
   `MATTER_CERT_OTA_FAST_RETRY` would shorten it. Step 6 starts as the subject returns from step 4's
   restart; if it applied and restarted again before the resubscription, it would discard DelayedOnApply
   undelivered.
-- **An observation reports only what the subscription delivered.** A read broadcasts the events it
-  returns to every observer just as a subscription report does; the in-process adapter holds what an
-  observation receives while a read of that peer runs and drops the read's own events
-  (`EventReadGate`), so a seed or `readEvents` call cannot stand in for a delivery the subscription
-  missed. A `subscribeEvents` subscription on the same node is not filtered: its reports reach the
-  observation too, so a case should not combine the two.
+- **An observation reports only what the default subscription delivered.** Only a node's default
+  subscription and its read after commissioning emit events to its observers; a read and a
+  `subscribeEvents` subscription return events to their caller only, so a seed or `readEvents` call cannot
+  stand in for a delivery the subscription missed. The legacy `PairedNode` API is the exception: it still
+  forwards the events of its own reads and subscriptions.
 
 ## DefaultOTAProviders on two fabrics (`TC-SU-4.1`)
 

@@ -35,6 +35,7 @@ import { Matter, MatterModel } from "@matter/model";
 import { Interactable, OccurrenceManager, PeerAddress, PeerSet } from "@matter/protocol";
 import { ClientEndpointInitializer } from "./client/ClientEndpointInitializer.js";
 import { ClientNodeInteraction } from "./client/ClientNodeInteraction.js";
+import { ClientStructure } from "./client/ClientStructure.js";
 import { ClientNodeLifecycle } from "./ClientNodeLifecycle.js";
 import { Node } from "./Node.js";
 import type { ServerNode } from "./ServerNode.js";
@@ -111,6 +112,7 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
 
         const initializer = new ClientEndpointInitializer(this);
         this.env.set(EndpointInitializer, initializer);
+        this.env.set(ClientStructure, initializer.structure);
 
         store.write = RemoteWriter(this, initializer.structure);
 

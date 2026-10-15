@@ -7,17 +7,20 @@
 import type { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { BasicInformationBehavior } from "#behaviors/basic-information";
-import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
+import { ClientNode, CommissioningServer, Endpoint, InteractionServer, NetworkClient, ServerNode } from "#index.js";
+import { ClientStructure } from "#node/client/ClientStructure.js";
 import {
-    ClientEndpointInitializer,
-    ClientNode,
-    CommissioningServer,
-    Endpoint,
-    InteractionServer,
-    NetworkClient,
-    ServerNode,
-} from "#index.js";
-import { Bytes, Crypto, type Environment, InternalError, Millis, Seconds } from "@matter/general";
+    Bytes,
+    Crypto,
+    type Environment,
+    InternalError,
+    LogDestination,
+    Logger,
+    LogFormat,
+    type LogLevel,
+    Millis,
+    Seconds,
+} from "@matter/general";
 import { Specification } from "@matter/model";
 import {
     Certificate,
@@ -527,19 +530,14 @@ export async function seedPeerCache(
         throw new InternalError(`${endpoint}.${type.id} is not active on ${peer.id}`);
     }
 
-    await structure.storeForRemote(endpoint, type).externalSet(values);
+    return await structure.storeForRemote(endpoint, type).externalSet(values);
 }
 
 /**
  * The client structure of a client node, for tests that feed it reports directly.
  */
 export function clientStructureOf(peer: ClientNode) {
-    const initializer = peer.env.get(EndpointInitializer);
-    if (!(initializer instanceof ClientEndpointInitializer)) {
-        throw new InternalError(`Node ${peer.id} is not a client node`);
-    }
-
-    return initializer.structure;
+    return peer.env.get(ClientStructure);
 }
 
 /**
@@ -592,4 +590,25 @@ export async function causeMessagesOf(promise: Promise<unknown>) {
         }
     }
     return messages.join(" | ");
+}
+
+/**
+ * Collects the text of log messages at or above {@link level} until disposed.
+ */
+export function captureLog(level: LogLevel) {
+    const messages = new Array<string>();
+    Logger.destinations.capture = LogDestination({
+        format: LogFormat.formats.plain,
+        write(text, message) {
+            if (message.level >= level) {
+                messages.push(text);
+            }
+        },
+    });
+    return {
+        messages,
+        [Symbol.dispose]() {
+            delete Logger.destinations.capture;
+        },
+    };
 }

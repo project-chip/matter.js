@@ -6,8 +6,6 @@
 
 import type { ActionContext } from "#behavior/context/ActionContext.js";
 import { IcdPeerAsleepError } from "#behavior/system/icd/IcdPeerAsleepError.js";
-import { NetworkClient } from "#behavior/system/network/NetworkClient.js";
-import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import type { ClientNode } from "#node/ClientNode.js";
 import {
     Abort,
@@ -42,14 +40,15 @@ import {
     PeerAddress,
     PeerSet,
     PhysicalDeviceProperties,
+    type Read,
     ReadResult,
     ShutdownError,
     Val,
     WriteResult,
 } from "@matter/protocol";
-import { EndpointNumber, NodeId } from "@matter/types";
-import { ClientEndpointInitializer } from "./ClientEndpointInitializer.js";
+import { EndpointNumber, EventNumber, NodeId } from "@matter/types";
 import { ClientNodePhysicalProperties } from "./ClientNodePhysicalProperties.js";
+import { ClientStructure } from "./ClientStructure.js";
 
 const logger = Logger.get("ClientNodeInteraction");
 
@@ -84,11 +83,13 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
 
     /**
      * Read chosen attributes remotely from the node. Known data versions are automatically injected into the request to
-     * optimize the read when the fabric filter matches the active subscription, except for clusters with a
-     * changes-omitted attribute, which the subscription does not keep current. Set `includeKnownVersions` in the
-     * request to skip version injection and always receive a full response from the server.
+     * optimize the read when the fabric filter matches the node's cache, except for clusters with a changes-omitted
+     * attribute, which the subscription does not keep current. Set `includeKnownVersions` in the request to skip
+     * version injection and always receive a full response from the server.
+     *
+     * Events are returned in the result only, unless `emitEvents` is set, as the node's default subscription does.
      */
-    async *read(request: ClientRead, context?: ActionContext): ReadResult {
+    async *read(request: ClientRead & ClientNodeInteraction.Options, context?: ActionContext): ReadResult {
         const { wakefulness, useIcdLit } = this.#awaitModeIcdRouting(request);
         if (useIcdLit) {
             request = { ...request, network: "icdLit" };
@@ -100,15 +101,13 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
             await hold;
         }
 
-        if (
-            !request.includeKnownVersions &&
-            (request.isFabricFiltered ?? true) === this.#structure.subscribedFabricFiltered
-        ) {
+        if (!request.includeKnownVersions) {
             request = this.#structure.injectVersionFilters(request, { refreshChangesOmitted: true });
         }
 
         const response = this.#interaction.read(request, context);
-        yield* this.#structure.mutate(request, response);
+        const { emitEvents, eventEmitted } = request;
+        yield* this.#structure.mutate(request, response, { emitEvents, eventEmitted });
     }
 
     /**
@@ -121,11 +120,32 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
      * know when/if a subscription could be established.  This class handles reconnections automatically.
      * When not providing the "sustain" flag, a PeerSubscription is returned after a subscription have been successfully
      * established; or an error is returned if this was not possible.
+     *
+     * Known data versions are injected as for {@link read} unless `includeKnownVersions` is set: into the initial
+     * request, which a sustained subscription with `bootstrapWithRead` first sends as a read, and, for a sustained
+     * subscription, into every later request it sends — each retry, each replacement of a lost subscription and each
+     * recreate after an ICD operating mode change.  Unlike a read, a subscription keeps the filters of clusters with a
+     * changes-omitted attribute, so these requests do not transfer those clusters again each time.  Events are returned in
+     * the result only, unless `emitEvents` is set, as the node's default subscription does.
      */
-    async subscribe(request: ClientSubscribe, context?: ActionContext): Promise<ClientSubscription> {
+    async subscribe(
+        request: ClientSubscribe & ClientNodeInteraction.Options,
+        context?: ActionContext,
+    ): Promise<ClientSubscription> {
+        const withKnownVersions = <T extends ClientSubscribe>(target: T) =>
+            target.includeKnownVersions ? target : this.#structure.injectVersionFilters(target);
+        const callerRefresh = request.sustain ? request.refreshRequest : undefined;
+        const { dataVersionFilters } = request;
+
+        // Reports are applied by the paths, fabric filter and cache epoch of the request that produced them
+        let sent: { request: Read; epoch: ClientStructure.Epoch } = {
+            request,
+            epoch: this.#structure.epoch,
+        };
+
         // ICD network routing for the subscription is applied by SustainedSubscription, not here.
         const intermediateRequest: ClientSubscribe = {
-            ...this.#structure.injectVersionFilters(request),
+            ...withKnownVersions(request),
             ...PhysicalDeviceProperties.subscriptionIntervalBoundsFor({
                 description: this.#node.toString(),
                 properties: ClientNodePhysicalProperties(this.#node),
@@ -137,7 +157,12 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
             sustain: !!request.sustain,
 
             updated: async data => {
-                const result = this.#structure.mutate(request, data);
+                const { emitEvents, eventEmitted } = request;
+                const result = this.#structure.mutate(sent.request, data, {
+                    emitEvents,
+                    eventEmitted,
+                    epoch: sent.epoch,
+                });
                 if (request.updated) {
                     await request.updated(result);
                 } else {
@@ -145,13 +170,13 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
                 }
             },
 
-            refreshRequest: request => {
-                const updated = {
-                    ...request,
-                    dataVersionFilters: undefined,
-                    eventFilters: [{ eventMin: this.#node.stateOf(NetworkClient).maxEventNumber + 1n }],
-                };
-                return this.#structure.injectVersionFilters(updated);
+            // Starts from the caller's own filters so versions injected into an earlier request do not accumulate
+            refreshRequest: previous => {
+                const epoch = this.#structure.epoch;
+                const base = { ...previous, dataVersionFilters };
+                const refreshed = withKnownVersions(callerRefresh === undefined ? base : callerRefresh(base));
+                sent = { request: refreshed, epoch };
+                return refreshed;
             },
 
             closed: request.closed?.bind(request),
@@ -192,7 +217,9 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
      * When the number of commands exceeds the peer's MaxPathsPerInvoke limit (or 1 for older nodes),
      * commands are split across multiple parallel exchanges automatically by ClientInteraction.
      *
-     * Single commands may be automatically batched with other commands invoked in the same timer tick.
+     * Single commands may be automatically batched with other commands for the same network invoked in the same
+     * timer tick.  A command with per-request options, such as an expected processing time, is sent on its own and
+     * may reach the peer before batched commands invoked earlier.
      */
     async *invoke(request: ClientInvoke, context?: ActionContext): DecodedInvokeResult {
         // For commands, by default ignore the queue because the user is responsible for managing that themselves
@@ -290,7 +317,7 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
     }
 
     get #structure() {
-        return (this.#node.env.get(EndpointInitializer) as ClientEndpointInitializer).structure;
+        return this.#node.env.get(ClientStructure);
     }
 
     /**
@@ -394,5 +421,28 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
         }
         const endpoint = this.#node.endpoints.for(endpointId);
         return endpoint.state as unknown as Record<string, Record<string, Val.Struct> | undefined>;
+    }
+}
+
+export namespace ClientNodeInteraction {
+    /**
+     * Options of {@link ClientNodeInteraction.read} and {@link ClientNodeInteraction.subscribe}.
+     *
+     * @internal
+     */
+    export interface Options {
+        /**
+         * Emit the events this interaction receives to the node's event observers and its change notifications while
+         * this is true or returns true.  Set by the node's default subscription and the read that initializes a
+         * newly-commissioned node, so other reads and subscriptions do not deliver an event to those observers a
+         * second time, and by the legacy controller API, whose listeners are fed from the change notifications.
+         */
+        emitEvents?: boolean | (() => boolean);
+
+        /**
+         * Called with the number of each event this interaction emits to the node's event observers, before the
+         * observers run.
+         */
+        eventEmitted?: (number: EventNumber) => void;
     }
 }

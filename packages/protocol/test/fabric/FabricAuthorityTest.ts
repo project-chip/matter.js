@@ -8,10 +8,30 @@ import { CertificateAuthority } from "#certificate/CertificateAuthority.js";
 import { Noc } from "#certificate/kinds/Noc.js";
 import { FabricAuthority } from "#fabric/FabricAuthority.js";
 import { FabricManager } from "#fabric/FabricManager.js";
-import { Bytes, ImplementationError, MemoryStorageDriver, StandardCrypto, StorageManager } from "@matter/general";
+import {
+    Bytes,
+    createPromise,
+    ImplementationError,
+    MemoryStorageDriver,
+    StandardCrypto,
+    StorageError,
+    StorageManager,
+    SupportedStorageTypes,
+} from "@matter/general";
 import { CaseAuthenticatedTag, FabricId, NodeId, VendorId } from "@matter/types";
 
 const crypto = new StandardCrypto();
+
+async function createAuthority(driver: MemoryStorageDriver) {
+    const storageManager = new StorageManager(driver);
+    await storageManager.initialize();
+    const fabrics = new FabricManager(crypto, storageManager.createContext("fabrics"));
+    await fabrics.construction.ready;
+    const ca = await CertificateAuthority.create(crypto, storageManager.createContext("ca"));
+    const authority = new FabricAuthority({ ca, fabrics });
+    await authority.construction;
+    return { authority, fabrics };
+}
 
 describe("FabricAuthority", () => {
     let storage: MemoryStorageDriver;
@@ -42,6 +62,64 @@ describe("FabricAuthority", () => {
             await expect(
                 authority.createFabric({ adminFabricLabel: "test-fabric", adminVendorId: VendorId(0xfff5, false) }),
             ).rejectedWith(ImplementationError, /Admin vendor ID 0xfff5 is reserved/);
+        });
+
+        it("completes once the fabric list is persisted and reports the fabric only as added", async () => {
+            const writing = createPromise<void>();
+            const release = createPromise<void>();
+            class GatedDriver extends MemoryStorageDriver {
+                override set(
+                    contexts: string[],
+                    keyOrValues: string | Record<string, SupportedStorageTypes>,
+                    value?: SupportedStorageTypes,
+                ) {
+                    if (contexts.includes("fabrics")) {
+                        writing.resolver();
+                        return release.promise.then(() => super.set(contexts, keyOrValues, value));
+                    }
+                    return super.set(contexts, keyOrValues, value);
+                }
+            }
+            const { authority, fabrics } = await createAuthority(new GatedDriver());
+
+            const events = new Array<string>();
+            fabrics.events.added.on(fabric => void events.push(`added ${fabric.fabricIndex}`));
+            fabrics.events.replaced.on(fabric => void events.push(`replaced ${fabric.fabricIndex}`));
+
+            let completed = false;
+            const created = authority.createFabric({ adminFabricLabel: "test-fabric" }).then(fabric => {
+                completed = true;
+                return fabric;
+            });
+            await writing.promise;
+            await MockTime.yield3();
+            expect(completed).false;
+
+            release.resolver();
+            const fabric = await created;
+
+            expect(events).deep.equals([`added ${fabric.fabricIndex}`]);
+        });
+
+        it("rejects when the fabric list cannot be persisted", async () => {
+            class FailingDriver extends MemoryStorageDriver {
+                override set(
+                    contexts: string[],
+                    keyOrValues: string | Record<string, SupportedStorageTypes>,
+                    value?: SupportedStorageTypes,
+                ) {
+                    if (contexts.includes("fabrics")) {
+                        return Promise.reject(new StorageError("Disk full"));
+                    }
+                    return super.set(contexts, keyOrValues, value);
+                }
+            }
+            const { authority } = await createAuthority(new FailingDriver());
+
+            await expect(authority.createFabric({ adminFabricLabel: "test-fabric" })).rejectedWith(
+                StorageError,
+                "Disk full",
+            );
         });
     });
 

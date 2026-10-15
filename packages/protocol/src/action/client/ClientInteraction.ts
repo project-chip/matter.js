@@ -25,6 +25,7 @@ import { ExchangeProvider } from "#protocol/ExchangeProvider.js";
 import type { ExchangeLogContext } from "#protocol/MessageExchange.js";
 import { GroupSession } from "#session/GroupSession.js";
 import type { Session } from "#session/Session.js";
+import { SessionParameters } from "#session/SessionParameters.js";
 import {
     Abort,
     AbortedError,
@@ -124,13 +125,22 @@ export function inferLargeMessage(request: ClientInvoke): boolean {
 interface PendingCommand {
     request: Invoke.ConcreteCommandRequest<any>;
     pathKey: string;
-    network?: string;
-    additionalMrpDelay?: Duration;
     abort?: AbortSignal;
     resolve: (entry: InvokeResult.DecodedData | undefined) => void;
     reject: (error: Error) => void;
     aborted?: boolean;
     cleanup?: () => void;
+}
+
+/**
+ * Commands queued for one network.  Each network flushes and sends its batches independently, so a command for a
+ * prioritized network such as an ICD's active window never waits behind another network's batch.
+ */
+interface BatchLane {
+    network?: string;
+    pending: Map<number, PendingCommand>;
+    mutex: Mutex;
+    timer?: Timer;
 }
 
 export type SubscriptionResult<T extends ClientSubscribe = ClientSubscribe> = Promise<
@@ -160,6 +170,44 @@ const DEFAULT_TIMED_REQUEST_TIMEOUT = Seconds(10);
 const DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE = Seconds(30);
 
 /**
+ * Whether a single-command request may join an automatic batch.
+ *
+ * A batch request is rebuilt from the queued commands and carries only what {@link ClientInteraction} reconstructs
+ * for it, so a request that sets anything else is sent on its own.  Each field of {@link ClientInvoke} is classified
+ * here, so a new field does not compile until someone decides whether it blocks batching.
+ */
+function isBatchable(request: ClientInvoke) {
+    const endpointId = request.invokeRequests[0]?.commandPath.endpointId;
+    const blocks: { [K in keyof Required<ClientInvoke>]: boolean } = {
+        commands: false,
+        invokeRequests: request.invokeRequests.length !== 1 || endpointId === undefined || endpointId === 0,
+        skipValidation: false,
+        abort: false,
+        network: false,
+        // Applied by the node before the request reaches the interaction
+        icdAwaitTimeout: false,
+        batchDuration: request.batchDuration === false,
+        interactionModelRevision:
+            request.interactionModelRevision !== undefined &&
+            request.interactionModelRevision !== SessionParameters.fallbacks.interactionModelRevision,
+        suppressResponse: !!request.suppressResponse,
+        timedRequest: !!request.timedRequest,
+        // Only used with timedRequest, which Invoke() sets alongside it
+        timeout: request.timeout !== undefined,
+        delayReportData: request.delayReportData !== undefined,
+        // Large Message Quality commands must not be batched
+        largeMessage: !!request.largeMessage,
+        expectedProcessingTime: request.expectedProcessingTime !== undefined,
+        useExtendedFailSafeMessageResponseTimeout: !!request.useExtendedFailSafeMessageResponseTimeout,
+        additionalMrpDelay: request.additionalMrpDelay !== undefined,
+        addressOverride: request.addressOverride !== undefined,
+        // Server only
+        beforeDispatch: request.beforeDispatch !== undefined,
+    };
+    return !Object.values(blocks).includes(true);
+}
+
+/**
  * Client-side implementation of the Matter protocol.
  */
 export class ClientInteraction<
@@ -176,9 +224,7 @@ export class ClientInteraction<
     readonly #network?: string;
 
     // Command batching state
-    readonly #pendingCommands = new Map<number, PendingCommand>();
-    readonly #batchMutex: Mutex;
-    #batchTimer?: Timer;
+    readonly #batchLanes = new Map<string | undefined, BatchLane>();
     #nextCommandRef = 1;
     #closeReason?: Error;
 
@@ -194,7 +240,6 @@ export class ClientInteraction<
             RetrySchedule.Configuration(SustainedSubscription.DefaultRetrySchedule, sustainRetries),
         );
         this.#address = address;
-        this.#batchMutex = new Mutex(this);
         this.#network = network;
 
         this.#lifetime = environment.join("interactions");
@@ -229,16 +274,18 @@ export class ClientInteraction<
         }
 
         // Close batching
-        this.#batchTimer?.stop();
-        for (const [, pending] of this.#pendingCommands) {
-            pending.cleanup?.();
-            pending.reject(reason);
+        for (const lane of this.#batchLanes.values()) {
+            lane.timer?.stop();
+            for (const [, pending] of lane.pending) {
+                pending.cleanup?.();
+                pending.reject(reason);
+            }
+            lane.pending.clear();
         }
-        this.#pendingCommands.clear();
 
-        // Abort before draining the mutex so an in-flight batch cancels instead of running to completion
+        // Abort before draining the mutexes so an in-flight batch cancels instead of running to completion
         this.#abort(reason);
-        await this.#batchMutex.close();
+        await Promise.all([...this.#batchLanes.values()].map(({ mutex }) => mutex.close()));
 
         while (this.#interactions.size) {
             await this.#interactions.deleted;
@@ -378,7 +425,7 @@ export class ClientInteraction<
             request,
         );
 
-        const response = await messenger.sendWriteCommand(request, session);
+        const response = await messenger.sendWriteCommand(request, { abort });
         if (request.suppressResponse) {
             return undefined as Awaited<WriteResult<T>>;
         }
@@ -409,7 +456,8 @@ export class ClientInteraction<
                     },
                     status,
                     clusterStatus,
-                };
+                    received: true,
+                } satisfies WriteResult.AttributeStatus;
             },
         ) as Awaited<WriteResult<T>>;
 
@@ -555,6 +603,7 @@ export class ClientInteraction<
                         commandRef,
                         status,
                         clusterStatus,
+                        received: true,
                     });
                 }
             }
@@ -652,7 +701,11 @@ export class ClientInteraction<
      * commands are split across multiple parallel exchanges automatically.
      *
      * Single commands are automatically batched with other commands invoked in the same timer tick
-     * when the device supports multiple invokes per exchange and the target is not endpoint 0.
+     * when the device supports multiple invokes per exchange and the target is not endpoint 0.  A command that sets
+     * per-request options (such as an expected processing time, an address override or timed/suppressResponse
+     * flags) is sent on its own so it keeps them, and batches are formed and sent per network.  A command sent on
+     * its own goes out at once while batched commands wait for the batch timer, and batches of different networks
+     * do not wait for each other, so the order on the wire can differ from the call order.
      */
     async *invoke(request: ClientInvoke, session?: SessionT): DecodedInvokeResult {
         if (request.largeMessage === undefined && inferLargeMessage(request)) {
@@ -662,27 +715,12 @@ export class ClientInteraction<
 
         const maxPathsPerInvoke = this.#exchangeProvider.maxPathsPerInvoke ?? 1;
 
-        // Large Message Quality commands must not be batched (per spec) but still respect the
-        // peer's MaxPathsPerInvoke — splitting propagates largeMessage to each sub-batch, which
-        // in turn forces TCP transport via #begin.
-        if (!request.largeMessage) {
-            // Single command with batching support — auto-batch.  Batching buys nothing when the peer
-            // only accepts one path per invoke, so send directly in that case.  The batch path always
-            // requests responses, so suppressResponse commands go directly too.  A batch message carries the commands
-            // of several callers, so a command with DelayReportData goes directly as well.
-            if (
-                request.invokeRequests.length === 1 &&
-                request.batchDuration !== false &&
-                maxPathsPerInvoke > 1 &&
-                !request.suppressResponse &&
-                request.delayReportData === undefined
-            ) {
-                const endpointId = request.invokeRequests[0].commandPath.endpointId;
-                if (endpointId !== undefined && endpointId !== 0 && !request.timedRequest) {
-                    yield* this.#invokeWithBatching(request, session);
-                    return;
-                }
-            }
+        // Batching buys nothing when the peer only accepts one path per invoke.  A Large Message Quality request is
+        // never batched but may still be split below, which carries largeMessage to each part and so forces TCP in
+        // #begin.
+        if (maxPathsPerInvoke > 1 && isBatchable(request)) {
+            yield* this.#invokeWithBatching(request, session);
+            return;
         }
 
         const commandCount = request.commands.size;
@@ -715,9 +753,13 @@ export class ClientInteraction<
             connectionTimeout: session?.connectionTimeout,
             abort: connectAbort.signal,
         });
+        if (this.#closeReason !== undefined) {
+            throw this.#closeReason;
+        }
 
+        const lane = this.#batchLaneFor(request.network ?? this.#network);
         const cmd = [...request.commands.values()][0];
-        const commandRef = this.#allocateCommandRef();
+        const commandRef = this.#allocateCommandRef(lane);
         const { endpointId, clusterId, commandId } = request.invokeRequests[0].commandPath;
         const pathKey = `${endpointId}-${clusterId}-${commandId}`;
         const { promise, resolver, rejecter } = createPromise<InvokeResult.DecodedData | undefined>();
@@ -725,27 +767,25 @@ export class ClientInteraction<
         const pending: PendingCommand = {
             request: { ...cmd, commandRef } as Invoke.ConcreteCommandRequest<any>,
             pathKey,
-            network: request.network,
-            additionalMrpDelay: request.additionalMrpDelay,
             abort: request.abort,
             resolve: resolver,
             reject: rejecter,
         };
 
-        this.#pendingCommands.set(commandRef, pending);
+        lane.pending.set(commandRef, pending);
 
         // Register per-command abort listeners. A batch carries commands of several callers, so an
         // abort belongs to its own command: it rejects that one and leaves the batch to the others.
         const abortSignals = [session?.abort, request.abort].filter(signal => signal !== undefined);
         if (abortSignals.length) {
             if (abortSignals.some(signal => signal.aborted)) {
-                this.#pendingCommands.delete(commandRef);
+                lane.pending.delete(commandRef);
                 throw new AbortedError();
             }
 
             const onAbort = () => {
                 pending.aborted = true;
-                this.#pendingCommands.delete(commandRef);
+                lane.pending.delete(commandRef);
                 pending.reject(new AbortedError());
             };
             for (const signal of abortSignals) {
@@ -760,21 +800,21 @@ export class ClientInteraction<
 
         const duration = request.batchDuration || Instant;
 
-        if (this.#batchTimer?.isRunning) {
+        if (lane.timer?.isRunning) {
             // Restart with a shorter duration if the new command needs a faster flush than the remaining time
-            const remaining = this.#batchTimer.interval - (this.#batchTimer.elapsed?.time ?? 0);
+            const remaining = lane.timer.interval - (lane.timer.elapsed?.time ?? 0);
             if (duration < remaining) {
-                this.#batchTimer.stop();
-                this.#batchTimer.interval = duration;
-                this.#batchTimer.start();
+                lane.timer.stop();
+                lane.timer.interval = duration;
+                lane.timer.start();
             }
         } else {
-            if (!this.#batchTimer) {
-                this.#batchTimer = Time.getTimer("invoke-batch", duration, () => this.#flushBatch());
+            if (!lane.timer) {
+                lane.timer = Time.getTimer("invoke-batch", duration, () => this.#flushBatch(lane));
             } else {
-                this.#batchTimer.interval = duration;
+                lane.timer.interval = duration;
             }
-            this.#batchTimer.start();
+            lane.timer.start();
         }
 
         try {
@@ -787,14 +827,23 @@ export class ClientInteraction<
         }
     }
 
-    #allocateCommandRef(): number {
+    #batchLaneFor(network: string | undefined) {
+        let lane = this.#batchLanes.get(network);
+        if (lane === undefined) {
+            lane = { network, pending: new Map(), mutex: new Mutex(this) };
+            this.#batchLanes.set(network, lane);
+        }
+        return lane;
+    }
+
+    #allocateCommandRef(lane: BatchLane): number {
         const startRef = this.#nextCommandRef;
 
         do {
             const ref = this.#nextCommandRef;
             this.#nextCommandRef = this.#nextCommandRef >= MAX_COMMAND_REF ? 1 : this.#nextCommandRef + 1;
 
-            if (!this.#pendingCommands.has(ref)) {
+            if (!lane.pending.has(ref)) {
                 return ref;
             }
         } while (this.#nextCommandRef !== startRef);
@@ -802,22 +851,22 @@ export class ClientInteraction<
         throw new ImplementationError("No available commandRef values");
     }
 
-    async #flushBatch() {
-        if (this.#pendingCommands.size === 0) {
+    async #flushBatch(lane: BatchLane) {
+        if (lane.pending.size === 0) {
             return;
         }
 
         // Snapshot current commands and clear for next batch
-        const commands = new Map(this.#pendingCommands);
-        this.#pendingCommands.clear();
+        const commands = new Map(lane.pending);
+        lane.pending.clear();
 
         // Partition into sub-batches with unique command paths per batch
         const batches = this.#partitionBatch(commands);
 
         for (const batch of batches) {
             try {
-                await this.#batchMutex.produce(async () => {
-                    await this.#executeBatch(batch);
+                await lane.mutex.produce(async () => {
+                    await this.#executeBatch(batch, lane.network);
                 });
             } catch (error) {
                 // Mutex may be closed during shutdown — reject remaining commands with the close reason
@@ -861,7 +910,7 @@ export class ClientInteraction<
         return batches.map(b => b.commands);
     }
 
-    async #executeBatch(commands: Map<number, PendingCommand>) {
+    async #executeBatch(commands: Map<number, PendingCommand>, network: string | undefined) {
         let releaseAbortListeners: (() => void) | undefined;
         try {
             // Filter out commands aborted between snapshot and send
@@ -880,16 +929,9 @@ export class ClientInteraction<
 
             logger.debug(`Executing ${invokeRequests.length} command(s)`);
 
-            // Preserve the network profile from the queued commands (all commands in a batch share the same
-            // ClientInteraction so they will normally have the same network; pick the first defined value)
-            const batchNetwork = commandList.find(c => c.network !== undefined)?.network;
-            const batchAdditionalMrpDelay = commandList.find(
-                c => c.additionalMrpDelay !== undefined,
-            )?.additionalMrpDelay;
-
             // Use #invokeSingle directly to avoid re-entering the batching path in invoke()
             // Skip validation: already validated on submit. timed=false: only non-timed commands
-            // reach this path (gate in invoke()); prevents Invoke() spec-based auto-promotion.
+            // reach this path (isBatchable); prevents Invoke() spec-based auto-promotion.
             // A batch outlives the caller of any one of its commands, so it stops sending only once
             // every command in it has been abandoned — until then the others still want the peer's
             // answer. A batch holding even one command without a deadline can never reach that point.
@@ -923,10 +965,9 @@ export class ClientInteraction<
 
             const batchRequest = {
                 ...Invoke({ commands: invokeRequests, skipValidation: true, timed: false }),
-                network: batchNetwork,
-                additionalMrpDelay: batchAdditionalMrpDelay,
+                network,
                 abort: abandonable ? batchAbort.signal : undefined,
-            } as ClientInvoke;
+            } satisfies ClientInvoke;
             const maxPathsPerInvoke = this.#exchangeProvider.maxPathsPerInvoke ?? 1;
             const chunks =
                 invokeRequests.length > maxPathsPerInvoke
