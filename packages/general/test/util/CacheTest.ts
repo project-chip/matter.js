@@ -488,6 +488,65 @@ describe("AsyncCache", () => {
         });
     });
 
+    describe("values touched while an expire callback is pending", () => {
+        before(() => MockTime.enable());
+
+        let expired: string[];
+        let callbackStarted: () => void;
+        let started: Promise<void>;
+        let release: () => void;
+        let cache: AsyncCache<string>;
+        let calls: number;
+
+        beforeEach(async () => {
+            expired = new Array<string>();
+            calls = 0;
+            started = new Promise<void>(resolve => (callbackStarted = resolve));
+            const gate = new Promise<void>(resolve => (release = resolve));
+            cache = new AsyncCache<string>(
+                "test",
+                async (key: string) => `v-${key}-${++calls}`,
+                Minutes(5),
+                async (_key, value) => {
+                    expired.push(value);
+                    if (value === "v-a-1") {
+                        callbackStarted();
+                        await gate;
+                    }
+                },
+            );
+            await cache.get("a");
+        });
+
+        afterEach(async () => {
+            await cache.close();
+        });
+
+        it("clear() also expires a value created during the clear", async () => {
+            const clearing = cache.clear();
+            await started;
+
+            expect(await cache.get("b")).equals("v-b-2");
+            release();
+            await clearing;
+
+            expect(expired).deep.equals(["v-a-1", "v-b-2"]);
+        });
+
+        it("periodic expiry keeps a value refreshed while an earlier callback is pending", async () => {
+            await cache.get("b");
+            const advancing = MockTime.advance(Minutes(5));
+            await started;
+
+            expect(await cache.get("b")).equals("v-b-2");
+            release();
+            await advancing;
+
+            expect(expired).deep.equals(["v-a-1"]);
+            expect(await cache.get("b")).equals("v-b-2");
+        });
+    });
+
     describe("evict()", () => {
         it("closes the cached resource and regenerates on the next get() for the same params", async () => {
             let calls = 0;

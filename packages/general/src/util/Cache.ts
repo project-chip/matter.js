@@ -99,17 +99,21 @@ class GenericCache<T> {
         this.knownKeys.clear();
     }
 
-    /** Expire every value, attempting all of them, and return the failures. */
+    /** Expire every value, including values created while this runs, and return the failures. */
     protected async expireAll() {
-        const failures = await this.#expireEach([...this.values.keys()]);
-        this.values.clear();
-        this.timestamps.clear();
-        return failures;
+        return this.#expireWhere(() => true);
     }
 
-    async #expireEach(keys: string[]) {
+    /**
+     * Iterates the live map, so a value created or refreshed while an earlier callback is awaited is judged by its
+     * current timestamp.
+     */
+    async #expireWhere(expires: (timestamp: number) => boolean) {
         const failures = new Array<{ key: string; error: unknown }>();
-        for (const key of keys) {
+        for (const [key, timestamp] of this.timestamps) {
+            if (!expires(timestamp)) {
+                continue;
+            }
             try {
                 await this.delete(key);
             } catch (error) {
@@ -148,10 +152,7 @@ class GenericCache<T> {
 
     private async expire() {
         const now = Time.nowMs;
-        const expired = [...this.timestamps.entries()]
-            .filter(([, timestamp]) => now - timestamp >= this.expiration)
-            .map(([key]) => key);
-        this.#logFailures(await this.#expireEach(expired));
+        this.#logFailures(await this.#expireWhere(timestamp => now - timestamp >= this.expiration));
     }
 }
 
