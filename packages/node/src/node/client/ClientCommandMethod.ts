@@ -45,10 +45,7 @@ export function ClientCommandMethod(name: string, commandModel?: CommandModel) {
                 invoke.largeMessage = true;
             }
 
-            const session = context ?? this.context;
-            // A batched invoke stops its exchange only on the aborts of its requests, not of their sessions
-            invoke.abort = session.abort;
-            const chunks = (node.interaction as ClientInteraction).invoke(invoke, session);
+            const chunks = (node.interaction as ClientInteraction).invoke(invoke, context ?? this.context);
 
             for await (const chunk of chunks) {
                 for (const entry of chunk) {

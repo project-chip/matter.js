@@ -906,7 +906,6 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
                 lifetime: this.construction,
                 clientPeerContext,
                 abort: options?.abort,
-                connectionTimeout: options?.connectionTimeout,
             },
         );
     }
@@ -1411,10 +1410,10 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
 export namespace Endpoint {
     /**
-     * Settings of the context {@link Endpoint.act} opens.  They reach the commands the actor invokes on a
-     * {@link ClientNode} through this context; `abort` also ends one held until a sleeping ICD peer wakes.
+     * Settings of the context {@link Endpoint.act} opens.  `abort` ends the peer interactions of the commands the actor
+     * invokes on a {@link ClientNode}, also while they wait for the peer.
      */
-    export type ActOptions = Pick<InteractionSettings, "abort" | "connectionTimeout">;
+    export type ActOptions = Pick<InteractionSettings, "abort">;
 
     export type BehaviorOptions<
         T extends EndpointType = EndpointType.Empty,
@@ -1492,6 +1491,9 @@ export namespace Endpoint {
 
     /**
      * Options for {@link Endpoint.get} and {@link Endpoint.getStateOf}.
+     *
+     * A read on a {@link ClientNode} does not run in the context of a surrounding {@link Endpoint.act}, so the abort of
+     * that context does not reach it; pass `abort` to end the read, also while it waits for a sleeping ICD peer.
      */
     export interface GetOptions extends Pick<InteractionSettings, "abort"> {
         /**

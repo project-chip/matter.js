@@ -20,14 +20,15 @@ import {
     AsyncObservableValue,
     Bytes,
     ClosedError,
+    createPromise,
     Crypto,
     Duration,
     ImplementationError,
-    InternalError,
     Logger,
     Millis,
     Observable,
     Observer,
+    ObserverErrorHandler,
     Seconds,
     Time,
     Timestamp,
@@ -36,8 +37,8 @@ import { bool, field, nonvolatile, octstr, subjectId, systimeMs, uint32, uint8 }
 import { FabricManager, IcdPeerSchedule, PeerAddress, type FabricIcd } from "@matter/protocol";
 import { NodeId, SubjectId, VendorId } from "@matter/types";
 import { IcdManagement } from "@matter/types/clusters/icd-management";
+import { holdUntilIcdPeerAwake } from "./holdUntilIcdPeerAwake.js";
 import { IcdMultiAdminError } from "./IcdMultiAdminError.js";
-import { IcdPeerAsleepError } from "./IcdPeerAsleepError.js";
 
 const logger = Logger.get("IcdClient");
 
@@ -60,7 +61,7 @@ export class IcdClient extends Behavior {
     static override readonly id = "icd";
 
     get isRegistered() {
-        return this.state.registered;
+        return this.state.key !== undefined;
     }
 
     /** Whether the peer is LIT-capable (LongIdleTimeSupport feature and specification version >= 1.4.0). */
@@ -93,12 +94,11 @@ export class IcdClient extends Behavior {
     }
 
     override initialize() {
-        // The phase is runtime only; the stored key is the durable fact it starts from
-        this.internal.phase = { kind: this.state.key === undefined ? "unregistered" : "registered" };
-        this.internal.lifetime = new Abort();
-
         // Abort in-flight work while the datasource is still open; it closes before asyncDispose runs
         this.reactTo(this.endpoint.lifecycle.destroying, this.#onDestroying);
+
+        // Announced after commit, so a listener sees the stored registration and cannot undo it
+        this.reactTo(this.events.key$Changed, this.#onKeyChanged, { offline: true });
 
         if (this.endpoint instanceof Node) {
             this.reactTo(this.endpoint.lifecycle.decommissioned, this.#onDecommissioned, { offline: true, lock: true });
@@ -139,6 +139,16 @@ export class IcdClient extends Behavior {
         this.internal.lifetime.abort();
     }
 
+    #onKeyChanged(key: Bytes | undefined, oldKey: Bytes | undefined) {
+        if (oldKey === undefined) {
+            this.events.registered.emit();
+        } else if (key === undefined) {
+            this.events.unregistered.emit();
+        } else {
+            this.events.keyRefreshed.emit();
+        }
+    }
+
     /**
      * The peer coming online is live proof it is awake, so note it as active in its wakefulness; a no-op for a non-LIT
      * or unfed peer.
@@ -167,6 +177,17 @@ export class IcdClient extends Behavior {
         this.#ensureLitRegistration();
     }
 
+    /** Whether neither a registration is stored nor an operation runs. */
+    get #idle() {
+        return this.internal.operation === undefined && this.state.key === undefined;
+    }
+
+    /** Whether an operation of `kind` may start now: none runs, or `kind` may take over the one that does. */
+    #mayStart(kind: IcdClient.Operation["kind"]) {
+        const current = this.internal.operation;
+        return current === undefined || TAKES_OVER[kind].includes(current.kind);
+    }
+
     /**
      * Register as a Check-In client for a LIT peer. Mandatory for LIT peers, so it bypasses the multi-admin check.
      * Best-effort: a failure is logged and retried by the next trigger.
@@ -178,7 +199,8 @@ export class IcdClient extends Behavior {
             this.internal.lifetime.aborted ||
             !this.peerSupportsLit ||
             !this.agent.get(NetworkClient).subscriptionActive ||
-            this.internal.phase.kind !== "unregistered"
+            !this.#mayStart("registering") ||
+            this.endpoint.stateOf(IcdClient).key !== undefined
         ) {
             return;
         }
@@ -203,7 +225,7 @@ export class IcdClient extends Behavior {
                     // Re-check inside the transaction: state, reachability, or operating mode may have changed since the
                     // trigger fired. An offline peer is a no-op (the next online edge retries), not an error.
                     if (
-                        icd.internal.phase.kind !== "unregistered" ||
+                        !icd.#idle ||
                         !(icd.endpoint instanceof Node) ||
                         !icd.endpoint.lifecycle.isOnline ||
                         !IcdClient.litSupported(icd.endpoint)
@@ -221,7 +243,7 @@ export class IcdClient extends Behavior {
                     ) {
                         return;
                     }
-                    if (icd.internal.phase.kind !== "unregistered") {
+                    if (!icd.#idle) {
                         return;
                     }
                     await icd.register({ allowMultiAdmin: true });
@@ -241,8 +263,8 @@ export class IcdClient extends Behavior {
             }
             this.internal.autoRegister = undefined;
         }
-        // A trigger arrived mid-run on a now-possibly-stale snapshot; re-run once. Touches only #internal here as the
-        // transaction has exited.
+        // A trigger arrived mid-run on a now-possibly-stale snapshot; re-run once.  The transaction has exited, so this
+        // reads committed state only.
         if (this.internal.autoRegisterPending) {
             this.internal.autoRegisterPending = undefined;
             this.#ensureLitRegistration();
@@ -281,91 +303,99 @@ export class IcdClient extends Behavior {
     }
 
     /**
-     * Move to `next`.  The only writer of {@link Internal.phase} after initialization; refuses a move the registration
-     * lifecycle does not have.
+     * Start an operation of `kind` that runs `body`, abandoning the operation in flight if `kind` may take it over.
+     * The operation is abandoned with the behavior; once it ends, no operation is in flight unless another one took
+     * over.
+     *
+     * @throws {ImplementationError} if an operation runs that `kind` may not take over
      */
-    #enter(next: IcdClient.Phase) {
-        const from = this.internal.phase.kind;
-        if (!TRANSITIONS[from].includes(next.kind)) {
-            throw new InternalError(`ICD client cannot move from ${from} to ${next.kind}`);
+    #start(
+        kind: IcdClient.Operation["kind"],
+        body: (operation: IcdClient.Operation) => Promise<void>,
+        options?: IcdClient.RegisterOptions,
+    ): IcdClient.Operation {
+        const current = this.internal.operation;
+        if (current !== undefined) {
+            if (!this.#mayStart(kind)) {
+                throw new ImplementationError(`ICD client cannot start ${kind} while ${current.kind} is in progress.`);
+            }
+            current.abort.abort();
         }
-        this.internal.phase = next;
+        const abort = Abort.subtask(this.internal.lifetime);
+        const started = createPromise<void>();
+        const operation: IcdClient.Operation = { kind, abort, done: started.promise, options };
+        this.internal.operation = operation;
+        this.internal.operations.add(operation.done);
+        this.#runBody(operation, body).then(started.resolver, started.rejecter);
+        return operation;
     }
 
-    /** Whether `phase` is still current and its operation not abandoned. */
-    #owns(phase: IcdClient.Phase) {
-        return this.internal.phase === phase && !("op" in phase && phase.op.abort.aborted);
+    /** Whether `operation` is still the one in flight and not abandoned. */
+    #owns(operation: IcdClient.Operation) {
+        return this.internal.operation === operation && !operation.abort.aborted;
     }
 
-    /**
-     * Run an operation in `phase`.  Afterwards, unless another operation took over, the phase follows the stored key:
-     * registered while one is stored, unregistered otherwise.
-     */
-    #run(phase: IcdClient.OperationPhase, body: () => Promise<void>) {
-        this.#enter(phase);
-        phase.op.done = this.#runBody(phase, body);
-        this.internal.operations.add(phase.op.done);
-    }
-
-    async #runBody(phase: IcdClient.OperationPhase, body: () => Promise<void>) {
+    async #runBody(operation: IcdClient.Operation, body: (operation: IcdClient.Operation) => Promise<void>) {
         try {
-            await body();
+            await body(operation);
         } finally {
-            this.internal.operations.delete(phase.op.done);
-            phase.op.abort.close();
-            // The caller's context may be gone by now, so read the committed state; a closing behavior has none
-            if (this.internal.phase === phase && !this.internal.lifetime.aborted) {
-                const { key } = this.endpoint.stateOf(IcdClient);
-                this.#enter({ kind: key === undefined ? "unregistered" : "registered" });
+            this.internal.operations.delete(operation.done);
+            operation.abort.close();
+            if (this.internal.operation === operation) {
+                this.internal.operation = undefined;
             }
         }
     }
 
-    /** A new operation, abandoned with the behavior. */
-    #operation(): IcdClient.Operation {
-        return { abort: Abort.subtask(this.internal.lifetime), done: Promise.resolve() };
-    }
-
     /**
-     * The only way an operation changes stored state or the phase after an await.  Only while `phase` still owns the
-     * registration, and under the ICD state lock, runs `write` and then `after` (phase switch, receive path, events)
-     * and commits.  The lock is released only by the commit, so nothing interleaves with the side effects of a write.
-     * Returns whether the write was committed; when the commit fails, the phase and the receive path follow the stored
-     * key again.
+     * The only way an operation changes stored state and the receive path after an await: only while `operation` still
+     * owns the registration, under the ICD state lock, `write` stores and updates the receive path, then commits.
+     * Returns whether the write was committed.  When the write or the commit fails, the receive path follows the
+     * committed registration again.
      */
-    async #commitIfOwned(phase: IcdClient.OperationPhase, write: () => void, after?: () => void) {
-        if (!this.#owns(phase)) {
+    async #commitIfOwned(operation: IcdClient.Operation, write: () => void) {
+        if (!this.#owns(operation)) {
             return false;
         }
         await this.context.transaction.lock(this);
-        if (!this.#owns(phase)) {
+        if (!this.#owns(operation)) {
             return false;
         }
-        write();
-        after?.();
         try {
+            write();
             await this.context.transaction.commit();
         } catch (error) {
-            this.#followStoredKey();
+            this.#followCommittedRegistration();
             throw error;
         }
         return true;
     }
 
-    /** Bring the phase and the receive path back to the committed registration after a failed commit. */
-    #followStoredKey() {
-        const { key } = this.endpoint.stateOf(IcdClient);
-        if (key === undefined) {
+    /**
+     * Feed or drop the receive path according to the committed registration.  A Check-In accepted meanwhile under the
+     * same key and baseline keeps its offset, so it cannot be accepted again.
+     */
+    #followCommittedRegistration() {
+        const { key, pendingKey, counterStart, lastOffset } = this.endpoint.stateOf(IcdClient);
+        if (key === undefined || lastOffset === undefined) {
             this.#dropReceivePath();
-            if (this.internal.phase.kind !== "unregistered") {
-                this.#enter({ kind: "unregistered" });
-            }
             return;
         }
-        if (this.internal.phase.kind !== "registered") {
-            this.#enter({ kind: "registered" });
-        }
-        this.#restoreReceivePath();
+        const { fabric, peerNodeId } = this.#fabricContext();
+        const entry = fabric.icd.peerFor(peerNodeId);
+        const sameBaseline =
+            entry !== undefined && Bytes.areEqual(entry.key, key) && entry.counterStart === counterStart;
+        this.#feedFabricIcd(
+            fabric,
+            peerNodeId,
+            {
+                key,
+                pendingKey,
+                counterStart,
+                lastOffset: sameBaseline ? Math.max(entry.lastOffset, lastOffset) : lastOffset,
+            },
+            false,
+        );
     }
 
     /**
@@ -381,12 +411,12 @@ export class IcdClient extends Behavior {
      * runtime-only, so it is rebuilt on every controller online.
      */
     #restoreReceivePath() {
-        if (this.internal.phase.kind !== "registered" || this.state.key === undefined) {
+        if (this.state.key === undefined) {
             return;
         }
         const { fabric, peerNodeId } = this.#fabricContext();
         // Peer reachability is unknown after a controller restart, so do not note it as active.
-        this.#feedFabricIcd(fabric, peerNodeId, false);
+        this.#feedFabricIcd(fabric, peerNodeId, this.state, false);
     }
 
     /**
@@ -394,17 +424,10 @@ export class IcdClient extends Behavior {
      * possible or needed — only local cleanup.
      */
     #onDecommissioned() {
-        const { phase } = this.internal;
-        if ("op" in phase) {
-            phase.op.abort.abort();
-        }
+        this.internal.operation?.abort.abort();
         if (this.state.key !== undefined) {
             this.#persistRegistration(undefined);
             this.#dropReceivePath();
-            this.events.unregistered.emit();
-        }
-        if (phase.kind !== "unregistered") {
-            this.#enter({ kind: "unregistered" });
         }
         // The peer left the fabric, also when it was unregistered before; a later peer with its node ID starts afresh
         const fed = this.#fed();
@@ -418,7 +441,7 @@ export class IcdClient extends Behavior {
      * The only writer of the stored registration facts.  The caller holds the ICD state lock in a transaction this
      * behavior owns.
      */
-    #persistRegistration(registration: IcdClient.Registration | undefined) {
+    #persistRegistration(registration: Registration | undefined) {
         this.state.key = registration?.key;
         this.state.pendingKey = registration?.pendingKey;
         this.state.counterStart = registration?.counterStart;
@@ -463,7 +486,7 @@ export class IcdClient extends Behavior {
      * Check-In messages, records the rolling-counter baseline in {@link IcdClient.State}, and arms the controller-side
      * Check-In receive path on the fabric.  Runs and stores in a transaction of its own, so do not call it from a
      * transaction that holds the ICD client state.  A call while a registration with the same options (defaults
-     * applied) is in flight joins it.
+     * applied) is in flight joins it.  {@link Events.registered} follows after the registration is stored.
      *
      * @throws {ImplementationError} if a registration exists or is being torn down, one with other options is in
      *   flight, the peer is not online (registration reads from and writes to the peer), or its IcdManagement cluster
@@ -474,21 +497,20 @@ export class IcdClient extends Behavior {
      * @see {@link MatterSpecification.v161.Core} § 9.16.7.1
      */
     async register(options: IcdClient.RegisterOptions = {}) {
-        const { phase } = this.internal;
-        switch (phase.kind) {
-            case "registering":
-                if (!this.#sameRegisterOptions(phase.options, options)) {
-                    throw new ImplementationError("An ICD client registration with other options is in progress.");
-                }
-                return await phase.op.done;
-            case "registered":
-            case "refreshing":
-                throw new ImplementationError(
-                    "ICD client is already registered; unregister first or let key refresh re-key in place.",
-                );
-            case "unregistering":
-            case "forgetting":
-                throw new ImplementationError("ICD client unregistration is in progress; wait for it to finish.");
+        const current = this.internal.operation;
+        if (current?.kind === "registering") {
+            if (!this.#sameRegisterOptions(current.options ?? {}, options)) {
+                throw new ImplementationError("An ICD client registration with other options is in progress.");
+            }
+            return await current.done;
+        }
+        if (!this.#mayStart("registering")) {
+            throw new ImplementationError(`ICD client cannot register while ${current?.kind} is in progress.`);
+        }
+        if (this.state.key !== undefined) {
+            throw new ImplementationError(
+                "ICD client is already registered; unregister first or let key refresh re-key in place.",
+            );
         }
 
         if (!this.agent.get(NetworkClient).subscriptionActive) {
@@ -507,11 +529,12 @@ export class IcdClient extends Behavior {
             );
         }
 
-        const registering: IcdClient.OperationPhase = { kind: "registering", op: this.#operation(), options };
-        this.#run(registering, () =>
-            this.#act("icd-register", icd => icd.#registerOnPeer(registering, options), registering.op.abort),
+        const operation = this.#start(
+            "registering",
+            operation => this.#act("icd-register", icd => icd.#registerOnPeer(operation, options), operation.abort),
+            options,
         );
-        await registering.op.done;
+        await operation.done;
     }
 
     /** The options with their defaults applied, so equal requests compare equal however they are spelled. */
@@ -537,11 +560,11 @@ export class IcdClient extends Behavior {
         );
     }
 
-    async #registerOnPeer(phase: IcdClient.OperationPhase, options: IcdClient.RegisterOptions) {
+    async #registerOnPeer(operation: IcdClient.Operation, options: IcdClient.RegisterOptions) {
         const { fabric, ownNodeId, peerNodeId } = this.#fabricContext();
         const { monitoredSubject, clientType, allowMultiAdmin, ignoredVendors } = this.#resolveOptions(options);
 
-        const fabrics = await this.#readPeerFabrics(phase.op.abort);
+        const fabrics = await this.#readPeerFabrics(operation.abort);
         IcdMultiAdminError.assertSingleAdmin(
             fabrics.map(f => f.vendorId),
             ignoredVendors,
@@ -557,23 +580,12 @@ export class IcdClient extends Behavior {
             clientType,
         });
 
-        const committed = await this.#commitIfOwned(
-            phase,
-            () =>
-                this.#persistRegistration({
-                    key,
-                    counterStart: icdCounter,
-                    lastOffset: 0,
-                    monitoredSubject,
-                    clientType,
-                }),
-            () => {
-                this.#enter({ kind: "registered" });
-                // The peer just answered registration I/O, so it is reachable: seed the availability window.
-                this.#feedFabricIcd(fabric, peerNodeId, true);
-                this.events.registered.emit();
-            },
-        );
+        const committed = await this.#commitIfOwned(operation, () => {
+            const registration = { key, counterStart: icdCounter, lastOffset: 0, monitoredSubject, clientType };
+            this.#persistRegistration(registration);
+            // The peer just answered registration I/O, so it is reachable: seed the availability window.
+            this.#feedFabricIcd(fabric, peerNodeId, registration, true);
+        });
         if (!committed) {
             throw new AbortedError("ICD registration was abandoned");
         }
@@ -586,7 +598,8 @@ export class IcdClient extends Behavior {
      * there too.  The local registration is cleared once the peer is awake, just before UnregisterClient goes out, so
      * a failed or abandoned exchange leaves at most a stale entry on the peer, which a later registration replaces.  A
      * no-op when not registered; while an unregister() runs, joins it.  Runs in a transaction of its own, so do not
-     * call it from a transaction that holds the ICD client state.
+     * call it from a transaction that holds the ICD client state.  {@link Events.unregistered} follows after the
+     * local clear is stored.
      *
      * @throws {ImplementationError} while {@link forget} runs, which leaves the peer's registration in place.
      * @throws {AbortedError} if forget(), decommission or shutdown abandons it before the local registration is
@@ -596,38 +609,30 @@ export class IcdClient extends Behavior {
      * @see {@link MatterSpecification.v161.Core} § 9.16.7.3
      */
     async unregister(): Promise<void> {
-        const { phase } = this.internal;
-        switch (phase.kind) {
-            case "unregistered":
-                return;
-            case "unregistering":
-                return await phase.op.done;
-            case "forgetting":
-                throw new ImplementationError("ICD client forget() is in progress; the peer keeps its registration.");
-            case "registering":
-            case "refreshing":
-                phase.op.abort.abort();
-                break;
+        const current = this.internal.operation;
+        if (current?.kind === "unregistering") {
+            return await current.done;
+        }
+        if (this.#idle) {
+            return;
         }
 
-        const unregistering: IcdClient.OperationPhase = { kind: "unregistering", op: this.#operation() };
-        this.#run(unregistering, () =>
-            this.#act("icd-unregister", icd => icd.#unregisterOnPeer(unregistering), unregistering.op.abort),
+        const operation = this.#start("unregistering", operation =>
+            this.#act("icd-unregister", icd => icd.#unregisterOnPeer(operation), operation.abort),
         );
-        await unregistering.op.done;
+        await operation.done;
     }
 
-    async #unregisterOnPeer(phase: IcdClient.OperationPhase) {
+    async #unregisterOnPeer(operation: IcdClient.Operation) {
         const { ownNodeId } = this.#fabricContext();
-        await this.#awaitPeerAwake(phase.op.abort);
+        await this.#awaitPeerAwake(operation.abort);
 
-        let verificationKey: Bytes | undefined;
-        const cleared = await this.#clearLocal(phase, key => (verificationKey = key));
-        if (!cleared) {
+        const cleared = await this.#clearLocal(operation);
+        if (cleared === undefined) {
             throw new AbortedError("ICD unregistration was abandoned");
         }
 
-        await this.#peerIcd().unregisterClient({ checkInNodeId: ownNodeId, verificationKey });
+        await this.#peerIcd().unregisterClient({ checkInNodeId: ownNodeId, verificationKey: cleared.key });
     }
 
     /**
@@ -644,64 +649,45 @@ export class IcdClient extends Behavior {
      * @see {@link MatterSpecification.v161.Core} § 9.16.7.3
      */
     async forget(): Promise<void> {
-        const { phase } = this.internal;
-        switch (phase.kind) {
-            case "unregistered":
-                return;
-            case "forgetting":
-                return await phase.op.done;
-            case "unregistering":
-                // After its local clear there is nothing left to forget, and its UnregisterClient may be on the way
-                if (this.state.key === undefined) {
-                    return;
-                }
-                phase.op.abort.abort();
-                break;
-            case "registering":
-            case "refreshing":
-                phase.op.abort.abort();
-                break;
+        const current = this.internal.operation;
+        if (current?.kind === "forgetting") {
+            return await current.done;
+        }
+        // Nothing stored and no registration that may store it; after an unregister()'s local clear its UnregisterClient
+        // may still be on the way
+        if (this.state.key === undefined && current?.kind !== "registering") {
+            return;
         }
 
-        const forgetting: IcdClient.OperationPhase = { kind: "forgetting", op: this.#operation() };
-        this.#run(forgetting, () =>
+        const operation = this.#start("forgetting", operation =>
             this.#act(
                 "icd-forget",
                 async icd => {
-                    if (!(await icd.#clearLocal(forgetting))) {
+                    if ((await icd.#clearLocal(operation)) === undefined) {
                         throw new AbortedError("ICD forget was abandoned");
                     }
                     logger.info(
                         "ICD registration forgotten locally (no peer UnregisterClient); peer retains a stale registration",
                     );
                 },
-                forgetting.op.abort,
+                operation.abort,
             ),
         );
-        await forgetting.op.done;
+        await operation.done;
     }
 
     /**
-     * Clear the stored registration and the receive path, announcing {@link Events.unregistered} if one was stored.
-     * Hands the cleared key, read under the lock, to `cleared`.
+     * Clear the stored registration and the receive path.  Returns the cleared key, read under the lock, or undefined
+     * when `operation` no longer owns the registration.
      */
-    #clearLocal(phase: IcdClient.OperationPhase, cleared?: (key: Bytes | undefined) => void) {
-        let registered = false;
-        return this.#commitIfOwned(
-            phase,
-            () => {
-                const { key } = this.state;
-                registered = key !== undefined;
-                cleared?.(key);
-                this.#persistRegistration(undefined);
-            },
-            () => {
-                this.#dropReceivePath();
-                if (registered) {
-                    this.events.unregistered.emit();
-                }
-            },
-        );
+    async #clearLocal(operation: IcdClient.Operation) {
+        let key: Bytes | undefined;
+        const committed = await this.#commitIfOwned(operation, () => {
+            key = this.state.key;
+            this.#persistRegistration(undefined);
+            this.#dropReceivePath();
+        });
+        return committed ? { key } : undefined;
     }
 
     /**
@@ -709,14 +695,7 @@ export class IcdClient extends Behavior {
      * the UnregisterClient can go out.
      */
     async #awaitPeerAwake(abort: Abort) {
-        const wakefulness = this.#wakefulness();
-        if (wakefulness === undefined || !wakefulness.requiresAwait || wakefulness.awake.value === true) {
-            return;
-        }
-        const timeout = wakefulness.nextCheckInWithin;
-        if (!(await wakefulness.awaitAwake(timeout, abort.signal))) {
-            throw new IcdPeerAsleepError(PeerAddress(this.#fabricContext().peerAddress), timeout);
-        }
+        await holdUntilIcdPeerAwake(this.#wakefulness(), this.#fabricContext().peerAddress, { abort: abort.signal });
     }
 
     /**
@@ -765,8 +744,13 @@ export class IcdClient extends Behavior {
         return PeerAddress(this.endpoint.maybeStateOf(CommissioningClient)?.peerAddress);
     }
 
-    #feedFabricIcd(fabric: ReturnType<FabricManager["for"]>, peerNodeId: NodeId, seed: boolean) {
-        const { key, pendingKey, counterStart, lastOffset } = this.state;
+    #feedFabricIcd(
+        fabric: ReturnType<FabricManager["for"]>,
+        peerNodeId: NodeId,
+        registration: Pick<Registration, "key" | "pendingKey" | "counterStart" | "lastOffset">,
+        seed: boolean,
+    ) {
+        const { key, pendingKey, counterStart, lastOffset } = registration;
         if (key === undefined || counterStart === undefined || lastOffset === undefined) {
             throw new ImplementationError("ICD peer cannot be fed to the fabric before registration state is set.");
         }
@@ -844,22 +828,22 @@ export class IcdClient extends Behavior {
             this.#persistPeerEntry(entry);
         }
         this.state.lastCheckInReceivedAt = Time.nowMs;
-        this.events.checkedIn.emit({ counter, activeModeThreshold });
 
-        // A listener may have started a teardown, and the baseline may have moved since the Check-In was decrypted
-        if (this.internal.phase.kind === "registered" && fed !== undefined && fed.icd.refreshNeeded(fed.nodeId)) {
-            const refreshing: IcdClient.OperationPhase = { kind: "refreshing", op: this.#operation() };
-            this.#run(refreshing, () => this.#refreshKey(refreshing));
+        // The baseline may have moved since the Check-In was decrypted, so FabricIcd answers for the current key
+        if (this.#mayStart("refreshing") && fed !== undefined && fed.icd.refreshNeeded(fed.nodeId)) {
+            this.#start("refreshing", operation => this.#refreshKey(operation));
         }
+
+        // Last, so a listener that starts an unregister() or forget() takes over the refresh started above
+        this.events.checkedIn.emit({ counter, activeModeThreshold });
     }
 
     /**
-     * Store the fed peer's key and counter state from {@link FabricIcd}, which advances it as Check-Ins arrive.  Emits
-     * {@link Events.keyRefreshed} when this stores the confirmation of the pending key.  The caller holds the ICD state
-     * lock in a transaction this behavior owns.
+     * Store the fed peer's key and counter state from {@link FabricIcd}, which advances it as Check-Ins arrive.  The
+     * caller holds the ICD state lock in a transaction this behavior owns.
      */
     #persistPeerEntry(entry: FabricIcd.Peer) {
-        const { pendingKey, monitoredSubject, clientType } = this.state;
+        const { monitoredSubject, clientType } = this.state;
         this.#persistRegistration({
             key: entry.key,
             pendingKey: entry.pendingKey,
@@ -868,15 +852,12 @@ export class IcdClient extends Behavior {
             monitoredSubject,
             clientType,
         });
-        if (pendingKey !== undefined && entry.pendingKey === undefined && Bytes.areEqual(entry.key, pendingKey)) {
-            this.events.keyRefreshed.emit();
-        }
     }
 
     /** Never rejects: the next Check-In under the old key retries. */
-    async #refreshKey(phase: IcdClient.OperationPhase) {
+    async #refreshKey(operation: IcdClient.Operation) {
         try {
-            await this.#act("icd-key-refresh", icd => icd.#offerKey(phase), phase.op.abort);
+            await this.#act("icd-key-refresh", icd => icd.#offerKey(operation), operation.abort);
         } catch (error) {
             if (IcdClient.#isAbandoned(error)) {
                 logger.debug(`ICD key refresh for peer ${this.#peerAddress} abandoned`);
@@ -898,18 +879,18 @@ export class IcdClient extends Behavior {
      *
      * @see {@link MatterSpecification.v161.Core} § 4.22.3.4.1, § 4.22.4.2, § 9.16.7.1
      */
-    async #offerKey(phase: IcdClient.OperationPhase) {
+    async #offerKey(operation: IcdClient.Operation) {
         const { fabric, ownNodeId, peerNodeId } = this.#fabricContext();
         let request: IcdManagement.RegisterClientRequest | undefined;
-        const offered = await this.#commitIfOwned(phase, () => {
+        const offered = await this.#commitIfOwned(operation, () => {
             const { monitoredSubject, clientType, key: verificationKey, pendingKey } = this.state;
             if (monitoredSubject === undefined || clientType === undefined || verificationKey === undefined) {
                 throw new ImplementationError("ICD key refresh requires an existing registration.");
             }
             const entry = this.#entryOf(peerNodeId);
-            // A Check-In under the pending key may have confirmed it while this refresh waited for the lock
+            // A Check-In under the pending key may have confirmed it while this refresh waited for the lock; that
+            // Check-In's reaction stores it
             if (pendingKey !== undefined && entry.pendingKey === undefined && Bytes.areEqual(entry.key, pendingKey)) {
-                this.#persistPeerEntry(entry);
                 return;
             }
             const key = pendingKey ?? this.env.get(Crypto).randomBytes(16);
@@ -922,16 +903,9 @@ export class IcdClient extends Behavior {
         }
         const { key } = request;
 
-        let icdCounter: number;
-        try {
-            ({ icdCounter } = await this.#peerIcd().registerClient(request));
-        } catch (error) {
-            // Store a key a Check-In confirmed meanwhile
-            await this.#commitIfOwned(phase, () => this.#persistPeerEntry(this.#entryOf(peerNodeId)));
-            throw error;
-        }
+        const { icdCounter } = await this.#peerIcd().registerClient(request);
 
-        await this.#commitIfOwned(phase, () => {
+        await this.#commitIfOwned(operation, () => {
             if (!fabric.icd.confirmKey(peerNodeId, key, icdCounter)) {
                 logger.warn(`ICD peer ${this.#peerAddress} confirmed a key refresh for a key it no longer holds`);
             }
@@ -960,19 +934,27 @@ export class IcdClient extends Behavior {
     }
 }
 
+/** The stored facts of a registration. */
+type Registration = Pick<
+    IcdClient.State,
+    "key" | "pendingKey" | "counterStart" | "lastOffset" | "monitoredSubject" | "clientType"
+>;
+
 /**
- * The moves of the registration lifecycle.  An operation phase ends in registered or unregistered, by the stored key;
- * unregister() and forget() take over a registration or refresh, forget() also an unregister() that has not cleared;
- * decommission ends any phase in unregistered.
+ * Which operation may abandon which: unregister() and forget() take over a registration or a key refresh, forget()
+ * also an unregister() that has not cleared yet.  A registration or refresh starts only when none runs.
  */
-const TRANSITIONS: Record<IcdClient.Phase["kind"], IcdClient.Phase["kind"][]> = {
-    unregistered: ["registering"],
-    registering: ["registered", "unregistered", "unregistering", "forgetting"],
-    registered: ["refreshing", "unregistering", "forgetting", "unregistered"],
-    refreshing: ["registered", "unregistering", "forgetting", "unregistered"],
-    unregistering: ["unregistered", "registered", "forgetting"],
-    forgetting: ["unregistered", "registered"],
+const TAKES_OVER: Record<IcdClient.Operation["kind"], IcdClient.Operation["kind"][]> = {
+    registering: [],
+    refreshing: [],
+    unregistering: ["registering", "refreshing"],
+    forgetting: ["registering", "refreshing", "unregistering"],
 };
+
+function logListenerError(event: string): ObserverErrorHandler {
+    return (error, observer) =>
+        logger.warn(`Error in ICD client ${event} listener ${observer.name || "(anon)"}`, error);
+}
 
 export namespace IcdClient {
     /** Minimum device Matter specification version (BasicInformation, encoded 0xMMmmpprr) for trustworthy LIT behavior. */
@@ -991,27 +973,22 @@ export namespace IcdClient {
         );
     }
 
-    /** Registration, key refresh or teardown in flight. */
+    /**
+     * Registration, key refresh or teardown in flight.  Runtime only; whether a registration exists is the stored
+     * {@link State.key}.  At most one runs.
+     */
     export interface Operation {
+        readonly kind: "registering" | "refreshing" | "unregistering" | "forgetting";
+
         /** Abandons the operation; a child of the behavior's lifetime. */
-        abort: Abort;
+        readonly abort: Abort;
 
         /** Settles with the operation, so a second caller can join it. */
         done: Promise<void>;
+
+        /** The options a registration was started with, so a second register() joins only with the same ones. */
+        readonly options?: RegisterOptions;
     }
-
-    /**
-     * Where a registration is in its life.  Runtime only: the stored registration facts are durable, the phase is not.
-     * At most one operation runs; the moves between phases are fixed (see `TRANSITIONS` in this module).
-     */
-    export type Phase = { kind: "unregistered" } | { kind: "registered" } | OperationPhase;
-
-    /** A phase with an operation in flight. */
-    export type OperationPhase =
-        | { kind: "registering"; op: Operation; options: RegisterOptions }
-        | { kind: "refreshing"; op: Operation }
-        | { kind: "unregistering"; op: Operation }
-        | { kind: "forgetting"; op: Operation };
 
     /** Options of {@link IcdClient.register}. */
     export interface RegisterOptions {
@@ -1021,15 +998,9 @@ export namespace IcdClient {
         ignoredVendors?: VendorId[];
     }
 
-    /** The stored facts of a registration. */
-    export type Registration = Pick<
-        State,
-        "key" | "pendingKey" | "counterStart" | "lastOffset" | "monitoredSubject" | "clientType"
-    >;
-
     export class Internal {
-        /** Where the registration is in its life; changed only by {@link IcdClient}'s transition check. */
-        phase: Phase = { kind: "unregistered" };
+        /** The operation in flight, if any. */
+        operation?: Operation;
 
         /** Aborted when the behavior goes away; every operation's abort is a child of it. */
         lifetime = new Abort();
@@ -1107,8 +1078,10 @@ export namespace IcdClient {
         clientType?: IcdManagement.ClientType;
 
         /**
-         * Whether this controller is currently registered as a Check-In client on the peer.  Derived: true exactly while
-         * a {@link key} is stored.
+         * Whether this controller is currently registered as a Check-In client on the peer: true exactly while a
+         * {@link key} is stored.
+         *
+         * @deprecated Use {@link IcdClient.isRegistered} or test {@link key}.
          */
         @field(bool, nonvolatile)
         registered: boolean = false;
@@ -1127,21 +1100,37 @@ export namespace IcdClient {
         available: boolean = false;
     }
 
+    /**
+     * A listener's error is logged, so it neither keeps the other listeners from the event nor, for {@link checkedIn},
+     * rolls back the Check-In state stored with it.
+     */
     export class Events extends BaseEvents {
-        registered = Observable();
-        unregistered = Observable();
-        checkedIn = Observable<[checkIn: { counter: number; activeModeThreshold: number }]>();
+        /** Emits after a registration is stored. */
+        registered = Observable(logListenerError("registered"));
+
+        /** Emits after the cleared registration is stored, by unregister(), forget() or decommission. */
+        unregistered = Observable(logListenerError("unregistered"));
+
+        /** Emits for each accepted Check-In, inside the transaction that stores its counter. */
+        checkedIn = Observable<[checkIn: { counter: number; activeModeThreshold: number }]>(
+            logListenerError("checkedIn"),
+        );
+
         /**
-         * Emits once per key refresh, when the new key is confirmed (by the RegisterClient response or by the first
-         * Check-In under it), inside the transaction that stores it.  {@link counterStart$Changed} follows after commit.
+         * Emits once per key refresh, after the new key is stored as confirmed (by the RegisterClient response or by
+         * the first Check-In under it).
          */
-        keyRefreshed = Observable();
+        keyRefreshed = Observable(logListenerError("keyRefreshed"));
+
+        /** Emits after commit whenever {@link State.key} changes; {@link registered}, {@link unregistered} and {@link keyRefreshed} follow from it. */
+        key$Changed = new Observable<[value: Bytes | undefined, oldValue: Bytes | undefined]>();
+
         available$Changed = new Observable<[value: boolean, oldValue: boolean]>();
 
         /**
          * Emits after commit whenever {@link State.counterStart} changes: set by a registration, replaced when a key
          * refresh is confirmed and again when a response follows a Check-In that confirmed it, cleared when the
-         * registration is.  Unlike {@link keyRefreshed}, a listener reads the new key from state.
+         * registration is.
          */
         counterStart$Changed = new Observable<[value: number | undefined, oldValue: number | undefined]>();
 

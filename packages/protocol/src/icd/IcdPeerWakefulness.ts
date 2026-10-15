@@ -52,20 +52,17 @@ export class IcdPeerWakefulness {
         return this.#awake;
     }
 
-    /**
-     * Wait until the peer is awake, at most `timeout`.  Returns false when the timeout elapses first; rejects with the
-     * abort error when one of `signals` aborts.
-     */
-    async awaitAwake(timeout: Duration, ...signals: (AbortSignal | undefined)[]): Promise<boolean> {
+    /** Wait until the peer is awake, at most `timeout` and until `abort` aborts.  Returns what ended the wait. */
+    async awaitAwake(timeout: Duration, abort?: AbortSignal): Promise<"awake" | "timeout" | "aborted"> {
         if (this.#awake.value) {
-            return true;
+            return "awake";
         }
-        using wait = new Abort({ abort: signals, timeout });
+        using wait = new Abort({ abort, timeout });
         await wait.race(this.#awake);
-        if (signals.some(Abort.is)) {
-            wait.throwIfAborted();
+        if (abort?.aborted) {
+            return "aborted";
         }
-        return !wait.aborted;
+        return wait.aborted ? "timeout" : "awake";
     }
 
     /** Emits when reachability state changes. `.value` reads the current boolean. */
