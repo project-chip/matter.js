@@ -256,6 +256,25 @@ function throwUnsupported(flavor: DeviceFlavor, capability: string): never {
     throw new Error(`${flavor} subjects do not support ${capability}; commission fresh per test instead`);
 }
 
+/** A start refused because the device has closed; a closed device starts no further process or container. */
+class CertDeviceClosedError extends Error {}
+
+/**
+ * Starts `device` for a backchannel command, and treats a start the device refuses because it has
+ * closed as done: only a caller the run has abandoned, such as a finalizer that outlived its
+ * timeout, still sends commands then, and the closed device stays down as it should.
+ */
+async function startForBackchannel(device: CertDevice, command: BackchannelCommand["name"]): Promise<void> {
+    try {
+        await device.start();
+    } catch (e) {
+        if (!(e instanceof CertDeviceClosedError)) {
+            throw e;
+        }
+        console.debug(`Cert device ${device.id} is closed, so the "${command}" backchannel command starts nothing`);
+    }
+}
+
 interface ExitDeferred {
     promise: Promise<DeviceExitInfo>;
     resolve: (info: DeviceExitInfo) => void;
@@ -562,7 +581,7 @@ class ChipLocalDevice implements CertDevice {
 
     #assertOpen() {
         if (this.#closed) {
-            throw new Error(`Cert device ${this.id} is closed, so it starts no further process`);
+            throw new CertDeviceClosedError(`Cert device ${this.id} is closed, so it starts no further process`);
         }
     }
 
@@ -737,12 +756,12 @@ class ChipLocalDevice implements CertDevice {
                     await rm(this.#storageDir, { recursive: true, force: true });
                     this.#storageDir = undefined;
                 }
-                await this.start();
+                await startForBackchannel(this, command.name);
                 break;
 
             case "reboot":
                 await this.stop();
-                await this.start();
+                await startForBackchannel(this, command.name);
                 break;
 
             case "stop":
@@ -750,7 +769,7 @@ class ChipLocalDevice implements CertDevice {
                 break;
 
             case "start":
-                await this.start();
+                await startForBackchannel(this, command.name);
                 break;
 
             default: {
@@ -1141,7 +1160,7 @@ export class ChipDockerDevice implements CertDevice {
 
     #assertOpen() {
         if (this.#closed) {
-            throw new Error(`Cert device ${this.id} is closed, so it launches no further container`);
+            throw new CertDeviceClosedError(`Cert device ${this.id} is closed, so it launches no further container`);
         }
     }
 
@@ -1201,7 +1220,7 @@ export class ChipDockerDevice implements CertDevice {
                 // The app's key-value store lives in the container's own filesystem, which the
                 // composition discards when it stops, so a fresh container is a factory-new device.
                 await this.stop();
-                await this.start();
+                await startForBackchannel(this, command.name);
                 break;
 
             case "reboot":
@@ -1217,7 +1236,7 @@ export class ChipDockerDevice implements CertDevice {
                 break;
 
             case "start":
-                await this.start();
+                await startForBackchannel(this, command.name);
                 break;
 
             default: {

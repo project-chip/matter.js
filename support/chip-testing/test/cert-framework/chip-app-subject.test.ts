@@ -479,13 +479,56 @@ describe("ChipLocalSubject", () => {
         // A cleanup the run abandoned keeps running while the run closes the device under it
         const reset = device.backchannel({ name: "factoryReset" });
         await device.close();
-        await expect(reset).rejectedWith("closed");
+        await reset;
 
         const pids = (await readFile(pidFile, "utf8")).trim().split("\n").map(Number);
         const alive = livingOf(pids);
         for (const pid of alive) {
             process.kill(pid, "SIGKILL");
         }
+        expect(pids).length(1);
+        expect(alive).deep.equal([]);
+    });
+
+    it("settles a restart command a caller sends after close and never awaits, starting nothing", async function () {
+        this.timeout(15_000);
+
+        const pidFile = join(appDir, "pids");
+        await writeFile(
+            join(appDir, `chip-${app}-app`),
+            ["#!/bin/sh", `echo $$ >> "${pidFile}"`, "echo up", "exec sleep 300", ""].join("\n"),
+            { mode: 0o755 },
+        );
+
+        const device = ChipLocalSubject(app)("cert");
+        if (!isCertDevice(device)) {
+            throw new Error("Expected a CertDevice");
+        }
+
+        await device.initialize();
+        await device.start();
+        await collectLines(device.log.follow(), 1, 5_000);
+        await device.close();
+
+        const unhandled = new Array<unknown>();
+        const onUnhandledRejection = (reason: unknown) => unhandled.push(reason);
+        process.on("unhandledRejection", onUnhandledRejection);
+        try {
+            // An abandoned finalizer's commands, which nobody awaits any more
+            for (const name of ["factoryReset", "reboot", "start"] as const) {
+                void device.backchannel({ name });
+            }
+            await new Promise(resolve => setTimeout(resolve, 100));
+        } finally {
+            process.off("unhandledRejection", onUnhandledRejection);
+        }
+
+        const pids = (await readFile(pidFile, "utf8")).trim().split("\n").map(Number);
+        const alive = livingOf(pids);
+        for (const pid of alive) {
+            process.kill(pid, "SIGKILL");
+        }
+        expect(unhandled).deep.equal([]);
         expect(pids).length(1);
         expect(alive).deep.equal([]);
     });
@@ -1308,7 +1351,7 @@ describe("ChipDockerSubject", () => {
         // A cleanup the run abandoned keeps running while the run closes the device under it
         const reset = device.backchannel({ name: "factoryReset" });
         await device.close();
-        await expect(reset).rejectedWith("closed");
+        await reset;
 
         expect(composed).equal(1);
         expect(closed).equal(1);
