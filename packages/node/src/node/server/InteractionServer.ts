@@ -79,6 +79,14 @@ import { ServerSubscription, ServerSubscriptionConfig, ServerSubscriptionContext
 
 const logger = Logger.get("InteractionServer");
 
+function isConcreteWritePath(path: AttributePath): path is WriteResult.ConcreteAttributePath {
+    return path.endpointId !== undefined && path.clusterId !== undefined && path.attributeId !== undefined;
+}
+
+function writePathKey({ endpointId, clusterId, attributeId }: WriteResult.ConcreteAttributePath) {
+    return `${endpointId}/${clusterId}/${attributeId}`;
+}
+
 // Hard acceptance ceiling for paths in a single read/subscribe interaction, set to the upper bound of the
 // CapabilityMinimaStruct field constraints in the data model.  Separate from the advertised CapabilityMinima defaults:
 // we advertise a guaranteed floor and accept up to this ceiling, blocking only beyond it.
@@ -163,6 +171,13 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     #newActivityBlocked = false;
     #aclServer?: AccessControlServer;
     #serverInteraction: OnlineServerInteraction;
+
+    /**
+     * The exchange of each chunked write interaction, by the attribute it is writing across chunks.  Another exchange's
+     * write to that attribute is answered BUSY or skipped, as the CHIP SDK does, so it cannot land between the chunks
+     * of a list write.
+     */
+    readonly #writingExchanges = new Map<string, MessageExchange>();
     #counters: InteractionCounters = {
         totalSubscriptionsEstablished: 0,
         totalInteractionModelMessagesSent: 0,
@@ -188,7 +203,14 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
         // ServerInteraction is the "new way" and will replace most logic here over time and especially
         // the InteractionEndpointStructure, which is currently a duplication of the node protocol
-        this.#serverInteraction = new OnlineServerInteraction(node.protocol);
+        this.#serverInteraction = new OnlineServerInteraction(node.protocol, {
+            isWriteLocked: (path, { exchange }) => this.#isWrittenByOther(path, exchange),
+        });
+    }
+
+    #isWrittenByOther(path: WriteResult.ConcreteAttributePath, exchange: MessageExchange) {
+        const writing = this.#writingExchanges.get(writePathKey(path));
+        return writing !== undefined && writing !== exchange;
     }
 
     async [Symbol.asyncDispose]() {
@@ -435,6 +457,15 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         // A list ADD (listIndex === null) is only valid if the previous write was to the same attribute.
         let previousProcessedAttributePath: WriteResult.ConcreteAttributePath | undefined;
 
+        let heldPath: string | undefined;
+        const releaseHeldPath = () => {
+            if (heldPath !== undefined) {
+                this.#writingExchanges.delete(heldPath);
+                heldPath = undefined;
+            }
+        };
+        using _held = { [Symbol.dispose]: releaseHeldPath };
+
         // Process chunks until moreChunkedMessages is false
         while (true) {
             const allResponses = new Array<WriteResult.AttributeStatus>();
@@ -469,6 +500,12 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 const { path } = request;
                 const listIndex = path.listIndex;
 
+                if (isConcreteWritePath(path) && this.#isWrittenByOther(path, exchange)) {
+                    await processBatch();
+                    allResponses.push({ kind: "attr-status", path, status: Status.Busy });
+                    continue;
+                }
+
                 if (listIndex === null) {
                     // This is a list ADD - check if a previous path matches
                     if (
@@ -494,8 +531,11 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
                 // Valid write - add to batch and update tracking
                 currentBatch.push(request);
-                if (path.endpointId !== undefined && path.clusterId !== undefined && path.attributeId !== undefined) {
-                    previousProcessedAttributePath = path as WriteResult.ConcreteAttributePath;
+                if (isConcreteWritePath(path)) {
+                    previousProcessedAttributePath = path;
+                    if (heldPath !== writePathKey(path)) {
+                        releaseHeldPath();
+                    }
                 }
             }
 
@@ -505,6 +545,11 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             if (suppressResponse) {
                 // No response to send, we are done
                 break;
+            }
+
+            if (moreChunkedMessages && previousProcessedAttributePath !== undefined && heldPath === undefined) {
+                heldPath = writePathKey(previousProcessedAttributePath);
+                this.#writingExchanges.set(heldPath, exchange);
             }
 
             // Send WriteResponse for this chunk

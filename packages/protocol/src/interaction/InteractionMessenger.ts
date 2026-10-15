@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { isAclOrExtensionPath } from "#action/request/Write.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { Mark } from "#common/Mark.js";
 import { PeerUnresponsiveError } from "#peer/PeerCommunicationError.js";
@@ -22,10 +23,13 @@ import {
 } from "@matter/general";
 import { Specification } from "@matter/model";
 import {
+    AttributeData,
+    AttributePath,
     ReceivedStatusResponseError,
     Status,
     StatusResponseError,
     TlvAny,
+    TlvAttributeData,
     TlvBoolean,
     TlvDataReport,
     TlvDataReportForSend,
@@ -42,6 +46,7 @@ import {
     TlvSubscribeRequest,
     TlvSubscribeResponse,
     TlvTimedRequest,
+    TlvType,
     TlvWriteRequest,
     TlvWriteResponse,
     TypeFromSchema,
@@ -87,6 +92,43 @@ export type WriteRequest = TypeFromSchema<typeof TlvWriteRequest>;
 export type WriteResponse = TypeFromSchema<typeof TlvWriteResponse>;
 
 const logger = Logger.get("InteractionMessenger");
+
+function isSameAttribute(a: AttributePath, b: AttributePath) {
+    return a.endpointId === b.endpointId && a.clusterId === b.clusterId && a.attributeId === b.attributeId;
+}
+
+function isVersionedListAdd({ path, dataVersion }: AttributeData) {
+    return path.listIndex === null && dataVersion !== undefined;
+}
+
+/**
+ * The TLV streams of the top-level entries of an encoded list, or undefined if the stream is not a list.
+ */
+function listEntriesOf(data: TlvStream) {
+    if (data[0]?.typeLength.type !== TlvType.Array) {
+        return;
+    }
+
+    const entries = new Array<TlvStream>();
+    let depth = 0;
+    for (const element of data.slice(1, -1)) {
+        if (depth === 0) {
+            entries.push([]);
+        }
+        entries[entries.length - 1].push(element);
+        switch (element.typeLength.type) {
+            case TlvType.Array:
+            case TlvType.List:
+            case TlvType.Structure:
+                depth++;
+                break;
+            case TlvType.EndOfContainer:
+                depth--;
+                break;
+        }
+    }
+    return entries;
+}
 
 /**
  * Only the SuppressResponse field of an Invoke or Write request.  Reads a request whose other fields break the schema;
@@ -1110,18 +1152,163 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         return finalResponse;
     }
 
-    async sendWriteCommand(writeRequest: WriteRequest, options?: ExchangeSendOptions) {
+    /**
+     * Send a write and return the WriteResponse, or undefined if suppressResponse.
+     *
+     * A write that does not fit one message is sent as several chunked WriteRequestMessages in this exchange.  Each
+     * chunk waits for its WriteResponse before the next is sent; the returned response carries the statuses of all
+     * chunks.
+     *
+     * A list write whose ADDs carry a DataVersion sends its REPLACE as the last AttributeDataIB of a chunk.  Once the
+     * REPLACE succeeded, the ADDs are sent without DataVersion: the REPLACE changed the data version, so the held one
+     * can no longer match.  If the REPLACE failed, the ADDs keep it, so a version mismatch rejects them too.  A timed or
+     * suppressResponse write that fits one message is not chunked for this, as such a write cannot be chunked.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 10.7.6.2
+     */
+    async sendWriteCommand(
+        writeRequest: WriteRequest,
+        options?: ExchangeSendOptions,
+    ): Promise<WriteResponse | undefined> {
+        const chunks = this.#chunkWriteRequest(writeRequest);
+
         if (writeRequest.suppressResponse) {
             await this.requestWithSuppressedResponse(MessageType.WriteRequest, TlvWriteRequest, writeRequest, options);
-        } else {
-            return await this.request(
+            return;
+        }
+
+        const writeResponses = new Array<WriteResponse["writeResponses"][number]>();
+        const replacedLists = new Array<AttributePath>();
+        let response: WriteResponse | undefined;
+        for (const chunk of chunks) {
+            const writeRequests = chunk.writeRequests.map(attributeData =>
+                attributeData.path.listIndex === null &&
+                attributeData.dataVersion !== undefined &&
+                replacedLists.some(path => isSameAttribute(path, attributeData.path))
+                    ? { ...attributeData, dataVersion: undefined }
+                    : attributeData,
+            );
+            response = await this.request(
                 MessageType.WriteRequest,
                 TlvWriteRequest,
                 MessageType.WriteResponse,
                 TlvWriteResponse,
-                writeRequest,
+                { ...chunk, writeRequests },
+                options,
+            );
+            const statuses = response.writeResponses ?? [];
+            writeResponses.push(...statuses);
+
+            for (const { path, dataVersion } of chunk.writeRequests) {
+                if (
+                    path.listIndex === undefined &&
+                    dataVersion !== undefined &&
+                    statuses.some(
+                        status => isSameAttribute(status.path, path) && status.status.status === Status.Success,
+                    )
+                ) {
+                    replacedLists.push(path);
+                }
+            }
+        }
+        return { ...response, writeResponses };
+    }
+
+    /**
+     * Split a write into WriteRequestMessages that each fit {@link MessageExchange.maxPayloadSize}.
+     *
+     * AttributeDataIBs keep their order, so the ADDs of a chunked list still follow its REPLACE.  A whole-list IB too
+     * large for one message is sent as a REPLACE followed by an ADD per remaining entry.  The REPLACE of the ACL or its
+     * Extension carries as many leading entries as fit, so the ACL is never emptied in between; for any other list it
+     * is empty.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 10.6.4.3.1
+     */
+    #chunkWriteRequest(writeRequest: WriteRequest): WriteRequest[] {
+        const { maxPayloadSize } = this.exchange;
+        const encodedSize = TlvWriteRequest.encode(writeRequest).byteLength;
+        if (encodedSize <= maxPayloadSize) {
+            const { writeRequests, timedRequest, suppressResponse } = writeRequest;
+            if (timedRequest || suppressResponse || !writeRequests.some(isVersionedListAdd)) {
+                return [writeRequest];
+            }
+        } else if (writeRequest.timedRequest || writeRequest.suppressResponse) {
+            throw new MatterFlowError(
+                `Write of ${encodedSize} bytes exceeds the maximum message size of ${maxPayloadSize} bytes and cannot be chunked because it is ${writeRequest.timedRequest ? "timed" : "sent with suppressResponse"}`,
             );
         }
+
+        const available =
+            maxPayloadSize -
+            TlvWriteRequest.encode({ ...writeRequest, writeRequests: [], moreChunkedMessages: true }).byteLength;
+        const chunks = new Array<WriteRequest>();
+        let current = new Array<AttributeData>();
+        let used = 0;
+
+        const flush = () => {
+            if (current.length) {
+                chunks.push({ ...writeRequest, writeRequests: current, moreChunkedMessages: true });
+                current = [];
+                used = 0;
+            }
+        };
+
+        const add = (attributeData: AttributeData) => {
+            const size = TlvAttributeData.encode(attributeData).byteLength;
+            const previous = current[current.length - 1];
+            if (
+                used + size > available ||
+                (isVersionedListAdd(attributeData) &&
+                    previous !== undefined &&
+                    previous.path.listIndex === undefined &&
+                    isSameAttribute(previous.path, attributeData.path))
+            ) {
+                flush();
+            }
+            if (size > available) {
+                throw new MatterFlowError(
+                    `Write data for ${Diagnostic.json(attributeData.path)} has ${size} bytes and does not fit a single message of ${maxPayloadSize} bytes`,
+                );
+            }
+            current.push(attributeData);
+            used += size;
+        };
+
+        for (const attributeData of writeRequest.writeRequests) {
+            const { path, data } = attributeData;
+            const entries =
+                path.listIndex === undefined && TlvAttributeData.encode(attributeData).byteLength > available
+                    ? listEntriesOf(data)
+                    : undefined;
+            if (entries === undefined) {
+                add(attributeData);
+                continue;
+            }
+
+            const [start, ...rest] = data;
+            const end = rest[rest.length - 1];
+            const replaceAll = (count: number): AttributeData => ({
+                ...attributeData,
+                data: [start, ...entries.slice(0, count).flat(), end],
+            });
+            let count = 0;
+            if (isAclOrExtensionPath(path)) {
+                while (
+                    count < entries.length &&
+                    TlvAttributeData.encode(replaceAll(count + 1)).byteLength <= available
+                ) {
+                    count++;
+                }
+            }
+            add(replaceAll(count));
+            for (const entry of entries.slice(count)) {
+                add({ ...attributeData, path: { ...path, listIndex: null }, data: entry });
+            }
+        }
+
+        flush();
+        chunks[chunks.length - 1].moreChunkedMessages = false;
+        return chunks;
     }
 
     sendTimedRequest(timeout: Duration, options?: ExchangeSendOptions) {
