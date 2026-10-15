@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ChildProcess, spawn } from "node:child_process";
 import { constants, lstat, mkdtemp, open, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -18,6 +17,7 @@ import { Terminal } from "../../docker/terminal.js";
 import { Volume } from "../../docker/volume.js";
 import { delay, LineQueue } from "../../util/async.js";
 import { asyncLinesOf } from "../../util/text.js";
+import { type ChildExit, ManagedChildProcess } from "../child-process.js";
 import { CERT_BINS_PLATFORM, prepareChipBins, resolveChipBinsSource } from "../chip-bins.js";
 import { chip } from "../chip.js";
 import { HARNESS_DBUS_CONTAINER } from "../config.js";
@@ -32,7 +32,6 @@ export { HARNESS_DBUS_CONTAINER };
 
 const DEFAULT_DISCRIMINATOR = 3840;
 const DEFAULT_PASSCODE = 20202021;
-const STOP_TIMEOUT_MS = 5_000;
 const DRAIN_TIMEOUT_MS = 5_000;
 
 // A chip app creates its command pipe as it starts, so a pipe still absent by now belongs to an app
@@ -43,6 +42,10 @@ const PIPE_POLL_MS = 50;
 // Killing a container and seeing it gone goes through the Docker daemon, so it is nothing like as
 // prompt as a SIGTERM to a local child.
 const CONTAINER_STOP_TIMEOUT_MS = 30_000;
+
+// How long close() waits for a container launch under way before it stops the device without it; the launch then
+// removes what it creates itself.
+const LAUNCH_ABORT_TIMEOUT_MS = 10_000;
 
 // Without these, a chip binary logs only its terse progress categories (EM/IN/SC) — the structured
 // `CHIP:DMG: ReadRequestMessage = { AttributePathIB = ... }` decode dumps cert-test log checks match
@@ -269,12 +272,10 @@ interface Generation {
     pumps: Promise<void>[];
     /** Set once this generation has ended, so `start()` knows to replace it. */
     exited: boolean;
-    /** Set while the harness is terminating this generation, which is not the crash `exit` reports. */
-    stopping: boolean;
 }
 
 interface LocalGeneration extends Generation {
-    child: ChildProcess;
+    process: ManagedChildProcess;
 
     /**
      * What went wrong on this generation's standard input, kept so the next command reports it
@@ -286,6 +287,9 @@ interface LocalGeneration extends Generation {
 
 interface DockerGeneration extends Generation {
     composition: CompositionHandle;
+
+    /** Set while the harness is terminating this generation, which is not the crash `exit` reports. */
+    stopping: boolean;
 
     /**
      * The attached terminal for an app driven through its standard input, kept for this generation's
@@ -300,7 +304,7 @@ interface DockerGeneration extends Generation {
 }
 
 function newGeneration(pumps: Promise<void>[]): Generation {
-    return { terminated: createExitDeferred(), pumps, exited: false, stopping: false };
+    return { terminated: createExitDeferred(), pumps, exited: false };
 }
 
 function createExitDeferred(): ExitDeferred {
@@ -369,6 +373,8 @@ class ChipLocalDevice implements CertDevice {
     #stdin = new StdinPacer();
     #generation?: LocalGeneration;
     #starting?: Promise<void>;
+    /** Set for good by close(): a start after it would leave a process nothing stops, holding its ports. */
+    #closed = false;
     #exit: ExitDeferred = createExitDeferred();
 
     constructor(app: string, domain: string, options?: Subject.Options, appVariant?: string) {
@@ -405,6 +411,8 @@ class ChipLocalDevice implements CertDevice {
     }
 
     async #spawn(): Promise<void> {
+        this.#assertOpen();
+
         const previous = this.#generation;
         if (previous !== undefined) {
             if (!previous.exited) {
@@ -447,57 +455,33 @@ class ChipLocalDevice implements CertDevice {
             ...this.#appArgs,
         ];
 
-        const child = spawn(binPath, args, {
-            stdio: [hasStdinCommands(this.app) ? "pipe" : "ignore", "pipe", "pipe"],
+        let generation: LocalGeneration | undefined;
+        const app = ManagedChildProcess.spawn(binPath, args, {
+            stdin: hasStdinCommands(this.app) ? "pipe" : "ignore",
+            onExit: exit => {
+                if (generation !== undefined) {
+                    this.#ended(generation, exit);
+                }
+            },
         });
-        const { stdout, stderr } = child;
-        if (!stdout || !stderr) {
-            throw new Error("Spawned process has no stdout/stderr streams");
-        }
 
-        const generation: LocalGeneration = {
-            child,
-            ...newGeneration([this.#hub.pump(asyncLinesOf(stdout)), this.#hub.pump(asyncLinesOf(stderr))]),
+        generation = {
+            process: app,
+            ...newGeneration([this.#hub.pump(asyncLinesOf(app.stdout)), this.#hub.pump(asyncLinesOf(app.stderr))]),
         };
-        child.stdin?.on("error", error => (generation.stdinError = error));
+        const spawned = generation;
+        app.stdin?.on("error", error => (spawned.stdinError = error));
         this.#generation = generation;
 
-        let failSpawn: ((error: Error) => void) | undefined;
-        const spawned = new Promise<void>((resolve, reject) => {
-            failSpawn = reject;
-            child.once("spawn", () => {
-                failSpawn = undefined;
-                resolve();
-            });
-        });
-
-        child.once("exit", (code, signal) => {
-            // A process that never ran has already been reported through start()'s own rejection
-            if (failSpawn === undefined) {
-                this.#ended(generation, { code, signal });
-            }
-        });
-
-        child.once("error", error => {
-            // spawn() failures (e.g. ENOENT) surface via "error", not "exit". The process never ran,
-            // so this is start()'s own failure rather than a device that died on its own.
-            if (failSpawn !== undefined) {
-                generation.exited = true;
-                generation.terminated.resolve({ code: null, signal: null });
-                if (this.#generation === generation) {
-                    this.#generation = undefined;
-                }
-                failSpawn(error);
-                return;
-            }
-
-            console.warn(`Error running ${binPath}:`, error);
-            this.#ended(generation, { code: null, signal: null });
-        });
-
         try {
-            await spawned;
+            await app.started();
         } catch (e) {
+            // The process never ran, so this is start()'s own failure rather than a device that died on its own
+            generation.exited = true;
+            generation.terminated.resolve({ code: null, signal: null });
+            if (this.#generation === generation) {
+                this.#generation = undefined;
+            }
             await this.#drain(generation);
             throw e;
         }
@@ -508,11 +492,12 @@ class ChipLocalDevice implements CertDevice {
      * for. The crash latch spans the device's whole life, so a run that restarts a device keeps the
      * detection it armed before its first step.
      */
-    #ended(generation: Generation, info: DeviceExitInfo): void {
+    #ended(generation: LocalGeneration, { code, signal, requested }: ChildExit): void {
+        const info = { code, signal };
         generation.exited = true;
         generation.terminated.resolve(info);
 
-        if (!generation.stopping) {
+        if (!requested) {
             this.#exit.resolve(info);
         }
     }
@@ -563,35 +548,29 @@ class ChipLocalDevice implements CertDevice {
         }
 
         this.#generation = undefined;
-        generation.stopping = true;
 
         try {
             if (generation.exited) {
                 return;
             }
 
-            const { child } = generation;
-            child.kill("SIGTERM");
-
-            const timer = delay(STOP_TIMEOUT_MS);
-            try {
-                const outcome = await Promise.race([
-                    generation.terminated.promise.then((): "exited" => "exited"),
-                    timer.promise,
-                ]);
-                if (outcome === "timeout") {
-                    child.kill("SIGKILL");
-                    await generation.terminated.promise;
-                }
-            } finally {
-                timer.cancel();
-            }
+            await generation.process.stop();
         } finally {
             await this.#drain(generation);
         }
     }
 
+    #assertOpen() {
+        if (this.#closed) {
+            throw new Error(`Cert device ${this.id} is closed, so it starts no further process`);
+        }
+    }
+
     async close(): Promise<void> {
+        this.#closed = true;
+
+        // A start under way has a process on the way that stop() cannot reach yet
+        await Promise.allSettled([this.#starting]);
         await this.stop();
 
         this.#hub.close();
@@ -685,7 +664,7 @@ class ChipLocalDevice implements CertDevice {
             );
         }
 
-        const stdin = generation.child.stdin;
+        const stdin = generation.process.stdin;
         if (stdin === null) {
             throw new Error(
                 `Cert device ${this.id} was started without a writable standard input, so the app cannot be ` +
@@ -865,6 +844,8 @@ export class ChipDockerDevice implements CertDevice {
     #stdin = new StdinPacer();
     #generation?: DockerGeneration;
     #starting?: Promise<void>;
+    /** Set for good by close(): a start after it would leave a container nothing stops, holding its ports. */
+    #closed = false;
     #exit: ExitDeferred = createExitDeferred();
 
     constructor(
@@ -932,6 +913,8 @@ export class ChipDockerDevice implements CertDevice {
     }
 
     async #launch(): Promise<void> {
+        this.#assertOpen();
+
         const previous = this.#generation;
         if (previous !== undefined) {
             // A generation that is up is joined; one that ended, or never came up at all, is replaced —
@@ -960,6 +943,7 @@ export class ChipDockerDevice implements CertDevice {
         const volumeName = mdnsVolumeName();
 
         await this.#docker.ensureVolume(volumeName);
+        this.#assertOpen();
 
         const required = requiredAppArgs(this.app, this.#appArgs, join(CONTAINER_APP_DIR, OTA_PLACEHOLDER_IMAGE));
         if (required.length) {
@@ -976,7 +960,7 @@ export class ChipDockerDevice implements CertDevice {
             network: "host",
             autoRemove: true,
         });
-        const generation: DockerGeneration = { composition, ...newGeneration([]) };
+        const generation: DockerGeneration = { composition, stopping: false, ...newGeneration([]) };
         this.#generation = generation;
 
         const args = [
@@ -1002,6 +986,16 @@ export class ChipDockerDevice implements CertDevice {
             });
 
             generation.container = container;
+
+            if (generation.stopping) {
+                // stop() ran while the container was being added, so nothing else will remove it
+                try {
+                    await container.kill();
+                } catch (e) {
+                    DockerError.accept(e, 404, 409);
+                }
+                throw new Error(`Cert device ${this.id} was stopped while its container was being added`);
+            }
 
             // Deliberately not awaited — it runs for the container's whole lifetime and only settles
             // this generation's latches, which stop() awaits separately. Its own try/catch means
@@ -1145,7 +1139,44 @@ export class ChipDockerDevice implements CertDevice {
         }
     }
 
+    #assertOpen() {
+        if (this.#closed) {
+            throw new Error(`Cert device ${this.id} is closed, so it launches no further container`);
+        }
+    }
+
+    /** Awaits a launch under way, for at most {@link LAUNCH_ABORT_TIMEOUT_MS}: a Docker call can stall without end. */
+    async #settleLaunch(): Promise<void> {
+        const starting = this.#starting;
+        if (starting === undefined) {
+            return;
+        }
+
+        const timer = delay(LAUNCH_ABORT_TIMEOUT_MS);
+        try {
+            const outcome = await Promise.race([
+                starting.then(
+                    (): "settled" => "settled",
+                    (): "settled" => "settled",
+                ),
+                timer.promise,
+            ]);
+            if (outcome === "timeout") {
+                console.warn(
+                    `Cert device ${this.id}: container launch still under way after ${LAUNCH_ABORT_TIMEOUT_MS}ms; ` +
+                        "closing without it",
+                );
+            }
+        } finally {
+            timer.cancel();
+        }
+    }
+
     async close(): Promise<void> {
+        this.#closed = true;
+
+        // A start under way has a container on the way that stop() cannot reach yet
+        await this.#settleLaunch();
         await this.stop();
 
         if (this.#storageDir !== undefined) {

@@ -366,9 +366,7 @@ function parseChipJSON(json: string) {
  * Use the matter.js model to convert the incoming data for write and invoke commands into the
  * expected format.
  *
- * Exported only as a test seam (see `resetControllerAdapterFactoryForTesting` in
- * `packages/testing/src/chip/cert/controller-adapter.ts` for the same pattern); no production
- * caller outside this module should import it.
+ * Exported only as a test seam; no production caller outside this module should import it.
  */
 export function convertWebsocketDataToMatter(value: any, model: ValueModel, clusterModel: ClusterModel): any {
     if (value === undefined) {

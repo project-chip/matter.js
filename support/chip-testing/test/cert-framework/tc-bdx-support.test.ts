@@ -118,6 +118,19 @@ describe("tc-bdx-support", () => {
     });
 
     describe("messages a chip TH logged", () => {
+        it("reads a message of a TCP session", async () => {
+            // The trace line prefix copied from a chip-all-clusters-app TH log of a TCP session
+            const log = await follower([
+                `${CHIP_DMG}<< from TCP:[fe80::1c9d:1982:6732:a4a7%en0]:65282 | 19414371 | [Bulk Data Exchange  (2) / Block End Of File (0x12) / Session = 33364 / Exchange = 32761]`,
+                `${CHIP_DMG}Decrypted Payload (107 bytes) =`,
+                `${CHIP_DMG}    BlockCounter = 2`,
+            ]);
+
+            expect(blockEofReceived(log, "chip-local", 0)?.map(({ counter, length }) => [counter, length])).deep.equal([
+                [2, 103],
+            ]);
+        });
+
         it("assembles the end of a transfer from the dump's two directions", async () => {
             const log = await follower([
                 `${CHIP_DMG}<< from UDP:[fe80::1%eth0]:1 | 1 | [Bulk Data Exchange  (2) / Block End Of File (0x12) / Session = 1 / Exchange = 2]`,

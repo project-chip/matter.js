@@ -86,8 +86,9 @@ export interface CommissioningTarget {
 /**
  * An attribute (or, for {@link CertNodeApi.readAttribute}, wildcard attribute path).
  *
- * An absent field is a wildcard for that path segment. `readAttribute` supports wildcards
- * (TC-IDM-2.1); other operations require a concrete path.
+ * An absent field is a wildcard for that path segment. Reads and subscriptions support wildcards
+ * (TC-IDM-2.1), and {@link CertNodeApi.writeAttributes} a wildcard endpoint; other operations
+ * require a concrete path.
  */
 export interface AttributePathSpec {
     endpoint?: number;
@@ -99,6 +100,22 @@ export interface SubscribeOptions {
     minIntervalFloorSeconds: number;
     maxIntervalCeilingSeconds: number;
     onUpdate?: (value: unknown) => void;
+
+    /**
+     * Invoked once when the subscription ends without the case ending it, with the cause, so a step waiting for a
+     * report fails on that cause rather than on its own timeout. Nothing reaches {@link onUpdate} afterwards.
+     *
+     * Only an adapter whose controller tells it about the end calls this. Such an adapter also ends the subscription
+     * with a report it cannot deliver: a status the device answered the subscribed path with, a value that does not
+     * decode, or a throw from {@link onUpdate}.
+     */
+    onEnded?: (cause: Error) => void;
+}
+
+/** Options for {@link CertNodeApi.subscribeAttributes}. */
+export interface SubscribeAttributesOptions extends Omit<SubscribeOptions, "onUpdate"> {
+    /** Invoked for each attribute a report after the priming one carries, naming the attribute it reports. */
+    onUpdate?: (entry: AttributeReadEntry) => void;
 }
 
 /**
@@ -152,6 +169,9 @@ export interface SubscribeEventOptions extends ReadEventOptions {
     maxIntervalCeilingSeconds: number;
     onUpdate?: (event: EventReadEntry) => void;
 
+    /** As {@link SubscribeOptions.onEnded}. */
+    onEnded?: (cause: Error) => void;
+
     /**
      * Marks every path of the subscription urgent, which a step operating the device and then waiting
      * for the event needs: without it the publisher holds queued events until the subscription's
@@ -171,7 +191,8 @@ export interface SubscribeEventOptions extends ReadEventOptions {
 export interface AttributeWriteEntry {
     /**
      * Omitting `endpoint` writes the attribute on every endpoint that has the cluster (TC-IDM-3.1
-     * step 2).
+     * step 2). `cluster` and `attribute` are always concrete: a write path has no other wildcard (Matter Core
+     * § 8.9.2.7).
      */
     path: AttributePathSpec;
 
@@ -238,8 +259,8 @@ export interface AttributeWriteStatus {
  * Omitted, the controller sends the interaction untimed unless the command or attribute requires
  * timed interaction on its own.
  *
- * The field is a `uint16` on the wire (§ 10.6.11's `TimedRequestMessage`). A value outside that range,
- * or a fractional one, is refused by every adapter before it issues anything.
+ * The field is a `uint16` on the wire (§ 10.6.11's `TimedRequestMessage`). Zero, a value outside that
+ * range, or a fractional one, is refused by every adapter before it issues anything.
  */
 export interface TimedInteractionOptions {
     timedInteractionTimeoutMs?: number;
@@ -296,6 +317,15 @@ export interface ReadAttributeOptions {
      * for it: the peer answers in a single report where MRP would have made it chunk.
      */
     largeMessage?: boolean;
+
+    /**
+     * The caller needs each entry's data version ({@link AttributeReadEntry.version}).
+     *
+     * A controller that cannot report the versions a read returned refuses with
+     * {@link UnsupportedByControllerError} rather than answering without them, so a step resting on a version skips
+     * instead of failing over a capability the controller lacks.
+     */
+    dataVersions?: boolean;
 }
 
 /**
@@ -864,12 +894,13 @@ export interface CertNodeApi {
     ): Promise<unknown>;
 
     /**
-     * Invokes several commands in one request (Matter Core § 8.2.5's batch commands), each carrying its
-     * own `CommandRef` so the device's answers stay attributable.
+     * Invokes several commands in one request, an `InvokeRequests` list of more than one `CommandDataIB`, each
+     * carrying its own `CommandRef` so the device's answers stay attributable.
      *
      * Results come back in **arrival** order, each naming the request position it answers, because that
      * order is itself evidence: TC-IDM-1.3 has the device answer a two-command batch in reverse, and in
-     * separate response messages, and a step proving it needs to see what arrived when.
+     * separate response messages, and a step proving it needs to see what arrived when. A controller that
+     * cannot see the arrival order returns them in request order and lacks `batch-arrival-order`.
      *
      * A command the device never answers yields `Status.NoCommandResponse` (0xcc) rather than being
      * omitted, so a step distinguishes "answered with a failure" from "not answered at all". Unlike
@@ -878,6 +909,8 @@ export interface CertNodeApi {
      *
      * A controller with no batch-invoke support throws {@link UnsupportedByControllerError} (see
      * {@link CertNodeApi}'s own doc for the general contract).
+     *
+     * @see {@link MatterSpecification.v161.Core} § 8.8.2
      */
     invokeBatch(commands: BatchCommandSpec[], options?: TimedInteractionOptions): Promise<BatchCommandResult[]>;
 
@@ -897,20 +930,22 @@ export interface CertNodeApi {
     writeAttribute(path: AttributePathSpec, value: unknown, options?: TimedInteractionOptions): Promise<void>;
 
     /**
-     * Writes several attributes in one request, optionally through wildcard paths or conditional on a
-     * data version.
+     * Writes several attributes in one request, optionally on every endpoint (a path without `endpoint`, the only
+     * wildcard a write path may carry) or conditional on a data version.
      *
      * Unlike {@link writeAttribute}, a rejected path is reported rather than thrown, so the step
      * decides which statuses it expected.
      *
-     * A wildcard path yields a status only for the attributes actually written: Matter Core § 8.9.2.8
-     * has the device skip an endpoint that lacks the cluster, an attribute it does not have, and one
-     * it may not write, silently. A path missing from the result was therefore not written — it is not
-     * a protocol failure, and a step that needs to know an attribute changed reads it back.
+     * A wildcard-endpoint path yields a status only for the attributes actually written: the device expands it to the
+     * endpoints that have the attribute and discards, silently, each one it may not write. A path missing from the
+     * result was therefore not written — it is not a protocol failure, and a step that needs to know an attribute
+     * changed reads it back.
      *
-     * An adapter whose controller cannot express a multi-path, wildcard or version-conditional write
+     * An adapter whose controller cannot express a multi-path, wildcard-endpoint or version-conditional write
      * throws {@link UnsupportedByControllerError} (see {@link CertNodeApi}'s own doc for the general
      * contract).
+     *
+     * @see {@link MatterSpecification.v161.Core} § 8.9.2.7, § 8.7.3.2
      */
     writeAttributes(entries: AttributeWriteEntry[]): Promise<AttributeWriteStatus[]>;
     /**
@@ -928,6 +963,17 @@ export interface CertNodeApi {
      * out of nothing.
      */
     subscribe(path: AttributePathSpec, opts: SubscribeOptions): Promise<unknown>;
+
+    /**
+     * Subscribes to every attribute `paths` selects in one request, resolving with the priming report's entries;
+     * later reports reach `opts.onUpdate`, each naming its attribute.
+     *
+     * Rejects on a concrete path's status for the same reason {@link subscribe} does; a wildcard path's statuses
+     * are dropped. An empty `paths` throws `ImplementationError`.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 8.5
+     */
+    subscribeAttributes(paths: AttributePathSpec[], opts: SubscribeAttributesOptions): Promise<AttributeReadEntry[]>;
 
     /**
      * Reads every event `paths` selects in one request (Matter Core § 8.4).
@@ -1087,20 +1133,23 @@ export interface CertNodeApi {
  * request chip-tool has no single command for.
  *
  * Raise this before the operation has any observable effect (a commission, a write, a recorded
- * check). The step runner enforces that: a refusal reaching it before the step recorded a check or made
- * a controller call that may change the device is a `skipped` step, counted as a coverage gap in the run
- * summary; a refusal arriving after either fails and aborts the run, because the step did act and no
- * later step can rest on a device state the bundle cannot describe.
+ * check).
  *
- * A controller that cannot do something at all should say so in its own PICS
- * (see {@link controllerPicsOverridesFor}), which gates the step before it runs and keeps the rest of
- * the run's coverage.
+ * A refusal that names the {@link ControllerCapability} it stands for is never a step outcome: the
+ * implementation declares that capability as a gap, so a step or test case that declares it is skipped
+ * before it runs, and a refusal that still reaches the step runner means a declaration is missing on one
+ * side. The runner reports that as a framework error, whatever the step already did.
+ *
+ * A refusal without a capability is a safety net: the step runner records it as a `skipped` step when
+ * the step had not yet recorded a check or made a controller call that may change the device, and fails
+ * and aborts the run otherwise. A step must never take this error for an outcome of the device.
  */
 export class UnsupportedByControllerError extends Error {
     constructor(
         readonly operation: string,
         readonly controller: string,
         detail?: string,
+        readonly capability?: ControllerCapability,
     ) {
         super(
             `not implementable on controller "${controller}": ${operation}` +
@@ -1121,6 +1170,13 @@ export interface ControllerAdapter {
     id: string;
     start(): Promise<void>;
     close(): Promise<void>;
+
+    /**
+     * Names the build of an external controller this adapter drives (a version, the entry point it was started
+     * from), so the evidence of a run says which build produced it. Read after {@link start}; absent for a controller
+     * that runs in the test process, whose build is the matter.js commit the record already carries.
+     */
+    readonly build?: Record<string, string>;
     commission(target: CommissioningTarget): Promise<CertNodeRef>;
 
     /**
@@ -1138,7 +1194,7 @@ export interface ControllerAdapter {
      * How much a controller validates while reading is its own: matter.js's codec applies § 5.1's
      * rules and refuses a code it would not commission from, where chip-tool's `parse-setup-payload`
      * reports the fields of any code its parser can decode. Assert a refusal through
-     * {@link commission}, which both controllers judge, rather than through this.
+     * {@link commission}, which every controller judges, rather than through this.
      */
     parseManualPairingCode(code: string): Promise<ManualPairingCodeFields>;
 
@@ -1405,35 +1461,252 @@ export interface WebRtcRequestorApi {
  */
 export type ControllerAdapterFactory = (id: string, options?: ControllerAdapterOptions) => ControllerAdapter;
 
-const factories = new Map<ControllerImplementation, ControllerAdapterFactory>();
-const controllerPics = new Map<ControllerImplementation, PicsValues>();
+/**
+ * The kind of a controller role in a test case: `dut` is the controller under test, `helper` an auxiliary controller
+ * such as a second commissioner.
+ */
+export type ControllerRoleKind = "dut" | "helper";
 
 /**
- * Registers the {@link ControllerAdapterFactory} cert-test wiring uses to construct controllers for
- * `implementation`.
+ * Something a step can need of a controller that the {@link ControllerAdapter} interface cannot promise, because not
+ * every controller behind it can do it:
+ *
+ * - `single-handshake-attempt` — commissioning honours {@link CommissioningTarget.singleHandshakeAttempt}
+ * - `onboarding-payload-parse` — {@link ControllerAdapter.parseQrPayload} and
+ *   {@link ControllerAdapter.parseManualPairingCode}
+ * - `multi-path-write` — {@link CertNodeApi.writeAttributes} with several entries or a data version
+ * - `chunked-write` — a write too large for one message sent as chunked WriteRequestMessages, each next one after the
+ *   WriteResponse to the previous (Matter Core § 10.2.3)
+ * - `batch-arrival-order` — {@link CertNodeApi.invokeBatch} results in the order the device's answers arrived
+ * - `basic-commissioning-window` — {@link CertNodeApi.openCommissioningWindow} without `enhanced`
+ * - `max-value-path-ids` — a concrete path naming endpoint 0xFFFF or a cluster, attribute or event id 0xFFFFFFFF
+ * - `session-introspection` — {@link CertNodeApi.sessions} and {@link CertNodeApi.severTransportConnection}
+ * - `group-messaging` — {@link ControllerAdapter.group}: a group key set of its own, and group-addressed commands
+ * - `tcp-transport` — a TCP-backed session where {@link ControllerAdapterOptions.transport} asks for one
+ * - `data-versions` — reads report data versions ({@link ReadAttributeOptions.dataVersions})
+ * - `complete-priming` — the value {@link CertNodeApi.subscribe} resolves with is the device's full priming report for
+ *   the path, which a controller that adds data version filters of its own to the request cannot promise
+ * - `unmodeled-requests` — writes and invokes addressed to clusters and attributes outside the Matter model the
+ *   controller was built with: a custom cert cluster, a CHIP test cluster, an attribute newer than the model
+ * - `attestation` — {@link ControllerAdapterOptions.attestation}
+ * - `webrtc-requestor` — {@link ControllerAdapterOptions.webRtcRequestor}
+ * - `ota-provider` — an OTA provider of the controller's own that serves a case's update:
+ *   {@link CertNodeApi.serveOtaUpdate}
+ * - `ota-provider-script` — that provider driven beyond its own answers: {@link CertNodeApi.scriptOtaProvider}, and
+ *   {@link CertNodeApi.announceOtaProvider} without {@link AnnounceOtaProviderOptions.provider}, which announces it
+ *   with nothing staged
+ * - `bdx-sender` — the controller as the sender of a BDX case, whose transfer the case drives and inspects beyond what
+ *   serving an OTA update needs
+ * - `icd-client` — {@link CertNodeApi.icdClient}
+ * - `sustained-subscription` — a subscription the controller keeps to a node on its own, which
+ *   {@link CertNodeApi.observeEvents} reports through and which keeps what {@link CertNodeApi.clientEndpoints} and
+ *   {@link CertNodeApi.clientAttribute} answer following the node
+ *
+ * An implementation states the ones it lacks, and the ones it deliberately does not offer, when it registers (see
+ * {@link registerControllerAdapterFactory}), and a step or test case states the ones it needs, so the engine skips it
+ * before it acts rather than letting a refusal mid-step decide its verdict.
+ *
+ * @see {@link MatterSpecification.v161.Core} § 10.2.3 for `chunked-write`
+ */
+export type ControllerCapability =
+    | "single-handshake-attempt"
+    | "onboarding-payload-parse"
+    | "multi-path-write"
+    | "chunked-write"
+    | "batch-arrival-order"
+    | "basic-commissioning-window"
+    | "max-value-path-ids"
+    | "session-introspection"
+    | "group-messaging"
+    | "tcp-transport"
+    | "data-versions"
+    | "complete-priming"
+    | "unmodeled-requests"
+    | "attestation"
+    | "webrtc-requestor"
+    | "ota-provider"
+    | "ota-provider-script"
+    | "bdx-sender"
+    | "icd-client"
+    | "sustained-subscription";
+
+/** The {@link ControllerCapability | capabilities} an implementation lacks, each with the reason it lacks it. */
+export type ControllerCapabilityGaps = Readonly<Partial<Record<ControllerCapability, string>>>;
+
+/**
+ * The {@link ControllerCapability | capabilities} an implementation deliberately does not offer, each with the reason
+ * the steps that need one do not apply to it. Unlike a gap, such a step is out of the controller's scope rather than
+ * missing coverage, so it does not keep a run from passing.
+ */
+export type ControllerCapabilitiesOutOfScope = Readonly<Partial<Record<ControllerCapability, string>>>;
+
+/** The capabilities a controller built with `options` has to have. */
+export function capabilitiesFor(options?: ControllerAdapterOptions): ControllerCapability[] {
+    const capabilities = new Array<ControllerCapability>();
+    if (options?.transport === "tcp") {
+        capabilities.push("tcp-transport");
+    }
+    if (options?.attestation) {
+        capabilities.push("attestation");
+    }
+    if (options?.webRtcRequestor) {
+        capabilities.push("webrtc-requestor");
+    }
+    return capabilities;
+}
+
+/** What an implementation registers with {@link registerControllerAdapterFactory}. */
+export interface ControllerAdapterRegistration {
+    factory: ControllerAdapterFactory;
+
+    /** The PICS entries the implementation declares about itself; see {@link controllerPicsOverridesFor}. */
+    pics?: PicsValues;
+
+    /** The capabilities it lacks; see {@link controllerCapabilityGap}. */
+    gaps?: ControllerCapabilityGaps;
+
+    /**
+     * The capabilities it deliberately does not offer; see {@link controllerCapabilityOutOfScope}. None of them may
+     * also be a gap.
+     */
+    outOfScope?: ControllerCapabilitiesOutOfScope;
+
+    /**
+     * The implementation that fills the helper roles of a run that selects this one. Absent, this implementation
+     * fills every role. An implementation that can only be the DUT controller names the one that serves its helpers,
+     * and a test case whose DUT is a device does not apply to it.
+     */
+    helperImplementation?: ControllerImplementation;
+}
+
+const registrations = new Map<ControllerImplementation, ControllerAdapterRegistration>();
+
+/**
+ * Registers how cert-test wiring constructs controllers for `implementation`, and what the implementation declares
+ * about itself.
  *
  * `packages/testing` cannot construct a real controller itself (that needs matter.js, which this
  * package must stay free of — see the repo's dependency invariant); `support/chip-testing/src/cert`
- * registers its adapters here at load time instead, one factory per implementation. Re-registering
- * the *same* implementation throws, since a silent overwrite would swap the controller stack under a
- * cert test already declared; registering a *different* implementation is normal — a process can
- * offer several, and {@link resolveControllerImplementation} picks between them per run.
+ * registers its adapters here at load time instead, one per implementation. Re-registering the *same*
+ * implementation throws, since a silent overwrite would swap the controller stack under a cert test
+ * already declared; registering a *different* implementation is normal — a process can offer several,
+ * and {@link resolveControllerImplementation} picks between them per run.
  */
 export function registerControllerAdapterFactory(
     implementation: ControllerImplementation,
-    factory: ControllerAdapterFactory,
-    pics?: PicsValues,
+    registration: ControllerAdapterRegistration,
 ): void {
-    if (factories.has(implementation)) {
+    if (registrations.has(implementation)) {
         throw new Error(
             `A ControllerAdapter factory is already registered for "${implementation}"; only one is supported ` +
                 "per implementation per process",
         );
     }
-    factories.set(implementation, factory);
-    if (pics !== undefined) {
-        controllerPics.set(implementation, pics);
+    const both = Object.keys(registration.outOfScope ?? {}).filter(capability =>
+        Object.hasOwn(registration.gaps ?? {}, capability),
+    );
+    if (both.length > 0) {
+        throw new Error(
+            `Controller "${implementation}" declares ${both.join(", ")} both as a gap and as out of scope; a step ` +
+                "needing it would count against the run under one and not under the other",
+        );
     }
+    if (registration.helperImplementation === implementation) {
+        throw new Error(
+            `Controller "${implementation}" names itself as the implementation for its helpers; omit ` +
+                "helperImplementation instead, since naming one marks the implementation as serving only the DUT role",
+        );
+    }
+    registrations.set(implementation, registration);
+}
+
+/** The {@link ControllerCapabilityGaps} `implementation` was registered with; none where it has no registration. */
+export function controllerCapabilityGapsFor(implementation: ControllerImplementation): ControllerCapabilityGaps {
+    return registrations.get(implementation)?.gaps ?? {};
+}
+
+/**
+ * Why the controllers filling roles of the given kinds in this run cannot serve every one of `required`, or
+ * `undefined` where they can.
+ *
+ * Each kind is resolved through `selection`, so a helper role is judged by the implementation that actually fills it.
+ */
+export function controllerCapabilityGap(
+    required: Iterable<ControllerCapability>,
+    kinds: Iterable<ControllerRoleKind> = ["dut"],
+    selection: ControllerSelection = resolveControllerSelection(),
+): string | undefined {
+    return firstDeclared(required, kinds, selection, controllerCapabilityGapsFor, "lacks");
+}
+
+/**
+ * Why the DUT controller of this run does not offer one of `required` by design, or `undefined` where it declares none
+ * of them out of scope (see {@link ControllerAdapterRegistration.outOfScope}), or no role of the given kinds is the
+ * DUT's. A helper's declarations do not count: what is out of scope is the DUT's implementation of a capability.
+ *
+ * A caller checks {@link controllerCapabilityGap} first: a step needing a capability that is a gap is a gap, whatever
+ * else it needs.
+ */
+export function controllerCapabilityOutOfScope(
+    required: Iterable<ControllerCapability>,
+    kinds: Iterable<ControllerRoleKind> = ["dut"],
+    selection: ControllerSelection = resolveControllerSelection(),
+): string | undefined {
+    return firstDeclared(
+        required,
+        [...kinds].filter(kind => kind === "dut"),
+        selection,
+        implementation => registrations.get(implementation)?.outOfScope ?? {},
+        "does not offer",
+    );
+}
+
+function firstDeclared(
+    required: Iterable<ControllerCapability>,
+    kinds: Iterable<ControllerRoleKind>,
+    selection: ControllerSelection,
+    declaredBy: (implementation: ControllerImplementation) => Readonly<Partial<Record<ControllerCapability, string>>>,
+    verb: string,
+): string | undefined {
+    const needed = [...required];
+    for (const kind of new Set(kinds)) {
+        const implementation = selection[kind];
+        const declared = declaredBy(implementation);
+        for (const capability of needed) {
+            const reason = declared[capability];
+            if (reason !== undefined) {
+                return `controller "${implementation}" ${verb} ${capability}: ${reason}`;
+            }
+        }
+    }
+    return undefined;
+}
+
+/**
+ * The implementation that serves the helper roles of a run selecting `implementation`, where it names one (see
+ * {@link ControllerAdapterRegistration.helperImplementation}).
+ */
+export function helperImplementationFor(
+    implementation: ControllerImplementation,
+): ControllerImplementation | undefined {
+    return registrations.get(implementation)?.helperImplementation;
+}
+
+/**
+ * The implementation filling each controller role kind of a run: the
+ * {@link resolveControllerImplementation | selected implementation} for the DUT role, and for helper roles the
+ * implementation the selected one names for its helpers, or the selected one itself.
+ *
+ * The cert DSL resolves it once per case and judges its gates, builds its controllers, hands it to its steps
+ * (`CertStepContext.controllerSelection`) and writes its records from that one value, so a selection that changes
+ * while the case is under way cannot make them name different controllers.
+ */
+export type ControllerSelection = Readonly<Record<ControllerRoleKind, ControllerImplementation>>;
+
+/** The {@link ControllerSelection} that `MATTER_CERT_CONTROLLER` and the registrations name at the time of the call. */
+export function resolveControllerSelection(): ControllerSelection {
+    const dut = resolveControllerImplementation();
+    return { dut, helper: helperImplementationFor(dut) ?? dut };
 }
 
 /**
@@ -1445,32 +1718,51 @@ export function registerControllerAdapterFactory(
  * per controller, an adapter states only what differs, beside the code that implements or refuses it.
  */
 export function controllerPicsOverridesFor(implementation: ControllerImplementation): PicsValues {
-    return controllerPics.get(implementation) ?? {};
+    return registrations.get(implementation)?.pics ?? {};
 }
 
 /**
- * Constructs a {@link ControllerAdapter} for `role`, via the factory registered for the run's
- * {@link resolveControllerImplementation | selected implementation}.
+ * Constructs a {@link ControllerAdapter} for `role`, via the factory registered for the implementation `selection`
+ * names for `kind`.
  */
-export function createControllerAdapter(role: string, options?: ControllerAdapterOptions): ControllerAdapter {
-    const implementation = resolveControllerImplementation();
-    const factory = factories.get(implementation);
-    if (!factory) {
+export function createControllerAdapter(
+    role: string,
+    options?: ControllerAdapterOptions,
+    kind: ControllerRoleKind = "dut",
+    selection: ControllerSelection = resolveControllerSelection(),
+): ControllerAdapter {
+    const implementation = selection[kind];
+    const registration = registrations.get(implementation);
+    if (!registration) {
         throw new Error(
             `No ControllerAdapter factory registered for "${implementation}"; a consumer (e.g. ` +
                 "support/chip-testing/src/cert/index.ts) must call registerControllerAdapterFactory() for it " +
                 "before running a cert test",
         );
     }
-    return factory(role, options);
+    return registration.factory(role, options);
 }
 
 /**
- * Removes `implementation`'s registered factory, so a test can register a throwaway one for an
- * implementation no production code has claimed yet without leaving it stuck for the rest of the
- * process (registration has no other way to be undone).
+ * Replaces `implementation`'s registration with `registration`, or removes it where that is `undefined`, and returns
+ * the function that puts the previous one back. A test calls it in `finally`, so the registration the module load
+ * made survives the test.
  */
-export function resetControllerAdapterFactoryForTesting(implementation: ControllerImplementation): void {
-    factories.delete(implementation);
-    controllerPics.delete(implementation);
+export function replaceControllerAdapterRegistrationForTesting(
+    implementation: ControllerImplementation,
+    registration?: ControllerAdapterRegistration,
+): () => void {
+    const previous = registrations.get(implementation);
+    if (registration === undefined) {
+        registrations.delete(implementation);
+    } else {
+        registrations.set(implementation, registration);
+    }
+    return () => {
+        if (previous === undefined) {
+            registrations.delete(implementation);
+        } else {
+            registrations.set(implementation, previous);
+        }
+    };
 }

@@ -6,7 +6,13 @@
 
 import { Bytes, InternalError, Seconds } from "@matter/main";
 import { Matter } from "@matter/model";
-import type { CertIcdEvent, CertIcdRegistration, CertNodeRef, CertStepContext } from "@matter/testing";
+import type {
+    AttributePathSpec,
+    CertIcdEvent,
+    CertIcdRegistration,
+    CertNodeRef,
+    CertStepContext,
+} from "@matter/testing";
 import { certTest } from "@matter/testing";
 import type { RecordedCheck } from "./tc-support.js";
 import {
@@ -28,6 +34,13 @@ const REGISTERED_CLIENTS_ID = requireId(
     ICD_MANAGEMENT.attributes.require("registeredClients").id,
     "IcdManagement.registeredClients",
 );
+
+const BASIC_INFORMATION = Matter.clusters.require("BasicInformation");
+const NODE_LABEL: AttributePathSpec = {
+    endpoint: 0,
+    cluster: requireId(BASIC_INFORMATION.id, "BasicInformation cluster"),
+    attribute: requireId(BASIC_INFORMATION.attributes.require("nodeLabel").id, "BasicInformation.nodeLabel"),
+};
 
 const GENERAL_DIAGNOSTICS = Matter.clusters.require("GeneralDiagnostics");
 const GENERAL_DIAGNOSTICS_ID = requireId(GENERAL_DIAGNOSTICS.id, "GeneralDiagnostics cluster");
@@ -132,6 +145,7 @@ certTest("TC-ICDB-1.3", {
     pics: ["ICDB.C"],
     app: "lit-icd",
     controllers: { dut: "dut", th2: "helper" },
+    controllerCapabilities: ["icd-client"],
     appArgs: { th: TH_ARGS },
 
     // A TH that persists subscriptions sends no Check-In to a client with a persisted one, and the DUT holds a
@@ -210,6 +224,14 @@ certTest("TC-ICDB-1.3", {
             const checkIn = await attempt(
                 async () => {
                     await icd.stopSubscription();
+
+                    // A TH keeps a subscription the DUT dropped after its priming report alive with empty reports,
+                    // which ask for no answer. A report carrying data does, and the DUT answers it with
+                    // INVALID_SUBSCRIPTION, which ends the subscription
+                    await cx.controllers.th2
+                        .node(commissioned.require("th2"))
+                        .writeAttribute(NODE_LABEL, "TC-ICDB-1.3");
+
                     return (await icd.waitFor("checkIn", 0, CHECK_IN_TIMEOUT)).event;
                 },
                 ({ counter }) => `DUT accepted a Check-In, counter ${counter}, offset ${offsetOf(counter, icdCounter)}`,

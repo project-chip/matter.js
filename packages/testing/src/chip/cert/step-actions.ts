@@ -48,6 +48,7 @@ const NODE: Classified<CertNodeApi> = {
     writeAttributes: "action",
     // A subscription changes what the device reports, not its data
     subscribe: "none",
+    subscribeAttributes: "none",
     readEvents: "none",
     subscribeEvents: "none",
     observeEvents: "none",
@@ -87,6 +88,7 @@ const CONTROLLER: Classified<ControllerAdapter> = {
     id: "none",
     start: "none",
     close: "none",
+    build: "none",
     commission: "action",
     parseQrPayload: "none",
     parseManualPairingCode: "none",

@@ -160,6 +160,18 @@ async function nextStore(
     }
 }
 
+/** The pids in `pids` that still name a running process. */
+function livingOf(pids: number[]) {
+    return pids.filter(pid => {
+        try {
+            process.kill(pid, 0);
+            return true;
+        } catch {
+            return false;
+        }
+    });
+}
+
 /**
  * A lower bound on the pause between two command characters, well under the pause the subject
  * actually leaves: the claim is that the two do not travel together, not what the exact gap is.
@@ -295,6 +307,38 @@ describe("ChipLocalSubject", () => {
         }
     });
 
+    it("reports an exit on its own as an exit although stop() follows before a process it started released the output", async function () {
+        this.timeout(15_000);
+
+        await writeFile(join(appDir, `chip-${app}-app`), '#!/bin/sh\nsleep 30 &\necho "holder $!"\nexit 3\n', {
+            mode: 0o755,
+        });
+
+        const device = ChipLocalSubject(app)("cert");
+        if (!isCertDevice(device)) {
+            throw new Error("Expected a CertDevice");
+        }
+
+        await device.initialize();
+        await device.start();
+
+        let holder: number | undefined;
+        try {
+            const [line] = await collectLines(device.log.follow(), 1, 5_000);
+            holder = Number(line.split(" ")[1]);
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            await device.stop();
+            expect(await stillPending(device.exit, 250)).equal(false);
+            expect(await device.exit).deep.equal({ code: 3, signal: null });
+        } finally {
+            if (holder !== undefined) {
+                process.kill(holder, "SIGKILL");
+            }
+            await device.close();
+        }
+    });
+
     it("does not report a restarted device as crashed by the process it replaced", async function () {
         this.timeout(15_000);
 
@@ -411,6 +455,66 @@ describe("ChipLocalSubject", () => {
         } finally {
             await device.close();
         }
+    });
+
+    it("starts no process once closed, although a factoryReset under way when it closed goes on to start", async function () {
+        this.timeout(15_000);
+
+        const pidFile = join(appDir, "pids");
+        await writeFile(
+            join(appDir, `chip-${app}-app`),
+            ["#!/bin/sh", `echo $$ >> "${pidFile}"`, "echo up", "exec sleep 300", ""].join("\n"),
+            { mode: 0o755 },
+        );
+
+        const device = ChipLocalSubject(app)("cert");
+        if (!isCertDevice(device)) {
+            throw new Error("Expected a CertDevice");
+        }
+
+        await device.initialize();
+        await device.start();
+        await collectLines(device.log.follow(), 1, 5_000);
+
+        // A cleanup the run abandoned keeps running while the run closes the device under it
+        const reset = device.backchannel({ name: "factoryReset" });
+        await device.close();
+        await expect(reset).rejectedWith("closed");
+
+        const pids = (await readFile(pidFile, "utf8")).trim().split("\n").map(Number);
+        const alive = livingOf(pids);
+        for (const pid of alive) {
+            process.kill(pid, "SIGKILL");
+        }
+        expect(pids).length(1);
+        expect(alive).deep.equal([]);
+    });
+
+    it("stops a process whose start was still under way when the device closed", async function () {
+        this.timeout(15_000);
+
+        const pidFile = join(appDir, "pids");
+        await writeFile(
+            join(appDir, `chip-${app}-app`),
+            ["#!/bin/sh", `echo $$ >> "${pidFile}"`, "exec sleep 300", ""].join("\n"),
+            { mode: 0o755 },
+        );
+
+        const device = ChipLocalSubject(app)("cert");
+        await device.initialize();
+
+        const start = device.start();
+        await device.close();
+        await start;
+
+        // A process close() missed has written its pid by then; one it stopped may have died before writing
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const pids = existsSync(pidFile) ? (await readFile(pidFile, "utf8")).trim().split("\n").map(Number) : [];
+        const alive = livingOf(pids);
+        for (const pid of alive) {
+            process.kill(pid, "SIGKILL");
+        }
+        expect(alive).deep.equal([]);
     });
 
     it("keeps the key-value store on a reboot backchannel command", async function () {
@@ -1171,6 +1275,164 @@ describe("ChipDockerSubject", () => {
 
         await device.close();
         expect(closed).equal(2);
+    });
+
+    it("launches no container once closed, although a factoryReset under way when it closed goes on to start", async function () {
+        this.timeout(5_000);
+
+        let composed = 0;
+        let closed = 0;
+        const docker: DockerHandle = {
+            async ensureVolume() {},
+            compose() {
+                composed++;
+                return {
+                    async add() {
+                        let ended!: () => void;
+                        const exited = new Promise<void>(resolve => (ended = resolve));
+                        return fakeContainer({ kill: async () => ended(), wait: () => exited });
+                    },
+                    async close() {
+                        closed++;
+                    },
+                };
+            },
+            async containerStatus() {
+                return { isRunning: true };
+            },
+        };
+
+        const device = new ChipDockerDevice("test", "cert", undefined, docker);
+        await device.start();
+
+        // A cleanup the run abandoned keeps running while the run closes the device under it
+        const reset = device.backchannel({ name: "factoryReset" });
+        await device.close();
+        await expect(reset).rejectedWith("closed");
+
+        expect(composed).equal(1);
+        expect(closed).equal(1);
+    });
+
+    it("kills a container whose launch was still under way when the device closed", async function () {
+        this.timeout(5_000);
+
+        let killed = false;
+        let ended!: () => void;
+        const exited = new Promise<void>(resolve => (ended = resolve));
+        const container = fakeContainer({
+            kill: async () => {
+                killed = true;
+                ended();
+            },
+            wait: () => exited,
+        });
+
+        let addCalled!: () => void;
+        const adding = new Promise<void>(resolve => (addCalled = resolve));
+        let releaseAdd!: (container: Container) => void;
+        const docker: DockerHandle = {
+            async ensureVolume() {},
+            compose() {
+                return {
+                    add() {
+                        addCalled();
+                        return new Promise<Container>(resolve => (releaseAdd = resolve));
+                    },
+                    async close() {},
+                };
+            },
+            async containerStatus() {
+                return { isRunning: true };
+            },
+        };
+
+        const device = new ChipDockerDevice("test", "cert", undefined, docker);
+        const start = device.start();
+        await adding;
+
+        const close = device.close();
+        releaseAdd(container);
+        await start;
+        await close;
+
+        expect(killed).equal(true);
+    });
+
+    it("closes without a launch whose container is not added in time, which then removes the container itself", async function () {
+        this.timeout(20_000);
+
+        let killed = false;
+        let releaseAdd!: (container: Container) => void;
+        let addCalled!: () => void;
+        const adding = new Promise<void>(resolve => (addCalled = resolve));
+        const docker: DockerHandle = {
+            async ensureVolume() {},
+            compose() {
+                return {
+                    add() {
+                        addCalled();
+                        return new Promise<Container>(resolve => (releaseAdd = resolve));
+                    },
+                    async close() {},
+                };
+            },
+            async containerStatus() {
+                return { isRunning: true };
+            },
+        };
+
+        const device = new ChipDockerDevice("test", "cert", undefined, docker);
+        const start = device.start();
+        await adding;
+
+        await device.close();
+        releaseAdd(
+            fakeContainer({
+                kill: async () => {
+                    killed = true;
+                },
+            }),
+        );
+
+        await expect(start).rejectedWith("was stopped while its container was being added");
+        expect(killed).equal(true);
+    });
+
+    it("composes nothing for a launch that resumes after the device closed", async function () {
+        this.timeout(5_000);
+
+        let composed = 0;
+        let releaseStatus!: (status: { isRunning: boolean }) => void;
+        let statusAsked!: () => void;
+        const asked = new Promise<void>(resolve => (statusAsked = resolve));
+        const docker: DockerHandle = {
+            async ensureVolume() {},
+            compose() {
+                composed++;
+                return {
+                    async add() {
+                        return fakeContainer();
+                    },
+                    async close() {},
+                };
+            },
+            containerStatus() {
+                statusAsked();
+                return new Promise(resolve => (releaseStatus = resolve));
+            },
+        };
+
+        const device = new ChipDockerDevice("test", "cert", undefined, docker);
+        const start = device.start();
+        await asked;
+
+        const close = device.close();
+        releaseStatus({ isRunning: true });
+        await expect(start).rejectedWith("closed");
+        await close;
+
+        expect(composed).equal(0);
     });
 
     it("kills a container whose exit the daemon never confirmed", async function () {

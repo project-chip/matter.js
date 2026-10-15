@@ -380,7 +380,7 @@ function messagesIn(
     }
 
     const header = new RegExp(
-        `\\[DMG\\] ${dmg.inbound ? "<< from" : ">> to"} UDP.*\\[Bulk Data Exchange[^\\]]*\\(0x${dmg.opcode
+        `\\[DMG\\] ${dmg.inbound ? "<< from" : ">> to"} (?:UDP|TCP):.*\\[Bulk Data Exchange[^\\]]*\\(0x${dmg.opcode
             .toString(16)
             .padStart(2, "0")}\\)`,
     );

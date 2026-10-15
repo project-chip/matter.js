@@ -304,49 +304,53 @@ describe("singleApplyUpdate", () => {
 });
 
 describe("delayedActionTime", () => {
+    const matterJs = { deviceFlavor: "matterjs" } as const;
+    const chipLocal = { deviceFlavor: "chip-local" } as const;
+
     function withFastRetry<T>(enabled: boolean, body: () => T): T {
         const previous = process.env.MATTER_CERT_OTA_FAST_RETRY;
-        const previousDevice = process.env.MATTER_CERT_DEVICE;
         if (enabled) {
             process.env.MATTER_CERT_OTA_FAST_RETRY = "1";
-            process.env.MATTER_CERT_DEVICE = "matterjs";
         } else {
             delete process.env.MATTER_CERT_OTA_FAST_RETRY;
         }
         try {
             return body();
         } finally {
-            // Captured and put back rather than deleted: either may have been set before this ran
-            restore("MATTER_CERT_OTA_FAST_RETRY", previous);
-            restore("MATTER_CERT_DEVICE", previousDevice);
-        }
-    }
-
-    function restore(name: string, value: string | undefined) {
-        if (value === undefined) {
-            delete process.env[name];
-        } else {
-            process.env[name] = value;
+            // Captured and put back rather than deleted: it may have been set before this ran
+            if (previous === undefined) {
+                delete process.env.MATTER_CERT_OTA_FAST_RETRY;
+            } else {
+                process.env.MATTER_CERT_OTA_FAST_RETRY = previous;
+            }
         }
     }
 
     // The plan's own number, which the daily run sends so its evidence is what the plan asks for
     it("names the plan's three minutes where the wait cannot be shortened", () => {
         withFastRetry(false, () => {
-            expect(delayedActionTime()).equal(180);
-            expect(longRunningReason("the wait")).contains("180s of real time");
+            expect(delayedActionTime(matterJs)).equal(180);
+            expect(longRunningReason("the wait")(matterJs)).contains("180s of real time");
 
-            expect(delayedActionTimeCheck(180).verdict).equal("pass");
-            expect(delayedActionTimeCheck(1).verdict).equal("fail");
-            expect(planDelayCoverageCheck().verdict).equal("pass");
+            expect(delayedActionTimeCheck(matterJs, 180).verdict).equal("pass");
+            expect(delayedActionTimeCheck(matterJs, 1).verdict).equal("fail");
+            expect(planDelayCoverageCheck(matterJs).verdict).equal("pass");
+        });
+    });
+
+    // chip's requestor floors the wait at compile time, whatever the run asked for
+    it("names the plan's three minutes on a chip TH even where the run asked to shorten", () => {
+        withFastRetry(true, () => {
+            expect(delayedActionTime(chipLocal)).equal(180);
+            expect(longRunningReason("the wait")(chipLocal)).contains("180s of real time");
         });
     });
 
     // Above zero, so the answer still carries the field the step is about
     it("names a short stand-in where it can", () => {
         withFastRetry(true, () => {
-            expect(delayedActionTime()).equal(1);
-            expect(longRunningReason("the wait")).equal(undefined);
+            expect(delayedActionTime(matterJs)).equal(1);
+            expect(longRunningReason("the wait")(matterJs)).equal(undefined);
         });
     });
 
@@ -355,7 +359,7 @@ describe("delayedActionTime", () => {
     // the other
     it("states that a shortened run did not script the plan's own value", () => {
         withFastRetry(true, () => {
-            const check = planDelayCoverageCheck();
+            const check = planDelayCoverageCheck(matterJs);
             expect(check.verdict).equal("unverified");
             expect(check.accepted).contains("the plan's 180s");
         });
@@ -365,9 +369,9 @@ describe("delayedActionTime", () => {
     // what the run shortened
     it("fails a value the DUT did not echo, shortened or not", () => {
         withFastRetry(true, () => {
-            expect(delayedActionTimeCheck(1).verdict).equal("pass");
-            expect(delayedActionTimeCheck(180).verdict).equal("fail");
-            expect(delayedActionTimeCheck(undefined).verdict).equal("fail");
+            expect(delayedActionTimeCheck(matterJs, 1).verdict).equal("pass");
+            expect(delayedActionTimeCheck(matterJs, 180).verdict).equal("fail");
+            expect(delayedActionTimeCheck(matterJs, undefined).verdict).equal("fail");
         });
     });
 });
@@ -451,6 +455,8 @@ describe("recordRequestorIdle", () => {
                     return "";
                 },
             },
+            controllerSelection: { dut: "matterjs", helper: "matterjs" },
+            deviceFlavor: undefined,
             picsMet: () => {
                 throw new InternalError("not used by these tests");
             },

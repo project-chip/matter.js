@@ -40,11 +40,17 @@ import type {
     OnboardingPayloadFields,
     ReadAttributeOptions,
     ReadEventOptions,
+    SubscribeAttributesOptions,
     SubscribeEventOptions,
     SubscribeOptions,
     TimedInteractionOptions,
 } from "@matter/testing";
-import type { ControllerAdapterOptions, ControllerTransport, PicsValues } from "@matter/testing";
+import type {
+    ControllerAdapterOptions,
+    ControllerCapabilityGaps,
+    ControllerTransport,
+    PicsValues,
+} from "@matter/testing";
 import { LineQueue, LogFollower, UnsupportedByControllerError } from "@matter/testing";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -53,6 +59,7 @@ import { env } from "node:process";
 import type { ChipToolCommissionerName } from "../chip-tool/chip-tool-client.js";
 import { ChipToolClient, resolveChipToolBinary } from "../chip-tool/chip-tool-client.js";
 import { chipJsonToMatter, matterToChipJson, stringifyChipJson } from "../chip-tool/json-codec.js";
+import { ControllerCommandError } from "./controller-command-error.js";
 import { certClusterModelFor, findCertCluster } from "./custom-clusters.js";
 import { assertSingleQrPayload, OnboardingPayloadRefusedError } from "./onboarding-payload.js";
 import { timedInteractionTimeoutOf } from "./timed-interaction.js";
@@ -174,6 +181,26 @@ export const CHIP_TOOL_CONTROLLER_PICS: PicsValues = {
     "MCORE.DEVLIST.UseDeviceState": 0,
     "MCORE.DEVLIST.UseBatInfo": 0,
 };
+
+/**
+ * What chip-tool lacks, declared with its registration so a step or case needing one of these is skipped before it acts
+ * (see `controllerCapabilityGap`).
+ *
+ * The transport is accepted as an option, and its `--allow-large-payload` reaches every command, but that does not make
+ * chip-tool establish a TCP-backed session.
+ */
+export const CHIP_TOOL_CAPABILITY_GAPS = {
+    "tcp-transport":
+        "chip-tool reuses the session commissioning established, so a large-payload interaction does not cause it to " +
+        "establish a TCP-backed one",
+    attestation:
+        "chip-tool reads revocation from a file its own process is started with, which a running adapter cannot change",
+    "webrtc-requestor":
+        "chip-tool is a commissioner process, not a node, so a provider has nowhere to invoke signaling",
+    "chunked-write":
+        "chip-tool write-by-id encodes the whole write into one message and fails with CHIP Error 0x0000000B (No memory) " +
+        "when it does not fit",
+} as const satisfies ControllerCapabilityGaps;
 
 const WILDCARD_CLUSTER = 0xffffffff;
 const WILDCARD_ATTRIBUTE = 0xffffffff;
@@ -694,12 +721,12 @@ function interpretReply(results: unknown[], isOwnPath: OwnPathTest): ChipReply {
 
 /**
  * A subscription one node of this adapter holds. chip-tool's reports carry no subscription id and no
- * node id (`RemoteDataModelLogger::LogAttributeAsJSON`), so the path is all there is to attribute a
- * report by: every live subscription whose path covers a report sees it.
+ * node id (`RemoteDataModelLogger::LogAttributeAsJSON`), so the paths are all there is to attribute a
+ * report by: every live subscription with a path covering a report sees it.
  */
 interface LiveSubscription {
-    path: AttributePathSpec;
-    onUpdate?: (value: unknown) => void;
+    paths: AttributePathSpec[];
+    onUpdate?: (entry: AttributeReadEntry) => void;
 }
 
 /** As {@link LiveSubscription}, for a subscription to events. */
@@ -833,7 +860,7 @@ function eventStatusFor(statuses: ChipPathStatus[], paths: EventPathSpec[]) {
  * {@link StatusResponseError} would invent a status the device never sent — and let a spec-negative
  * step asserting `Failure` pass without the device ever having answered.
  */
-export class ChipToolCommandError extends MatterError {}
+export class ChipToolCommandError extends ControllerCommandError {}
 
 /**
  * chip-tool's own marker for a failure raised inside its setup-payload layer, as `CHIP_ERROR`'s
@@ -1194,13 +1221,37 @@ class ChipToolCertNodeApi implements CertNodeApi {
      * decoded value reaches the controller log regardless, which is lossless.
      */
     async subscribe(path: AttributePathSpec, opts: SubscribeOptions): Promise<unknown> {
-        const reply = await this.#adapter.subscribe(this.#node, path, opts);
+        const { onUpdate } = opts;
+        const reply = await this.#adapter.subscribe("subscribe", this.#node, [path], {
+            ...opts,
+            onUpdate: onUpdate && (entry => onUpdate(entry.value)),
+        });
 
         const seed = reply.values.filter(entry => pathCovers(path, entry));
         if (path.endpoint !== undefined && path.cluster !== undefined && path.attribute !== undefined) {
             return seed.length === 0 ? undefined : decodeAttributeValue(seed[0]);
         }
         return toReadEntries(seed);
+    }
+
+    /** {@link subscribe} for several paths in one `any subscribe-by-id`, with the same bounds on the callbacks. */
+    async subscribeAttributes(
+        paths: AttributePathSpec[],
+        opts: SubscribeAttributesOptions,
+    ): Promise<AttributeReadEntry[]> {
+        if (paths.length === 0) {
+            throw new ImplementationError("subscribeAttributes requires at least one path");
+        }
+        if (paths.length > MAX_PATHS_PER_COMMAND) {
+            throw new UnsupportedByControllerError(
+                "subscribeAttributes",
+                CONTROLLER,
+                `${paths.length} paths exceeds chip-tool's limit of ${MAX_PATHS_PER_COMMAND} per subscription`,
+            );
+        }
+
+        const reply = await this.#adapter.subscribe("subscribeAttributes", this.#node, paths, opts);
+        return toReadEntries(reply.values.filter(entry => paths.some(path => pathCovers(path, entry))));
     }
 
     /**
@@ -1364,6 +1415,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
                 "chip-tool decides a session's transport when it establishes one and reuses the session " +
                     "pairing already made, so it cannot be made to answer a single read over a " +
                     "TCP-backed session",
+                "tcp-transport",
             );
         }
 
@@ -1506,8 +1558,8 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
             throw new UnsupportedByControllerError(
                 "judging device attestation against installed revocation information",
                 id,
-                "chip-tool reads revocation from a file its own process is started with, which a running adapter " +
-                    "cannot change",
+                CHIP_TOOL_CAPABILITY_GAPS.attestation,
+                "attestation",
             );
         }
 
@@ -1515,7 +1567,8 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
             throw new UnsupportedByControllerError(
                 "hosting a WebRTC transport requestor cluster",
                 id,
-                "chip-tool is a commissioner process, not a node, so a provider has nowhere to invoke signaling",
+                CHIP_TOOL_CAPABILITY_GAPS["webrtc-requestor"],
+                "webrtc-requestor",
             );
         }
 
@@ -1702,31 +1755,35 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
      * Subscribes `node` to `path` and starts forwarding its reports, returning the establishing reply
      * so the caller can take the priming values out of it.
      */
-    async subscribe(node: string, path: AttributePathSpec, opts: SubscribeOptions): Promise<ChipReply> {
+    async subscribe(
+        operation: string,
+        node: string,
+        paths: AttributePathSpec[],
+        opts: SubscribeAttributesOptions,
+    ): Promise<ChipReply> {
         // chip-tool defaults keepSubscriptions to false, which has the device drop every earlier
-        // subscription of this controller; matter.js's own cert adapter keeps them
+        // subscription of this controller, and a case's steps rely on theirs staying live. The id lists
+        // zip into paths as in a read.
         const reply = await this.execute(
-            `any subscribe-by-id ${clusterArg(path)} ${attributeArg(path)} ` +
+            `any subscribe-by-id ${paths.map(clusterArg).join(",")} ${paths.map(attributeArg).join(",")} ` +
                 `${opts.minIntervalFloorSeconds} ${opts.maxIntervalCeilingSeconds} ${node} ` +
-                `${endpointArg(path)} --keepSubscriptions true${largePayloadArg(this.#transport)}`,
-            { attributes: [path] },
+                `${paths.map(endpointArg).join(",")} --keepSubscriptions true${largePayloadArg(this.#transport)}`,
+            { attributes: paths },
         );
-        assertNoFailure(reply, `subscribe ${JSON.stringify(path)}`);
+        const described = JSON.stringify(paths.length === 1 ? paths[0] : paths);
+        assertNoFailure(reply, `${operation} ${described}`);
 
-        const { endpoint, cluster, attribute } = path;
-        if (endpoint !== undefined && cluster !== undefined && attribute !== undefined) {
-            // A concrete path's status is the device refusing this subscription itself; a wildcard's
-            // statuses are per-item, as in a read, and leave the subscription established.
-            const status = statusFor(reply.statuses, { endpoint, cluster, attribute });
-            if (status !== undefined) {
-                throw deviceStatusError(status, "subscribe", `subscribe ${JSON.stringify(path)} failed`);
-            }
+        // A concrete path's status is the device refusing this subscription itself; a wildcard's
+        // statuses are per-item, as in a read, and leave the subscription established.
+        const refused = attributeStatusFor(reply.statuses, paths);
+        if (refused !== undefined) {
+            throw deviceStatusError(refused.status, operation, `${operation} ${JSON.stringify(refused.path)} failed`);
         }
 
         // Registering only now is what draws the seeding boundary: the priming values chip-tool
-        // recorded into this reply were dispatched while no subscription claimed this path, so they are
-        // the caller's return value and every report after them is an update.
-        this.#subscriptions.push({ path, onUpdate: opts.onUpdate });
+        // recorded into this reply were dispatched while no subscription claimed these paths, so they
+        // are the caller's return value and every report after them is an update.
+        this.#subscriptions.push({ paths, onUpdate: opts.onUpdate });
         this.#requireClient().armReports();
 
         return reply;
@@ -1861,7 +1918,9 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
         if (requested?.attributes?.some(candidate => pathCovers(candidate, entry))) {
             return true;
         }
-        return !this.#subscriptions.some(subscription => pathCovers(subscription.path, entry));
+        return !this.#subscriptions.some(subscription =>
+            subscription.paths.some(candidate => pathCovers(candidate, entry)),
+        );
     }
 
     #requireClient() {
@@ -1872,7 +1931,7 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
     }
 
     /**
-     * Hands every value a live subscription's path covers to that subscription's `onUpdate`, and says
+     * Hands every value a path of a live subscription covers to that subscription's `onUpdate`, and says
      * whether any subscription claimed one.
      *
      * Nothing here throws: these entries arrive in an unrelated command's reply or on chip-tool's own
@@ -1883,15 +1942,17 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
         let claimed = false;
 
         for (const entry of values) {
-            const subscribers = this.#subscriptions.filter(subscription => pathCovers(subscription.path, entry));
+            const subscribers = this.#subscriptions.filter(subscription =>
+                subscription.paths.some(candidate => pathCovers(candidate, entry)),
+            );
             if (subscribers.length === 0) {
                 continue;
             }
             claimed = true;
 
-            let value;
+            let decoded: AttributeReadEntry;
             try {
-                value = decodeAttributeValue(entry);
+                [decoded] = toReadEntries([entry]);
             } catch (e) {
                 this.#logStream.push(
                     `Undecodable chip-tool report for endpoint ${entry.endpoint} cluster ${entry.cluster} ` +
@@ -1902,9 +1963,9 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
 
             for (const subscriber of subscribers) {
                 try {
-                    subscriber.onUpdate?.(value);
+                    subscriber.onUpdate?.(decoded);
                 } catch (e) {
-                    this.#logStream.push(`Subscription callback for ${JSON.stringify(subscriber.path)} failed: ${e}`);
+                    this.#logStream.push(`Subscription callback for ${JSON.stringify(subscriber.paths)} failed: ${e}`);
                 }
             }
         }

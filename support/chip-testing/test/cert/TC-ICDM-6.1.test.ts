@@ -78,6 +78,7 @@ certTest("TC-ICDM-6.1", {
     plan: "icdmanagement.adoc",
     pics: ["ICDM.C"],
     app: "lit-icd",
+    controllerCapabilities: ["icd-client"],
 
     // The variant TC-ICDB-1.3 needs is the only lit-icd binary this project's image carries; this case does not
     // depend on how it handles subscriptions

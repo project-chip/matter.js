@@ -16,7 +16,7 @@ import type {
     OtaQueryImageExchange,
     OtaQueryImageResponseRecord,
 } from "@matter/testing";
-import { flavorFamily, resolveDeviceFlavor } from "@matter/testing";
+import { type CertRunSetup, flavorFamily } from "@matter/testing";
 import { otaFastRetryEnabled } from "../../src/OtaRequestorTestInstance.js";
 import { CertCheckFailedError, record, requireId } from "./tc-support.js";
 
@@ -344,13 +344,13 @@ export function unsupportedByDut(capability: string) {
  * lower its two-minute floors, so where it is the TH and the run asked for it, such a step costs no
  * real time. chip's requestor floors the wait at compile time, so there it costs what the plan costs.
  */
-export function otaDelaysShortened() {
-    return otaFastRetryEnabled() && flavorFamily(resolveDeviceFlavor()) === "matterjs";
+export function otaDelaysShortened(setup: Pick<CertRunSetup, "deviceFlavor">) {
+    return otaFastRetryEnabled() && flavorFamily(setup.deviceFlavor) === "matterjs";
 }
 
 /** The plan's own `DelayedActionTime`, in seconds, or the short stand-in a shortened run uses. */
-export function delayedActionTime() {
-    return otaDelaysShortened() ? SHORT_DELAYED_ACTION_TIME : PLAN_DELAYED_ACTION_TIME;
+export function delayedActionTime(setup: Pick<CertRunSetup, "deviceFlavor">) {
+    return otaDelaysShortened(setup) ? SHORT_DELAYED_ACTION_TIME : PLAN_DELAYED_ACTION_TIME;
 }
 
 /** What the plans name wherever they ask a provider to defer: three minutes. */
@@ -371,8 +371,11 @@ const SHORT_DELAYED_ACTION_TIME = 1;
  * DUT on any run. What changes with the shortening is *which* value was scripted, and that is
  * {@link planDelayCoverageCheck}'s claim rather than this one's.
  */
-export function delayedActionTimeCheck(sent: number | undefined): CheckRecord {
-    const asked = delayedActionTime();
+export function delayedActionTimeCheck(
+    setup: Pick<CertRunSetup, "deviceFlavor">,
+    sent: number | undefined,
+): CheckRecord {
+    const asked = delayedActionTime(setup);
     return {
         type: "response",
         verdict: sent === asked ? "pass" : "fail",
@@ -387,8 +390,8 @@ export function delayedActionTimeCheck(sent: number | undefined): CheckRecord {
  * so the TH's wait is short, which leaves that outcome untested — stated here rather than folded into
  * the check above, where a verdict that changed with an environment variable could not fail at all.
  */
-export function planDelayCoverageCheck(): CheckRecord {
-    if (!otaDelaysShortened()) {
+export function planDelayCoverageCheck(setup: Pick<CertRunSetup, "deviceFlavor">): CheckRecord {
+    if (!otaDelaysShortened(setup)) {
         return {
             type: "response",
             verdict: "pass",
@@ -406,11 +409,12 @@ export function planDelayCoverageCheck(): CheckRecord {
     };
 }
 
-/** The reason a step carries when this run cannot shorten the wait it costs. */
+/** The `longRunning` option of a step whose wait a run can shorten only on some flavors. */
 export function longRunningReason(what: string) {
-    return otaDelaysShortened()
-        ? undefined
-        : `${what} costs the plan's ${PLAN_DELAYED_ACTION_TIME}s of real time on this flavor`;
+    return (setup: Pick<CertRunSetup, "deviceFlavor">) =>
+        otaDelaysShortened(setup)
+            ? undefined
+            : `${what} costs the plan's ${PLAN_DELAYED_ACTION_TIME}s of real time on this flavor`;
 }
 
 const OTA_REQUESTOR = Matter.clusters.require("OtaSoftwareUpdateRequestor");

@@ -11,11 +11,16 @@ import type {
     CertIcdClientApi,
     CertNodeApi,
     CertStepContext,
+    CertRunSetup,
+    CertStepSetting,
     CertStepWiring,
     CertTestDefinition,
     CheckRecord,
     Container,
     ControllerAdapter,
+    ControllerCapability,
+    ControllerRoleKind,
+    ControllerSelection,
     DeviceExitInfo,
     DeviceFlavor,
     Docker,
@@ -35,16 +40,20 @@ import {
     PicsUnansweredError,
     PicsUnavailableError,
     registerCertAppPics,
+    replaceControllerAdapterRegistrationForTesting,
+    resolveControllerSelection,
     unmetTestPics,
     unregisterCertAppPics,
     UnsupportedByControllerError,
     CertStepNotApplicableError,
+    CertControllerGapError,
+    CertFrameworkError,
 } from "@matter/testing";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { env } from "node:process";
-import { CommissionedRefs } from "../cert/tc-support.js";
+import { CertCheckFailedError, CommissionedRefs } from "../cert/tc-support.js";
 import { fakeCertNode } from "./fake-cert-node.js";
 
 async function notImplemented(..._args: unknown[]): Promise<never> {
@@ -207,9 +216,13 @@ class TestCertTest extends CertTest {
         cx: CertStepWiring,
         finalizationTimeoutMs?: number,
         teardownErrors: unknown[] = [],
-        options: { beforeFlushError?: unknown; onTeardown?: () => Promise<void> } = {},
+        options: {
+            beforeFlushError?: unknown;
+            onTeardown?: () => Promise<void>;
+            selection?: ControllerSelection;
+        } = {},
     ) {
-        super(definition, descriptor, container);
+        super(definition, descriptor, container, options.selection ?? resolveControllerSelection());
         this.#cx = cx;
         this.#finalizationTimeoutMs = finalizationTimeoutMs;
         this.#teardownErrors = teardownErrors;
@@ -241,6 +254,17 @@ class TestCertTest extends CertTest {
     }
 }
 
+/** A run that skipped a step for a controller gap reports so rather than passing. */
+async function expectControllerGap(run: Promise<void>) {
+    try {
+        await run;
+    } catch (e) {
+        expect(e).instanceOf(CertControllerGapError);
+        return;
+    }
+    expect.fail("expected the run to report a controller gap");
+}
+
 describe("CertTest", () => {
     it("evaluates step PICS at run time, aborts remaining steps on failure, and always flushes evidence", async () => {
         const ran = { step1: false, step2: false, step3: false };
@@ -250,6 +274,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -324,6 +349,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -366,6 +392,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -399,6 +426,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -440,6 +468,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -467,6 +496,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -508,6 +538,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -535,6 +566,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -573,6 +605,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -608,6 +641,7 @@ describe("CertTest", () => {
                 plan: "interactiondatamodel.adoc",
                 pics: [],
                 app: "all-clusters",
+                controllers: { dut: "dut" },
                 steps: [
                     {
                         number: 1,
@@ -671,6 +705,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -721,6 +756,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -776,6 +812,7 @@ describe("CertTest", () => {
             plan: "securechannel.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -820,6 +857,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -867,6 +905,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -938,6 +977,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -991,6 +1031,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1030,6 +1071,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "Passing step", run: async () => {} }],
             finalize: async () => {
                 throw new Error("decommission failed");
@@ -1066,6 +1108,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1137,6 +1180,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 7,
@@ -1171,6 +1215,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "Passing step", run: async () => {} }],
             finalize: () => new Promise<void>(() => {}),
         };
@@ -1211,6 +1256,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "Passing step", run: async () => {} }],
             finalize: () =>
                 new Promise<void>(() => {
@@ -1238,6 +1284,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "Passing step", run: async () => {} }],
             finalize: () =>
                 new Promise<void>((_, reject) => {
@@ -1283,6 +1330,7 @@ describe("CertTest", () => {
             plan: "softwareupdate.adoc",
             pics: [],
             app: "ota-requestor",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1336,6 +1384,7 @@ describe("CertTest", () => {
             plan: "softwareupdate.adoc",
             pics: [],
             app: "ota-requestor",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1389,6 +1438,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1453,6 +1503,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1510,6 +1561,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1565,6 +1617,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "A step that never runs", run: async () => {} }],
         };
 
@@ -1588,7 +1641,9 @@ describe("CertTest", () => {
 
         // The throw came from outside every step, so only the run's own outcome can keep the record
         // from settling as though nothing went wrong.
-        expect(outcomes).deep.equal([{ failed: true, detail: "PICS accessor exploded", unproven: false }]);
+        expect(outcomes).deep.equal([
+            { failed: true, detail: "PICS accessor exploded", unproven: false, frameworkError: false },
+        ]);
     });
 
     it("reports a device that died rather than a controller that would not close", async () => {
@@ -1602,6 +1657,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "A step that passes", run: async () => {} }],
         };
 
@@ -1638,6 +1694,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1677,6 +1734,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1718,6 +1776,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1759,6 +1818,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1808,6 +1868,7 @@ describe("CertTest", () => {
             plan: "interactiondatamodel.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1849,6 +1910,7 @@ describe("CertTest", () => {
             plan: "interactiondatamodel.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1883,6 +1945,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "A step that passes", run: async () => {} }],
         };
 
@@ -1900,6 +1963,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1927,6 +1991,7 @@ describe("CertTest", () => {
             plan: "interactiondatamodel.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1961,6 +2026,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -1994,7 +2060,7 @@ describe("CertTest", () => {
         const test = new TestCertTest(definition, stubDescriptor(), stubContainer(), cx);
         const subject = stubSubject(new PicsFile([]));
 
-        await test.invoke(subject, () => {}, [], false);
+        await expectControllerGap(test.invoke(subject, () => {}, [], false));
 
         expect(step2Ran).equal(true);
         expect(endStepCalls).deep.equal([
@@ -2015,6 +2081,7 @@ describe("CertTest", () => {
             plan: "binding.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -2049,12 +2116,18 @@ describe("CertTest", () => {
             }),
         };
 
-        await new TestCertTest(definition, stubDescriptor(), stubContainer(), cx).invoke(
-            stubSubject(new PicsFile([])),
-            () => {},
-            [],
-            false,
-        );
+        try {
+            await new TestCertTest(definition, stubDescriptor(), stubContainer(), cx).invoke(
+                stubSubject(new PicsFile([])),
+                () => {},
+                [],
+                false,
+            );
+        } catch (e) {
+            if (!(e instanceof CertControllerGapError)) {
+                throw e;
+            }
+        }
 
         expect(step2Ran).equal(true);
         expect(endStepCalls).deep.equal([
@@ -2070,6 +2143,7 @@ describe("CertTest", () => {
             plan: "binding.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -2118,6 +2192,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -2166,6 +2241,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -2196,7 +2272,7 @@ describe("CertTest", () => {
         const test = new TestCertTest(definition, stubDescriptor(), stubContainer(), cx);
         const subject = stubSubject(new PicsFile([]));
 
-        await test.invoke(subject, () => {}, [], false);
+        await expectControllerGap(test.invoke(subject, () => {}, [], false));
 
         expect(endStepCalls).deep.equal([
             {
@@ -2212,6 +2288,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -2273,6 +2350,7 @@ describe("CertTest", () => {
                 plan: "multiplefabrics.adoc",
                 pics: [],
                 app: "all-clusters",
+                controllers: { dut: "dut" },
                 steps: runs.map((run, index) => ({ number: index + 1, text: "Step under test", run })),
             };
             const cx: CertStepWiring = {
@@ -2339,7 +2417,21 @@ describe("CertTest", () => {
                 },
             );
 
-            expect(outcome).undefined;
+            expect(outcome).instanceOf(CertControllerGapError);
+            expect(endStepCalls.map(({ verdict }) => verdict)).deep.equal(["skipped"]);
+        });
+
+        it("does not count a read of the controller's build as an action", async () => {
+            const controller: ControllerAdapter = {
+                ...controllerWith(fakeCertNode({})),
+                build: { version: "1.2.3" },
+            };
+            const { endStepCalls, outcome } = await runStep(controller, async cx => {
+                expect(cx.controllers.dut.build).deep.equal({ version: "1.2.3" });
+                throw new UnsupportedByControllerError("writeAttributes", "chip-tool");
+            });
+
+            expect(outcome).instanceOf(CertControllerGapError);
             expect(endStepCalls.map(({ verdict }) => verdict)).deep.equal(["skipped"]);
         });
 
@@ -2356,7 +2448,7 @@ describe("CertTest", () => {
                 },
             );
 
-            expect(outcome).undefined;
+            expect(outcome).instanceOf(CertControllerGapError);
             expect(endStepCalls.map(({ verdict }) => verdict)).deep.equal(["skipped"]);
         });
 
@@ -2374,7 +2466,7 @@ describe("CertTest", () => {
                 },
             );
 
-            expect(outcome).undefined;
+            expect(outcome).instanceOf(CertControllerGapError);
             expect(endStepCalls.map(({ verdict }) => verdict)).deep.equal(["pass", "skipped"]);
         });
 
@@ -2569,6 +2661,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -2596,7 +2689,7 @@ describe("CertTest", () => {
 
         const test = new TestCertTest(definition, stubDescriptor(), stubContainer(), cx);
 
-        await test.invoke(stubSubject(new PicsFile([])), () => {}, [], false);
+        await expectControllerGap(test.invoke(stubSubject(new PicsFile([])), () => {}, [], false));
 
         const banners = deviceLog.lines.filter(line => line.synthetic).map(line => line.text);
         expect(banners).contain("TC-CADMIN-1.17 — Test Step 2: SKIPPED");
@@ -2608,6 +2701,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -2635,7 +2729,7 @@ describe("CertTest", () => {
 
         const test = new TestCertTest(definition, stubDescriptor(), stubContainer(), cx);
 
-        await test.invoke(stubSubject(new PicsFile([])), () => {}, [], false);
+        await expectControllerGap(test.invoke(stubSubject(new PicsFile([])), () => {}, [], false));
 
         const banners = deviceLog.lines.filter(line => line.synthetic).map(line => line.text);
         expect(banners).contain("TC-CADMIN-1.17 — Test Step 1: SKIPPED");
@@ -2651,6 +2745,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -2683,6 +2778,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "Step one text", run: async () => {} }],
         };
 
@@ -2719,6 +2815,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "Step one text", run: async () => {} }],
         };
 
@@ -2749,6 +2846,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -2776,7 +2874,7 @@ describe("CertTest", () => {
         };
 
         const test = new TestCertTest(definition, stubDescriptor(), stubContainer(), cx);
-        await test.invoke(stubSubject(new PicsFile([])), () => {}, [], false);
+        await expectControllerGap(test.invoke(stubSubject(new PicsFile([])), () => {}, [], false));
 
         const banners = deviceLog.lines.filter(line => line.synthetic).map(line => line.text);
         expect(banners).to.include("TC-CADMIN-1.17 — 2 steps skipped as unsupported by the controller");
@@ -2788,6 +2886,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 { number: 1, text: "Step the device does not declare", pics: "CADMIN.C.C00.Tx", run: async () => {} },
                 { number: 2, text: "Another such step", pics: "CADMIN.C.C00.Tx", run: async () => {} },
@@ -2826,7 +2925,11 @@ describe("CertTest", () => {
         expect(banners).to.include("TC-CADMIN-1.17 — 2 steps skipped by their own PICS");
     });
 
-    async function runLongRunning(enabled: boolean) {
+    async function runLongRunning(
+        enabled: boolean,
+        longRunning: CertStepSetting = "the TH waits out three minutes",
+        setup?: { selection: ControllerSelection; flavor: DeviceFlavor },
+    ) {
         const previous = process.env.MATTER_CERT_LONG_RUNNING;
         if (enabled) {
             process.env.MATTER_CERT_LONG_RUNNING = "1";
@@ -2840,11 +2943,12 @@ describe("CertTest", () => {
             plan: "softwareupdate.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
                     text: "Step costing minutes",
-                    longRunning: "the TH waits out three minutes",
+                    longRunning,
                     run: async () => {
                         ran.push(1);
                     },
@@ -2864,7 +2968,9 @@ describe("CertTest", () => {
         const endStepVerdicts = new Array<{ number: number | string; verdict: StepVerdict; reason?: string }>();
         const cx: CertStepWiring = {
             controllers: {},
-            devices: { th: { ...stubCertDevice(new Promise<DeviceExitInfo>(() => {})), log: deviceLog } },
+            devices: {
+                th: { ...stubCertDevice(new Promise<DeviceExitInfo>(() => {}), setup?.flavor), log: deviceLog },
+            },
             recorder: stubRecorder({
                 endStep(step, verdict, skipReason) {
                     endStepVerdicts.push({ number: step.number, verdict, reason: skipReason });
@@ -2876,7 +2982,9 @@ describe("CertTest", () => {
             }),
         };
 
-        const test = new TestCertTest(definition, stubDescriptor(), stubContainer(), cx);
+        const test = new TestCertTest(definition, stubDescriptor(), stubContainer(), cx, undefined, [], {
+            selection: setup?.selection,
+        });
         try {
             await test.invoke(stubSubject(new PicsFile([])), () => {}, [], false);
         } finally {
@@ -2913,12 +3021,197 @@ describe("CertTest", () => {
         expect(endStepVerdicts.map(entry => entry.verdict)).deep.equal(["pass", "pass"]);
     });
 
+    it("decides a long-running step from the setup the run was built for, where it declares a function", async () => {
+        // Neither matches the environment's defaults, so a setup read from the environment shows here
+        const selection: ControllerSelection = { dut: "chip-tool", helper: "chip-tool" };
+        const setups = new Array<CertRunSetup>();
+        const onChip = ({ controllerSelection, deviceFlavor }: CertRunSetup) => {
+            setups.push({ controllerSelection, deviceFlavor });
+            return deviceFlavor === "chip-local" ? undefined : "only the chip TH shortens the wait";
+        };
+        const shortened = await runLongRunning(false, onChip, { selection, flavor: "chip-local" });
+        expect(shortened.ran).deep.equal([1, 2]);
+        expect(shortened.longRunningSkips).deep.equal([]);
+        expect(setups).deep.equal([{ controllerSelection: selection, deviceFlavor: "chip-local" }]);
+
+        const notShortened = await runLongRunning(false, () => "the wait cannot be shortened here");
+        expect(notShortened.ran).deep.equal([2]);
+        expect(notShortened.endStepVerdicts[0].reason).contains("the wait cannot be shortened here");
+    });
+
+    for (const option of ["notApplicable", "longRunning"] as const) {
+        it(`fails the run as a framework error where a step's ${option} function answers a blank reason`, async () => {
+            const ran = new Array<number | string>();
+            const verdicts = new Array<StepVerdict>();
+            const definition: CertTestDefinition = {
+                tc: "TC-SU-3.2",
+                plan: "softwareupdate.adoc",
+                pics: [],
+                app: "all-clusters",
+                controllers: { dut: "dut" },
+                steps: [
+                    {
+                        number: 1,
+                        text: "Step whose option answers blank",
+                        [option]: () => " ",
+                        run: async () => {
+                            ran.push(1);
+                        },
+                    },
+                    {
+                        number: 2,
+                        text: "Ordinary step",
+                        run: async () => {
+                            ran.push(2);
+                        },
+                    },
+                ],
+            };
+            const cx: CertStepWiring = {
+                controllers: {},
+                devices: { th: stubCertDevice(new Promise<DeviceExitInfo>(() => {})) },
+                recorder: stubRecorder({
+                    endStep(_step, verdict) {
+                        verdicts.push(verdict);
+                        return [];
+                    },
+                }),
+            };
+
+            let thrown: unknown;
+            try {
+                await new TestCertTest(definition, stubDescriptor(), stubContainer(), cx).invoke(
+                    stubSubject(new PicsFile([])),
+                    () => {},
+                    [],
+                    false,
+                );
+            } catch (e) {
+                thrown = e;
+            }
+
+            expect(thrown).instanceOf(CertFrameworkError);
+            expect(String(thrown)).contains(`"${option}" option with a blank reason`);
+            expect(ran).deep.equal([]);
+            expect(verdicts).deep.equal(["error", "aborted"]);
+        });
+
+        it(`keeps an earlier step's failure where a later step's ${option} function throws`, async () => {
+            const verdicts = new Array<StepVerdict>();
+            const outcomes = new Array<{ failed: boolean; detail?: string; frameworkError?: boolean }>();
+            const definition: CertTestDefinition = {
+                tc: "TC-SU-3.2",
+                plan: "softwareupdate.adoc",
+                pics: [],
+                app: "all-clusters",
+                controllers: { dut: "dut" },
+                steps: [
+                    {
+                        number: 1,
+                        text: "Failing step",
+                        run: async () => {
+                            throw new CertCheckFailedError("step 1 failed");
+                        },
+                    },
+                    {
+                        number: 2,
+                        text: "Step whose option throws",
+                        [option]: () => {
+                            throw new InternalError("option exploded");
+                        },
+                        run: async () => {},
+                    },
+                ],
+            };
+            const cx: CertStepWiring = {
+                controllers: {},
+                devices: { th: stubCertDevice(new Promise<DeviceExitInfo>(() => {})) },
+                recorder: stubRecorder({
+                    endStep(_step, verdict) {
+                        verdicts.push(verdict);
+                        return [];
+                    },
+                    async concludeRun(outcome) {
+                        outcomes.push(outcome);
+                    },
+                }),
+            };
+
+            await expect(
+                new TestCertTest(definition, stubDescriptor(), stubContainer(), cx).invoke(
+                    stubSubject(new PicsFile([])),
+                    () => {},
+                    [],
+                    false,
+                ),
+            ).rejectedWith(CertCheckFailedError, "step 1 failed");
+
+            expect(verdicts).deep.equal(["fail", "aborted"]);
+            expect(outcomes.map(({ detail, frameworkError }) => ({ detail, frameworkError }))).deep.equal([
+                { detail: "step 1 failed", frameworkError: false },
+            ]);
+        });
+    }
+
+    it("skips a step whose notApplicable function names a reason, and runs one where it names none", async () => {
+        const ran = new Array<number | string>();
+        const verdicts = new Array<{ number: number | string; verdict: StepVerdict; reason?: string }>();
+        const definition: CertTestDefinition = {
+            tc: "TC-IDM-3.1",
+            plan: "interactiondatamodel.adoc",
+            pics: [],
+            app: "all-clusters",
+            controllers: { dut: "dut" },
+            steps: [
+                {
+                    number: 1,
+                    text: "Step needing a chip TH",
+                    notApplicable: ({ deviceFlavor }) =>
+                        deviceFlavor === "chip-local" ? "no such cluster" : undefined,
+                    run: async () => {
+                        ran.push(1);
+                    },
+                },
+                {
+                    number: 2,
+                    text: "Step needing a matter.js TH",
+                    notApplicable: ({ deviceFlavor }) => (deviceFlavor === "chip-local" ? undefined : "matter.js only"),
+                    run: async () => {
+                        ran.push(2);
+                    },
+                },
+            ],
+        };
+        const cx: CertStepWiring = {
+            controllers: {},
+            devices: { th: stubCertDevice(new Promise<DeviceExitInfo>(() => {}), "chip-local") },
+            recorder: stubRecorder({
+                endStep(step, verdict, skipReason) {
+                    verdicts.push({ number: step.number, verdict, reason: skipReason });
+                    return [];
+                },
+            }),
+        };
+
+        await new TestCertTest(definition, stubDescriptor(), stubContainer(), cx).invoke(
+            stubSubject(new PicsFile([])),
+            () => {},
+            [],
+            false,
+        );
+
+        expect(ran).deep.equal([2]);
+        expect(verdicts[0]).deep.equal({ number: 1, verdict: "skipped", reason: "no such cluster" });
+        expect(verdicts[1].verdict).equal("pass");
+    });
+
     it("reports no PICS-skip count for a run whose steps all ran", async () => {
         const definition: CertTestDefinition = {
             tc: "TC-CADMIN-1.17",
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "Step the device declares", pics: "CADMIN.C", run: async () => {} }],
         };
 
@@ -2945,6 +3238,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "Passing step", run: async () => {} }],
         };
 
@@ -2988,6 +3282,7 @@ describe("CertTest", () => {
                 plan: "multiplefabrics.adoc",
                 pics: [],
                 app: "all-clusters",
+                controllers: { dut: "dut" },
                 steps: [{ number: 1, text: "Passing step", run: async () => {} }],
             };
 
@@ -3038,6 +3333,7 @@ describe("CertTest", () => {
                 plan: "multiplefabrics.adoc",
                 pics: [],
                 app: "all-clusters",
+                controllers: { dut: "dut" },
                 steps: [{ number: 1, text: "Passing step", run: async () => {} }],
             };
 
@@ -3079,6 +3375,7 @@ describe("CertTest", () => {
                 plan: "multiplefabrics.adoc",
                 pics: [],
                 app: "all-clusters",
+                controllers: { dut: "dut" },
                 steps: [{ number: 1, text: "Passing step", run: async () => {} }],
             };
 
@@ -3118,6 +3415,7 @@ describe("CertTest", () => {
                 plan: "multiplefabrics.adoc",
                 pics: [],
                 app: "all-clusters",
+                controllers: { dut: "dut" },
                 steps: [
                     {
                         number: 1,
@@ -3182,6 +3480,7 @@ describe("CertTest", () => {
                 plan: "multiplefabrics.adoc",
                 pics: [],
                 app: "all-clusters",
+                controllers: { dut: "dut" },
                 steps: [{ number: 1, text: "Passing step", run: async () => {} }],
             };
 
@@ -3223,6 +3522,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [{ number: 1, text: "Passing step", run: async () => {} }],
         };
 
@@ -3243,6 +3543,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -3269,6 +3570,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -3337,6 +3639,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -3383,6 +3686,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -3432,6 +3736,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -3470,6 +3775,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -3513,6 +3819,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -3558,6 +3865,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -3598,6 +3906,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -3643,6 +3952,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 {
                     number: 1,
@@ -3680,6 +3990,7 @@ describe("CertTest", () => {
             plan: "multiplefabrics.adoc",
             pics: [],
             app: "all-clusters",
+            controllers: { dut: "dut" },
             steps: [
                 { number: 1, text: "Passing step", run: async () => {} },
                 {
@@ -3706,6 +4017,240 @@ describe("CertTest", () => {
     });
 });
 
+describe("a step declaring controller capabilities", () => {
+    const originalController = env.MATTER_CERT_CONTROLLER;
+
+    afterEach(() => {
+        if (originalController === undefined) {
+            delete env.MATTER_CERT_CONTROLLER;
+        } else {
+            env.MATTER_CERT_CONTROLLER = originalController;
+        }
+    });
+
+    async function runGroupcastStep(controllers: Record<string, ControllerRoleKind> = { dut: "dut" }) {
+        let ran = false;
+        const ended = new Array<{ number: number | string; verdict: StepVerdict; skipReason?: string }>();
+        const skipCounts = new Array<number>();
+
+        const definition: CertTestDefinition = {
+            tc: "TC-SC-5.3",
+            plan: "group_communication.adoc",
+            pics: [],
+            app: "all-clusters",
+            controllers,
+            steps: [
+                {
+                    number: 1,
+                    text: "Step needing group messaging",
+                    controllerCapabilities: ["group-messaging"],
+                    run: async () => {
+                        ran = true;
+                    },
+                },
+                { number: 2, text: "Step needing nothing", run: async () => {} },
+            ],
+        };
+        const cx: CertStepWiring = {
+            controllers: {},
+            devices: {},
+            recorder: stubRecorder({
+                endStep(step, verdict, skipReason) {
+                    ended.push({ number: step.number, verdict, skipReason });
+                    return [];
+                },
+                recordControllerUnsupportedSkips(count) {
+                    skipCounts.push(count);
+                },
+            }),
+        };
+
+        try {
+            await new TestCertTest(definition, stubDescriptor(), stubContainer(), cx).invoke(
+                stubSubject(new PicsFile([])),
+                () => {},
+                [],
+                false,
+            );
+        } catch (e) {
+            if (!(e instanceof CertControllerGapError)) {
+                throw e;
+            }
+        }
+        return { ran, ended, skipCounts };
+    }
+
+    it("is skipped before it runs where the DUT controller lacks one, and counted as the controller's gap", async () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+
+        const { ran, ended, skipCounts } = await runGroupcastStep();
+
+        expect(ran).equal(false);
+        expect(ended[0].verdict).equal("skipped");
+        expect(ended[0].skipReason).contains('controller "matterjs-server" lacks group-messaging');
+        expect(ended[1].verdict).equal("pass");
+        expect(skipCounts).deep.equal([1]);
+    });
+
+    it("runs where the controller has it", async () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs";
+
+        const { ran, ended, skipCounts } = await runGroupcastStep();
+
+        expect(ran).equal(true);
+        expect(ended.map(({ verdict }) => verdict)).deep.equal(["pass", "pass"]);
+        expect(skipCounts).deep.equal([]);
+    });
+
+    it("is judged by the roles the test declares", async () => {
+        // The server selection fills helper roles with matterjs, which lacks nothing
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+
+        expect((await runGroupcastStep({ th: "helper" })).ran).equal(true);
+        expect((await runGroupcastStep({ dut: "dut", th: "helper" })).ran).equal(false);
+    });
+});
+
+describe("a step needing a capability its controller declares out of scope", () => {
+    const originalController = env.MATTER_CERT_CONTROLLER;
+
+    afterEach(() => {
+        if (originalController === undefined) {
+            delete env.MATTER_CERT_CONTROLLER;
+        } else {
+            env.MATTER_CERT_CONTROLLER = originalController;
+        }
+    });
+
+    async function runTimedWriteStep({
+        capabilities = ["bdx-sender"] as ControllerCapability[],
+        controllers = { dut: "dut" } as Record<string, ControllerRoleKind>,
+        registration = {},
+    }: {
+        capabilities?: ControllerCapability[];
+        controllers?: Record<string, ControllerRoleKind>;
+        registration?: { gaps?: Partial<Record<ControllerCapability, string>>; helperImplementation?: undefined };
+    } = {}) {
+        let ran = false;
+        const ended = new Array<{ number: number | string; verdict: StepVerdict; skipReason?: string }>();
+        const outOfScopeCounts = new Array<number>();
+        const gapCounts = new Array<number>();
+
+        const definition: CertTestDefinition = {
+            tc: "TC-IDM-5.1",
+            plan: "interactiondatamodel.adoc",
+            pics: [],
+            app: "all-clusters",
+            controllers,
+            steps: [
+                {
+                    number: 1,
+                    text: "Step needing a timed write",
+                    controllerCapabilities: capabilities,
+                    run: async () => {
+                        ran = true;
+                    },
+                },
+                { number: 2, text: "Step needing nothing", run: async () => {} },
+            ],
+        };
+        const cx: CertStepWiring = {
+            controllers: {},
+            devices: {},
+            recorder: stubRecorder({
+                endStep(step, verdict, skipReason) {
+                    ended.push({ number: step.number, verdict, skipReason });
+                    return [];
+                },
+                recordOutOfScopeSkips(count) {
+                    outOfScopeCounts.push(count);
+                },
+                recordControllerUnsupportedSkips(count) {
+                    gapCounts.push(count);
+                },
+            }),
+        };
+
+        const restore = replaceControllerAdapterRegistrationForTesting("matterjs-server", {
+            factory: () => {
+                throw new InternalError("no controller is built in this test");
+            },
+            helperImplementation: "matterjs",
+            outOfScope: { "bdx-sender": "not for controllers" },
+            ...registration,
+        });
+        let thrown: unknown;
+        try {
+            await new TestCertTest(definition, stubDescriptor(), stubContainer(), cx).invoke(
+                stubSubject(new PicsFile([])),
+                () => {},
+                [],
+                false,
+            );
+        } catch (e) {
+            thrown = e;
+        } finally {
+            restore();
+        }
+        return { ran, ended, outOfScopeCounts, gapCounts, thrown };
+    }
+
+    it("is skipped with the controller's reason, counted out of scope, and leaves the run passing", async () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+
+        const { ran, ended, outOfScopeCounts, gapCounts, thrown } = await runTimedWriteStep();
+
+        expect(thrown).undefined;
+        expect(ran).equal(false);
+        expect(ended[0]).deep.equal({
+            number: 1,
+            verdict: "skipped",
+            skipReason: 'controller "matterjs-server" does not offer bdx-sender: not for controllers',
+        });
+        expect(ended[1].verdict).equal("pass");
+        expect(outOfScopeCounts).deep.equal([1]);
+        expect(gapCounts).deep.equal([]);
+    });
+
+    it("is a gap where the step also needs a capability the controller lacks", async () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+
+        const { ran, ended, outOfScopeCounts, gapCounts, thrown } = await runTimedWriteStep({
+            capabilities: ["bdx-sender", "chunked-write"],
+            registration: { gaps: { "chunked-write": "not yet" } },
+        });
+
+        expect(thrown).instanceOf(CertControllerGapError);
+        expect(ran).equal(false);
+        expect(ended[0].skipReason).equal('controller "matterjs-server" lacks chunked-write: not yet');
+        expect(outOfScopeCounts).deep.equal([]);
+        expect(gapCounts).deep.equal([1]);
+    });
+
+    it("does not apply a helper's out-of-scope declarations", async () => {
+        // Without a helper implementation of its own, matterjs-server fills the helper role too
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+
+        const { ran, outOfScopeCounts } = await runTimedWriteStep({
+            controllers: { th: "helper" },
+            registration: { helperImplementation: undefined },
+        });
+
+        expect(ran).equal(true);
+        expect(outOfScopeCounts).deep.equal([]);
+    });
+
+    it("runs where the controller offers it", async () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs";
+
+        const { ran, ended, outOfScopeCounts } = await runTimedWriteStep();
+
+        expect(ran).equal(true);
+        expect(ended.map(({ verdict }) => verdict)).deep.equal(["pass", "pass"]);
+        expect(outOfScopeCounts).deep.equal([]);
+    });
+});
+
 describe("test-level PICS gate", () => {
     const originalController = env.MATTER_CERT_CONTROLLER;
 
@@ -3718,7 +4263,14 @@ describe("test-level PICS gate", () => {
     });
 
     function definitionWith(pics: string[]): CertTestDefinition {
-        return { tc: "TC-IDM-1.3", plan: "interactiondatamodel.adoc", pics, app: "all-clusters", steps: [] };
+        return {
+            tc: "TC-IDM-1.3",
+            plan: "interactiondatamodel.adoc",
+            pics,
+            app: "all-clusters",
+            controllers: { dut: "dut" },
+            steps: [],
+        };
     }
 
     it("is met for a controller that declares the capability", () => {
@@ -3767,7 +4319,15 @@ describe("cert app PICS", () => {
     });
 
     function definitionFor(pics: string[], dutIsDevice: boolean): CertTestDefinition {
-        return { tc: "TC-PICS-0.1", plan: "bdx.adoc", pics, app: APP, dutIsDevice, steps: [] };
+        return {
+            tc: "TC-PICS-0.1",
+            plan: "bdx.adoc",
+            pics,
+            app: APP,
+            dutIsDevice,
+            controllers: dutIsDevice ? { th: "helper" } : { dut: "dut" },
+            steps: [],
+        };
     }
 
     it("answers nothing for an app that declared nothing", () => {
@@ -3803,6 +4363,7 @@ describe("cert app PICS", () => {
         const definition: CertTestDefinition = {
             ...definitionFor(["MCORE.BDX.Receiver"], true),
             app: "all-clusters",
+            controllers: { dut: "dut" },
             dutApp: APP,
         };
 
@@ -3824,5 +4385,473 @@ describe("cert app PICS", () => {
 
         expect(new PicsExpression("MCORE.BDX.BlockQueryWithSkip").evaluate(forDevice)).equal(true);
         expect(new PicsExpression("MCORE.BDX.BlockQueryWithSkip").evaluate(forController)).equal(false);
+    });
+});
+
+describe("a controller refusal naming a capability", () => {
+    const noLines = async function* (): AsyncGenerator<string> {};
+
+    async function runRefusal(
+        stepCapabilities?: ControllerCapability[],
+        recordFirst = false,
+        refused: {
+            capability: ControllerCapability;
+            transport?: "tcp";
+            testCapabilities?: ControllerCapability[];
+        } = { capability: "group-messaging" },
+    ) {
+        const ended = new Array<StepVerdict>();
+        const outcomes = new Array<{ failed: boolean; frameworkError?: boolean }>();
+        let laterStepRan = false;
+        const definition: CertTestDefinition = {
+            tc: "TC-SC-5.3",
+            plan: "group_communication.adoc",
+            pics: [],
+            app: "all-clusters",
+            controllers: { dut: "dut" },
+            transport: refused.transport,
+            controllerCapabilities: refused.testCapabilities,
+            steps: [
+                {
+                    number: 1,
+                    text: "Step reaching a refusal",
+                    controllerCapabilities: stepCapabilities,
+                    run: async cx => {
+                        if (recordFirst) {
+                            cx.recorder.check({ type: "response", verdict: "pass" });
+                        }
+                        throw new UnsupportedByControllerError(
+                            "an operation",
+                            "matterjs",
+                            "not offered",
+                            refused.capability,
+                        );
+                    },
+                },
+                {
+                    number: 2,
+                    text: "Later step",
+                    run: async () => {
+                        laterStepRan = true;
+                    },
+                },
+            ],
+        };
+        const cx: CertStepWiring = {
+            controllers: { dut: stubControllerAdapter(new LogFollower(noLines(), "dut")) },
+            devices: {},
+            recorder: stubRecorder({
+                endStep(_step, verdict) {
+                    ended.push(verdict);
+                    return [];
+                },
+                async concludeRun(outcome) {
+                    outcomes.push(outcome);
+                },
+            }),
+        };
+        const outcome = await new TestCertTest(definition, stubDescriptor(), stubContainer(), cx)
+            .invoke(stubSubject(new PicsFile([])), () => {}, [], false)
+            .then(
+                () => undefined,
+                (e: unknown) => e,
+            );
+        return { ended, outcomes, outcome, laterStepRan };
+    }
+
+    it("is a framework error where the step does not declare the capability, even before the step acted", async () => {
+        const { ended, outcomes, outcome, laterStepRan } = await runRefusal();
+
+        expect(ended).deep.equal(["error", "aborted"]);
+        expect(laterStepRan).equal(false);
+        if (!(outcome instanceof CertFrameworkError)) {
+            expect.fail(`expected a CertFrameworkError, got ${outcome}`);
+        }
+        expect(outcome.message).contains("needs group-messaging and neither it nor its test case declares it");
+        expect(outcomes).deep.equal([{ failed: true, detail: outcome.message, unproven: false, frameworkError: true }]);
+    });
+
+    it("is a framework error naming the controller's registration where the step declares the capability", async () => {
+        const { ended, outcome } = await runRefusal(["group-messaging"]);
+
+        expect(ended).deep.equal(["error", "aborted"]);
+        expect(String(outcome)).contains("which its registration declares neither as a gap nor out of scope");
+    });
+
+    it("counts a capability its test case declares as declared", async () => {
+        const { outcome } = await runRefusal(undefined, false, {
+            capability: "group-messaging",
+            testCapabilities: ["group-messaging"],
+        });
+
+        expect(String(outcome)).contains("which its registration declares neither as a gap nor out of scope");
+    });
+
+    it("counts the capability a TCP test case implies as declared", async () => {
+        const { outcome } = await runRefusal(undefined, false, { capability: "tcp-transport", transport: "tcp" });
+
+        expect(String(outcome)).contains("which its registration declares neither as a gap nor out of scope");
+    });
+
+    it("is a framework error after the step recorded a check as well", async () => {
+        const { ended, outcome } = await runRefusal(undefined, true);
+
+        expect(ended).deep.equal(["error", "aborted"]);
+        expect(outcome).instanceOf(CertFrameworkError);
+    });
+});
+
+describe("a step that decides at run time whether the plan applies it", () => {
+    const originalController = env.MATTER_CERT_CONTROLLER;
+
+    afterEach(() => {
+        if (originalController === undefined) {
+            delete env.MATTER_CERT_CONTROLLER;
+        } else {
+            env.MATTER_CERT_CONTROLLER = originalController;
+        }
+    });
+
+    const TCP_REASON = "the DUT's session to the TH runs over TCP";
+
+    function controllerWith(node: CertNodeApi): ControllerAdapter {
+        return {
+            ...stubControllerAdapter(new LogFollower(noLines(), "dut")),
+            node: () => node,
+        };
+    }
+
+    async function runProbedStep({
+        probe,
+        capabilities,
+        body = async () => {},
+        node = fakeCertNode({ readAttribute: async () => "label", writeAttribute: async () => {} }),
+    }: {
+        probe: (cx: CertStepContext) => Promise<string | undefined>;
+        capabilities?: ControllerCapability[];
+        body?: (cx: CertStepContext) => Promise<void>;
+        node?: CertNodeApi;
+    }) {
+        let ran = false;
+        const ended = new Array<{ number: number | string; verdict: StepVerdict; skipReason?: string }>();
+        const opened = new Array<string>();
+        const planConditionCounts = new Array<number>();
+        const gapCounts = new Array<number>();
+        const definition: CertTestDefinition = {
+            tc: "TC-IDM-3.1",
+            plan: "interactiondatamodel.adoc",
+            pics: [],
+            app: "all-clusters",
+            controllers: { dut: "dut" },
+            steps: [
+                {
+                    number: 1,
+                    text: "Step whose plan may not apply",
+                    controllerCapabilities: capabilities,
+                    notApplicableAtRun: probe,
+                    run: async cx => {
+                        ran = true;
+                        await body(cx);
+                    },
+                },
+                { number: 2, text: "Step after it", run: async () => {} },
+            ],
+        };
+        const cx: CertStepWiring = {
+            controllers: { dut: controllerWith(node) },
+            devices: {},
+            recorder: stubRecorder({
+                endStep(step, verdict, skipReason) {
+                    ended.push({ number: step.number, verdict, skipReason });
+                    return [];
+                },
+                recordPlanConditionSkips(count) {
+                    planConditionCounts.push(count);
+                },
+                recordControllerUnsupportedSkips(count) {
+                    gapCounts.push(count);
+                },
+            }),
+        };
+        const restore = replaceControllerAdapterRegistrationForTesting("matterjs-server", {
+            factory: () => {
+                throw new InternalError("no controller is built in this test");
+            },
+            helperImplementation: "matterjs",
+            gaps: { "chunked-write": "not yet" },
+        });
+        let thrown: unknown;
+        try {
+            await new TestCertTest(definition, stubDescriptor(), stubContainer(), cx).invoke(
+                stubSubject(new PicsFile([])),
+                title => opened.push(title),
+                [],
+                false,
+            );
+        } catch (e) {
+            thrown = e;
+        } finally {
+            restore();
+        }
+        return { ran, ended, opened, planConditionCounts, gapCounts, thrown };
+    }
+
+    it("skips the step with the reason, as a plan condition, ahead of a capability the controller lacks", async () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+
+        const { ran, ended, opened, planConditionCounts, gapCounts, thrown } = await runProbedStep({
+            probe: async cx => {
+                await cx.controllers.dut.node("ref").readAttribute({ endpoint: 0, cluster: 0x28, attribute: 5 });
+                return TCP_REASON;
+            },
+            capabilities: ["chunked-write"],
+        });
+
+        expect(thrown).undefined;
+        expect(ran).equal(false);
+        expect(ended).deep.equal([
+            { number: 1, verdict: "skipped", skipReason: TCP_REASON },
+            { number: 2, verdict: "pass", skipReason: undefined },
+        ]);
+        expect(planConditionCounts).deep.equal([1]);
+        expect(gapCounts).deep.equal([]);
+        expect(opened).deep.equal(["Test Step 1: Step whose plan may not apply", "Test Step 2: Step after it"]);
+    });
+
+    it("leaves the step to the capability gate where the plan applies", async () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+
+        const { ran, ended, planConditionCounts, gapCounts, thrown } = await runProbedStep({
+            probe: async () => undefined,
+            capabilities: ["chunked-write"],
+        });
+
+        expect(thrown).instanceOf(CertControllerGapError);
+        expect(ran).equal(false);
+        expect(ended[0]).deep.equal({
+            number: 1,
+            verdict: "skipped",
+            skipReason: 'controller "matterjs-server" lacks chunked-write: not yet',
+        });
+        expect(planConditionCounts).deep.equal([]);
+        expect(gapCounts).deep.equal([1]);
+    });
+
+    it("runs the step, opened once, where the plan applies and the controller lacks nothing", async () => {
+        const { ran, ended, opened, thrown } = await runProbedStep({ probe: async () => undefined });
+
+        expect(thrown).undefined;
+        expect(ran).equal(true);
+        expect(ended.map(({ verdict }) => verdict)).deep.equal(["pass", "pass"]);
+        expect(opened).deep.equal(["Test Step 1: Step whose plan may not apply", "Test Step 2: Step after it"]);
+    });
+
+    it("is a framework error where the decision wrote to the device", async () => {
+        const { ran, ended, thrown } = await runProbedStep({
+            probe: async cx => {
+                await cx.controllers.dut.node("ref").writeAttribute({ endpoint: 0, cluster: 0x28, attribute: 5 }, "x");
+                return TCP_REASON;
+            },
+        });
+
+        expect(ran).equal(false);
+        expect(ended.map(({ verdict }) => verdict)).deep.equal(["error", "aborted"]);
+        expect(thrown).instanceOf(CertFrameworkError);
+        expect(String(thrown)).contains("made 1 controller call(s) that may change the device");
+    });
+
+    it("is a framework error where the decision recorded a check", async () => {
+        const { ended, thrown } = await runProbedStep({
+            probe: async cx => {
+                cx.recorder.check({ type: "response", verdict: "pass" });
+                return undefined;
+            },
+        });
+
+        expect(ended.map(({ verdict }) => verdict)).deep.equal(["error", "aborted"]);
+        expect(String(thrown)).contains("recorded 1 check(s)");
+    });
+
+    it("is a framework error where the decision gives a blank reason", async () => {
+        const { ended, thrown } = await runProbedStep({ probe: async () => " " });
+
+        expect(ended.map(({ verdict }) => verdict)).deep.equal(["error", "aborted"]);
+        expect(String(thrown)).contains("with a blank reason");
+    });
+
+    it("fails the step, and aborts the rest, where deciding throws", async () => {
+        const { ran, ended, thrown } = await runProbedStep({
+            probe: async () => {
+                throw new CertCheckFailedError("the read failed");
+            },
+        });
+
+        expect(ran).equal(false);
+        expect(ended.map(({ verdict }) => verdict)).deep.equal(["fail", "aborted"]);
+        expect(thrown).instanceOf(CertCheckFailedError);
+    });
+
+    it("skips the step as a plan condition where deciding throws CertStepNotApplicableError", async () => {
+        const { ran, ended, planConditionCounts, thrown } = await runProbedStep({
+            probe: async () => {
+                throw new CertStepNotApplicableError(TCP_REASON);
+            },
+        });
+
+        expect(thrown).undefined;
+        expect(ran).equal(false);
+        expect(ended[0]).deep.equal({ number: 1, verdict: "skipped", skipReason: TCP_REASON });
+        expect(planConditionCounts).deep.equal([1]);
+    });
+
+    it("skips a step that read before it found the plan does not apply", async () => {
+        const { ended, planConditionCounts, thrown } = await runProbedStep({
+            probe: async () => undefined,
+            body: async cx => {
+                await cx.controllers.dut.node("ref").readAttribute({ endpoint: 0, cluster: 0x28, attribute: 5 });
+                throw new CertStepNotApplicableError(TCP_REASON);
+            },
+        });
+
+        expect(thrown).undefined;
+        expect(ended[0]).deep.equal({ number: 1, verdict: "skipped", skipReason: TCP_REASON });
+        expect(planConditionCounts).deep.equal([1]);
+    });
+
+    it("writes a clean gap record for a step that applies and then meets the capability gate", async () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+        const outDir = await mkdtemp(join(tmpdir(), "matter-cert-test-evidence-"));
+        const restore = replaceControllerAdapterRegistrationForTesting("matterjs-server", {
+            factory: () => {
+                throw new InternalError("no controller is built in this test");
+            },
+            helperImplementation: "matterjs",
+            gaps: { "chunked-write": "not yet" },
+        });
+        try {
+            const definition: CertTestDefinition = {
+                tc: "TC-IDM-3.1",
+                plan: "interactiondatamodel.adoc",
+                pics: [],
+                app: "all-clusters",
+                controllers: { dut: "dut" },
+                steps: [
+                    {
+                        number: 1,
+                        text: "Passing step",
+                        run: async cx => cx.recorder.check({ type: "response", verdict: "pass" }),
+                    },
+                    {
+                        number: 2,
+                        text: "Step whose plan applies over UDP",
+                        controllerCapabilities: ["chunked-write"],
+                        notApplicableAtRun: async () => undefined,
+                        run: async () => {},
+                    },
+                ],
+            };
+            const recorder = new EvidenceRecorder(outDir, {
+                tc: "TC-IDM-3.1",
+                plan: "interactiondatamodel.adoc",
+                timestamp: "2026-10-15T00:00:00.000Z",
+                controller: "dut",
+                controllerImplementation: "matterjs-server",
+                devices: [{ role: "th", app: "all-clusters", flavor: "chip-local" }],
+                matterJsCommit: "abc1234",
+            });
+            const cx: CertStepWiring = { controllers: {}, devices: {}, recorder };
+
+            await expect(
+                new TestCertTest(definition, stubDescriptor(), stubContainer(), cx).invoke(
+                    stubSubject(new PicsFile([])),
+                    () => {},
+                    [],
+                    false,
+                ),
+            ).rejectedWith(CertControllerGapError);
+
+            const result = JSON.parse(
+                await readFile(join(outDir, "2026-10-15T00-00-00.000Z-TC-IDM-3.1", "result.json"), "utf8"),
+            );
+            expect(result.verdict).equal("controller-gap");
+            expect(result.controllerUnsupportedSkips).equal(1);
+            expect("planConditionSkips" in result).equal(false);
+            expect(result.steps[1]).deep.include({
+                verdict: "skipped",
+                skipReason: 'controller "matterjs-server" lacks chunked-write: not yet',
+                checks: [],
+            });
+        } finally {
+            restore();
+            await rm(outDir, { recursive: true, force: true });
+        }
+    });
+
+    it("writes a passing record that carries the reason and the plan-condition count", async () => {
+        const outDir = await mkdtemp(join(tmpdir(), "matter-cert-test-evidence-"));
+        try {
+            const definition: CertTestDefinition = {
+                tc: "TC-IDM-2.1",
+                plan: "interactiondatamodel.adoc",
+                pics: [],
+                app: "all-clusters",
+                controllers: { dut: "dut" },
+                steps: [
+                    {
+                        number: 1,
+                        text: "Passing step",
+                        run: async cx => cx.recorder.check({ type: "response", verdict: "pass" }),
+                    },
+                    {
+                        number: 2,
+                        text: "Step whose plan does not apply",
+                        notApplicableAtRun: async () => TCP_REASON,
+                        run: async () => {},
+                    },
+                    {
+                        number: 3,
+                        text: "Step that finds it from its own read",
+                        run: async () => {
+                            throw new CertStepNotApplicableError(TCP_REASON);
+                        },
+                    },
+                ],
+            };
+            const recorder = new EvidenceRecorder(outDir, {
+                tc: "TC-IDM-2.1",
+                plan: "interactiondatamodel.adoc",
+                timestamp: "2026-10-15T00:00:00.000Z",
+                controller: "dut",
+                controllerImplementation: "matterjs",
+                devices: [{ role: "th", app: "all-clusters", flavor: "chip-local" }],
+                matterJsCommit: "abc1234",
+            });
+            const cx: CertStepWiring = { controllers: {}, devices: {}, recorder };
+
+            await new TestCertTest(definition, stubDescriptor(), stubContainer(), cx).invoke(
+                stubSubject(new PicsFile([])),
+                () => {},
+                [],
+                false,
+            );
+
+            const result = JSON.parse(
+                await readFile(join(outDir, "2026-10-15T00-00-00.000Z-TC-IDM-2.1", "result.json"), "utf8"),
+            );
+            expect(result.verdict).equal("pass");
+            expect(result.planConditionSkips).equal(2);
+            expect(
+                result.steps.map(({ verdict, skipReason }: { verdict: string; skipReason?: string }) => ({
+                    verdict,
+                    skipReason,
+                })),
+            ).deep.equal([
+                { verdict: "pass", skipReason: undefined },
+                { verdict: "skipped", skipReason: TCP_REASON },
+                { verdict: "skipped", skipReason: TCP_REASON },
+            ]);
+        } finally {
+            await rm(outDir, { recursive: true, force: true });
+        }
     });
 });

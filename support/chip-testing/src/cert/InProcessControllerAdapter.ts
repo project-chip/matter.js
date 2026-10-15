@@ -121,6 +121,7 @@ import type {
     CommissioningTarget,
     ControllerAdapter,
     ControllerAdapterOptions,
+    ControllerCapabilityGaps,
     ControllerTransport,
     EventPathSpec,
     EventReadEntry,
@@ -141,6 +142,7 @@ import type {
     ReadAttributeOptions,
     ReadEventOptions,
     ServeOtaUpdateOptions,
+    SubscribeAttributesOptions,
     SubscribeEventOptions,
     SubscribeOptions,
     TimedInteractionOptions,
@@ -155,6 +157,7 @@ import { OTA_TEST_PAYLOAD_SIZE, otaTestPayload, otaTestSoftwareVersionString } f
 import { certClusterModelFor, findCertCluster } from "./custom-clusters.js";
 import { OriginDestination, registerLogOrigin } from "./log-origins.js";
 import { refusalOf, singleQrPayload } from "./onboarding-payload.js";
+import { concreteSubscribeSeed } from "./subscribe-seed.js";
 import { timedInteractionTimeoutOf } from "./timed-interaction.js";
 
 /**
@@ -297,6 +300,14 @@ export const MATTERJS_CONTROLLER_PICS: PicsValues = {
     "MCORE.DEVLIST.UseDeviceState": 1,
     "MCORE.DEVLIST.UseBatInfo": 1,
 };
+
+/**
+ * What this controller lacks, declared with its registration so a step needing one of these is skipped before it acts
+ * (see `controllerCapabilityGap`).
+ */
+export const MATTERJS_CAPABILITY_GAPS = {
+    "chunked-write": "the matter.js client does not split a large write into chunked WriteRequests",
+} as const satisfies ControllerCapabilityGaps;
 
 const adapterStreams = new Map<string, LineQueue>();
 
@@ -1142,18 +1153,31 @@ class InProcessIcdClient implements CertIcdClientApi {
         const events = peer.eventsOf(IcdClient);
         events.checkedIn.on(({ counter }) => this.#push({ kind: "checkIn", counter }));
 
-        // A refresh replaces one starting counter with another; registration sets the first and clearing removes it.
-        // Committed by the time this fires, so state holds the new key
-        events.counterStart$Changed.on((counterStart, previous) => {
-            if (counterStart === undefined || previous === undefined) {
-                return;
-            }
-            const { key } = peer.stateOf(IcdClient);
-            if (key === undefined) {
-                logger.error(`IcdClient for ${peer} committed a new starting counter without a key`);
+        // Fires once per key change, after commit. A Check-In under the new key can confirm it before the response
+        // arrives; the counter then is the Check-In's baseline until the response replaces it with the node's ICDCounter.
+        events.keyRefreshed.on(() => {
+            const { key, counterStart } = peer.stateOf(IcdClient);
+            if (key === undefined || counterStart === undefined) {
+                logger.error(`IcdClient for ${peer} refreshed its key without a key and starting counter`);
                 return;
             }
             this.#push({ kind: "keyRefresh", key: Bytes.of(key), counterStart });
+        });
+
+        events.counterStart$Changed.on(counterStart => {
+            const { key } = peer.stateOf(IcdClient);
+            if (counterStart === undefined || key === undefined) {
+                return;
+            }
+            for (let index = this.#events.length - 1; index >= 0; index--) {
+                const event = this.#events[index];
+                if (event.kind === "keyRefresh") {
+                    if (Bytes.areEqual(event.key, Bytes.of(key))) {
+                        this.#events[index] = { ...event, counterStart };
+                    }
+                    return;
+                }
+            }
         });
     }
 
@@ -1523,41 +1547,88 @@ class InProcessCertNodeApi implements CertNodeApi {
     }
 
     subscribe(path: AttributePathSpec, opts: SubscribeOptions): Promise<unknown> {
+        return runTagged(this.#adapterId, () =>
+            this.#subscribeAttributes(
+                [path],
+                opts,
+                report => opts.onUpdate?.(report.value),
+                (seed, statuses) =>
+                    isConcretePath(path) ? concreteSubscribeSeed(path, seed, statuses) : toWireValues(seed),
+            ),
+        );
+    }
+
+    subscribeAttributes(paths: AttributePathSpec[], opts: SubscribeAttributesOptions): Promise<AttributeReadEntry[]> {
         return runTagged(this.#adapterId, async () => {
-            const { endpointId, clusterId, attributeId } = toIds(path);
-            const seed = new Array<ReadResult.AttributeValue>();
-            let seeding = true;
-            // The priming report is the step's seed, so it must not omit what the node's own subscription cached
-            const request: ClientSubscribe = {
-                ...Subscribe({
-                    attributes: [{ endpointId, clusterId, attributeId }],
-                    keepSubscriptions: true,
-                    minIntervalFloor: Seconds(opts.minIntervalFloorSeconds),
-                    maxIntervalCeiling: Seconds(opts.maxIntervalCeilingSeconds),
-                }),
-                includeKnownVersions: true,
-            };
-            request.updated = async data => {
-                for await (const chunk of data) {
-                    for await (const report of chunk) {
-                        if (report.kind !== "attr-value") {
-                            continue;
-                        }
+            if (paths.length === 0) {
+                throw new ImplementationError("subscribeAttributes requires at least one path");
+            }
+            return this.#subscribeAttributes(
+                paths,
+                opts,
+                report => {
+                    const [entry] = toWireValues([report]);
+                    opts.onUpdate?.(entry);
+                },
+                (seed, statuses) => {
+                    assertNoConcreteAttributeStatus(paths, statuses, "subscribeAttributes");
+                    return toWireValues(seed);
+                },
+            );
+        });
+    }
+
+    /**
+     * One subscription to every path of `paths`. `seedOf` turns the priming report's values and statuses into the
+     * caller's result and closes the subscription if it throws; every value a later report carries reaches `update`.
+     */
+    async #subscribeAttributes<T>(
+        paths: AttributePathSpec[],
+        intervals: Pick<SubscribeOptions, "minIntervalFloorSeconds" | "maxIntervalCeilingSeconds">,
+        update: (report: ReadResult.AttributeValue) => void,
+        seedOf: (seed: ReadResult.AttributeValue[], statuses: ReadResult.AttributeStatus[]) => T,
+    ): Promise<T> {
+        const seed = new Array<ReadResult.AttributeValue>();
+        const statuses = new Array<ReadResult.AttributeStatus>();
+        let seeding = true;
+        // The priming report is the step's seed, so it must not omit what the node's own subscription cached
+        const request: ClientSubscribe = {
+            ...Subscribe({
+                attributes: paths.map(toIds),
+                keepSubscriptions: true,
+                minIntervalFloor: Seconds(intervals.minIntervalFloorSeconds),
+                maxIntervalCeiling: Seconds(intervals.maxIntervalCeilingSeconds),
+            }),
+            includeKnownVersions: true,
+        };
+        request.updated = async data => {
+            for await (const chunk of data) {
+                for await (const report of chunk) {
+                    if (report.kind === "attr-status") {
                         if (seeding) {
-                            seed.push(report);
-                        } else {
-                            opts.onUpdate?.(report.value);
+                            statuses.push(report);
                         }
+                        continue;
+                    }
+                    if (report.kind !== "attr-value") {
+                        continue;
+                    }
+                    if (seeding) {
+                        seed.push(report);
+                    } else {
+                        update(report);
                     }
                 }
-            };
-            await this.#peer.interaction.subscribe(request);
-            seeding = false;
-            if (isConcretePath(path)) {
-                return seed[0]?.value;
             }
-            return toWireValues(seed);
-        });
+        };
+        const subscription = await this.#peer.interaction.subscribe(request);
+        seeding = false;
+        try {
+            return seedOf(seed, statuses);
+        } catch (error) {
+            subscription.close();
+            throw error;
+        }
     }
 
     clientEndpoints(): Promise<ClientEndpointEntry[]> {
