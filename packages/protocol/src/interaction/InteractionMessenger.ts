@@ -30,6 +30,7 @@ import {
     StatusResponseError,
     TlvAny,
     TlvAttributeData,
+    TlvAttributeStatus,
     TlvBoolean,
     TlvDataReport,
     TlvDataReportForSend,
@@ -95,6 +96,12 @@ const logger = Logger.get("InteractionMessenger");
 
 function isSameAttribute(a: AttributePath, b: AttributePath) {
     return a.endpointId === b.endpointId && a.clusterId === b.clusterId && a.attributeId === b.attributeId;
+}
+
+/** The largest AttributeStatusIB a peer answers {@link path} with. */
+function maxStatusSizeOf(path: AttributePath) {
+    return TlvAttributeStatus.encode({ path, status: { status: Status.Failure, clusterStatus: Status.Failure } })
+        .byteLength;
 }
 
 function isVersionedListAdd({ path, dataVersion }: AttributeData) {
@@ -1225,7 +1232,10 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     }
 
     /**
-     * Split a write into WriteRequestMessages that each fit {@link MessageExchange.maxPayloadSize}.
+     * Split a write into WriteRequestMessages that each fit {@link MessageExchange.maxPayloadSize}, and whose
+     * WriteResponse fits it too, counting the largest status for each path.  A WriteResponse cannot be chunked, so a
+     * peer cannot send a status list larger than one message.  A wildcard path counts as one status although the
+     * peer answers it with one per matching endpoint, which the client cannot know.
      *
      * AttributeDataIBs keep their order, so the ADDs of a chunked list still follow its REPLACE.  A whole-list IB too
      * large for one message is sent as a REPLACE followed by an ADD per remaining entry.  The REPLACE of the ACL or its
@@ -1236,15 +1246,26 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
      */
     #chunkWriteRequest(writeRequest: WriteRequest): WriteRequest[] {
         const { maxPayloadSize } = this.exchange;
+        const { writeRequests, timedRequest, suppressResponse } = writeRequest;
+        const availableForStatuses = suppressResponse
+            ? Infinity
+            : maxPayloadSize -
+              TlvWriteResponse.encode({
+                  writeResponses: [],
+                  interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+              }).byteLength;
+
         const encodedSize = TlvWriteRequest.encode(writeRequest).byteLength;
-        if (encodedSize <= maxPayloadSize) {
-            const { writeRequests, timedRequest, suppressResponse } = writeRequest;
+        const statusesSize = suppressResponse
+            ? 0
+            : writeRequests.reduce((size, { path }) => size + maxStatusSizeOf(path), 0);
+        if (encodedSize <= maxPayloadSize && statusesSize <= availableForStatuses) {
             if (timedRequest || suppressResponse || !writeRequests.some(isVersionedListAdd)) {
                 return [writeRequest];
             }
-        } else if (writeRequest.timedRequest || writeRequest.suppressResponse) {
+        } else if (timedRequest || suppressResponse) {
             throw new MatterFlowError(
-                `Write of ${encodedSize} bytes exceeds the maximum message size of ${maxPayloadSize} bytes and cannot be chunked because it is ${writeRequest.timedRequest ? "timed" : "sent with suppressResponse"}`,
+                `Write of ${encodedSize} bytes with statuses of up to ${statusesSize} bytes exceeds the maximum message size of ${maxPayloadSize} bytes and cannot be chunked because it is ${timedRequest ? "timed" : "sent with suppressResponse"}`,
             );
         }
 
@@ -1254,20 +1275,24 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         const chunks = new Array<WriteRequest>();
         let current = new Array<AttributeData>();
         let used = 0;
+        let usedForStatuses = 0;
 
         const flush = () => {
             if (current.length) {
                 chunks.push({ ...writeRequest, writeRequests: current, moreChunkedMessages: true });
                 current = [];
                 used = 0;
+                usedForStatuses = 0;
             }
         };
 
         const add = (attributeData: AttributeData) => {
             const size = TlvAttributeData.encode(attributeData).byteLength;
+            const statusSize = maxStatusSizeOf(attributeData.path);
             const previous = current[current.length - 1];
             if (
                 used + size > available ||
+                usedForStatuses + statusSize > availableForStatuses ||
                 (isVersionedListAdd(attributeData) &&
                     previous !== undefined &&
                     previous.path.listIndex === undefined &&
@@ -1282,6 +1307,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             }
             current.push(attributeData);
             used += size;
+            usedForStatuses += statusSize;
         };
 
         for (const attributeData of writeRequest.writeRequests) {

@@ -19,6 +19,7 @@ import {
     Status,
     SubscribeRequest,
     TlvArray,
+    TlvBoolean,
     TlvByteString,
     TlvDataReport,
     TlvReadRequest,
@@ -427,6 +428,51 @@ describe("InteractionClientMessenger", () => {
             expect(response?.writeResponses.map(({ path }) => path.attributeId)).deep.equals(
                 writes.map(({ path }) => path.attributeId),
             );
+        });
+
+        /** As many boolean writes as fit one request of {@link maxPayloadSize} bytes. */
+        function smallValuesFitting(maxPayloadSize: number) {
+            const small = (count: number) =>
+                Array.from({ length: count }, (_, i) => attributeData(i, TlvBoolean.encodeTlv(true)));
+            let count = 1;
+            while (TlvWriteRequest.encode(writeRequest(small(count + 1))).byteLength <= maxPayloadSize) {
+                count++;
+            }
+            return small(count);
+        }
+
+        it("chunks a write whose statuses would not fit one WriteResponse although the request does", async () => {
+            const { received, messenger, exchange } = await writeResponder();
+            const worstResponseSize = (writes: AttributeData[]) =>
+                TlvWriteResponse.encode({
+                    writeResponses: writes.map(({ path }) => ({
+                        path,
+                        status: { status: Status.Failure, clusterStatus: Status.Failure },
+                    })),
+                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                }).byteLength;
+            const writes = smallValuesFitting(exchange.maxPayloadSize);
+            expect(worstResponseSize(writes)).greaterThan(exchange.maxPayloadSize);
+
+            await messenger.sendWriteCommand(writeRequest(writes));
+
+            expect(received.length).greaterThan(1);
+            for (const { request } of received) {
+                expect(worstResponseSize(request.writeRequests)).lessThanOrEqual(exchange.maxPayloadSize);
+            }
+            expect(received.flatMap(({ request }) => request.writeRequests.map(({ path }) => path))).deep.equals(
+                writes.map(({ path }) => path),
+            );
+        });
+
+        it("refuses a timed write whose statuses would not fit one WriteResponse", async () => {
+            const { received, messenger, exchange } = await writeResponder();
+            const writes = smallValuesFitting(exchange.maxPayloadSize);
+
+            await expect(messenger.sendWriteCommand(writeRequest(writes, { timedRequest: true }))).rejectedWith(
+                MatterFlowError,
+            );
+            expect(received).deep.equals([]);
         });
 
         function sentList(received: { request: WriteRequest }[]) {
