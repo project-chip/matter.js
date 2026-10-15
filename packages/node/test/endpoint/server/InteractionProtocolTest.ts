@@ -1780,6 +1780,102 @@ describe("InteractionProtocol", () => {
             expect(node.state.basicInformation.nodeLabel).equals("second");
         });
 
+        it("answers BUSY to a write that overlaps another exchange's first chunk of the same attribute", async () => {
+            const fabric = await node.addFabric();
+            const nodeLabel = {
+                endpointId: EndpointNumber(0),
+                clusterId: ClusterId(0x28),
+                attributeId: AttributeId(5),
+            };
+            const write = (moreChunkedMessages: boolean, label: string) =>
+                ({
+                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    suppressResponse: false,
+                    timedRequest: false,
+                    moreChunkedMessages,
+                    writeRequests: [{ path: nodeLabel, data: TlvString.encodeTlv(label) }],
+                }) satisfies WriteRequest;
+            const holderExchange = await createDummyMessageExchange(node, { fabric });
+            const competingExchange = await createDummyMessageExchange(node, { fabric });
+
+            const holder = interactionProtocol.handleWriteRequest(
+                holderExchange,
+                write(true, "first"),
+                {
+                    sendWriteResponse: async () => {},
+                    readNextWriteRequest: async () => ({ writeRequest: write(false, "second") }),
+                } as unknown as InteractionServerMessenger,
+                interaction.BarelyMockedMessage,
+            );
+            const competing = createMockWriteMessenger();
+            await interactionProtocol.handleWriteRequest(
+                competingExchange,
+                write(false, "competing"),
+                competing.messenger,
+                interaction.BarelyMockedMessage,
+            );
+            await holder;
+
+            expect(competing.getResponse()?.writeResponses.map(({ status }) => status.status)).deep.equals([
+                Status.Busy,
+            ]);
+            expect(node.state.basicInformation.nodeLabel).equals("second");
+        });
+
+        it("holds an attribute until the writes of its chunk are done when the chunk moves to another one", async () => {
+            const fabric = await node.addFabric();
+            const attribute = (attributeId: number) => ({
+                endpointId: EndpointNumber(0),
+                clusterId: ClusterId(0x28),
+                attributeId: AttributeId(attributeId),
+            });
+            const nodeLabel = attribute(5);
+            const location = attribute(6);
+            const write = (
+                moreChunkedMessages: boolean,
+                ...writes: [WriteRequest["writeRequests"][number]["path"], string][]
+            ) =>
+                ({
+                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    suppressResponse: false,
+                    timedRequest: false,
+                    moreChunkedMessages,
+                    writeRequests: writes.map(([path, value]) => ({ path, data: TlvString.encodeTlv(value) })),
+                }) satisfies WriteRequest;
+            const competingExchange = await createDummyMessageExchange(node, { fabric });
+
+            const competing = createMockWriteMessenger();
+            let competingWrite: Promise<void> | undefined;
+            node.events.basicInformation.nodeLabel$Changing.on(value => {
+                if (value === "second" && competingWrite === undefined) {
+                    competingWrite = interactionProtocol.handleWriteRequest(
+                        competingExchange,
+                        write(false, [nodeLabel, "competing"]),
+                        competing.messenger,
+                        interaction.BarelyMockedMessage,
+                    );
+                }
+            });
+
+            const chunks = [write(true, [nodeLabel, "second"], [location, "XX"]), write(false, [location, "YY"])];
+            await interactionProtocol.handleWriteRequest(
+                await createDummyMessageExchange(node, { fabric }),
+                write(true, [nodeLabel, "first"]),
+                {
+                    sendWriteResponse: async () => {},
+                    readNextWriteRequest: async () => ({ writeRequest: chunks.shift()! }),
+                } as unknown as InteractionServerMessenger,
+                interaction.BarelyMockedMessage,
+            );
+            await competingWrite;
+
+            expect(competing.getResponse()?.writeResponses.map(({ status }) => status.status)).deep.equals([
+                Status.Busy,
+            ]);
+            expect(node.state.basicInformation.nodeLabel).equals("second");
+            expect(node.state.basicInformation.location).equals("YY");
+        });
+
         it("does not hold the attribute of a write that fits one message", async () => {
             const fabric = await node.addFabric();
             const nodeLabel = {

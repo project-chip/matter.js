@@ -173,9 +173,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     #serverInteraction: OnlineServerInteraction;
 
     /**
-     * The exchange of each chunked write interaction, by the attribute it is writing across chunks.  Another exchange's
-     * write to that attribute is answered BUSY or skipped, as the CHIP SDK does, so it cannot land between the chunks
-     * of a list write.
+     * The exchange of each chunked write interaction, by the attributes it is writing.  Between chunks only the last
+     * attribute stays held.  Another exchange's write to a held attribute is answered BUSY or skipped, as the CHIP SDK
+     * does, so it cannot land between the chunks of a list write.
      */
     readonly #writingExchanges = new Map<string, MessageExchange>();
     #counters: InteractionCounters = {
@@ -204,11 +204,11 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         // ServerInteraction is the "new way" and will replace most logic here over time and especially
         // the InteractionEndpointStructure, which is currently a duplication of the node protocol
         this.#serverInteraction = new OnlineServerInteraction(node.protocol, {
-            isWriteLocked: (path, { exchange }) => this.#isWrittenByOther(path, exchange),
+            isHeldByOtherWrite: (path, { exchange }) => this.#isHeldByOther(path, exchange),
         });
     }
 
-    #isWrittenByOther(path: WriteResult.ConcreteAttributePath, exchange: MessageExchange) {
+    #isHeldByOther(path: WriteResult.ConcreteAttributePath, exchange: MessageExchange) {
         const writing = this.#writingExchanges.get(writePathKey(path));
         return writing !== undefined && writing !== exchange;
     }
@@ -457,14 +457,16 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         // A list ADD (listIndex === null) is only valid if the previous write was to the same attribute.
         let previousProcessedAttributePath: WriteResult.ConcreteAttributePath | undefined;
 
-        let heldPath: string | undefined;
-        const releaseHeldPath = () => {
-            if (heldPath !== undefined) {
-                this.#writingExchanges.delete(heldPath);
-                heldPath = undefined;
+        const heldPaths = new Set<string>();
+        const releaseHeldPaths = (keep?: string) => {
+            for (const key of heldPaths) {
+                if (key !== keep) {
+                    this.#writingExchanges.delete(key);
+                    heldPaths.delete(key);
+                }
             }
         };
-        using _held = { [Symbol.dispose]: releaseHeldPath };
+        using _held = { [Symbol.dispose]: () => releaseHeldPaths() };
 
         // Process chunks until moreChunkedMessages is false
         while (true) {
@@ -500,7 +502,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 const { path } = request;
                 const listIndex = path.listIndex;
 
-                if (isConcreteWritePath(path) && this.#isWrittenByOther(path, exchange)) {
+                if (isConcreteWritePath(path) && this.#isHeldByOther(path, exchange)) {
                     await processBatch();
                     allResponses.push({ kind: "attr-status", path, status: Status.Busy });
                     continue;
@@ -533,8 +535,11 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 currentBatch.push(request);
                 if (isConcreteWritePath(path)) {
                     previousProcessedAttributePath = path;
-                    if (heldPath !== writePathKey(path)) {
-                        releaseHeldPath();
+                    // Taken before any await, so no other exchange passes the BUSY check for this path meanwhile
+                    if (moreChunkedMessages || heldPaths.size) {
+                        const key = writePathKey(path);
+                        heldPaths.add(key);
+                        this.#writingExchanges.set(key, exchange);
                     }
                 }
             }
@@ -547,9 +552,12 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 break;
             }
 
-            if (moreChunkedMessages && previousProcessedAttributePath !== undefined && heldPath === undefined) {
-                heldPath = writePathKey(previousProcessedAttributePath);
-                this.#writingExchanges.set(heldPath, exchange);
+            if (moreChunkedMessages) {
+                releaseHeldPaths(
+                    previousProcessedAttributePath === undefined
+                        ? undefined
+                        : writePathKey(previousProcessedAttributePath),
+                );
             }
 
             // Send WriteResponse for this chunk

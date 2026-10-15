@@ -35,7 +35,7 @@ export class AttributeWriteResponse<
     SessionT extends InteractionSession = InteractionSession,
 > extends DataResponse<SessionT> {
     #fabricIndex: FabricIndex;
-    #isWriteLocked?: AttributeWriteResponse.Options<SessionT>["isWriteLocked"];
+    #isHeldByOtherWrite?: AttributeWriteResponse.Options<SessionT>["isHeldByOtherWrite"];
     // The following state updates as data producers execute.  This serves both to convey state between functions and as
     // a cache between producers that touch the same endpoint and/or cluster
     #currentEndpoint?: EndpointProtocol;
@@ -49,7 +49,7 @@ export class AttributeWriteResponse<
     constructor(node: NodeProtocol, session: SessionT, options?: AttributeWriteResponse.Options<SessionT>) {
         super(node, session);
         this.#fabricIndex = session.fabric ?? FabricIndex.NO_FABRIC;
-        this.#isWriteLocked = options?.isWriteLocked;
+        this.#isHeldByOtherWrite = options?.isHeldByOtherWrite;
     }
 
     async process({ writeRequests, suppressResponse }: Write): Promise<WriteResult.AttributeStatus[] | undefined> {
@@ -352,7 +352,7 @@ export class AttributeWriteResponse<
             attributeId: attribute.id,
         };
 
-        if (this.#isWriteLocked?.(concretePath, this.session)) {
+        if (this.#isHeldByOtherWrite?.(concretePath, this.session)) {
             logger.debug(`Write skips ${this.node.inspectPath(concretePath)}: another write is in progress`);
             return;
         }
@@ -476,12 +476,13 @@ export class AttributeWriteResponse<
 export namespace AttributeWriteResponse {
     export interface Options<SessionT extends InteractionSession = InteractionSession> {
         /**
-         * Tells whether a write interaction other than the one of the session writes the attribute at the path.  A
-         * group or wildcard write skips such an attribute without a status, as the CHIP SDK does.  Concrete paths are
-         * not checked here.
+         * Tells whether a chunked write interaction other than the one of the session holds the attribute at the path.
+         * A group or wildcard write skips such an attribute without a status.  Concrete paths are not checked here.
+         *
+         * The specification gives no such reason to discard an expanded path; this follows the CHIP SDK.
          *
          * @see {@link MatterSpecification.v161.Core} § 8.7.3.2
          */
-        isWriteLocked?(path: WriteResult.ConcreteAttributePath, session: SessionT): boolean;
+        isHeldByOtherWrite?(path: WriteResult.ConcreteAttributePath, session: SessionT): boolean;
     }
 }

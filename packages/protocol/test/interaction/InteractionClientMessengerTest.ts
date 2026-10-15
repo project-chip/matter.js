@@ -485,6 +485,17 @@ describe("InteractionClientMessenger", () => {
             });
         }
 
+        it("refuses a whole list at a wildcard path that does not fit one message", async () => {
+            const { received, messenger } = await writeResponder();
+            const list = attributeData(1, TlvArray(TlvByteString).encodeTlv(Array.from({ length: 8 }, () => ENTRY)));
+            const { endpointId: _endpoint, ...wildcardPath } = list.path;
+
+            await expect(messenger.sendWriteCommand(writeRequest([{ ...list, path: wildcardPath }]))).rejectedWith(
+                MatterFlowError,
+            );
+            expect(received).deep.equals([]);
+        });
+
         it("refuses a single value that does not fit one message", async () => {
             const { received, messenger } = await writeResponder();
             const large = attributeData(1, TlvByteString.encodeTlv(Bytes.fromHex("ab".repeat(1300))));
@@ -526,6 +537,24 @@ describe("InteractionClientMessenger", () => {
             await messenger.sendWriteCommand(writeRequest([replace, ...adds]));
 
             expect(received.map(({ request }) => request.writeRequests)).deep.equals([[replace], adds]);
+        });
+
+        it("keeps the DataVersion on the ADDs of a repeated list write whose second REPLACE failed", async () => {
+            let replaces = 0;
+            const { received, messenger } = await writeResponder(undefined, ({ path }) =>
+                path.listIndex === undefined && ++replaces > 1 ? Status.DataVersionMismatch : Status.Success,
+            );
+            const [replace1, add1] = versionedList(1);
+            const [replace2, add2] = versionedList(1);
+
+            await messenger.sendWriteCommand(writeRequest([replace1, add1, replace2, add2]));
+
+            const { dataVersion: _version, ...unversionedAdd1 } = add1;
+            expect(received.map(({ request }) => request.writeRequests)).deep.equals([
+                [replace1],
+                [unversionedAdd1, replace2],
+                [add2],
+            ]);
         });
 
         it("sends a timed versioned list write that fits one message unchanged", async () => {

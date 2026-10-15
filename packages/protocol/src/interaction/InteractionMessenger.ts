@@ -101,6 +101,14 @@ function isVersionedListAdd({ path, dataVersion }: AttributeData) {
     return path.listIndex === null && dataVersion !== undefined;
 }
 
+function lastStatusOf(statuses: NonNullable<WriteResponse["writeResponses"]>, path: AttributePath) {
+    for (let i = statuses.length - 1; i >= 0; i--) {
+        if (isSameAttribute(statuses[i].path, path)) {
+            return statuses[i].status.status;
+        }
+    }
+}
+
 /**
  * The TLV streams of the top-level entries of an encoded list, or undefined if the stream is not a list.
  */
@@ -1200,13 +1208,15 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             writeResponses.push(...statuses);
 
             for (const { path, dataVersion } of chunk.writeRequests) {
-                if (
-                    path.listIndex === undefined &&
-                    dataVersion !== undefined &&
-                    statuses.some(
-                        status => isSameAttribute(status.path, path) && status.status.status === Status.Success,
-                    )
-                ) {
+                if (path.listIndex !== undefined || dataVersion === undefined) {
+                    continue;
+                }
+                const replaced = replacedLists.findIndex(replacedPath => isSameAttribute(replacedPath, path));
+                if (replaced !== -1) {
+                    replacedLists.splice(replaced, 1);
+                }
+                // A versioned REPLACE followed by ADDs ends its chunk, so its status is the last for this attribute
+                if (lastStatusOf(statuses, path) === Status.Success) {
                     replacedLists.push(path);
                 }
             }
@@ -1283,6 +1293,11 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             if (entries === undefined) {
                 add(attributeData);
                 continue;
+            }
+            if (path.endpointId === undefined || path.clusterId === undefined || path.attributeId === undefined) {
+                throw new MatterFlowError(
+                    `Write of the list at wildcard path ${Diagnostic.json(path)} does not fit a single message and cannot be chunked, because list ADDs need a concrete path`,
+                );
             }
 
             const [start, ...rest] = data;

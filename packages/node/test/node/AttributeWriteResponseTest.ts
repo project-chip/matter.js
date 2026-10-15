@@ -334,7 +334,7 @@ describe("AttributeWriteRequest", () => {
                         : context;
                     const checked = new Array<WriteResult.ConcreteAttributePath>();
                     const response = new AttributeWriteResponse(node.protocol, session, {
-                        isWriteLocked: (path, lockSession) => {
+                        isHeldByOtherWrite: (path, lockSession) => {
                             expect(lockSession).equals(session);
                             checked.push(path);
                             return locked;
