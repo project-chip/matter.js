@@ -16,6 +16,7 @@ describe("Cache", () => {
             const calls = new Array<unknown[]>();
             const cache = new Cache<string>(
                 "test",
+                Lifetime.mock,
                 (...params) => {
                     calls.push(params);
                     return `v${calls.length}`;
@@ -34,7 +35,7 @@ describe("Cache", () => {
         });
 
         it("keeps single-param keys round-trippable via keys()", async () => {
-            const cache = new Cache<string>("test", (iface: string) => `records-${iface}`, Minutes(5));
+            const cache = new Cache<string>("test", Lifetime.mock, (iface: string) => `records-${iface}`, Minutes(5));
 
             cache.get("eth0");
             cache.get("wlan0");
@@ -54,6 +55,7 @@ describe("Cache", () => {
             let calls = 0;
             const cache = new Cache<string | undefined>(
                 "test",
+                Lifetime.mock,
                 () => {
                     calls++;
                     return undefined;
@@ -72,7 +74,7 @@ describe("Cache", () => {
     describe("close()", () => {
         it("throws on get() after close and creates nothing", async () => {
             let calls = 0;
-            const cache = new Cache<string>("test", () => `v${++calls}`, Minutes(5));
+            const cache = new Cache<string>("test", Lifetime.mock, () => `v${++calls}`, Minutes(5));
 
             await cache.close();
 
@@ -90,6 +92,7 @@ describe("AsyncCache", () => {
             let calls = 0;
             const cache = new AsyncCache<string>(
                 "test",
+                Lifetime.mock,
                 () => {
                     calls++;
                     return new Promise<string>(resolve => (pendingResolve = resolve));
@@ -117,6 +120,7 @@ describe("AsyncCache", () => {
             let pendingResolve!: (value: string) => void;
             const cache = new AsyncCache<string>(
                 "test",
+                Lifetime.mock,
                 () => {
                     attempt++;
                     if (attempt === 1) {
@@ -147,6 +151,7 @@ describe("AsyncCache", () => {
             let calls = 0;
             const cache = new AsyncCache<string>(
                 "test",
+                Lifetime.mock,
                 async (key: string) => {
                     calls++;
                     return `v-${key}`;
@@ -165,6 +170,7 @@ describe("AsyncCache", () => {
             let attempt = 0;
             const cache = new AsyncCache<string>(
                 "test",
+                Lifetime.mock,
                 (): Promise<string> => {
                     attempt++;
                     if (attempt === 1) {
@@ -189,6 +195,7 @@ describe("AsyncCache", () => {
             const expired = new Array<[string, string]>();
             const cache = new AsyncCache<string>(
                 "test",
+                Lifetime.mock,
                 () => new Promise<string>(resolve => (pendingResolve = resolve)),
                 Minutes(5),
                 async (key, value) => {
@@ -215,6 +222,7 @@ describe("AsyncCache", () => {
             let expireCalls = 0;
             const cache = new AsyncCache<string>(
                 "test",
+                Lifetime.mock,
                 () => new Promise<string>((_, reject) => (pendingReject = reject)),
                 Minutes(5),
                 async () => {
@@ -241,6 +249,7 @@ describe("AsyncCache", () => {
             let calls = 0;
             const cache = new AsyncCache<string | undefined>(
                 "test",
+                Lifetime.mock,
                 async () => {
                     calls++;
                     return undefined;
@@ -261,6 +270,7 @@ describe("AsyncCache", () => {
             let attempt = 0;
             const cache = new AsyncCache<string>(
                 "test",
+                Lifetime.mock,
                 async (key: string) => {
                     attempt++;
                     if (key === "bad") {
@@ -287,6 +297,7 @@ describe("AsyncCache", () => {
             const expired = new Array<[string, string]>();
             const cache = new AsyncCache<string>(
                 "test",
+                Lifetime.mock,
                 (key: string) => new Promise<string>(resolve => resolvers.set(key, resolve)),
                 Minutes(5),
                 async (key, value) => {
@@ -318,7 +329,7 @@ describe("AsyncCache", () => {
     describe("close()", () => {
         it("rejects get() after close and creates nothing", async () => {
             let calls = 0;
-            const cache = new AsyncCache<string>("test", async () => `v${++calls}`, Minutes(5));
+            const cache = new AsyncCache<string>("test", Lifetime.mock, async () => `v${++calls}`, Minutes(5));
 
             await cache.close();
 
@@ -333,6 +344,7 @@ describe("AsyncCache", () => {
             const expired = new Array<[string, string]>();
             const cache = new AsyncCache<string>(
                 "test",
+                Lifetime.mock,
                 () => {
                     calls++;
                     return new Promise<string>(resolve => (pendingResolve = resolve));
@@ -362,7 +374,7 @@ describe("AsyncCache", () => {
     describe("lifetime", () => {
         it("joins the owner's lifetime and leaves it on close", async () => {
             const owner = Lifetime.mock;
-            const cache = new AsyncCache<string>("test", async () => "v", Minutes(5), undefined, owner);
+            const cache = new AsyncCache<string>("test", owner, async () => "v", Minutes(5));
 
             expect([...owner.spans].map(span => span.name)).deep.equals(["test cache"]);
 
@@ -371,29 +383,17 @@ describe("AsyncCache", () => {
             expect(owner.spans.size).equals(0);
         });
 
-        it("joins the process lifetime without an owner", async () => {
-            const cache = new AsyncCache<string>("ownerless test", async () => "v", Minutes(5));
-
-            using probe = Lifetime.process.join("probe");
-            const processSpans = () => [...(probe.owner?.spans ?? [])].map(span => span.name);
-            expect(processSpans()).contains("ownerless test cache");
-
-            await cache.close();
-
-            expect(processSpans()).not.contains("ownerless test cache");
-        });
-
         it("rejects get() once the owner closes and still expires the values on close()", async () => {
             const owner = Lifetime.mock.join("owner");
             const expired = new Array<[string, string]>();
             const cache = new AsyncCache<string>(
                 "test",
+                owner,
                 async (key: string) => `v-${key}`,
                 Minutes(5),
                 async (key, value) => {
                     expired.push([key, value]);
                 },
-                owner,
             );
             expect(await cache.get("a")).equals("v-a");
 
@@ -434,6 +434,7 @@ describe("AsyncCache", () => {
         async function filledCache() {
             const cache = new AsyncCache<string>(
                 "failing",
+                Lifetime.mock,
                 async (key: string) => `v-${key}`,
                 Minutes(5),
                 async key => {
@@ -505,6 +506,7 @@ describe("AsyncCache", () => {
             const gate = new Promise<void>(resolve => (release = resolve));
             cache = new AsyncCache<string>(
                 "test",
+                Lifetime.mock,
                 async (key: string) => `v-${key}-${++calls}`,
                 Minutes(5),
                 async (_key, value) => {
@@ -553,6 +555,7 @@ describe("AsyncCache", () => {
             const expired = new Array<string>();
             const cache = new AsyncCache<string>(
                 "test",
+                Lifetime.mock,
                 async (netInterface: string, isIPv4: boolean) => `${netInterface}-${isIPv4}-${++calls}`,
                 Minutes(5),
                 async (_key, value) => {

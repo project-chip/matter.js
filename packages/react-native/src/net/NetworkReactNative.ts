@@ -24,6 +24,7 @@ import {
     AsyncCache,
     InterfaceType,
     isIPv6,
+    Lifetime,
     Logger,
     Minutes,
     Network,
@@ -120,6 +121,7 @@ export class NetworkReactNative extends Network {
 
     private static readonly netInterfaces = new AsyncCache<string | undefined>(
         "Network interface",
+        Lifetime.process,
         (ip: string) => this.getNetInterfaceForRemoteAddress(ip),
         Minutes(5),
     );

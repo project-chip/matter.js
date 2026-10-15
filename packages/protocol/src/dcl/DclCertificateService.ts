@@ -353,10 +353,9 @@ export class DclCertificateService {
 
         this.#revocationCache = new AsyncCache(
             "CRL revocation",
+            this.#construction,
             (akid: string) => this.#fetchAndValidateRevocation(akid),
             Hours(1),
-            undefined,
-            this.#construction,
         );
     }
 

@@ -61,6 +61,7 @@ export class MdnsServer {
         this.#lifetime = lifetime.join("mdns server");
         this.#records = new AsyncCache<MdnsServer.InterfaceRecords>(
             "MDNS discovery",
+            this.#lifetime,
             async (multicastInterface: string) => {
                 const byService = new Map<string, DnsRecord<any>[]>();
                 const ownedNames = new Set<string>();
@@ -83,8 +84,6 @@ export class MdnsServer {
                 return { byService, ownedNames };
             },
             Minutes(15) /* matches maximum standard commissioning window time */,
-            undefined,
-            this.#lifetime,
         );
         this.#observers.on(this.#socket.receipt, this.#handleMessage.bind(this));
     }

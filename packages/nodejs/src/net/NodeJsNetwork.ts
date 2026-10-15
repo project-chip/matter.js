@@ -8,6 +8,7 @@ import {
     Cache,
     InterfaceType,
     isIPv6,
+    Lifetime,
     Logger,
     Minutes,
     Network,
@@ -124,6 +125,7 @@ export class NodeJsNetwork extends Network {
 
     private static readonly netInterfaces = new Cache<string | undefined>(
         "Network interface",
+        Lifetime.process,
         (ip: string) => this.getNetInterfaceForRemoteAddress(ip),
         Minutes(5),
     );

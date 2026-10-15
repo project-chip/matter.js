@@ -27,9 +27,9 @@ class GenericCache<T> {
 
     constructor(
         name: string,
+        lifetime: Lifetime.Owner,
         private readonly expiration: Duration,
         private readonly expireCallback?: (key: string, value: T) => Promise<void>,
-        lifetime: Lifetime.Owner = Lifetime.process,
     ) {
         this.#lifetime = lifetime.join(`${name} cache`);
         const lifetimeName = String(this.#lifetime.name);
@@ -159,12 +159,12 @@ class GenericCache<T> {
 export class Cache<T> extends GenericCache<T> {
     constructor(
         name: string,
+        lifetime: Lifetime.Owner,
         private readonly generator: (...params: any[]) => T,
         expiration: Duration,
         expireCallback?: (key: string, value: T) => Promise<void>,
-        lifetime?: Lifetime.Owner,
     ) {
-        super(name, expiration, expireCallback, lifetime);
+        super(name, lifetime, expiration, expireCallback);
     }
 
     /**
@@ -189,12 +189,12 @@ export class AsyncCache<T> extends GenericCache<T> {
 
     constructor(
         name: string,
+        lifetime: Lifetime.Owner,
         private readonly generator: (...params: any[]) => Promise<T>,
         expiration: Duration,
         expireCallback?: (key: string, value: T) => Promise<void>,
-        lifetime?: Lifetime.Owner,
     ) {
-        super(name, expiration, expireCallback, lifetime);
+        super(name, lifetime, expiration, expireCallback);
     }
 
     /**

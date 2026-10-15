@@ -121,10 +121,10 @@ export class UdpMulticastServer {
         this.#lifetime = lifetime;
         this.broadcastChannels = new AsyncCache<UdpSocket>(
             "UDP broadcast channel",
+            lifetime,
             (netInterface, isIPv4) => this.createBroadcastChannel(netInterface, isIPv4),
             Minutes(5),
             async (_key, channel) => channel.close(),
-            lifetime,
         );
         this.network = network;
         this.#broadcastAddressIpv4 = broadcastAddressIpv4;
