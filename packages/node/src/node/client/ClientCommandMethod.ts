@@ -6,6 +6,7 @@
 
 import { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
+import type { Endpoint } from "#endpoint/Endpoint.js";
 import type { ClientNode } from "#node/ClientNode.js";
 import { Node } from "#node/Node.js";
 import type { CommandModel } from "@matter/model";
@@ -14,6 +15,9 @@ import { Status } from "@matter/types";
 
 /**
  * Create the command method for a client behavior.
+ *
+ * The invocation is abandoned when the abort signal of the acting context aborts (see {@link Endpoint.ActOptions}),
+ * also while it waits for a sleeping ICD peer to wake.
  */
 export function ClientCommandMethod(name: string, commandModel?: CommandModel) {
     const largeMessage = !!commandModel?.effectiveQuality.largeMessage;
@@ -41,7 +45,7 @@ export function ClientCommandMethod(name: string, commandModel?: CommandModel) {
                 invoke.largeMessage = true;
             }
 
-            const chunks = (node.interaction as ClientInteraction).invoke(invoke, context);
+            const chunks = (node.interaction as ClientInteraction).invoke(invoke, context ?? this.context);
 
             for await (const chunk of chunks) {
                 for (const entry of chunk) {
