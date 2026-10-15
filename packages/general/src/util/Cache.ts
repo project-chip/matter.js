@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ClosedError } from "#MatterError.js";
 import { Duration } from "#time/Duration.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Time, Timer } from "../time/Time.js";
@@ -18,12 +19,15 @@ class GenericCache<T> {
     protected readonly values = new Map<string, T>();
     protected readonly timestamps = new Map<string, number>();
     private readonly periodicTimer: Timer;
+    readonly #name: string;
+    #closed = false;
 
     constructor(
         name: string,
         private readonly expiration: Duration,
         private readonly expireCallback?: (key: string, value: T) => Promise<void>,
     ) {
+        this.#name = name;
         this.periodicTimer = Time.getPeriodicTimer(
             Diagnostic.upgrade(`${name} cache expiration`, [Diagnostic.strong(name), "cache expiration"]),
             expiration,
@@ -63,10 +67,23 @@ class GenericCache<T> {
         this.timestamps.clear();
     }
 
+    /**
+     * Expire all values and refuse further {@link Cache.get}/{@link AsyncCache.get} calls.  Creations already pending
+     * finish and are expired like any other value.
+     */
     async close() {
+        this.#closed = true;
+        this.periodicTimer.stop();
         await this.clear();
         this.knownKeys.clear();
-        this.periodicTimer.stop();
+    }
+
+    protected get isClosed() {
+        return this.#closed;
+    }
+
+    protected closedError() {
+        return new ClosedError(`${this.#name} cache is closed`);
     }
 
     private async expire() {
@@ -88,7 +105,13 @@ export class Cache<T> extends GenericCache<T> {
         super(name, expiration, expireCallback);
     }
 
+    /**
+     * @throws {ClosedError} if the cache is closed
+     */
     get(...params: any[]) {
+        if (this.isClosed) {
+            throw this.closedError();
+        }
         const key = this.keyFor(params);
         if (!this.values.has(key)) {
             this.values.set(key, this.generator(...params));
@@ -111,7 +134,13 @@ export class AsyncCache<T> extends GenericCache<T> {
         super(name, expiration, expireCallback);
     }
 
+    /**
+     * Rejects with {@link ClosedError} if the cache is closed.
+     */
     get(...params: any[]): Promise<T> {
+        if (this.isClosed) {
+            return Promise.reject(this.closedError());
+        }
         const key = this.keyFor(params);
         if (this.values.has(key)) {
             this.timestamps.set(key, Time.nowMs);

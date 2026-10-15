@@ -8,6 +8,7 @@ import {
     asError,
     AsyncCache,
     Bytes,
+    ClosedError,
     Construction,
     Crypto,
     Days,
@@ -693,6 +694,8 @@ export class DclCertificateService {
      *
      * Returns true if the certificate is revoked, false otherwise.
      * If revocation data is not available for the given authority, returns false.
+     *
+     * @throws {ClosedError} if the service is closing or closed
      */
     async isRevoked(
         authorityKeyIdentifier: Bytes | string,
@@ -718,8 +721,12 @@ export class DclCertificateService {
         let lookup: RevocationLookup;
         try {
             lookup = await this.#revocationCache.get(akid);
-        } catch {
-            // Underlying fetch already logged the cause; treat unreachable CRL as not-revoked
+        } catch (error) {
+            // A closing service must not answer "not revoked" for a lookup it never ran
+            if (error instanceof ClosedError) {
+                throw error;
+            }
+            // A failed fetch already logged its cause; an unreachable CRL counts as not revoked
             return false;
         }
 

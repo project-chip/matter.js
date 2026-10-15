@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ClosedError } from "#MatterError.js";
 import { Minutes } from "#time/TimeUnit.js";
 import { AsyncCache, Cache } from "#util/Cache.js";
 
@@ -63,6 +64,19 @@ describe("Cache", () => {
             expect(calls).equals(1);
 
             await cache.close();
+        });
+    });
+
+    describe("close()", () => {
+        it("throws on get() after close and creates nothing", async () => {
+            let calls = 0;
+            const cache = new Cache<string>("test", () => `v${++calls}`, Minutes(5));
+
+            await cache.close();
+
+            expect(() => cache.get("k")).throws(ClosedError);
+            expect(calls).equals(0);
+            expect(cache.keys()).deep.equals([]);
         });
     });
 });
@@ -296,6 +310,50 @@ describe("AsyncCache", () => {
             ]);
 
             await cache.close();
+        });
+    });
+
+    describe("close()", () => {
+        it("rejects get() after close and creates nothing", async () => {
+            let calls = 0;
+            const cache = new AsyncCache<string>("test", async () => `v${++calls}`, Minutes(5));
+
+            await cache.close();
+
+            await expect(cache.get("k")).rejectedWith(ClosedError);
+            expect(calls).equals(0);
+            expect(cache.keys()).deep.equals([]);
+        });
+
+        it("rejects get() while close runs and expires a creation pending at close", async () => {
+            let pendingResolve!: (value: string) => void;
+            let calls = 0;
+            const expired = new Array<[string, string]>();
+            const cache = new AsyncCache<string>(
+                "test",
+                () => {
+                    calls++;
+                    return new Promise<string>(resolve => (pendingResolve = resolve));
+                },
+                Minutes(5),
+                async (key, value) => {
+                    expired.push([key, value]);
+                },
+            );
+
+            const pending = cache.get("a");
+            const closing = cache.close();
+
+            await expect(cache.get("b")).rejectedWith(ClosedError);
+
+            // Characterization from here: clear() expired pending creations before close() refused get()
+            pendingResolve("A");
+            expect(await pending).equals("A");
+            await closing;
+
+            expect(calls).equals(1);
+            expect(expired).deep.equals([["a", "A"]]);
+            expect(cache.keys()).deep.equals([]);
         });
     });
 

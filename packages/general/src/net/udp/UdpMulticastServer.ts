@@ -165,7 +165,7 @@ export class UdpMulticastServer {
                     await this.broadcastChannels.get(netInterface, ipV4Target)
                 ).send(uniCastTarget, this.#broadcastPort, message);
             } catch (error) {
-                logger.info(`${netInterface} ${uniCastTarget}: ${asError(error).message}`);
+                this.#logSendFailure(`${netInterface} ${uniCastTarget}: ${asError(error).message}`);
                 await this.#evictBroadcastChannel(netInterface, ipV4Target);
             }
         } else {
@@ -193,7 +193,7 @@ export class UdpMulticastServer {
                                     await this.broadcastChannels.get(netInterface, isIPv4)
                                 ).send(address, this.#broadcastPort, message);
                             } catch (error) {
-                                logger.info(`${netInterface}: ${asError(error).message}`);
+                                this.#logSendFailure(`${netInterface}: ${asError(error).message}`);
                                 await this.#evictBroadcastChannel(netInterface, isIPv4);
                             }
                         }),
@@ -202,6 +202,15 @@ export class UdpMulticastServer {
                 }),
                 "Error sending UDP Multicast message",
             );
+        }
+    }
+
+    /** Send failures while the server closes are routine at shutdown. */
+    #logSendFailure(message: string) {
+        if (this.#lifetime.isClosing) {
+            logger.debug(message);
+        } else {
+            logger.info(message);
         }
     }
 
@@ -214,7 +223,7 @@ export class UdpMulticastServer {
         try {
             await this.broadcastChannels.evict(netInterface, isIPv4);
         } catch (error) {
-            logger.info(`${netInterface}: failed to evict broadcast channel: ${asError(error).message}`);
+            this.#logSendFailure(`${netInterface}: failed to evict broadcast channel: ${asError(error).message}`);
         }
     }
 

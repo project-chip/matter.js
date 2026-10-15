@@ -229,7 +229,13 @@ export class MdnsServer {
                 }
             }),
             "Error announcing MDNS messages",
-        ).catch(error => logger.error("Error announcing MDNS messages", error));
+        ).catch(error => {
+            if (this.#lifetime.isClosing) {
+                logger.debug("Error announcing MDNS messages while closing", error);
+            } else {
+                logger.error("Error announcing MDNS messages", error);
+            }
+        });
     }
 
     async expireAnnouncements(...services: string[]) {
@@ -256,7 +262,13 @@ export class MdnsServer {
                 }
             }),
             "Error happened when expiring MDNS announcements",
-        ).catch(error => logger.warn("Error happened when expiring MDNS announcements", error));
+        ).catch(error => {
+            if (this.#lifetime.isClosing) {
+                logger.debug("Error happened when expiring MDNS announcements while closing", error);
+            } else {
+                logger.warn("Error happened when expiring MDNS announcements", error);
+            }
+        });
         await this.#resetServices();
     }
 

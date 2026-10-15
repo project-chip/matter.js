@@ -125,7 +125,8 @@ export class NetworkReactNative extends Network {
     );
 
     override async close() {
-        await NetworkReactNative.netInterfaces.close();
+        // The cache is static and shared by every instance, so it must stay open
+        await NetworkReactNative.netInterfaces.clear();
     }
 
     private static async getNetInterfaceForRemoteAddress(ip: string) {

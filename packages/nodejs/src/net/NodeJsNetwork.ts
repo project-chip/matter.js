@@ -129,7 +129,8 @@ export class NodeJsNetwork extends Network {
     );
 
     override async close() {
-        await NodeJsNetwork.netInterfaces.close();
+        // The cache is static and shared by every instance, so it must stay open
+        await NodeJsNetwork.netInterfaces.clear();
     }
 
     private static getNetInterfaceForRemoteAddress(ip: string) {

@@ -39,6 +39,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: DNS-SD TXT keys are matched regardless of case, as RFC 6763 requires, so a device advertising `sii=` instead of `SII=` is no longer ignored
     - Fix: `WebSocketClient` no longer loses a message the server sends right after the connection opens, and `connect()` rejects when the socket closes before it opens
     - Fix: An observer failure that the observable's error handler takes no longer skips the remaining observers of an asynchronous emit
+    - Fix: `Cache`/`AsyncCache.get()` after `close()` throws `ClosedError` instead of caching a value nothing closes, so a late mDNS send no longer leaves a socket bound
 
 - @matter/model
     - Breaking: Provisional elements are always treated as optional
