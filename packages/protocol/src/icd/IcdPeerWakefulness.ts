@@ -5,6 +5,7 @@
  */
 
 import {
+    Abort,
     AsyncObservable,
     AsyncObservableValue,
     Duration,
@@ -49,6 +50,22 @@ export class IcdPeerWakefulness {
     /** Emits when send-now state changes. `.value` reads the current boolean. */
     get awake() {
         return this.#awake;
+    }
+
+    /**
+     * Wait until the peer is awake, at most `timeout`.  Returns false when the timeout elapses first; rejects with the
+     * abort error when one of `signals` aborts.
+     */
+    async awaitAwake(timeout: Duration, ...signals: (AbortSignal | undefined)[]): Promise<boolean> {
+        if (this.#awake.value) {
+            return true;
+        }
+        using wait = new Abort({ abort: signals, timeout });
+        await wait.race(this.#awake);
+        if (signals.some(Abort.is)) {
+            wait.throwIfAborted();
+        }
+        return !wait.aborted;
     }
 
     /** Emits when reachability state changes. `.value` reads the current boolean. */

@@ -8,7 +8,6 @@ import type { ActionContext } from "#behavior/context/ActionContext.js";
 import { IcdPeerAsleepError } from "#behavior/system/icd/IcdPeerAsleepError.js";
 import type { ClientNode } from "#node/ClientNode.js";
 import {
-    Abort,
     Diagnostic,
     Duration,
     ImplementationError,
@@ -96,7 +95,7 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
         }
 
         // Hold for a LIT peer to wake before the first yield* so we never transmit into a sleeping radio.
-        const hold = this.#holdUntilAwake(wakefulness, request.icdAwaitTimeout);
+        const hold = this.#holdUntilAwake(wakefulness, request, context);
         if (hold !== undefined) {
             await hold;
         }
@@ -203,7 +202,7 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
             request = { ...request, network: "icdLit" } as T; // a generic spread is not inferrable as T
         }
 
-        const hold = this.#holdUntilAwake(wakefulness, request.icdAwaitTimeout);
+        const hold = this.#holdUntilAwake(wakefulness, request, context);
         if (hold !== undefined) {
             await hold;
         }
@@ -228,7 +227,7 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
         }
 
         // Hold for a LIT peer to wake before the first yield* so we never transmit into a sleeping radio.
-        const hold = this.#holdUntilAwake(this.#icdWakefulness(), request.icdAwaitTimeout);
+        const hold = this.#holdUntilAwake(this.#icdWakefulness(), request, context);
         if (hold !== undefined) {
             await hold;
         }
@@ -342,11 +341,15 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
      * peer) so callers add no latency and no microtask boundary on the hot path — important for same-tick invoke
      * batching.  Returns a promise only when the operation must actually park; it resolves when a Check-In or any
      * other message from the peer re-arms the awake window and rejects with {@link IcdPeerAsleepError} if the timeout
-     * elapses first.
+     * elapses first.  An abort of the request or of the acting context ends the hold with the abort error.
      *
      * requiresAwait is read live so a DSLS SIT⇄LIT flip is honored per interaction.
      */
-    #holdUntilAwake(wakefulness: IcdPeerWakefulness | undefined, timeout?: Duration): Promise<void> | undefined {
+    #holdUntilAwake(
+        wakefulness: IcdPeerWakefulness | undefined,
+        { icdAwaitTimeout, abort }: ClientRequest,
+        context?: ActionContext,
+    ): Promise<void> | undefined {
         if (wakefulness === undefined || !wakefulness.requiresAwait || wakefulness.awake.value === true) {
             return undefined;
         }
@@ -356,10 +359,18 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
             return undefined;
         }
 
-        return this.#awaitWake(wakefulness, address, timeout ?? wakefulness.nextCheckInWithin);
+        return this.#awaitWake(wakefulness, address, icdAwaitTimeout ?? wakefulness.nextCheckInWithin, [
+            abort,
+            context?.abort,
+        ]);
     }
 
-    async #awaitWake(wakefulness: IcdPeerWakefulness, address: PeerAddress, timeout: Duration) {
+    async #awaitWake(
+        wakefulness: IcdPeerWakefulness,
+        address: PeerAddress,
+        timeout: Duration,
+        signals: (AbortSignal | undefined)[],
+    ) {
         const nextCheckIn = wakefulness.nextCheckInDue;
         logger.info(
             "Peer is a LIT ICD in idle mode; holding interaction until it wakes",
@@ -370,10 +381,7 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
                     nextCheckIn === undefined ? undefined : Duration.format(Millis(nextCheckIn - Time.nowUs)),
             }),
         );
-        using abort = Abort.subtask(undefined, timeout);
-        await abort.race(wakefulness.awake);
-
-        if (abort.aborted) {
+        if (!(await wakefulness.awaitAwake(timeout, ...signals))) {
             throw new IcdPeerAsleepError(address, timeout);
         }
     }

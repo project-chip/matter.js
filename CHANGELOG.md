@@ -213,6 +213,10 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: `VendorIdVerification.verify()` returns `undefined` when the device rejects the signing request
     - Fix: A fabric change waits for the commissioning state instead of failing with `synchronous-transaction-conflict` when another transaction holds it
     - Fix: A peer that exposes only its root endpoint now becomes seeded
+    - Fix: An ICD key refresh no longer leaves the controller and the device on different keys
+    - Breaking: `IcdClient.register()`, `unregister()` and `forget()` run in a transaction of their own
+    - Feature: `Endpoint.act()` accepts `abort` and `connectionTimeout`, and `Endpoint.getStateOf()` accepts `abort`, for the peer interactions they run
+    - Fix: A read, write or invoke held for a sleeping ICD peer ends when its request's `abort` signal aborts
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument
@@ -243,6 +247,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: `PeerDescriptor.sessionParameters` is replaced by `reportedSessionParameters`, which holds only what the peer reported; `Peer.sessionParameters` provides the effective values
     - Breaking: The discovery data handed to `finalizeCommissioning` no longer carries the PASE session intervals; they come as the new third argument `sessionParameters`
     - Breaking: `Subscription` implementations provide `closeForShutdown()`; `Subscription.close()` and `Session.closeSubscriptions()` end subscriptions for good (`isTerminated`), only `Session.closeSubscriptionsForShutdown()` keeps them for re-establishment
+    - Breaking: `FabricIcd.updatePeer()` is removed (use `setPendingKey()` and `confirmKey()`), and `FabricIcd.ReceivedCheckIn` no longer carries `offset` and `refreshNeeded` (use `FabricIcd.refreshNeeded()`)
     - Deprecation: The legacy `DecodedDataReport` types and `normalize*` helpers, `Invoke.LegacyCommandRequest`, `Specifier.ClusterTypeCommand` and `SessionManager.owner` will be removed in 0.19
     - Feature: Groupcast support (Matter 1.6.1) for multicast group sessions
     - Feature: `DclClient.fetchComplianceInfo()` reads a software version's compliance record, used by OTA update checks
