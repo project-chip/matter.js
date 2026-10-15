@@ -128,6 +128,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: A server rejects an obsolete (`Z`) element; a client sends and decodes it
     - Adjustment: A node's `ClusterProtocol.readState()` throws `ImplementationError` for a remote session without a transaction
     - Adjustment: A `ClientNode` takes a written attribute value locally only once the device accepts it
+    - Adjustment: Subscription keep-alives request a status response, so a subscription on a session without MRP (TCP, BLE) ends when the controller answers with `INVALID_SUBSCRIPTION`
     - Fix: A `ClientNode` no longer emits `$Changed` with an outdated value for an attribute a transaction did not touch, when a report changed it during the transaction
     - Fix: `WebRtcTransportRequestorServer` keeps sessions of different peers with the same session id apart
     - Fix: `DclBehavior` boolean options set through environment variables are read as booleans
@@ -209,7 +210,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: An endpoint that sets a `number` in its options which a stored endpoint with another ID had before gets that number and logs a warning; the stored endpoint gets a new number when it is added again
     - Fix: (@grzonu) Reading a peer's `BasicInformation` through `Peer` (on every read, subscribe and invoke) no longer leaves a state reference behind per access
     - Fix: A subscription that ends while the node keeps running, e.g. because its session was closed, is no longer re-established after a restart; re-establishment tries the newest stored subscription of a peer first
-    - Fix: Subscription keep-alives request a status response, so a subscription on a session without MRP (TCP, BLE) ends when the controller answers with `INVALID_SUBSCRIPTION`
     - Fix: `VendorIdVerification.verify()` returns `undefined` when the device rejects the signing request
     - Fix: A fabric change waits for the commissioning state instead of failing with `synchronous-transaction-conflict` when another transaction holds it
 
