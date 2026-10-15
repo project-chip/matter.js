@@ -131,6 +131,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: A `ClientNode` takes a written attribute value locally only once the device accepts it
     - Adjustment: `IcdClient` emits `registered`, `unregistered` and `keyRefreshed` after the change is stored; `unregister()` keeps the registration when a sleeping peer does not wake in time, `register()` joins a registration with the same options in flight, and `forget()` abandons work in flight
     - Adjustment: Subscription keep-alives request a status response, so a subscription on a session without MRP (TCP, BLE) ends when the controller answers with `INVALID_SUBSCRIPTION`
+    - Fix: A write to an attribute that another exchange is still writing in chunks is answered BUSY, and a group or wildcard write skips that attribute, as in the CHIP SDK
     - Fix: A `ClientNode` no longer emits `$Changed` with an outdated value for an attribute a transaction did not touch, when a report changed it during the transaction
     - Fix: `WebRtcTransportRequestorServer` keeps sessions of different peers with the same session id apart
     - Fix: `DclBehavior` boolean options set through environment variables are read as booleans
@@ -267,6 +268,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: `DclVendorInfoService` always provides the built-in test vendors and no longer stores them
     - Adjustment: The error for a whole-interaction StatusResponse is the received class of its status, with a message like `Received error status NotFound (code 139)`
     - Fix: DNS-SD discovery ignores malformed or out-of-range `D`, `CM`, `VP`, `DT`, `PH`, `T` and `ICD` values
+    - Fix: A client write is sent as chunked WriteRequest messages when the request or its WriteResponse would not fit one message, instead of one message that gets dropped
+    - Fix: A client list write with a DataVersion sends its entries without the DataVersion once the list was replaced, so the device no longer rejects them
     - Fix: A sustained subscription logs a failure of its own processing of a report and continues, counting the events received before the failure as seen
     - Fix: Commissioning tries addresses in ranked order and once each, moves on faster, and stops on a wrong passcode
     - Fix: Commissioning continues when the device rejects or does not answer ScanNetworks

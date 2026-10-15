@@ -427,7 +427,7 @@ export class ClientInteraction<
             request,
         );
 
-        const response = await messenger.sendWriteCommand(request, session);
+        const response = await messenger.sendWriteCommand(request, { abort });
         if (request.suppressResponse) {
             return undefined as Awaited<WriteResult<T>>;
         }
