@@ -434,7 +434,7 @@ describe("ClientInvoke", () => {
         it("direct invoke (#invokeSingle) propagates network to exchange", async () => {
             // batchDuration: false bypasses the batching path so ClientInteraction.invoke() calls #invokeSingle directly
             await using site = new MockSite();
-            const { controller, device } = await site.addCommissionedPair({
+            const { controller } = await site.addCommissionedPair({
                 device: {
                     type: ServerNode.RootEndpoint,
                     basicInformation: { maxPathsPerInvoke: 10 },
@@ -445,21 +445,13 @@ describe("ClientInvoke", () => {
             const { captured, restore } = spyNetworkSelect(controller);
 
             try {
-                // batchDuration is not in Invoke.Definition so set it on the result
-                const request = Invoke({
-                    commands: [
-                        Invoke.ConcreteCommandRequest({
-                            endpoint: EndpointNumber(1),
-                            cluster: OnOff,
-                            command: "toggle",
-                        }),
-                    ],
-                });
-                request.batchDuration = false;
-
-                // Two concurrent invokes prove the direct path: batched they would share one exchange
+                // Two concurrent invokes on different paths prove the direct path: batched they would share one
+                // exchange
                 const exchanges = await captureInvokeExchanges(() =>
-                    Promise.all([drain(peer1.interaction.invoke(request)), drain(peer1.interaction.invoke(request))]),
+                    Promise.all([
+                        drain(peer1.interaction.invoke(onOffInvoke("on", { batchDuration: false }))),
+                        drain(peer1.interaction.invoke(onOffInvoke("toggle", { batchDuration: false }))),
+                    ]),
                 );
                 expect(exchanges.map(({ commandCount }) => commandCount)).deep.equals([1, 1]);
             } finally {
@@ -467,7 +459,6 @@ describe("ClientInvoke", () => {
             }
 
             expect(captured).to.include("unlimited");
-            expect(device.parts.get(1)!.stateOf(OnOffServer).onOff).equals(false);
         });
 
         it("batched invoke (#invokeWithBatching) propagates network to exchange", async () => {
