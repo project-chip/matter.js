@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClosedError } from "#MatterError.js";
+import { Diagnostic, LogDestination, Logger, LogLevel } from "#index.js";
+import { ClosedError, MatterAggregateError } from "#MatterError.js";
 import { Minutes } from "#time/TimeUnit.js";
 import { AsyncCache, Cache } from "#util/Cache.js";
 import { Lifetime } from "#util/Lifetime.js";
@@ -405,6 +406,85 @@ describe("AsyncCache", () => {
 
             expect(expired).deep.equals([["a", "v-a"]]);
             expect([...owner.spans].map(span => span.name)).not.contains("test cache");
+        });
+    });
+
+    describe("failing expireCallback", () => {
+        before(() => MockTime.enable());
+
+        let attempted: string[];
+        let warnings: unknown[];
+
+        beforeEach(() => {
+            attempted = new Array<string>();
+            warnings = new Array<unknown>();
+            Logger.destinations.capture = LogDestination({
+                add(message: Diagnostic.Message) {
+                    if (message.facility === "Cache" && message.level === LogLevel.WARN) {
+                        warnings.push(message.values[0]);
+                    }
+                },
+            });
+        });
+
+        afterEach(() => {
+            delete Logger.destinations.capture;
+        });
+
+        async function filledCache() {
+            const cache = new AsyncCache<string>(
+                "failing",
+                async (key: string) => `v-${key}`,
+                Minutes(5),
+                async key => {
+                    attempted.push(key);
+                    if (key === "a") {
+                        throw new Error("close failed");
+                    }
+                },
+            );
+            await cache.get("a");
+            await cache.get("b");
+            return cache;
+        }
+
+        it("close() expires every value, logs the failure and resolves", async () => {
+            const cache = await filledCache();
+
+            await cache.close();
+
+            expect(attempted).deep.equals(["a", "b"]);
+            expect(warnings).deep.equals(["failing cache failed to expire a:"]);
+        });
+
+        it("clear() expires every value and throws the failures", async () => {
+            const cache = await filledCache();
+
+            await expect(cache.clear()).rejectedWith(MatterAggregateError, "failing cache failed to expire a");
+
+            expect(attempted).deep.equals(["a", "b"]);
+            await cache.close();
+            expect(attempted).deep.equals(["a", "b"]);
+        });
+
+        it("periodic expiry expires every value and logs the failure", async () => {
+            const cache = await filledCache();
+
+            await MockTime.advance(Minutes(5));
+
+            expect(attempted).deep.equals(["a", "b"]);
+            expect(warnings).deep.equals(["failing cache failed to expire a:"]);
+            await cache.close();
+            expect(attempted).deep.equals(["a", "b"]);
+        });
+
+        it("delete() drops the value even when the callback rejects", async () => {
+            const cache = await filledCache();
+
+            await expect(cache.delete("a")).rejectedWith("close failed");
+            await cache.close();
+
+            expect(attempted).deep.equals(["a", "b"]);
         });
     });
 

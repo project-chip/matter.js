@@ -6,14 +6,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClosedError } from "#MatterError.js";
+import { ClosedError, MatterAggregateError } from "#MatterError.js";
 import { Duration } from "#time/Duration.js";
 import { Diagnostic } from "../log/Diagnostic.js";
+import { Logger } from "../log/Logger.js";
 import { Time, Timer } from "../time/Time.js";
 import { Lifetime } from "./Lifetime.js";
 
 /** ASCII Unit Separator — unlikely to appear in the interface names, IPs, or booleans current callers pass. */
 const KEY_SEPARATOR = "\x1F";
+
+const logger = Logger.get("Cache");
 
 class GenericCache<T> {
     protected readonly knownKeys = new Set<string>();
@@ -47,13 +50,20 @@ class GenericCache<T> {
         return Array.from(this.knownKeys.values());
     }
 
+    /**
+     * Expire the value cached under `key`.  The value leaves the cache even when {@link expireCallback} rejects, because
+     * nothing would retry it.
+     */
     async delete(key: string) {
-        // Cached-undefined must still trigger expireCallback.
-        if (this.expireCallback !== undefined && this.values.has(key)) {
-            await this.expireCallback(key, this.values.get(key) as T);
+        try {
+            // Cached-undefined must still trigger expireCallback.
+            if (this.expireCallback !== undefined && this.values.has(key)) {
+                await this.expireCallback(key, this.values.get(key) as T);
+            }
+        } finally {
+            this.values.delete(key);
+            this.timestamps.delete(key);
         }
-        this.values.delete(key);
-        this.timestamps.delete(key);
     }
 
     /** Evict the entry addressed by the same params passed to {@link Cache.get}/{@link AsyncCache.get}. */
@@ -61,23 +71,62 @@ class GenericCache<T> {
         await this.delete(this.keyFor(params));
     }
 
+    /**
+     * Expire all values.
+     *
+     * @throws {MatterAggregateError} with the rejection of each {@link expireCallback} that failed, after every value
+     * was expired
+     */
     async clear() {
-        for (const key of this.values.keys()) {
-            await this.delete(key);
+        const failures = await this.expireAll();
+        if (failures.length) {
+            throw new MatterAggregateError(
+                failures.map(({ error }) => error),
+                `${this.#describe()} failed to expire ${failures.map(({ key }) => key).join(", ")}`,
+            );
         }
-        this.values.clear();
-        this.timestamps.clear();
     }
 
     /**
      * Expire all values and refuse further {@link Cache.get}/{@link AsyncCache.get} calls.  Creations already pending
-     * finish and are expired like any other value.
+     * finish and are expired like any other value.  A failed {@link expireCallback} is logged and does not stop
+     * closing.
      */
     async close() {
         using _closing = this.#lifetime.closing();
         this.periodicTimer.stop();
-        await this.clear();
+        this.#logFailures(await this.expireAll());
         this.knownKeys.clear();
+    }
+
+    /** Expire every value, attempting all of them, and return the failures. */
+    protected async expireAll() {
+        const failures = await this.#expireEach([...this.values.keys()]);
+        this.values.clear();
+        this.timestamps.clear();
+        return failures;
+    }
+
+    async #expireEach(keys: string[]) {
+        const failures = new Array<{ key: string; error: unknown }>();
+        for (const key of keys) {
+            try {
+                await this.delete(key);
+            } catch (error) {
+                failures.push({ key, error });
+            }
+        }
+        return failures;
+    }
+
+    #logFailures(failures: { key: string; error: unknown }[]) {
+        for (const { key, error } of failures) {
+            logger.warn(`${this.#describe()} failed to expire ${key}:`, error);
+        }
+    }
+
+    #describe() {
+        return String(this.#lifetime.name);
     }
 
     /**
@@ -94,15 +143,15 @@ class GenericCache<T> {
     }
 
     protected closedError() {
-        return new ClosedError(`${String(this.#lifetime.name)} is closed`);
+        return new ClosedError(`${this.#describe()} is closed`);
     }
 
     private async expire() {
         const now = Time.nowMs;
-        for (const [key, timestamp] of this.timestamps.entries()) {
-            if (now - timestamp < this.expiration) continue;
-            await this.delete(key);
-        }
+        const expired = [...this.timestamps.entries()]
+            .filter(([, timestamp]) => now - timestamp >= this.expiration)
+            .map(([key]) => key);
+        this.#logFailures(await this.#expireEach(expired));
     }
 }
 
@@ -191,8 +240,8 @@ export class AsyncCache<T> extends GenericCache<T> {
         await super.delete(key);
     }
 
-    override async clear() {
+    protected override async expireAll() {
         await Promise.allSettled(this.#inflight.values());
-        await super.clear();
+        return super.expireAll();
     }
 }
