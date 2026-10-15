@@ -174,7 +174,7 @@ describe("UdpMulticastServer", () => {
         }
     });
 
-    // Characterization: the send reaches the cache before it closes, and close() expires the pending channel
+    // Characterization: also holds without the closed check, because close() expires a channel a racing send creates
     it("leaves no broadcast channel open for a send started while the server closes", async () => {
         const network = new SocketCountingNetwork(new NetworkSimulator(), "00:11:22:33:44:08", [
             "192.168.1.10",

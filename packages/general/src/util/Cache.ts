@@ -10,6 +10,7 @@ import { ClosedError } from "#MatterError.js";
 import { Duration } from "#time/Duration.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Time, Timer } from "../time/Time.js";
+import { Lifetime } from "./Lifetime.js";
 
 /** ASCII Unit Separator — unlikely to appear in the interface names, IPs, or booleans current callers pass. */
 const KEY_SEPARATOR = "\x1F";
@@ -19,17 +20,18 @@ class GenericCache<T> {
     protected readonly values = new Map<string, T>();
     protected readonly timestamps = new Map<string, number>();
     private readonly periodicTimer: Timer;
-    readonly #name: string;
-    #closed = false;
+    readonly #lifetime: Lifetime;
 
     constructor(
         name: string,
         private readonly expiration: Duration,
         private readonly expireCallback?: (key: string, value: T) => Promise<void>,
+        lifetime: Lifetime.Owner = Lifetime.process,
     ) {
-        this.#name = name;
+        this.#lifetime = lifetime.join(`${name} cache`);
+        const lifetimeName = String(this.#lifetime.name);
         this.periodicTimer = Time.getPeriodicTimer(
-            Diagnostic.upgrade(`${name} cache expiration`, [Diagnostic.strong(name), "cache expiration"]),
+            Diagnostic.upgrade(`${lifetimeName} expiration`, [Diagnostic.strong(lifetimeName), "expiration"]),
             expiration,
             () => this.expire(),
         ).start();
@@ -72,18 +74,27 @@ class GenericCache<T> {
      * finish and are expired like any other value.
      */
     async close() {
-        this.#closed = true;
+        using _closing = this.#lifetime.closing();
         this.periodicTimer.stop();
         await this.clear();
         this.knownKeys.clear();
     }
 
+    /**
+     * Set once this cache or any lifetime enclosing it begins closing, so an owner that closes before calling
+     * {@link close} already stops new values.
+     */
     protected get isClosed() {
-        return this.#closed;
+        for (let lifetime: Lifetime | undefined = this.#lifetime; lifetime !== undefined; lifetime = lifetime.owner) {
+            if (lifetime.isClosing) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected closedError() {
-        return new ClosedError(`${this.#name} cache is closed`);
+        return new ClosedError(`${String(this.#lifetime.name)} is closed`);
     }
 
     private async expire() {
@@ -101,8 +112,9 @@ export class Cache<T> extends GenericCache<T> {
         private readonly generator: (...params: any[]) => T,
         expiration: Duration,
         expireCallback?: (key: string, value: T) => Promise<void>,
+        lifetime?: Lifetime.Owner,
     ) {
-        super(name, expiration, expireCallback);
+        super(name, expiration, expireCallback, lifetime);
     }
 
     /**
@@ -130,8 +142,9 @@ export class AsyncCache<T> extends GenericCache<T> {
         private readonly generator: (...params: any[]) => Promise<T>,
         expiration: Duration,
         expireCallback?: (key: string, value: T) => Promise<void>,
+        lifetime?: Lifetime.Owner,
     ) {
-        super(name, expiration, expireCallback);
+        super(name, expiration, expireCallback, lifetime);
     }
 
     /**

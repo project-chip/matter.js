@@ -325,12 +325,6 @@ export class DclCertificateService {
             }),
         );
 
-        this.#revocationCache = new AsyncCache(
-            "CRL revocation",
-            (akid: string) => this.#fetchAndValidateRevocation(akid),
-            Hours(1),
-        );
-
         if (options.revocations !== undefined) {
             this.installRevocations(options.revocations);
         }
@@ -356,6 +350,14 @@ export class DclCertificateService {
                 ).start();
             }
         });
+
+        this.#revocationCache = new AsyncCache(
+            "CRL revocation",
+            (akid: string) => this.#fetchAndValidateRevocation(akid),
+            Hours(1),
+            undefined,
+            this.#construction,
+        );
     }
 
     get construction() {
@@ -702,6 +704,10 @@ export class DclCertificateService {
         serialNumber: Bytes | string,
         issuerDnDerHex?: string,
     ): Promise<boolean> {
+        // A closing service must not answer "not revoked" for a lookup it never ran
+        if (this.#closed) {
+            throw new ClosedError("DCL certificate service is closed");
+        }
         this.construction.assert();
 
         const akid = this.#normalizeSubjectKeyId(authorityKeyIdentifier);
@@ -721,11 +727,7 @@ export class DclCertificateService {
         let lookup: RevocationLookup;
         try {
             lookup = await this.#revocationCache.get(akid);
-        } catch (error) {
-            // A closing service must not answer "not revoked" for a lookup it never ran
-            if (error instanceof ClosedError) {
-                throw error;
-            }
+        } catch {
             // A failed fetch already logged its cause; an unreachable CRL counts as not revoked
             return false;
         }

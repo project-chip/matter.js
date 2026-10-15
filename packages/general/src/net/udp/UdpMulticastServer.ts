@@ -106,12 +106,7 @@ export class UdpMulticastServer {
         }
     }
 
-    private readonly broadcastChannels = new AsyncCache<UdpSocket>(
-        "UDP broadcast channel",
-        (netInterface, isIPv4) => this.createBroadcastChannel(netInterface, isIPv4),
-        Minutes(5),
-        async (_key, channel) => channel.close(),
-    );
+    private readonly broadcastChannels: AsyncCache<UdpSocket>;
 
     private constructor(
         lifetime: Lifetime,
@@ -124,6 +119,13 @@ export class UdpMulticastServer {
         netInterface: string | undefined,
     ) {
         this.#lifetime = lifetime;
+        this.broadcastChannels = new AsyncCache<UdpSocket>(
+            "UDP broadcast channel",
+            (netInterface, isIPv4) => this.createBroadcastChannel(netInterface, isIPv4),
+            Minutes(5),
+            async (_key, channel) => channel.close(),
+            lifetime,
+        );
         this.network = network;
         this.#broadcastAddressIpv4 = broadcastAddressIpv4;
         this.#broadcastAddressIpv6 = broadcastAddressIpv6;

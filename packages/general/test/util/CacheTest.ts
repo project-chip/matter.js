@@ -7,6 +7,7 @@
 import { ClosedError } from "#MatterError.js";
 import { Minutes } from "#time/TimeUnit.js";
 import { AsyncCache, Cache } from "#util/Cache.js";
+import { Lifetime } from "#util/Lifetime.js";
 
 describe("Cache", () => {
     describe("key encoding", () => {
@@ -354,6 +355,56 @@ describe("AsyncCache", () => {
             expect(calls).equals(1);
             expect(expired).deep.equals([["a", "A"]]);
             expect(cache.keys()).deep.equals([]);
+        });
+    });
+
+    describe("lifetime", () => {
+        it("joins the owner's lifetime and leaves it on close", async () => {
+            const owner = Lifetime.mock;
+            const cache = new AsyncCache<string>("test", async () => "v", Minutes(5), undefined, owner);
+
+            expect([...owner.spans].map(span => span.name)).deep.equals(["test cache"]);
+
+            await cache.close();
+
+            expect(owner.spans.size).equals(0);
+        });
+
+        it("joins the process lifetime without an owner", async () => {
+            const cache = new AsyncCache<string>("ownerless test", async () => "v", Minutes(5));
+
+            using probe = Lifetime.process.join("probe");
+            const processSpans = () => [...(probe.owner?.spans ?? [])].map(span => span.name);
+            expect(processSpans()).contains("ownerless test cache");
+
+            await cache.close();
+
+            expect(processSpans()).not.contains("ownerless test cache");
+        });
+
+        it("rejects get() once the owner closes and still expires the values on close()", async () => {
+            const owner = Lifetime.mock.join("owner");
+            const expired = new Array<[string, string]>();
+            const cache = new AsyncCache<string>(
+                "test",
+                async (key: string) => `v-${key}`,
+                Minutes(5),
+                async (key, value) => {
+                    expired.push([key, value]);
+                },
+                owner,
+            );
+            expect(await cache.get("a")).equals("v-a");
+
+            using _closing = owner.closing();
+
+            await expect(cache.get("b")).rejectedWith(ClosedError);
+            await expect(cache.get("a")).rejectedWith(ClosedError);
+
+            await cache.close();
+
+            expect(expired).deep.equals([["a", "v-a"]]);
+            expect([...owner.spans].map(span => span.name)).not.contains("test cache");
         });
     });
 

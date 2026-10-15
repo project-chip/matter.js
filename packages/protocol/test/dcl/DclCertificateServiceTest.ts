@@ -1734,7 +1734,7 @@ describe("DclCertificateService", () => {
             await service.close();
         });
 
-        it("isRevoked rejects instead of answering not revoked while the service closes", async () => {
+        it("isRevoked rejects instead of answering not revoked while and after the service closes", async () => {
             fetchMock.addResponse("/dcl/pki/root-certificates", mockDclRootCertificateList);
             fetchMock.addResponse(
                 "/dcl/pki/certificates/MDAxGDAWBgNVBAMMD01hdHRlciBUZXN0IFBBQQ%3D%3D/78%3A5C%3AE7%3A05%3AB8%3A6B%3A8F%3A4E%3A6F%3AC7%3A93%3AAA%3A60%3ACB%3A43%3AEA%3A69%3A68%3A82%3AD5",
@@ -1752,6 +1752,8 @@ describe("DclCertificateService", () => {
             const closing = service.close();
             await expect(service.isRevoked("AABBCCDD", "01AB")).rejectedWith(ClosedError);
             await closing;
+
+            await expect(service.isRevoked("AABBCCDD", "01AB")).rejectedWith(ClosedError);
         });
 
         it("isRevoked fetches CRL on demand and checks serial", async () => {
