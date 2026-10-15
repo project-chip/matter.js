@@ -8,6 +8,7 @@ import {
     Cache,
     InterfaceType,
     isIPv6,
+    Lifetime,
     Logger,
     Minutes,
     Network,
@@ -124,12 +125,14 @@ export class NodeJsNetwork extends Network {
 
     private static readonly netInterfaces = new Cache<string | undefined>(
         "Network interface",
+        Lifetime.process,
         (ip: string) => this.getNetInterfaceForRemoteAddress(ip),
         Minutes(5),
     );
 
     override async close() {
-        await NodeJsNetwork.netInterfaces.close();
+        // The cache is static and shared by every instance, so it must stay open
+        await NodeJsNetwork.netInterfaces.clear();
     }
 
     private static getNetInterfaceForRemoteAddress(ip: string) {

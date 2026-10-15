@@ -329,6 +329,12 @@ describe("NodeJsNetwork", () => {
             await expect(network.close()).eventually.undefined;
         });
 
+        it("keeps the shared interface lookup working after close", async () => {
+            await network.close();
+
+            expect(NodeJsNetwork.getNetInterfaceForIp("fe80::1%eth0")).equal("eth0");
+        });
+
         it("can be called multiple times", async () => {
             await network.close();
             await expect(network.close()).eventually.undefined;
