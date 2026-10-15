@@ -839,15 +839,9 @@ export class IcdClient extends Behavior {
         const fed = this.#fed();
         const entry = fed?.icd.peerFor(fed.nodeId);
 
-        // Persist the advanced offset so a restart cannot restore a stale lastOffset and reopen the replay window.  A
-        // key this Check-In confirmed is stored by the in-flight refresh instead, with the starting counter its response
-        // reports.
-        const { key } = this.state;
-        if (
-            entry !== undefined &&
-            (phase.kind === "registered" ||
-                (phase.kind === "refreshing" && key !== undefined && Bytes.areEqual(entry.key, key)))
-        ) {
+        // Persist the advanced offset, and a key this Check-In confirmed, so a restart cannot restore an older baseline
+        // and accept this Check-In again
+        if (entry !== undefined && (phase.kind === "registered" || phase.kind === "refreshing")) {
             this.#persistPeerEntry(entry);
         }
         this.state.lastCheckInReceivedAt = Time.nowMs;
@@ -913,9 +907,15 @@ export class IcdClient extends Behavior {
             if (monitoredSubject === undefined || clientType === undefined || verificationKey === undefined) {
                 throw new ImplementationError("ICD key refresh requires an existing registration.");
             }
+            const entry = this.#entryOf(peerNodeId);
+            // A Check-In under the pending key may have confirmed it while this refresh waited for the lock
+            if (pendingKey !== undefined && entry.pendingKey === undefined && Bytes.areEqual(entry.key, pendingKey)) {
+                this.#persistPeerEntry(entry);
+                return;
+            }
             const key = pendingKey ?? this.env.get(Crypto).randomBytes(16);
             fabric.icd.setPendingKey(peerNodeId, key);
-            this.#persistPeerEntry(this.#entryOf(peerNodeId));
+            this.#persistPeerEntry(entry);
             request = { checkInNodeId: ownNodeId, monitoredSubject, key, clientType, verificationKey };
         });
         if (!offered || request === undefined) {
@@ -1082,9 +1082,9 @@ export namespace IcdClient {
         /**
          * Starting value of the peer's ICD counter for {@link key}; Check-In counters are validated relative to this.
          *
-         * The ICDCounter of the peer's RegisterClient response.  When a Check-In under a refreshed key arrives first and
-         * the response never does, the last counter accepted under the previous key, a lower bound of the peer's counter
-         * when it took the key.
+         * The ICDCounter of the peer's RegisterClient response.  When a Check-In under a refreshed key confirms it first,
+         * the last counter accepted under the previous key, a lower bound of the peer's counter when it took the key; a
+         * response that follows replaces it.
          */
         @field(uint32, nonvolatile)
         counterStart?: number;
@@ -1134,16 +1134,15 @@ export namespace IcdClient {
         checkedIn = Observable<[checkIn: { counter: number; activeModeThreshold: number }]>();
         /**
          * Emits once per key refresh, when the new key is confirmed (by the RegisterClient response or by the first
-         * Check-In under it), inside the transaction that stores it.  Followed by one {@link counterStart$Changed}
-         * after commit.
+         * Check-In under it), inside the transaction that stores it.  {@link counterStart$Changed} follows after commit.
          */
         keyRefreshed = Observable();
         available$Changed = new Observable<[value: boolean, oldValue: boolean]>();
 
         /**
-         * Emits after commit whenever {@link State.counterStart} changes: set by a registration, replaced once when a key
-         * refresh is confirmed, cleared when the registration is.  Unlike {@link keyRefreshed}, a listener reads the new
-         * key from state.
+         * Emits after commit whenever {@link State.counterStart} changes: set by a registration, replaced when a key
+         * refresh is confirmed and again when a response follows a Check-In that confirmed it, cleared when the
+         * registration is.  Unlike {@link keyRefreshed}, a listener reads the new key from state.
          */
         counterStart$Changed = new Observable<[value: number | undefined, oldValue: number | undefined]>();
 

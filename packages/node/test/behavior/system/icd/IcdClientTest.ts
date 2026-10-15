@@ -342,7 +342,9 @@ async function wakeSleepingPeer(device: ServerNode, link: { restore(): void }) {
 }
 
 function nextCheckIn(peer: ClientNode) {
-    return new Promise<{ counter: number }>(resolve => peer.eventsOf(IcdClient).checkedIn.once(resolve));
+    return new Promise<{ counter: number; activeModeThreshold: number }>(resolve =>
+        peer.eventsOf(IcdClient).checkedIn.once(resolve),
+    );
 }
 
 /** Past the deadline of the next report (subscription liveness timeout of about an hour) of a peer that sends nothing. */
@@ -1088,14 +1090,20 @@ describe("IcdClient", () => {
             expect(events).deep.equals(["keyRefreshed", `counterStart ${lastOldCounter}`]);
         });
 
-        it("stores a key a Check-In confirmed while the refresh waits for a lost response", async () => {
+        it("rejects a replay after a restart between a Check-In that confirmed the key and the lost response", async () => {
             await using site = new MockSite();
-            const { controller, device, peer1 } = await checkInPair(site);
+            const { controller, device } = await site.addCommissionedPair({
+                device: { type: ServerNode.RootEndpoint.with(CountingIcdServer), icdManagement: LIT_CONFIG },
+            });
+            const peer1 = await subscribedPeer(controller, "peer1");
+            await peer1.act(agent => agent.get(IcdClient).register({ monitoredSubject: SubjectId(NodeId(0xabcdn)) }));
             mintDistinctKeys(controller);
             await requestRefreshOnNextCheckIn(controller, peer1);
             const oldKey = deviceKeyOf(device)!;
+            CountingIcdServer.registrations = 0;
+            // Every secured reply after the device handled the RegisterClient is lost, so the response never arrives
             const traffic = deviceTraffic(device);
-            traffic.dropFromDevice = packet => isSecured(packet) && !Bytes.areEqual(deviceKeyOf(device)!, oldKey);
+            traffic.dropFromDevice = packet => isSecured(packet) && CountingIcdServer.registrations > 0;
             const events = new Array<string>();
             peer1.eventsOf(IcdClient).keyRefreshed.on(() => {
                 events.push("keyRefreshed");
@@ -1104,39 +1112,102 @@ describe("IcdClient", () => {
                 events.push(`counterStart ${value}`);
             });
 
-            using log = captureLog(LogLevel.INFO);
+            using log = captureLog(LogLevel.WARN);
             const oldCheckIn = nextCheckIn(peer1);
             await triggerCheckIn(device);
             const lastOldCounter = (await MockTime.resolve(oldCheckIn, { macrotasks: true })).counter;
             await until(() => !Bytes.areEqual(deviceKeyOf(device)!, oldKey));
+            const newKey = deviceKeyOf(device)!;
 
             const newCheckIn = nextCheckIn(peer1);
             await triggerCheckIn(device);
-            const { counter } = await MockTime.resolve(newCheckIn, { macrotasks: true });
-            await settled(controller);
-            // The refresh still waits for its response and stores the confirmation itself
+            const { counter, activeModeThreshold } = await MockTime.resolve(newCheckIn, { macrotasks: true });
+            for (let i = 0; i < 10; i++) {
+                await MockTime.macrotask;
+            }
+            const stored = { ...peer1.stateOf(IcdClient) };
+            const eventsBeforeRestart = [...events];
             expect(log.messages.filter(message => message.includes("key refresh"))).deep.equals([]);
-            expect(Bytes.areEqual(peer1.stateOf(IcdClient).key!, oldKey)).true;
-            expect(events).deep.equals([]);
 
-            // The exchange gives up while another transaction holds the state
-            const release = await holdIcdState(peer1);
-            await until(() =>
-                log.messages.some(
-                    message => message.includes("icd-key-refresh") && message.includes("waiting on ◦holder"),
-                ),
+            // A crash while the refresh still waits for its response: storage keeps what was written up to now
+            const storage = site.storageFor(controller);
+            const atCrash = structuredClone(storage);
+            await MockTime.resolve(controller.close());
+            for (const key of Object.keys(storage)) {
+                delete storage[key];
+            }
+            Object.assign(storage, atCrash);
+            const controllerB = await site.addNode(undefined, { id: controller.id, index: 1 });
+            const peer1b = controllerB.peers.get("peer1")!;
+            let checkIns = 0;
+            peer1b.eventsOf(IcdClient).checkedIn.on(() => {
+                checkIns++;
+            });
+            const fabricIcd = controllerB.env
+                .get(FabricManager)
+                .for(peer1b.stateOf(CommissioningClient).peerAddress!.fabricIndex).icd;
+            const replay = await CheckInMessage.encodeIcd(
+                controllerB.env.get(Crypto),
+                newKey,
+                counter,
+                activeModeThreshold,
             );
-            expect(log.messages.filter(message => message.includes("key refresh"))).deep.equals([]);
-            expect(Bytes.areEqual(peer1.stateOf(IcdClient).key!, oldKey)).true;
-            await release();
-            await until(() => log.messages.some(message => message.includes("ICD key refresh")));
-            await until(() => peer1.stateOf(IcdClient).pendingKey === undefined);
+            await fabricIcd.processCheckIn(replay);
+            for (let i = 0; i < 10; i++) {
+                await MockTime.macrotask;
+            }
 
-            const state = peer1.stateOf(IcdClient);
-            expect(Bytes.areEqual(state.key!, deviceKeyOf(device)!)).true;
-            expect(state.counterStart).equals(lastOldCounter);
-            expect(state.lastOffset).equals(counter - lastOldCounter);
-            expect(events).deep.equals(["keyRefreshed", `counterStart ${lastOldCounter}`]);
+            expect(checkIns).equals(0);
+            // The Check-In stored the key it confirmed at once
+            expect(Bytes.areEqual(stored.key!, newKey)).true;
+            expect(stored).deep.include({ counterStart: lastOldCounter, pendingKey: undefined });
+            expect(eventsBeforeRestart).deep.equals(["keyRefreshed", `counterStart ${lastOldCounter}`]);
+        });
+
+        it("ends a retry when a Check-In under the pending key confirms it while the retry waits for the state", async () => {
+            await using site = new MockSite({ createStorageDriver: store => new GatedIcdStorage(store) });
+            const { controller, device, peer1 } = await checkInPair(site);
+            mintDistinctKeys(controller);
+            await requestRefreshOnNextCheckIn(controller, peer1);
+            const oldKey = deviceKeyOf(device)!;
+            const traffic = deviceTraffic(device);
+            traffic.dropFromDevice = packet => isSecured(packet) && !Bytes.areEqual(deviceKeyOf(device)!, oldKey);
+            let refreshes = 0;
+            peer1.eventsOf(IcdClient).keyRefreshed.on(() => {
+                refreshes++;
+            });
+
+            // The device takes the new key, the response is lost, and the refresh gives up with the key pending
+            using log = captureLog(LogLevel.WARN);
+            await triggerCheckIn(device);
+            await until(() => log.messages.some(message => message.includes("key refresh")));
+            const newKey = deviceKeyOf(device)!;
+            expect(Bytes.areEqual(peer1.stateOf(IcdClient).pendingKey!, newKey)).true;
+
+            // A late Check-In under the old key starts a retry, which waits behind that Check-In's commit
+            const entry = fedPeerOf(controller, peer1);
+            const lastOldCounter = (entry.counterStart + entry.lastOffset) >>> 0;
+            const crypto = controller.env.get(Crypto);
+            GatedIcdStorage.arm();
+            const { fabricIndex } = peer1.stateOf(CommissioningClient).peerAddress!;
+            const fabricIcd = controller.env.get(FabricManager).for(fabricIndex).icd;
+            await fabricIcd.processCheckIn(
+                await CheckInMessage.encodeIcd(crypto, oldKey, (lastOldCounter + 1) >>> 0, 5000),
+            );
+            await MockTime.resolve(GatedIcdStorage.gate.writing.promise, { macrotasks: true });
+
+            // Meanwhile a Check-In under the new key confirms it
+            await fabricIcd.processCheckIn(
+                await CheckInMessage.encodeIcd(crypto, newKey, (lastOldCounter + 2) >>> 0, 5000),
+            );
+            expect(fedPeerOf(controller, peer1).pendingKey).undefined;
+            GatedIcdStorage.gate.release.resolver();
+            await until(() => peer1.stateOf(IcdClient).pendingKey === undefined);
+            await settled(controller);
+
+            expect(Bytes.areEqual(peer1.stateOf(IcdClient).key!, newKey)).true;
+            expect(fedPeerOf(controller, peer1).pendingKey).undefined;
+            expect(refreshes).equals(1);
         });
 
         it("unregister() abandons a key refresh that waits for its response", async () => {
