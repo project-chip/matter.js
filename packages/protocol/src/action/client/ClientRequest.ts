@@ -58,7 +58,8 @@ export interface ClientRequest {
      * the peer, which is a property of the peer rather than of the caller's deadline.
      *
      * Aborting abandons the interaction rather than telling the peer anything, so a write or invoke
-     * already in flight may still be acted on by the peer.
+     * already in flight may still be acted on by the peer.  A subscribe is the exception: after it rejects, the
+     * client tries to answer the peer's next report with INVALID_SUBSCRIPTION so the peer drops the subscription.
      */
     abort?: AbortSignal;
 

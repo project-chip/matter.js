@@ -5,15 +5,18 @@
  */
 
 import { NetworkClient } from "#behavior/system/network/NetworkClient.js";
+import { SubscriptionsServer } from "#behavior/system/subscriptions/SubscriptionsServer.js";
 import { AccessControlClient } from "#behaviors/access-control";
 import { BasicInformationClient } from "#behaviors/basic-information";
 import { OnOffClient, OnOffServer } from "#behaviors/on-off";
 import { ClientNodeInteraction } from "#node/client/ClientNodeInteraction.js";
 import type { ClientNode } from "#node/ClientNode.js";
+import { InteractionServer } from "#node/server/InteractionServer.js";
 import { ServerNode } from "#node/ServerNode.js";
 import { ClientNodeStore } from "#storage/client/ClientNodeStore.js";
 import { DatasourceCache } from "#storage/client/DatasourceCache.js";
 import {
+    AbortedError,
     Diagnostic,
     ImplementationError,
     Lifecycle,
@@ -21,6 +24,10 @@ import {
     Logger,
     LogLevel,
     MatterError,
+    MockNetwork,
+    MockRouter,
+    Network,
+    Seconds,
 } from "@matter/general";
 import { clientStructureOf, MockSite, settled, subscribedPeer } from "@matter/node/testing";
 import {
@@ -1101,6 +1108,156 @@ describe("ClientSubscribe", () => {
 
             expect(structure.injectVersionFilters(Read({ attributes: [basicInformation] })).dataVersionFilters).not
                 .undefined;
+        });
+    });
+
+    describe("cancelled while being established", () => {
+        /** Holds the device's unicast packets until {@link release}; mDNS passes. */
+        function holdDeviceReplies(device: ServerNode) {
+            const network = device.env.get(Network);
+            if (!(network instanceof MockNetwork)) {
+                expect.fail("device network is not simulated");
+            }
+            const deviceAddresses = ["abcd::2", "10.10.10.2"];
+            const held = new Array<() => void>();
+            let holding = true;
+            network.simulator.router.intercept((packet: MockRouter.Packet, route: MockRouter.Route) => {
+                if (holding && deviceAddresses.includes(packet.sourceAddress) && packet.destPort !== 5353) {
+                    held.push(() => route(packet));
+                    return;
+                }
+                route(packet);
+            });
+            return {
+                release() {
+                    holding = false;
+                    for (const send of held.splice(0)) {
+                        send();
+                    }
+                },
+            };
+        }
+
+        /** Collects the device's reasons for failing to prime a subscription. */
+        async function primingFailuresDuring(action: () => Promise<void>) {
+            const failures = new Array<string>();
+            Logger.destinations.capture = LogDestination({
+                add(message: Diagnostic.Message) {
+                    if (message.facility === "InteractionServer") {
+                        const text = message.values.join(" ");
+                        if (text.includes("Error while sending initial data reports")) {
+                            failures.push(text);
+                        }
+                    }
+                },
+            });
+            try {
+                await action();
+            } finally {
+                delete Logger.destinations.capture;
+            }
+            return failures;
+        }
+
+        function storedIdsOf(node: ServerNode) {
+            return node.stateOf(SubscriptionsServer).subscriptions.map(({ subscriptionId }) => subscriptionId);
+        }
+
+        function subscribeRequest(abort: AbortController): ClientSubscribe {
+            return {
+                ...Subscribe({ attributes: [{}], keepSubscriptions: true }),
+                sustain: false,
+                abort: abort.signal,
+            };
+        }
+
+        it("answers the priming report that arrives after the cancel with INVALID_SUBSCRIPTION", async () => {
+            await using site = new MockSite();
+            const { controller, device } = await site.addCommissionedPair();
+            const peer = await subscribedPeer(controller, "peer1");
+            const stored = storedIdsOf(device);
+
+            const abort = new AbortController();
+            const replies = holdDeviceReplies(device);
+            device.env.get(InteractionServer).subscriptionEstablishmentStarted.once(() => abort.abort());
+
+            let outcome: unknown;
+            const failures = await primingFailuresDuring(async () => {
+                outcome = await MockTime.resolve(
+                    peer.interaction.subscribe(subscribeRequest(abort)).then(
+                        () => undefined,
+                        (error: unknown) => error,
+                    ),
+                );
+                replies.release();
+                await MockTime.resolve(MockTime.sleep("device handles the status", Seconds(1)));
+            });
+
+            expect(outcome).instanceOf(AbortedError);
+            expect(failures).length(1);
+            expect(failures[0]).contains("InvalidSubscription");
+            expect(storedIdsOf(device)).deep.equals(stored);
+        });
+
+        it("answers the priming report it is processing during the cancel with INVALID_SUBSCRIPTION", async () => {
+            await using site = new MockSite();
+            const { controller, device } = await site.addCommissionedPair();
+            const peer = await subscribedPeer(controller, "peer1");
+            const stored = storedIdsOf(device);
+
+            const abort = new AbortController();
+            const request = subscribeRequest(abort);
+            request.updated = async chunks => {
+                for await (const _chunk of chunks) {
+                    abort.abort();
+                }
+            };
+
+            let outcome: unknown;
+            const failures = await primingFailuresDuring(async () => {
+                outcome = await MockTime.resolve(
+                    peer.interaction.subscribe(request).then(
+                        () => undefined,
+                        (error: unknown) => error,
+                    ),
+                );
+                await MockTime.resolve(MockTime.sleep("device handles the status", Seconds(1)));
+            });
+
+            expect(outcome).instanceOf(AbortedError);
+            expect(failures).length(1);
+            expect(failures[0]).contains("InvalidSubscription");
+            expect(storedIdsOf(device)).deep.equals(stored);
+        });
+
+        it("answers the priming report with INVALID_SUBSCRIPTION when processing it fails", async () => {
+            await using site = new MockSite();
+            const { controller, device } = await site.addCommissionedPair();
+            const peer = await subscribedPeer(controller, "peer1");
+            const stored = storedIdsOf(device);
+
+            const request = subscribeRequest(new AbortController());
+            request.updated = async chunks => {
+                for await (const _chunk of chunks) {
+                    throw new SubscribeRefusedError("priming refused");
+                }
+            };
+
+            let outcome: unknown;
+            const failures = await primingFailuresDuring(async () => {
+                outcome = await MockTime.resolve(
+                    peer.interaction.subscribe(request).then(
+                        () => undefined,
+                        (error: unknown) => error,
+                    ),
+                );
+                await MockTime.resolve(MockTime.sleep("device handles the status", Seconds(1)));
+            });
+
+            expect(outcome).instanceOf(SubscribeRefusedError);
+            expect(failures).length(1);
+            expect(failures[0]).contains("InvalidSubscription");
+            expect(storedIdsOf(device)).deep.equals(stored);
         });
     });
 });

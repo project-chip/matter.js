@@ -17,6 +17,7 @@ import { DecodedInvokeResult, InvokeResult } from "#action/response/InvokeResult
 import { ReadResult } from "#action/response/ReadResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
 import { BdxMessenger } from "#bdx/BdxMessenger.js";
+import type { Message } from "#codec/MessageCodec.js";
 import { Mark } from "#common/Mark.js";
 import { InteractionClientMessenger, MessageType } from "#interaction/InteractionMessenger.js";
 import { Subscription } from "#interaction/Subscription.js";
@@ -1051,60 +1052,80 @@ export class ClientInteraction<
         }
 
         const subscribe = async (request: ClientSubscribe, extraAbort?: AbortSignal) => {
-            await using context = await this.#begin("subscribing", request, interactionSession, extraAbort);
+            const context = await this.#begin("subscribing", request, interactionSession, extraAbort);
             const { abort, messenger } = context;
+            let disposeContext = true;
 
-            logger.info(
-                "Subscribe",
-                Mark.OUTBOUND,
-                messenger.exchange.via,
-                Diagnostic.asFlags({ keepSubscriptions: request.keepSubscriptions }),
-                Diagnostic.dict({
-                    min: Duration.format(request.minIntervalFloor),
-                    max: Duration.format(request.maxIntervalCeiling),
-                }),
-                request,
-            );
+            try {
+                logger.info(
+                    "Subscribe",
+                    Mark.OUTBOUND,
+                    messenger.exchange.via,
+                    Diagnostic.asFlags({ keepSubscriptions: request.keepSubscriptions }),
+                    Diagnostic.dict({
+                        min: Duration.format(request.minIntervalFloor),
+                        max: Duration.format(request.maxIntervalCeiling),
+                    }),
+                    request,
+                );
 
-            await messenger.sendSubscribeRequest(
-                {
-                    ...request,
-                    minIntervalFloorSeconds: Seconds.of(minIntervalFloor),
-                    maxIntervalCeilingSeconds: Seconds.of(maxIntervalCeiling),
-                },
-                { abort },
-            );
+                let responseMessage: Message;
+                try {
+                    await messenger.sendSubscribeRequest(
+                        {
+                            ...request,
+                            minIntervalFloorSeconds: Seconds.of(minIntervalFloor),
+                            maxIntervalCeilingSeconds: Seconds.of(maxIntervalCeiling),
+                        },
+                        { abort },
+                    );
 
-            await this.#handleSubscriptionResponse(request, readChunks(messenger, abort));
-            abort.throwIfAborted();
+                    await this.#handleSubscriptionResponse(request, readChunks(messenger, abort));
+                    abort.throwIfAborted();
 
-            const responseMessage = await messenger.nextMessage(MessageType.SubscribeResponse, { abort });
-            const response = TlvSubscribeResponse.decode(responseMessage.payload);
+                    responseMessage = await messenger.nextMessage(MessageType.SubscribeResponse, { abort });
+                } catch (error) {
+                    // An abort can come after the peer accepted the request, even while we wait for its ack
+                    const awaitReport = abort.aborted;
+                    if (awaitReport || messenger.reportAwaitsStatus) {
+                        disposeContext = false;
+                        this.#abandonSubscription(context, awaitReport, interactionSession).catch(error =>
+                            logger.warn(messenger.exchange.via, "Error ending abandoned subscribe interaction", error),
+                        );
+                    }
+                    throw error;
+                }
+                const response = TlvSubscribeResponse.decode(responseMessage.payload);
 
-            const subscription = new PeerSubscription({
-                lifetime: this.subscriptions,
-                request,
-                peer,
-                closed: () => this.subscriptions.delete(subscription),
-                response,
-                abort,
-                maxPeerResponseTime: this.maximumPeerResponseTime(SUBSCRIPTION_PROCESSING_TIME),
-            });
-            this.subscriptions.addPeer(subscription);
+                const subscription = new PeerSubscription({
+                    lifetime: this.subscriptions,
+                    request,
+                    peer,
+                    closed: () => this.subscriptions.delete(subscription),
+                    response,
+                    abort,
+                    maxPeerResponseTime: this.maximumPeerResponseTime(SUBSCRIPTION_PROCESSING_TIME),
+                });
+                this.subscriptions.addPeer(subscription);
 
-            logger.info(
-                "Subscription successful",
-                Mark.INBOUND,
-                messenger.exchange.via,
-                messenger.exchange.diagnostics,
-                Diagnostic.dict({
-                    id: Subscription.idStrOf(response.subscriptionId),
-                    interval: Duration.format(Seconds(response.maxInterval)),
-                    timeout: Duration.format(subscription.timeout),
-                }),
-            );
+                logger.info(
+                    "Subscription successful",
+                    Mark.INBOUND,
+                    messenger.exchange.via,
+                    messenger.exchange.diagnostics,
+                    Diagnostic.dict({
+                        id: Subscription.idStrOf(response.subscriptionId),
+                        interval: Duration.format(Seconds(response.maxInterval)),
+                        timeout: Duration.format(subscription.timeout),
+                    }),
+                );
 
-            return subscription;
+                return subscription;
+            } finally {
+                if (disposeContext) {
+                    await context[Symbol.asyncDispose]();
+                }
+            }
         };
 
         const read = (request: Read, extraAbort?: AbortSignal, logContext?: ExchangeLogContext) => {
@@ -1150,6 +1171,22 @@ export class ClientInteraction<
         this.subscriptions.addActive(subscription);
 
         return subscription as unknown as SubscriptionResult<T>;
+    }
+
+    /**
+     * Ends a subscribe interaction that stopped before the peer confirmed the subscription, then disposes it.
+     *
+     * The peer holds the subscription from the moment it accepted the request.  The caller does not wait for this, so
+     * an abort stays as prompt as for other interactions; {@link close} waits for it and cuts it short.
+     */
+    async #abandonSubscription(context: RequestContext, awaitReport: boolean, session?: InteractionSession) {
+        try {
+            // Once the session or this interactable closes, waiting for the peer serves nobody
+            using peerReachable = Abort.any(session?.abort, this.#abort);
+            await context.messenger.abandonSubscription({ awaitReport, abort: peerReachable.signal });
+        } finally {
+            await context[Symbol.asyncDispose]();
+        }
     }
 
     async #handleSubscriptionResponse(request: Subscribe, result: ReadResult) {

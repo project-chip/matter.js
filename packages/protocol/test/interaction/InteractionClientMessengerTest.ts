@@ -349,6 +349,103 @@ describe("InteractionClientMessenger", () => {
         expect(exchangeClosed).to.be.true;
     });
 
+    describe("abandonSubscription", () => {
+        function report(fields: { suppressResponse?: boolean; moreChunkedMessages?: boolean } = {}) {
+            return {
+                packetHeader: {},
+                payloadHeader: { messageType: MessageType.ReportData },
+                payload: TlvDataReport.encode({
+                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    suppressResponse: false,
+                    subscriptionId: 7,
+                    ...fields,
+                }),
+            };
+        }
+
+        function subscribeResponse() {
+            return {
+                packetHeader: {},
+                payloadHeader: { messageType: MessageType.SubscribeResponse },
+                payload: TlvSubscribeResponse.encode({
+                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    subscriptionId: 7,
+                    maxInterval: 60,
+                }),
+            };
+        }
+
+        /** A peer that sends {@link messages} and records the statuses the client sends. */
+        function peer(...messages: unknown[]) {
+            const queue = new DataReadQueue<unknown>();
+            for (const message of messages) {
+                queue.write(message);
+            }
+            const statuses = new Array<Status>();
+            const exchange = {
+                maxPayloadSize: 1200,
+                send: async (messageType: number, payload: Bytes) => {
+                    expect(messageType).equals(MessageType.StatusResponse);
+                    statuses.push(TlvStatusResponse.decode(payload).status);
+                },
+                nextMessage: () => queue.read(),
+                close: async () => {},
+            } as unknown as MessageExchange;
+            return { messenger: new InteractionClientMessenger(exchange), statuses };
+        }
+
+        it("answers a report it has not answered yet with INVALID_SUBSCRIPTION", async () => {
+            const { messenger, statuses } = peer(report({ moreChunkedMessages: true }));
+            await messenger.readDataReports().next();
+
+            expect(messenger.reportAwaitsStatus).true;
+            await messenger.abandonSubscription({ awaitReport: false });
+
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
+            expect(messenger.reportAwaitsStatus).false;
+        });
+
+        it("answers the next report with INVALID_SUBSCRIPTION when asked to await it", async () => {
+            const { messenger, statuses } = peer(report());
+
+            await messenger.abandonSubscription({ awaitReport: true });
+
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
+        });
+
+        it("leaves a SubscribeResponse unanswered", async () => {
+            const { messenger, statuses } = peer(subscribeResponse());
+
+            await messenger.abandonSubscription({ awaitReport: true });
+
+            expect(statuses).deep.equals([]);
+        });
+
+        it("sends nothing when no report waits for a status and it is not asked to await one", async () => {
+            const { messenger, statuses } = peer(report());
+
+            await messenger.abandonSubscription({ awaitReport: false });
+
+            expect(statuses).deep.equals([]);
+        });
+
+        it("does not consider a report with SuppressResponse as waiting for a status", async () => {
+            const { messenger } = peer(report({ suppressResponse: true }));
+            await messenger.readDataReports().next();
+
+            expect(messenger.reportAwaitsStatus).false;
+        });
+
+        it("does not consider a report waiting for a status once it was answered", async () => {
+            const { messenger, statuses } = peer(report({ moreChunkedMessages: true }), report());
+            for await (const _report of messenger.readDataReports());
+            await messenger.close();
+
+            expect(statuses).deep.equals([Status.Success, Status.Success]);
+            expect(messenger.reportAwaitsStatus).false;
+        });
+    });
+
     describe("writes", () => {
         const ENTRY = Bytes.fromHex("ab".repeat(300));
 

@@ -10,6 +10,7 @@ import { Mark } from "#common/Mark.js";
 import { PeerUnresponsiveError } from "#peer/PeerCommunicationError.js";
 import { UnexpectedMessageError } from "#protocol/errors.js";
 import {
+    asError,
     Bytes,
     causedBy,
     Diagnostic,
@@ -66,7 +67,7 @@ import {
     encodeEventPayload,
     EventReportPayload,
 } from "./AttributeDataEncoder.js";
-import { Subscription } from "./Subscription.js";
+import { Subscription, SubscriptionId } from "./Subscription.js";
 
 export enum MessageType {
     StatusResponse = 0x01,
@@ -968,6 +969,9 @@ export class InteractionServerMessenger extends InteractionMessenger {
 }
 
 export class IncomingInteractionClientMessenger extends InteractionMessenger {
+    /** Set while the peer waits for our status on the last data report it sent. */
+    #reportAwaitingStatus?: { subscriptionId?: SubscriptionId };
+
     async waitFor(expectedMessageInfo: string, messageType: number, options?: ExchangeReceiveOptions) {
         const message = await this.anyNextMessage(expectedMessageInfo, options);
         const {
@@ -999,9 +1003,14 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         while (true) {
             const dataReportMessage = await this.waitFor("DataReport", MessageType.ReportData, options);
             const report = TlvDataReport.decode(dataReportMessage.payload);
+            this.#reportAwaitingStatus =
+                report.suppressResponse && !report.moreChunkedMessages
+                    ? undefined
+                    : { subscriptionId: report.subscriptionId };
 
             yield report;
 
+            this.#reportAwaitingStatus = undefined;
             if (report.moreChunkedMessages) {
                 await this.sendStatus(Status.Success, {
                     multipleMessageInteraction: true,
@@ -1028,6 +1037,59 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
             if (!report.moreChunkedMessages) {
                 break;
             }
+        }
+    }
+
+    /** Whether the peer waits for our status on the last data report it sent. */
+    get reportAwaitsStatus() {
+        return this.#reportAwaitingStatus !== undefined;
+    }
+
+    /**
+     * Answers the peer's data report with INVALID_SUBSCRIPTION, which makes the peer terminate the subscription.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 8.5
+     */
+    async sendInvalidSubscription(subscriptionId?: SubscriptionId, options?: { abort?: AbortSignal }) {
+        this.#reportAwaitingStatus = undefined;
+        await this.sendStatus(Status.InvalidSubscription, {
+            abort: options?.abort,
+            multipleMessageInteraction: true,
+            logContext: Subscription.diagnosticOf(subscriptionId),
+        });
+    }
+
+    /**
+     * Ends a subscribe interaction the client gave up before the peer confirmed the subscription.
+     *
+     * The peer holds the subscription from the moment it accepts the request, so it must learn that the client no
+     * longer wants it.  Answers the report the peer waits on with INVALID_SUBSCRIPTION.  If there is none and
+     * `awaitReport` is set, waits for the next message instead, up to the usual response time, and answers it if it
+     * is a report.  A SubscribeResponse cannot be answered; the peer then drops the subscription when its next report
+     * is refused.  Never throws.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 8.5
+     */
+    async abandonSubscription({ awaitReport, abort }: { awaitReport: boolean; abort?: AbortSignal }) {
+        try {
+            let subscriptionId = this.#reportAwaitingStatus?.subscriptionId;
+            if (this.#reportAwaitingStatus === undefined) {
+                if (!awaitReport) {
+                    return;
+                }
+                const message = await this.anyNextMessage("DataReport", { abort, suppressPeerLoss: true });
+                if (message.payloadHeader.messageType !== MessageType.ReportData) {
+                    return;
+                }
+                subscriptionId = TlvDataReport.decode(message.payload).subscriptionId;
+            }
+            await this.sendInvalidSubscription(subscriptionId, { abort });
+        } catch (error) {
+            logger.debug(
+                this.exchange.via,
+                "Abandoned subscription not terminated on the peer:",
+                Diagnostic.errorMessage(asError(error)),
+            );
         }
     }
 
