@@ -19,6 +19,7 @@ import {
     AsyncObservable,
     BinaryKeyPair,
     Bytes,
+    CertificateError,
     Crypto,
     DataWriter,
     Diagnostic,
@@ -73,9 +74,9 @@ export class Fabric {
     readonly operationalCert: Bytes;
     readonly #keyPair: Key;
     readonly #sessions = new Set<SecureSession>();
-    readonly #groups: FabricGroups;
+    #groups: FabricGroups;
     #icd?: FabricIcd;
-    readonly #accessControl: FabricAccessControl;
+    #accessControl: FabricAccessControl;
 
     readonly #leaving = AsyncObservable<[]>();
     readonly #deleting = AsyncObservable<[]>();
@@ -278,8 +279,22 @@ export class Fabric {
     }
 
     /**
+     * Take over the runtime state of {@link previous}, the object this one replaces for the same fabric: groups, access
+     * control, ICD state and the storage context.  Both objects then share the same instances, so sessions still bound
+     * to {@link previous} see every change.  Only valid when the root, fabric ID and IPK are unchanged.
+     */
+    takeOverRuntimeStateOf(previous: Fabric) {
+        this.#groups = previous.#groups;
+        this.#accessControl = previous.#accessControl;
+        this.#icd = previous.icd;
+        this.#storage = previous.#storage;
+    }
+
+    /**
      * Release in-memory resources that must not outlive the fabric — currently the ICD wakefulness timers, which would
      * otherwise keep firing and delay node shutdown.  Does not delete or unpersist the fabric.
+     *
+     * The instances are shared with replaced objects of the same fabric, so only `FabricManager` disposes.
      */
     [Symbol.dispose](): void {
         this.#icd?.close();
@@ -395,7 +410,7 @@ export class Fabric {
         }
     }
 
-    set persistCallback(callback: (isUpdate?: boolean) => MaybePromise<void>) {
+    set persistCallback(callback: ((isUpdate?: boolean) => MaybePromise<void>) | undefined) {
         // TODO Remove "isUpdate" parameter as soon as the fabric scoped data are removed from here/legacy API gets removed
         this.#persistCallback = callback;
     }
@@ -454,7 +469,6 @@ export class Fabric {
     async #delete(currentExchange?: MessageExchange) {
         await this.#deleting.emit();
         await this.#closeSessions(currentExchange);
-        this[Symbol.dispose]();
         await this.#deleted.emit();
     }
 
@@ -504,6 +518,7 @@ export class FabricBuilder {
     #vidVerificationStatement?: Bytes;
     #vvsc?: Bytes;
     #fabricIndex?: FabricIndex;
+    #expectedFabricId?: FabricId;
     #label = "";
 
     constructor(crypto: Crypto, key: PrivateKey) {
@@ -531,6 +546,8 @@ export class FabricBuilder {
         const root = Rcac.fromTlv(rootCert);
         await root.verify(this.#crypto);
         this.#rootCert = rootCert;
+        // A new root means a new fabric, so a preceding update preparation no longer constrains the fabric ID
+        this.#expectedFabricId = undefined;
         return this;
     }
 
@@ -570,6 +587,12 @@ export class FabricBuilder {
         }
         await nocCert.verify(this.#crypto, rootCert, icaCert);
 
+        if (this.#expectedFabricId !== undefined && FabricId(fabricId) !== this.#expectedFabricId) {
+            throw new CertificateError(
+                `Operational certificate is for fabric ID ${fabricId}, but the updated fabric has fabric ID ${this.#expectedFabricId}`,
+            );
+        }
+
         this.#operationalCert = operationalCert;
         this.#intermediateCACert = intermediateCACert;
         this.#fabricId = FabricId(fabricId);
@@ -601,7 +624,14 @@ export class FabricBuilder {
         return this;
     }
 
+    /**
+     * Prepare an update of the operational credentials of {@link fabric}.  A following
+     * {@link setOperationalCert} accepts only a NOC for the same fabric ID.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 11.18.6.9.1
+     */
     initializeFromFabricForUpdate(fabric: Fabric) {
+        this.#expectedFabricId = fabric.fabricId;
         this.#rootVendorId = fabric.rootVendorId;
         this.#rootNodeId = fabric.rootNodeId;
         this.#identityProtectionKey = fabric.identityProtectionKey;

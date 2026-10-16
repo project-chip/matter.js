@@ -97,15 +97,4 @@ export class MessagingState {
     forgetReceptionState(operationalKey: Bytes) {
         this.#messageDataReceptionState.delete(Bytes.toHex(operationalKey));
     }
-
-    /**
-     * Replace the reception state with that of {@link source}, the state of the same fabric before its operational
-     * credentials changed.  The per-source reception states are shared, so replay protection continues across the change.
-     */
-    copyReceptionStateFrom(source: MessagingState) {
-        this.#messageDataReceptionState.clear();
-        for (const [operationalKey, bySource] of source.#messageDataReceptionState) {
-            this.#messageDataReceptionState.set(operationalKey, new Map(bySource));
-        }
-    }
 }

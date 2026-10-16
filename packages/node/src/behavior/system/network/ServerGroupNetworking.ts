@@ -77,19 +77,6 @@ export class ServerGroupNetworking {
             return this.#reconcile();
         });
 
-        this.#observers.on(fabrics.events.replaced, fabric => {
-            const fabricIndex = fabric.fabricIndex;
-            this.#observersForFabric(fabricIndex).close();
-            this.#fabricObservers.delete(fabricIndex);
-            this.#registerFabricGroupObserver(fabric);
-
-            this.#desired.delete(fabricIndex);
-            for (const groupId of fabric.groups.endpoints.keys()) {
-                this.#want(groupId, fabric);
-            }
-            return this.#reconcile();
-        });
-
         await this.#reconcile();
     }
 
@@ -215,11 +202,11 @@ export class ServerGroupNetworking {
         });
 
         // A group's resolved address can change independent of endpoint add/remove (e.g. Groupcast applying its
-        // policy after GKM has already restored endpoints on reload/fabric-replace).  The policy map emits before it
-        // commits the value, so the address is read after a yield.
+        // policy after GKM has already restored endpoints on reload).  The policy map emits before it commits the
+        // value, so the address is read after a yield.
         const rebind = async (groupId: GroupId) => {
             await Promise.resolve();
-            // A replaced fabric registers new observers; the old fabric's pending rebind must not overwrite its address
+            // A fabric added later under the same index registers new observers; a pending rebind must not touch it
             if (this.#fabricObservers.get(fabricIndex) === observers && this.#desired.get(fabricIndex)?.has(groupId)) {
                 this.#want(groupId, fabric);
                 await this.#reconcile();

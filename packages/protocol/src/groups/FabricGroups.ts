@@ -5,11 +5,10 @@
  */
 
 import { MessagePrivacy } from "#codec/MessagePrivacy.js";
-import type { Fabric } from "#fabric/Fabric.js";
 import { GroupKeySet, KeySets, OperationalKeySet } from "#groups/KeySets.js";
 import { MessagingState } from "#groups/MessagingState.js";
-import { BasicMap, Bytes, hex, InternalError, MatterFlowError, StorageContext } from "@matter/general";
-import { GroupId, MATTER_EPOCH_OFFSET_US } from "@matter/types";
+import { BasicMap, Bytes, Crypto, hex, InternalError, MatterFlowError, StorageContext } from "@matter/general";
+import { FabricId, GlobalFabricId, GroupId, MATTER_EPOCH_OFFSET_US } from "@matter/types";
 import { GroupMulticastPolicy, Groups } from "./Groups.js";
 
 export const GROUP_SECURITY_INFO = Bytes.fromString("GroupKey v1.0");
@@ -19,16 +18,18 @@ export const IPK_DEFAULT_EPOCH_START_TIME = MATTER_EPOCH_OFFSET_US;
  * Class that contains an operational view on the Group Keys for a fabric
  */
 export class FabricGroups {
-    #fabric: Fabric;
+    readonly #crypto: Crypto;
+    readonly #globalId: GlobalFabricId;
     #groups: Groups;
     #messagingState: MessagingState;
 
     /** Operationally enhanced variants of the group key sets based on their ID. */
     #keySets = new KeySets();
 
-    constructor(fabric: Fabric, storage?: StorageContext) {
-        this.#fabric = fabric;
-        this.#groups = new Groups(fabric, this.#keySets);
+    constructor(fabric: FabricGroups.FabricIdentity, storage?: StorageContext) {
+        this.#crypto = fabric.crypto;
+        this.#globalId = fabric.globalId;
+        this.#groups = new Groups(fabric.fabricId, this.#keySets);
         this.#messagingState = new MessagingState();
 
         // KeySet with ID 0 is always the Fabric IPK, so we initialize from there because this is not stored
@@ -115,30 +116,6 @@ export class FabricGroups {
         this.#groups.removeGroupMulticastPolicy(groupId);
     }
 
-    /**
-     * Replace all group state with that of {@link source}, the groups of the same fabric before its operational
-     * credentials changed.
-     *
-     * The derived operational keys and session IDs are taken over as they are.  They depend only on the epoch keys and
-     * the compressed fabric ID, so the caller must ensure that root public key, fabric ID and IPK are unchanged.
-     */
-    copyFrom(source: FabricGroups) {
-        for (const keySet of [...this.#keySets]) {
-            if (source.#keySets.forId(keySet.groupKeySetId) === undefined) {
-                this.#keySets.delete(keySet);
-            }
-        }
-        for (const keySet of source.#keySets) {
-            this.#keySets.add({ ...keySet });
-        }
-
-        this.#groups.idMap = source.#groups.idMap;
-        copyEntries(source.#groups.endpointMap, this.#groups.endpointMap, endpoints => [...endpoints]);
-        copyEntries(source.#groups.multicastPolicy, this.#groups.multicastPolicy, policy => policy);
-
-        this.#messagingState.copyReceptionStateFrom(source.#messagingState);
-    }
-
     /*
     TODO for Controller to generate new epochs
     addGroupEpoch(groupKeySetId: number, startTimeMs = Time.nowMs) {
@@ -164,43 +141,37 @@ export class FabricGroups {
         }
 
         // Lets pre-calculate the operational keys
-        const globalId = Bytes.fromHex(hex.fixed(this.#fabric.globalId, 16));
-        const operationalEpochKey0 = await this.#fabric.crypto.createHkdfKey(epochKey0, globalId, GROUP_SECURITY_INFO);
+        const globalId = Bytes.fromHex(hex.fixed(this.#globalId, 16));
+        const operationalEpochKey0 = await this.#crypto.createHkdfKey(epochKey0, globalId, GROUP_SECURITY_INFO);
         const operationalEpochKey1 =
-            epochKey1 !== null
-                ? await this.#fabric.crypto.createHkdfKey(epochKey1, globalId, GROUP_SECURITY_INFO)
-                : null;
+            epochKey1 !== null ? await this.#crypto.createHkdfKey(epochKey1, globalId, GROUP_SECURITY_INFO) : null;
         const operationalEpochKey2 =
-            epochKey2 !== null
-                ? await this.#fabric.crypto.createHkdfKey(epochKey2, globalId, GROUP_SECURITY_INFO)
-                : null;
-        const operationalPrivacyKey0 = Bytes.of(
-            await MessagePrivacy.deriveKey(this.#fabric.crypto, operationalEpochKey0),
-        );
+            epochKey2 !== null ? await this.#crypto.createHkdfKey(epochKey2, globalId, GROUP_SECURITY_INFO) : null;
+        const operationalPrivacyKey0 = Bytes.of(await MessagePrivacy.deriveKey(this.#crypto, operationalEpochKey0));
         const operationalPrivacyKey1 =
             operationalEpochKey1 !== null
-                ? Bytes.of(await MessagePrivacy.deriveKey(this.#fabric.crypto, operationalEpochKey1))
+                ? Bytes.of(await MessagePrivacy.deriveKey(this.#crypto, operationalEpochKey1))
                 : null;
         const operationalPrivacyKey2 =
             operationalEpochKey2 !== null
-                ? Bytes.of(await MessagePrivacy.deriveKey(this.#fabric.crypto, operationalEpochKey2))
+                ? Bytes.of(await MessagePrivacy.deriveKey(this.#crypto, operationalEpochKey2))
                 : null;
         this.#keySets.add({
             ...groupKeySet,
             operationalEpochKey0,
             operationalPrivacyKey0,
-            groupSessionId0: await this.#keySets.sessionIdFromKey(this.#fabric.crypto, operationalEpochKey0),
+            groupSessionId0: await this.#keySets.sessionIdFromKey(this.#crypto, operationalEpochKey0),
             operationalEpochKey1,
             operationalPrivacyKey1,
             groupSessionId1:
                 operationalEpochKey1 !== null
-                    ? await this.#keySets.sessionIdFromKey(this.#fabric.crypto, operationalEpochKey1)
+                    ? await this.#keySets.sessionIdFromKey(this.#crypto, operationalEpochKey1)
                     : null,
             operationalEpochKey2,
             operationalPrivacyKey2,
             groupSessionId2:
                 operationalEpochKey2 !== null
-                    ? await this.#keySets.sessionIdFromKey(this.#fabric.crypto, operationalEpochKey2)
+                    ? await this.#keySets.sessionIdFromKey(this.#crypto, operationalEpochKey2)
                     : null,
         });
         // An in-place rewrite that changes epoch keys drops the previous operational keys; forget their reception state
@@ -249,13 +220,13 @@ export class FabricGroups {
     }
 }
 
-function copyEntries<K, V>(source: Map<K, V>, target: Map<K, V>, copy: (value: V) => V) {
-    for (const key of [...target.keys()]) {
-        if (!source.has(key)) {
-            target.delete(key);
-        }
-    }
-    for (const [key, value] of source) {
-        target.set(key, copy(value));
+export namespace FabricGroups {
+    /** The fabric values group key derivation and multicast addressing depend on. */
+    export interface FabricIdentity {
+        crypto: Crypto;
+        fabricId: FabricId;
+        globalId: GlobalFabricId;
+        identityProtectionKey: Bytes;
+        operationalIdentityProtectionKey: Bytes;
     }
 }

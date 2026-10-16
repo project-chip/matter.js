@@ -12,10 +12,13 @@ import { OperationalCredentialsClient } from "#behaviors/operational-credentials
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { ClientNode } from "#node/ClientNode.js";
 import { ServerNode } from "#node/ServerNode.js";
-import { Bytes, Crypto, MockNetwork, Network } from "@matter/general";
+import { Bytes, Crypto } from "@matter/general";
+import { AccessLevel, DataModelPath } from "@matter/model";
 import { FAILSAFE_LENGTH_S, MockServerNode, MockSite } from "@matter/node/testing";
 import {
+    AccessControl,
     Certificate,
+    Fabric,
     FabricAuthority,
     FabricManager,
     IANA_GROUPCAST_MULTICAST_ADDRESS,
@@ -34,7 +37,9 @@ import {
     VendorId,
 } from "@matter/types";
 import { Groupcast } from "@matter/types/clusters/groupcast";
+import { OnOff } from "@matter/types/clusters/on-off";
 import { OperationalCredentials } from "@matter/types/clusters/operational-credentials";
+import { recordMembershipChanges } from "../groupcast/multicast-helpers.js";
 
 describe("OperationalCredentialsServer", () => {
     before(() => {
@@ -163,10 +168,19 @@ describe("OperationalCredentialsServer", () => {
             GroupKeyManagementServer,
             AccessControlServer.with("Extension", "Auxiliary"),
         );
+        const GROUP = GroupId(0x0001);
+
+        function peerOf(controller: ServerNode) {
+            const peer = controller.peers.get("peer1");
+            if (peer === undefined) {
+                expect.fail("The controller has no commissioned peer");
+            }
+            return peer;
+        }
 
         /** Runs UpdateNOC from the controller with a NOC for `fabricId`, by default the fabric's own. */
         async function updateNoc(controller: ServerNode, device: ServerNode, fabricId?: FabricId) {
-            const peer = controller.peers.get("peer1")!;
+            const peer = peerOf(controller);
             // Mock crypto would derive the operational key pair the fabric already holds
             const crypto = device.env.get(Crypto);
             if (!("entropic" in crypto)) {
@@ -192,68 +206,100 @@ describe("OperationalCredentialsServer", () => {
             return await commands.updateNoc({ nocValue: noc, icacValue: fabric.intermediateCACert });
         }
 
-        it("carries group keys, group map and multicast policy to the new fabric", async () => {
-            await using site = new MockSite();
+        /** A device on the controller's fabric with a Groupcast group on endpoint 1 with an auxiliary ACL entry. */
+        async function deviceWithGroup(site: MockSite) {
             const { controller, device } = await site.addCommissionedPair({
                 device: { type: GroupcastDeviceRoot, device: OnOffLightDevice },
             });
-            const group = GroupId(0x0001);
-            await controller.peers
-                .get("peer1")!
+            await peerOf(controller)
                 .commandsOf(GroupcastClient)
                 .joinGroup({
-                    groupId: group,
+                    groupId: GROUP,
                     endpoints: [EndpointNumber(1)],
                     keySetId: 1,
                     key: new Uint8Array(16),
+                    useAuxiliaryAcl: true,
                     mcastAddrPolicy: Groupcast.MulticastAddrPolicy.IanaAddr,
                 });
             await MockTime.yield3();
-
             const fabrics = device.env.get(FabricManager);
-            const previous = fabrics.fabrics[0];
-            const network = device.env.get(Network);
-            if (!(network instanceof MockNetwork)) {
-                expect.fail("The device does not run on a MockNetwork");
-            }
-            expect(network.isMemberOf(IANA_GROUPCAST_MULTICAST_ADDRESS)).true;
-            const membershipChanges = new Array<string>();
-            const addMembership = network.addMembership.bind(network);
-            const dropMembership = network.dropMembership.bind(network);
-            network.addMembership = (...ips: string[]) => {
-                membershipChanges.push(`join ${ips.join()}`);
-                addMembership(...ips);
+            return { controller, device, fabrics, previous: fabrics.fabrics[0] };
+        }
+
+        /** What a group message for {@link GROUP} would meet on `fabric`: key, endpoints, address and ACL. */
+        function groupStateOf(fabric: Fabric) {
+            const { keySetId, key } = fabric.groups.currentKeyForGroup(GROUP);
+            const session: AccessControl.RemoteActorSession = {
+                fabric: fabric.fabricIndex,
+                subject: fabric.groups.subjectForGroup(GROUP, key),
+                authorityAt: () => AccessControl.Authority.Granted,
             };
-            network.dropMembership = (...ips: string[]) => {
-                membershipChanges.push(`leave ${ips.join()}`);
-                dropMembership(...ips);
+            return {
+                keySetId,
+                endpoints: fabric.groups.endpoints.get(GROUP),
+                address: fabric.groups.multicastAddressFor(GROUP),
+                onOffAccess: fabric.accessControl.accessLevelsFor(
+                    session,
+                    { path: DataModelPath.none, endpoint: EndpointNumber(1), cluster: OnOff.Cluster.id },
+                    { id: EndpointNumber(1), deviceTypes: [] },
+                ),
             };
+        }
+
+        const expectedGroupState = {
+            keySetId: 1,
+            endpoints: [EndpointNumber(1)],
+            address: IANA_GROUPCAST_MULTICAST_ADDRESS,
+            onOffAccess: [AccessLevel.Operate, AccessLevel.View],
+        };
+
+        it("keeps group keys, endpoints, multicast policy and group ACL of the fabric", async () => {
+            await using site = new MockSite();
+            const { controller, device, fabrics, previous } = await deviceWithGroup(site);
+            expect(groupStateOf(previous)).deep.equals(expectedGroupState);
+            const { changes } = recordMembershipChanges(device);
             const atReplacement = new Array<unknown>();
-            fabrics.events.replaced.on(fabric => {
-                atReplacement.push({
-                    keySetId: fabric.groups.groupKeyIdMap.get(group),
-                    hasKeySet: fabric.groups.keySets.forId(1) !== undefined,
-                    endpoints: fabric.groups.endpoints.get(group),
-                    address: fabric.groups.multicastAddressFor(group),
-                });
-            });
+            fabrics.events.replaced.on(fabric => void atReplacement.push(groupStateOf(fabric)));
 
             const { statusCode } = await updateNoc(controller, device);
 
             expect(statusCode).equals(OperationalCredentials.NodeOperationalCertStatus.Ok);
             expect(fabrics.fabrics[0]).not.equals(previous);
-            expect(atReplacement).deep.equals([
-                {
-                    keySetId: 1,
-                    hasKeySet: true,
-                    endpoints: [EndpointNumber(1)],
-                    address: IANA_GROUPCAST_MULTICAST_ADDRESS,
-                },
-            ]);
+            expect(atReplacement).deep.equals([expectedGroupState]);
             for (let i = 0; i < 20; i++) {
                 await MockTime.yield3();
             }
-            expect(membershipChanges).deep.equals([]);
+            expect(changes).deep.equals([]);
+        });
+
+        it("keeps the group state when the fail-safe expires and restores the previous credentials", async () => {
+            await using site = new MockSite();
+            const { controller, device, fabrics, previous } = await deviceWithGroup(site);
+            const restored = new Promise<void>(resolve =>
+                fabrics.events.replaced.on(fabric => {
+                    if (fabric === previous) {
+                        resolve();
+                    }
+                }),
+            );
+
+            await updateNoc(controller, device);
+            const replacement = fabrics.fabrics[0];
+            expect(replacement).not.equals(previous);
+            replacement.groups.endpoints.set(GROUP, [EndpointNumber(1), EndpointNumber(2)]);
+            await MockTime.resolve(restored, { macrotasks: true });
+
+            expect(fabrics.fabrics[0]).equals(previous);
+            expect(groupStateOf(previous)).deep.equals({
+                ...expectedGroupState,
+                endpoints: [EndpointNumber(1), EndpointNumber(2)],
+            });
+
+            const events = new Array<string>();
+            fabrics.events.deleting.on(fabric => void events.push(`deleting ${fabric.fabricIndex}`));
+            fabrics.events.deleted.on(fabric => void events.push(`deleted ${fabric.fabricIndex}`));
+            await previous.delete();
+            expect(events).deep.equals([`deleting ${previous.fabricIndex}`, `deleted ${previous.fabricIndex}`]);
         });
 
         it("rejects a NOC for another fabric ID with InvalidNOC", async () => {

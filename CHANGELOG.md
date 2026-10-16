@@ -243,6 +243,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 - @matter/protocol
     - Breaking: Outgoing group messages use message privacy; matter.js based devices <0.17.2 will not receive them
+    - Breaking: The `Groups` constructor takes the fabric ID instead of the `Fabric`
     - Breaking: Received group messages are decrypted only with key sets mapped in the GroupKeyMap
     - Breaking: Sending a group message without a usable key fails with `NoUsableGroupKeyError` (`GroupKeySetMissingError` or `GroupKeyNotStartedError`)
     - Breaking: `DclClient` maps DCL records to their schema types (empty values become `undefined`, `otaFileSize` is a `bigint`) and ignores records with unsupported schema versions
@@ -302,8 +303,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A closed `SustainedSubscription` always ends not live, whatever phase the close interrupts and even when an `active`/`inactive` observer throws
     - Fix: `FabricAuthority.createFabric()` resolves once the new fabric is persisted, rejects when persisting fails, and no longer reports the new fabric as replaced
     - Fix: Automatic invoke batching groups commands per network and sends a command with its own options alone, so it keeps them but may overtake earlier batched commands
-    - Fix: A fabric replaced by UpdateNOC or NOC rotation keeps its group keys, groups and Groupcast policies immediately
-    - Fix: UpdateNOC rejects a NOC for another fabric ID with `InvalidNOC`
+    - Fix: A fabric replaced by UpdateNOC or NOC rotation keeps its group state, ACL, ICD registrations and Check-In peers without interruption
+    - Fix: UpdateNOC rejects a NOC for another fabric ID (`InvalidNOC`)
+    - Fix: Removing a fabric that a fail-safe expiry restored emits `deleting` and `deleted` once
 
 - @matter/react-native
     - Fix: `ReactNativeBle.scanner` returns the same `BleScanner` on every access

@@ -11,7 +11,6 @@ import type { NodeSession } from "#session/NodeSession.js";
 import {
     AsyncObservable,
     Bytes,
-    CertificateError,
     Construction,
     Duration,
     Logger,
@@ -213,22 +212,14 @@ export abstract class FailsafeContext {
     /**
      * Build a new Fabric object based on an existing fabric for the "UpdateNoc" case of the Operational Credentials
      * cluster.
-     *
-     * @see {@link MatterSpecification.v161.Core} § 11.18.6.9.1
      */
     async buildUpdatedFabric(nocValue: Bytes, icacValue: Bytes | undefined) {
-        const fabric = this.associatedFabric;
-        if (fabric === undefined) {
+        if (this.associatedFabric === undefined) {
             throw new MatterFlowError("No fabric associated with failsafe context, but we prepare an Fabric update.");
         }
-        this.#builder.initializeFromFabricForUpdate(fabric);
+        this.#builder.initializeFromFabricForUpdate(this.associatedFabric);
         await this.#builder.setOperationalCert(nocValue, icacValue);
-        if (this.#builder.fabricId !== fabric.fabricId) {
-            throw new CertificateError(
-                `UpdateNOC certificate is for fabric ID ${this.#builder.fabricId}, but fabric ${fabric.fabricIndex} has fabric ID ${fabric.fabricId}`,
-            );
-        }
-        return await this.#builder.build(fabric.fabricIndex);
+        return await this.#builder.build(this.associatedFabric.fabricIndex);
     }
 
     /** Build a new Fabric object for a new fabric for the "AddNoc" case of the Operational Credentials cluster. */

@@ -6,10 +6,12 @@
 
 import { CertificateAuthority } from "#certificate/CertificateAuthority.js";
 import { Noc } from "#certificate/kinds/Noc.js";
+import { FabricBuilder } from "#fabric/Fabric.js";
 import { FabricAuthority } from "#fabric/FabricAuthority.js";
 import { FabricManager } from "#fabric/FabricManager.js";
 import {
     Bytes,
+    CertificateError,
     createPromise,
     ImplementationError,
     MemoryStorageDriver,
@@ -182,6 +184,54 @@ describe("FabricAuthority", () => {
             const current = rotatedFabric.groups.currentKeyForGroup(GroupId(7));
             expect(Bytes.areEqual(current.key, key)).true;
             expect(current.sessionId).equals(sessionId);
+        });
+
+        it("rotated fabric keeps receiving Check-Ins of the ICD peers of the previous fabric", async () => {
+            const config = { adminFabricLabel: "test-fabric", adminFabricId: FabricId(1n) };
+            const initialFabric = await authority.createFabric(config);
+            const peer = {
+                peerNodeId: NodeId(0x55n),
+                key: Bytes.fromHex("00112233445566778899aabbccddeeff"),
+                counterStart: 0,
+                lastOffset: 0,
+            };
+            initialFabric.icd.addPeer(peer, () => {});
+
+            const rotatedFabric = await authority.defaultFabric(config, true);
+
+            expect(rotatedFabric).not.equals(initialFabric);
+            expect(rotatedFabric.icdActive).true;
+            expect(rotatedFabric.icd.peerFor(peer.peerNodeId)?.peerNodeId).equals(peer.peerNodeId);
+        });
+
+        it("refuses to rotate to a NOC for another fabric ID", async () => {
+            const fabric = await authority.createFabric({
+                adminFabricLabel: "test-fabric",
+                adminFabricId: FabricId(1n),
+            });
+            const builder = await FabricBuilder.create(crypto);
+            builder.initializeFromFabricForUpdate(fabric);
+            const noc = await ca.generateNoc(builder.publicKey, FabricId(2n), fabric.nodeId);
+
+            await expect(builder.setOperationalCert(noc, fabric.intermediateCACert)).rejectedWith(
+                CertificateError,
+                /fabric ID 2/,
+            );
+        });
+
+        it("accepts a NOC for a new fabric once a builder prepared for an update gets a new root", async () => {
+            const fabric = await authority.createFabric({
+                adminFabricLabel: "test-fabric",
+                adminFabricId: FabricId(1n),
+            });
+            const builder = await FabricBuilder.create(crypto);
+            builder.initializeFromFabricForUpdate(fabric);
+            await builder.setRootCert(ca.rootCert);
+            const noc = await ca.generateNoc(builder.publicKey, FabricId(2n), fabric.nodeId);
+
+            await builder.setOperationalCert(noc, fabric.intermediateCACert);
+
+            expect(builder.fabricId).equals(FabricId(2n));
         });
 
         it("rotation occurs exactly once per runtime per fabric", async () => {

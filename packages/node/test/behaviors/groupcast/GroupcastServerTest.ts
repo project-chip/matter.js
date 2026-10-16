@@ -26,6 +26,7 @@ import { MockExchange, MockServerNode, MockSite } from "@matter/node/testing";
 import { Fabric, FabricManager, IANA_GROUPCAST_MULTICAST_ADDRESS, SessionManager } from "@matter/protocol";
 import { EndpointNumber, FabricIndex, GroupId, MATTER_EPOCH_OFFSET_US, NodeId } from "@matter/types";
 import { Groupcast } from "@matter/types/clusters/groupcast";
+import { recordMembershipChanges } from "./multicast-helpers.js";
 
 /** Root endpoint type with GroupcastServer (Listener+Sender+PerGroup), GKM (GCAST feature) and auxiliary ACLs. */
 const GroupcastRootEndpoint = MockServerNode.RootEndpoint.with(
@@ -1403,22 +1404,8 @@ describe("GroupcastServer", () => {
                 }),
             );
             await MockTime.yield3();
-            const network = node.env.get(Network);
-            if (!(network instanceof MockNetwork)) {
-                expect.fail("The node does not run on a MockNetwork");
-            }
+            const { network, changes } = recordMembershipChanges(node);
             expect(network.isMemberOf(IANA_GROUPCAST_MULTICAST_ADDRESS)).equal(true);
-            const membershipChanges = new Array<string>();
-            const addMembership = network.addMembership.bind(network);
-            const dropMembership = network.dropMembership.bind(network);
-            network.addMembership = (...ips: string[]) => {
-                membershipChanges.push(`join ${ips.join()}`);
-                addMembership(...ips);
-            };
-            network.dropMembership = (...ips: string[]) => {
-                membershipChanges.push(`leave ${ips.join()}`);
-                dropMembership(...ips);
-            };
 
             const replacement = new Fabric(fabrics.crypto, fabrics.for(fi).config);
             await fabrics.replaceFabric(replacement);
@@ -1428,7 +1415,7 @@ describe("GroupcastServer", () => {
             for (let i = 0; i < 20; i++) {
                 await MockTime.yield3();
             }
-            expect(membershipChanges).deep.equals([]);
+            expect(changes).deep.equals([]);
             expect(network.isMemberOf(IANA_GROUPCAST_MULTICAST_ADDRESS)).equal(true);
         });
     });
