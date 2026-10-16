@@ -739,14 +739,16 @@ with `outOfScope` naming the reason, no devices and verdict `skipped`.
   once the server recognized a Check-In under the new key: matter.js logs only a failed refresh
   (`ICD key refresh for peer … failed`), which stays open until a Check-In under the key is accepted. The provider's `ProtocolService Invoke «/»` lines carry `QueryImage`,
   `ApplyUpdateRequest` and `NotifyUpdateApplied` with their fields, and the BDX session's `ReceiveInit`,
-  `ReceiveAccept` and `Block` lines its negotiation and the bytes sent. The server's own node id comes from the
+  `ReceiveAccept` and `Block` lines its negotiation and the bytes sent. The session read is the one the requestor
+  ended with `BlockAckEof`, so a download the requestor aborted and retried on a new exchange reports the retry. The server's own node id comes from the
   node's ACL (the CASE administrator subject the server's commissioning wrote).
 - `serveOtaUpdate` uploads an image it builds (`initiate_ota_upload`, then `POST /ota-upload/<id>`), starts the
   update with `update_node` and follows it through the requestor's own `StateTransition` and `DownloadError` events,
   which reach the adapter as `node_event` after `start_listening`. `update_node` and the wait for the end of the
   download share one deadline, the case's OTA budget.
 - matter.js logs every session of the server with its transport, as `•442c(tcp)`: the server reaches the TH over
-  TCP, so a pattern on the server's log has to allow it.
+  TCP, so a pattern on the server's log has to allow it. The peer address before it prints the fabric index in hex
+  (`@a:5` on fabric index 10).
 - TC-SU-1.1 runs: announcing another node as the provider is a plain `AnnounceOTAProvider` invoke. The adapter takes
   the provider's endpoint from that node's ServerList. The VendorID has to be the server's Basic Information VendorID,
   which the WebSocket API does not expose; the server sets it from `--vendorid`, as it sets the AdminVendorId of every
