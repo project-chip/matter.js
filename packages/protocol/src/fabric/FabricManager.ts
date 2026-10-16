@@ -354,6 +354,11 @@ export class FabricManager {
         );
     }
 
+    /**
+     * Replace a fabric by a new object for the same fabric under new operational credentials, as UpdateNOC and NOC
+     * rotation produce.  The new object takes over the group state of the replaced one before
+     * the `replaced` event emits.
+     */
     async replaceFabric(fabric: Fabric) {
         await this.#construction;
 
@@ -368,7 +373,16 @@ export class FabricManager {
             // Nothing changed, so it is a restore without any change
             return;
         }
+        if (
+            fabric.globalId !== existingFabric.globalId ||
+            !Bytes.areEqual(fabric.identityProtectionKey, existingFabric.identityProtectionKey)
+        ) {
+            throw new ImplementationError(
+                `Fabric ${fabricIndex} can only be replaced by new operational credentials under the same root, fabric ID and IPK`,
+            );
+        }
 
+        fabric.groups.copyFrom(existingFabric.groups);
         this.#addOrUpdateFabricEntry(fabric);
 
         if (this.#storage) {

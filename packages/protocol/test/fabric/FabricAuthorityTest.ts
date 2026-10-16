@@ -18,7 +18,8 @@ import {
     StorageManager,
     SupportedStorageTypes,
 } from "@matter/general";
-import { CaseAuthenticatedTag, FabricId, NodeId, VendorId } from "@matter/types";
+import { CaseAuthenticatedTag, FabricId, GroupId, NodeId, VendorId } from "@matter/types";
+import { GroupKeyManagement } from "@matter/types/clusters/group-key-management";
 
 const crypto = new StandardCrypto();
 
@@ -157,6 +158,30 @@ describe("FabricAuthority", () => {
 
             // Verify root node ID is preserved
             expect(rotatedFabric.rootNodeId).to.equal(initialFabric.rootNodeId);
+        });
+
+        it("rotated fabric sends to a group at once with the keys of the previous fabric", async () => {
+            const config = { adminFabricLabel: "test-fabric", adminFabricId: FabricId(1n) };
+            const initialFabric = await authority.createFabric(config);
+            await initialFabric.groups.setFromGroupKeySet({
+                groupKeySetId: 0x1a1,
+                groupKeySecurityPolicy: GroupKeyManagement.GroupKeySecurityPolicy.TrustFirst,
+                epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+                epochStartTime0: 1n,
+                epochKey1: null,
+                epochStartTime1: null,
+                epochKey2: null,
+                epochStartTime2: null,
+            });
+            initialFabric.groups.groupKeyIdMap.set(GroupId(7), 0x1a1);
+            const { key, sessionId } = initialFabric.groups.currentKeyForGroup(GroupId(7));
+
+            const rotatedFabric = await authority.defaultFabric(config, true);
+
+            expect(rotatedFabric).not.equals(initialFabric);
+            const current = rotatedFabric.groups.currentKeyForGroup(GroupId(7));
+            expect(Bytes.areEqual(current.key, key)).true;
+            expect(current.sessionId).equals(sessionId);
         });
 
         it("rotation occurs exactly once per runtime per fabric", async () => {

@@ -23,7 +23,7 @@ import {
 } from "@matter/general";
 import { AccessLevel } from "@matter/model";
 import { MockExchange, MockServerNode, MockSite } from "@matter/node/testing";
-import { FabricManager, IANA_GROUPCAST_MULTICAST_ADDRESS, SessionManager } from "@matter/protocol";
+import { Fabric, FabricManager, IANA_GROUPCAST_MULTICAST_ADDRESS, SessionManager } from "@matter/protocol";
 import { EndpointNumber, FabricIndex, GroupId, MATTER_EPOCH_OFFSET_US, NodeId } from "@matter/types";
 import { Groupcast } from "@matter/types/clusters/groupcast";
 
@@ -1387,12 +1387,11 @@ describe("GroupcastServer", () => {
             expect(observedAddress).equal(IANA_GROUPCAST_MULTICAST_ADDRESS);
         });
 
-        it("restores multicast policies when a fabric is replaced", async () => {
-            await using node = await createGroupcastNode();
+        it("keeps multicast policy and membership when a fabric is replaced", async () => {
+            await using node = await MockServerNode.createOnline(IanaOnlyRootEndpoint, { device: undefined });
             const fabric = await node.addFabric();
             const fi = fabric.fabricIndex;
             const fabrics = node.env.get(FabricManager);
-            const realFabric = fabrics.for(fi);
 
             await node.online({ exchange: fabricExchange(fi), command: true }, agent =>
                 agent.get(GroupcastServer).joinGroup({
@@ -1403,19 +1402,34 @@ describe("GroupcastServer", () => {
                     mcastAddrPolicy: Groupcast.MulticastAddrPolicy.IanaAddr,
                 }),
             );
-            expect(realFabric.groups.multicastAddressFor(GroupId(0x0001))).equal(IANA_GROUPCAST_MULTICAST_ADDRESS);
+            await MockTime.yield3();
+            const network = node.env.get(Network);
+            if (!(network instanceof MockNetwork)) {
+                expect.fail("The node does not run on a MockNetwork");
+            }
+            expect(network.isMemberOf(IANA_GROUPCAST_MULTICAST_ADDRESS)).equal(true);
+            const membershipChanges = new Array<string>();
+            const addMembership = network.addMembership.bind(network);
+            const dropMembership = network.dropMembership.bind(network);
+            network.addMembership = (...ips: string[]) => {
+                membershipChanges.push(`join ${ips.join()}`);
+                addMembership(...ips);
+            };
+            network.dropMembership = (...ips: string[]) => {
+                membershipChanges.push(`leave ${ips.join()}`);
+                dropMembership(...ips);
+            };
 
-            // A replaced fabric arrives with a fresh Groups instance; simulate the policy loss and the event
-            realFabric.groups.removeGroupMulticastPolicy(GroupId(0x0001));
-            expect(realFabric.groups.multicastAddressFor(GroupId(0x0001))).not.equal(IANA_GROUPCAST_MULTICAST_ADDRESS);
-            fabrics.events.replaced.emit(realFabric);
-            const restored = () =>
-                realFabric.groups.multicastAddressFor(GroupId(0x0001)) === IANA_GROUPCAST_MULTICAST_ADDRESS;
-            for (let i = 0; i < 20 && !restored(); i++) {
+            const replacement = new Fabric(fabrics.crypto, fabrics.for(fi).config);
+            await fabrics.replaceFabric(replacement);
+
+            expect(replacement.groups.multicastAddressFor(GroupId(0x0001))).equal(IANA_GROUPCAST_MULTICAST_ADDRESS);
+            expect(replacement.groups.currentKeyForGroup(GroupId(0x0001)).keySetId).equal(1);
+            for (let i = 0; i < 20; i++) {
                 await MockTime.yield3();
             }
-
-            expect(realFabric.groups.multicastAddressFor(GroupId(0x0001))).equal(IANA_GROUPCAST_MULTICAST_ADDRESS);
+            expect(membershipChanges).deep.equals([]);
+            expect(network.isMemberOf(IANA_GROUPCAST_MULTICAST_ADDRESS)).equal(true);
         });
     });
 

@@ -89,8 +89,9 @@ export class BindingManager {
     }
 
     /**
-     * A fabric update (UpdateNOC) replaces the Fabric object, and with it the group key maps a watch observes; the event
-     * also fires when a fabric is persisted unchanged.
+     * A fabric update (UpdateNOC) replaces the Fabric object, and with it the group key maps a watch observes.  The new
+     * object carries the same group keys, so only the watch moves.  The event also fires when a fabric is persisted
+     * unchanged.
      */
     readonly #fabricReplaced = (fabric: Fabric) => {
         const release = this.#groupKeyWatches.get(fabric.fabricIndex);
@@ -100,7 +101,6 @@ export class BindingManager {
         release();
         this.#groupKeyWatches.delete(fabric.fabricIndex);
         this.#watchGroupKeys(fabric.fabricIndex);
-        this.#scheduleGroupRecheck(fabric.fabricIndex);
     };
 
     readonly #fabricDeleted = (fabric: Fabric) => {

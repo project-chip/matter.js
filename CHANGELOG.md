@@ -302,6 +302,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A closed `SustainedSubscription` always ends not live, whatever phase the close interrupts and even when an `active`/`inactive` observer throws
     - Fix: `FabricAuthority.createFabric()` resolves once the new fabric is persisted, rejects when persisting fails, and no longer reports the new fabric as replaced
     - Fix: Automatic invoke batching groups commands per network and sends a command with its own options alone, so it keeps them but may overtake earlier batched commands
+    - Fix: A fabric replaced by UpdateNOC or NOC rotation keeps its group keys, groups and Groupcast policies immediately
+    - Fix: UpdateNOC rejects a NOC for another fabric ID with `InvalidNOC`
 
 - @matter/react-native
     - Fix: `ReactNativeBle.scanner` returns the same `BleScanner` on every access

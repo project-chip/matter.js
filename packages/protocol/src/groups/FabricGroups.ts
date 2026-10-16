@@ -115,6 +115,30 @@ export class FabricGroups {
         this.#groups.removeGroupMulticastPolicy(groupId);
     }
 
+    /**
+     * Replace all group state with that of {@link source}, the groups of the same fabric before its operational
+     * credentials changed.
+     *
+     * The derived operational keys and session IDs are taken over as they are.  They depend only on the epoch keys and
+     * the compressed fabric ID, so the caller must ensure that root public key, fabric ID and IPK are unchanged.
+     */
+    copyFrom(source: FabricGroups) {
+        for (const keySet of [...this.#keySets]) {
+            if (source.#keySets.forId(keySet.groupKeySetId) === undefined) {
+                this.#keySets.delete(keySet);
+            }
+        }
+        for (const keySet of source.#keySets) {
+            this.#keySets.add({ ...keySet });
+        }
+
+        this.#groups.idMap = source.#groups.idMap;
+        copyEntries(source.#groups.endpointMap, this.#groups.endpointMap, endpoints => [...endpoints]);
+        copyEntries(source.#groups.multicastPolicy, this.#groups.multicastPolicy, policy => policy);
+
+        this.#messagingState.copyReceptionStateFrom(source.#messagingState);
+    }
+
     /*
     TODO for Controller to generate new epochs
     addGroupEpoch(groupKeySetId: number, startTimeMs = Time.nowMs) {
@@ -222,5 +246,16 @@ export class FabricGroups {
                 this.#messagingState.forgetReceptionState(key);
             }
         }
+    }
+}
+
+function copyEntries<K, V>(source: Map<K, V>, target: Map<K, V>, copy: (value: V) => V) {
+    for (const key of [...target.keys()]) {
+        if (!source.has(key)) {
+            target.delete(key);
+        }
+    }
+    for (const [key, value] of source) {
+        target.set(key, copy(value));
     }
 }

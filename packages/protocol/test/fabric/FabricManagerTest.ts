@@ -4,10 +4,38 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Fabric } from "#fabric/Fabric.js";
 import { FabricManager, FabricTableFullError } from "#fabric/FabricManager.js";
 import { TestFabric } from "#fabric/TestFabric.js";
-import { MatterFlowError, MemoryStorageDriver, StandardCrypto, StorageManager } from "@matter/general";
-import { FabricIndex } from "@matter/types";
+import {
+    Bytes,
+    ImplementationError,
+    MatterFlowError,
+    MemoryStorageDriver,
+    StandardCrypto,
+    StorageManager,
+} from "@matter/general";
+import { EndpointNumber, FabricIndex, GroupId, NodeId } from "@matter/types";
+import { GroupKeyManagement } from "@matter/types/clusters/group-key-management";
+
+const GROUP = GroupId(0x0101);
+const KEY_SET_ID = 0x1a1;
+
+async function provisionGroup(fabric: Fabric) {
+    await fabric.groups.setFromGroupKeySet({
+        groupKeySetId: KEY_SET_ID,
+        groupKeySecurityPolicy: GroupKeyManagement.GroupKeySecurityPolicy.TrustFirst,
+        epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+        epochStartTime0: 1n,
+        epochKey1: null,
+        epochStartTime1: null,
+        epochKey2: null,
+        epochStartTime2: null,
+    });
+    fabric.groups.groupKeyIdMap.set(GROUP, KEY_SET_ID);
+    fabric.groups.endpoints.set(GROUP, [EndpointNumber(1)]);
+    fabric.groups.setGroupMulticastPolicy(GROUP, "ianaAddr");
+}
 
 describe("FabricManager", () => {
     const crypto = new StandardCrypto();
@@ -77,6 +105,72 @@ describe("FabricManager", () => {
             await fabric.delete();
 
             expect(fabrics.fabrics).to.deep.equal([]);
+        });
+    });
+
+    describe("replacing Fabrics", () => {
+        async function replaceable() {
+            const fabric = await TestFabric({ fabrics });
+            await provisionGroup(fabric);
+            return { fabric, replacement: new Fabric(crypto, fabric.config) };
+        }
+
+        it("carries the group state to the replacement before it reports the replacement", async () => {
+            const { fabric, replacement } = await replaceable();
+            const operationalKey = fabric.groups.currentKeyForGroup(GROUP).key;
+            const receptionState = fabric.groups.messaging.receptionStateFor(NodeId(5), operationalKey);
+            let seen: { keySetId: number; endpoints?: EndpointNumber[]; address: string } | undefined;
+            fabrics.events.replaced.on(replaced => {
+                seen = {
+                    keySetId: replaced.groups.currentKeyForGroup(GROUP).keySetId,
+                    endpoints: replaced.groups.endpoints.get(GROUP),
+                    address: replaced.groups.multicastAddressFor(GROUP),
+                };
+            });
+
+            await fabrics.replaceFabric(replacement);
+
+            expect(seen).deep.equals({ keySetId: KEY_SET_ID, endpoints: [EndpointNumber(1)], address: "ff05::fa" });
+            expect(Bytes.areEqual(replacement.groups.currentKeyForGroup(GROUP).key, operationalKey)).true;
+            expect([...replacement.groups.sessions.keys()]).deep.equals([...fabric.groups.sessions.keys()]);
+            expect(replacement.groups.messaging.receptionStateFor(NodeId(5), operationalKey)).equals(receptionState);
+        });
+
+        it("drops group state from a restored fabric that the replacement no longer holds", async () => {
+            const { fabric, replacement } = await replaceable();
+            await fabrics.replaceFabric(replacement);
+            replacement.groups.removeGroupKeySet(KEY_SET_ID);
+            replacement.groups.groupKeyIdMap.delete(GROUP);
+            replacement.groups.endpoints.delete(GROUP);
+            replacement.groups.removeGroupMulticastPolicy(GROUP);
+
+            await fabrics.replaceFabric(fabric);
+
+            expect(fabric.groups.keySets.forId(KEY_SET_ID)).undefined;
+            expect(fabric.groups.groupKeyIdMap.has(GROUP)).false;
+            expect(fabric.groups.endpoints.has(GROUP)).false;
+            expect(fabric.groups.multicastPolicy.has(GROUP)).false;
+        });
+
+        it("refuses a replacement from another root", async () => {
+            const { fabric } = await replaceable();
+            const otherRoot = await TestFabric({ index: fabric.fabricIndex });
+            const other = new Fabric(crypto, {
+                ...otherRoot.config,
+                identityProtectionKey: fabric.identityProtectionKey,
+            });
+            expect(other.globalId).not.equals(fabric.globalId);
+
+            await expect(fabrics.replaceFabric(other)).rejectedWith(ImplementationError);
+            expect(fabrics.for(fabric.fabricIndex)).equals(fabric);
+        });
+
+        it("refuses a replacement with another IPK", async () => {
+            const { fabric } = await replaceable();
+            const other = new Fabric(crypto, { ...fabric.config, identityProtectionKey: new Uint8Array(16) });
+
+            await expect(fabrics.replaceFabric(other)).rejectedWith(ImplementationError);
+            expect(fabrics.for(fabric.fabricIndex)).equals(fabric);
         });
     });
 
