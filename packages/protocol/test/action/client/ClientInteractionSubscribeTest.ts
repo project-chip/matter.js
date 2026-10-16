@@ -11,10 +11,12 @@ import { MessageType } from "#interaction/InteractionMessenger.js";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { ExchangeManager } from "#protocol/ExchangeManager.js";
 import { ExchangeProvider } from "#protocol/ExchangeProvider.js";
-import { ExchangeReceiveOptions, MessageExchange } from "#protocol/MessageExchange.js";
+import { ExchangeReceiveOptions, ExchangeSendOptions, MessageExchange } from "#protocol/MessageExchange.js";
 import {
     AbortedError,
+    Bytes,
     ChannelType,
+    ClosedError,
     createPromise,
     DataReadQueue,
     Duration,
@@ -22,7 +24,7 @@ import {
     Seconds,
 } from "@matter/general";
 import { Specification } from "@matter/model";
-import { FabricIndex, NodeId, TlvSubscribeResponse } from "@matter/types";
+import { FabricIndex, NodeId, Status, TlvDataReport, TlvStatusResponse, TlvSubscribeResponse } from "@matter/types";
 import { createDummyMessageExchange } from "../../interaction/interaction-utils.js";
 
 /** A peer that accepts a subscribe request and then sends nothing until the receiving side gives up. */
@@ -77,6 +79,8 @@ class ScriptedExchange {
     readonly #closeCalled = createPromise<void>();
     readonly #closed = createPromise<void>();
     #holdClose = false;
+    #failClose = false;
+    readonly sent = new Array<{ messageType: number; payload: Bytes; options?: ExchangeSendOptions }>();
 
     get requestSent() {
         return this.#requestSent.promise;
@@ -98,13 +102,18 @@ class ScriptedExchange {
         this.#holdClose = true;
     }
 
+    failClose() {
+        this.#failClose = true;
+    }
+
     releaseClose() {
         this.#closeReleased.resolver();
     }
 
     async create() {
         const exchange = await createDummyMessageExchange();
-        exchange.send = async (messageType: number) => {
+        exchange.send = async (messageType: number, payload: Bytes, options?: ExchangeSendOptions) => {
+            this.sent.push({ messageType, payload, options });
             if (messageType === MessageType.SubscribeRequest) {
                 this.#requestSent.resolver();
             }
@@ -116,6 +125,9 @@ class ScriptedExchange {
                 await this.#closeReleased.promise;
             }
             this.#closed.resolver();
+            if (this.#failClose) {
+                throw new ClosedError("Exchange close failed");
+            }
         };
         return exchange;
     }
@@ -145,6 +157,18 @@ class ScriptedPeerExchangeProvider extends ExchangeProvider {
         this.#opened.write(scripted);
         return scripted.create();
     }
+}
+
+function primingReport(): Message {
+    return {
+        packetHeader: {},
+        payloadHeader: { messageType: MessageType.ReportData },
+        payload: TlvDataReport.encode({
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+            subscriptionId: 1,
+            suppressResponse: false,
+        }),
+    } as Message;
 }
 
 function subscribeResponse(): Message {
@@ -209,5 +233,60 @@ describe("ClientInteraction subscribe", () => {
         second.releaseClose();
         await closing;
         expect(await retried).instanceOf(AbortedError);
+    });
+
+    it("still ends on close when closing the exchange of an abandoned subscribe fails", async () => {
+        const provider = new ScriptedPeerExchangeProvider();
+        const client = new ClientInteraction({ environment: Environment.default, exchangeProvider: provider });
+        const cancel = new AbortController();
+
+        const abandoned = client.subscribe({ ...Subscribe({ attributes: [{}] }), abort: cancel.signal });
+        const exchange = await provider.nextExchange();
+        await exchange.requestSent;
+        exchange.failClose();
+        cancel.abort();
+        await expect(abandoned).rejectedWith(AbortedError);
+
+        exchange.deliver(subscribeResponse());
+        await exchange.closed;
+
+        await client.close();
+    });
+
+    it("answers a report it still owes once, without retransmission, when closed while processing it", async () => {
+        const provider = new ScriptedPeerExchangeProvider();
+        const client = new ClientInteraction({ environment: Environment.default, exchangeProvider: provider });
+        const processing = createPromise<void>();
+        const proceed = createPromise<void>();
+
+        const subscribing = client
+            .subscribe({
+                ...Subscribe({ attributes: [{}] }),
+                updated: async chunks => {
+                    for await (const _chunk of chunks) {
+                        processing.resolver();
+                        await proceed.promise;
+                    }
+                },
+            })
+            .then(
+                () => undefined,
+                (error: unknown) => error,
+            );
+        const exchange = await provider.nextExchange();
+        await exchange.requestSent;
+        exchange.deliver(primingReport());
+        await processing.promise;
+
+        const closing = client.close();
+        proceed.resolver();
+        await closing;
+
+        expect(await subscribing).instanceOf(Error);
+        const statuses = exchange.sent.filter(({ messageType }) => messageType === MessageType.StatusResponse);
+        expect(statuses.map(({ payload }) => TlvStatusResponse.decode(payload).status)).deep.equals([
+            Status.InvalidSubscription,
+        ]);
+        expect(statuses[0].options?.disableMrpLogic).true;
     });
 });

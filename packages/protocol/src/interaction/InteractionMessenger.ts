@@ -1101,7 +1101,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     }
 
     /**
-     * Ends a subscribe interaction the client gave up before the peer confirmed the subscription.
+     * Ends a subscribe interaction the client gave up, or that failed, before the peer confirmed the subscription.
      *
      * The peer holds the subscription from the moment it accepts the request, so it must learn that the client no
      * longer wants it.  Answers the report the peer waits on with INVALID_SUBSCRIPTION.  If there is none and

@@ -290,9 +290,7 @@ export class ClientInteraction<
         this.#abort(reason);
         await Promise.all([...this.#batchLanes.values()].map(({ mutex }) => mutex.close()));
 
-        while (this.#interactions.size) {
-            await this.#interactions.deleted;
-        }
+        await this.#interactions.empty;
     }
 
     async [Symbol.asyncDispose]() {
@@ -1085,9 +1083,7 @@ export class ClientInteraction<
             } catch (error) {
                 // An abort can come after the peer accepted the request, even while we wait for its ack
                 const awaitReport = abort.aborted;
-                if (awaitReport || messenger.reportAwaitsStatus) {
-                    context.abandon(closing => messenger.abandonSubscription({ awaitReport, abort: closing }));
-                }
+                context.abandon(closing => messenger.abandonSubscription({ awaitReport, abort: closing }));
                 throw error;
             }
             const response = TlvSubscribeResponse.decode(responseMessage.payload);
@@ -1180,20 +1176,22 @@ export class ClientInteraction<
         if (this.#abort.aborted) {
             throw new ImplementationError("Client interaction unavailable after close");
         }
+        const messenger = await BdxMessenger.create(this.#exchangeProvider, request.messageTimeout);
+
         const entry = Symbol("bdx");
         this.#interactions.add(entry);
-
         const abort = new Abort({ abort: [session?.abort, this.#abort] });
-
-        const messenger = await BdxMessenger.create(this.#exchangeProvider, request.messageTimeout);
 
         const context: RequestContext<BdxMessenger> = {
             abort,
             messenger,
             [Symbol.asyncDispose]: async () => {
-                await messenger.close();
-                this.#interactions.delete(entry);
-                abort[Symbol.dispose]();
+                try {
+                    await messenger.close();
+                } finally {
+                    this.#interactions.delete(entry);
+                    abort[Symbol.dispose]();
+                }
             },
         };
 
@@ -1260,16 +1258,22 @@ export class ClientInteraction<
 
         const dispose = async () => {
             using _closing = lifetime.closing();
-            await messenger.close();
-            this.#interactions.delete(entry);
-            abort[Symbol.dispose]();
+            try {
+                await messenger.close();
+            } finally {
+                this.#interactions.delete(entry);
+                abort[Symbol.dispose]();
+            }
         };
-        let abandoned = false;
-        const context: InteractionContext = {
+        let state: "active" | "abandoned" | "disposed" = "active";
+        const context: AbandonableRequestContext = {
             abort,
             messenger,
             abandon: task => {
-                abandoned = true;
+                if (state !== "active") {
+                    throw new InternalError(`Cannot abandon ${what} interaction that is already ${state}`);
+                }
+                state = "abandoned";
                 const finish = async () => {
                     try {
                         await task(this.#abort.signal);
@@ -1278,11 +1282,12 @@ export class ClientInteraction<
                     }
                 };
                 finish().catch(error =>
-                    logger.warn(messenger.exchange.via, "Error finishing abandoned interaction", error),
+                    logger.warn(messenger.exchange.via, "Error finishing interaction in the background", error),
                 );
             },
             [Symbol.asyncDispose]: async () => {
-                if (!abandoned) {
+                if (state === "active") {
+                    state = "disposed";
                     await dispose();
                 }
             },
@@ -1330,11 +1335,14 @@ export interface RequestContext<M extends InteractionClientMessenger | BdxMessen
 /**
  * The context of an interaction whose remainder can outlive the caller's scope.
  */
-export interface InteractionContext extends RequestContext<InteractionClientMessenger> {
+export interface AbandonableRequestContext extends RequestContext<InteractionClientMessenger> {
     /**
      * Hands the rest of the interaction to `task`, which runs in the background.  Disposal then waits for the task
      * instead of the caller's scope, and {@link ClientInteraction.close} waits for it.  Caller and session aborts do not
-     * reach the task; only {@link ClientInteraction.close} stops it, through the signal it gets.
+     * reach the task; only {@link ClientInteraction.close} stops it, through the signal it gets.  The task must settle
+     * soon after `closing` fires, or close never returns.
+     *
+     * @throws InternalError when the context was already abandoned or disposed
      */
     abandon(task: (closing: AbortSignal) => Promise<void>): void;
 }
