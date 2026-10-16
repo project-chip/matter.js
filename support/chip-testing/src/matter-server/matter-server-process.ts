@@ -344,7 +344,6 @@ class StartupLoad<T> {
     #announce = (_loaded: T) => {};
     #refuse = (_error: CertConfigError) => {};
     #read?: T;
-    #settled = false;
 
     constructor(file: StartupFile<T>) {
         this.#file = file;
@@ -355,31 +354,22 @@ class StartupLoad<T> {
     }
 
     observe(line: string) {
-        if (this.#settled) {
-            return;
-        }
         const { path, file, unloaded, loadedOf, refusalOf } = this.#file;
         this.#read ??= loadedOf(line);
         const refusal = refusalOf(line);
         if (refusal !== undefined) {
-            this.#settle(() => this.#refuse(new CertConfigError(`matterjs-server refused its ${file}: ${refusal}`)));
+            this.#refuse(new CertConfigError(`matterjs-server refused its ${file}: ${refusal}`));
         } else if (readinessPortOf(line) !== undefined) {
-            const read = this.#read;
-            this.#settle(() =>
-                read === undefined
-                    ? this.#refuse(
-                          new CertConfigError(
-                              `matterjs-server became ready without logging that it loaded ${path}; ${unloaded}`,
-                          ),
-                      )
-                    : this.#announce(read),
-            );
+            if (this.#read === undefined) {
+                this.#refuse(
+                    new CertConfigError(
+                        `matterjs-server became ready without logging that it loaded ${path}; ${unloaded}`,
+                    ),
+                );
+            } else {
+                this.#announce(this.#read);
+            }
         }
-    }
-
-    #settle(settle: () => void) {
-        this.#settled = true;
-        settle();
     }
 }
 
