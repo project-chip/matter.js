@@ -2105,6 +2105,14 @@ describe("fabric-removal log patterns", () => {
         expect((await check("matterjs", fabricSessionsEnded(2), [fabric20])).verdict).equal("fail");
     });
 
+    it("finds the sessions of a fabric index above 9, which matter.js logs in hex, and of a TCP session", async () => {
+        const fabric10 = MATTERJS_SESSION_ENDED.replace("@2:", "@a:");
+        const overTcp = MATTERJS_SESSION_ENDED.replace("•c677", "•c677(tcp)");
+
+        expect((await check("matterjs", fabricSessionsEnded(10), [fabric10])).verdict).equal("pass");
+        expect((await check("matterjs", fabricSessionsEnded(2), [overTcp])).verdict).equal("pass");
+    });
+
     it("does not take a PASE session ending for a removed fabric's", async () => {
         const unsecured = "2026-08-23 22:41:11.220 INFO Session •unsecured#7372af0fa8e6f033 Session ended";
 

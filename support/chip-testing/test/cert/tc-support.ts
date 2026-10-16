@@ -736,13 +736,13 @@ export function removeFabricSucceeded(fabricIndex: number): LogExpectPatterns {
 
 /**
  * The removed fabric's sessions going away. A matter.js session is named
- * `@<fabricIndex>:<fabricId>•<id>`, so one such line per session is what chip states once as
- * "Expiring all sessions for fabric N".
+ * `@<fabricIndex in hex>:<peer node id>•<id>`, with `(tcp)` after the id over TCP, so one such line per session is
+ * what chip states once as "Expiring all sessions for fabric N".
  */
 export function fabricSessionsEnded(fabricIndex: number): LogExpectPatterns {
     return {
         chip: new RegExp(`Expiring all sessions for fabric 0x${fabricIndex.toString(16)}!!`),
-        matterjs: new RegExp(`Session @${fabricIndex}:[0-9a-f]+•[0-9a-f]+ Session ended`),
+        matterjs: new RegExp(`Session @${fabricIndex.toString(16)}:[0-9a-f]+•[0-9a-f]+(?:\\(\\w+\\))? Session ended`),
     };
 }
 
