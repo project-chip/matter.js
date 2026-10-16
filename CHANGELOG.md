@@ -307,6 +307,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Automatic invoke batching groups commands per network and sends a command with its own options alone, so it keeps them but may overtake earlier batched commands
     - Fix: A fabric replaced by UpdateNOC or NOC rotation keeps its group state, ACL, ICD registrations and Check-In peers without interruption
     - Fix: UpdateNOC rejects a NOC for another fabric ID (`InvalidNOC`)
+    - Fix: Group messages carry the current node ID after the fabric's NOC changed
     - Fix: Removing a fabric that a fail-safe expiry restored emits `deleting` and `deleted` once
 
 - @matter/react-native

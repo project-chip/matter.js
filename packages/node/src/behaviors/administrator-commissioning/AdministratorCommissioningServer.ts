@@ -180,11 +180,9 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         this.state.adminFabricIndex = adminFabric.fabricIndex;
         this.state.adminVendorId = adminFabric.rootVendorId;
 
-        // By fabric index through FabricManager, because UpdateNOC replaces the Fabric object of the admin fabric
-        if (!this.internal.observesFabricRemoval) {
-            this.reactTo(this.env.get(FabricManager).events.deleting, this.#fabricRemoved);
-            this.internal.observesFabricRemoval = true;
-        }
+        // By fabric index through FabricManager, because UpdateNOC replaces the Fabric object of the admin fabric.
+        // Registering again on a later window is a no-op.
+        this.reactTo(this.env.get(FabricManager).events.deleting, this.#fabricRemoved);
     }
 
     /**
@@ -249,7 +247,6 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 export namespace AdministratorCommissioningServer {
     export class Internal {
         onWindowClosed?: () => void;
-        observesFabricRemoval = false;
 
         /**
          * Mandated by spec; should only be modified in testing.
