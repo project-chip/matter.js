@@ -198,6 +198,15 @@ describe("userConsentCheck", () => {
         }
     });
 
+    it("words an absent UserConsentNeeded differently from an explicit False", () => {
+        const absent = userConsentCheck(exchange(true, undefined)).detail;
+        const explicit = userConsentCheck(exchange(true, false)).detail;
+
+        expect(absent).contain("the DUT answered without UserConsentNeeded, so");
+        expect(explicit).contain("the DUT answered UserConsentNeeded False, so");
+        expect(explicit).not.contain("without");
+    });
+
     it("accepts delegation to a requestor that offered to consent, quoting the rule", () => {
         const check = userConsentCheck(exchange(true, true));
         expect(check.verdict).equal("unverified");
@@ -331,6 +340,11 @@ describe("queryImageResponseLines", () => {
 
         it("matches the line of the response the DUT recorded sending", () => {
             expect(matches(RESPONSE)).equal(true);
+        });
+
+        // The DUT's record keeps a token in whatever case the controller's API reported it, and matter.js logs lowercase
+        it("matches a token recorded in uppercase against the lowercase the log carries", () => {
+            expect(matches({ ...RESPONSE, updateToken: RESPONSE.updateToken.toUpperCase() })).equal(true);
         });
 
         it("refuses the line of a response that carried another update token", () => {

@@ -3867,6 +3867,63 @@ describe("CertTest", () => {
         expect(endStepVerdicts).deep.equal(["unverified", "unverified", "unverified"]);
     });
 
+    describe("the sentence naming what the run did not prove", () => {
+        const UNCHECKED = "ended without recording any check";
+        const UNEVALUATED = "ended with a check that could not be evaluated";
+
+        type StepRun = CertTestDefinition["steps"][number]["run"];
+
+        const unevaluated: StepRun = async cx => {
+            cx.recorder.check({ type: "device-log", verdict: "unverified" });
+        };
+        const unchecked: StepRun = async () => {};
+
+        async function gapsOf(runs: StepRun[]) {
+            const definition: CertTestDefinition = {
+                tc: "TC-CADMIN-1.17",
+                plan: "multiplefabrics.adoc",
+                pics: [],
+                app: "all-clusters",
+                controllers: { dut: "dut" },
+                steps: runs.map((run, index) => ({ number: index + 1, text: `Step ${index + 1}`, run })),
+            };
+            const cx: CertStepWiring = { controllers: {}, devices: {}, recorder: stubRecorder() };
+            const test = new TestCertTest(definition, stubDescriptor(), stubContainer(), cx);
+
+            const rejection = await test
+                .invoke(stubSubject(new PicsFile([])), () => {}, [], false)
+                .then(
+                    () => undefined,
+                    (e: unknown) => e,
+                );
+            return String(rejection);
+        }
+
+        it("names only the unevaluated checks where every step recorded one", async () => {
+            const message = await gapsOf([unevaluated, unevaluated]);
+
+            expect(message).contains(`2 steps ${UNEVALUATED}`);
+            expect(message).not.contains(UNCHECKED);
+        });
+
+        it("names only the steps that recorded nothing where no check was left unevaluated", async () => {
+            const single = await gapsOf([unchecked]);
+            expect(single).contains(`Step 1 ${UNCHECKED}`);
+            expect(single).not.contains(UNEVALUATED);
+
+            const several = await gapsOf([unchecked, async cx => passes(cx), unchecked]);
+            expect(several).contains(`Steps 1, 3 ${UNCHECKED}`);
+            expect(several).not.contains(UNEVALUATED);
+        });
+
+        it("uses the plural for several steps of each gap", async () => {
+            const message = await gapsOf([unevaluated, unchecked, unchecked, unevaluated, unevaluated]);
+
+            expect(message).contains(`3 steps ${UNEVALUATED}`);
+            expect(message).contains(`Steps 2, 3 ${UNCHECKED}`);
+        });
+    });
+
     it("counts a blank reason as no reason at all", async () => {
         const definition: CertTestDefinition = {
             tc: "TC-CADMIN-1.17",
