@@ -45,7 +45,6 @@ import {
 import "../../src/cert/index.js";
 import {
     InProcessControllerAdapter,
-    MATTERJS_CAPABILITY_GAPS,
     MATTERJS_CONTROLLER_PICS,
     NoCommissionedPeerError,
     SessionStateError,
@@ -1558,7 +1557,7 @@ describe("controller capabilities", () => {
     });
 
     it("reports the capabilities each controller declares it lacks", () => {
-        expect(controllerCapabilityGapsFor("matterjs")).deep.equal(MATTERJS_CAPABILITY_GAPS);
+        expect(controllerCapabilityGapsFor("matterjs")).deep.equal({});
         expect(controllerCapabilityGapsFor("chip-tool")).deep.equal(CHIP_TOOL_CAPABILITY_GAPS);
         expect(controllerCapabilityGapsFor("matterjs-server")).deep.equal(MATTERJS_SERVER_CAPABILITY_GAPS);
     });
@@ -1572,18 +1571,14 @@ describe("controller capabilities", () => {
         expect(controllerCapabilityGap([])).undefined;
     });
 
-    it("records a chunked write as a gap of every controller", () => {
+    it("records a chunked write as a gap of chip-tool only", () => {
         const required = ["chunked-write"] as const;
 
         env.MATTER_CERT_CONTROLLER = "matterjs-server";
-        expect(controllerCapabilityGap(required)).equal(
-            `controller "matterjs-server" lacks chunked-write: ${MATTERJS_SERVER_CAPABILITY_GAPS["chunked-write"]}`,
-        );
+        expect(controllerCapabilityGap(required)).undefined;
 
         env.MATTER_CERT_CONTROLLER = "matterjs";
-        expect(controllerCapabilityGap(required)).equal(
-            `controller "matterjs" lacks chunked-write: ${MATTERJS_CAPABILITY_GAPS["chunked-write"]}`,
-        );
+        expect(controllerCapabilityGap(required)).undefined;
 
         env.MATTER_CERT_CONTROLLER = "chip-tool";
         expect(controllerCapabilityGap(required)).equal(
@@ -1649,9 +1644,7 @@ describe("controller capabilities", () => {
     it("finds no gap for a controller that declares none of the required capabilities", () => {
         env.MATTER_CERT_CONTROLLER = "matterjs";
 
-        const required = Object.keys(MATTERJS_SERVER_CAPABILITY_GAPS)
-            .filter(isCapability)
-            .filter(capability => !Object.hasOwn(MATTERJS_CAPABILITY_GAPS, capability));
+        const required = Object.keys(MATTERJS_SERVER_CAPABILITY_GAPS).filter(isCapability);
         expect(required).not.empty;
         expect(controllerCapabilityGap(required)).undefined;
     });

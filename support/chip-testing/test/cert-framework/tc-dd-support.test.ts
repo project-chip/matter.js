@@ -43,6 +43,7 @@ import {
     chipToolDiscoveryGaveUp,
     checkGeneratedPayload,
     commissionByManualCode,
+    commissionChecked,
     commissionByQr,
     CUSTOM_FLOW,
     flowName,
@@ -1574,9 +1575,85 @@ describe("commissionByQr's own causal boundary", () => {
     });
 });
 
+describe("commissionChecked", () => {
+    const completion = (fabric: string) =>
+        `2026-08-27 19:31:27.056 NOTICE GeneralCommissioningClusterHandler Commissioned fabric: ${fabric} (#1) node: 1`;
+    const TARGET = { passcode: 20202021, discriminator: 3840 };
+
+    it("records the node the controller assigned and the completion its own commissioning caused", async () => {
+        const fixture = new UnpairFixture("matterjs", {
+            commission: async () => {
+                fixture.push(completion("bbbbbbbbbbbbbbbb"));
+                return "peer7";
+            },
+        });
+        // Already written and left undrained, as a completion from an earlier commissioning would be
+        fixture.push(completion("aaaaaaaaaaaaaaaa"));
+
+        let ref: CertNodeRef | undefined;
+        await withChecks(fixture.cx, async checks => {
+            ref = await commissionChecked(
+                fixture.cx.controllers.dut,
+                TARGET,
+                fixture.device,
+                "DUT commissions TH",
+                checks,
+            );
+        });
+
+        expect(ref).equal("peer7");
+        expect(fixture.checks.map(({ type, verdict }) => ({ type, verdict }))).deep.equal([
+            { type: "response", verdict: "pass" },
+            { type: "device-log", verdict: "pass" },
+        ]);
+        expect(fixture.checks[0].detail).contains("commissioned as node peer7");
+        expect(fixture.checks[1].matched).contains("bbbbbbbbbbbbbbbb");
+    });
+
+    it("records the controller's failure alone and fails with it as the cause, without waiting for a completion", async () => {
+        const failure = new Error("PASE failed");
+        const fixture = new UnpairFixture("matterjs", {
+            commission: async () => {
+                throw failure;
+            },
+        });
+
+        const error = await withChecks(fixture.cx, async checks => {
+            await commissionChecked(fixture.cx.controllers.dut, TARGET, fixture.device, "DUT commissions TH", checks);
+        }).then(
+            () => undefined,
+            (e: unknown) => e,
+        );
+
+        expect(error).instanceOf(CertCheckFailedError);
+        expect(error)
+            .property("message")
+            .match(/^DUT commissions TH failed: .*PASE failed/);
+        expect(error).property("cause").equal(failure);
+        expect(fixture.checks.map(({ type, verdict }) => ({ type, verdict }))).deep.equal([
+            { type: "response", verdict: "fail" },
+        ]);
+        expect(fixture.checks[0].detail).match(/^DUT commissions TH failed: /);
+    });
+
+    // The engine skips a step on this refusal only while the step has recorded nothing
+    it("lets a controller refusal through before adding any check", async () => {
+        const refusal = new UnsupportedByControllerError("commission", "test");
+        const fixture = new UnpairFixture("matterjs", {
+            commission: async () => {
+                throw refusal;
+            },
+        });
+        const checks = new Array<RecordedCheck>();
+
+        await expect(
+            commissionChecked(fixture.cx.controllers.dut, TARGET, fixture.device, "DUT commissions TH", checks),
+        ).rejectedWith(refusal);
+        expect(checks).deep.equal([]);
+    });
+});
+
 describe("the commissioning helpers' TH completion check", () => {
-    const completion =
-        "2026-08-27 19:31:27.056 NOTICE GeneralCommissioningClusterHandler Commissioned fabric: bb (#1) node: 1";
     const callersCheck: CheckRecord = { type: "response", verdict: "fail", detail: "caller's own check" };
 
     function fixtureWithoutCompletion() {
@@ -1617,24 +1694,29 @@ describe("the commissioning helpers' TH completion check", () => {
         expect(fixture.checks.find(check => check.type === "device-log")?.verdict).equal("fail");
     });
 
-    it("takes the TH's completion line when the DUT's commissioning fails", async () => {
-        const fixture: UnpairFixture = new UnpairFixture("matterjs", {
+    it("fails on the DUT's own error, as the cause, without waiting for the TH's completion line", async () => {
+        const failure = new ChipToolCommandError("chip-tool commissioning failed");
+        const fixture = new UnpairFixture("matterjs", {
             commission: async () => {
-                fixture.push(completion);
-                throw new ChipToolCommandError("chip-tool commissioning failed");
+                throw failure;
             },
         });
+        const commissioned = new CommissionedRefs();
 
-        await expect(
-            withChecks(fixture.cx, checks =>
-                commissionByQr(fixture.cx, "MT:-24J042C00KA0648G00", new CommissionedRefs(), checks),
-            ),
-        ).rejectedWith(ChipToolCommandError);
+        const error = await withChecks(fixture.cx, checks =>
+            commissionByQr(fixture.cx, "MT:-24J042C00KA0648G00", commissioned, checks),
+        ).then(
+            () => undefined,
+            (e: unknown) => e,
+        );
 
+        expect(error).instanceOf(CertCheckFailedError);
+        expect(error).property("cause").equal(failure);
         const response = fixture.checks.find(check => check.detail?.startsWith("commissioning from"));
         expect(response?.verdict).equal("fail");
         expect(response?.detail).contains("MT:-24J042C00KA0648G00");
-        expect(fixture.checks.find(check => check.type === "device-log")?.verdict).equal("pass");
+        expect(fixture.checks.find(check => check.type === "device-log")).equal(undefined);
+        expect(commissioned.get("dut")).equal(undefined);
     });
 });
 

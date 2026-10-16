@@ -94,6 +94,11 @@ function stubDescriptor(): TestFileDescriptor {
     };
 }
 
+/** A step body that records the one passing check a step needs to pass. */
+async function passes(cx: CertStepContext): Promise<void> {
+    cx.recorder.check({ type: "response", verdict: "pass", detail: "observed" });
+}
+
 function stubRecorder(overrides: Partial<StepRecorder> = {}): StepRecorder {
     return {
         beginStep() {},
@@ -279,7 +284,8 @@ describe("CertTest", () => {
                 {
                     number: 1,
                     text: "Step one text",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran.step1 = true;
                     },
                 },
@@ -287,7 +293,8 @@ describe("CertTest", () => {
                     number: 2,
                     text: "Step two text",
                     pics: "CADMIN.S.UnmetToken",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran.step2 = true;
                     },
                 },
@@ -397,7 +404,7 @@ describe("CertTest", () => {
                 {
                     number: 1,
                     text: "Passing step",
-                    run: async () => {},
+                    run: passes,
                 },
             ],
         };
@@ -432,7 +439,8 @@ describe("CertTest", () => {
                     number: 1,
                     text: "Step gated on PICS",
                     pics: "CADMIN.S.SomeToken",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran = true;
                     },
                 },
@@ -473,7 +481,8 @@ describe("CertTest", () => {
                 {
                     number: 1,
                     text: "Step that must not run",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran = true;
                     },
                 },
@@ -502,7 +511,8 @@ describe("CertTest", () => {
                     number: 1,
                     text: "Step gated on PICS",
                     pics: "CADMIN.S.SomeToken",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran = true;
                     },
                 },
@@ -544,6 +554,7 @@ describe("CertTest", () => {
                     number: 1,
                     text: "Step whose outcome depends on PICS",
                     run: async cx => {
+                        await passes(cx);
                         for (const expression of ["CADMIN.C", "CADMIN.C.C00.Tx", "!CADMIN.C.C00.Tx", "CADMIN.S"]) {
                             answers.push(cx.picsMet(expression));
                         }
@@ -573,6 +584,7 @@ describe("CertTest", () => {
                     text: "Step whose outcome depends on PICS",
                     pics: "CADMIN.S.SomeToken",
                     run: async cx => {
+                        await passes(cx);
                         cx.picsMet("CADMIN.S.SomeToken");
                     },
                 },
@@ -611,6 +623,7 @@ describe("CertTest", () => {
                     number: 1,
                     text: "Step whose outcome depends on PICS",
                     run: async cx => {
+                        await passes(cx);
                         cx.picsMet("");
                     },
                 },
@@ -647,7 +660,8 @@ describe("CertTest", () => {
                         number: 1,
                         text: "Step gated on a capability only the controller can claim",
                         pics: "MCORE.IDM.C.InvokeRequest.BatchCommands",
-                        run: async () => {
+                        run: async cx => {
+                            await passes(cx);
                             ran = true;
                         },
                     },
@@ -655,6 +669,7 @@ describe("CertTest", () => {
                         number: 2,
                         text: "Step asking the same question",
                         run: async cx => {
+                            await passes(cx);
                             answered = cx.picsMet("MCORE.IDM.C.InvokeRequest.BatchCommands");
                         },
                     },
@@ -711,14 +726,15 @@ describe("CertTest", () => {
                     number: 1,
                     text: "Step with a broken PICS expression",
                     pics: "",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran = true;
                     },
                 },
                 {
                     number: 2,
                     text: "Step after the PICS-expression failure",
-                    run: async () => {},
+                    run: passes,
                 },
             ],
         };
@@ -762,7 +778,8 @@ describe("CertTest", () => {
                     number: 1,
                     text: "Step restricted to chip flavors",
                     flavors: ["chip-docker", "chip-local"],
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         step1Ran = true;
                     },
                 },
@@ -770,7 +787,8 @@ describe("CertTest", () => {
                     number: 2,
                     text: "Step that includes the current flavor",
                     flavors: ["matterjs"],
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         step2Ran = true;
                     },
                 },
@@ -818,7 +836,8 @@ describe("CertTest", () => {
                     number: 1,
                     text: "Step restricted to matterjs",
                     flavors: ["matterjs"],
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran = true;
                     },
                 },
@@ -863,7 +882,8 @@ describe("CertTest", () => {
                     number: 1,
                     text: "Step restricted to chip flavors",
                     flavors: ["chip-docker", "chip-local"],
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran = true;
                     },
                 },
@@ -911,7 +931,8 @@ describe("CertTest", () => {
                     number: 1,
                     text: "A step CHIP's harness cannot execute",
                     notApplicable: "Out of Scope in CHIP's harness",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         step1Ran = true;
                     },
                 },
@@ -921,7 +942,8 @@ describe("CertTest", () => {
                     notApplicable: "No attribute of the required data type exists",
                     flavors: ["chip-docker"],
                     pics: "CADMIN.S.UnmetToken",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         step2Ran = true;
                     },
                 },
@@ -990,12 +1012,12 @@ describe("CertTest", () => {
                     number: 2,
                     text: "Step the plan itself declares untestable",
                     notApplicable: "Out of Scope in CHIP's harness",
-                    run: async () => {},
+                    run: passes,
                 },
                 {
                     number: 3,
                     text: "Step that would have run",
-                    run: async () => {},
+                    run: passes,
                 },
             ],
         };
@@ -1037,7 +1059,8 @@ describe("CertTest", () => {
                     number: 1,
                     text: "Step gated on an unmet PICS",
                     pics: "CADMIN.S.UnmetToken",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         order.push("step1");
                     },
                 },
@@ -1072,7 +1095,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "Passing step", run: async () => {} }],
+            steps: [{ number: 1, text: "Passing step", run: passes }],
             finalize: async () => {
                 throw new Error("decommission failed");
             },
@@ -1216,7 +1239,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "Passing step", run: async () => {} }],
+            steps: [{ number: 1, text: "Passing step", run: passes }],
             finalize: () => new Promise<void>(() => {}),
         };
 
@@ -1257,7 +1280,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "Passing step", run: async () => {} }],
+            steps: [{ number: 1, text: "Passing step", run: passes }],
             finalize: () =>
                 new Promise<void>(() => {
                     exitDevice({ code: 1, signal: null });
@@ -1285,7 +1308,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "Passing step", run: async () => {} }],
+            steps: [{ number: 1, text: "Passing step", run: passes }],
             finalize: () =>
                 new Promise<void>((_, reject) => {
                     rejectCleanup = reject;
@@ -1453,7 +1476,8 @@ describe("CertTest", () => {
                 {
                     number: 2,
                     text: "Step that must not run after the device exited",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         step2Ran = true;
                     },
                 },
@@ -1566,7 +1590,8 @@ describe("CertTest", () => {
                 {
                     number: 1,
                     text: "Step that completes before the device dies",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         // The device exits only after this step has already resolved — no step
                         // race is pending to observe it.
                         setTimeout(() => exitDevice({ code: 1, signal: null }), 0);
@@ -1618,7 +1643,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "A step that never runs", run: async () => {} }],
+            steps: [{ number: 1, text: "A step that never runs", run: passes }],
         };
 
         const outcomes = new Array<{ failed: boolean; detail?: string; unproven?: boolean }>();
@@ -1658,7 +1683,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "A step that passes", run: async () => {} }],
+            steps: [{ number: 1, text: "A step that passes", run: passes }],
         };
 
         const cx: CertStepWiring = {
@@ -1699,7 +1724,7 @@ describe("CertTest", () => {
                 {
                     number: 1,
                     text: "Step that finishes before the device ever exits",
-                    run: async () => {},
+                    run: passes,
                 },
             ],
         };
@@ -1739,7 +1764,7 @@ describe("CertTest", () => {
                 {
                     number: 1,
                     text: "Step one text",
-                    run: async () => {},
+                    run: passes,
                 },
             ],
         };
@@ -1946,7 +1971,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "A step that passes", run: async () => {} }],
+            steps: [{ number: 1, text: "A step that passes", run: passes }],
         };
 
         const cx: CertStepWiring = { controllers: {}, devices: {}, recorder: stubRecorder() };
@@ -1996,7 +2021,7 @@ describe("CertTest", () => {
                 {
                     number: 1,
                     text: "Step one text",
-                    run: async () => {},
+                    run: passes,
                 },
             ],
         };
@@ -2038,7 +2063,8 @@ describe("CertTest", () => {
                 {
                     number: 2,
                     text: "Step after the unsupported-operation skip",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         step2Ran = true;
                     },
                 },
@@ -2093,7 +2119,8 @@ describe("CertTest", () => {
                 {
                     number: 2,
                     text: "Step after it",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         step2Ran = true;
                     },
                 },
@@ -2204,7 +2231,8 @@ describe("CertTest", () => {
                 {
                     number: 2,
                     text: "Step that must not run after the failure",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         step2Ran = true;
                     },
                 },
@@ -2751,7 +2779,7 @@ describe("CertTest", () => {
                     number: 1,
                     text: "Step restricted to chip flavors",
                     flavors: ["chip-docker"],
-                    run: async () => {},
+                    run: passes,
                 },
             ],
         };
@@ -2779,7 +2807,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "Step one text", run: async () => {} }],
+            steps: [{ number: 1, text: "Step one text", run: passes }],
         };
 
         const headerLines = [
@@ -2816,7 +2844,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "Step one text", run: async () => {} }],
+            steps: [{ number: 1, text: "Step one text", run: passes }],
         };
 
         const deviceLog = new LogFollower(noLines(), "device");
@@ -2862,7 +2890,7 @@ describe("CertTest", () => {
                         throw new UnsupportedByControllerError("readAttributes", "chip-tool");
                     },
                 },
-                { number: 3, text: "Passing step", run: async () => {} },
+                { number: 3, text: "Passing step", run: passes },
             ],
         };
 
@@ -2888,9 +2916,9 @@ describe("CertTest", () => {
             app: "all-clusters",
             controllers: { dut: "dut" },
             steps: [
-                { number: 1, text: "Step the device does not declare", pics: "CADMIN.C.C00.Tx", run: async () => {} },
-                { number: 2, text: "Another such step", pics: "CADMIN.C.C00.Tx", run: async () => {} },
-                { number: 3, text: "Step the device declares", pics: "CADMIN.C", run: async () => {} },
+                { number: 1, text: "Step the device does not declare", pics: "CADMIN.C.C00.Tx", run: passes },
+                { number: 2, text: "Another such step", pics: "CADMIN.C.C00.Tx", run: passes },
+                { number: 3, text: "Step the device declares", pics: "CADMIN.C", run: passes },
             ],
         };
 
@@ -2949,14 +2977,16 @@ describe("CertTest", () => {
                     number: 1,
                     text: "Step costing minutes",
                     longRunning,
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran.push(1);
                     },
                 },
                 {
                     number: 2,
                     text: "Ordinary step",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran.push(2);
                     },
                 },
@@ -3054,14 +3084,16 @@ describe("CertTest", () => {
                         number: 1,
                         text: "Step whose option answers blank",
                         [option]: () => " ",
-                        run: async () => {
+                        run: async cx => {
+                            await passes(cx);
                             ran.push(1);
                         },
                     },
                     {
                         number: 2,
                         text: "Ordinary step",
-                        run: async () => {
+                        run: async cx => {
+                            await passes(cx);
                             ran.push(2);
                         },
                     },
@@ -3119,7 +3151,7 @@ describe("CertTest", () => {
                         [option]: () => {
                             throw new InternalError("option exploded");
                         },
-                        run: async () => {},
+                        run: passes,
                     },
                 ],
             };
@@ -3168,7 +3200,8 @@ describe("CertTest", () => {
                     text: "Step needing a chip TH",
                     notApplicable: ({ deviceFlavor }) =>
                         deviceFlavor === "chip-local" ? "no such cluster" : undefined,
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran.push(1);
                     },
                 },
@@ -3176,7 +3209,8 @@ describe("CertTest", () => {
                     number: 2,
                     text: "Step needing a matter.js TH",
                     notApplicable: ({ deviceFlavor }) => (deviceFlavor === "chip-local" ? undefined : "matter.js only"),
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran.push(2);
                     },
                 },
@@ -3212,7 +3246,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "Step the device declares", pics: "CADMIN.C", run: async () => {} }],
+            steps: [{ number: 1, text: "Step the device declares", pics: "CADMIN.C", run: passes }],
         };
 
         const picsSkips = new Array<number>();
@@ -3239,7 +3273,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "Passing step", run: async () => {} }],
+            steps: [{ number: 1, text: "Passing step", run: passes }],
         };
 
         const calls = new Array<string>();
@@ -3283,7 +3317,7 @@ describe("CertTest", () => {
                 pics: [],
                 app: "all-clusters",
                 controllers: { dut: "dut" },
-                steps: [{ number: 1, text: "Passing step", run: async () => {} }],
+                steps: [{ number: 1, text: "Passing step", run: passes }],
             };
 
             const recorder = new EvidenceRecorder(outDir, {
@@ -3334,7 +3368,7 @@ describe("CertTest", () => {
                 pics: [],
                 app: "all-clusters",
                 controllers: { dut: "dut" },
-                steps: [{ number: 1, text: "Passing step", run: async () => {} }],
+                steps: [{ number: 1, text: "Passing step", run: passes }],
             };
 
             const recorder = new EvidenceRecorder(outDir, {
@@ -3376,7 +3410,7 @@ describe("CertTest", () => {
                 pics: [],
                 app: "all-clusters",
                 controllers: { dut: "dut" },
-                steps: [{ number: 1, text: "Passing step", run: async () => {} }],
+                steps: [{ number: 1, text: "Passing step", run: passes }],
             };
 
             const recorder = new EvidenceRecorder(outDir, {
@@ -3481,7 +3515,7 @@ describe("CertTest", () => {
                 pics: [],
                 app: "all-clusters",
                 controllers: { dut: "dut" },
-                steps: [{ number: 1, text: "Passing step", run: async () => {} }],
+                steps: [{ number: 1, text: "Passing step", run: passes }],
             };
 
             // A real recorder, because the defect this covers is what reaches disk, not what the
@@ -3523,7 +3557,7 @@ describe("CertTest", () => {
             pics: [],
             app: "all-clusters",
             controllers: { dut: "dut" },
-            steps: [{ number: 1, text: "Passing step", run: async () => {} }],
+            steps: [{ number: 1, text: "Passing step", run: passes }],
         };
 
         const cx: CertStepWiring = { controllers: {}, devices: {}, recorder: stubRecorder() };
@@ -3730,6 +3764,109 @@ describe("CertTest", () => {
         ]);
     });
 
+    it("ends a step that recorded no check unverified, still runs the later steps, and records the run unverified", async () => {
+        const outDir = await mkdtemp(join(tmpdir(), "matter-cert-test-evidence-"));
+        try {
+            let laterStepRan = false;
+            const definition: CertTestDefinition = {
+                tc: "TC-TBRM-3.1",
+                plan: "threadborderroutermanagement.adoc",
+                pics: [],
+                app: "network-manager",
+                controllers: { dut: "dut" },
+                steps: [
+                    { number: "0", text: "Precondition that only sets up state", run: async () => {} },
+                    {
+                        number: 1,
+                        text: "Step that observed what it claims",
+                        run: async cx => {
+                            laterStepRan = true;
+                            await passes(cx);
+                        },
+                    },
+                ],
+            };
+
+            const recorder = new EvidenceRecorder(outDir, {
+                tc: "TC-TBRM-3.1",
+                plan: "threadborderroutermanagement.adoc",
+                timestamp: "2026-10-16T00:00:00.000Z",
+                controller: "dut",
+                controllerImplementation: "matterjs",
+                devices: [{ role: "th", app: "network-manager", flavor: "chip-local" }],
+                matterJsCommit: "abc1234",
+            });
+            const resultPath = join(outDir, "2026-10-16T00-00-00.000Z-TC-TBRM-3.1", "result.json");
+            const cx: CertStepWiring = { controllers: {}, devices: {}, recorder };
+
+            const test = new TestCertTest(definition, stubDescriptor(), stubContainer(), cx);
+
+            await expect(test.invoke(stubSubject(new PicsFile([])), () => {}, [], false)).rejectedWith(
+                "Step 0 ended without recording any check",
+            );
+
+            expect(laterStepRan).equal(true);
+            const resultJson = JSON.parse(await readFile(resultPath, "utf8"));
+            expect(resultJson.verdict).equal("unverified");
+            expect(
+                resultJson.steps.map(({ verdict, checks }: { verdict: string; checks: unknown[] }) => ({
+                    verdict,
+                    checks: checks.length,
+                })),
+            ).deep.equal([
+                { verdict: "unverified", checks: 0 },
+                { verdict: "pass", checks: 1 },
+            ]);
+        } finally {
+            await rm(outDir, { recursive: true, force: true });
+        }
+    });
+
+    it("names both gaps where one step left a check unevaluated and another recorded none", async () => {
+        const definition: CertTestDefinition = {
+            tc: "TC-CADMIN-1.17",
+            plan: "multiplefabrics.adoc",
+            pics: [],
+            app: "all-clusters",
+            controllers: { dut: "dut" },
+            steps: [
+                {
+                    number: 1,
+                    text: "Step whose log check names no pattern for this flavor",
+                    run: async cx => {
+                        cx.recorder.check({ type: "device-log", verdict: "unverified" });
+                    },
+                },
+                { number: 2, text: "Step that recorded nothing", run: async () => {} },
+                { number: 3, text: "Another step that recorded nothing", run: async () => {} },
+            ],
+        };
+
+        const endStepVerdicts = new Array<StepVerdict>();
+        const cx: CertStepWiring = {
+            controllers: {},
+            devices: {},
+            recorder: stubRecorder({
+                endStep(_step, verdict) {
+                    endStepVerdicts.push(verdict);
+                    return [];
+                },
+            }),
+        };
+
+        const test = new TestCertTest(definition, stubDescriptor(), stubContainer(), cx);
+
+        const rejection = await test
+            .invoke(stubSubject(new PicsFile([])), () => {}, [], false)
+            .then(
+                () => undefined,
+                (e: unknown) => e,
+            );
+        expect(String(rejection)).contains("1 step ended with a check that could not be evaluated");
+        expect(String(rejection)).contains("Steps 2, 3 ended without recording any check");
+        expect(endStepVerdicts).deep.equal(["unverified", "unverified", "unverified"]);
+    });
+
     it("counts a blank reason as no reason at all", async () => {
         const definition: CertTestDefinition = {
             tc: "TC-CADMIN-1.17",
@@ -3826,7 +3963,7 @@ describe("CertTest", () => {
                     text: "Step that opens a recorder frame of its own",
                     run: async cx => {
                         cx.recorder.check({ type: "device-log", verdict: "unverified" });
-                        cx.recorder.beginStep({ number: 1, text: "inner", run: async () => {} });
+                        cx.recorder.beginStep({ number: 1, text: "inner", run: passes });
                         cx.recorder.check({ type: "response", verdict: "pass" });
                     },
                 },
@@ -3992,12 +4129,12 @@ describe("CertTest", () => {
             app: "all-clusters",
             controllers: { dut: "dut" },
             steps: [
-                { number: 1, text: "Passing step", run: async () => {} },
+                { number: 1, text: "Passing step", run: passes },
                 {
                     number: 2,
                     text: "Step skipped for an unrelated reason",
                     pics: "CADMIN.S.UnmetToken",
-                    run: async () => {},
+                    run: passes,
                 },
             ],
         };
@@ -4044,11 +4181,12 @@ describe("a step declaring controller capabilities", () => {
                     number: 1,
                     text: "Step needing session introspection",
                     controllerCapabilities: ["session-introspection"],
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran = true;
                     },
                 },
-                { number: 2, text: "Step needing nothing", run: async () => {} },
+                { number: 2, text: "Step needing nothing", run: passes },
             ],
         };
         const cx: CertStepWiring = {
@@ -4147,11 +4285,12 @@ describe("a step needing a capability its controller declares out of scope", () 
                     number: 1,
                     text: "Step needing a timed write",
                     controllerCapabilities: capabilities,
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         ran = true;
                     },
                 },
-                { number: 2, text: "Step needing nothing", run: async () => {} },
+                { number: 2, text: "Step needing nothing", run: passes },
             ],
         };
         const cx: CertStepWiring = {
@@ -4431,7 +4570,8 @@ describe("a controller refusal naming a capability", () => {
                 {
                     number: 2,
                     text: "Later step",
-                    run: async () => {
+                    run: async cx => {
+                        await passes(cx);
                         laterStepRan = true;
                     },
                 },
@@ -4524,7 +4664,7 @@ describe("a step that decides at run time whether the plan applies it", () => {
     async function runProbedStep({
         probe,
         capabilities,
-        body = async () => {},
+        body = passes,
         node = fakeCertNode({ readAttribute: async () => "label", writeAttribute: async () => {} }),
     }: {
         probe: (cx: CertStepContext) => Promise<string | undefined>;
@@ -4554,7 +4694,7 @@ describe("a step that decides at run time whether the plan applies it", () => {
                         await body(cx);
                     },
                 },
-                { number: 2, text: "Step after it", run: async () => {} },
+                { number: 2, text: "Step after it", run: passes },
             ],
         };
         const cx: CertStepWiring = {
@@ -4746,7 +4886,7 @@ describe("a step that decides at run time whether the plan applies it", () => {
                         text: "Step whose plan applies over UDP",
                         controllerCapabilities: ["chunked-write"],
                         notApplicableAtRun: async () => undefined,
-                        run: async () => {},
+                        run: passes,
                     },
                 ],
             };
@@ -4806,7 +4946,7 @@ describe("a step that decides at run time whether the plan applies it", () => {
                         number: 2,
                         text: "Step whose plan does not apply",
                         notApplicableAtRun: async () => TCP_REASON,
-                        run: async () => {},
+                        run: passes,
                     },
                     {
                         number: 3,

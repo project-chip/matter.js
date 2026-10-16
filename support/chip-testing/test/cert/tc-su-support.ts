@@ -104,6 +104,55 @@ function only<T>(exchanges: T[], what: string): T {
     return exchanges[0];
 }
 
+/**
+ * Whether a provider's `UserConsentNeeded` answer is one the specification lets it give the requestor
+ * that asked.
+ *
+ * True delegates consent to the requestor, which the provider may do only for a requestor that offered
+ * it; otherwise the provider states it obtained consent itself.
+ *
+ * @see {@link MatterSpecification.v161.Core} § 11.20.3.4.1
+ * @see {@link MatterSpecification.v161.Core} § 11.20.6.5.2.7
+ */
+export function userConsentCheck({
+    request,
+    response,
+}: Pick<OtaQueryImageExchange, "request" | "response">): CheckRecord {
+    if (response.userConsentNeeded !== true) {
+        return {
+            type: "response",
+            verdict: "pass",
+            detail:
+                `the DUT answered ${response.userConsentNeeded === undefined ? "without UserConsentNeeded" : "UserConsentNeeded False"}, ` +
+                'so by Core § 11.20.3.4.1 "the OTA Requestor SHALL assume that the OTA Provider already obtained ' +
+                'sufficient user consent during the querying phase"',
+        };
+    }
+
+    if (request.requestorCanConsent !== true) {
+        return {
+            type: "response",
+            verdict: "fail",
+            detail:
+                `the DUT answered UserConsentNeeded True to a QueryImage with RequestorCanConsent ` +
+                `${request.requestorCanConsent ?? "absent"}: True states "user consent was not previously obtained" ` +
+                '(Core § 11.20.3.4.1), yet the field "SHALL only be interpreted if the OTA Requestor had previously ' +
+                'indicated a value of True in the RequestorCanConsent field of the QueryImageRequest" ' +
+                "(Core § 11.20.6.5.2.7), so this requestor goes ahead without anyone's consent",
+        };
+    }
+
+    return {
+        type: "response",
+        verdict: "unverified",
+        detail: "the DUT answered UserConsentNeeded True to a QueryImage with RequestorCanConsent True",
+        accepted:
+            'the DUT delegated consent to the requestor, which Core § 11.20.3.4.1 allows: "The OTA Provider, if it ' +
+            "determines that the best way to obtain user consent is to delegate to the OTA Requestor Node, SHALL " +
+            'include the UserConsentNeeded field, with a value set to True"',
+    };
+}
+
 /** Byte length of a hex-rendered field, which is what the plan's size rules are about. */
 export function hexByteLength(hex: string) {
     return hex.length / 2;
@@ -114,10 +163,8 @@ export function hexByteLength(hex: string) {
  *
  * chip's `DefaultOTARequestor` prints the response field by field under `[SWU]`
  * (`LogQueryImageResponse`), including the update token's *length* rather than its value. matter.js's
- * requestor logs no line for the response itself, so its own account is the download it then ran.
- *
- * Ordered rather than adjacent on both: chip interleaves the fields with nothing, but matter.js puts
- * its own work between the lines it writes.
+ * client prints every invoke response it decoded on one line, naming the command's path and each field
+ * the response carried, the update token as its lowercase hex value.
  */
 export function queryImageResponseLines(response: OtaQueryImageResponseRecord) {
     const chip = [/\[SWU\] QueryImageResponse:\s*$/, new RegExp(`\\[SWU\\]\\s+status: ${response.status}\\s*$`)];
@@ -137,13 +184,24 @@ export function queryImageResponseLines(response: OtaQueryImageResponseRecord) {
         chip.push(new RegExp(`\\[SWU\\]\\s+updateToken: ${hexByteLength(response.updateToken)}\\s*$`));
     }
 
+    // One lookahead per field, over the one line matter.js prints the decoded response on
+    const fields = [`\\.otaSoftwareUpdateProvider\\.queryImage status: ${response.status}(?: |$)`];
+    if (response.imageUri !== undefined) {
+        fields.push(` imageUri: ${escapeForPattern(response.imageUri)}(?: |$)`);
+    }
+    if (response.softwareVersion !== undefined) {
+        fields.push(` softwareVersion: ${response.softwareVersion}(?: |$)`);
+    }
+    if (response.softwareVersionString !== undefined) {
+        fields.push(` softwareVersionString: ${escapeForPattern(response.softwareVersionString)}(?: |$)`);
+    }
+    if (response.updateToken !== undefined) {
+        fields.push(` updateToken: ${response.updateToken.toLowerCase()}(?: |$)`);
+    }
+
     return {
         chip: { ordered: chip },
-
-        // No matterjs pattern, and none is possible: its requestor writes no line for a
-        // QueryImageResponse at all. A pattern matching what it does next would be matching what the
-        // precondition already required, so the step would record a pass it cannot fail.
-        matterjs: undefined,
+        matterjs: [new RegExp(`ClientInteraction Invoke « ${fields.map(field => `(?=.*${field})`).join("")}`)],
     };
 }
 

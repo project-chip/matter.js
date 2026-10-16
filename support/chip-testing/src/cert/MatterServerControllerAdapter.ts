@@ -245,7 +245,6 @@ export const MATTERJS_SERVER_CAPABILITY_GAPS = {
     "unmodeled-requests":
         "device_command and write_attribute address only clusters, commands and attributes of the server's own " +
         "Matter model",
-    "chunked-write": "the server's matter.js client does not split a large write into chunked WriteRequests",
     "batch-arrival-order":
         "batched_device_commands answers in request order, so the order the device's answers arrived in is not visible",
     attestation: "the server reads revocation from the DCL and the WebSocket API cannot install a revocation set",

@@ -244,6 +244,9 @@ A step passing means its `run` callback didn't throw *and* every check it record
 `"fail"` check is recorded rather than acted on, so a check that must gate the step still has to
 throw (see "Shape of a cert test" above; this is the single easiest mistake to make writing a new
 step), while an `"unverified"` check that did not state why makes the step `"unverified"` on its own.
+A step that recorded no check at all ends `"unverified"` too: a precondition step that only commissions or
+sets up state still records what it established (the node the commissioning assigned, the TH's own
+completion line — `commissionChecked` in `tc-dd-support.ts`).
 `RunRecord.verdict` is computed by `EvidenceRecorder`, not hand-set: until `concludeRun` runs ⇒
 `"incomplete"`; then `deviceExit`/`finalizationError`/`teardownError`/`evidenceError` set, the run's
 own reported failure (`runError`) where that failure is not merely an unverified step, or any step
@@ -635,8 +638,9 @@ answer: a controller that cannot send a command says nothing about the device, a
 
 - `ControllerCapability` (`controller-adapter.ts`) names what a step may need beyond the adapter interface; its JSDoc
   lists them.
-- Each adapter lists what it lacks, with the reason, in `MATTERJS_CAPABILITY_GAPS`, `CHIP_TOOL_CAPABILITY_GAPS` and
-  `MATTERJS_SERVER_CAPABILITY_GAPS`, registered as `gaps`. Every matterjs-server refusal names one of them
+- An adapter that lacks something lists it, with the reason, in `CHIP_TOOL_CAPABILITY_GAPS` or
+  `MATTERJS_SERVER_CAPABILITY_GAPS`, registered as `gaps`. The in-process controller lacks none and registers no
+  `gaps`. Every matterjs-server refusal names one of them
   (`UnsupportedByControllerError.capability`), built from the same text.
 - A test declares `controllerCapabilities` on `certTest()`, and a step declares it on `step()`. A test is skipped
   when any controller role lacks one, helper roles included (each role is judged by the implementation that fills
@@ -919,10 +923,10 @@ run time, from the TH's log of a request on the DUT's session (`chunkingNotAppli
 - Step 13 cannot learn it from its own write, because the write changes the TH, and its `chunked-write` gate runs
   before the body. It uses `notApplicableAtRun`, which the engine calls inside the step after the `pics` gate and
   before the controller gates: `chunkedWriteNotApplicable` reads the attribute the step writes and checks that read's
-  transport. Over UDP, or where the TH's log does not show that read, the step goes on to the gate and stays a
-  `chunked-write` gap. That the write uses the read's
-  session is inferred, not verified; `expectChunkedWrite` throws `CertStepNotApplicableError` when the write arrived
-  over TCP anyway, which the engine turns into a run failure because the step already wrote.
+  transport. Over UDP, or where the TH's log does not show that read, the step goes on to the gate and writes (only
+  chip-tool lacks `chunked-write`). That the write uses the read's session is inferred, not verified;
+  `expectChunkedWrite` throws `CertStepNotApplicableError` when the write arrived over TCP anyway, which the engine
+  turns into a run failure because the step already wrote.
 
 `notApplicableAtRun` may read through the controllers and the logs. A check it records or a controller call that may
 change the device is a framework error, as is a blank reason.
@@ -1278,11 +1282,13 @@ the chip TH's log, starting at the Write Request whose path the step's own path 
 another attribute in the window is not taken for it: two or more `WriteRequestMessage`s on one exchange,
 `moreChunkedMessages = true` on all but the last, and the DUT's MRP acknowledgement of each `WriteResponse` logged
 before the TH decodes the next chunk. Line order alone cannot show the DUT waited, because the TH answers an early
-chunk in turn anyway. On a matter.js TH, whose log it has no pattern for, the check reports `unverified`. Over TCP the
-step does not apply (see "A step that applies only over UDP" below). No controller can chunk a write today: the in-process
-controller sends the whole write as one 1683-byte message, which the TH discards, and chip-tool's `write-by-id` sends
-the list as one REPLACE `AttributeDataIB` and fails with `CHIP Error 0x0000000B: No memory`. Step 13 declares
-`chunked-write`, which every controller lists as a gap, so it skips and the case settles as `controller-gap`.
+chunk in turn anyway. A non-chip TH's log has no pattern, so the check would report `unverified`; the matter.js
+all-clusters app has no UnitTesting cluster, so on a matter.js TH the step is not applicable before it gets there. Over
+TCP the step does not apply (see "A step that applies only over UDP" above). The in-process controller and
+matterjs-server send the write as two chunks, and the step passes against a chip TH. The server reaches the chip TH
+over TCP, so it skips there unless the server runs with `MATTER_NETWORK_TCP=false` (see the matterjs-server section).
+chip-tool's `write-by-id` sends the list as one REPLACE `AttributeDataIB` and fails with
+`CHIP Error 0x0000000B: No memory`, so chip-tool lists `chunked-write` as a gap and the step skips there.
 
 `subscribeAndModify` compares reported values by content (`isDeepEqual`). A controller decodes each report
 into a new value, so reference equality never matches a list.

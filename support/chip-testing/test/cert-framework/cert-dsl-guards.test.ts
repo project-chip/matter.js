@@ -330,6 +330,11 @@ describe("per-device identity", () => {
 
 async function* noLines(): AsyncGenerator<string> {}
 
+/** A step body that records the one passing check a step needs to pass. */
+async function passes(cx: CertStepContext): Promise<void> {
+    cx.recorder.check({ type: "response", verdict: "pass", detail: "observed" });
+}
+
 /**
  * A matterjs {@link CertDeviceFactory} whose device reports `app` truthfully — never anything the
  * caller passed as `domain` — so a test can tell which registered factory actually built a device
@@ -460,6 +465,7 @@ describe("multi-device wiring", () => {
                 controllers: {},
             }).step(1, "Capture which device each role actually started", async cx => {
                 capturedDevices = cx.devices;
+                await passes(cx);
             });
         } finally {
             Reflect.set(globalThis, "describe", originalDescribe);
@@ -828,7 +834,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
                         pics: [],
                         app,
                         controllers: { dut: "dut", th: "helper" },
-                    }).step(1, "Nothing to do", async () => {});
+                    }).step(1, "Nothing to do", passes);
                 }),
             );
             const descriptor = active[0]?.descriptor;
@@ -923,7 +929,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
                 collect(() => {
                     const builder = certTest(tc, { plan: "n/a", pics: [], app, ...options });
                     steps.forEach(({ caps, pics, notApplicable, run }, index) =>
-                        builder.step(index + 1, `Step ${index + 1}`, run ?? (async () => {}), {
+                        builder.step(index + 1, `Step ${index + 1}`, run ?? passes, {
                             controllerCapabilities: caps,
                             pics,
                             notApplicable,
@@ -1272,6 +1278,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
                     const seen = new Array<CertRunSetup>();
                     const observe = async (cx: CertStepContext) => {
                         seen.push({ controllerSelection: cx.controllerSelection, deviceFlavor: cx.deviceFlavor });
+                        await passes(cx);
                     };
                     const result = await runCase(
                         `TC-SELECTION-RUN-${tcSuffix()}`,

@@ -23,6 +23,7 @@ import type {
     CertStepContext,
     CheckRecord,
     CommissioningTarget,
+    ControllerAdapter,
     ControllerCapability,
     LogFollower,
     OnboardingPayloadFields,
@@ -117,6 +118,41 @@ const COMMISSIONING_COMPLETE = /Commissioning completed successfully/;
 
 /** A device announcing it completed a commissioning, in whichever form its implementation prints. */
 export const COMMISSIONED = { chip: COMMISSIONING_COMPLETE, matterjs: MATTERJS_COMMISSIONED_FABRIC };
+
+/**
+ * Has `controller` commission `device` from `target`, and adds two checks to `checks`: the controller's own result,
+ * naming the node it assigned, and the device's own line saying a commissioning completed. Returns the node ref.
+ *
+ * Where the controller fails, its failure is the only check added and this throws a {@link CertCheckFailedError}
+ * whose `cause` is the controller's error. The step has failed at that point, so waiting out the device's completion
+ * line would only delay the report.
+ */
+export async function commissionChecked(
+    controller: ControllerAdapter,
+    target: CommissioningTarget,
+    device: CertDevice,
+    what: string,
+    checks: RecordedCheck[],
+): Promise<CertNodeRef> {
+    // Settled, because the completion pattern does not tell one commissioning from another: a line still in flight
+    // from an earlier commissioning would otherwise satisfy this one
+    const from = await device.log.markSettled();
+    const commissioned = await attempt(
+        () => controller.commission(target),
+        ref => `${what}: commissioned as node ${ref}`,
+    );
+    if (!commissioned.ok) {
+        const detail = `${what} failed: ${commissioned.check.detail}`;
+        checks.push({ what, check: () => ({ ...commissioned.check, detail }) });
+        throw new CertCheckFailedError(detail, { cause: commissioned.error });
+    }
+    checks.push({ what, check: () => commissioned.check });
+
+    const logged = await expectDeviceLog(device.log, device.flavor, COMMISSIONED, from, COMMISSIONING_LOG_TIMEOUT);
+    checks.push({ what: `${device.id} logged the commissioning completing`, check: () => logged.check });
+
+    return commissioned.value;
+}
 
 /**
  * Records that `th` did **not** complete a commissioning since `from`, which is how a plan's "only
@@ -1458,38 +1494,10 @@ async function commissionByTarget(
         }
     }
 
-    // Settled, because the line this waits for names no fabric on either flavor: a completion still
-    // in flight from an earlier commissioning would otherwise satisfy this one
-    const from = await th.log.markSettled();
-    const commissioning = await attempt(
-        () => dut.commission(target),
-        ref => `commissioned as node ${ref}`,
+    commissioned.set(
+        "dut",
+        await commissionChecked(dut, target, th, `commissioning from ${describeTarget(target)}`, checks),
     );
-    if (commissioning.ok) {
-        commissioned.set("dut", commissioning.value);
-    }
-    const what = `commissioning from ${describeTarget(target)}`;
-    checks.push({
-        what,
-        check: () =>
-            commissioning.ok
-                ? commissioning.check
-                : { ...commissioning.check, detail: `${what} failed: ${commissioning.check.detail}` },
-    });
-
-    const completed = await expectSequence(
-        th.log,
-        th.flavor,
-        "commissioning complete",
-        { chip: [COMMISSIONING_COMPLETE], matterjs: [MATTERJS_COMMISSIONED_FABRIC] },
-        from,
-        COMMISSIONING_LOG_TIMEOUT,
-    );
-    checks.push({ what: `${th.id} commissioning`, check: () => completed });
-
-    if (!commissioning.ok) {
-        throw commissioning.error;
-    }
 }
 
 /**

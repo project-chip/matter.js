@@ -122,7 +122,6 @@ import type {
     CommissioningTarget,
     ControllerAdapter,
     ControllerAdapterOptions,
-    ControllerCapabilityGaps,
     ControllerTransport,
     EventPathSpec,
     EventReadEntry,
@@ -302,14 +301,6 @@ export const MATTERJS_CONTROLLER_PICS: PicsValues = {
     "MCORE.DEVLIST.UseDeviceState": 1,
     "MCORE.DEVLIST.UseBatInfo": 1,
 };
-
-/**
- * What this controller lacks, declared with its registration so a step needing one of these is skipped before it acts
- * (see `controllerCapabilityGap`).
- */
-export const MATTERJS_CAPABILITY_GAPS = {
-    "chunked-write": "the matter.js client does not split a large write into chunked WriteRequests",
-} as const satisfies ControllerCapabilityGaps;
 
 const adapterStreams = new Map<string, LineQueue>();
 

@@ -90,8 +90,9 @@ export interface CertDeviceFactory extends Subject.Factory {
  * Outcome of a single cert-test step.
  *
  * `"unverified"` means the step ran and nothing in it threw, but at least one of its checks could not
- * be evaluated, so the step observed less than its claim needs. It fails the run — unlike `"skipped"`,
- * which states the step never ran at all — because a gap in what was observed must not read as proof.
+ * be evaluated, or it recorded no check at all, so the step observed less than its claim needs. It fails
+ * the run — unlike `"skipped"`, which states the step never ran at all — because a gap in what was
+ * observed must not read as proof.
  * A check whose claim the run genuinely cannot observe says so with {@link CheckRecord.accepted} and
  * leaves the step at `"pass"`.
  *

@@ -14,6 +14,7 @@ import type {
     CertStepContext,
 } from "@matter/testing";
 import { certTest } from "@matter/testing";
+import { commissionChecked } from "./tc-dd-support.js";
 import type { RecordedCheck } from "./tc-support.js";
 import {
     attempt,
@@ -25,6 +26,7 @@ import {
     LOG_TIMEOUT,
     recordAll,
     requireId,
+    withChecks,
 } from "./tc-support.js";
 
 const ICD_MANAGEMENT = Matter.clusters.require("IcdManagement");
@@ -158,29 +160,39 @@ certTest("TC-ICDB-1.3", {
     .step(
         "0",
         "Preconditions: commission TH1 to the DUT, and to TH2 through a window the DUT opens.",
-        async cx => {
-            const dut = cx.controllers.dut;
-            const th = cx.devices.th;
+        cx =>
+            withChecks(cx, async checks => {
+                const dut = cx.controllers.dut;
+                const th = cx.devices.th;
 
-            const dutRef = await dut.commission({
-                passcode: th.commissioning.passcode,
-                discriminator: th.commissioning.discriminator,
-            });
-            commissioned.set("dut", dutRef);
+                const dutRef = await commissionChecked(
+                    dut,
+                    { passcode: th.commissioning.passcode, discriminator: th.commissioning.discriminator },
+                    th,
+                    "DUT commissions TH1",
+                    checks,
+                );
+                commissioned.set("dut", dutRef);
 
-            const { manualPairingCode } = await dut
-                .node(dutRef)
-                .openCommissioningWindow({ timeout: 180, enhanced: true });
-            if (manualPairingCode === undefined) {
-                throw new InternalError("openCommissioningWindow({enhanced: true}) returned no manualPairingCode");
-            }
-            const th2Ref = await cx.controllers.th2.commission({ manualPairingCode });
-            commissioned.set("th2", th2Ref);
+                const { manualPairingCode } = await dut
+                    .node(dutRef)
+                    .openCommissioningWindow({ timeout: 180, enhanced: true });
+                if (manualPairingCode === undefined) {
+                    throw new InternalError("openCommissioningWindow({enhanced: true}) returned no manualPairingCode");
+                }
+                const th2Ref = await commissionChecked(
+                    cx.controllers.th2,
+                    { manualPairingCode },
+                    th,
+                    "TH2 commissions TH1 through the DUT's window",
+                    checks,
+                );
+                commissioned.set("th2", th2Ref);
 
-            // TH2 only sends test event triggers. Unsubscribed while TH1 is still SIT, it never registers itself once
-            // TH1 turns LIT, so TH1's only Check-In client is the DUT
-            await cx.controllers.th2.node(th2Ref).icdClient().stopSubscription();
-        },
+                // TH2 only sends test event triggers. Unsubscribed while TH1 is still SIT, it never registers itself
+                // once TH1 turns LIT, so TH1's only Check-In client is the DUT
+                await cx.controllers.th2.node(th2Ref).icdClient().stopSubscription();
+            }),
         {
             pics: "ICDB.C",
             expected:

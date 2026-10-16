@@ -100,8 +100,8 @@ export class CertTest extends BaseTest {
         });
         const { devices } = cx;
 
-        // A step's own checks are how the suite defines "something was observed" — AGENTS.md requires
-        // a response check on essentially every step. Counting them is what lets a controller refusal
+        // A step's own checks are how the suite defines "something was observed", and a step that ran
+        // without recording one ends unverified. Counting them is what lets a controller refusal
         // discovered *after* the step acted be told apart from one discovered before it acted.
         let observedThisStep = 0;
         // Checks alone miss a step that changed the device before it recorded anything
@@ -182,6 +182,7 @@ export class CertTest extends BaseTest {
         let planConditionSkips = 0;
         let outOfScopeSkips = 0;
         let unverifiedSteps = 0;
+        const uncheckedSteps = new Array<CertStepDefinition["number"]>();
         let unproven = false;
         let frameworkError = false;
         let reportingFailure: unknown;
@@ -424,6 +425,12 @@ export class CertTest extends BaseTest {
                     continue;
                 }
 
+                if (observedThisStep === 0) {
+                    uncheckedSteps.push(stepDef.number);
+                    report(stepDef, "unverified");
+                    continue;
+                }
+
                 report(stepDef, "pass");
             }
 
@@ -576,16 +583,26 @@ export class CertTest extends BaseTest {
 
             // Only where nothing else failed: a device that died or cleanup that threw is the run's
             // own outcome, and a step that observed nothing is the weaker claim of the two.
-            if (!failed && unverifiedSteps > 0) {
+            if (!failed && (unverifiedSteps > 0 || uncheckedSteps.length > 0)) {
+                const gaps = new Array<string>();
+                if (unverifiedSteps > 0) {
+                    gaps.push(
+                        `${unverifiedSteps} step${unverifiedSteps === 1 ? "" : "s"} ended with a check that could ` +
+                            "not be evaluated. Close the gap — a device-log check usually needs the pattern for this " +
+                            "device's flavor written — or, where this run genuinely cannot observe the claim, say so " +
+                            'in the check\'s "accepted" field.',
+                    );
+                }
+                if (uncheckedSteps.length > 0) {
+                    gaps.push(
+                        `Step${uncheckedSteps.length === 1 ? "" : "s"} ${uncheckedSteps.join(", ")} ended without ` +
+                            "recording any check. Record what the step established, such as the node a " +
+                            "commissioning assigned or the device's own line confirming it.",
+                    );
+                }
                 unproven = true;
                 failed = true;
-                failure = new Error(
-                    `Cert test ${tc}: ${unverifiedSteps} step${unverifiedSteps === 1 ? "" : "s"} ended with a ` +
-                        "check that could not be evaluated, so the run proved less than those steps claim. Close " +
-                        "the gap — a device-log check usually needs the pattern for this device's flavor written " +
-                        "— or, where this run genuinely cannot observe the claim, say so in the check's " +
-                        '"accepted" field.',
-                );
+                failure = new Error(`Cert test ${tc}: the run proved less than its steps claim. ${gaps.join(" ")}`);
             }
 
             // Last, so the outcome handed over is the one this method is about to report. The record

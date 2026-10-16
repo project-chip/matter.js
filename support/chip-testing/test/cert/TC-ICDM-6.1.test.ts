@@ -8,6 +8,7 @@ import { InternalError } from "@matter/main";
 import { Matter } from "@matter/model";
 import type { CertIcdClientApi, CertIcdRegistration, CertNodeRef, CertStepContext } from "@matter/testing";
 import { certTest } from "@matter/testing";
+import { commissionChecked } from "./tc-dd-support.js";
 import type { CommandFieldValue, RecordedCheck } from "./tc-support.js";
 import {
     attempt,
@@ -17,6 +18,7 @@ import {
     LOG_TIMEOUT,
     recordAll,
     requireId,
+    withChecks,
 } from "./tc-support.js";
 
 const ICD_MANAGEMENT = Matter.clusters.require("IcdManagement");
@@ -89,16 +91,18 @@ certTest("TC-ICDM-6.1", {
     .step(
         "0",
         "Commission TH to DUT.",
-        async cx => {
-            const th = cx.devices.th;
-            commissioned.set(
-                "dut",
-                await cx.controllers.dut.commission({
-                    passcode: th.commissioning.passcode,
-                    discriminator: th.commissioning.discriminator,
-                }),
-            );
-        },
+        cx =>
+            withChecks(cx, async checks => {
+                const th = cx.devices.th;
+                const ref = await commissionChecked(
+                    cx.controllers.dut,
+                    { passcode: th.commissioning.passcode, discriminator: th.commissioning.discriminator },
+                    th,
+                    "DUT commissions TH",
+                    checks,
+                );
+                commissioned.set("dut", ref);
+            }),
         { pics: "ICDM.C", expected: "TH is on the DUT's fabric." },
     )
     .step(

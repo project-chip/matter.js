@@ -39,7 +39,6 @@ import {
 import {
     controllerAdapterClaimsLogs,
     InProcessControllerAdapter,
-    MATTERJS_CAPABILITY_GAPS,
     MATTERJS_CONTROLLER_PICS,
 } from "./InProcessControllerAdapter.js";
 import { forgetLogOriginClaims, logOriginsAreClaimed, OriginDestination, registerLogOrigin } from "./log-origins.js";
@@ -53,7 +52,6 @@ import {
 registerControllerAdapterFactory("matterjs", {
     factory: (id, options) => new InProcessControllerAdapter(id, options),
     pics: MATTERJS_CONTROLLER_PICS,
-    gaps: MATTERJS_CAPABILITY_GAPS,
 });
 
 registerControllerAdapterFactory("chip-tool", {
