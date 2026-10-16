@@ -947,12 +947,15 @@ describe("MessageExchange", () => {
             await MockTime.resolve(retransmitted.promise);
             abort.abort();
             await sending;
+            await exchange.sendStandaloneAckForMessage(fakeInboundMessage({ messageId: 7, requiresAck: true }));
             released.resolver();
             for (let i = 0; i < 20; i++) {
                 await MockTime.advance(Seconds(3));
             }
 
-            expect(sent.length).equals(2);
+            const transmissions = sent.filter(({ payloadHeader: { messageType } }) => messageType === 1);
+            expect(transmissions.length).equals(2);
+            expect(sent.length).equals(3);
         });
 
         it("does not transmit when an abort that already fired may stop the transmission", async () => {

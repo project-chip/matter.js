@@ -791,7 +791,7 @@ export class MessageExchange {
             );
         }
         if (waiting.aborted) {
-            this.#retransmissionEndedFor = message;
+            this.#endAckWait();
             return;
         }
 
@@ -813,7 +813,7 @@ export class MessageExchange {
                 // packets to an unreachable peer while the exchange is being torn down.
                 // Leave #sentMessageToAck and the ack callbacks intact so that exchange.close()
                 // still sees the pending ack and can handle cleanup properly.
-                this.#retransmissionEndedFor = message;
+                this.#endAckWait();
                 this.#retransmissionTimer?.stop();
 
                 if (abort.aborted && !causedBy(abort.reason, AbortedError)) {
@@ -981,6 +981,14 @@ export class MessageExchange {
             });
 
         return true;
+    }
+
+    /**
+     * Ends the ack wait of the message awaiting an ack.  It stays pending for close() but is never transmitted again.
+     * Standalone acks never await one, so they cannot take its place.
+     */
+    #endAckWait() {
+        this.#retransmissionEndedFor = this.#sentMessageToAck;
     }
 
     #retransmits(message: Message) {
