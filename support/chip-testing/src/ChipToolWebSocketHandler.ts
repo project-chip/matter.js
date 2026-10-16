@@ -5,6 +5,7 @@
  */
 
 import {
+    Abort,
     AbortedError,
     Bytes,
     causedBy,
@@ -15,6 +16,7 @@ import {
     Logger,
     LogLevel,
     Millis,
+    nextEmitOf,
     NotImplementedError,
     Seconds,
     Time,
@@ -739,15 +741,12 @@ export class ChipToolWebSocketHandler {
 
         if (this.#subscriptionData.length === 0) {
             if (deadline === undefined) {
-                await this.#subscriptionUpdated;
+                await nextEmitOf(this.#subscriptionUpdated);
             } else {
                 const abort = new AbortController();
                 const timer = Time.getTimer("Report timeout", deadline, () => abort.abort()).start();
                 try {
-                    await Promise.race([
-                        this.#subscriptionUpdated,
-                        new Promise<void>(resolve => abort.signal.addEventListener("abort", () => resolve())),
-                    ]);
+                    await Abort.race(abort, this.#subscriptionUpdated);
                 } finally {
                     timer.stop();
                 }

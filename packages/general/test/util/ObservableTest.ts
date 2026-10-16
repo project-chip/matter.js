@@ -8,6 +8,7 @@ import { MatterError } from "#MatterError.js";
 import {
     AsyncObservable,
     BasicObservable,
+    nextEmitOf,
     Observable,
     ObservableProxy,
     ObservableValue,
@@ -670,5 +671,17 @@ describe("Observable.observed", () => {
             expect(quiet.isObservedBy(observer)).true;
             expect(quiet.isObservedBy(() => {})).false;
         });
+    });
+});
+
+describe("nextEmitOf", () => {
+    it("resolves with an emit that comes right after the call", async () => {
+        const observable = Observable<[number]>();
+
+        const next = nextEmitOf(observable);
+        observable.emit(1);
+
+        const missed = new Promise(resolve => setTimeout(() => resolve("missed"), 10));
+        expect(await Promise.race([next, missed])).equals(1);
     });
 });

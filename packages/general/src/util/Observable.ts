@@ -555,6 +555,20 @@ export class BasicObservable<T extends any[] = any[], R = void> implements Obser
 type Next<T> = undefined | { value: T; promise: Promise<Next<T>> };
 
 /**
+ * The first payload value of the next emit of `observable`.
+ *
+ * Awaiting an {@link Observable} subscribes only when the await calls `then()`, one microtask later, so an emit right
+ * after a state check or an action is missed.  This subscribes at once.
+ */
+export function nextEmitOf<T extends any[], R>(observable: Observable<T, R>): Promise<T[0]> {
+    return new Promise(resolve =>
+        observable.once((...payload: T) => {
+            resolve(payload[0]);
+        }),
+    );
+}
+
+/**
  * Create an {@link Observable}.
  */
 export const Observable = constructObservable as unknown as {
