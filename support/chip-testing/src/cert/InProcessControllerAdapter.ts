@@ -343,10 +343,8 @@ function toIds(path: AttributePathSpec) {
 }
 
 /**
- * `Invoke`/`Write` derive `timedRequest` from either flag, and a zero timeout is falsy — asking for one
- * without `timed` would send the interaction untimed, where chip-tool sends a real timed request for
- * the same call. An absent option stays absent rather than becoming a default the caller did not ask
- * for.
+ * An absent option stays absent rather than becoming a default the caller did not ask for, so an interaction is timed
+ * only where the caller named a timeout.
  */
 function timedInteraction(options?: TimedInteractionOptions) {
     const timeout = timedInteractionTimeoutOf(options);

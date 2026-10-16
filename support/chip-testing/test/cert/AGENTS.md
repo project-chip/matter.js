@@ -99,7 +99,7 @@ The convention this series has followed, worth stating explicitly for the next T
   non-functional end-to-end (see the root `README.md`'s cert section for why); `chip-local` is the
   practical way to get real chip-side evidence today, and satisfies the "at least one chip flavor"
   bar every pilot so far has used.
-- **`matterjs` is the fast, no-Docker, no-binary dev loop, not a certification claim on its own.**
+- **`matterjs` is the fast, no-binary dev loop, not a certification claim on its own.**
   It's what you run while iterating on a TC's step logic before touching Docker/a real binary at
   all, and it's also useful for confirming matter.js's own controller-side response shape
   independent of chip's TH-side implementation quirks. But a TC that only ever runs green on
@@ -715,8 +715,7 @@ with `outOfScope` naming the reason, no devices and verdict `skipped`.
   endpoint) runs on this leg, on a matter.js TH (the CHIP apps answer that write `InvalidAction`). Several entries or a
   data version (TC-IDM-3.1 step 15) are out of scope (`multi-path-write`): the server writes one attribute per request
   and handles conditional writes itself. They skip as "not reachable for controller use cases" and the TC passes on
-  its other steps. A timed write (TC-IDM-5.1 step 2) sends `timed_request_timeout_ms`, and so does an invoke with a
-  zero timeout, which the server sends as a Timed Request too.
+  its other steps. A timed write (TC-IDM-5.1 step 2) sends `timed_request_timeout_ms`.
 - TC-SC-3.5 (`single-handshake-attempt`) and the TCP block (`tcp-transport`) are capability-gated the same way. So
   are, at test level, the OTA provider cases that script the server's provider or announce it with nothing staged
   (TC-SU-3.2–3.4: `ota-provider-script`) and TC-BR-4 (`sustained-subscription`).
@@ -1543,7 +1542,7 @@ Do not give the option a default. An absent timeout must stay absent, or every i
 every TC silently becomes a timed interaction.
 
 Every adapter routes the value through `timedInteractionTimeoutOf` (`src/cert/timed-interaction.ts`),
-which refuses anything but an integer in the `uint16` range the wire carries: matter.js's TLV layer
+which refuses anything but an integer from 1 to 65535 (the `uint16` the wire carries, without 0): matter.js's TLV layer
 checks bounds but not integrality, so without it a fractional timeout would reach one controller as a
 truncated integer and the other as a chip-tool usage error.
 
@@ -2997,8 +2996,8 @@ went.
 the same step says "If Groupcast cluster is enabled on the RootNode endpoint of the TH, skip to step 6", and step 6
 sends JoinGroup to the TH. Step 1a therefore reads the TH's root `ServerList` after commissioning: without Groupcast
 the legacy steps 3–5 run and 6–7 skip, with it 3–5 skip and 6–7 run (`notApplicableAtRun`, so the skips count as
-plan conditions). matter.js's `all-clusters` TH mounts Groupcast on its root; the chip TH is the `nogroupcast` variant
-(or a released binary that predates the cluster). Step 6 invokes `Groupcast.JoinGroup` (group 1, endpoint 1, key set
+plan conditions). matter.js's `all-clusters` TH and the cert-bins chip app mount Groupcast on their root; only this project's own-built
+chip-local `nogroupcast` variant leaves it out. Step 6 invokes `Groupcast.JoinGroup` (group 1, endpoint 1, key set
 1, no key: step 2 already wrote it) on the TH; step 7 sends `OnOff.Toggle` to group 1 and checks the DUT's log names
 `ff05::fa` on port 5540 (matter.js `dest:`, chip-tool `[UDP:[ff05::fa]:5540]` on its `(G) Msg TX` line), the TH's
 dispatch, and the OnOff state flipping. The plan's group ids (1 and 2) are kept; the YAML's 259/257 are its example
@@ -3007,8 +3006,8 @@ values.
 **The controller's keys are declared on the case.** `certTest({ controllerGroups })` names each group the DUT
 controller sends on, with its key set and an optional address policy, and the engine hands it to the DUT
 controller as `ControllerAdapterOptions.groups`. It may be a function of the run setup: TC-SC-5.3 declares group 1
-with `groupKeySet()` (the value step 2 writes), on `ianaAddr` for a matterjs TH and on the per-group address for a
-chip TH, because a controller that needs its keys before it starts must know the branch before step 1a can read it.
+with `groupKeySet()` (the value step 2 writes), on `ianaAddr` for a TH with Groupcast and on the per-group address for
+the `nogroupcast` variant, because a controller that needs its keys before it starts must know the branch before step 1a can read it.
 Step 1a fails where the TH's root disagrees with that prediction. Every adapter validates the declaration when it is
 built (`validateControllerGroups`: application group id, no key set 0, no duplicate group, one key per key set id,
 policy 0/1, Unix-epoch start time), checks `defineKeySet` against it and refuses an undeclared group in `invoke`.
@@ -3770,8 +3769,8 @@ chip-cert-bins' stock `lit-icd-app`. Four things had to line up before any Check
   on subscription reports, so each report asks for an answer, and a DUT without the subscription answers
   INVALID_SUBSCRIPTION, which ends it. Step 1 has TH2 write TH1's NodeLabel, which makes TH1 send a report at once
   rather than at the next max interval. The server leg ends the DUT's subscription this way. The in-process leg drops
-  the recreated subscription while its priming report is in flight: matter.js ignores that report because its exchange
-  is closing and sends only a standalone ack, so the TH times out about 15 seconds later and keeps the persisted entry.
+  the recreated subscription while its priming report is in flight, and matter.js answers that report with
+  INVALID_SUBSCRIPTION too, so the TH ends the subscription and deletes its persisted entry.
 - **The controller has to advertise operationally**, or the TH fails with "Node Address resolution failed for ICD
   Check-In". Every in-process cert controller advertises `_matter._tcp`: it creates its fabric before `start()`,
   and `CommissioningServer` counts such a fabric as commissioned once the node is online. TC-ICDB-1.3 is the case
