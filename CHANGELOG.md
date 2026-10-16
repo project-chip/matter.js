@@ -218,6 +218,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A fabric change waits for the commissioning state instead of failing with `synchronous-transaction-conflict` when another transaction holds it
     - Fix: A peer that exposes only its root endpoint now becomes seeded
     - Fix: The ICD client keeps the controller and the device on the same Check-In key when a key refresh overlaps a Check-In, loses its response, or spans a restart
+    - Fix: The Thermostat User Interface Configuration server keeps a configured or stored `keypadLockout` on startup instead of resetting it to `NoLockout`
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument
