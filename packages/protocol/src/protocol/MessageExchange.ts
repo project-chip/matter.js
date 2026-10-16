@@ -276,6 +276,9 @@ export class MessageExchange {
     #messageSendCounter = 0;
     #messageReceivedCounter = 0;
     #retransmissionTimer?: Timer;
+
+    /** A pending message whose ack wait ended: it still awaits its ack for close(), but is never transmitted again. */
+    #retransmissionEndedFor?: Message;
     #lastTransmissionAt?: Timestamp;
     #lastActive = Time.nowMs;
 
@@ -788,6 +791,7 @@ export class MessageExchange {
             );
         }
         if (waiting.aborted) {
+            this.#retransmissionEndedFor = message;
             return;
         }
 
@@ -809,6 +813,7 @@ export class MessageExchange {
                 // packets to an unreachable peer while the exchange is being torn down.
                 // Leave #sentMessageToAck and the ack callbacks intact so that exchange.close()
                 // still sees the pending ack and can handle cleanup properly.
+                this.#retransmissionEndedFor = message;
                 this.#retransmissionTimer?.stop();
 
                 if (abort.aborted && !causedBy(abort.reason, AbortedError)) {
@@ -890,9 +895,9 @@ export class MessageExchange {
      * drop whatever the transmission was meant to convey.
      */
     #retransmitMessage(message: Message, expectedProcessingTime?: Duration) {
-        // The message may have been acked while an earlier transmission of it was still in flight.  Its timers must
-        // neither outlive it nor spend the retransmission budget of whatever is pending now.
-        if (this.#sentMessageToAck !== message) {
+        // The message may have been acked, or its ack wait ended, while an earlier transmission of it was still in
+        // flight.  Its timers must neither outlive it nor spend the retransmission budget of whatever is pending now.
+        if (!this.#retransmits(message)) {
             return false;
         }
 
@@ -978,10 +983,14 @@ export class MessageExchange {
         return true;
     }
 
+    #retransmits(message: Message) {
+        return this.#sentMessageToAck === message && this.#retransmissionEndedFor !== message;
+    }
+
     #initializeResubmission(message: Message, resubmissionBackoffTime: Duration, expectedProcessingTimeMs?: Duration) {
-        // An ack may have landed while the transmission we are following up on was in flight; arming a timer for a
-        // message that is no longer pending leaves it running unreferenced, so nothing can ever stop it
-        if (this.#sentMessageToAck !== message) {
+        // An ack may have landed, or the ack wait ended, while the transmission we are following up on was in flight;
+        // a timer armed then would retransmit a message nobody waits for
+        if (!this.#retransmits(message)) {
             return;
         }
 

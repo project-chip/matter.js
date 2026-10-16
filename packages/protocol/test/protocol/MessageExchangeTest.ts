@@ -13,6 +13,7 @@ import { SessionParameters } from "#session/SessionParameters.js";
 import {
     AbortedError,
     Bytes,
+    createPromise,
     Duration,
     MatterFlowError,
     Millis,
@@ -866,6 +867,8 @@ describe("MessageExchange", () => {
     });
 
     describe("ackWaitAbort", () => {
+        before(() => MockTime.enable());
+
         function mrpSession() {
             const channel = new ProtocolMocks.NetworkChannel({ index: 1 });
             channel.isReliable = false;
@@ -921,6 +924,35 @@ describe("MessageExchange", () => {
             await MockTime.advance(Seconds(30));
 
             expect(sent.length).equals(1);
+        });
+
+        it("does not retransmit after the ack wait ended during a retransmission in flight", async () => {
+            const channel = new ProtocolMocks.NetworkChannel({ index: 1 });
+            channel.isReliable = false;
+            const session = new ProtocolMocks.NodeSession({ channel });
+            const sent = new Array<Message>();
+            const retransmitted = createPromise<void>();
+            const released = createPromise<void>();
+            (session.channel as any).send = async (message: Message) => {
+                sent.push(message);
+                if (sent.length === 2) {
+                    retransmitted.resolver();
+                    await released.promise;
+                }
+            };
+            const { exchange } = createExchange(session);
+            const abort = new AbortController();
+
+            const sending = exchange.send(1, Bytes.empty, { ackWaitAbort: abort.signal });
+            await MockTime.resolve(retransmitted.promise);
+            abort.abort();
+            await sending;
+            released.resolver();
+            for (let i = 0; i < 20; i++) {
+                await MockTime.advance(Seconds(3));
+            }
+
+            expect(sent.length).equals(2);
         });
 
         it("does not transmit when an abort that already fired may stop the transmission", async () => {
