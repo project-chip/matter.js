@@ -9,7 +9,7 @@ import { Duration } from "#time/Duration.js";
 import { Time, Timer } from "#time/Time.js";
 import { Instant, Millis, Seconds } from "#time/TimeUnit.js";
 import { Logger } from "../log/Logger.js";
-import { ImplementationError } from "../MatterError.js";
+import { AbortedError, ImplementationError } from "../MatterError.js";
 import "../polyfills/disposable.js";
 import { asError } from "./Error.js";
 import { MaybePromise } from "./Promises.js";
@@ -452,11 +452,7 @@ export class BasicObservable<T extends any[] = any[], R = void> implements Obser
         onfulfilled?: ((value: T[0]) => TResult1 | PromiseLike<TResult1>) | null,
         onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
     ): Promise<TResult1 | TResult2> {
-        return new Promise<T>(resolve => {
-            this.once((...payload): undefined => {
-                resolve(payload[0]);
-            });
-        }).then(onfulfilled, onrejected);
+        return nextEmitOf(this).then(onfulfilled, onrejected);
     }
 
     async *[Symbol.asyncIterator](): AsyncIterator<T[0]> {
@@ -559,13 +555,26 @@ type Next<T> = undefined | { value: T; promise: Promise<Next<T>> };
  *
  * Awaiting an {@link Observable} subscribes only when the await calls `then()`, one microtask later, so an emit right
  * after a state check or an action is missed.  This subscribes at once.
+ *
+ * Rejects with {@link AbortedError} and unsubscribes when `abort` fires first.
  */
-export function nextEmitOf<T extends any[], R>(observable: Observable<T, R>): Promise<T[0]> {
-    return new Promise(resolve =>
-        observable.once((...payload: T): undefined => {
+export function nextEmitOf<T extends any[], R>(observable: Observable<T, R>, abort?: AbortSignal): Promise<T[0]> {
+    return new Promise((resolve, reject) => {
+        const onAbort = () => {
+            observable.off(observer);
+            reject(new AbortedError(undefined, { cause: abort?.reason }));
+        };
+        const observer = (...payload: T): undefined => {
+            abort?.removeEventListener("abort", onAbort);
             resolve(payload[0]);
-        }),
-    );
+        };
+        if (abort?.aborted) {
+            onAbort();
+            return;
+        }
+        abort?.addEventListener("abort", onAbort, { once: true });
+        observable.once(observer);
+    });
 }
 
 /**

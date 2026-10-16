@@ -740,21 +740,17 @@ export class ChipToolWebSocketHandler {
         }
 
         if (this.#subscriptionData.length === 0) {
-            if (deadline === undefined) {
-                await nextEmitOf(this.#subscriptionUpdated);
-            } else {
-                const abort = new AbortController();
-                const timer = Time.getTimer("Report timeout", deadline, () => abort.abort()).start();
-                try {
-                    await Abort.race(abort, this.#subscriptionUpdated);
-                } finally {
-                    timer.stop();
+            using timeout = new Abort({ timeout: deadline });
+            try {
+                await nextEmitOf(this.#subscriptionUpdated, timeout.signal);
+            } catch (error) {
+                if (!(error instanceof AbortedError)) {
+                    throw error;
                 }
-
-                if (this.#subscriptionData.length === 0) {
-                    logger.error(`No subscription report within ${Duration.format(deadline)}`);
-                    return { results: [{ error: "FAILURE" }] };
-                }
+            }
+            if (deadline !== undefined && this.#subscriptionData.length === 0) {
+                logger.error(`No subscription report within ${Duration.format(deadline)}`);
+                return { results: [{ error: "FAILURE" }] };
             }
         }
 

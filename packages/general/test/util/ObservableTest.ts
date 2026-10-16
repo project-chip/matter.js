@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError } from "#MatterError.js";
+import { AbortedError, MatterError } from "#MatterError.js";
 import {
     AsyncObservable,
     BasicObservable,
@@ -683,5 +683,34 @@ describe("nextEmitOf", () => {
 
         const missed = new Promise(resolve => setTimeout(() => resolve("missed"), 10));
         expect(await Promise.race([next, missed])).equals(1);
+    });
+
+    it("rejects with AbortedError and unsubscribes when aborted first", async () => {
+        const observable = Observable<[number]>();
+        const abort = new AbortController();
+
+        const next = nextEmitOf(observable, abort.signal);
+        abort.abort();
+
+        await expect(next).rejectedWith(AbortedError);
+        expect(observable.isObserved).false;
+    });
+
+    it("rejects with AbortedError without subscribing when already aborted", async () => {
+        const observable = Observable<[number]>();
+        const abort = new AbortController();
+        abort.abort();
+
+        await expect(nextEmitOf(observable, abort.signal)).rejectedWith(AbortedError);
+        expect(observable.isObserved).false;
+    });
+
+    it("resolves through then() with an emit", async () => {
+        const observable = Observable<[number]>();
+
+        const next = observable.then(value => value);
+        observable.emit(2);
+
+        expect(await next).equals(2);
     });
 });
