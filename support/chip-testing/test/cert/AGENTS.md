@@ -641,7 +641,10 @@ answer: a controller that cannot send a command says nothing about the device, a
 - An adapter that lacks something lists it, with the reason, in `CHIP_TOOL_CAPABILITY_GAPS` or
   `MATTERJS_SERVER_CAPABILITY_GAPS`, registered as `gaps`. The in-process controller lacks none and registers no
   `gaps`. Every matterjs-server refusal names one of them
-  (`UnsupportedByControllerError.capability`), built from the same text.
+  (`UnsupportedByControllerError.capability`), built from the same text, and so does every chip-tool refusal of an
+  operation it always lacks. chip-tool declares `tcp-transport`, `attestation`, `webrtc-requestor`, `chunked-write`,
+  `batch-arrival-order`, `session-introspection`, `sustained-subscription`, `ota-provider`, `ota-provider-script`
+  and `icd-client`.
 - A test declares `controllerCapabilities` on `certTest()`, and a step declares it on `step()`. A test is skipped
   when any controller role lacks one, helper roles included (each role is judged by the implementation that fills
   it). `transport: "tcp"` implies `tcp-transport`. A skipped step is counted in `controllerUnsupportedSkips`.
@@ -660,8 +663,9 @@ answer: a controller that cannot send a command says nothing about the device, a
 - A refusal that names a capability and still reaches the step runner is a framework error (step verdict `error`,
   run verdict `error`, `CertFrameworkError`), whatever the step already did: either the step lacks the declaration or
   the implementation refuses something it declares neither as a gap nor out of scope.
-- A refusal without a capability (chip-tool's call-time refusals, the in-process adapter) stays a safety net: it
-  skips a step that has not acted yet and fails one that has.
+- A refusal without a capability (chip-tool's refusals that depend on the call, such as a read of more paths than it
+  accepts, or an `invokeBatch` and an `announceOtaProvider` naming another node's provider, which its PICS gate, and
+  the in-process adapter) stays a safety net: it skips a step that has not acted yet and fails one that has.
 - A capability a controller deliberately does not offer is no gap: the adapter lists it in its `outOfScope`
   registration (`MATTERJS_SERVER_OUT_OF_SCOPE`), with the reason. A step needing it is skipped with that reason and
   counted in `outOfScopeSkips`, which never changes the verdict. A test needing it is skipped as a whole and writes a
@@ -2713,8 +2717,8 @@ before activation on the chip flavors.
 says what a session *permits* — only what it was observed carrying — so `CertNodeApi.sessions()`
 reports every live session the controller holds with a node: its id, the transport beneath it, whether
 it permits large payloads, and the payload ceiling. That is held state in the sense `clientEndpoints()`
-is, and chip-tool refuses it: a session there lives inside the process it spawns per command, and
-nothing it prints names the transport beneath one.
+is, and chip-tool refuses it as its `session-introspection` gap: a session there lives inside the process it spawns
+per command, and nothing it prints names the transport beneath one.
 
 **Every session claim names a session, and that is the load-bearing decision here.** A controller may
 hold more than one session with a peer at once — `Peer.connect` keeps one per transport — so an API

@@ -19,6 +19,7 @@ import { getOperationalDeviceQname, ResultStatus } from "@matter/main/protocol";
 import { FabricId, GlobalFabricId, NodeId, statedIdentifier, Status, StatusResponseError } from "@matter/main/types";
 import { ClusterModel, CommandModel, ValueModel } from "@matter/model";
 import type {
+    AnnounceOtaProviderOptions,
     AttributePathSpec,
     AttributeReadEntry,
     AttributeWriteEntry,
@@ -202,7 +203,27 @@ export const CHIP_TOOL_CAPABILITY_GAPS = {
     "chunked-write":
         "chip-tool write-by-id encodes the whole write into one message and fails with CHIP Error 0x0000000B (No memory) " +
         "when it does not fit",
+    "batch-arrival-order":
+        "command-by-id sends one command per invoke request, so there is no batch whose answers arrive in an order",
+    "session-introspection":
+        "chip-tool exposes no session state of its own: a session lives inside the process it spawns per command, and " +
+        "nothing it prints names the transport beneath one",
+    "sustained-subscription":
+        "chip-tool keeps no subscription to a node between commands, so it has none to observe events through and " +
+        "holds no device list or attribute values of its own",
+    "ota-provider":
+        "chip-tool is a commissioner, not an OTA provider: it hosts no OtaSoftwareUpdateProvider cluster and keeps no " +
+        "image catalog to serve one from",
+    "ota-provider-script":
+        "chip-tool hosts no OtaSoftwareUpdateProvider cluster, so there is no provider of its own to script or announce",
+    "icd-client":
+        "this adapter drives chip-tool's commands for single interactions and does not expose its ICD client " +
+        "(registration, key refresh and Check-In handling)",
 } as const satisfies ControllerCapabilityGaps;
+
+function refusal(capability: keyof typeof CHIP_TOOL_CAPABILITY_GAPS, operation: string, controller = CONTROLLER) {
+    return new UnsupportedByControllerError(operation, controller, CHIP_TOOL_CAPABILITY_GAPS[capability], capability);
+}
 
 const WILDCARD_CLUSTER = 0xffffffff;
 const WILDCARD_ATTRIBUTE = 0xffffffff;
@@ -1054,39 +1075,27 @@ class ChipToolCertNodeApi implements CertNodeApi {
     }
 
     icdClient(): never {
-        throw new UnsupportedByControllerError(
-            "icdClient",
-            CONTROLLER,
-            "this adapter drives chip-tool's commands for single interactions and does not expose its ICD client " +
-                "(registration, key refresh and Check-In handling)",
-        );
+        throw refusal("icd-client", "icdClient");
     }
 
     async serveOtaUpdate(): Promise<never> {
-        throw new UnsupportedByControllerError(
-            "serveOtaUpdate",
-            CONTROLLER,
-            "chip-tool is a commissioner, not an OTA provider: it hosts no OtaSoftwareUpdateProvider cluster and " +
-                "keeps no image catalog to serve one from",
-        );
+        throw refusal("ota-provider", "serveOtaUpdate");
     }
 
-    async announceOtaProvider(): Promise<never> {
+    async announceOtaProvider(options?: AnnounceOtaProviderOptions): Promise<never> {
+        if (options?.provider === undefined) {
+            throw refusal("ota-provider-script", "announcing the controller's own OTA provider");
+        }
         throw new UnsupportedByControllerError(
             "announceOtaProvider",
             CONTROLLER,
-            "chip-tool is a commissioner, not an OTA provider: it hosts no OtaSoftwareUpdateProvider cluster to " +
-                "announce, so a node it announced would query an endpoint that does not exist",
+            "this adapter sends no AnnounceOTAProvider command, and its PICS declare OTAR.C.M.AnnounceOTAProvider " +
+                "unsupported",
         );
     }
 
     async scriptOtaProvider(): Promise<never> {
-        throw new UnsupportedByControllerError(
-            "scriptOtaProvider",
-            CONTROLLER,
-            "chip-tool hosts no OtaSoftwareUpdateProvider cluster, so there is no provider of its own whose " +
-                "answers could be scripted",
-        );
+        throw refusal("ota-provider-script", "scriptOtaProvider");
     }
 
     async invokeBatch(commands: BatchCommandSpec[]): Promise<BatchCommandResult[]> {
@@ -1311,13 +1320,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
     }
 
     async observeEvents(_paths: EventPathSpec[], _opts: ObserveEventOptions): Promise<EventReadEntry[]> {
-        // chip-tool holds no subscription of its own between commands, so there is none to observe
-        // through; a case needing this runs against a controller that keeps one.
-        throw new UnsupportedByControllerError(
-            "observeEvents",
-            CONTROLLER,
-            "chip-tool sustains no subscription a case could observe a node's events through",
-        );
+        throw refusal("sustained-subscription", "observeEvents");
     }
 
     /**
@@ -1346,39 +1349,19 @@ class ChipToolCertNodeApi implements CertNodeApi {
     }
 
     async clientEndpoints(): Promise<ClientEndpointEntry[]> {
-        throw new UnsupportedByControllerError(
-            "the endpoints the controller holds for a node",
-            "chip-tool",
-            "chip-tool answers each command from the device and keeps no device list between them, so " +
-                "there is nothing of its own to report",
-        );
+        throw refusal("sustained-subscription", "the endpoints the controller holds for a node");
     }
 
     async clientAttribute(_path: ClientAttributePath): Promise<unknown> {
-        throw new UnsupportedByControllerError(
-            "the value the controller holds for an attribute",
-            "chip-tool",
-            "chip-tool answers each command from the device and keeps no state between them, so there " +
-                "is nothing of its own to report",
-        );
+        throw refusal("sustained-subscription", "the value the controller holds for an attribute");
     }
 
     async sessions(): Promise<never> {
-        throw new UnsupportedByControllerError(
-            "the sessions the controller holds with a node",
-            "chip-tool",
-            "chip-tool exposes no session state of its own — a session lives inside the process it " +
-                "spawns per command, and nothing it prints names the transport beneath one",
-        );
+        throw refusal("session-introspection", "the sessions the controller holds with a node");
     }
 
     async severTransportConnection(_sessionId: number): Promise<never> {
-        throw new UnsupportedByControllerError(
-            "severing the connection beneath a session",
-            "chip-tool",
-            "chip-tool owns no session a test can reach into, and it establishes a TCP-backed one for " +
-                "no interaction, so there is no connection to sever",
-        );
+        throw refusal("session-introspection", "severing the connection beneath a session");
     }
 
     async openCommissioningWindow(opts: {
@@ -1570,21 +1553,11 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
 
     constructor(id: string, options?: ControllerAdapterOptions) {
         if (options?.attestation) {
-            throw new UnsupportedByControllerError(
-                "judging device attestation against installed revocation information",
-                id,
-                CHIP_TOOL_CAPABILITY_GAPS.attestation,
-                "attestation",
-            );
+            throw refusal("attestation", "judging device attestation against installed revocation information", id);
         }
 
         if (options?.webRtcRequestor) {
-            throw new UnsupportedByControllerError(
-                "hosting a WebRTC transport requestor cluster",
-                id,
-                CHIP_TOOL_CAPABILITY_GAPS["webrtc-requestor"],
-                "webrtc-requestor",
-            );
+            throw refusal("webrtc-requestor", "hosting a WebRTC transport requestor cluster", id);
         }
 
         const commissionerName = COMMISSIONER_NAMES.find(name => !claimedCommissioners.has(name));

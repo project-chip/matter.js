@@ -24,6 +24,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { env } from "node:process";
 import {
+    CHIP_TOOL_CAPABILITY_GAPS,
+    CHIP_TOOL_CONTROLLER_PICS,
     ChipToolCommandError,
     ChipToolControllerAdapter,
     ChipToolUnmappedStatusError,
@@ -819,16 +821,56 @@ describe("ChipToolControllerAdapter", function () {
         expect(fake.commands).deep.equal([]);
     });
 
-    it("reports what the controller itself holds as unsupported, without issuing anything", async () => {
+    it("refuses what it always lacks naming a declared gap, without issuing anything", async () => {
         const { node } = await commissioned();
 
-        expect(await rejectionOf(node.clientEndpoints())).instanceOf(UnsupportedByControllerError);
-        expect(
-            await rejectionOf(
+        const refusals = {
+            clientEndpoints: () => node.clientEndpoints(),
+            clientAttribute: () =>
                 node.clientAttribute({ endpoint: 1, cluster: requireId(ON_OFF.id, "OnOff"), attribute: 0 }),
-            ),
-        ).instanceOf(UnsupportedByControllerError);
+            observeEvents: () => node.observeEvents([{ endpoint: 0, cluster: 0x28, event: 0 }], {}),
+            sessions: () => node.sessions(),
+            severTransportConnection: () => node.severTransportConnection(1),
+            serveOtaUpdate: () => node.serveOtaUpdate(),
+            scriptOtaProvider: () => node.scriptOtaProvider({}),
+            announceOtaProvider: () => node.announceOtaProvider(),
+            icdClient: async () => node.icdClient(),
+        };
+        const capabilities: Record<string, string | undefined> = {};
+        for (const [operation, refuse] of Object.entries(refusals)) {
+            const failure = await rejectionOf(refuse());
+            if (!(failure instanceof UnsupportedByControllerError)) {
+                throw new InternalError(`Expected ${operation} to refuse, got ${failure}`);
+            }
+            capabilities[operation] = failure.capability;
+        }
+
+        expect(capabilities).deep.equal({
+            clientEndpoints: "sustained-subscription",
+            clientAttribute: "sustained-subscription",
+            observeEvents: "sustained-subscription",
+            sessions: "session-introspection",
+            severTransportConnection: "session-introspection",
+            serveOtaUpdate: "ota-provider",
+            scriptOtaProvider: "ota-provider-script",
+            announceOtaProvider: "ota-provider-script",
+            icdClient: "icd-client",
+        });
+        for (const capability of Object.values(capabilities)) {
+            expect(CHIP_TOOL_CAPABILITY_GAPS).have.property(capability ?? "");
+        }
         expect(fake.commands).deep.equal([]);
+    });
+
+    it("refuses to announce another node's OTA provider without naming a capability, as its PICS gate it", async () => {
+        const { node } = await commissioned();
+
+        const failure = await rejectionOf(node.announceOtaProvider({ provider: "2" }));
+        if (!(failure instanceof UnsupportedByControllerError)) {
+            throw new InternalError(`Expected an UnsupportedByControllerError, got ${failure}`);
+        }
+        expect(failure.capability).undefined;
+        expect(CHIP_TOOL_CONTROLLER_PICS["OTAR.C.M.AnnounceOTAProvider"]).equal(0);
     });
 
     it("writes two attributes of two clusters, with their data versions, in one command", async () => {
