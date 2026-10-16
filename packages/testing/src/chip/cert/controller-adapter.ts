@@ -321,9 +321,9 @@ export interface ReadAttributeOptions {
     /**
      * The caller needs each entry's data version ({@link AttributeReadEntry.version}).
      *
-     * A controller that cannot report the versions a read returned refuses with
-     * {@link UnsupportedByControllerError} rather than answering without them, so a step resting on a version skips
-     * instead of failing over a capability the controller lacks.
+     * A controller that cannot report versions declares the `data-versions` capability as a gap, so a step resting on
+     * a version skips at its gate instead of failing. An adapter that can report them may fail a read whose answer
+     * lacks the version of an entry, rather than answer without it.
      */
     dataVersions?: boolean;
 }
