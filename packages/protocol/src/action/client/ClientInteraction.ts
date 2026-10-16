@@ -12,15 +12,17 @@ import { MalformedRequestError } from "#action/request/MalformedRequestError.js"
 import { Read } from "#action/request/Read.js";
 import { resolvePathForSpecifier } from "#action/request/Specifier.js";
 import { Subscribe } from "#action/request/Subscribe.js";
-import { Write } from "#action/request/Write.js";
 import { DecodedInvokeResult, InvokeResult } from "#action/response/InvokeResult.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
 import { BdxMessenger } from "#bdx/BdxMessenger.js";
+import type { Message } from "#codec/MessageCodec.js";
 import { Mark } from "#common/Mark.js";
 import { InteractionClientMessenger, MessageType } from "#interaction/InteractionMessenger.js";
 import { Subscription } from "#interaction/Subscription.js";
 import { PeerAddress } from "#peer/PeerAddress.js";
+import { PeerCommunicationError } from "#peer/PeerCommunicationError.js";
+import { SessionClosedError } from "#protocol/errors.js";
 import { ExchangeProvider } from "#protocol/ExchangeProvider.js";
 import type { ExchangeLogContext } from "#protocol/MessageExchange.js";
 import { GroupSession } from "#session/GroupSession.js";
@@ -32,6 +34,7 @@ import {
     asError,
     AsyncIterator,
     BasicSet,
+    causedBy,
     ChannelType,
     ClosedError,
     createPromise,
@@ -57,6 +60,7 @@ import {
 } from "@matter/general";
 import {
     GroupId,
+    ReceivedStatusResponseError,
     Status,
     TlvAttributeReport,
     TlvOfModel,
@@ -218,7 +222,8 @@ export class ClientInteraction<
     readonly #environment: Environment;
     readonly #lifetime: Lifetime;
     readonly #exchangeProvider: ExchangeProvider;
-    readonly #interactions = new BasicSet<Read | Write | Invoke | Subscribe | ClientBdxRequest>();
+    /** One entry per running interaction; retries may reuse request objects. */
+    readonly #interactions = new BasicSet<symbol>();
     #subscriptions?: ClientSubscriptions;
     readonly #abort: Abort;
     readonly #sustainRetries: RetrySchedule;
@@ -289,9 +294,7 @@ export class ClientInteraction<
         this.#abort(reason);
         await Promise.all([...this.#batchLanes.values()].map(({ mutex }) => mutex.close()));
 
-        while (this.#interactions.size) {
-            await this.#interactions.deleted;
-        }
+        await this.#interactions.empty;
     }
 
     async [Symbol.asyncDispose]() {
@@ -1066,19 +1069,33 @@ export class ClientInteraction<
                 request,
             );
 
-            await messenger.sendSubscribeRequest(
-                {
-                    ...request,
-                    minIntervalFloorSeconds: Seconds.of(minIntervalFloor),
-                    maxIntervalCeilingSeconds: Seconds.of(maxIntervalCeiling),
-                },
-                { abort },
-            );
+            let responseMessage: Message;
+            try {
+                await messenger.sendSubscribeRequest(
+                    {
+                        ...request,
+                        minIntervalFloorSeconds: Seconds.of(minIntervalFloor),
+                        maxIntervalCeilingSeconds: Seconds.of(maxIntervalCeiling),
+                    },
+                    { abort },
+                );
 
-            await this.#handleSubscriptionResponse(request, readChunks(messenger, abort));
-            abort.throwIfAborted();
+                await this.#handleSubscriptionResponse(request, readChunks(messenger, abort));
+                abort.throwIfAborted();
 
-            const responseMessage = await messenger.nextMessage(MessageType.SubscribeResponse, { abort });
+                responseMessage = await messenger.nextMessage(MessageType.SubscribeResponse, { abort });
+            } catch (error) {
+                // The request may have reached the peer even if its send failed; unless the peer or the session ended the
+                // interaction, the peer may hold the subscription and its report may still come
+                const awaitReport = !causedBy(
+                    error,
+                    PeerCommunicationError,
+                    SessionClosedError,
+                    ReceivedStatusResponseError,
+                );
+                context.abandon(closing => messenger.abandonSubscription({ awaitReport, abort: closing }));
+                throw error;
+            }
             const response = TlvSubscribeResponse.decode(responseMessage.payload);
 
             const subscription = new PeerSubscription({
@@ -1169,19 +1186,29 @@ export class ClientInteraction<
         if (this.#abort.aborted) {
             throw new ImplementationError("Client interaction unavailable after close");
         }
-        this.#interactions.add(request);
-
+        // Registered before the exchange exists, so close() waits for a creation in progress, which it aborts
+        const entry = Symbol("bdx");
+        this.#interactions.add(entry);
         const abort = new Abort({ abort: [session?.abort, this.#abort] });
-
-        const messenger = await BdxMessenger.create(this.#exchangeProvider, request.messageTimeout);
+        let messenger: BdxMessenger;
+        try {
+            messenger = await BdxMessenger.create(this.#exchangeProvider, request.messageTimeout, abort.signal);
+        } catch (e) {
+            this.#interactions.delete(entry);
+            abort[Symbol.dispose]();
+            throw e;
+        }
 
         const context: RequestContext<BdxMessenger> = {
             abort,
             messenger,
             [Symbol.asyncDispose]: async () => {
-                await messenger.close();
-                this.#interactions.delete(request);
-                abort[Symbol.dispose]();
+                try {
+                    await messenger.close();
+                } finally {
+                    this.#interactions.delete(entry);
+                    abort[Symbol.dispose]();
+                }
             },
         };
 
@@ -1236,7 +1263,8 @@ export class ClientInteraction<
             throw e;
         }
 
-        this.#interactions.add(request);
+        const entry = Symbol(what);
+        this.#interactions.add(entry);
 
         // Provide via dynamically so is up to date if exchange changes due to retry
         Object.defineProperty(lifetime.details, "via", {
@@ -1245,14 +1273,40 @@ export class ClientInteraction<
             },
         });
 
-        const context: RequestContext = {
+        const dispose = async () => {
+            using _closing = lifetime.closing();
+            try {
+                await messenger.close();
+            } finally {
+                this.#interactions.delete(entry);
+                abort[Symbol.dispose]();
+            }
+        };
+        let state: "active" | "abandoned" | "disposed" = "active";
+        const context: AbandonableRequestContext = {
             abort,
             messenger,
+            abandon: task => {
+                if (state !== "active") {
+                    throw new InternalError(`Cannot abandon ${what} interaction that is already ${state}`);
+                }
+                state = "abandoned";
+                const finish = async () => {
+                    try {
+                        await task(this.#abort.signal);
+                    } finally {
+                        await dispose();
+                    }
+                };
+                finish().catch(error =>
+                    logger.debug(messenger.exchange.via, "Error finishing interaction in the background", error),
+                );
+            },
             [Symbol.asyncDispose]: async () => {
-                using _closing = lifetime.closing();
-                await messenger.close();
-                this.#interactions.delete(request);
-                abort[Symbol.dispose]();
+                if (state === "active") {
+                    state = "disposed";
+                    await dispose();
+                }
             },
         };
 
@@ -1293,6 +1347,21 @@ export interface RequestContext<M extends InteractionClientMessenger | BdxMessen
     messenger: M;
 
     [Symbol.asyncDispose](): Promise<void>;
+}
+
+/**
+ * The context of an interaction whose remainder can outlive the caller's scope.
+ */
+export interface AbandonableRequestContext extends RequestContext<InteractionClientMessenger> {
+    /**
+     * Hands the rest of the interaction to `task`, which runs in the background.  Disposal then waits for the task
+     * instead of the caller's scope, and {@link ClientInteraction.close} waits for it.  Caller and session aborts do not
+     * reach the task; only {@link ClientInteraction.close} stops it, through the signal it gets.  The task must settle
+     * soon after `closing` fires, or close never returns.
+     *
+     * @throws InternalError when the context was already abandoned or disposed
+     */
+    abandon(task: (closing: AbortSignal) => Promise<void>): void;
 }
 
 /**

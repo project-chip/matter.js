@@ -182,6 +182,18 @@ function namedPipeCommandFor(app: string, command: BackchannelCommand): string |
 }
 
 /**
+ * Logs a failed read of a device's output. A stream the process closes before its reader is done ends with
+ * `ERR_STREAM_PREMATURE_CLOSE`, which is routine whenever a device is stopped, so only other failures warn.
+ */
+function logOutputFailure(error: unknown) {
+    if (error instanceof Error && "code" in error && error.code === "ERR_STREAM_PREMATURE_CLOSE") {
+        console.debug("Device output ended early:", error.message);
+        return;
+    }
+    console.warn("Error reading device output:", error);
+}
+
+/**
  * Serializes standard-input writes and leaves {@link STDIN_COMMAND_GAP_MS} between them.
  *
  * @internal Test seam — not API. Exported so its spacing can be asserted where it is decided; the
@@ -191,6 +203,7 @@ function namedPipeCommandFor(app: string, command: BackchannelCommand): string |
  * The gap belongs to the delivery, not to the caller: a step that operates a device twice in a row
  * must not have to know how the app reads its input.
  */
+
 export class StdinPacer {
     #ready: Promise<void> = Promise.resolve();
 
@@ -538,7 +551,7 @@ class ChipLocalDevice implements CertDevice {
                 Promise.allSettled(pumps).then((results): "drained" => {
                     for (const result of results) {
                         if (result.status === "rejected") {
-                            console.warn("Error reading device output:", result.reason);
+                            logOutputFailure(result.reason);
                         }
                     }
                     return "drained";
@@ -552,7 +565,7 @@ class ChipLocalDevice implements CertDevice {
                         "continuing without them",
                 );
                 for (const pump of pumps) {
-                    void pump.catch(e => console.warn("Error reading device output:", e));
+                    void pump.catch(logOutputFailure);
                 }
             }
         } finally {
@@ -1091,7 +1104,7 @@ export class ChipDockerDevice implements CertDevice {
                 Promise.allSettled(pumps).then((results): "drained" => {
                     for (const result of results) {
                         if (result.status === "rejected") {
-                            console.warn("Error reading device output:", result.reason);
+                            logOutputFailure(result.reason);
                         }
                     }
                     return "drained";
@@ -1105,7 +1118,7 @@ export class ChipDockerDevice implements CertDevice {
                         "continuing without it",
                 );
                 for (const pump of pumps) {
-                    void pump.catch(e => console.warn("Error reading device output:", e));
+                    void pump.catch(logOutputFailure);
                 }
             }
         } finally {
