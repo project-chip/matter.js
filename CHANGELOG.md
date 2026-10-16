@@ -87,9 +87,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: Adding an endpoint with the number of an erased endpoint that is still a part of its parent is refused
     - Breaking: An essential endpoint whose initialization fails in `add()` is closed instead of reset, so the same instance cannot be added again
     - Breaking: `erase()` on an endpoint restarts it with its default values and options and keeps its endpoint number; on a server node the ConfigurationVersion increases
-    - Breaking: `erase()` of an endpoint or node rejects with a `MatterAggregateError` when a step fails; a failed storage erase leaves the endpoint or node crashed, and so does a node that cannot go offline before or online after the erase
+    - Breaking: `erase()` of an endpoint or node rejects with a `MatterAggregateError` when a step fails; a failed storage erase leaves the endpoint or node crashed, and so does a node that cannot go offline before or online after the erase; a peer whose server node is offline stays offline instead
     - Breaking: `ServerNode.delete()` erases the node's storage and closes the node; it no longer restarts the node first
-    - Breaking: `ClientNode.erase()` keeps the commissioning state and reconnects when the node was online
+    - Breaking: `ClientNode.erase()` keeps the commissioning state and reconnects when it was started, unless its server node is offline
     - Breaking: `Endpoint.reset()`, `Node.reset()` and `EndpointContainer.reset()` are removed; `erase()` resets and also wipes the persisted data
     - Breaking: Changing the `owner` of an endpoint that already has one, also by adding it to another endpoint, throws; an endpoint cannot move, so close or delete it and add a new one
     - Breaking: `EndpointInitializer.eraseDescendant()` is replaced by `prepareEraseDescendant()` and `prepareDeleteDescendant()`
@@ -224,6 +224,10 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Deleting an endpoint of a server node increases the ConfigurationVersion of the nearest bridged endpoint above it and of the node, or only of the node when there is none
     - Fix: `erase()`, `delete()` and `close()` of the endpoints of one node run one after another; `close()` waits for an erase or delete in progress, and a repeated call joins the one in progress
     - Fix: A factory reset completes and restarts the node when its in-memory reset fails
+    - Fix: A factory reset or `delete()` of a server node waits for a peer that is closing before it erases the storage
+    - Fix: A factory reset of a server node no longer hangs when one of its peers starts meanwhile
+    - Fix: `start()` and `stop()` of a node take effect in call order; `start()` no longer returns at once while another start is in progress
+    - Fix: A peer whose network start fails no longer logs an unhandled error when it closes its network runtime
     - Fix: An endpoint without a `number` no longer gets a number that another endpoint of the node sets in its options but is not yet added, so adding that endpoint later no longer fails
     - Fix: An endpoint refused for its number is not listed in `PartsList` and is not reported as deleted
     - Fix: Automatically assigned endpoint numbers count up from the highest number used so far or explicitly requested in options; after 0xFFFE they continue with the lowest free number instead of the invalid 0xFFFF

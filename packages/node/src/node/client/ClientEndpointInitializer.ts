@@ -30,12 +30,17 @@ export class ClientEndpointInitializer extends EndpointInitializer {
 
     async prepareEraseDescendant(endpoint: Endpoint): Promise<EndpointInitializer.Erasure> {
         return {
-            wipe: () => this.#eraseStore(endpoint),
+            wipe: async () => {
+                await this.#eraseStore(endpoint);
+                this.#structure?.renewStores(endpoint);
+            },
         };
     }
 
     async prepareDeleteDescendant(endpoint: Endpoint): Promise<EndpointInitializer.Erasure> {
-        return this.prepareEraseDescendant(endpoint);
+        return {
+            wipe: () => this.#eraseStore(endpoint),
+        };
     }
 
     async #eraseStore(endpoint: Endpoint) {

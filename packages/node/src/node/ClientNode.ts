@@ -234,14 +234,32 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
 
     /**
      * Erase the data cached from the peer and initialize the node again if it was started.  Commissioning and connection
-     * settings stay.  If the node was online it reconnects and reads the peer again.
+     * settings stay.  If its network was running it reconnects and reads the peer again.
      *
      * Rejects with a {@link MatterAggregateError} if a step fails.  A failed reset still erases the cache and
      * initializes the node again.  The node crashes if it cannot disconnect first, in which case nothing is erased, if
-     * the cache erase fails, or if it cannot reconnect.
+     * the cache erase fails, or if it cannot reconnect while its server node is online.  If its server node is offline
+     * by then, the node stays offline instead.
      */
     override erase() {
         return super.erase();
+    }
+
+    /**
+     * Bring the node online, and its server node first if that is offline.  The server node stays online if the start
+     * of this node fails.  Throws `DestroyedDependencyError` if the node or its server node is closing or closed, also
+     * when a verb of its server node removes the node while this waits for the server node.
+     */
+    override async start() {
+        this.assertNotTerminal("start");
+
+        // The server node mutex comes before the peer node mutex: the server waits for its peers while holding its mutex.
+        // An online server node may hold its mutex while it starts this node, so this does not queue on it then
+        if (!this.owner.lifecycle.isOnline) {
+            await this.owner.start();
+        }
+
+        await super.start();
     }
 
     /**
@@ -323,6 +341,10 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         } finally {
             this.#blockInteractions = false;
         }
+    }
+
+    protected override get canGoOnline() {
+        return this.owner.lifecycle.isOnline;
     }
 
     // A peer belongs to its host's Peers, which closes it within the host's teardown

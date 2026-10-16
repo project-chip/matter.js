@@ -262,6 +262,20 @@ export class ClientStructure {
     }
 
     /**
+     * Give the clusters of {@link endpoint} new stores once its cache is erased.  An erased store ignores the values the
+     * peer reports.
+     */
+    renewStores(endpoint: Endpoint) {
+        const structure = this.#endpoints.get(endpoint.number);
+        if (structure === undefined) {
+            return;
+        }
+        for (const [key, cluster] of structure.clusters) {
+            cluster.store = this.#storeFactory(endpoint, key.toString(), cluster.primaryKey);
+        }
+    }
+
+    /**
      * Obtain the store for a remote cluster.
      */
     storeForRemote(endpoint: Endpoint, type: ClusterBehavior.Type) {

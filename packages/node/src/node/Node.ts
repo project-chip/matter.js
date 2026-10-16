@@ -45,7 +45,7 @@ const logger = Logger.get("Node");
 export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEndpoint> extends Endpoint<T> {
     #environment: Environment;
     #runtime?: NetworkRuntime;
-    #startInProgress = false;
+    #startRequest = 0;
 
     constructor(config: Node.Configuration<T>) {
         const parentEnvironment = config.environment ?? config.owner?.env ?? Environment.default;
@@ -110,24 +110,30 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     }
 
     /**
-     * Bring the node online.  Throws {@link DestroyedDependencyError} once a close or delete of the node was requested.
+     * Bring the node online.  Calls of {@link start} and {@link stop} take effect in call order, so the last one sets
+     * whether the node ends online.  Throws {@link DestroyedDependencyError} once a close or delete of the node was
+     * requested.
      */
     async start() {
         this.assertNotTerminal("start");
-        if (this.lifecycle.isOnline || this.#startInProgress) {
+        if (this.lifecycle.isOnline && this.lifecycle.shouldBeOnline) {
             return;
         }
 
-        this.#startInProgress = true;
+        const request = ++this.#startRequest;
+        this.lifecycle.targetState = "online";
         try {
-            this.lifecycle.targetState = "online";
-
-            await this.lifecycle.mutex.hold(`starting ${this}`, () => this.startWithMutex());
+            await this.lifecycle.mutex.hold(`starting ${this}`, () => {
+                // A close or delete may have been requested while this start waited for the mutex
+                this.assertNotTerminal("start");
+                return this.startWithMutex();
+            });
         } catch (error) {
-            this.lifecycle.targetState = "offline";
+            // A later start owns the target state
+            if (request === this.#startRequest) {
+                this.lifecycle.targetState = "offline";
+            }
             throw error;
-        } finally {
-            this.#startInProgress = false;
         }
     }
 
@@ -247,19 +253,21 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
 
     /**
      * Run the step of a lifecycle verb of the node while holding the node mutex and then the tree mutex.  The node goes
-     * offline first and online again afterwards if it was online and should stay so.
+     * offline first and online again afterwards if its network was running and it should stay online.
      */
     protected override async withLifecycleMutex(operation: string, step: () => Promise<void>) {
         await this.lifecycle.mutex.hold(operation, () => this.#runOffline(operation, step));
     }
 
     /**
-     * Take the node offline, run {@link step} while holding the tree mutex, and bring the node online again if it was
-     * online and should stay so.  The runtime is not designed to operate with a node whose root resets or closes, so it
-     * goes first.  A node that fails to go offline before an erase or to go online again crashes.
+     * Take the node offline, run {@link step} while holding the tree mutex, and bring the node online again if its
+     * network was running and it should stay online.  The runtime is not designed to operate with a node whose root
+     * resets or closes, so it goes first.  A node that fails to go offline before an erase or to go online again
+     * crashes, unless it cannot go online now ({@link canGoOnline}); then it stays offline.
      */
     async #runOffline(operation: string, step: () => Promise<void>) {
-        const wasOnline = this.lifecycle.isOnline;
+        // A peer without a session is offline while its runtime runs and reconnects
+        const wasRunning = this.#runtime !== undefined;
         const errors = new Array<unknown>();
 
         try {
@@ -278,15 +286,23 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
             errors.push(e);
         }
 
-        if (wasOnline && this.lifecycle.shouldBeOnline && this.construction.status === Lifecycle.Status.Active) {
+        if (wasRunning && this.lifecycle.shouldBeOnline && this.construction.status === Lifecycle.Status.Active) {
             try {
                 await this.startWithMutex();
             } catch (e) {
-                errors.push(e);
+                if (this.canGoOnline) {
+                    errors.push(e);
 
-                // A failed start of the construction crashed it with its cause already
-                if (this.construction.status === Lifecycle.Status.Active) {
-                    this.construction.crash();
+                    // A failed start of the construction crashed it with its cause already
+                    if (this.construction.status === Lifecycle.Status.Active) {
+                        this.construction.crash();
+                    }
+                } else {
+                    logger.debug(
+                        Diagnostic.strong(this.toString()),
+                        `stays offline after ${operation} as it cannot go online now:`,
+                        e,
+                    );
                 }
             }
         }
@@ -312,6 +328,14 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     abstract readonly nodeType: "server" | "client" | "group";
 
     protected abstract prepareRuntimeShutdown(): Promise<void>;
+
+    /**
+     * Whether the node can go online now.  A node that cannot stays offline when it fails to go online again after a
+     * lifecycle verb, instead of crashing.
+     */
+    protected get canGoOnline() {
+        return true;
+    }
 
     /**
      * Whether the node registers with the environment's runtime when it starts, so that shutting down the runtime

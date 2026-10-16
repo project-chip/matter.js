@@ -16,6 +16,7 @@ import { ProtocolService } from "#node/integration/ProtocolService.js";
 import type { Node } from "#node/Node.js";
 import {
     Construction,
+    createPromise,
     DestroyedDependencyError,
     Diagnostic,
     Environment,
@@ -1135,10 +1136,10 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     #begin(phase: LifecyclePhase, operation: () => Promise<void>) {
         this.#phase = phase;
-        if (phase === "deleting" || phase === "closing") {
-            this.lifecycle.change(EndpointLifecycle.Change.Destroying);
-        }
-        const promise = operation().finally(() => {
+
+        // Listeners of the Destroying change may call a verb, which joins this one only once it is installed
+        const { promise: done, resolver, rejecter } = createPromise<void>();
+        const promise = done.finally(() => {
             if (this.#operation !== promise) {
                 return;
             }
@@ -1148,6 +1149,15 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             }
         });
         this.#operation = promise;
+
+        try {
+            if (phase === "deleting" || phase === "closing") {
+                this.lifecycle.change(EndpointLifecycle.Change.Destroying);
+            }
+            operation().then(resolver, rejecter);
+        } catch (e) {
+            rejecter(e);
+        }
         return promise;
     }
 

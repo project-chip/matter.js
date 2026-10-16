@@ -12,6 +12,7 @@ import { OnOffLightDevice } from "#devices/on-off-light";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointBehaviorsError } from "#endpoint/errors.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
+import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import {
     DestroyedDependencyError,
@@ -997,6 +998,25 @@ describe("Endpoint lifecycle verbs", () => {
         await closing;
         expect(light.construction.status).equals(Lifecycle.Status.Destroyed);
     });
+
+    for (const verb of ["delete", "close"] as const) {
+        it(`joins the ${verb} from a listener of its Destroying change`, async () => {
+            await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+            const light = await node.add(OnOffLightDevice, { id: "light" });
+
+            const joined = new Array<Promise<Lifecycle.Status>>();
+            light.lifecycle.changed.on((type, endpoint) => {
+                if (type === EndpointLifecycle.Change.Destroying && endpoint === light) {
+                    joined.push(light.close().then(() => light.construction.status));
+                    joined.push(light[verb]().then(() => light.construction.status));
+                }
+            });
+
+            await light[verb]();
+
+            expect(await Promise.all(joined)).deep.equals([Lifecycle.Status.Destroyed, Lifecycle.Status.Destroyed]);
+        });
+    }
 });
 
 describe("Endpoint lifecycle verbs of parts", () => {

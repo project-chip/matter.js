@@ -64,6 +64,7 @@ import {
     STANDARD_MATTER_PORT,
     StorageManager,
     StorageService,
+    Time,
     UdpSocketOptions,
 } from "@matter/general";
 import { AccessLevel, BasicInformation, ElementTag, FeatureMap } from "@matter/model";
@@ -1987,6 +1988,175 @@ describe("ServerNode", () => {
 
         expect([...controller.peers].length).equals(0);
         expect(controller.lifecycle.isOnline).equals(true);
+    });
+
+    it("deletes its peers when it is deleted", async () => {
+        await using site = new MockSite();
+        const { controller } = await site.addCommissionedPair();
+        const peer = [...controller.peers][0];
+        const peerSet = controller.env.get(PeerSet);
+        const address = peer.peerAddress!;
+        const deletePeer = peer.delete.bind(peer);
+        let peerDeleted = false;
+        peer.delete = async () => {
+            await deletePeer();
+            peerDeleted = true;
+        };
+
+        await MockTime.resolve(controller.delete(), { macrotasks: true });
+
+        expect(peerDeleted).equals(true);
+        expect(peer.construction.status).equals(Lifecycle.Status.Destroyed);
+        expect(peerSet.get(address)).equals(undefined);
+    });
+
+    it("rejects a start queued behind an erase when a close follows", async () => {
+        const node = new MockServerNode({});
+        await node.construction;
+
+        const erasing = node.erase();
+        const starting = expect(node.start()).rejectedWith(DestroyedDependencyError);
+        const closing = node.close();
+
+        await MockTime.resolve(Promise.all([erasing, starting, closing]));
+
+        expect(node.construction.status).equals(Lifecycle.Status.Destroyed);
+    });
+
+    it("ends online after a start, a stop and a start in a row", async () => {
+        const node = new MockServerNode({});
+        await node.construction;
+
+        await MockTime.resolve(Promise.all([node.start(), node.stop(), node.start()]));
+
+        expect(node.lifecycle.isOnline).equals(true);
+        await MockTime.resolve(node.close());
+    });
+
+    it("ends online after a stop and a start of an online node in a row", async () => {
+        const node = new MockServerNode({});
+        await MockTime.resolve(node.start());
+
+        await MockTime.resolve(Promise.all([node.stop(), node.start()]));
+
+        expect(node.lifecycle.isOnline).equals(true);
+        await MockTime.resolve(node.close());
+    });
+
+    it("stays meant to be online when a start fails while another start waits", async () => {
+        class NodeFailingFirstStart extends MockServerNode {
+            failures = 1;
+
+            protected override async startWithMutex() {
+                if (this.failures-- > 0) {
+                    throw new NetworkError("Start failed");
+                }
+                await super.startWithMutex();
+            }
+        }
+        const node = new NodeFailingFirstStart({});
+        await node.construction;
+
+        const failing = expect(node.start()).rejectedWith(NetworkError);
+        await MockTime.resolve(Promise.all([failing, node.start()]));
+
+        expect(node.lifecycle.isOnline).equals(true);
+        expect(node.lifecycle.shouldBeOnline).equals(true);
+        await MockTime.resolve(node.close());
+    });
+
+    describe("waits for a peer that is closing before it erases its storage", () => {
+        class SlowCloseBehavior extends Behavior {
+            static override readonly id = "slowClose";
+
+            override async [Symbol.asyncDispose]() {
+                await Time.sleep("slow peer close", Seconds(1));
+            }
+        }
+
+        async function offlineControllerWithClosingPeer(site: MockSite) {
+            const { controller } = await site.addCommissionedPair();
+            const peer = [...controller.peers][0];
+            peer.behaviors.require(SlowCloseBehavior);
+            await MockTime.resolve(
+                peer.act(agent => agent.get(SlowCloseBehavior)),
+                { macrotasks: true },
+            );
+            await MockTime.resolve(controller.stop(), { macrotasks: true });
+
+            const order = new Array<string>();
+            peer.lifecycle.destroyed.once(() => {
+                order.push("peer destroyed");
+            });
+            const store = controller.env.get(ServerNodeStore);
+            const eraseStore = store.erase.bind(store);
+            store.erase = async () => {
+                order.push("storage erased");
+                await eraseStore();
+            };
+            const address = peer.peerAddress!;
+            const closing = peer.close();
+
+            return { controller, order, closing, address };
+        }
+
+        it("on erase", async () => {
+            await using site = new MockSite();
+            const { controller, order, closing } = await offlineControllerWithClosingPeer(site);
+
+            await MockTime.resolve(controller.erase(), { macrotasks: true });
+            await MockTime.resolve(closing, { macrotasks: true });
+
+            expect(order).deep.equals(["peer destroyed", "storage erased"]);
+        });
+
+        it("and forgets the peer on erase", async () => {
+            await using site = new MockSite();
+            const { controller, closing, address } = await offlineControllerWithClosingPeer(site);
+
+            await MockTime.resolve(controller.erase(), { macrotasks: true });
+            await MockTime.resolve(closing, { macrotasks: true });
+
+            expect(controller.env.get(PeerSet).has(address)).equals(false);
+        });
+
+        it("on delete", async () => {
+            await using site = new MockSite();
+            const { controller, order, closing } = await offlineControllerWithClosingPeer(site);
+
+            await MockTime.resolve(controller.delete(), { macrotasks: true });
+            await MockTime.resolve(closing, { macrotasks: true });
+
+            expect(order).deep.equals(["peer destroyed", "storage erased"]);
+        });
+    });
+
+    describe("erases while a peer starts", () => {
+        async function offlineControllerWithStartingPeer(site: MockSite) {
+            const { controller } = await site.addCommissionedPair();
+            const peer = [...controller.peers][0];
+            await MockTime.resolve(controller.stop(), { macrotasks: true });
+
+            const erasing = controller.erase();
+            const starting = expect(peer.start()).rejectedWith(DestroyedDependencyError);
+
+            return { peer, erasing, starting };
+        }
+
+        it("and rejects the start of the peer", async () => {
+            await using site = new MockSite();
+            const { erasing, starting } = await offlineControllerWithStartingPeer(site);
+
+            await MockTime.resolve(Promise.all([erasing, starting]), { macrotasks: true });
+        });
+
+        it("and rejects the start of the peer while the peer closes", async () => {
+            await using site = new MockSite();
+            const { peer, erasing, starting } = await offlineControllerWithStartingPeer(site);
+            const closing = peer.close();
+
+            await MockTime.resolve(Promise.all([erasing, closing, starting]), { macrotasks: true });
+        });
     });
 
     it("erases CA key material the node never loaded", async () => {
