@@ -203,7 +203,6 @@ function logOutputFailure(error: unknown) {
  * The gap belongs to the delivery, not to the caller: a step that operates a device twice in a row
  * must not have to know how the app reads its input.
  */
-
 export class StdinPacer {
     #ready: Promise<void> = Promise.resolve();
 
