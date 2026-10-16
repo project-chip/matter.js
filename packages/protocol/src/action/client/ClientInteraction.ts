@@ -1089,7 +1089,7 @@ export class ClientInteraction<
                     const awaitReport = abort.aborted;
                     if (awaitReport || messenger.reportAwaitsStatus) {
                         disposeContext = false;
-                        this.#abandonSubscription(context, awaitReport, interactionSession).catch(error =>
+                        this.#abandonSubscription(context, awaitReport).catch(error =>
                             logger.warn(messenger.exchange.via, "Error ending abandoned subscribe interaction", error),
                         );
                     }
@@ -1177,13 +1177,14 @@ export class ClientInteraction<
      * Ends a subscribe interaction that stopped before the peer confirmed the subscription, then disposes it.
      *
      * The peer holds the subscription from the moment it accepted the request.  The caller does not wait for this, so
-     * an abort stays as prompt as for other interactions; {@link close} waits for it and cuts it short.
+     * an abort stays as prompt as for other interactions.  {@link close} waits for it; it stops the wait for a report
+     * still to come but not the answer to a report already received.
      */
-    async #abandonSubscription(context: RequestContext, awaitReport: boolean, session?: InteractionSession) {
+    async #abandonSubscription(context: RequestContext, awaitReport: boolean) {
         try {
-            // Once the session or this interactable closes, waiting for the peer serves nobody
-            using peerReachable = Abort.any(session?.abort, this.#abort);
-            await context.messenger.abandonSubscription({ awaitReport, abort: peerReachable.signal });
+            // Only this interactable's close bounds it: a caller cancel must not stop telling the peer, and session loss
+            // closes the exchange
+            await context.messenger.abandonSubscription({ awaitReport, abort: this.#abort.signal });
         } finally {
             await context[Symbol.asyncDispose]();
         }

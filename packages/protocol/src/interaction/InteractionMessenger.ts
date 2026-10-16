@@ -15,6 +15,7 @@ import {
     causedBy,
     Diagnostic,
     Duration,
+    ImplementationError,
     InternalError,
     Logger,
     MatterFlowError,
@@ -968,9 +969,19 @@ export class InteractionServerMessenger extends InteractionMessenger {
     }
 }
 
+/** The subscription ID of a data report, for logging only; a report that does not decode has none. */
+function subscriptionIdOf(message: Message) {
+    try {
+        return TlvDataReport.decode(message.payload).subscriptionId;
+    } catch (error) {
+        logger.debug("Undecodable data report:", Diagnostic.errorMessage(asError(error)));
+        return undefined;
+    }
+}
+
 export class IncomingInteractionClientMessenger extends InteractionMessenger {
-    /** Set while the peer waits for our status on the last data report it sent. */
-    #reportAwaitingStatus?: { subscriptionId?: SubscriptionId };
+    #reportAwaitsStatus = false;
+    #subscriptionId?: SubscriptionId;
 
     async waitFor(expectedMessageInfo: string, messageType: number, options?: ExchangeReceiveOptions) {
         const message = await this.anyNextMessage(expectedMessageInfo, options);
@@ -1002,15 +1013,17 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
     async *readDataReports(options?: ExchangeReceiveOptions) {
         while (true) {
             const dataReportMessage = await this.waitFor("DataReport", MessageType.ReportData, options);
+            this.#reportAwaitsStatus = true;
+            this.#subscriptionId = undefined;
             const report = TlvDataReport.decode(dataReportMessage.payload);
-            this.#reportAwaitingStatus =
-                report.suppressResponse && !report.moreChunkedMessages
-                    ? undefined
-                    : { subscriptionId: report.subscriptionId };
+            this.#subscriptionId = report.subscriptionId;
+            if (report.suppressResponse && !report.moreChunkedMessages) {
+                this.#reportAwaitsStatus = false;
+            }
 
             yield report;
 
-            this.#reportAwaitingStatus = undefined;
+            this.#reportAwaitsStatus = false;
             if (report.moreChunkedMessages) {
                 await this.sendStatus(Status.Success, {
                     multipleMessageInteraction: true,
@@ -1042,7 +1055,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
 
     /** Whether the peer waits for our status on the last data report it sent. */
     get reportAwaitsStatus() {
-        return this.#reportAwaitingStatus !== undefined;
+        return this.#reportAwaitsStatus;
     }
 
     /**
@@ -1050,10 +1063,13 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
      *
      * @see {@link MatterSpecification.v161.Core} § 8.5
      */
-    async sendInvalidSubscription(subscriptionId?: SubscriptionId, options?: { abort?: AbortSignal }) {
-        this.#reportAwaitingStatus = undefined;
+    async sendInvalidSubscription(
+        subscriptionId?: SubscriptionId,
+        options?: Pick<ExchangeSendOptions, "abort" | "disableMrpLogic">,
+    ) {
+        this.#reportAwaitsStatus = false;
         await this.sendStatus(Status.InvalidSubscription, {
-            abort: options?.abort,
+            ...options,
             multipleMessageInteraction: true,
             logContext: Subscription.diagnosticOf(subscriptionId),
         });
@@ -1064,16 +1080,18 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
      *
      * The peer holds the subscription from the moment it accepts the request, so it must learn that the client no
      * longer wants it.  Answers the report the peer waits on with INVALID_SUBSCRIPTION.  If there is none and
-     * `awaitReport` is set, waits for the next message instead, up to the usual response time, and answers it if it
+     * `awaitReport` is set, waits for the next message until `abort` or the usual response time and answers it if it
      * is a report.  A SubscribeResponse cannot be answered; the peer then drops the subscription when its next report
-     * is refused.  Never throws.
+     * is refused.
+     *
+     * `abort` never suppresses an owed answer: once it fired the answer goes out once without retransmission, and an
+     * abort while waiting for its ack stops the wait.  Never throws.
      *
      * @see {@link MatterSpecification.v161.Core} § 8.5
      */
     async abandonSubscription({ awaitReport, abort }: { awaitReport: boolean; abort?: AbortSignal }) {
         try {
-            let subscriptionId = this.#reportAwaitingStatus?.subscriptionId;
-            if (this.#reportAwaitingStatus === undefined) {
+            if (!this.#reportAwaitsStatus) {
                 if (!awaitReport) {
                     return;
                 }
@@ -1081,15 +1099,22 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
                 if (message.payloadHeader.messageType !== MessageType.ReportData) {
                     return;
                 }
-                subscriptionId = TlvDataReport.decode(message.payload).subscriptionId;
+                this.#subscriptionId = subscriptionIdOf(message);
             }
-            await this.sendInvalidSubscription(subscriptionId, { abort });
-        } catch (error) {
-            logger.debug(
-                this.exchange.via,
-                "Abandoned subscription not terminated on the peer:",
-                Diagnostic.errorMessage(asError(error)),
+            await this.sendInvalidSubscription(
+                this.#subscriptionId,
+                abort?.aborted ? { disableMrpLogic: true } : { abort },
             );
+        } catch (error) {
+            if (causedBy(error, InternalError, ImplementationError, MatterFlowError)) {
+                logger.warn(this.exchange.via, "Error terminating abandoned subscription on the peer:", error);
+            } else {
+                logger.debug(
+                    this.exchange.via,
+                    "Abandoned subscription not terminated on the peer:",
+                    Diagnostic.errorMessage(asError(error)),
+                );
+            }
         }
     }
 

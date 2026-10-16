@@ -59,7 +59,10 @@ export interface ClientRequest {
      *
      * Aborting abandons the interaction rather than telling the peer anything, so a write or invoke
      * already in flight may still be acted on by the peer.  A subscribe is the exception: after it rejects, the
-     * client tries to answer the peer's next report with INVALID_SUBSCRIPTION so the peer drops the subscription.
+     * client answers the peer's pending report on the subscribe exchange with INVALID_SUBSCRIPTION, or waits up to the
+     * peer's response time for the next one, so the peer drops the subscription.  If the abort comes after the final
+     * priming report was answered but before the SubscribeResponse, only the peer's next report, up to its max
+     * interval later, is refused.
      */
     abort?: AbortSignal;
 

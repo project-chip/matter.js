@@ -5,8 +5,19 @@
  */
 
 import { InteractionClientMessenger, MessageType } from "#interaction/InteractionMessenger.js";
-import { MessageExchange } from "#protocol/MessageExchange.js";
-import { Bytes, DataReadQueue, MatterFlowError } from "@matter/general";
+import { OperationalAddressChangedError } from "#peer/PeerCommunicationError.js";
+import { ExchangeReceiveOptions, ExchangeSendOptions, MessageExchange } from "#protocol/MessageExchange.js";
+import {
+    AbortedError,
+    Bytes,
+    DataReadQueue,
+    Diagnostic,
+    InternalError,
+    LogDestination,
+    Logger,
+    LogLevel,
+    MatterFlowError,
+} from "@matter/general";
 import { Specification } from "@matter/model";
 import {
     AttributeData,
@@ -375,23 +386,52 @@ describe("InteractionClientMessenger", () => {
             };
         }
 
-        /** A peer that sends {@link messages} and records the statuses the client sends. */
+        /**
+         * A peer that sends {@link messages} and records the statuses the client sends.  Unless {@link acks} it never
+         * acks, so an MRP send waits until its abort.
+         */
         function peer(...messages: unknown[]) {
             const queue = new DataReadQueue<unknown>();
             for (const message of messages) {
                 queue.write(message);
             }
             const statuses = new Array<Status>();
+            const sendOptions = new Array<ExchangeSendOptions | undefined>();
+            let acks = true;
+            let receiveError: Error | undefined;
             const exchange = {
                 maxPayloadSize: 1200,
-                send: async (messageType: number, payload: Bytes) => {
+                send: async (messageType: number, payload: Bytes, options?: ExchangeSendOptions) => {
+                    if (options?.abort?.aborted) {
+                        throw new AbortedError();
+                    }
                     expect(messageType).equals(MessageType.StatusResponse);
                     statuses.push(TlvStatusResponse.decode(payload).status);
+                    sendOptions.push(options);
+                    const abort = options?.abort;
+                    if (!acks && !options?.disableMrpLogic && abort !== undefined) {
+                        await new Promise(resolve => abort.addEventListener("abort", resolve, { once: true }));
+                    }
                 },
-                nextMessage: () => queue.read(),
+                nextMessage: async (options?: ExchangeReceiveOptions) => {
+                    if (receiveError !== undefined) {
+                        throw receiveError;
+                    }
+                    return queue.read(options?.abort);
+                },
                 close: async () => {},
             } as unknown as MessageExchange;
-            return { messenger: new InteractionClientMessenger(exchange), statuses };
+            return {
+                messenger: new InteractionClientMessenger(exchange),
+                statuses,
+                sendOptions,
+                withoutAcks() {
+                    acks = false;
+                },
+                failReceiveWith(error: Error) {
+                    receiveError = error;
+                },
+            };
         }
 
         it("answers a report it has not answered yet with INVALID_SUBSCRIPTION", async () => {
@@ -413,12 +453,111 @@ describe("InteractionClientMessenger", () => {
             expect(statuses).deep.equals([Status.InvalidSubscription]);
         });
 
+        /** Collects the messenger's warnings during {@link action}. */
+        async function warningsDuring(action: () => Promise<void>) {
+            const warnings = new Array<string>();
+            Logger.destinations.capture = LogDestination({
+                add(message: Diagnostic.Message) {
+                    if (message.facility === "InteractionMessenger" && message.level >= LogLevel.WARN) {
+                        warnings.push(message.values.join(" "));
+                    }
+                },
+            });
+            try {
+                await action();
+            } finally {
+                delete Logger.destinations.capture;
+            }
+            return warnings;
+        }
+
         it("leaves a SubscribeResponse unanswered", async () => {
             const { messenger, statuses } = peer(subscribeResponse());
 
-            await messenger.abandonSubscription({ awaitReport: true });
+            const warnings = await warningsDuring(() => messenger.abandonSubscription({ awaitReport: true }));
 
             expect(statuses).deep.equals([]);
+            expect(warnings).deep.equals([]);
+        });
+
+        it("answers a report it has not answered yet once, without retransmission, after the abort", async () => {
+            const { messenger, statuses, sendOptions } = peer(report({ moreChunkedMessages: true }));
+            await messenger.readDataReports().next();
+
+            const abort = new AbortController();
+            abort.abort();
+            await messenger.abandonSubscription({ awaitReport: true, abort: abort.signal });
+
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
+            expect(sendOptions[0]?.disableMrpLogic).true;
+        });
+
+        it("stops waiting for the ack of its answer on abort", async () => {
+            const { messenger, statuses, sendOptions, withoutAcks } = peer(report({ moreChunkedMessages: true }));
+            await messenger.readDataReports().next();
+            withoutAcks();
+
+            const abort = new AbortController();
+            const abandoning = messenger.abandonSubscription({ awaitReport: false, abort: abort.signal });
+            await Promise.resolve();
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
+            expect(sendOptions[0]?.abort).equals(abort.signal);
+            abort.abort();
+            await abandoning;
+        });
+
+        it("logs a failure of the peer or of the exchange at debug", async () => {
+            const { messenger, failReceiveWith } = peer();
+            failReceiveWith(new OperationalAddressChangedError());
+
+            const warnings = await warningsDuring(() => messenger.abandonSubscription({ awaitReport: true }));
+
+            expect(warnings).deep.equals([]);
+        });
+
+        it("logs an error of its own at warn", async () => {
+            const { messenger, failReceiveWith } = peer();
+            failReceiveWith(new InternalError("broken"));
+
+            const warnings = await warningsDuring(() => messenger.abandonSubscription({ awaitReport: true }));
+
+            expect(warnings).length(1);
+        });
+
+        it("stops waiting for the next report on abort", async () => {
+            const { messenger, statuses } = peer();
+            const abort = new AbortController();
+
+            const abandoning = messenger.abandonSubscription({ awaitReport: true, abort: abort.signal });
+            abort.abort();
+            await abandoning;
+
+            expect(statuses).deep.equals([]);
+        });
+
+        it("answers a next report it cannot decode with INVALID_SUBSCRIPTION", async () => {
+            const { messenger, statuses } = peer({
+                packetHeader: {},
+                payloadHeader: { messageType: MessageType.ReportData },
+                payload: Bytes.fromHex("ff"),
+            });
+
+            await messenger.abandonSubscription({ awaitReport: true });
+
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
+        });
+
+        it("answers a report it cannot decode with INVALID_SUBSCRIPTION", async () => {
+            const { messenger, statuses } = peer({
+                packetHeader: {},
+                payloadHeader: { messageType: MessageType.ReportData },
+                payload: Bytes.fromHex("ff"),
+            });
+            await expect(messenger.readDataReports().next()).rejected;
+
+            await messenger.abandonSubscription({ awaitReport: false });
+
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
         });
 
         it("sends nothing when no report waits for a status and it is not asked to await one", async () => {

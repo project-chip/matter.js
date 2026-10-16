@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { CommissioningClient } from "#behavior/system/commissioning/CommissioningClient.js";
 import { NetworkClient } from "#behavior/system/network/NetworkClient.js";
 import { SubscriptionsServer } from "#behavior/system/subscriptions/SubscriptionsServer.js";
 import { AccessControlClient } from "#behaviors/access-control";
@@ -35,6 +36,7 @@ import {
     ClientRead,
     ClientSubscribe,
     ClientSubscription,
+    PeerSet,
     Read,
     SessionManager,
     ReadResult,
@@ -1146,7 +1148,7 @@ describe("ClientSubscribe", () => {
                     if (message.facility === "InteractionServer") {
                         const text = message.values.join(" ");
                         if (text.includes("Error while sending initial data reports")) {
-                            failures.push(text);
+                            failures.push(`${message.level} ${text}`);
                         }
                     }
                 },
@@ -1192,6 +1194,46 @@ describe("ClientSubscribe", () => {
                 replies.release();
                 await MockTime.resolve(MockTime.sleep("device handles the status", Seconds(1)));
             });
+
+            expect(outcome).instanceOf(AbortedError);
+            expect(failures).length(1);
+            expect(failures[0]).contains("InvalidSubscription");
+            expect(failures[0].startsWith(`${LogLevel.DEBUG} `)).true;
+            expect(storedIdsOf(device)).deep.equals(stored);
+        });
+
+        it("answers the priming report with INVALID_SUBSCRIPTION when the session signal aborts", async () => {
+            await using site = new MockSite();
+            const { controller, device } = await site.addCommissionedPair();
+            const peer = await subscribedPeer(controller, "peer1");
+            const stored = storedIdsOf(device);
+            const address = peer.stateOf(CommissioningClient).peerAddress;
+            if (address === undefined) {
+                expect.fail("peer is not commissioned");
+            }
+            const interaction = new ClientInteraction({
+                environment: peer.env,
+                exchangeProvider: peer.env.get(PeerSet).for(address).exchangeProvider,
+            });
+
+            const abort = new AbortController();
+            const replies = holdDeviceReplies(device);
+            device.env.get(InteractionServer).subscriptionEstablishmentStarted.once(() => abort.abort());
+
+            let outcome: unknown;
+            const failures = await primingFailuresDuring(async () => {
+                outcome = await MockTime.resolve(
+                    interaction
+                        .subscribe(Subscribe({ attributes: [{}], keepSubscriptions: true }), { abort: abort.signal })
+                        .then(
+                            () => undefined,
+                            (error: unknown) => error,
+                        ),
+                );
+                replies.release();
+                await MockTime.resolve(MockTime.sleep("device handles the status", Seconds(1)));
+            });
+            await MockTime.resolve(interaction.close());
 
             expect(outcome).instanceOf(AbortedError);
             expect(failures).length(1);
