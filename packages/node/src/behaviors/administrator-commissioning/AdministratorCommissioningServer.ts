@@ -10,6 +10,7 @@ import {
     assertRemoteActor,
     DeviceCommissioner,
     Fabric,
+    FabricManager,
     FailsafeContext,
     PaseServer,
     SessionManager,
@@ -179,13 +180,15 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         this.state.adminFabricIndex = adminFabric.fabricIndex;
         this.state.adminVendorId = adminFabric.rootVendorId;
 
+        // Through FabricManager, because UpdateNOC replaces the Fabric object of the admin fabric
+        const fabrics = this.env.get(FabricManager);
         const onAdminFabricDeleting = (this.internal.onAdminFabricDeleting ??= this.callback(
             this.#fabricRemovedCallback,
         ));
         this.internal.stopMonitoringFabricForRemoval = () => {
-            adminFabric.deleting.off(onAdminFabricDeleting);
+            fabrics.events.deleting.off(onAdminFabricDeleting);
         };
-        adminFabric.deleting.on(onAdminFabricDeleting);
+        fabrics.events.deleting.on(onAdminFabricDeleting);
     }
 
     /**
@@ -237,9 +240,14 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     }
 
     /**
-     * Invoked when fabric is removed.
+     * Invoked when a fabric is removed.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 11.19.7.2
      */
-    #fabricRemovedCallback() {
+    #fabricRemovedCallback(fabric: Fabric) {
+        if (fabric.fabricIndex !== this.state.adminFabricIndex) {
+            return;
+        }
         this.state.adminFabricIndex = null;
         this.internal.stopMonitoringFabricForRemoval?.();
         this.internal.stopMonitoringFabricForRemoval = undefined;
@@ -250,7 +258,7 @@ export namespace AdministratorCommissioningServer {
     export class Internal {
         stopMonitoringFabricForRemoval?: () => void;
         onWindowClosed?: () => void;
-        onAdminFabricDeleting?: () => void;
+        onAdminFabricDeleting?: (fabric: Fabric) => void;
 
         /**
          * Mandated by spec; should only be modified in testing.
