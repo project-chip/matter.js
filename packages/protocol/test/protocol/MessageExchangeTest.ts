@@ -855,4 +855,39 @@ describe("MessageExchange", () => {
             wakefulness.close();
         });
     });
+
+    describe("abortOnlyWaiting", () => {
+        function mrpSession() {
+            const channel = new ProtocolMocks.NetworkChannel({ index: 1 });
+            channel.isReliable = false;
+            const session = new ProtocolMocks.NodeSession({ channel });
+            const sent = new Array<Message>();
+            (session.channel as any).send = async (message: Message) => {
+                sent.push(message);
+            };
+            return { session, sent };
+        }
+
+        it("transmits once despite an abort that already fired and does not wait for the ack", async () => {
+            const { session, sent } = mrpSession();
+            const { exchange } = createExchange(session);
+            const abort = new AbortController();
+            abort.abort();
+
+            await exchange.send(1, Bytes.empty, { abort: abort.signal, abortOnlyWaiting: true });
+
+            expect(sent.length).equals(1);
+        });
+
+        it("does not transmit when an abort that already fired may stop the transmission", async () => {
+            const { session, sent } = mrpSession();
+            const { exchange } = createExchange(session);
+            const abort = new AbortController();
+            abort.abort();
+
+            await expect(exchange.send(1, Bytes.empty, { abort: abort.signal })).rejected;
+
+            expect(sent.length).equals(0);
+        });
+    });
 });

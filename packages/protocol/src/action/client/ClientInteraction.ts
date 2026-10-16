@@ -1176,10 +1176,16 @@ export class ClientInteraction<
         if (this.#abort.aborted) {
             throw new ImplementationError("Client interaction unavailable after close");
         }
-        const messenger = await BdxMessenger.create(this.#exchangeProvider, request.messageTimeout);
-
+        // Registered before the exchange exists, so close() waits for a creation in progress
         const entry = Symbol("bdx");
         this.#interactions.add(entry);
+        let messenger: BdxMessenger;
+        try {
+            messenger = await BdxMessenger.create(this.#exchangeProvider, request.messageTimeout);
+        } catch (e) {
+            this.#interactions.delete(entry);
+            throw e;
+        }
         const abort = new Abort({ abort: [session?.abort, this.#abort] });
 
         const context: RequestContext<BdxMessenger> = {

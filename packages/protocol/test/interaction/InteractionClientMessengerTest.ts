@@ -390,14 +390,14 @@ describe("InteractionClientMessenger", () => {
             const exchange = {
                 maxPayloadSize: 1200,
                 send: async (messageType: number, payload: Bytes, options?: ExchangeSendOptions) => {
-                    if (options?.abort?.aborted) {
+                    if (options?.abort?.aborted && !options.abortOnlyWaiting) {
                         throw new AbortedError();
                     }
                     expect(messageType).equals(MessageType.StatusResponse);
                     statuses.push(TlvStatusResponse.decode(payload).status);
                     sendOptions.push(options);
                     const abort = options?.abort;
-                    if (!acks && !options?.disableMrpLogic && abort !== undefined) {
+                    if (!acks && abort !== undefined && !abort.aborted) {
                         await new Promise(resolve => abort.addEventListener("abort", resolve, { once: true }));
                     }
                 },
@@ -450,7 +450,7 @@ describe("InteractionClientMessenger", () => {
             await messenger.abandonSubscription({ awaitReport: true, abort: abort.signal });
 
             expect(statuses).deep.equals([Status.InvalidSubscription]);
-            expect(sendOptions[0]?.disableMrpLogic).true;
+            expect(sendOptions[0]?.abortOnlyWaiting).true;
         });
 
         it("stops waiting for the ack of its answer on abort", async () => {

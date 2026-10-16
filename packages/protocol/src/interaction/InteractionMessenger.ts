@@ -1069,7 +1069,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
      */
     async sendInvalidSubscription(
         subscriptionId?: SubscriptionId,
-        options?: Pick<ExchangeSendOptions, "abort" | "disableMrpLogic">,
+        options?: Pick<ExchangeSendOptions, "abort" | "abortOnlyWaiting">,
     ) {
         this.#reportAwaitsStatus = false;
         await this.sendStatus(Status.InvalidSubscription, {
@@ -1126,7 +1126,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
                 }
                 subscriptionId = subscriptionIdOf(message);
             }
-            await this.sendInvalidSubscription(subscriptionId, abort?.aborted ? { disableMrpLogic: true } : { abort });
+            await this.sendInvalidSubscription(subscriptionId, { abort, abortOnlyWaiting: true });
         } catch (error) {
             logger.debug(
                 this.exchange.via,

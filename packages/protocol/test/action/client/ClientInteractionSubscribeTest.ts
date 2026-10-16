@@ -287,6 +287,45 @@ describe("ClientInteraction subscribe", () => {
         expect(statuses.map(({ payload }) => TlvStatusResponse.decode(payload).status)).deep.equals([
             Status.InvalidSubscription,
         ]);
-        expect(statuses[0].options?.disableMrpLogic).true;
+        expect(statuses[0].options?.abortOnlyWaiting).true;
+    });
+
+    it("waits on close for a BDX exchange still being created", async () => {
+        const provider = new ScriptedPeerExchangeProvider();
+        const created = createPromise<void>();
+        const initiateExchange = provider.initiateExchange.bind(provider);
+        provider.initiateExchange = async () => {
+            await created.promise;
+            return initiateExchange();
+        };
+        const client = new ClientInteraction({ environment: Environment.default, exchangeProvider: provider });
+
+        const bdx = client.initBdx({}).then(
+            () => undefined,
+            (error: unknown) => error,
+        );
+        let closed = false;
+        const closing = client.close().then(() => (closed = true));
+        await expect(Promise.race([closing, Promise.resolve("pending")])).eventually.equals("pending");
+        expect(closed).false;
+
+        created.resolver();
+        await closing;
+        expect(await bdx).instanceOf(Error);
+        const exchange = await provider.nextExchange();
+        await exchange.closed;
+    });
+
+    it("does not wait on close for a BDX exchange whose creation failed", async () => {
+        const provider = new ScriptedPeerExchangeProvider();
+        provider.initiateExchange = async () => {
+            throw new ClosedError("No connection");
+        };
+        const client = new ClientInteraction({ environment: Environment.default, exchangeProvider: provider });
+
+        await expect(client.initBdx({})).rejectedWith(ClosedError);
+
+        const closed = await Promise.race([client.close().then(() => "closed"), new Promise(r => setTimeout(r, 10))]);
+        expect(closed).equals("closed");
     });
 });
