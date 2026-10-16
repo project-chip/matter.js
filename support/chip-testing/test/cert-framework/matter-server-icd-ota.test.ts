@@ -50,8 +50,9 @@ function registration(
     key: Uint8Array,
     icdCounter: number,
     verificationKey?: Uint8Array,
+    fabricIndex = 1,
 ) {
-    const token = `@1:${node.toString(16)}•d65e(tcp)⇵${exchange}`;
+    const token = `@${fabricIndex.toString(16)}:${node.toString(16)}•d65e(tcp)⇵${exchange}`;
     const verification = verificationKey === undefined ? "" : ` verificationKey: ${Bytes.toHex(verificationKey)}`;
     return [
         `2026-10-15 07:43:00.179 INFO ClientInteraction Invoke » ${token} 0.icdManagement.registerClient with ` +
@@ -205,6 +206,22 @@ describe("matterjs-server ICD client log", () => {
         expect(events).deep.equals([{ kind: "checkIn", counter: 301 }]);
     });
 
+    it("reads the registrations and refresh failures of a fabric index above 9, which matter.js logs in hex", async () => {
+        const events = icdEventsOf(
+            linesOf([
+                ...registration(NODE, "1599", KEY1, 100, undefined, 10),
+                ...registration(NODE, "159b", KEY2, 300, KEY1, 10),
+                REFRESH_FAILED.replaceAll("@1:5", "@a:5"),
+                ...(await checkIn("bb", KEY1, 301, "accepted")),
+                ...(await checkIn("cc", KEY2, 302, "dropped")),
+            ]),
+            NODE,
+            crypto,
+        );
+
+        expect(events).deep.equals([{ kind: "checkIn", counter: 301 }]);
+    });
+
     it("reports a failed key refresh once the server accepts a Check-In under the pending key", async () => {
         const lines = [
             ...registration(NODE, "1599", KEY1, 100),
@@ -350,6 +367,23 @@ describe("matterjs-server OTA provider log", () => {
         ]);
     });
 
+    it("pairs the commands of a node on a fabric index above 9, which matter.js logs in hex", () => {
+        const onFabric10 = "@a:5•4c89(tcp)⇵e45f✉1";
+        const exchanges = providerExchangesOf(
+            linesOf([
+                `INFO ProtocolService Invoke « s.ota.otaSoftwareUpdateProvider.applyUpdateRequest ${onFabric10} ` +
+                    "updateToken: aabb newVersion: 2",
+                `INFO ProtocolService Invoke » s.ota.otaSoftwareUpdateProvider.applyUpdateRequest ${onFabric10} ` +
+                    "action: 0 delayedActionTime: 0",
+            ]),
+            NODE,
+        );
+
+        expect(exchanges.applyUpdate.map(({ request, response }) => ({ request, response }))).deep.equals([
+            { request: { updateToken: "aabb", newVersion: 2 }, response: { action: 0, delayedActionTime: 0 } },
+        ]);
+    });
+
     it("counts each block of the session once, however often it was sent", () => {
         const session = "@1:5•4c89(tcp)⇵e45d";
         const block = (kind: string, counter: number, length: number, exchange = session) =>
@@ -453,6 +487,17 @@ describe("MatterServerControllerAdapter on the server's ICD client and OTA provi
                 { command: "register_icd", args: { node_id: Number(NODE), allow_multi_admin: true } },
             ]);
             expect(node().icdClient()).equals(icd);
+        });
+
+        it("reads the registration the server logged on a fabric index above 9, which matter.js logs in hex", async () => {
+            replies.register_icd = () => {
+                for (const line of registration(NODE, "1599", KEY1, 4711, undefined, 10)) {
+                    lines.push(line);
+                }
+                return { result: { registered: true } };
+            };
+
+            expect(await node().icdClient().register()).deep.include({ key: KEY1, icdCounter: 4711 });
         });
 
         it("switches the server's subscription on once, and again after stopSubscription", async () => {

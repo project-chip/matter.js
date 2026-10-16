@@ -327,7 +327,7 @@ function* linesFrom(log: LogFollower, from: number): Generator<LogLine> {
  * session carries its transport where it is not UDP, as `•442c(tcp)`.
  */
 function exchangeOf(nodeId: NodeId) {
-    return String.raw`@\d+:${nodeId.toString(16)}•[0-9a-f]+(?:\(\w+\))?⇵[0-9a-f]+`;
+    return String.raw`@[0-9a-f]+:${nodeId.toString(16)}•[0-9a-f]+(?:\(\w+\))?⇵[0-9a-f]+`;
 }
 
 const QUERY_REQUEST_FIELDS = [

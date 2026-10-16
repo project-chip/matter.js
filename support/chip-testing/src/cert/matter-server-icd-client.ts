@@ -28,7 +28,7 @@ const REGISTRATION_LOG_TIMEOUT = Millis(10_000);
  * `@<fabric index>:<peer node id in hex>•<session>⇵<exchange>`, which matter.js puts on every line of an exchange. The
  * session carries its transport where it is not UDP, as `•442c(tcp)`.
  */
-const EXCHANGE = String.raw`@\d+:([0-9a-f]+)•[0-9a-f]+(?:\(\w+\))?⇵[0-9a-f]+`;
+const EXCHANGE = String.raw`@[0-9a-f]+:([0-9a-f]+)•[0-9a-f]+(?:\(\w+\))?⇵[0-9a-f]+`;
 
 const REGISTER_REQUEST = new RegExp(
     String.raw`ClientInteraction Invoke » (${EXCHANGE}) \d+\.icdManagement\.registerClient with (.*)$`,
@@ -202,7 +202,7 @@ async function registrationIn(log: LogFollower, nodeId: NodeId, from: number) {
     let request: LogLine;
     try {
         request = await log.expectPattern(
-            new RegExp(String.raw`ClientInteraction Invoke » @\d+:${peer}•.*\.icdManagement\.registerClient with `),
+            new RegExp(String.raw`ClientInteraction Invoke » @[0-9a-f]+:${peer}•.*\.icdManagement\.registerClient with `),
             { from, timeoutMs: REGISTRATION_LOG_TIMEOUT },
         );
     } catch (error) {
@@ -259,7 +259,7 @@ async function registrationIn(log: LogFollower, nodeId: NodeId, from: number) {
  */
 export function icdEventsOf(lines: Iterable<LogLine>, nodeId: NodeId, crypto: Crypto): CertIcdEvent[] {
     const peer = nodeId.toString(16);
-    const refreshFailed = new RegExp(String.raw`IcdClient ICD key refresh for peer @\d+:${peer} failed`);
+    const refreshFailed = new RegExp(String.raw`IcdClient ICD key refresh for peer @[0-9a-f]+:${peer} failed`);
     const requests = new Map<string, { key: Uint8Array; refresh: boolean }>();
     const keys = new Array<Uint8Array>();
     const entries = new Array<IcdLogEntry>();
