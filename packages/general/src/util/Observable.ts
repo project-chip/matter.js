@@ -562,7 +562,7 @@ type Next<T> = undefined | { value: T; promise: Promise<Next<T>> };
  */
 export function nextEmitOf<T extends any[], R>(observable: Observable<T, R>): Promise<T[0]> {
     return new Promise(resolve =>
-        observable.once((...payload: T) => {
+        observable.once((...payload: T): undefined => {
             resolve(payload[0]);
         }),
     );
