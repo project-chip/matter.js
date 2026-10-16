@@ -257,15 +257,16 @@ export class GroupSession extends SecureSession {
     encode(message: Message): Packet {
         message.packetHeader.sessionId = this.#id;
         const { header, applicationPayload } = MessageCodec.encodePayload(message);
-        if (header.destGroupId === undefined) {
+        if (header.destGroupId === undefined || header.sourceNodeId === undefined) {
             // Just to be sure
-            throw new UnexpectedDataError("Group ID is required for GroupSession encode.");
+            throw new UnexpectedDataError("Group ID and source node ID are required for GroupSession encode.");
         }
 
         const headerBytes = MessageCodec.encodePacketHeader(message.packetHeader);
         const securityFlags = headerBytes[3];
         const fabric = this.fabric;
-        const nonce = Session.generateNonce(securityFlags, header.messageId, fabric.nodeId);
+        // Receivers derive the nonce from the header, so the header's source node ID is the only one used
+        const nonce = Session.generateNonce(securityFlags, header.messageId, header.sourceNodeId);
         const ciphertext = fabric.crypto.encrypt(this.#operationalGroupKey, applicationPayload, nonce, headerBytes);
 
         if (!message.packetHeader.hasPrivacyEnhancements) {

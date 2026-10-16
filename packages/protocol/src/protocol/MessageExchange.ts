@@ -725,7 +725,8 @@ export class MessageExchange {
                 sessionType: SessionType.Group,
                 messageId,
                 destGroupId,
-                sourceNodeId: this.#nodeId, // We are the source node, so use our NodeId
+                // The fabric's node ID can change during the exchange's lifetime (NOC update), so it is read per message
+                sourceNodeId: session.nodeId,
                 hasPrivacyEnhancements: this.session.usePrivacy,
                 isControlMessage: false,
                 hasMessageExtensions: false,
