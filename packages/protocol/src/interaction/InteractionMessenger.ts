@@ -15,7 +15,6 @@ import {
     causedBy,
     Diagnostic,
     Duration,
-    ImplementationError,
     InternalError,
     Logger,
     MatterFlowError,
@@ -1129,15 +1128,11 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             }
             await this.sendInvalidSubscription(subscriptionId, abort?.aborted ? { disableMrpLogic: true } : { abort });
         } catch (error) {
-            if (causedBy(error, InternalError, ImplementationError, MatterFlowError)) {
-                logger.warn(this.exchange.via, "Error terminating abandoned subscription on the peer:", error);
-            } else {
-                logger.debug(
-                    this.exchange.via,
-                    "Abandoned subscription not terminated on the peer:",
-                    Diagnostic.errorMessage(asError(error)),
-                );
-            }
+            logger.debug(
+                this.exchange.via,
+                "Abandoned subscription not terminated on the peer:",
+                Diagnostic.errorMessage(asError(error)),
+            );
         }
     }
 

@@ -1282,7 +1282,7 @@ export class ClientInteraction<
                     }
                 };
                 finish().catch(error =>
-                    logger.warn(messenger.exchange.via, "Error finishing interaction in the background", error),
+                    logger.debug(messenger.exchange.via, "Error finishing interaction in the background", error),
                 );
             },
             [Symbol.asyncDispose]: async () => {

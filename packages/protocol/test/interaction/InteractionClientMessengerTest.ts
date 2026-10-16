@@ -5,19 +5,8 @@
  */
 
 import { InteractionClientMessenger, MessageType } from "#interaction/InteractionMessenger.js";
-import { OperationalAddressChangedError } from "#peer/PeerCommunicationError.js";
 import { ExchangeReceiveOptions, ExchangeSendOptions, MessageExchange } from "#protocol/MessageExchange.js";
-import {
-    AbortedError,
-    Bytes,
-    DataReadQueue,
-    Diagnostic,
-    InternalError,
-    LogDestination,
-    Logger,
-    LogLevel,
-    MatterFlowError,
-} from "@matter/general";
+import { AbortedError, Bytes, DataReadQueue, MatterFlowError } from "@matter/general";
 import { Specification } from "@matter/model";
 import {
     AttributeData,
@@ -398,7 +387,6 @@ describe("InteractionClientMessenger", () => {
             const statuses = new Array<Status>();
             const sendOptions = new Array<ExchangeSendOptions | undefined>();
             let acks = true;
-            let receiveError: Error | undefined;
             const exchange = {
                 maxPayloadSize: 1200,
                 send: async (messageType: number, payload: Bytes, options?: ExchangeSendOptions) => {
@@ -413,12 +401,7 @@ describe("InteractionClientMessenger", () => {
                         await new Promise(resolve => abort.addEventListener("abort", resolve, { once: true }));
                     }
                 },
-                nextMessage: async (options?: ExchangeReceiveOptions) => {
-                    if (receiveError !== undefined) {
-                        throw receiveError;
-                    }
-                    return queue.read(options?.abort);
-                },
+                nextMessage: (options?: ExchangeReceiveOptions) => queue.read(options?.abort),
                 close: async () => {},
             } as unknown as MessageExchange;
             return {
@@ -427,9 +410,6 @@ describe("InteractionClientMessenger", () => {
                 sendOptions,
                 withoutAcks() {
                     acks = false;
-                },
-                failReceiveWith(error: Error) {
-                    receiveError = error;
                 },
             };
         }
@@ -453,31 +433,12 @@ describe("InteractionClientMessenger", () => {
             expect(statuses).deep.equals([Status.InvalidSubscription]);
         });
 
-        /** Collects the messenger's warnings during {@link action}. */
-        async function warningsDuring(action: () => Promise<void>) {
-            const warnings = new Array<string>();
-            Logger.destinations.capture = LogDestination({
-                add(message: Diagnostic.Message) {
-                    if (message.facility === "InteractionMessenger" && message.level >= LogLevel.WARN) {
-                        warnings.push(message.values.join(" "));
-                    }
-                },
-            });
-            try {
-                await action();
-            } finally {
-                delete Logger.destinations.capture;
-            }
-            return warnings;
-        }
-
         it("leaves a SubscribeResponse unanswered", async () => {
             const { messenger, statuses } = peer(subscribeResponse());
 
-            const warnings = await warningsDuring(() => messenger.abandonSubscription({ awaitReport: true }));
+            await messenger.abandonSubscription({ awaitReport: true });
 
             expect(statuses).deep.equals([]);
-            expect(warnings).deep.equals([]);
         });
 
         it("answers a report it has not answered yet once, without retransmission, after the abort", async () => {
@@ -504,24 +465,6 @@ describe("InteractionClientMessenger", () => {
             expect(sendOptions[0]?.abort).equals(abort.signal);
             abort.abort();
             await abandoning;
-        });
-
-        it("logs a failure of the peer or of the exchange at debug", async () => {
-            const { messenger, failReceiveWith } = peer();
-            failReceiveWith(new OperationalAddressChangedError());
-
-            const warnings = await warningsDuring(() => messenger.abandonSubscription({ awaitReport: true }));
-
-            expect(warnings).deep.equals([]);
-        });
-
-        it("logs an error of its own at warn", async () => {
-            const { messenger, failReceiveWith } = peer();
-            failReceiveWith(new InternalError("broken"));
-
-            const warnings = await warningsDuring(() => messenger.abandonSubscription({ awaitReport: true }));
-
-            expect(warnings).length(1);
         });
 
         it("stops waiting for the next report on abort", async () => {
