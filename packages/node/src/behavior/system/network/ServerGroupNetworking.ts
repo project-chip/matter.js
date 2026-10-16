@@ -155,7 +155,7 @@ export class ServerGroupNetworking {
             this.#joined.add(address);
             return true;
         } catch (error) {
-            logger.warn(
+            logger.info(
                 `Failed to join multicast address ${address}, retrying in ${Duration.format(JOIN_RETRY_INTERVAL)}`,
                 error,
             );
