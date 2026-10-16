@@ -29,6 +29,8 @@ import {
 import type { AttributeReadEntry, CertNodeApi, ControllerAdapter, ControllerAdapterOptions } from "@matter/testing";
 import { CertConfigError, LineQueue, LogFollower, UnsupportedByControllerError } from "@matter/testing";
 import { expect } from "chai";
+import { env } from "node:process";
+import { fileURLToPath } from "node:url";
 import { ControllerCommandError } from "../../src/cert/controller-command-error.js";
 import { registerCertCustomCluster } from "../../src/cert/custom-clusters.js";
 import { InProcessControllerAdapter } from "../../src/cert/InProcessControllerAdapter.js";
@@ -2465,6 +2467,14 @@ describe("MatterServerControllerAdapter construction", () => {
         });
     });
 
+    it("declares the Switch client of an action switch, as the other controllers do", () => {
+        expect(MATTERJS_SERVER_CONTROLLER_PICS).deep.include({
+            "SWTCH.C": 1,
+            "SWTCH.C.F02": 0,
+            "SWTCH.C.F05": 1,
+        });
+    });
+
     it("declares the roles it lacks only through this adapter as capability gaps, not as PICS it does not support", () => {
         expect(MATTERJS_SERVER_CONTROLLER_PICS).deep.include({
             "MCORE.OTA.Provider": 1,
@@ -2651,10 +2661,10 @@ describe("MatterServerControllerAdapter group messaging", () => {
     it("refuses a group invoke for an undeclared group before sending anything", async () => {
         const dut = await started({ groups: GROUPS });
 
-        expect(await rejectionOf(dut.group(2).invoke("Groups", "addGroup", { groupId: 2, groupName: "x" })))
-            .instanceOf(ImplementationError)
-            .property("message")
-            .contains("group 2");
+        const error = await rejectionOf(dut.group(2).invoke("Groups", "addGroup", { groupId: 2, groupName: "x" }));
+
+        expect(error).instanceOf(ImplementationError);
+        expect(messageOf(error)).contains("was not built for group 2").not.contains("before defineKeySet");
         expect(server.requests).deep.equals([]);
     });
 
@@ -2665,6 +2675,21 @@ describe("MatterServerControllerAdapter group messaging", () => {
             .instanceOf(ImplementationError)
             .property("message")
             .contains("before defineKeySet");
+        expect(server.requests).deep.equals([]);
+    });
+
+    it("refuses a group invoke of a command the cluster does not have, or a cluster it does not know, before sending anything", async () => {
+        const dut = await started({ groups: GROUPS });
+        await dut.group(1).defineKeySet(KEY_SET);
+
+        const unknownCommand = await rejectionOf(dut.group(1).invoke("Groups", "noSuchCommand", {}));
+        expect(unknownCommand).instanceOf(ImplementationError);
+        expect(messageOf(unknownCommand)).equals('Unknown command "noSuchCommand" on cluster Groups');
+
+        const unknownCluster = await rejectionOf(dut.group(1).invoke("NoSuchCluster", "addGroup", {}));
+        expect(unknownCluster).instanceOf(ImplementationError);
+        expect(messageOf(unknownCluster)).equals('Unknown command "addGroup" on cluster NoSuchCluster');
+
         expect(server.requests).deep.equals([]);
     });
 
@@ -2795,5 +2820,65 @@ describe("MatterServerControllerAdapter attestation", () => {
         expect(error.reason).equals("attestation-rejected");
         // TC-DA-1.9 tells a refusal for revocation from any other refusal by this name in the message
         expect(error.message).contains("CertificateRevoked");
+    });
+});
+
+describe("MatterServerControllerAdapter started from the environment", () => {
+    const ENTRY = fileURLToPath(new URL("./fixtures/fake-server-entry.mjs", import.meta.url));
+    const REVOCATION_SET = JSON.stringify([
+        {
+            type: "revocation_set",
+            issuer_subject_key_id: "63540E47F64B1C38D13884A462D16C195D8FFB3C",
+            issuer_name: "MD0xJTAjBgNVBAMMHE1hdHRlciBEZXYgUEFJIDB4RkZGMSBubyBQSUQxFDASBgorBgEEAYKifAIBDARGRkYx",
+            revoked_serial_numbers: ["19367D978EAC533A"],
+        },
+    ]);
+    const KEY_SET = {
+        groupKeySetId: 1,
+        groupKeySecurityPolicy: 0,
+        epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+        epochStartTime0: 1_600_000_000_000_000n,
+    };
+
+    const originalEntry = env.MATTER_CERT_SERVER_ENTRY;
+    let adapter: MatterServerControllerAdapter | undefined;
+
+    beforeEach(() => {
+        env.MATTER_CERT_SERVER_ENTRY = `${process.execPath} ${ENTRY}`;
+    });
+
+    afterEach(async () => {
+        await adapter?.close();
+        adapter = undefined;
+        if (originalEntry === undefined) {
+            delete env.MATTER_CERT_SERVER_ENTRY;
+        } else {
+            env.MATTER_CERT_SERVER_ENTRY = originalEntry;
+        }
+    });
+
+    it("hands the server process the key sets and the revocation set the case declared", async () => {
+        adapter = new MatterServerControllerAdapter("dut", {
+            groups: [{ groupId: 1, keySet: KEY_SET }],
+            attestation: true,
+            revocationSet: REVOCATION_SET,
+        });
+
+        await adapter.start();
+
+        const texts = () => adapter?.log.lines.map(({ text }) => text) ?? [];
+        await waitFor(() => texts().some(text => text.includes("Loaded revocation sets from")), "revocation line");
+        expect(texts().some(text => text.includes("Loaded group key configuration"))).equals(true);
+    });
+
+    it("starts the server without either file where the case declares none", async () => {
+        adapter = new MatterServerControllerAdapter("dut");
+
+        await adapter.start();
+
+        const texts = () => adapter?.log.lines.map(({ text }) => text) ?? [];
+        await waitFor(() => texts().some(text => text.startsWith("fake-server args: ")), "args line");
+        expect(texts().some(text => text.includes("Loaded group key configuration"))).equals(false);
+        expect(texts().some(text => text.includes("--revocation-sets-dir"))).equals(false);
     });
 });

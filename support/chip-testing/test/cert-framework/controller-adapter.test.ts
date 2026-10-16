@@ -5,8 +5,8 @@
  */
 
 import { Bytes, ImplementationError, InternalError } from "@matter/main";
-import { DeviceAttestationCheck } from "@matter/main/protocol";
-import { QrPairingCodeCodec, Status, StatusResponseError } from "@matter/main/types";
+import { DeviceAttestationCheck, FabricGroups } from "@matter/main/protocol";
+import { GroupId, QrPairingCodeCodec, Status, StatusResponseError } from "@matter/main/types";
 import { Matter } from "@matter/model";
 import { PicsExpression, PicsFile, UnsupportedByControllerError } from "@matter/testing";
 import {
@@ -1762,6 +1762,69 @@ describe("InProcessControllerAdapter group key sets", () => {
         );
         await expect(adapter.group(2).defineKeySet(KEY_SET)).rejectedWith(ImplementationError, /controllerGroups/);
         await expect(adapter.group(2).invoke("OnOff", "toggle")).rejectedWith(ImplementationError, /group 2/);
+    });
+
+    /**
+     * Defines groups 1 (IanaAddr policy) and 2 (no policy) on a started controller and returns the FabricGroups they
+     * were installed on.
+     *
+     * The sending path resolves its own Fabric object, which the adapter does not expose, so the install is observed on
+     * the FabricGroups it writes to, with the real implementation called through.
+     */
+    async function definedGroups() {
+        const installed = new Array<FabricGroups>();
+        const original = FabricGroups.prototype.setFromGroupKeySet;
+        FabricGroups.prototype.setFromGroupKeySet = function (this: FabricGroups, ...args) {
+            installed.push(this);
+            return original.apply(this, args);
+        };
+
+        try {
+            adapter = new InProcessControllerAdapter("groups-install", {
+                groups: [
+                    { groupId: 1, keySet: KEY_SET, addressPolicy: "ianaAddr" },
+                    { groupId: 2, keySet: KEY_SET },
+                ],
+            });
+            await adapter.start();
+            expect(installed).lengthOf(0);
+
+            await adapter.group(1).defineKeySet(KEY_SET);
+            await adapter.group(2).defineKeySet(KEY_SET);
+        } finally {
+            FabricGroups.prototype.setFromGroupKeySet = original;
+        }
+
+        expect(installed).lengthOf(2);
+        expect(installed[1]).equals(installed[0]);
+        return installed[0];
+    }
+
+    it("installs the declared key set", async function () {
+        this.timeout(20_000);
+
+        const groups = await definedGroups();
+
+        expect(groups.keySets.get("groupKeySetId", KEY_SET.groupKeySetId)).not.undefined;
+    });
+
+    it("maps each declared group to its key set", async function () {
+        this.timeout(20_000);
+
+        const groups = await definedGroups();
+
+        expect(groups.groupKeyIdMap.get(GroupId(1))).equals(KEY_SET.groupKeySetId);
+        expect(groups.groupKeyIdMap.get(GroupId(2))).equals(KEY_SET.groupKeySetId);
+        expect(groups.isKeySetMapped(KEY_SET.groupKeySetId)).equals(true);
+    });
+
+    it("sets a declared address policy on its group only", async function () {
+        this.timeout(20_000);
+
+        const groups = await definedGroups();
+
+        expect(groups.multicastAddressFor(GroupId(1))).equals("ff05::fa");
+        expect(groups.multicastAddressFor(GroupId(2))).not.equals("ff05::fa");
     });
 
     it("refuses a declaration every controller refuses when it is built", () => {

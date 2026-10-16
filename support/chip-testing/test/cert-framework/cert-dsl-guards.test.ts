@@ -28,6 +28,7 @@ import type {
     CertStepContext,
     CertStepSetting,
     ControllerAdapter,
+    ControllerAdapterFactory,
     ControllerCapability,
     ControllerCapabilityGaps,
     ControllerRoleKind,
@@ -870,6 +871,109 @@ describe("certTest under a controller that serves only the DUT role", () => {
             }
             await rm(outDir, { recursive: true, force: true });
         }
+    });
+
+    describe("controller groups", () => {
+        const KEY_SET = {
+            groupKeySetId: 1,
+            groupKeySecurityPolicy: 0,
+            epochKey0: new Uint8Array(16).fill(0xd0),
+            epochStartTime0: 1_600_000_000_000_000n,
+        };
+        const GROUPS = [{ groupId: 1, keySet: KEY_SET, addressPolicy: "ianaAddr" as const }];
+
+        /** Runs a case under `matterjs-server` with a `matterjs` helper and returns the options each role was built with. */
+        async function optionsPerRole(controllerGroups: Parameters<typeof certTest>[1]["controllerGroups"]) {
+            const suffix = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+            const app = `groups-app-${suffix}`;
+            const tc = `TC-GROUPS-WIRING-${suffix}`;
+            registerMatterJsCertSubject(app, fakeMatterJsCertDevice(app));
+
+            const built = new Map<string, unknown>();
+            const factory = (id: string, options?: Parameters<ControllerAdapterFactory>[1]) => {
+                built.set(id, options?.groups);
+                return fakeAdapter(id);
+            };
+            const restoreMatterJs = replaceControllerAdapterRegistrationForTesting("matterjs", { factory });
+            const restoreServer = replaceControllerAdapterRegistrationForTesting("matterjs-server", {
+                factory,
+                helperImplementation: "matterjs",
+            });
+
+            const outDir = await mkdtemp(join(tmpdir(), "cert-dsl-groups-"));
+            const originalEvidenceDir = env.MATTER_CERT_EVIDENCE_DIR;
+            const originalController = env.MATTER_CERT_CONTROLLER;
+            try {
+                env.MATTER_CERT_EVIDENCE_DIR = outDir;
+                const { active } = withController("matterjs-server", () =>
+                    collect(() => {
+                        certTest(tc, {
+                            plan: "n/a",
+                            pics: [],
+                            app,
+                            controllers: { dut: "dut", th: "helper" },
+                            controllerGroups,
+                        }).step(1, "Nothing to do", passes);
+                    }),
+                );
+                const descriptor = active[0]?.descriptor;
+                if (!descriptor) {
+                    throw new InternalError(`certTest("${tc}") did not register a descriptor`);
+                }
+
+                env.MATTER_CERT_CONTROLLER = "matterjs-server";
+                await createRegisteredCertTest(descriptor).invoke(
+                    fakeMatterJsCertDevice(app)("cert"),
+                    () => {},
+                    [],
+                    false,
+                );
+                return built;
+            } finally {
+                restoreServer();
+                restoreMatterJs();
+                if (originalController === undefined) {
+                    delete env.MATTER_CERT_CONTROLLER;
+                } else {
+                    env.MATTER_CERT_CONTROLLER = originalController;
+                }
+                if (originalEvidenceDir === undefined) {
+                    delete env.MATTER_CERT_EVIDENCE_DIR;
+                } else {
+                    env.MATTER_CERT_EVIDENCE_DIR = originalEvidenceDir;
+                }
+                await rm(outDir, { recursive: true, force: true });
+            }
+        }
+
+        it("hands a declared group list to the DUT controller only", async () => {
+            const built = await optionsPerRole(GROUPS);
+
+            expect(built.get("dut")).equals(GROUPS);
+            expect(built.has("th")).equals(true);
+            expect(built.get("th")).equals(undefined);
+        });
+
+        it("resolves a group function against the run's controller selection and device flavor, for the DUT only", async () => {
+            const calls = new Array<CertRunSetup>();
+            const built = await optionsPerRole(setup => {
+                calls.push({ controllerSelection: setup.controllerSelection, deviceFlavor: setup.deviceFlavor });
+                return GROUPS;
+            });
+
+            expect(calls).deep.equals([
+                { controllerSelection: { dut: "matterjs-server", helper: "matterjs" }, deviceFlavor: "matterjs" },
+            ]);
+            expect(built.get("dut")).equals(GROUPS);
+            expect(built.get("th")).equals(undefined);
+        });
+
+        it("builds the DUT without groups where the case declares none", async () => {
+            const built = await optionsPerRole(undefined);
+
+            expect(built.has("dut")).equals(true);
+            expect(built.get("dut")).equals(undefined);
+        });
     });
 
     /**

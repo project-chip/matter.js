@@ -99,6 +99,17 @@ describe("controller group declarations", () => {
         }
     });
 
+    it("bounds the key set start time to a safe JSON number", () => {
+        const startingAt = (epochStartTime0: bigint) => [{ groupId: 1, keySet: { ...KEY_SET, epochStartTime0 } }];
+
+        validateControllerGroups("dut", startingAt(BigInt(Number.MAX_SAFE_INTEGER)));
+        validateControllerGroups("dut", startingAt(946_684_800_000_000n));
+        expect(() => validateControllerGroups("dut", startingAt(BigInt(Number.MAX_SAFE_INTEGER) + 1n)))
+            .throw(ImplementationError)
+            .property("message")
+            .contains("not Unix-epoch microseconds");
+    });
+
     it("refuses a send on a group the case has not keyed yet", () => {
         const keyed = new KeyedGroups();
         expect(() => keyed.assertKeyed("dut", 1))
