@@ -30,6 +30,7 @@ import { getOperationalDeviceQname } from "@matter/main/protocol";
 import { GlobalFabricId, NodeId, Status, StatusResponseError } from "@matter/main/types";
 import type {
     AnnounceOtaProviderOptions,
+    AttestationApi,
     AttributePathSpec,
     AttributeReadEntry,
     AttributeWriteEntry,
@@ -69,7 +70,7 @@ import { capabilitiesFor, CertConfigError, LogFollower, UnsupportedByControllerE
 import { env } from "node:process";
 import { type CertContextFile, certContextFor } from "../matter-server/matter-server-cert-context.js";
 import { type MatterServerClient, MatterServerCommandError } from "../matter-server/matter-server-client.js";
-import { MatterServerProcess } from "../matter-server/matter-server-process.js";
+import { MatterServerProcess, type MatterServerProcessOptions } from "../matter-server/matter-server-process.js";
 import { MatterServerSubscriptions } from "../matter-server/matter-server-subscriptions.js";
 import {
     clusterKeyOf,
@@ -85,6 +86,11 @@ import {
     type WireValueResult,
 } from "../matter-server/matter-server-wire.js";
 import { assertDeclaredKeySet, declaredGroup, KeyedGroups, validateControllerGroups } from "./controller-groups.js";
+import {
+    assertDeclaredRevocationSet,
+    type DeclaredRevocationSet,
+    declaredRevocationSet,
+} from "./controller-revocation.js";
 import { findCertCluster } from "./custom-clusters.js";
 import { MatterServerIcdClient } from "./matter-server-icd-client.js";
 import { MatterServerOtaError, serveOtaUpdateThroughServer } from "./matter-server-ota.js";
@@ -155,7 +161,7 @@ export const MATTERJS_SERVER_CONTROLLER_PICS: PicsValues = {
 
     // The server hosts matter.js's OTA provider, so it takes the BDX and OTA roles the in-process controller declares.
     // The CHIP PICS file answers these for a device. What this adapter cannot drive of its own provider is the
-    // `ota-provider-script` capability gap; the BDX cases themselves are out of its scope (`bdx-sender`).
+    // `ota-provider-script` capability gap.
     "MCORE.BDX.Sender": 1,
     "MCORE.BDX.Responder": 1,
     "MCORE.BDX.SynchronousSender": 1,
@@ -247,7 +253,6 @@ export const MATTERJS_SERVER_CAPABILITY_GAPS = {
         "Matter model",
     "batch-arrival-order":
         "batched_device_commands answers in request order, so the order the device's answers arrived in is not visible",
-    attestation: "the server reads revocation from the DCL and the WebSocket API cannot install a revocation set",
     "webrtc-requestor": "the WebSocket API does not expose the server's requestor cluster to a case",
     "ota-provider-script":
         "the WebSocket API cannot script the answers of the server's OTA provider or announce it with nothing staged",
@@ -265,9 +270,6 @@ export const MATTERJS_SERVER_OUT_OF_SCOPE = {
     "multi-path-write":
         "not reachable for controller use cases: the server writes one attribute per request, on one endpoint or on " +
         "all, and handles conditional writes itself",
-    "bdx-sender":
-        "not reachable for controller use cases: the server sends BDX only as its OTA provider, and the WebSocket API " +
-        "drives no BDX transfer of its own",
 } as const satisfies ControllerCapabilitiesOutOfScope;
 
 type MatterServerGap = keyof typeof MATTERJS_SERVER_CAPABILITY_GAPS;
@@ -329,14 +331,17 @@ export interface MatterServerConnection {
  * launcher must honour it and reject once it stopped what it started: `close()` waits for the launch to settle, so
  * a launcher that ignores the signal blocks `close()` until the server is ready.
  *
- * `certContext` is present where the case declares groups the controller sends on; the launcher hands it to the
- * server before it starts (see `MatterServerProcessOptions.certContext`).
+ * `startup` holds what the server has to be given before it starts: the groups the case declares the controller sends
+ * on, and the revocation set it declares (see `MatterServerProcessOptions`).
  */
 export type MatterServerLauncher = (
     role: string,
     signal: AbortSignal,
-    certContext?: CertContextFile,
+    startup: MatterServerStartup,
 ) => Promise<MatterServerConnection>;
+
+/** What a server is given before it starts, where the case declares it. */
+export type MatterServerStartup = Pick<MatterServerProcessOptions, "certContext" | "revocationSet">;
 
 /**
  * Starts matterjs-server from `MATTER_CERT_SERVER_ENTRY`, on the interface `MATTER_MDNS_NETWORKINTERFACE` names
@@ -345,7 +350,7 @@ export type MatterServerLauncher = (
 async function launchFromEnvironment(
     role: string,
     signal: AbortSignal,
-    certContext?: CertContextFile,
+    startup: MatterServerStartup,
 ): Promise<MatterServerConnection> {
     const entry = env.MATTER_CERT_SERVER_ENTRY;
     if (entry === undefined || entry === "") {
@@ -358,7 +363,7 @@ async function launchFromEnvironment(
         role,
         primaryInterface: env.MATTER_MDNS_NETWORKINTERFACE || undefined,
         signal,
-        certContext,
+        ...startup,
     });
 }
 
@@ -394,10 +399,11 @@ async function launchFromEnvironment(
  */
 export class MatterServerControllerAdapter implements ControllerAdapter {
     readonly id: string;
+    readonly attestation?: AttestationApi;
 
     readonly #launch: MatterServerLauncher;
     readonly #groups?: readonly CertControllerGroup[];
-    readonly #certContext?: CertContextFile;
+    readonly #startup: MatterServerStartup;
     readonly #keyedGroups = new KeyedGroups();
     readonly #invokeQueues = new Map<string, Mutex>();
     readonly #autoSubscriptions = new Map<string, Promise<void>>();
@@ -418,7 +424,14 @@ export class MatterServerControllerAdapter implements ControllerAdapter {
         this.#launch = launch;
         validateControllerGroups(id, options?.groups);
         this.#groups = options?.groups;
-        this.#certContext = options?.groups === undefined ? undefined : certContextFor(options.groups);
+        const revocationSet = declaredRevocationSet(id, options);
+        this.#startup = {
+            certContext: options?.groups === undefined ? undefined : certContextFor(options.groups),
+            revocationSet: revocationSet?.text,
+        };
+        if (options?.attestation) {
+            this.attestation = new MatterServerAttestationApi(id, revocationSet);
+        }
     }
 
     get log(): LogFollower {
@@ -449,7 +462,7 @@ export class MatterServerControllerAdapter implements ControllerAdapter {
     }
 
     async #connect() {
-        const connection = await this.#launch(this.id, this.#closing.signal, this.#certContext);
+        const connection = await this.#launch(this.id, this.#closing.signal, this.#startup);
         if (this.#closing.signal.aborted) {
             await connection.close();
             throw new ClosedError(`Controller adapter "${this.id}" was closed while its server started`);
@@ -730,6 +743,24 @@ export class MatterServerControllerAdapter implements ControllerAdapter {
             this.#keyedGroups,
             () => this.#started.client,
         );
+    }
+}
+
+/**
+ * Device attestation as the server judges it. The server installed the revocation set the adapter wrote before it
+ * started, so a case's set is checked against that declaration rather than installed.
+ */
+class MatterServerAttestationApi implements AttestationApi {
+    readonly #adapterId: string;
+    readonly #declared?: DeclaredRevocationSet;
+
+    constructor(adapterId: string, declared: DeclaredRevocationSet | undefined) {
+        this.#adapterId = adapterId;
+        this.#declared = declared;
+    }
+
+    async installRevocations(revocationSet: string): Promise<void> {
+        assertDeclaredRevocationSet(this.#adapterId, this.#declared, revocationSet);
     }
 }
 

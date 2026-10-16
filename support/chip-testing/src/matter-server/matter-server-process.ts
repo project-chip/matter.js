@@ -5,8 +5,9 @@
  */
 
 import { Abort, ClosedError, Duration, Seconds, TimeoutError } from "@matter/general";
+import { DclCertificateService } from "@matter/main/protocol";
 import { CertConfigError, type ChildExit, LineQueue, LogFollower, ManagedChildProcess } from "@matter/testing";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
@@ -17,6 +18,14 @@ import {
     certContextRefusalOf,
 } from "./matter-server-cert-context.js";
 import { MatterServerClient } from "./matter-server-client.js";
+import {
+    REVOCATION_SET_FILE,
+    REVOCATION_SETS_DIR,
+    REVOCATION_SETS_DIR_FLAG,
+    type RevocationSetsLoaded,
+    revocationSetRefusalOf,
+    revocationSetsLoadedOf,
+} from "./matter-server-revocation.js";
 
 /** Makes the server leave attribute subscriptions to the cert test instead of subscribing on its own. */
 export const DISABLE_AUTO_SUBSCRIPTION_FLAG = "--disable-auto-subscription";
@@ -97,6 +106,15 @@ export interface MatterServerProcessOptions {
      * `CertConfigError` where the server refuses the file or never says it loaded it.
      */
     certContext?: CertContextFile;
+
+    /**
+     * A revocation set, as the text of the file the CHIP SDK's `generate_revocation_set.py` writes. Written to
+     * {@link REVOCATION_SET_FILE} in a directory of the server's storage that the server is pointed at with
+     * {@link REVOCATION_SETS_DIR_FLAG}. The start then also waits for the server to log that it loaded one file with
+     * as many entries as the set holds, and fails with `CertConfigError` where the server refuses the file or never
+     * says it loaded it. Text that is no revocation set fails with `ImplementationError` before the server starts.
+     */
+    revocationSet?: string;
 }
 
 /**
@@ -141,6 +159,7 @@ export class MatterServerProcess {
             exitGrace = EXIT_GRACE,
             env,
             certContext,
+            revocationSet,
         } = options;
 
         if (signal?.aborted) {
@@ -152,9 +171,21 @@ export class MatterServerProcess {
         let child: ManagedChildProcess | undefined;
 
         try {
-            const certContextPath = join(storagePath, CERT_CONTEXT_FILE);
+            const observers = new Array<(line: string) => void>();
+            const loadedAsWritten = new Array<Promise<void>>();
+
             if (certContext !== undefined) {
-                await writeFile(certContextPath, JSON.stringify(certContext, undefined, 4));
+                const path = join(storagePath, CERT_CONTEXT_FILE);
+                await writeFile(path, JSON.stringify(certContext, undefined, 4));
+                const load = new StartupLoad({
+                    path,
+                    file: CERT_CONTEXT_FILE,
+                    unloaded: `a server build without support for ${CERT_CONTEXT_FILE} ignores it`,
+                    loadedOf: certContextLoadedOf,
+                    refusalOf: certContextRefusalOf,
+                });
+                observers.push(line => load.observe(line));
+                loadedAsWritten.push(certContextLoadedAsWritten(load.loaded, path, certContext));
             }
 
             const [command, ...entryArgs] = commandFor(entry);
@@ -176,10 +207,26 @@ export class MatterServerProcess {
                 args.push("--primary-interface", primaryInterface);
             }
 
+            if (revocationSet !== undefined) {
+                const dir = join(storagePath, REVOCATION_SETS_DIR);
+                const entries = DclCertificateService.parseRevocationSet(revocationSet).length;
+                await mkdir(dir);
+                await writeFile(join(dir, REVOCATION_SET_FILE), revocationSet);
+                args.push(REVOCATION_SETS_DIR_FLAG, dir);
+                const load = new StartupLoad({
+                    path: dir,
+                    file: REVOCATION_SET_FILE,
+                    unloaded: "its log before the readiness line says why",
+                    loadedOf: revocationSetsLoadedOf,
+                    refusalOf: revocationSetRefusalOf,
+                });
+                observers.push(line => load.observe(line));
+                loadedAsWritten.push(revocationSetsLoadedAsWritten(load.loaded, dir, entries));
+            }
+
             const recent = new Array<string>();
             let announce = (_port: number) => {};
             const listening = new Promise<number>(resolve => (announce = resolve));
-            const load = new CertContextLoad(certContextPath);
             child = ManagedChildProcess.spawn(command, args, {
                 env: { ...inheritedEnvironment(), ...env },
                 stopGraceMs: exitGrace,
@@ -190,8 +237,8 @@ export class MatterServerProcess {
                         recent.shift();
                     }
                     lines.push(line);
-                    if (certContext !== undefined) {
-                        load.observe(line);
+                    for (const observe of observers) {
+                        observe(line);
                     }
                     const port = readinessPortOf(line);
                     if (port !== undefined) {
@@ -200,12 +247,7 @@ export class MatterServerProcess {
                 },
             });
 
-            const ready =
-                certContext === undefined
-                    ? listening
-                    : Promise.all([listening, loadedAsWritten(load.loaded, certContextPath, certContext)]).then(
-                          ([port]) => port,
-                      );
+            const ready = Promise.all([listening, ...loadedAsWritten]).then(([port]) => port);
             const port = await readyPort(ready, child, command, recent, readinessTimeout, signal);
             const client = await MatterServerClient.connect(
                 `ws://${LISTEN_ADDRESS}:${port}${WEBSOCKET_PATH}`,
@@ -274,23 +316,38 @@ function commandFor(entry: string): string[] {
     return parts;
 }
 
+/** A file the server reads and installs before it starts its web server, and how its log reports that. */
+interface StartupFile<T> {
+    /** The path the server is given and names when it loaded it. */
+    path: string;
+
+    /** The file the server names when it refuses it. */
+    file: string;
+
+    /** Why a server may become ready without logging that it loaded the file. */
+    unloaded: string;
+
+    loadedOf(line: string): T | undefined;
+    refusalOf(line: string): string | undefined;
+}
+
 /**
- * The server's handling of {@link CERT_CONTEXT_FILE}, as its log reports it up to the readiness line.
+ * The server's handling of a {@link StartupFile}, as its log reports it up to the readiness line.
  *
  * The server reads the file and installs it before it starts its web server, so the readiness line settles it: loaded
  * where a loaded line came before it, ignored otherwise. A refusal of the file, or of installing it after it was read,
- * ends the server's start and fails the wait when it is logged rather than when the server exits.
+ * fails the wait when it is logged rather than when the server exits, since the server may go on or shut down slowly.
  */
-class CertContextLoad {
-    readonly loaded: Promise<CertContextLoaded>;
-    readonly #path: string;
-    #announce = (_loaded: CertContextLoaded) => {};
+class StartupLoad<T> {
+    readonly loaded: Promise<T>;
+    readonly #file: StartupFile<T>;
+    #announce = (_loaded: T) => {};
     #refuse = (_error: CertConfigError) => {};
-    #read?: CertContextLoaded;
+    #read?: T;
     #settled = false;
 
-    constructor(path: string) {
-        this.#path = path;
+    constructor(file: StartupFile<T>) {
+        this.#file = file;
         this.loaded = new Promise((resolve, reject) => {
             this.#announce = resolve;
             this.#refuse = reject;
@@ -301,20 +358,18 @@ class CertContextLoad {
         if (this.#settled) {
             return;
         }
-        this.#read ??= certContextLoadedOf(line);
-        const refusal = certContextRefusalOf(line);
+        const { path, file, unloaded, loadedOf, refusalOf } = this.#file;
+        this.#read ??= loadedOf(line);
+        const refusal = refusalOf(line);
         if (refusal !== undefined) {
-            this.#settle(() =>
-                this.#refuse(new CertConfigError(`matterjs-server refused its ${CERT_CONTEXT_FILE}: ${refusal}`)),
-            );
+            this.#settle(() => this.#refuse(new CertConfigError(`matterjs-server refused its ${file}: ${refusal}`)));
         } else if (readinessPortOf(line) !== undefined) {
             const read = this.#read;
             this.#settle(() =>
                 read === undefined
                     ? this.#refuse(
                           new CertConfigError(
-                              `matterjs-server became ready without logging that it loaded ${this.#path}; a server ` +
-                                  `build without support for ${CERT_CONTEXT_FILE} ignores it`,
+                              `matterjs-server became ready without logging that it loaded ${path}; ${unloaded}`,
                           ),
                       )
                     : this.#announce(read),
@@ -332,7 +387,7 @@ class CertContextLoad {
  * Resolves once the server logged that it loaded the file at `path` with the counts `written` holds; rejects with
  * `CertConfigError` where it loaded other counts or another file.
  */
-async function loadedAsWritten(loaded: Promise<CertContextLoaded>, path: string, written: CertContextFile) {
+async function certContextLoadedAsWritten(loaded: Promise<CertContextLoaded>, path: string, written: CertContextFile) {
     const { path: loadedPath, keySets, groups } = await loaded;
     if (loadedPath !== path || keySets !== written.keySets.length || groups !== written.groupKeyMap.length) {
         throw new CertConfigError(
@@ -343,8 +398,22 @@ async function loadedAsWritten(loaded: Promise<CertContextLoaded>, path: string,
 }
 
 /**
+ * Resolves once the server logged that it loaded one file with `entries` entries from `dir`; rejects with
+ * `CertConfigError` where it loaded other counts or from another directory.
+ */
+async function revocationSetsLoadedAsWritten(loaded: Promise<RevocationSetsLoaded>, dir: string, entries: number) {
+    const { dir: loadedDir, files, entries: loadedEntries } = await loaded;
+    if (loadedDir !== dir || files !== 1 || loadedEntries !== entries) {
+        throw new CertConfigError(
+            `matterjs-server loaded ${files} revocation set files with ${loadedEntries} entries from ${loadedDir}; ` +
+                `the adapter wrote 1 file with ${entries} entries to ${dir}`,
+        );
+    }
+}
+
+/**
  * The port `ready` resolves with once the server logged its readiness line (and, where it was given a
- * {@link CERT_CONTEXT_FILE}, that it loaded the file); fails when the server exits, refuses the file or takes too long.
+ * {@link StartupFile}, that it loaded it); fails when the server exits, refuses such a file or takes too long.
  */
 async function readyPort(
     ready: Promise<number>,

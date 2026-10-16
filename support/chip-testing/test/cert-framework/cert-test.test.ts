@@ -4261,8 +4261,8 @@ describe("a step needing a capability its controller declares out of scope", () 
     });
 
     async function runTimedWriteStep({
-        capabilities = ["bdx-sender"] as ControllerCapability[],
-        controllers = { dut: "dut" } as Record<string, ControllerRoleKind>,
+        capabilities = ["icd-client"],
+        controllers = { dut: "dut" },
         registration = {},
     }: {
         capabilities?: ControllerCapability[];
@@ -4315,7 +4315,7 @@ describe("a step needing a capability its controller declares out of scope", () 
                 throw new InternalError("no controller is built in this test");
             },
             helperImplementation: "matterjs",
-            outOfScope: { "bdx-sender": "not for controllers" },
+            outOfScope: { "icd-client": "not for controllers" },
             ...registration,
         });
         let thrown: unknown;
@@ -4344,7 +4344,7 @@ describe("a step needing a capability its controller declares out of scope", () 
         expect(ended[0]).deep.equal({
             number: 1,
             verdict: "skipped",
-            skipReason: 'controller "matterjs-server" does not offer bdx-sender: not for controllers',
+            skipReason: 'controller "matterjs-server" does not offer icd-client: not for controllers',
         });
         expect(ended[1].verdict).equal("pass");
         expect(outOfScopeCounts).deep.equal([1]);
@@ -4355,7 +4355,7 @@ describe("a step needing a capability its controller declares out of scope", () 
         env.MATTER_CERT_CONTROLLER = "matterjs-server";
 
         const { ran, ended, outOfScopeCounts, gapCounts, thrown } = await runTimedWriteStep({
-            capabilities: ["bdx-sender", "chunked-write"],
+            capabilities: ["icd-client", "chunked-write"],
             registration: { gaps: { "chunked-write": "not yet" } },
         });
 

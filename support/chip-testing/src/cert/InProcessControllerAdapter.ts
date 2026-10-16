@@ -155,6 +155,11 @@ import { LineQueue, LogFollower } from "@matter/testing";
 import { AsyncLocalStorage } from "node:async_hooks";
 import { OTA_TEST_PAYLOAD_SIZE, otaTestPayload, otaTestSoftwareVersionString } from "../OtaTestIdentity.js";
 import { assertDeclaredKeySet, declaredGroup, validateControllerGroups } from "./controller-groups.js";
+import {
+    assertDeclaredRevocationSet,
+    type DeclaredRevocationSet,
+    declaredRevocationSet,
+} from "./controller-revocation.js";
 import { certClusterModelFor, findCertCluster } from "./custom-clusters.js";
 import { OriginDestination, registerLogOrigin } from "./log-origins.js";
 import { refusalOf, singleQrPayload } from "./onboarding-payload.js";
@@ -2603,6 +2608,7 @@ export class InProcessControllerAdapter implements ControllerAdapter {
     readonly #hostsWebRtcRequestor: boolean;
     #webRtcRequestor?: InProcessWebRtcRequestorApi;
     readonly #judgesAttestation: boolean;
+    readonly #revocationSet?: DeclaredRevocationSet;
     #attestation?: InProcessAttestationApi;
     readonly #groups?: readonly CertControllerGroup[];
     readonly #icdClients = new Map<NodeId, InProcessIcdClient>();
@@ -2630,6 +2636,7 @@ export class InProcessControllerAdapter implements ControllerAdapter {
         this.#transport = options?.transport;
         this.#hostsWebRtcRequestor = options?.webRtcRequestor === true;
         this.#judgesAttestation = options?.attestation === true;
+        this.#revocationSet = declaredRevocationSet(id, options);
         validateControllerGroups(id, options?.groups);
         this.#groups = options?.groups;
         this.#env = new Environment(`cert-${id}`, Environment.default);
@@ -2665,7 +2672,7 @@ export class InProcessControllerAdapter implements ControllerAdapter {
             // Before the node: a commissioning attempt resolves the service out of the environment the
             // node is a child of, and nothing states that it does so lazily
             if (this.#judgesAttestation) {
-                this.#attestation = new InProcessAttestationApi(this.#env);
+                this.#attestation = new InProcessAttestationApi(this.id, this.#env, this.#revocationSet);
                 await this.#attestation.construction;
             }
 
@@ -2839,10 +2846,14 @@ export class InProcessControllerAdapter implements ControllerAdapter {
  * unaffected by one that has it.
  */
 class InProcessAttestationApi implements AttestationApi {
+    readonly #adapterId: string;
+    readonly #declared?: DeclaredRevocationSet;
     readonly #environment: Environment;
     readonly #service: DclCertificateService;
 
-    constructor(adapterEnvironment: Environment) {
+    constructor(adapterId: string, adapterEnvironment: Environment, declared: DeclaredRevocationSet | undefined) {
+        this.#adapterId = adapterId;
+        this.#declared = declared;
         this.#environment = new Environment("cert-attestation");
         this.#environment.set(Crypto, adapterEnvironment.get(Crypto));
         new MockStorageService(this.#environment);
@@ -2868,7 +2879,7 @@ class InProcessAttestationApi implements AttestationApi {
     }
 
     async installRevocations(revocationSet: string) {
-        this.#service.installRevocations(DclCertificateService.parseRevocationSet(revocationSet));
+        this.#service.installRevocations(assertDeclaredRevocationSet(this.#adapterId, this.#declared, revocationSet));
     }
 
     /**

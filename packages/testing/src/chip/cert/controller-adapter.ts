@@ -1335,9 +1335,24 @@ export interface ControllerAdapterOptions {
      * nothing else, so an attestation a case expects to be refused is refused for the reason the case
      * is about.
      *
+     * matterjs-server judges attestation by its own policy whether or not this is set; there it adds
+     * {@link ControllerAdapter.attestation} only.
+     *
      * @see {@link MatterSpecification.v161.Core} § 6.2.3.1
      */
     attestation?: boolean;
+
+    /**
+     * The revocation set the case installs through {@link AttestationApi.installRevocations}, as the text of the
+     * file the CHIP SDK's revocation-set tool writes. A controller that has to know it before it starts
+     * (matterjs-server) is provisioned from this; the others install it when the case calls `installRevocations` and
+     * refuse a set this does not declare, so every controller gets the set from one place.
+     *
+     * Needs {@link attestation}: a controller that does not judge attestation never consults it.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 6.2.4
+     */
+    revocationSet?: string;
 
     /**
      * The groups the controller sends on, each with the key set it encrypts with. A controller that has to know its
@@ -1375,6 +1390,8 @@ export interface AttestationApi {
      *
      * A commissioner normally reads revocation from the DCL. A certification run is against a PKI the
      * DCL does not publish, so the set has to come from the case.
+     *
+     * The set must be the one {@link ControllerAdapterOptions.revocationSet} declares; a controller refuses any other.
      *
      * @see {@link MatterSpecification.v161.Core} § 6.2.4
      */
@@ -1523,8 +1540,6 @@ export type ControllerRoleKind = "dut" | "helper";
  * - `ota-provider-script` — that provider driven beyond its own answers: {@link CertNodeApi.scriptOtaProvider}, and
  *   {@link CertNodeApi.announceOtaProvider} without {@link AnnounceOtaProviderOptions.provider}, which announces it
  *   with nothing staged
- * - `bdx-sender` — the controller as the sender of a BDX case, whose transfer the case drives and inspects beyond what
- *   serving an OTA update needs
  * - `icd-client` — {@link CertNodeApi.icdClient}
  * - `sustained-subscription` — a subscription the controller keeps to a node on its own, which
  *   {@link CertNodeApi.observeEvents} reports through and which keeps what {@link CertNodeApi.clientEndpoints} and
@@ -1554,7 +1569,6 @@ export type ControllerCapability =
     | "webrtc-requestor"
     | "ota-provider"
     | "ota-provider-script"
-    | "bdx-sender"
     | "icd-client"
     | "sustained-subscription";
 

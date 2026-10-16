@@ -2265,7 +2265,6 @@ describe("MatterServerControllerAdapter construction", () => {
     it("refuses options the server cannot honour, for the reason it declares", () => {
         const cases: [ControllerAdapterOptions, MatterServerGap][] = [
             [{ transport: "tcp" }, "tcp-transport"],
-            [{ attestation: true }, "attestation"],
             [{ webRtcRequestor: true }, "webrtc-requestor"],
         ];
         for (const [options, capability] of cases) {
@@ -2508,7 +2507,7 @@ describe("MatterServerControllerAdapter group messaging", () => {
     });
 
     async function started(options?: ControllerAdapterOptions) {
-        adapter = new MatterServerControllerAdapter("dut", options, async (_role, _signal, certContext) => {
+        adapter = new MatterServerControllerAdapter("dut", options, async (_role, _signal, { certContext }) => {
             launchedWith.push({ certContext });
             const client = await MatterServerClient.connect(server.url);
             const lines = new LineQueue();
@@ -2677,5 +2676,124 @@ describe("MatterServerControllerAdapter group messaging", () => {
         expect(await rejectionOf(dut.group(1).invoke("Groups", "addGroup", { groupId: 2, groupName: "x" }))).instanceOf(
             UnexpectedDataError,
         );
+    });
+});
+
+describe("MatterServerControllerAdapter attestation", () => {
+    const REVOCATION_SET = JSON.stringify([
+        {
+            type: "revocation_set",
+            issuer_subject_key_id: "63540E47F64B1C38D13884A462D16C195D8FFB3C",
+            issuer_name: "MD0xJTAjBgNVBAMMHE1hdHRlciBEZXYgUEFJIDB4RkZGMSBubyBQSUQxFDASBgorBgEEAYKifAIBDARGRkYx",
+            revoked_serial_numbers: ["19367D978EAC533A"],
+        },
+    ]);
+
+    let server: FakeMatterServer;
+    let adapter: MatterServerControllerAdapter | undefined;
+    let launchedWith: (string | undefined)[];
+
+    beforeEach(async () => {
+        server = await FakeMatterServer.start();
+        launchedWith = [];
+    });
+
+    afterEach(async () => {
+        await adapter?.close();
+        adapter = undefined;
+        await server.close();
+        expect(server.failures).deep.equals([]);
+    });
+
+    async function started(options?: ControllerAdapterOptions) {
+        adapter = new MatterServerControllerAdapter("dut", options, async (_role, _signal, { revocationSet }) => {
+            launchedWith.push(revocationSet);
+            const client = await MatterServerClient.connect(server.url);
+            const lines = new LineQueue();
+            return {
+                client,
+                entry: "fake-entry",
+                httpUrl: server.httpUrl,
+                log: new LogFollower(lines.follow(), "dut"),
+                close: async () => {
+                    await client.close();
+                    lines.close();
+                },
+            };
+        });
+        await adapter.start();
+        return adapter;
+    }
+
+    it("hands the server the declared revocation set before it starts", async () => {
+        await started({ attestation: true, revocationSet: REVOCATION_SET });
+
+        expect(launchedWith).deep.equals([REVOCATION_SET]);
+    });
+
+    it("judges attestation only where asked, and hands the server no set where the case declares none", async () => {
+        expect((await started()).attestation).undefined;
+        await adapter?.close();
+
+        expect((await started({ attestation: true })).attestation).not.undefined;
+        expect(launchedWith).deep.equals([undefined, undefined]);
+    });
+
+    it("takes the declared set as installed, however its text is laid out", async () => {
+        const dut = await started({ attestation: true, revocationSet: REVOCATION_SET });
+
+        await dut.attestation?.installRevocations(JSON.stringify(JSON.parse(REVOCATION_SET), undefined, 4));
+        expect(server.requests).deep.equals([]);
+    });
+
+    it("refuses to install a set other than the declared one, or any set where none was declared", async () => {
+        const other = REVOCATION_SET.replace("19367D978EAC533A", "19367D978EAC533B");
+
+        const declared = await started({ attestation: true, revocationSet: REVOCATION_SET });
+        expect(await rejectionOf(declared.attestation!.installRevocations(other)))
+            .instanceOf(ImplementationError)
+            .property("message")
+            .contains("differs from the one the case's revocationSet declares");
+        await adapter?.close();
+
+        const undeclared = await started({ attestation: true });
+        expect(await rejectionOf(undeclared.attestation!.installRevocations(REVOCATION_SET)))
+            .instanceOf(ImplementationError)
+            .property("message")
+            .contains("was not built with a revocation set");
+    });
+
+    it("refuses a declared set it cannot read, or one without attestation, before the server starts", () => {
+        for (const [options, problem] of [
+            [{ attestation: true, revocationSet: "{ not a revocation set }" }, "is not a revocation set"],
+            [{ revocationSet: REVOCATION_SET }, "needs attestation"],
+        ] as const) {
+            expect(() => new MatterServerControllerAdapter("dut", options, () => expect.fail("launched")))
+                .throws(ImplementationError)
+                .property("message")
+                .contains(problem);
+        }
+    });
+
+    it("reports a refusal for revocation with the finding the server names", async () => {
+        server.reply = ({ command }) =>
+            command === "commission_with_code"
+                ? {
+                      errorCode: 1,
+                      details:
+                          "Commission failed: Device attestation refused: CertificateRevoked: Product Attestation " +
+                          "Intermediate certificate has been revoked",
+                      failure: { reason: "attestation-rejected" },
+                  }
+                : undefined;
+        const dut = await started({ attestation: true, revocationSet: REVOCATION_SET });
+
+        const error = await rejectionOf(dut.commission({ manualPairingCode: "34970112332" }));
+        if (!(error instanceof MatterServerCommissioningError)) {
+            expect.fail(`expected a MatterServerCommissioningError, got ${messageOf(error)}`);
+        }
+        expect(error.reason).equals("attestation-rejected");
+        // TC-DA-1.9 tells a refusal for revocation from any other refusal by this name in the message
+        expect(error.message).contains("CertificateRevoked");
     });
 });

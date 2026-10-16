@@ -752,9 +752,12 @@ with `outOfScope` naming the reason, no devices and verdict `skipped`.
   filters the caller gives (CR-3), so the priming report is complete. A concrete path the priming report leaves out is
   `MatterServerReadError`, a server or device fault. Step 10 runs too: one `subscribe` carries its three paths (see
   "One subscription over several paths" below).
-- TC-BDX-1.4 and 2.1 declare `bdx-sender`, which the server has out of scope: it sends BDX only as its OTA provider,
-  and the WebSocket API drives no BDX transfer of its own. The BDX PICS stay 1, because an OTA provider supports BDX
-  (Core 11.20). TC-BDX-1.2 and 2.2 put a device in the DUT role and skip as not applicable to a DUT-only controller.
+- TC-BDX-1.4 and 2.1 run on `serveOtaUpdate`, as TC-SU-3.1 does: the server's provider is the BDX responder and
+  sender. The DUT-side facts they check (the `ReceiveInit` proposal, the `ReceiveAccept` grant, the bytes sent) come
+  from the server's `BDX/ReceiveInit`, `BDX/ReceiveAccept`, `BDX/Block`, `BDX/BlockEof` and `BDX/BlockAckEof` message
+  lines, and the file size from the image the adapter uploaded. The TH-side checks read the TH's log, as on every
+  leg. The update needs the staged image, so neither case needs `ota-provider-script`. TC-BDX-1.2 and 2.2 put a
+  device in the DUT role and skip as not applicable to a DUT-only controller.
 - TC-IDM-2.1 has no capability gap on this leg. A value outside the model decodes without an error (see "Values of clusters, attributes
   and events outside the adapter's model" below), and no step asserts the type or content of such a value. The
   auditor reads those from the `ReportData` payloads that `device-th.log` and `controller-dut.log` carry at debug.
@@ -3342,6 +3345,30 @@ PKI this case uses is published in neither ledger — `/dcl/pki/revocation-point
 every issuer in the set. The test plan allows for exactly this: its setup says revocation information
 may be "generated out of band and made available to the DUT". So the case reads the revocation set out
 of the container and installs it through `ControllerAdapter.attestation`.
+
+**The set is declared before the controller is built.** Every vector names the same file,
+`revocation-sets/revocation-set.json`, so a run has one set. The case reads it before it builds the DUT and passes
+its text as `ControllerAdapterOptions.revocationSet` (which needs `attestation: true`), the way `groups` declares a
+group key. Every adapter reads the declaration when it is built (`declaredRevocationSet`,
+`controller-revocation.ts`) and refuses an unreadable one; `installRevocations` refuses a set the case did not
+declare (compared as read, so layout does not matter). The in-process adapter installs the set then. The
+matterjs-server adapter has handed it to the server before the server started, so its `installRevocations` only
+checks.
+
+**On the matterjs-server leg the set is in place before the server starts.** The adapter writes the declared text to
+`<storage>/revocation-sets/revocation-set.json` and starts the server with `--revocation-sets-dir` naming that
+directory. The server (matterjs-server `loadRevocationSets`, checked at 749d9938) reads every top-level `*.json` there before
+its web server starts and installs each set as a whole. It goes on starting after a file or directory it cannot use:
+ERROR `Skipped revocation set <name>: …`, `Revocation sets directory <dir> does not exist…` or `Cannot read
+revocation sets directory <dir>: …`, then WARN `No revocation sets installed from <dir>` where nothing was installed.
+Only after an install does it log the NOTICE `Loaded revocation sets from <dir>: <F> files, <N> entries`. So the
+start fails with `CertConfigError` at an ERROR or FATAL line about a revocation set, at a readiness line with no
+NOTICE before it, or on another directory, a file count other than 1 or an entry count other than what
+`DclCertificateService.parseRevocationSet` reads from the written text. A server build without the option exits on
+the unknown flag. The NOTICE pattern is `REVOCATION_SETS_LOADED_LINE` in `matter-server-revocation.ts`. A refusal reaches the case as
+`MatterServerCommissioningError` (reason `attestation-rejected`, error code 1) whose message carries the server's
+`Commission failed: Device attestation refused: <Type>: <message>` text, findings joined by `; `, so the case finds `CertificateRevoked`
+in it as it does in-process.
 
 **A controller only judges attestation when asked, and asking changes two things.**
 `createControllerAdapter("dut", { attestation: true })` gives it a certificate service seeded with the

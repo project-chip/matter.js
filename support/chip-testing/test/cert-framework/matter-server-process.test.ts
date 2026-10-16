@@ -25,6 +25,12 @@ import {
     plainLogLine,
     readinessPortOf,
 } from "../../src/matter-server/matter-server-process.js";
+import {
+    REVOCATION_SET_FILE,
+    REVOCATION_SETS_DIR_FLAG,
+    revocationSetRefusalOf,
+    revocationSetsLoadedOf,
+} from "../../src/matter-server/matter-server-revocation.js";
 import { waitFor } from "./fake-chip-tool.js";
 
 const ENTRY = fileURLToPath(new URL("./fixtures/fake-server-entry.mjs", import.meta.url));
@@ -36,6 +42,7 @@ interface Report {
     storagePath: string;
     environment: string[];
     certContext?: unknown;
+    revocationSets?: { dir: string; files: Record<string, string> };
 }
 
 function messageOf(error: unknown) {
@@ -77,6 +84,18 @@ async function rejectionOf(promise: Promise<unknown>) {
     }
     expect.fail("expected a rejection");
 }
+
+const CONTEXT: CertContextFile = {
+    keySets: [
+        {
+            groupKeySetId: 1,
+            epochKey0: "d0d1d2d3d4d5d6d7d8d9dadbdcdddedf",
+            epochStartTime0: 1_600_000_000_000_000,
+            groupKeySecurityPolicy: "TrustFirst",
+        },
+    ],
+    groupKeyMap: [{ groupId: 1, groupKeySetId: 1 }],
+};
 
 describe("MatterServerProcess", () => {
     let server: MatterServerProcess | undefined;
@@ -367,18 +386,6 @@ describe("MatterServerProcess", () => {
     });
 
     describe("with a cert-context.json", () => {
-        const CONTEXT: CertContextFile = {
-            keySets: [
-                {
-                    groupKeySetId: 1,
-                    epochKey0: "d0d1d2d3d4d5d6d7d8d9dadbdcdddedf",
-                    epochStartTime0: 1_600_000_000_000_000,
-                    groupKeySecurityPolicy: "TrustFirst",
-                },
-            ],
-            groupKeyMap: [{ groupId: 1, groupKeySetId: 1 }],
-        };
-
         it("writes the file into the server's storage before it starts and waits for the server to load it", async () => {
             server = await start({ entry: ENTRY, role: "dut", certContext: CONTEXT });
 
@@ -466,6 +473,128 @@ describe("MatterServerProcess", () => {
             expect(Date.now() - started, "failed without waiting out the readiness timeout").lessThan(10_000);
         });
     });
+
+    describe("with a revocation set", () => {
+        const REVOCATION_SET = JSON.stringify([
+            {
+                type: "revocation_set",
+                issuer_subject_key_id: "63540E47F64B1C38D13884A462D16C195D8FFB3C",
+                revoked_serial_numbers: ["19367D978EAC533A"],
+            },
+            {
+                type: "revocation_set",
+                issuer_subject_key_id: "A0B1C2D3E4F5061728394A5B6C7D8E9FA0B1C2D3",
+                revoked_serial_numbers: ["0102", "0304"],
+            },
+        ]);
+
+        it("writes the set into a directory of the server's storage, names it to the server and waits for the load", async () => {
+            server = await start({ entry: ENTRY, role: "dut", revocationSet: REVOCATION_SET });
+
+            const args = await argsFromLog(server);
+            const dir = args[args.indexOf(REVOCATION_SETS_DIR_FLAG) + 1];
+            expect(dir.startsWith(storageOf(args)), "the directory is in the server's storage").true;
+            expect((await readReport()).revocationSets).deep.equals({
+                dir,
+                files: { [REVOCATION_SET_FILE]: REVOCATION_SET },
+            });
+            expect(
+                server.log.lines.some(({ text }) =>
+                    text.includes(`Loaded revocation sets from ${dir}: 1 files, 2 entries`),
+                ),
+                "the loaded line is in the log",
+            ).true;
+        });
+
+        it("names no directory where no set is given", async () => {
+            server = await start({ entry: ENTRY, role: "dut" });
+
+            expect(await argsFromLog(server)).not.includes(REVOCATION_SETS_DIR_FLAG);
+            expect((await readReport()).revocationSets).undefined;
+        });
+
+        it("fails at the line the server refuses the file with", async () => {
+            const error = await rejectionOf(
+                start({ entry: withFlag("--revocation-refuse"), role: "dut", revocationSet: REVOCATION_SET }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error)).match(
+                /^matterjs-server refused its revocation-set\.json: .*ERROR MatterServer\.RevocationSets Skipped revocation set revocation-set\.json: /,
+            );
+        });
+
+        it("fails at the line the server refuses the directory with", async () => {
+            const error = await rejectionOf(
+                start({ entry: withFlag("--revocation-unreadable-dir"), role: "dut", revocationSet: REVOCATION_SET }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error)).contains("Cannot read revocation sets directory");
+        });
+
+        it("waits for both files where it was given a cert-context.json too", async () => {
+            server = await start({ entry: ENTRY, role: "dut", certContext: CONTEXT, revocationSet: REVOCATION_SET });
+
+            const report = await readReport();
+            expect(report.certContext).deep.equals(CONTEXT);
+            expect(report.revocationSets?.files).deep.equals({ [REVOCATION_SET_FILE]: REVOCATION_SET });
+        });
+
+        it("fails at a refused revocation set where the cert-context.json loaded", async () => {
+            const error = await rejectionOf(
+                start({
+                    entry: withFlag("--revocation-refuse"),
+                    role: "dut",
+                    certContext: CONTEXT,
+                    revocationSet: REVOCATION_SET,
+                }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error)).contains("refused its revocation-set.json");
+        });
+
+        it("fails where the server loaded other counts than it was given", async () => {
+            const error = await rejectionOf(
+                start({ entry: withFlag("--revocation-miscount"), role: "dut", revocationSet: REVOCATION_SET }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error))
+                .contains("loaded 1 revocation set files with 3 entries")
+                .contains("wrote 1 file with 2 entries");
+        });
+
+        it("fails where the server loaded another number of files", async () => {
+            const error = await rejectionOf(
+                start({ entry: withFlag("--revocation-extra-file"), role: "dut", revocationSet: REVOCATION_SET }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error)).contains("loaded 2 revocation set files with 2 entries");
+        });
+
+        it("fails where the server loaded the sets from another directory", async () => {
+            const error = await rejectionOf(
+                start({ entry: withFlag("--revocation-other-dir"), role: "dut", revocationSet: REVOCATION_SET }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error)).contains("with 2 entries from /elsewhere/revocation-sets");
+        });
+
+        it("fails at the readiness line where the server becomes ready without saying it loaded the set", async () => {
+            const error = await rejectionOf(
+                start({ entry: withFlag("--revocation-ignore"), role: "dut", revocationSet: REVOCATION_SET }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error))
+                .contains("became ready without logging that it loaded")
+                .contains("its log before the readiness line says why");
+        });
+    });
 });
 
 describe("plainLogLine", () => {
@@ -518,5 +647,33 @@ describe("cert-context.json log lines", () => {
                 `NOTICE GroupKeyConfig Loaded group key configuration from ${PATH}: 1 key sets, 1 groups`,
             ),
         ).undefined;
+    });
+});
+
+describe("revocation set log lines", () => {
+    const DIR = "/private/tmp/matter-cert-server-abc/revocation-sets";
+
+    it("reads the directory and counts from the server's loaded line", () => {
+        expect(
+            revocationSetsLoadedOf(
+                `2026-10-16 09:12:01.204 NOTICE MatterServer.RevocationSets Loaded revocation sets from ${DIR}: 1 files, 6 entries`,
+            ),
+        ).deep.equals({ dir: DIR, files: 1, entries: 6 });
+        expect(revocationSetsLoadedOf("NOTICE Runtime Shutting down")).undefined;
+    });
+
+    it("takes an ERROR or FATAL line about a revocation set or its directory as a refusal, and nothing else", () => {
+        const error = "2026-10-16 ERROR MatterServer.RevocationSets Skipped revocation set revocation-set.json: bad";
+        expect(revocationSetRefusalOf(error)).equals(error);
+        expect(revocationSetRefusalOf(error.replace("ERROR", "FATAL"))).not.undefined;
+        expect(
+            revocationSetRefusalOf(
+                `2026-10-16 ERROR MatterServer.RevocationSets Revocation sets directory ${DIR} does not exist, no ` +
+                    "revocation sets installed",
+            ),
+        ).not.undefined;
+        expect(revocationSetRefusalOf(error.replace("ERROR", "DEBUG"))).undefined;
+        expect(revocationSetRefusalOf("2026-10-16 ERROR MatterServer Server failed to start: storage closed"))
+            .undefined;
     });
 });

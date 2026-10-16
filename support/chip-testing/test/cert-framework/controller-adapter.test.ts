@@ -925,6 +925,15 @@ describe("InProcessControllerAdapter", () => {
 });
 
 describe("InProcessControllerAdapter attestation", () => {
+    const REVOCATION_SET = JSON.stringify([
+        {
+            type: "revocation_set",
+            issuer_subject_key_id: "63540E47F64B1C38D13884A462D16C195D8FFB3C",
+            issuer_name: "MD0xJTAjBgNVBAMMHE1hdHRlciBEZXYgUEFJIDB4RkZGMSBubyBQSUQxFDASBgorBgEEAYKifAIBDARGRkYx",
+            revoked_serial_numbers: ["19367D978EAC533A"],
+        },
+    ]);
+
     let adapter: InProcessControllerAdapter;
 
     afterEach(async function () {
@@ -944,20 +953,52 @@ describe("InProcessControllerAdapter attestation", () => {
     it("takes revocation information a case installs", async function () {
         this.timeout(20_000);
 
-        adapter = new InProcessControllerAdapter("attestation-on", { attestation: true });
+        adapter = new InProcessControllerAdapter("attestation-on", {
+            attestation: true,
+            revocationSet: REVOCATION_SET,
+        });
         await adapter.start();
 
         expect(adapter.attestation).not.equal(undefined);
-        await adapter.attestation!.installRevocations(
-            JSON.stringify([
-                {
-                    type: "revocation_set",
-                    issuer_subject_key_id: "63540E47F64B1C38D13884A462D16C195D8FFB3C",
-                    issuer_name: "MD0xJTAjBgNVBAMMHE1hdHRlciBEZXYgUEFJIDB4RkZGMSBubyBQSUQxFDASBgorBgEEAYKifAIBDARGRkYx",
-                    revoked_serial_numbers: ["19367D978EAC533A"],
-                },
-            ]),
+        await adapter.attestation!.installRevocations(REVOCATION_SET);
+    });
+
+    it("refuses a declared revocation set it cannot read, or one without attestation, when it is built", () => {
+        for (const [options, problem] of [
+            [{ attestation: true, revocationSet: "{ not a revocation set }" }, "is not a revocation set"],
+            [{ revocationSet: REVOCATION_SET }, "needs attestation"],
+        ] as const) {
+            expect(() => new InProcessControllerAdapter("attestation-declaration", options)).to.throw(
+                ImplementationError,
+                problem,
+            );
+        }
+    });
+
+    it("refuses to install a revocation set where the case declared none", async function () {
+        this.timeout(20_000);
+
+        adapter = new InProcessControllerAdapter("attestation-unset", { attestation: true });
+        await adapter.start();
+
+        await expect(adapter.attestation!.installRevocations(REVOCATION_SET)).to.be.rejectedWith(
+            ImplementationError,
+            /was not built with a revocation set/,
         );
+    });
+
+    it("refuses a revocation set the case did not declare", async function () {
+        this.timeout(20_000);
+
+        adapter = new InProcessControllerAdapter("attestation-undeclared", {
+            attestation: true,
+            revocationSet: REVOCATION_SET,
+        });
+        await adapter.start();
+
+        await expect(
+            adapter.attestation!.installRevocations(REVOCATION_SET.replace("19367D978EAC533A", "19367D978EAC533B")),
+        ).to.be.rejectedWith(ImplementationError, /differs from the one the case's revocationSet declares/);
     });
 
     it("accepts what a test device presents until something is wrong with it", async function () {
@@ -1012,11 +1053,15 @@ describe("InProcessControllerAdapter attestation", () => {
     it("refuses a revocation set it cannot read rather than commissioning as if nothing was revoked", async function () {
         this.timeout(20_000);
 
-        adapter = new InProcessControllerAdapter("attestation-malformed", { attestation: true });
+        adapter = new InProcessControllerAdapter("attestation-malformed", {
+            attestation: true,
+            revocationSet: REVOCATION_SET,
+        });
         await adapter.start();
 
         await expect(adapter.attestation!.installRevocations("{ not a revocation set }")).to.be.rejectedWith(
             ImplementationError,
+            /"attestation-malformed": the revocation set to install is not a revocation set: Revocation set is not JSON/,
         );
     });
 });
@@ -1589,23 +1634,26 @@ describe("controller capabilities", () => {
     it("names the controller, the capability and the reason where the DUT controller declares one out of scope", () => {
         env.MATTER_CERT_CONTROLLER = "matterjs-server";
 
-        expect(controllerCapabilityOutOfScope(["group-messaging", "bdx-sender"])).equal(
-            `controller "matterjs-server" does not offer bdx-sender: ${MATTERJS_SERVER_OUT_OF_SCOPE["bdx-sender"]}`,
+        expect(controllerCapabilityOutOfScope(["group-messaging", "multi-path-write"])).equal(
+            `controller "matterjs-server" does not offer multi-path-write: ${MATTERJS_SERVER_OUT_OF_SCOPE["multi-path-write"]}`,
         );
-        expect(controllerCapabilityGap(["bdx-sender", "multi-path-write"])).undefined;
+        expect(controllerCapabilityGap(["multi-path-write"])).undefined;
 
         env.MATTER_CERT_CONTROLLER = "matterjs";
-        expect(controllerCapabilityOutOfScope(["bdx-sender", "multi-path-write"])).undefined;
+        expect(controllerCapabilityOutOfScope(["multi-path-write"])).undefined;
     });
 
     it("applies only the DUT controller's out-of-scope declarations", () => {
         const selection = { dut: "matterjs", helper: "matterjs-server" } as const;
 
-        expect(controllerCapabilityOutOfScope(["bdx-sender"], ["helper"], selection)).undefined;
-        expect(controllerCapabilityOutOfScope(["bdx-sender"], ["dut", "helper"], selection)).undefined;
+        expect(controllerCapabilityOutOfScope(["multi-path-write"], ["helper"], selection)).undefined;
+        expect(controllerCapabilityOutOfScope(["multi-path-write"], ["dut", "helper"], selection)).undefined;
         expect(
-            controllerCapabilityOutOfScope(["bdx-sender"], ["dut"], { dut: "matterjs-server", helper: "matterjs" }),
-        ).contains('controller "matterjs-server" does not offer bdx-sender');
+            controllerCapabilityOutOfScope(["multi-path-write"], ["dut"], {
+                dut: "matterjs-server",
+                helper: "matterjs",
+            }),
+        ).contains('controller "matterjs-server" does not offer multi-path-write');
     });
 
     it("refuses a registration that declares a capability both as a gap and out of scope", () => {
@@ -1616,10 +1664,10 @@ describe("controller capabilities", () => {
                     factory: () => {
                         throw new InternalError("never built");
                     },
-                    gaps: { "bdx-sender": "a" },
-                    outOfScope: { "bdx-sender": "b" },
+                    gaps: { "icd-client": "a" },
+                    outOfScope: { "icd-client": "b" },
                 }),
-            ).throw(/bdx-sender both as a gap and as out of scope/);
+            ).throw(/icd-client both as a gap and as out of scope/);
         } finally {
             restore();
         }

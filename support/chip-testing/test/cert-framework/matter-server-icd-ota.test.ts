@@ -562,6 +562,7 @@ describe("MatterServerControllerAdapter on the server's ICD client and OTA provi
         function serve(
             outcome: "downloaded" | "failed" | "downloadError" | "notFromDownloading",
             fileDesignator = "ota/fff1.8001.local.2",
+            bdxLines?: string[],
         ) {
             const init = BdxReceiveInitMessage.encode({
                 transferProtocol: { version: 0, receiverDrive: true },
@@ -578,12 +579,14 @@ describe("MatterServerControllerAdapter on the server's ICD client and OTA provi
                     "productId: 32769 softwareVersion: 1 protocolsSupported: 0",
                 `INFO ProtocolService Invoke » s.ota.otaSoftwareUpdateProvider.queryImage ${query} status: 0 ` +
                     "imageUri: bdx://000000000001B669/ota/fff1.8001.local.2 softwareVersion: 2 updateToken: aabb",
-                `DEBUG MessageExchange Message « for: BDX/ReceiveInit id: ${session}✉1 type: 0x2/0x4 payload: ` +
-                    Bytes.toHex(init),
-                `DEBUG MessageChannel Message » for: BDX/ReceiveAccept backOff: 1s id: ${session}✉2 type: 0x2/0x5 ` +
-                    `payload: ${Bytes.toHex(accept)}`,
-                `DEBUG MessageChannel Message » for: BDX/BlockEof cnt: 0 len: 700 id: ${session}✉3 type: 0x2/0x12 payload: 00`,
-                `DEBUG MessageExchange Message « for: BDX/BlockAckEof id: ${session}✉4 type: 0x2/0x14 payload: 00`,
+                ...(bdxLines ?? [
+                    `DEBUG MessageExchange Message « for: BDX/ReceiveInit id: ${session}✉1 type: 0x2/0x4 payload: ` +
+                        Bytes.toHex(init),
+                    `DEBUG MessageChannel Message » for: BDX/ReceiveAccept backOff: 1s id: ${session}✉2 type: 0x2/0x5 ` +
+                        `payload: ${Bytes.toHex(accept)}`,
+                    `DEBUG MessageChannel Message » for: BDX/BlockEof cnt: 0 len: 700 id: ${session}✉3 type: 0x2/0x12 payload: 00`,
+                    `DEBUG MessageExchange Message « for: BDX/BlockAckEof id: ${session}✉4 type: 0x2/0x14 payload: 00`,
+                ]),
                 `INFO ProtocolService Invoke « s.ota.otaSoftwareUpdateProvider.applyUpdateRequest ${apply} ` +
                     "updateToken: aabb newVersion: 2",
                 `INFO ProtocolService Invoke » s.ota.otaSoftwareUpdateProvider.applyUpdateRequest ${apply} action: 0 ` +
@@ -660,6 +663,51 @@ describe("MatterServerControllerAdapter on the server's ICD client and OTA provi
                 "disable_auto_subscription",
             ]);
             expect(sentCommands().at(-1)).equals("disable_auto_subscription");
+        });
+
+        it("reads the proposal, the accept and the bytes sent from the BDX lines of a real server run", async () => {
+            // From a live run against chip's ota-requestor-app: pins the line format the BDX cases read
+            const real = "@1:5•5ea5(tcp)⇵ea35";
+            const bdxLines = [
+                `2026-10-16 13:10:04.645 DEBUG MessageExchange Message « for: BDX/ReceiveInit id: ${real}✉020be850 ` +
+                    "type: 0x2/0x4 size: 27 payload: 2000000415006f74612f666666312e383030312e6c6f63616c2e32",
+                `2026-10-16 13:10:04.647 DEBUG MessageChannel Message » for: BDX/ReceiveAccept id: ${real}✉06b3c7ad ` +
+                    "type: 0x2/0x5 size: 4 payload: 20000004",
+                `2026-10-16 13:10:04.648 DEBUG MessageChannel Message » for: BDX/Block cnt: 0 len: 1024 id: ${real}✉06b3c7ae ` +
+                    "type: 0x2/0x11 size: 1028 payload: 000000001ef1ee1b6c000100",
+                `2026-10-16 13:10:04.649 DEBUG MessageChannel Message » for: BDX/Block cnt: 1 len: 1024 id: ${real}✉06b3c7af ` +
+                    "type: 0x2/0x11 size: 1028 payload: 01000000d6d7d4d5dadbd8d9",
+                `2026-10-16 13:10:04.725 DEBUG MessageChannel Message » for: BDX/BlockEof cnt: 2 len: 108 id: ${real}✉06b3c82a ` +
+                    "type: 0x2/0x12 size: 112 payload: 40000000d6d7d4d5dadbd8d9",
+                `2026-10-16 13:10:04.726 DEBUG MessageExchange Message « for: BDX/BlockAckEof id: ${real}✉020be8cf ` +
+                    "type: 0x2/0x14 size: 4 payload: 40000000",
+            ];
+            replies.update_node = () => {
+                setTimeout(() => serve("downloaded", undefined, bdxLines), 10);
+                return { result: null };
+            };
+
+            const transfer = await node().serveOtaUpdate({ timeoutMs: 5_000, applyTimeoutMs: 5_000 });
+
+            expect(transfer.proposal).deep.equals({
+                version: 0,
+                senderDrive: false,
+                receiverDrive: true,
+                asynchronousTransfer: false,
+                maxBlockSize: 1024,
+                startOffset: undefined,
+                definiteLength: undefined,
+                fileDesignator: "ota/fff1.8001.local.2",
+                fileDesignatorLength: 21,
+            });
+            expect(transfer.accept).deep.equals({
+                version: 0,
+                mode: "receiverDrive",
+                asynchronousTransfer: false,
+                maxBlockSize: 1024,
+                definiteLength: undefined,
+            });
+            expect(transfer.transferredBytes).equals(2 * 1024 + 108);
         });
 
         it("fails on the requestor's DownloadError", async () => {

@@ -657,7 +657,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
             factory: id => fakeAdapter(id),
             helperImplementation: "matterjs",
             gaps: { "group-messaging": "no groups" },
-            outOfScope: { "bdx-sender": "not for controllers" },
+            outOfScope: { "icd-client": "not for controllers" },
         });
         try {
             env.MATTER_CERT_EVIDENCE_DIR = outDir;
@@ -666,7 +666,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
                     plan: "n/a",
                     pics: [],
                     app: "all-clusters",
-                    controllerCapabilities: ["group-messaging", "bdx-sender"],
+                    controllerCapabilities: ["group-messaging", "icd-client"],
                 });
 
             const underServer = withController("matterjs-server", () => collect(() => declare(tc)));
@@ -1162,7 +1162,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
                 factory: id => fakeAdapter(id),
                 helperImplementation: "matterjs",
                 pics: { [BATCH_COMMANDS]: 0 },
-                outOfScope: { "bdx-sender": "not for controllers" },
+                outOfScope: { "icd-client": "not for controllers" },
             });
             return body().finally(restore);
         }
@@ -1170,7 +1170,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
         it("does not skip a case on out-of-scope declarations of the implementation filling its helper roles", async () => {
             const restore = replaceControllerAdapterRegistrationForTesting("matterjs-server", {
                 factory: id => fakeAdapter(id),
-                outOfScope: { "bdx-sender": "not for controllers" },
+                outOfScope: { "icd-client": "not for controllers" },
             });
             try {
                 const { active } = withController("matterjs-server", () =>
@@ -1180,7 +1180,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
                             pics: [],
                             app: "all-clusters",
                             controllers: { th: "helper" },
-                            controllerCapabilities: ["bdx-sender"],
+                            controllerCapabilities: ["icd-client"],
                         }),
                     ),
                 );
@@ -1230,7 +1230,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
                                 plan: "n/a",
                                 pics: [],
                                 app: "all-clusters",
-                                controllerCapabilities: ["bdx-sender"],
+                                controllerCapabilities: ["icd-client"],
                             }),
                         ),
                     );
@@ -1239,7 +1239,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
             );
 
             expect(result?.verdict).equal("skipped");
-            expect(result?.outOfScope).contain('controller "matterjs-server" does not offer bdx-sender');
+            expect(result?.outOfScope).contain('controller "matterjs-server" does not offer icd-client');
             expect(result?.run.controllerImplementation).equal("matterjs-server");
         });
 
@@ -1253,7 +1253,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
                                 plan: "n/a",
                                 pics: [BATCH_COMMANDS],
                                 app: "all-clusters",
-                                controllerCapabilities: ["bdx-sender"],
+                                controllerCapabilities: ["icd-client"],
                             }),
                         ),
                     );
@@ -1270,7 +1270,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
                     throw new InternalError("chip-tool is not the collected controller and must not be built");
                 },
                 gaps: { "group-messaging": "no groups" },
-                outOfScope: { "bdx-sender": "not for controllers" },
+                outOfScope: { "icd-client": "not for controllers" },
                 pics: { [BATCH_COMMANDS]: 1 },
             });
             try {
@@ -1285,7 +1285,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
                         { controllers: { dut: "dut" } },
                         [
                             { caps: ["group-messaging"] },
-                            { caps: ["bdx-sender"] },
+                            { caps: ["icd-client"] },
                             { pics: BATCH_COMMANDS },
                             { pics: APP_ONLY_PICS, run: observe },
                             {
@@ -1375,7 +1375,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
             {
                 kind: "out-of-scope",
                 declaredWith: "matterjs-server",
-                options: { controllerCapabilities: ["bdx-sender"] },
+                options: { controllerCapabilities: ["icd-client"] },
                 verdict: "skipped",
             },
         ] as const) {
@@ -1501,7 +1501,7 @@ describe("skipOnControllerGap", () => {
             factory: id => fakeAdapter(id),
             helperImplementation: "matterjs",
             gaps: { "webrtc-requestor": "no requestor" },
-            outOfScope: { "bdx-sender": "not for controllers" },
+            outOfScope: { "icd-client": "not for controllers" },
         });
         try {
             let thrown: unknown;
@@ -1532,16 +1532,16 @@ describe("skipOnControllerGap", () => {
     }
 
     it("records the reason and skips where the controller declares a required capability out of scope", async () => {
-        const { thrown, result } = await skippedUnderServer(["bdx-sender"]);
+        const { thrown, result } = await skippedUnderServer(["icd-client"]);
 
         expect(thrown).instanceOf(Skipped);
         expect(result.verdict).equal("skipped");
-        expect(result.outOfScope).contain('controller "matterjs-server" does not offer bdx-sender');
+        expect(result.outOfScope).contain('controller "matterjs-server" does not offer icd-client');
         expect(result.controllerGap).undefined;
     });
 
     it("records a gap where a required capability is a gap and another out of scope", async () => {
-        const { thrown, result } = await skippedUnderServer(["bdx-sender", "webrtc-requestor"]);
+        const { thrown, result } = await skippedUnderServer(["icd-client", "webrtc-requestor"]);
 
         expect(thrown).instanceOf(Skipped);
         expect(result.verdict).equal("controller-gap");

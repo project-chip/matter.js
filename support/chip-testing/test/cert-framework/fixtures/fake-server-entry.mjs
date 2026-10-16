@@ -6,7 +6,7 @@
 
 // Stand-in for the matterjs-server entry point. Plain JavaScript because the child process is plain Node and
 // cannot load the TypeScript fake server.
-import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { WebSocketServer } from "ws";
 
@@ -26,9 +26,10 @@ const storageIndex = args.indexOf("--storage-path");
 const storagePath = storageIndex === -1 ? undefined : args[storageIndex + 1];
 
 const certContext = loadCertContext();
+const revocationSets = loadRevocationSets();
 
 if (reportFile) {
-    writeReport({ pid: process.pid, storagePath, environment: Object.keys(process.env), certContext });
+    writeReport({ pid: process.pid, storagePath, environment: Object.keys(process.env), certContext, revocationSets });
 }
 runServer();
 
@@ -69,6 +70,45 @@ function loadCertContext() {
         setInterval(() => {}, 1 << 30);
     }
     return content;
+}
+
+/**
+ * Logs what the real server logs for the revocation sets in the directory `--revocation-sets-dir` names
+ * (`loadRevocationSets`): an ERROR for a file or directory it cannot install from, which it skips, then a NOTICE with
+ * what it loaded or a WARN where it loaded nothing from a directory it could read.
+ */
+function loadRevocationSets() {
+    const dirIndex = args.indexOf("--revocation-sets-dir");
+    if (dirIndex === -1) {
+        return undefined;
+    }
+    const dir = args[dirIndex + 1];
+    const log = (level, message) => console.log(`2026-10-16 09:12:01.204 ${level} MatterServer.RevocationSets ${message}`);
+    const files = {};
+    if (args.includes("--revocation-unreadable-dir")) {
+        log("ERROR", `Cannot read revocation sets directory ${dir}: EACCES: permission denied`);
+        return { dir, files };
+    }
+    let loaded = 0;
+    let entries = 0;
+    for (const name of readdirSync(dir).filter(name => name.endsWith(".json"))) {
+        files[name] = readFileSync(join(dir, name), "utf8");
+        if (args.includes("--revocation-refuse")) {
+            log("ERROR", `Skipped revocation set ${name}: Revocation set entry 0 is not an object`);
+            continue;
+        }
+        loaded++;
+        entries += JSON.parse(files[name]).length;
+    }
+    if (loaded === 0) {
+        log("WARN", `No revocation sets installed from ${dir}`);
+    } else if (!args.includes("--revocation-ignore")) {
+        const extra = args.includes("--revocation-miscount") ? 1 : 0;
+        const loadedFrom = args.includes("--revocation-other-dir") ? "/elsewhere/revocation-sets" : dir;
+        const fileCount = loaded + (args.includes("--revocation-extra-file") ? 1 : 0);
+        log("NOTICE", `Loaded revocation sets from ${loadedFrom}: ${fileCount} files, ${entries + extra} entries`);
+    }
+    return { dir, files };
 }
 
 function runServer() {

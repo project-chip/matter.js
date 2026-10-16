@@ -792,7 +792,7 @@ describe("EvidenceRecorder", () => {
         const scoped = recorder("TC-IDM-5.1");
         scoped.beginStep(step1);
         scoped.endStep(step1, "pass");
-        scoped.endStep(step2, "skipped", 'controller "matterjs-server" does not offer bdx-sender: not for controllers');
+        scoped.endStep(step2, "skipped", 'controller "matterjs-server" does not offer icd-client: not for controllers');
         scoped.recordOutOfScopeSkips(1);
         const withSkips = JSON.parse(await fsp.readFile(pathMod.join(await publish(scoped), "result.json"), "utf8"));
 
