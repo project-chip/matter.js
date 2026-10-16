@@ -453,6 +453,17 @@ describe("MatterServerProcess", () => {
                 .contains("wrote 1 key sets and 1 groups");
         });
 
+        it("fails where the server loaded the key sets it was given but another number of groups", async () => {
+            const error = await rejectionOf(
+                start({ entry: withFlag("--cert-context-group-miscount"), role: "dut", certContext: CONTEXT }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error))
+                .contains("loaded 1 key sets and 2 groups")
+                .contains("wrote 1 key sets and 1 groups");
+        });
+
         it("fails where the server loaded the file from another path", async () => {
             const error = await rejectionOf(
                 start({ entry: withFlag("--cert-context-other-path"), role: "dut", certContext: CONTEXT }),
@@ -660,6 +671,25 @@ describe("revocation set log lines", () => {
             ),
         ).deep.equals({ dir: DIR, files: 1, entries: 6 });
         expect(revocationSetsLoadedOf("NOTICE Runtime Shutting down")).undefined;
+    });
+
+    const loaded = (counts: string) =>
+        revocationSetsLoadedOf(`NOTICE RevocationSets Loaded revocation sets from ${DIR}: ${counts}`);
+
+    it("reads the singular file the server writes for a count of one", () => {
+        expect(loaded("1 file, 3 entries")).deep.equals({ dir: DIR, files: 1, entries: 3 });
+    });
+
+    it("reads the singular entry the server writes for a count of one", () => {
+        expect(loaded("2 files, 1 entry")).deep.equals({ dir: DIR, files: 2, entries: 1 });
+    });
+
+    it('takes a line starting with "Revocation sets directory" as a refusal', () => {
+        expect(
+            revocationSetRefusalOf(
+                `2026-10-16 ERROR MatterServer.RevocationSets Revocation sets directory ${DIR} does not exist`,
+            ),
+        ).not.undefined;
     });
 
     it("takes an ERROR or FATAL line about a revocation set or its directory as a refusal, and nothing else", () => {

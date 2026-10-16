@@ -55,10 +55,11 @@ function loadCertContext() {
     }
     if (!args.includes("--cert-context-ignore")) {
         const extra = args.includes("--cert-context-miscount") ? 1 : 0;
+        const extraGroups = args.includes("--cert-context-group-miscount") ? 1 : 0;
         const loadedFrom = args.includes("--cert-context-other-path") ? "/elsewhere/cert-context.json" : path;
         console.log(
             `2026-10-16 06:46:44.840 NOTICE GroupKeyConfig Loaded group key configuration from ${loadedFrom}: ` +
-                `${content.keySets.length + extra} key sets, ${content.groupKeyMap.length} groups`,
+                `${content.keySets.length + extra} key sets, ${content.groupKeyMap.length + extraGroups} groups`,
         );
     }
     if (args.includes("--cert-context-install-fail")) {

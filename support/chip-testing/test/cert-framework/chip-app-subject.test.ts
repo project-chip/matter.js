@@ -429,6 +429,64 @@ describe("ChipLocalSubject", () => {
         }
     });
 
+    for (const command of ["start", "reboot", "factoryReset"] as const) {
+        it(`propagates a real start failure of a ${command} backchannel command`, async function () {
+            this.timeout(15_000);
+
+            const device = ChipLocalSubject(app)("cert");
+            if (!isCertDevice(device)) {
+                throw new Error("Expected a CertDevice");
+            }
+
+            await device.initialize();
+            await device.start();
+
+            try {
+                await device.backchannel({ name: "stop" });
+                await rm(join(appDir, `chip-${app}-app`));
+
+                await expect(device.backchannel({ name: command })).rejectedWith("ENOENT");
+            } finally {
+                await device.close();
+            }
+        });
+    }
+
+    it("starts a stopped device again on a start backchannel command", async function () {
+        this.timeout(15_000);
+
+        const pidFile = join(appDir, "pids");
+        await writeFile(
+            join(appDir, `chip-${app}-app`),
+            ["#!/bin/sh", `echo $$ >> "${pidFile}"`, "echo up", "exec sleep 300", ""].join("\n"),
+            { mode: 0o755 },
+        );
+
+        const device = ChipLocalSubject(app)("cert");
+        if (!isCertDevice(device)) {
+            throw new Error("Expected a CertDevice");
+        }
+
+        await device.initialize();
+        await device.start();
+        await collectLines(device.log.follow(), 1, 5_000);
+
+        try {
+            await device.backchannel({ name: "stop" });
+            await device.backchannel({ name: "start" });
+
+            let pids = new Array<number>();
+            for (let attempt = 0; pids.length < 2 && attempt < 100; attempt++) {
+                await new Promise(resolve => setTimeout(resolve, 50));
+                pids = (await readFile(pidFile, "utf8")).trim().split("\n").map(Number);
+            }
+            expect(pids).length(2);
+            expect(livingOf(pids)).deep.equal([pids[1]]);
+        } finally {
+            await device.close();
+        }
+    });
+
     it("discards the key-value store on a factoryReset backchannel command", async function () {
         this.timeout(15_000);
 
@@ -1567,6 +1625,150 @@ describe("ChipDockerSubject", () => {
 
         expect(killed).equal(true);
         expect(closed).equal(1);
+    });
+});
+
+describe("ChipDockerDevice backchannel start and output failures", () => {
+    function dockerHandle(composition: CompositionHandle): DockerHandle {
+        return {
+            async ensureVolume() {},
+            compose() {
+                return composition;
+            },
+            async containerStatus() {
+                return { isRunning: true };
+            },
+        };
+    }
+
+    it("starts a container on a start backchannel command and removes it on stop", async function () {
+        this.timeout(5_000);
+
+        let added = 0;
+        let closed = 0;
+        const device = new ChipDockerDevice(
+            "test",
+            "cert",
+            undefined,
+            dockerHandle({
+                async add() {
+                    added++;
+                    let ended!: () => void;
+                    const exited = new Promise<void>(resolve => (ended = resolve));
+                    return fakeContainer({ kill: async () => ended(), wait: () => exited });
+                },
+                async close() {
+                    closed++;
+                },
+            }),
+        );
+
+        try {
+            await device.backchannel({ name: "start" });
+            expect(added).equal(1);
+
+            await device.backchannel({ name: "stop" });
+            expect(closed).equal(1);
+
+            await device.backchannel({ name: "start" });
+            expect(added).equal(2);
+        } finally {
+            await device.close();
+        }
+    });
+
+    for (const command of ["start", "factoryReset"] as const) {
+        it(`propagates a real launch failure of a ${command} backchannel command`, async function () {
+            this.timeout(5_000);
+
+            const device = new ChipDockerDevice(
+                "test",
+                "cert",
+                undefined,
+                dockerHandle({
+                    async add() {
+                        throw new Error("add exploded");
+                    },
+                    async close() {},
+                }),
+            );
+
+            try {
+                await expect(device.backchannel({ name: command })).rejectedWith("add exploded");
+            } finally {
+                await device.close();
+            }
+        });
+    }
+
+    /** Stops a device whose output read fails with `error`, and returns what it logged. */
+    async function logsFor(error: Error) {
+        let ended!: () => void;
+        const exited = new Promise<void>(resolve => (ended = resolve));
+        const terminal = {
+            async write() {},
+            async close() {},
+            async consume() {
+                return "";
+            },
+            [Symbol.asyncIterator]() {
+                return {
+                    async next(): Promise<never> {
+                        throw error;
+                    },
+                };
+            },
+        };
+        const container = fakeContainer({
+            kill: async () => ended(),
+            wait: () => exited,
+            attach: (async () => terminal) as unknown as Container["attach"],
+        });
+        const device = new ChipDockerDevice(
+            "test",
+            "cert",
+            undefined,
+            dockerHandle({
+                async add() {
+                    return container;
+                },
+                async close() {},
+            }),
+        );
+
+        const logged = { debug: new Array<unknown[]>(), warn: new Array<unknown[]>() };
+        const { debug, warn } = console;
+        console.debug = (...args: unknown[]) => void logged.debug.push(args);
+        console.warn = (...args: unknown[]) => void logged.warn.push(args);
+        try {
+            await device.start();
+            await device.stop();
+        } finally {
+            console.debug = debug;
+            console.warn = warn;
+            await device.close();
+        }
+        return logged;
+    }
+
+    it("logs an output stream closed early at debug, not as a warning", async function () {
+        this.timeout(5_000);
+
+        const logged = await logsFor(
+            Object.assign(new Error("Premature close"), { code: "ERR_STREAM_PREMATURE_CLOSE" }),
+        );
+
+        expect(logged.debug.map(args => args[0])).contains("Device output ended early:");
+        expect(logged.warn.map(args => args[0])).not.contains("Error reading device output:");
+    });
+
+    it("logs any other output failure as a warning", async function () {
+        this.timeout(5_000);
+
+        const logged = await logsFor(Object.assign(new Error("socket reset"), { code: "ECONNRESET" }));
+
+        expect(logged.warn.map(args => args[0])).contains("Error reading device output:");
+        expect(logged.debug.map(args => args[0])).not.contains("Device output ended early:");
     });
 });
 
