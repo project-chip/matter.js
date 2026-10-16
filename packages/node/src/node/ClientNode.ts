@@ -10,6 +10,7 @@ import { ClientNetworkRuntime } from "#behavior/system/network/ClientNetworkRunt
 import { NetworkClient } from "#behavior/system/network/NetworkClient.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { Agent } from "#endpoint/Agent.js";
+import type { Endpoint } from "#endpoint/Endpoint.js";
 import { ClientNodeEndpoints } from "#endpoint/properties/ClientNodeEndpoints.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { awaitLifecycleOperation } from "#endpoint/properties/LifecycleMutex.js";
@@ -336,6 +337,7 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
     override act<R>(
         purpose: string,
         actor: (agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>,
+        options?: Endpoint.ActOptions,
     ): MaybePromise<R>;
 
     override act<R>(actor: (agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>): MaybePromise<R>;
@@ -343,8 +345,9 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
     override act<R>(
         actorOrPurpose: string | ((agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>),
         actor?: (agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>,
+        options?: Endpoint.ActOptions,
     ): MaybePromise<R> {
-        const act = (): MaybePromise<R> => (super.act as any)(actorOrPurpose, actor);
+        const act = (): MaybePromise<R> => (super.act as any)(actorOrPurpose, actor, options);
         const ready = this.#readyToAct();
         return ready === undefined ? act() : ready.then(act);
     }

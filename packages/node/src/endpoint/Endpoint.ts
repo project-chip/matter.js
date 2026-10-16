@@ -31,7 +31,7 @@ import {
     UninitializedDependencyError,
 } from "@matter/general";
 import { ClusterModel, DataModelPath } from "@matter/model";
-import { Read, ReadResult, Val } from "@matter/protocol";
+import { InteractionSettings, Read, ReadResult, Val } from "@matter/protocol";
 import { AttributeId, ClusterId, EndpointNumber, FabricIndex, Status } from "@matter/types";
 import { RootEndpoint } from "../endpoints/root.js";
 import { Agent } from "./Agent.js";
@@ -875,8 +875,13 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      *
      * @param purpose textual description of operation used for diagnostics
      * @param actor the function that performs the action
+     * @param options settings of the acting context, see {@link Endpoint.ActOptions}
      */
-    act<R>(purpose: string, actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R>;
+    act<R>(
+        purpose: string,
+        actor: (agent: Agent.Instance<T>) => MaybePromise<R>,
+        options?: Endpoint.ActOptions,
+    ): MaybePromise<R>;
 
     /**
      * Version of {@link act} without explicit diagnostic purpose.
@@ -886,6 +891,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     act<R>(
         actorOrPurpose: string | ((agent: Agent.Instance<T>) => MaybePromise<R>),
         actor?: (agent: Agent.Instance<T>) => MaybePromise<R>,
+        options?: Endpoint.ActOptions,
     ): MaybePromise<R> {
         let purpose;
         if (typeof actorOrPurpose === "string") {
@@ -915,6 +921,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
                 activity: this.#activity,
                 lifetime: this.construction,
                 clientPeerContext,
+                abort: options?.abort,
             },
         );
     }
@@ -1549,10 +1556,11 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
         if (node.nodeType === "client") {
             const fabricFilter = options?.fabricFilter ?? true;
-            const baseRequest = Read({ attributes: [...attributePaths.paths], fabricFilter });
-            const request = options?.includeKnownVersions
-                ? { ...baseRequest, includeKnownVersions: true }
-                : baseRequest;
+            const request = {
+                ...Read({ attributes: [...attributePaths.paths], fabricFilter }),
+                includeKnownVersions: options?.includeKnownVersions,
+                abort: options?.abort,
+            };
             const readValues = new Map<string, Map<string, unknown>>();
             for await (const chunk of node.interaction.read(request, undefined)) {
                 for await (const report of chunk) {
@@ -1716,6 +1724,12 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 }
 
 export namespace Endpoint {
+    /**
+     * Settings of the context {@link Endpoint.act} opens.  `abort` ends the peer interactions of the commands the actor
+     * invokes on a {@link ClientNode}, also while they wait for the peer.
+     */
+    export type ActOptions = Pick<InteractionSettings, "abort">;
+
     export type BehaviorOptions<
         T extends EndpointType = EndpointType.Empty,
         O extends EndpointOptions = EndpointOptions,
@@ -1792,8 +1806,11 @@ export namespace Endpoint {
 
     /**
      * Options for {@link Endpoint.get} and {@link Endpoint.getStateOf}.
+     *
+     * A read on a {@link ClientNode} does not run in the context of a surrounding {@link Endpoint.act}, so the abort of
+     * that context does not reach it; pass `abort` to end the read, also while it waits for a sleeping ICD peer.
      */
-    export interface GetOptions {
+    export interface GetOptions extends Pick<InteractionSettings, "abort"> {
         /**
          * When `false`, the underlying Matter Read is not fabric-filtered. Defaults to `true`.
          */

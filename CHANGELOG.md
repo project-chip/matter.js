@@ -39,6 +39,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: DNS-SD TXT keys are matched regardless of case, as RFC 6763 requires, so a device advertising `sii=` instead of `SII=` is no longer ignored
     - Fix: `WebSocketClient` no longer loses a message the server sends right after the connection opens, and `connect()` rejects when the socket closes before it opens
     - Fix: An observer failure that the observable's error handler takes no longer skips the remaining observers of an asynchronous emit
+    - Fix: `Cache`/`AsyncCache.get()` after `close()` throws `ClosedError` instead of caching a value nothing closes, so a late mDNS send no longer leaves a socket bound
 
 - @matter/model
     - Breaking: Provisional elements are always treated as optional
@@ -128,6 +129,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: `EndpointReadFailure` carries `received` for a status the device sent
     - Enhancement: A client command raises a `ReceivedStatusResponseError` for a status the device sent
     - Enhancement: `includeKnownVersions` on `ClientNode` subscriptions skips injecting cached data versions, also when a sustained subscription resubscribes
+    - Enhancement: `Endpoint.act()` accepts an `abort` signal that ends the client commands its actor invokes, and `Endpoint.getStateOf()` accepts one for its read
     - Adjustment: For a part of a server node, the `IdAssigned` and `NumberAssigned` lifecycle changes are emitted before `Installed`
     - Adjustment: The `Destroying` lifecycle change is emitted when `close()` or `delete()` is called, so a node emits it before it goes offline
     - Adjustment: `ChangeNotificationService.Change` has a new kind `"readable"`, emitted when an endpoint's state becomes readable; consumers that switch on kind must handle or ignore it
@@ -141,6 +143,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: A server rejects an obsolete (`Z`) element; a client sends and decodes it
     - Adjustment: A node's `ClusterProtocol.readState()` throws `ImplementationError` for a remote session without a transaction
     - Adjustment: A `ClientNode` takes a written attribute value locally only once the device accepts it
+    - Adjustment: `IcdClient` emits `registered`, `unregistered` and `keyRefreshed` after the change is stored; `unregister()` keeps the registration when a sleeping peer does not wake in time, `register()` joins a registration with the same options in flight, and `forget()` abandons work in flight
     - Adjustment: Subscription keep-alives request a status response, so a subscription on a session without MRP (TCP, BLE) ends when the controller answers with `INVALID_SUBSCRIPTION`
     - Fix: A write to an attribute that another exchange is still writing in chunks is answered BUSY, and a group or wildcard write skips that attribute, as in the CHIP SDK
     - Fix: A `ClientNode` no longer emits `$Changed` with an outdated value for an attribute a transaction did not touch, when a report changed it during the transaction
@@ -231,6 +234,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: `VendorIdVerification.verify()` returns `undefined` when the device rejects the signing request
     - Fix: A fabric change waits for the commissioning state instead of failing with `synchronous-transaction-conflict` when another transaction holds it
     - Fix: A peer that exposes only its root endpoint now becomes seeded
+    - Fix: The ICD client keeps the controller and the device on the same Check-In key when a key refresh overlaps a Check-In, loses its response, or spans a restart
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument

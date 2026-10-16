@@ -5,20 +5,9 @@
  */
 
 import type { ActionContext } from "#behavior/context/ActionContext.js";
-import { IcdPeerAsleepError } from "#behavior/system/icd/IcdPeerAsleepError.js";
+import { holdUntilIcdPeerAwake } from "#behavior/system/icd/holdUntilIcdPeerAwake.js";
 import type { ClientNode } from "#node/ClientNode.js";
-import {
-    Abort,
-    Diagnostic,
-    Duration,
-    ImplementationError,
-    Lifecycle,
-    Logger,
-    MatterAggregateError,
-    Millis,
-    ObserverGroup,
-    Time,
-} from "@matter/general";
+import { ImplementationError, Lifecycle, Logger, MatterAggregateError, ObserverGroup } from "@matter/general";
 import {
     ClientBdxRequest,
     ClientBdxResponse,
@@ -37,7 +26,6 @@ import {
     IcdPeerWakefulness,
     Interactable,
     OperationalAddressChangedError,
-    PeerAddress,
     PeerSet,
     PhysicalDeviceProperties,
     type Read,
@@ -96,7 +84,7 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
         }
 
         // Hold for a LIT peer to wake before the first yield* so we never transmit into a sleeping radio.
-        const hold = this.#holdUntilAwake(wakefulness, request.icdAwaitTimeout);
+        const hold = this.#holdUntilAwake(wakefulness, request, context);
         if (hold !== undefined) {
             await hold;
         }
@@ -203,7 +191,7 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
             request = { ...request, network: "icdLit" } as T; // a generic spread is not inferrable as T
         }
 
-        const hold = this.#holdUntilAwake(wakefulness, request.icdAwaitTimeout);
+        const hold = this.#holdUntilAwake(wakefulness, request, context);
         if (hold !== undefined) {
             await hold;
         }
@@ -228,7 +216,7 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
         }
 
         // Hold for a LIT peer to wake before the first yield* so we never transmit into a sleeping radio.
-        const hold = this.#holdUntilAwake(this.#icdWakefulness(), request.icdAwaitTimeout);
+        const hold = this.#holdUntilAwake(this.#icdWakefulness(), request, context);
         if (hold !== undefined) {
             await hold;
         }
@@ -340,42 +328,21 @@ export class ClientNodeInteraction implements Interactable<ActionContext> {
      *
      * Returns `undefined` for the common passthrough cases (non-LIT peer, unregistered peer, or an already-awake LIT
      * peer) so callers add no latency and no microtask boundary on the hot path — important for same-tick invoke
-     * batching.  Returns a promise only when the operation must actually park; it resolves when a Check-In or any
-     * other message from the peer re-arms the awake window and rejects with {@link IcdPeerAsleepError} if the timeout
-     * elapses first.
-     *
-     * requiresAwait is read live so a DSLS SIT⇄LIT flip is honored per interaction.
+     * batching.  An abort of the request or of the acting context ends the hold with the abort error.
      */
-    #holdUntilAwake(wakefulness: IcdPeerWakefulness | undefined, timeout?: Duration): Promise<void> | undefined {
-        if (wakefulness === undefined || !wakefulness.requiresAwait || wakefulness.awake.value === true) {
-            return undefined;
-        }
-
+    #holdUntilAwake(
+        wakefulness: IcdPeerWakefulness | undefined,
+        { icdAwaitTimeout, abort }: ClientRequest,
+        context?: ActionContext,
+    ): Promise<void> | undefined {
         const address = this.#node.state.commissioning.peerAddress;
         if (address === undefined) {
             return undefined;
         }
-
-        return this.#awaitWake(wakefulness, address, timeout ?? wakefulness.nextCheckInWithin);
-    }
-
-    async #awaitWake(wakefulness: IcdPeerWakefulness, address: PeerAddress, timeout: Duration) {
-        const nextCheckIn = wakefulness.nextCheckInDue;
-        logger.info(
-            "Peer is a LIT ICD in idle mode; holding interaction until it wakes",
-            Diagnostic.dict({
-                peer: PeerAddress(address),
-                timeout: Duration.format(timeout),
-                nextCheckInWithin:
-                    nextCheckIn === undefined ? undefined : Duration.format(Millis(nextCheckIn - Time.nowUs)),
-            }),
-        );
-        using abort = Abort.subtask(undefined, timeout);
-        await abort.race(wakefulness.awake);
-
-        if (abort.aborted) {
-            throw new IcdPeerAsleepError(address, timeout);
-        }
+        return holdUntilIcdPeerAwake(wakefulness, address, {
+            timeout: icdAwaitTimeout,
+            abort: [abort, context?.abort],
+        });
     }
 
     /**
