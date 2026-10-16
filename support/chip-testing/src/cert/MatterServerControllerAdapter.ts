@@ -218,6 +218,11 @@ export const MATTERJS_SERVER_CONTROLLER_PICS: PicsValues = {
     "S.C.C05.Tx": 1,
     "S.C.C06.Tx": 1,
     "S.C.C40.Tx": 1,
+
+    // The same Switch client declaration as the other controllers: the switch it observes is an action switch
+    "SWTCH.C": 1,
+    "SWTCH.C.F02": 0,
+    "SWTCH.C.F05": 1,
     "TBRM.C": 1,
     "TBRM.C.C00.Tx": 1,
     "TBRM.C.C01.Tx": 1,
