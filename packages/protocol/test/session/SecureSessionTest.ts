@@ -178,6 +178,66 @@ describe("SecureSession", () => {
             return { fabric, fabricManager };
         }
 
+        it("sends a cached group session's messages as the node ID of the current fabric object", async () => {
+            const { fabric, fabricManager } = await groupFabric();
+            const sessionStorage = new MemoryStorageDriver();
+            sessionStorage.initialize();
+            const sessions = new SessionManager({
+                fabrics: fabricManager,
+                storage: new StorageContext(sessionStorage, ["sessions"]),
+            });
+            await sessions.construction.ready;
+            const current = fabric.groups.keySets.currentKeyForId(1);
+            const groupId = 2;
+            const session = new GroupSession({
+                manager: sessions,
+                id: current.sessionId ?? 0,
+                fabric,
+                keySetId: 1,
+                operationalGroupKey: current.key,
+                operationalPrivacyKey: current.privacyKey,
+                peerNodeId: NodeId(0xffffffffffff0000n | BigInt(groupId)),
+                multicastAddress: fabric.groups.multicastAddressFor(GroupId(groupId)),
+                messageCounter: new MessageCounter(fabric.crypto),
+            });
+
+            // As UpdateNOC with a new node ID does
+            await fabricManager.replaceFabric(new Fabric(crypto, { ...fabric.config, nodeId: NodeId(2) }));
+
+            expect(session.nodeId).equals(NodeId(2));
+            const packet = session.encode({
+                packetHeader: {
+                    sessionId: current.sessionId ?? 0,
+                    sessionType: SessionType.Group,
+                    messageId: 0x12345679,
+                    destGroupId: groupId,
+                    sourceNodeId: NodeId(2),
+                    hasPrivacyEnhancements: true,
+                    isControlMessage: false,
+                    hasMessageExtensions: false,
+                },
+                payloadHeader: {
+                    isInitiatorMessage: true,
+                    requiresAck: false,
+                    messageType: 0x05,
+                    exchangeId: 0x1234,
+                    protocolId: 0x0001,
+                    ackedMessageId: undefined,
+                    hasSecuredExtension: false,
+                },
+                payload: b$`00112233`,
+            });
+            const wire = MessageCodec.encodePacket(packet);
+            const decodedPacket = MessageCodec.decodePacket(wire);
+            const aad = Bytes.of(wire).slice(0, wire.byteLength - decodedPacket.applicationPayload.byteLength);
+
+            const result = GroupSession.decode(fabricManager, decodedPacket, aad);
+
+            expect(result.sourceNodeId).equals(NodeId(2));
+            expect(Bytes.toHex(result.message.payload)).equals("00112233");
+            await sessions.close();
+        });
+
         it("round-trips a group message with privacy enabled", async () => {
             const { fabric, fabricManager } = await groupFabric();
             const current = fabric.groups.keySets.currentKeyForId(1);
