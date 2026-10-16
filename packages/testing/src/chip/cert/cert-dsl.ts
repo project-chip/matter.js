@@ -176,10 +176,10 @@ export interface CertStepOptions {
      * DUT's session to the TH. A reason skips the step with it, as a plan condition (`RunRecord.planConditionSkips`);
      * `undefined` lets the step run.
      *
-     * The engine calls it inside the step, after its `pics` gate and before the controller's capability, out-of-scope
-     * and long-running gates, so a plan that does not apply the step here outranks what the controller lacks. It may read through the controllers
-     * and the logs, but it may not record a check or make a controller call that may change the device: either is a
-     * framework error. A step that learns the same from its own first read throws `CertStepNotApplicableError` instead.
+     * The engine calls it inside the step, after its `pics`, controller capability, out-of-scope and long-running
+     * gates, so a step the controller cannot run skips as such without the decision's reads. It may read through the
+     * controllers and the logs, but it may not record a check or make a controller call that may change the device:
+     * either is a framework error. A step that learns the same from its own first read throws `CertStepNotApplicableError` instead.
      */
     notApplicableAtRun?: (cx: CertStepContext) => Promise<string | undefined>;
 

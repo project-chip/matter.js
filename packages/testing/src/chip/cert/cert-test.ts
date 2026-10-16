@@ -287,38 +287,6 @@ export class CertTest extends BaseTest {
                         recorder.beginStep(stepDef);
                     };
 
-                    // Before the controller gates: a plan that does not apply the step here outranks what the
-                    // controller lacks, as the declared `notApplicable` does.
-                    if (stepDef.notApplicableAtRun !== undefined) {
-                        open();
-                        const reason = await raceAgainstDeviceExit(
-                            stepDef.notApplicableAtRun(cx),
-                            deviceExitWatch.exit,
-                            tc,
-                            stepDef.number,
-                        );
-                        const misuse =
-                            observedThisStep > 0 || actions.count > 0
-                                ? `recorded ${observedThisStep} check(s) and made ${actions.count} controller ` +
-                                  "call(s) that may change the device while deciding whether it applies; it may only read"
-                                : reason?.trim() === ""
-                                  ? 'decided its "notApplicableAtRun" option with a blank reason'
-                                  : undefined;
-                        if (misuse !== undefined) {
-                            aborted = true;
-                            failed = true;
-                            frameworkError = true;
-                            failure = new CertFrameworkError(`Cert test ${tc} step ${stepDef.number} ${misuse}`);
-                            report(stepDef, "error");
-                            continue;
-                        }
-                        if (reason !== undefined) {
-                            planConditionSkips++;
-                            report(stepDef, "skipped", reason);
-                            continue;
-                        }
-                    }
-
                     const capabilityGap =
                         stepDef.controllerCapabilities === undefined
                             ? undefined
@@ -351,6 +319,38 @@ export class CertTest extends BaseTest {
                         longRunningSkips++;
                         report(stepDef, "skipped", `${longRunning}; set MATTER_CERT_LONG_RUNNING=1 to run it`);
                         continue;
+                    }
+
+                    // After the static gates: the decision reads the DUT and the TH log, and a read that fails must
+                    // not turn a step this controller cannot run into an error.
+                    if (stepDef.notApplicableAtRun !== undefined) {
+                        open();
+                        const reason = await raceAgainstDeviceExit(
+                            stepDef.notApplicableAtRun(cx),
+                            deviceExitWatch.exit,
+                            tc,
+                            stepDef.number,
+                        );
+                        const misuse =
+                            observedThisStep > 0 || actions.count > 0
+                                ? `recorded ${observedThisStep} check(s) and made ${actions.count} controller ` +
+                                  "call(s) that may change the device while deciding whether it applies; it may only read"
+                                : reason?.trim() === ""
+                                  ? 'decided its "notApplicableAtRun" option with a blank reason'
+                                  : undefined;
+                        if (misuse !== undefined) {
+                            aborted = true;
+                            failed = true;
+                            frameworkError = true;
+                            failure = new CertFrameworkError(`Cert test ${tc} step ${stepDef.number} ${misuse}`);
+                            report(stepDef, "error");
+                            continue;
+                        }
+                        if (reason !== undefined) {
+                            planConditionSkips++;
+                            report(stepDef, "skipped", reason);
+                            continue;
+                        }
                     }
 
                     open();

@@ -4664,11 +4664,13 @@ describe("a step that decides at run time whether the plan applies it", () => {
     async function runProbedStep({
         probe,
         capabilities,
+        longRunning,
         body = passes,
         node = fakeCertNode({ readAttribute: async () => "label", writeAttribute: async () => {} }),
     }: {
         probe: (cx: CertStepContext) => Promise<string | undefined>;
         capabilities?: ControllerCapability[];
+        longRunning?: string;
         body?: (cx: CertStepContext) => Promise<void>;
         node?: CertNodeApi;
     }) {
@@ -4688,6 +4690,7 @@ describe("a step that decides at run time whether the plan applies it", () => {
                     number: 1,
                     text: "Step whose plan may not apply",
                     controllerCapabilities: capabilities,
+                    longRunning,
                     notApplicableAtRun: probe,
                     run: async cx => {
                         ran = true;
@@ -4736,15 +4739,12 @@ describe("a step that decides at run time whether the plan applies it", () => {
         return { ran, ended, opened, planConditionCounts, gapCounts, thrown };
     }
 
-    it("skips the step with the reason, as a plan condition, ahead of a capability the controller lacks", async () => {
-        env.MATTER_CERT_CONTROLLER = "matterjs-server";
-
+    it("skips the step with the reason, as a plan condition, after a read", async () => {
         const { ran, ended, opened, planConditionCounts, gapCounts, thrown } = await runProbedStep({
             probe: async cx => {
                 await cx.controllers.dut.node("ref").readAttribute({ endpoint: 0, cluster: 0x28, attribute: 5 });
                 return TCP_REASON;
             },
-            capabilities: ["chunked-write"],
         });
 
         expect(thrown).undefined;
@@ -4756,6 +4756,63 @@ describe("a step that decides at run time whether the plan applies it", () => {
         expect(planConditionCounts).deep.equal([1]);
         expect(gapCounts).deep.equal([]);
         expect(opened).deep.equal(["Test Step 1: Step whose plan may not apply", "Test Step 2: Step after it"]);
+    });
+
+    it("skips a step the controller lacks a capability for as a controller gap, without deciding", async () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+        let decided = false;
+
+        const { ran, ended, opened, planConditionCounts, gapCounts, thrown } = await runProbedStep({
+            probe: async () => {
+                decided = true;
+                throw new CertCheckFailedError("the read failed");
+            },
+            capabilities: ["chunked-write"],
+        });
+
+        expect(decided).equal(false);
+        expect(thrown).instanceOf(CertControllerGapError);
+        expect(ran).equal(false);
+        expect(ended).deep.equal([
+            {
+                number: 1,
+                verdict: "skipped",
+                skipReason: 'controller "matterjs-server" lacks chunked-write: not yet',
+            },
+            { number: 2, verdict: "pass", skipReason: undefined },
+        ]);
+        expect(planConditionCounts).deep.equal([]);
+        expect(gapCounts).deep.equal([1]);
+        expect(opened).deep.equal(["Test Step 2: Step after it"]);
+    });
+
+    it("skips a long-running step that is not enabled without deciding", async () => {
+        const previous = env.MATTER_CERT_LONG_RUNNING;
+        delete env.MATTER_CERT_LONG_RUNNING;
+        let decided = false;
+        try {
+            const { ran, ended, planConditionCounts, thrown } = await runProbedStep({
+                probe: async () => {
+                    decided = true;
+                    return TCP_REASON;
+                },
+                longRunning: "the TH waits out three minutes",
+            });
+
+            expect(decided).equal(false);
+            expect(thrown).undefined;
+            expect(ran).equal(false);
+            expect(ended[0]).deep.equal({
+                number: 1,
+                verdict: "skipped",
+                skipReason: "the TH waits out three minutes; set MATTER_CERT_LONG_RUNNING=1 to run it",
+            });
+            expect(planConditionCounts).deep.equal([]);
+        } finally {
+            if (previous !== undefined) {
+                env.MATTER_CERT_LONG_RUNNING = previous;
+            }
+        }
     });
 
     it("leaves the step to the capability gate where the plan applies", async () => {

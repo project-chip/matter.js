@@ -925,9 +925,9 @@ run time, from the TH's log of a request on the DUT's session (`chunkingNotAppli
   only about the chunks and their acks, and step 21 makes the same wildcard read with the same >100-attribute check.
 - Step 13 cannot learn it from its own write, because the write changes the TH, and its `chunked-write` gate runs
   before the body. It uses `notApplicableAtRun`, which the engine calls inside the step after the `pics` gate and
-  before the controller gates: `chunkedWriteNotApplicable` reads the attribute the step writes and checks that read's
-  transport. Over UDP, or where the TH's log does not show that read, the step goes on to the gate and writes (only
-  chip-tool lacks `chunked-write`). That the write uses the read's session is inferred, not verified;
+  the controller gates, so on chip-tool, which lacks `chunked-write`, the step skips as a controller gap without the
+  probe: `chunkedWriteNotApplicable` reads the attribute the step writes and checks that read's transport. Over UDP, or
+  where the TH's log does not show that read, the step writes. That the write uses the read's session is inferred, not verified;
   `expectChunkedWrite` throws `CertStepNotApplicableError` when the write arrived over TCP anyway, which the engine
   turns into a run failure because the step already wrote.
 
