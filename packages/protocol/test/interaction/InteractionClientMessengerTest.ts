@@ -390,13 +390,13 @@ describe("InteractionClientMessenger", () => {
             const exchange = {
                 maxPayloadSize: 1200,
                 send: async (messageType: number, payload: Bytes, options?: ExchangeSendOptions) => {
-                    if (options?.abort?.aborted && !options.abortOnlyWaiting) {
+                    if (options?.abort?.aborted) {
                         throw new AbortedError();
                     }
                     expect(messageType).equals(MessageType.StatusResponse);
                     statuses.push(TlvStatusResponse.decode(payload).status);
                     sendOptions.push(options);
-                    const abort = options?.abort;
+                    const abort = options?.ackWaitAbort;
                     if (!acks && abort !== undefined && !abort.aborted) {
                         await new Promise(resolve => abort.addEventListener("abort", resolve, { once: true }));
                     }
@@ -450,7 +450,8 @@ describe("InteractionClientMessenger", () => {
             await messenger.abandonSubscription({ awaitReport: true, abort: abort.signal });
 
             expect(statuses).deep.equals([Status.InvalidSubscription]);
-            expect(sendOptions[0]?.abortOnlyWaiting).true;
+            expect(sendOptions[0]?.abort).undefined;
+            expect(sendOptions[0]?.ackWaitAbort).equals(abort.signal);
         });
 
         it("stops waiting for the ack of its answer on abort", async () => {
@@ -462,7 +463,7 @@ describe("InteractionClientMessenger", () => {
             const abandoning = messenger.abandonSubscription({ awaitReport: false, abort: abort.signal });
             await Promise.resolve();
             expect(statuses).deep.equals([Status.InvalidSubscription]);
-            expect(sendOptions[0]?.abort).equals(abort.signal);
+            expect(sendOptions[0]?.ackWaitAbort).equals(abort.signal);
             abort.abort();
             await abandoning;
         });

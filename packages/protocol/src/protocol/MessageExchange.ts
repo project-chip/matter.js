@@ -115,11 +115,19 @@ export interface ExchangeSendOptions {
     /** Additional context information for logging to be included at the beginning of the Message log. */
     logContext?: ExchangeLogContext;
 
-    /** Aborts sending; does not throw */
+    /**
+     * Aborts sending.  Before or during the first transmission the send rejects with {@link AbortedError} (cause: the
+     * reason).  While waiting for the ack it resolves if the reason is an {@link AbortedError}, otherwise it rejects with
+     * the reason.
+     */
     abort?: AbortSignal;
 
-    /** Lets {@link abort} end only the waits for the ack and for retransmissions, never the first transmission. */
-    abortOnlyWaiting?: boolean;
+    /**
+     * Ends only the waits for the ack and for retransmissions; the message is still transmitted once, even when this
+     * fired before.  The send then resolves.  Either this or {@link abort} ends the waits; only {@link abort} stops the
+     * transmission.
+     */
+    ackWaitAbort?: AbortSignal;
 
     /** Number of MRP retries to attempt (default: MRP.MAX_TRANSMISSIONS) */
     maxRetransmissions?: number;
@@ -135,7 +143,7 @@ export interface ExchangeSendOptions {
 }
 
 export interface ExchangeReceiveOptions {
-    /** Aborts sending; does not throw */
+    /** Aborts receiving; rejects with {@link AbortedError} (cause: the reason) unless a message is already queued. */
     abort?: AbortSignal;
 
     timeout?: Duration;
@@ -644,13 +652,13 @@ export class MessageExchange {
         const {
             expectAckOnly = false,
             disableMrpLogic,
-            abortOnlyWaiting,
+            ackWaitAbort,
             expectedProcessingTime = MRP.DEFAULT_EXPECTED_PROCESSING_TIME,
             logContext = {},
         } = this.#sendOptions;
 
         using abort = new Abort(this.#sendOptions);
-        const transmitting = <T>(promise: Promise<T>) => (abortOnlyWaiting ? promise : abort.attempt(promise));
+        using waiting = new Abort({ abort: [abort, ackWaitAbort] });
 
         const isStandaloneAck = standaloneAckMessageId !== undefined;
         if (standaloneAckMessageId !== undefined) {
@@ -694,7 +702,7 @@ export class MessageExchange {
         if (this.session.type === SessionType.Unicast) {
             const messageId = isStandaloneAck
                 ? await this.session.getIncrementedMessageCounter() // Standalone acks always need to be sendable
-                : await transmitting(this.session.getIncrementedMessageCounter());
+                : await abort.attempt(this.session.getIncrementedMessageCounter());
             if (messageId === undefined) {
                 return;
             }
@@ -721,7 +729,7 @@ export class MessageExchange {
             if (destGroupId === 0) {
                 throw new InternalError(`Invalid GroupId extracted from NodeId ${peerNodeId}`);
             }
-            const messageId = await transmitting(this.session.getIncrementedMessageCounter());
+            const messageId = await abort.attempt(this.session.getIncrementedMessageCounter());
             if (messageId === undefined) {
                 return;
             }
@@ -775,11 +783,11 @@ export class MessageExchange {
         if (isStandaloneAck) {
             await this.channel.send(message, { exchange: this, addressOverride: this.#addressOverride });
         } else {
-            await transmitting(
+            await abort.attempt(
                 this.channel.send(message, { exchange: this, logContext, addressOverride: this.#addressOverride }),
             );
         }
-        if (abort.aborted) {
+        if (waiting.aborted) {
             return;
         }
 
@@ -795,15 +803,15 @@ export class MessageExchange {
             // Use race (not attempt) so that on abort we fall through to the cleanup block below
             // instead of throwing immediately — we need to stop the retransmission timer first.
             using _waiting = sending.join("waiting for ack");
-            const responseMessage = await abort.race(ackPromise);
-            if (abort.aborted) {
+            const responseMessage = await waiting.race(ackPromise);
+            if (waiting.aborted) {
                 // Aborted — stop the retransmission timer immediately so we don't keep sending
                 // packets to an unreachable peer while the exchange is being torn down.
                 // Leave #sentMessageToAck and the ack callbacks intact so that exchange.close()
                 // still sees the pending ack and can handle cleanup properly.
                 this.#retransmissionTimer?.stop();
 
-                if (!causedBy(abort.reason, AbortedError)) {
+                if (abort.aborted && !causedBy(abort.reason, AbortedError)) {
                     throw abort.reason;
                 }
                 return;

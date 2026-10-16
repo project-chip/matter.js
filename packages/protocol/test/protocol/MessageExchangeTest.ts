@@ -865,7 +865,7 @@ describe("MessageExchange", () => {
         });
     });
 
-    describe("abortOnlyWaiting", () => {
+    describe("ackWaitAbort", () => {
         function mrpSession() {
             const channel = new ProtocolMocks.NetworkChannel({ index: 1 });
             channel.isReliable = false;
@@ -883,7 +883,7 @@ describe("MessageExchange", () => {
             const abort = new AbortController();
             abort.abort();
 
-            await exchange.send(1, Bytes.empty, { abort: abort.signal, abortOnlyWaiting: true });
+            await exchange.send(1, Bytes.empty, { ackWaitAbort: abort.signal });
 
             expect(sent.length).equals(1);
         });
@@ -898,7 +898,27 @@ describe("MessageExchange", () => {
                 return allocate();
             };
 
-            await exchange.send(1, Bytes.empty, { abort: abort.signal, abortOnlyWaiting: true });
+            await exchange.send(1, Bytes.empty, { ackWaitAbort: abort.signal });
+
+            expect(sent.length).equals(1);
+        });
+
+        it("ends the wait for the ack without retransmitting and resolves", async () => {
+            const { session, sent } = mrpSession();
+            const { exchange } = createExchange(session);
+            const abort = new AbortController();
+
+            const sending = exchange.send(1, Bytes.empty, { ackWaitAbort: abort.signal });
+            for (let i = 0; i < 10 && !sent.length; i++) {
+                await MockTime.yield3();
+            }
+            // Let the send reach the wait for the ack
+            for (let i = 0; i < 5; i++) {
+                await MockTime.yield3();
+            }
+            abort.abort();
+            await sending;
+            await MockTime.advance(Seconds(30));
 
             expect(sent.length).equals(1);
         });

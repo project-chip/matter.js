@@ -287,14 +287,17 @@ describe("ClientInteraction subscribe", () => {
         expect(statuses.map(({ payload }) => TlvStatusResponse.decode(payload).status)).deep.equals([
             Status.InvalidSubscription,
         ]);
-        expect(statuses[0].options?.abortOnlyWaiting).true;
+        expect(statuses[0].options?.abort).undefined;
+        expect(statuses[0].options?.ackWaitAbort?.aborted).true;
     });
 
     it("waits on close for a BDX exchange still being created", async () => {
         const provider = new ScriptedPeerExchangeProvider();
+        const creating = createPromise<void>();
         const created = createPromise<void>();
         const initiateExchange = provider.initiateExchange.bind(provider);
         provider.initiateExchange = async () => {
+            creating.resolver();
             await created.promise;
             return initiateExchange();
         };
@@ -304,9 +307,10 @@ describe("ClientInteraction subscribe", () => {
             () => undefined,
             (error: unknown) => error,
         );
+        await creating.promise;
         let closed = false;
         const closing = client.close().then(() => (closed = true));
-        await expect(Promise.race([closing, Promise.resolve("pending")])).eventually.equals("pending");
+        await new Promise(resolve => setTimeout(resolve, 0));
         expect(closed).false;
 
         created.resolver();
