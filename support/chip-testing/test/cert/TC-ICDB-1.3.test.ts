@@ -150,9 +150,10 @@ certTest("TC-ICDB-1.3", {
     controllerCapabilities: ["icd-client"],
     appArgs: { th: TH_ARGS },
 
-    // A TH that persists subscriptions sends no Check-In to a client with a persisted one, and the DUT holds a
-    // subscription before it registers. Only this project's own image carries the chip variant without persistence,
-    // and chip-docker runs no variant
+    // The in-process DUT can drop the subscription it recreates after registering while the TH's priming report is
+    // still unanswered. A TH that persists subscriptions keeps the entry when that report times out and sends no
+    // Check-In, so the case runs the variant without persistence, which only this project's image carries.
+    // chip-docker runs no variant
     appVariant: { matterjs: "nopersist" },
     chipBinsSources: ["matterjs"],
     flavors: ["chip-local", "matterjs"],
@@ -237,9 +238,8 @@ certTest("TC-ICDB-1.3", {
                 async () => {
                     await icd.stopSubscription();
 
-                    // A TH keeps a subscription the DUT dropped after its priming report alive with empty reports,
-                    // which ask for no answer. A report carrying data does, and the DUT answers it with
-                    // INVALID_SUBSCRIPTION, which ends the subscription
+                    // Makes the TH send a report at once, which the DUT answers with INVALID_SUBSCRIPTION. That ends
+                    // the subscription, and a CHIP TH also deletes its persisted entry, which would block Check-Ins
                     await cx.controllers.th2
                         .node(commissioned.require("th2"))
                         .writeAttribute(NODE_LABEL, "TC-ICDB-1.3");

@@ -82,10 +82,9 @@ certTest("TC-ICDM-6.1", {
     app: "lit-icd",
     controllerCapabilities: ["icd-client"],
 
-    // The variant TC-ICDB-1.3 needs is the only lit-icd binary this project's image carries; this case does not
-    // depend on how it handles subscriptions
+    // This project's image carries only the variant TC-ICDB-1.3 needs, and chip-cert-bins only the stock app. The
+    // case uses no Check-In, so how the TH persists subscriptions does not matter to it
     appVariant: { matterjs: "nopersist" },
-    chipBinsSources: ["matterjs"],
     flavors: ["chip-local", "matterjs"],
 })
     .step(
