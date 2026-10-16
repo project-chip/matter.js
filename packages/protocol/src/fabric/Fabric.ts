@@ -518,7 +518,6 @@ export class FabricBuilder {
     #vidVerificationStatement?: Bytes;
     #vvsc?: Bytes;
     #fabricIndex?: FabricIndex;
-    #expectedFabricId?: FabricId;
     #label = "";
 
     constructor(crypto: Crypto, key: PrivateKey) {
@@ -546,8 +545,6 @@ export class FabricBuilder {
         const root = Rcac.fromTlv(rootCert);
         await root.verify(this.#crypto);
         this.#rootCert = rootCert;
-        // A new root means a new fabric, so a preceding update preparation no longer constrains the fabric ID
-        this.#expectedFabricId = undefined;
         return this;
     }
 
@@ -556,6 +553,40 @@ export class FabricBuilder {
     }
 
     async setOperationalCert(operationalCert: Bytes, intermediateCACert?: Bytes) {
+        if (this.#rootCert === undefined) {
+            throw new MatterFlowError("Root certificate needs to be set first");
+        }
+        const verified = await this.#verifyOperationalCert(this.#rootCert, operationalCert, intermediateCACert);
+        this.#installOperationalCert(operationalCert, verified);
+        return this;
+    }
+
+    /**
+     * Take over the data of {@link fabric} and install a new NOC for it, as UpdateNOC and NOC rotation do.  The NOC
+     * must chain to the fabric's root and carry its fabric ID.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 11.18.6.9.1
+     */
+    async updateOperationalCert(fabric: Fabric, operationalCert: Bytes, intermediateCACert?: Bytes) {
+        const verified = await this.#verifyOperationalCert(fabric.rootCert, operationalCert, intermediateCACert);
+        if (verified.fabricId !== fabric.fabricId) {
+            throw new CertificateError(
+                `Operational certificate is for fabric ID ${verified.fabricId}, but fabric ${fabric.fabricIndex} has fabric ID ${fabric.fabricId}`,
+            );
+        }
+
+        this.#rootVendorId = fabric.rootVendorId;
+        this.#rootNodeId = fabric.rootNodeId;
+        this.#identityProtectionKey = fabric.identityProtectionKey;
+        this.#rootCert = fabric.rootCert;
+        this.#vidVerificationStatement = fabric.vidVerificationStatement;
+        this.#vvsc = fabric.vvsc;
+        this.#label = fabric.label;
+        this.#installOperationalCert(operationalCert, verified);
+        return this;
+    }
+
+    async #verifyOperationalCert(rootCertBytes: Bytes, operationalCert: Bytes, intermediateCACert?: Bytes) {
         if (intermediateCACert !== undefined && intermediateCACert.byteLength === 0) {
             intermediateCACert = undefined;
         }
@@ -575,11 +606,7 @@ export class FabricBuilder {
             throw new PublicKeyError("Operational certificate does not match public key");
         }
 
-        if (this.#rootCert === undefined) {
-            throw new MatterFlowError("Root certificate needs to be set first");
-        }
-
-        const rootCert = Rcac.fromTlv(this.#rootCert);
+        const rootCert = Rcac.fromTlv(rootCertBytes);
         const nocCert = Noc.fromTlv(operationalCert);
         const icaCert = intermediateCACert !== undefined ? Icac.fromTlv(intermediateCACert) : undefined;
         if (icaCert !== undefined) {
@@ -587,18 +614,17 @@ export class FabricBuilder {
         }
         await nocCert.verify(this.#crypto, rootCert, icaCert);
 
-        if (this.#expectedFabricId !== undefined && FabricId(fabricId) !== this.#expectedFabricId) {
-            throw new CertificateError(
-                `Operational certificate is for fabric ID ${fabricId}, but the updated fabric has fabric ID ${this.#expectedFabricId}`,
-            );
-        }
+        return { fabricId: FabricId(fabricId), nodeId, intermediateCACert };
+    }
 
+    #installOperationalCert(
+        operationalCert: Bytes,
+        verified: { fabricId: FabricId; nodeId: NodeId; intermediateCACert?: Bytes },
+    ) {
         this.#operationalCert = operationalCert;
-        this.#intermediateCACert = intermediateCACert;
-        this.#fabricId = FabricId(fabricId);
-        this.#nodeId = nodeId;
-
-        return this;
+        this.#intermediateCACert = verified.intermediateCACert;
+        this.#fabricId = verified.fabricId;
+        this.#nodeId = verified.nodeId;
     }
 
     setRootVendorId(rootVendorId: VendorId) {
@@ -622,23 +648,6 @@ export class FabricBuilder {
         }
         this.#label = label;
         return this;
-    }
-
-    /**
-     * Prepare an update of the operational credentials of {@link fabric}.  A following
-     * {@link setOperationalCert} accepts only a NOC for the same fabric ID.
-     *
-     * @see {@link MatterSpecification.v161.Core} § 11.18.6.9.1
-     */
-    initializeFromFabricForUpdate(fabric: Fabric) {
-        this.#expectedFabricId = fabric.fabricId;
-        this.#rootVendorId = fabric.rootVendorId;
-        this.#rootNodeId = fabric.rootNodeId;
-        this.#identityProtectionKey = fabric.identityProtectionKey;
-        this.#rootCert = fabric.rootCert;
-        this.#vidVerificationStatement = fabric.vidVerificationStatement;
-        this.#vvsc = fabric.vvsc;
-        this.#label = fabric.label;
     }
 
     get globalId() {
