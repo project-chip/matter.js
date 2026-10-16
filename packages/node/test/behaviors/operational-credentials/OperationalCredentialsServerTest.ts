@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { OperationalCredentialsClient } from "#behaviors/operational-credentials";
+import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
+import { GeneralCommissioningClient } from "#behaviors/general-commissioning";
+import { OperationalCredentialsClient, OperationalCredentialsServer } from "#behaviors/operational-credentials";
 import { ClientNode } from "#node/ClientNode.js";
-import { Bytes, Crypto } from "@matter/general";
-import { FAILSAFE_LENGTH_S, MockServerNode, MockSite } from "@matter/node/testing";
+import { Bytes, Crypto, LogLevel } from "@matter/general";
+import { captureLog, FAILSAFE_LENGTH_S, MockServerNode, MockSite } from "@matter/node/testing";
 import { Certificate, TestFabric, TlvCertSigningRequest } from "@matter/protocol";
 import { FabricId, FabricIndex, NodeId, Status, StatusResponseError, SubjectId, VendorId } from "@matter/types";
 import { OperationalCredentials } from "@matter/types/clusters/operational-credentials";
@@ -130,6 +132,47 @@ describe("OperationalCredentialsServer", () => {
             );
 
             expect(status).equals(Status.ConstraintError);
+        });
+    });
+
+    describe("while a fail-safe without AddNOC or UpdateNOC is armed", () => {
+        function commandsOf(peer: ClientNode) {
+            return peer.commandsOf(OperationalCredentialsClient);
+        }
+
+        async function changeFabric(change: (commands: ReturnType<typeof commandsOf>) => Promise<unknown>) {
+            await using site = new MockSite();
+            const { controller, device } = await site.addCommissionedPair();
+            const peer = controller.peers.get("peer1")!;
+            const commands = commandsOf(peer);
+            await peer
+                .commandsOf(GeneralCommissioningClient)
+                .armFailSafe({ expiryLengthSeconds: FAILSAFE_LENGTH_S, breadcrumb: 1 });
+
+            const changes = new Array<string>();
+            device.events.commissioning.fabricsChanged.on((index, action) => void changes.push(`${index} ${action}`));
+            using log = captureLog(LogLevel.ERROR);
+
+            await change(commands);
+
+            expect(log.messages).deep.equals([]);
+            expect(changes).deep.equals([`${FabricIndex(1)} updated`]);
+            expect(device.stateOf(CommissioningServer).commissioned).true;
+            return device.stateOf(OperationalCredentialsServer).fabrics[0];
+        }
+
+        it("treats UpdateFabricLabel as a final fabric change", async () => {
+            const fabric = await changeFabric(commands => commands.updateFabricLabel({ label: "renamed" }));
+
+            expect(fabric.label).equals("renamed");
+        });
+
+        it("treats SetVIDVerificationStatement as a final fabric change", async () => {
+            const fabric = await changeFabric(commands =>
+                commands.setVidVerificationStatement({ vendorId: VendorId(0xfff2) }),
+            );
+
+            expect(fabric.vendorId).equals(VendorId(0xfff2));
         });
     });
 });
