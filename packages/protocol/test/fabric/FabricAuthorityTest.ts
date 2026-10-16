@@ -6,10 +6,12 @@
 
 import { CertificateAuthority } from "#certificate/CertificateAuthority.js";
 import { Noc } from "#certificate/kinds/Noc.js";
+import { FabricBuilder } from "#fabric/Fabric.js";
 import { FabricAuthority } from "#fabric/FabricAuthority.js";
 import { FabricManager } from "#fabric/FabricManager.js";
 import {
     Bytes,
+    CertificateError,
     createPromise,
     ImplementationError,
     MemoryStorageDriver,
@@ -18,7 +20,8 @@ import {
     StorageManager,
     SupportedStorageTypes,
 } from "@matter/general";
-import { CaseAuthenticatedTag, FabricId, NodeId, VendorId } from "@matter/types";
+import { CaseAuthenticatedTag, FabricId, GroupId, NodeId, VendorId } from "@matter/types";
+import { GroupKeyManagement } from "@matter/types/clusters/group-key-management";
 
 const crypto = new StandardCrypto();
 
@@ -157,6 +160,48 @@ describe("FabricAuthority", () => {
 
             // Verify root node ID is preserved
             expect(rotatedFabric.rootNodeId).to.equal(initialFabric.rootNodeId);
+        });
+
+        it("rotated fabric sends to a group at once with the keys of the previous fabric", async () => {
+            const config = { adminFabricLabel: "test-fabric", adminFabricId: FabricId(1n) };
+            const initialFabric = await authority.createFabric(config);
+            await initialFabric.groups.setFromGroupKeySet({
+                groupKeySetId: 0x1a1,
+                groupKeySecurityPolicy: GroupKeyManagement.GroupKeySecurityPolicy.TrustFirst,
+                epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+                epochStartTime0: 1n,
+                epochKey1: null,
+                epochStartTime1: null,
+                epochKey2: null,
+                epochStartTime2: null,
+            });
+            initialFabric.groups.groupKeyIdMap.set(GroupId(7), 0x1a1);
+            const { key, sessionId } = initialFabric.groups.currentKeyForGroup(GroupId(7));
+
+            const rotatedFabric = await authority.defaultFabric(config, true);
+
+            expect(rotatedFabric).not.equals(initialFabric);
+            const current = rotatedFabric.groups.currentKeyForGroup(GroupId(7));
+            expect(Bytes.areEqual(current.key, key)).true;
+            expect(current.sessionId).equals(sessionId);
+        });
+
+        it("rotated fabric keeps receiving Check-Ins of the ICD peers of the previous fabric", async () => {
+            const config = { adminFabricLabel: "test-fabric", adminFabricId: FabricId(1n) };
+            const initialFabric = await authority.createFabric(config);
+            const peer = {
+                peerNodeId: NodeId(0x55n),
+                key: Bytes.fromHex("00112233445566778899aabbccddeeff"),
+                counterStart: 0,
+                lastOffset: 0,
+            };
+            initialFabric.icd.addPeer(peer, () => {});
+
+            const rotatedFabric = await authority.defaultFabric(config, true);
+
+            expect(rotatedFabric).not.equals(initialFabric);
+            expect(rotatedFabric.icdActive).true;
+            expect(rotatedFabric.icd.peerFor(peer.peerNodeId)?.peerNodeId).equals(peer.peerNodeId);
         });
 
         it("rotation occurs exactly once per runtime per fabric", async () => {
@@ -402,6 +447,24 @@ describe("FabricAuthority", () => {
 
             const createdFabric = await authority.createFabric(config);
             expect(emittedFabric).to.equal(createdFabric);
+        });
+    });
+
+    describe("FabricBuilder.updateOperationalCert", () => {
+        it("refuses a NOC for another fabric ID and takes over nothing", async () => {
+            const fabric = await authority.createFabric({
+                adminFabricLabel: "test-fabric",
+                adminFabricId: FabricId(1n),
+            });
+            const builder = await FabricBuilder.create(crypto);
+            const noc = await ca.generateNoc(builder.publicKey, FabricId(2n), fabric.nodeId);
+
+            await expect(builder.updateOperationalCert(fabric, noc, fabric.intermediateCACert)).rejectedWith(
+                CertificateError,
+                /fabric ID 2/,
+            );
+            expect(builder.rootCert).undefined;
+            expect(builder.fabricId).undefined;
         });
     });
 });

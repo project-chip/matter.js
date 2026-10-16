@@ -115,19 +115,13 @@ export class CommissioningServer extends Behavior {
      * {@link CommissioningServer.Events.fabricsChanged}.
      */
     async handleFabricChange(fabricIndex: FabricIndex, fabricAction: CommissioningServer.FabricAction) {
-        // An added or updated fabric counts only once the fail-safe ends, because the fail-safe may still roll it back.
-        // A deletion is final, whoever holds the fail-safe
+        // The fail-safe rolls back only the fabric its AddNOC or UpdateNOC changed, so only a change of that fabric waits
+        // for the fail-safe to end.  A deletion is final, whoever holds the fail-safe
         if (fabricAction !== "deleted" && this.env.has(FailsafeContext)) {
             const failsafe = this.env.get(FailsafeContext);
-            if (failsafe.construction.status !== Lifecycle.Status.Destroyed) {
-                if (failsafe.fabricIndex === fabricIndex) {
-                    this.#monitorFailsafe(failsafe);
-                    return;
-                } else {
-                    throw new MatterFlowError(
-                        `Failsafe owns a different fabricIndex than ${failsafe.forUpdateNoc ? "updated" : "added"}: ${failsafe.fabricIndex} vs. ${fabricIndex}`,
-                    );
-                }
+            if (failsafe.construction.status !== Lifecycle.Status.Destroyed && failsafe.fabricIndex === fabricIndex) {
+                this.#monitorFailsafe(failsafe);
+                return;
             }
         }
 

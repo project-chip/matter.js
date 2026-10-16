@@ -4,32 +4,56 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, InternalError } from "@matter/main";
-import { DeviceAttestationCheck } from "@matter/main/protocol";
-import { QrPairingCodeCodec, Status, StatusResponseError } from "@matter/main/types";
+import { Bytes, ImplementationError, InternalError } from "@matter/main";
+import { DeviceAttestationCheck, FabricGroups } from "@matter/main/protocol";
+import { GroupId, QrPairingCodeCodec, Status, StatusResponseError } from "@matter/main/types";
 import { Matter } from "@matter/model";
 import { PicsExpression, PicsFile, UnsupportedByControllerError } from "@matter/testing";
 import {
+    capabilitiesFor,
+    controllerCapabilityGap,
+    controllerCapabilityGapsFor,
+    controllerCapabilityOutOfScope,
     controllerPicsOverridesFor,
+    helperImplementationFor,
     createControllerAdapter,
     LineQueue,
     LogFollower,
     registerControllerAdapterFactory,
-    resetControllerAdapterFactoryForTesting,
+    replaceControllerAdapterRegistrationForTesting,
+    resolveControllerSelection,
 } from "@matter/testing";
-import type { AttributePathSpec, CertNodeApi, CertNodeRef, ControllerAdapter, EventReadEntry } from "@matter/testing";
+import type {
+    AttributePathSpec,
+    AttributeReadEntry,
+    CertNodeApi,
+    CertNodeRef,
+    ControllerAdapter,
+    ControllerCapability,
+    EventReadEntry,
+} from "@matter/testing";
 import { StreamUsage } from "@matter/types";
 import { BasicInformation } from "@matter/types/clusters/basic-information";
 import { expect } from "chai";
 import { env } from "node:process";
 import { AllClustersTestInstance } from "../../src/AllClustersTestInstance.js";
-import { CHIP_TOOL_CONTROLLER_PICS, ChipToolControllerAdapter } from "../../src/cert/ChipToolControllerAdapter.js";
+import {
+    CHIP_TOOL_CAPABILITY_GAPS,
+    CHIP_TOOL_CONTROLLER_PICS,
+    ChipToolControllerAdapter,
+} from "../../src/cert/ChipToolControllerAdapter.js";
+import "../../src/cert/index.js";
 import {
     InProcessControllerAdapter,
     MATTERJS_CONTROLLER_PICS,
     NoCommissionedPeerError,
     SessionStateError,
 } from "../../src/cert/InProcessControllerAdapter.js";
+import {
+    MATTERJS_SERVER_CAPABILITY_GAPS,
+    MATTERJS_SERVER_CONTROLLER_PICS,
+    MATTERJS_SERVER_OUT_OF_SCOPE,
+} from "../../src/cert/MatterServerControllerAdapter.js";
 import { OnboardingPayloadRefusedError } from "../../src/cert/onboarding-payload.js";
 import { IcdTestInstance } from "../../src/IcdTestInstance.js";
 import { manualPairingCode } from "../cert/tc-dd-support.js";
@@ -106,6 +130,9 @@ async function versionOf(node: CertNodeApi, path: AttributePathSpec) {
     }
     throw new InternalError(`No data version reported for cluster ${path.cluster}`);
 }
+
+/** Every implementation `src/cert/index.ts` registers, each held to the same rules about what it declares. */
+const IMPLEMENTATIONS = ["matterjs", "chip-tool", "matterjs-server"] as const;
 
 describe("InProcessControllerAdapter", () => {
     let device: AllClustersTestInstance;
@@ -500,6 +527,74 @@ describe("InProcessControllerAdapter", () => {
         await node.decommission();
     });
 
+    it("subscribes to several paths in one subscription and names the attribute of each update", async function () {
+        this.timeout(30_000);
+
+        const ref = await adapter.commission({ passcode: 20202021, discriminator: 3840 });
+        const node = adapter.node(ref);
+
+        const onOff = { endpoint: 1, cluster: ON_OFF.id, attribute: ON_OFF_ATTRIBUTE.id };
+        const nodeLabel = { endpoint: 0, cluster: BASIC_INFORMATION.id, attribute: NODE_LABEL_ATTRIBUTE.id };
+        const updates = new Array<AttributeReadEntry>();
+        const seed = await node.subscribeAttributes([onOff, nodeLabel], {
+            minIntervalFloorSeconds: 0,
+            maxIntervalCeilingSeconds: 10,
+            onUpdate: entry => updates.push(entry),
+        });
+        expect(seed.map(({ endpoint, cluster, attribute }) => ({ endpoint, cluster, attribute }))).to.have.deep.members(
+            [onOff, nodeLabel],
+        );
+        expect(updates).to.be.empty;
+
+        const seeded = seed.find(({ cluster }) => cluster === ON_OFF.id)?.value;
+        await node.invoke("OnOff", "toggle", {}, 1);
+        await waitFor(() => updates.length > 0);
+        expect(updates).to.deep.equal([{ ...onOff, value: !seeded, version: updates[0].version }]);
+
+        await node.decommission();
+    });
+
+    it("refuses a subscribe to no attribute path at all", async function () {
+        this.timeout(30_000);
+
+        const node = adapter.node(await adapter.commission({ passcode: 20202021, discriminator: 3840 }));
+
+        const refusal = await rejectionOf(
+            node.subscribeAttributes([], { minIntervalFloorSeconds: 0, maxIntervalCeilingSeconds: 10 }),
+        );
+        expect(refusal).instanceOf(ImplementationError);
+        expect(refusal instanceof Error && refusal.message).match(/subscribeAttributes requires at least one path/);
+
+        await node.decommission();
+    });
+
+    it("rejects a multi-path subscribe when the device refuses one of its concrete paths", async function () {
+        this.timeout(30_000);
+
+        const ref = await adapter.commission({ passcode: 20202021, discriminator: 3840 });
+        const node = adapter.node(ref);
+
+        const updates = new Array<AttributeReadEntry>();
+        const rejection = await rejectionOf(
+            node.subscribeAttributes(
+                [
+                    { endpoint: 1, cluster: ON_OFF.id, attribute: ON_OFF_ATTRIBUTE.id },
+                    { endpoint: 1, cluster: BASIC_INFORMATION.id, attribute: VENDOR_ID_ATTRIBUTE.id },
+                ],
+                { minIntervalFloorSeconds: 0, maxIntervalCeilingSeconds: 10, onUpdate: entry => updates.push(entry) },
+            ),
+        );
+        expect(rejection).to.be.instanceOf(StatusResponseError);
+
+        // The device established the subscription for the path it accepted, so only closing it keeps a
+        // report of that path from reaching the step that already failed
+        await node.invoke("OnOff", "toggle", {}, 1);
+        await new Promise(resolve => setTimeout(resolve, 1_500));
+        expect(updates).to.be.empty;
+
+        await node.decommission();
+    });
+
     it("reads an event the device recorded", async function () {
         this.timeout(30_000);
 
@@ -830,6 +925,15 @@ describe("InProcessControllerAdapter", () => {
 });
 
 describe("InProcessControllerAdapter attestation", () => {
+    const REVOCATION_SET = JSON.stringify([
+        {
+            type: "revocation_set",
+            issuer_subject_key_id: "63540E47F64B1C38D13884A462D16C195D8FFB3C",
+            issuer_name: "MD0xJTAjBgNVBAMMHE1hdHRlciBEZXYgUEFJIDB4RkZGMSBubyBQSUQxFDASBgorBgEEAYKifAIBDARGRkYx",
+            revoked_serial_numbers: ["19367D978EAC533A"],
+        },
+    ]);
+
     let adapter: InProcessControllerAdapter;
 
     afterEach(async function () {
@@ -849,20 +953,52 @@ describe("InProcessControllerAdapter attestation", () => {
     it("takes revocation information a case installs", async function () {
         this.timeout(20_000);
 
-        adapter = new InProcessControllerAdapter("attestation-on", { attestation: true });
+        adapter = new InProcessControllerAdapter("attestation-on", {
+            attestation: true,
+            revocationSet: REVOCATION_SET,
+        });
         await adapter.start();
 
         expect(adapter.attestation).not.equal(undefined);
-        await adapter.attestation!.installRevocations(
-            JSON.stringify([
-                {
-                    type: "revocation_set",
-                    issuer_subject_key_id: "63540E47F64B1C38D13884A462D16C195D8FFB3C",
-                    issuer_name: "MD0xJTAjBgNVBAMMHE1hdHRlciBEZXYgUEFJIDB4RkZGMSBubyBQSUQxFDASBgorBgEEAYKifAIBDARGRkYx",
-                    revoked_serial_numbers: ["19367D978EAC533A"],
-                },
-            ]),
+        await adapter.attestation!.installRevocations(REVOCATION_SET);
+    });
+
+    it("refuses a declared revocation set it cannot read, or one without attestation, when it is built", () => {
+        for (const [options, problem] of [
+            [{ attestation: true, revocationSet: "{ not a revocation set }" }, "is not a revocation set"],
+            [{ revocationSet: REVOCATION_SET }, "needs attestation"],
+        ] as const) {
+            expect(() => new InProcessControllerAdapter("attestation-declaration", options)).to.throw(
+                ImplementationError,
+                problem,
+            );
+        }
+    });
+
+    it("refuses to install a revocation set where the case declared none", async function () {
+        this.timeout(20_000);
+
+        adapter = new InProcessControllerAdapter("attestation-unset", { attestation: true });
+        await adapter.start();
+
+        await expect(adapter.attestation!.installRevocations(REVOCATION_SET)).to.be.rejectedWith(
+            ImplementationError,
+            /was not built with a revocation set/,
         );
+    });
+
+    it("refuses a revocation set the case did not declare", async function () {
+        this.timeout(20_000);
+
+        adapter = new InProcessControllerAdapter("attestation-undeclared", {
+            attestation: true,
+            revocationSet: REVOCATION_SET,
+        });
+        await adapter.start();
+
+        await expect(
+            adapter.attestation!.installRevocations(REVOCATION_SET.replace("19367D978EAC533A", "19367D978EAC533B")),
+        ).to.be.rejectedWith(ImplementationError, /differs from the one the case's revocationSet declares/);
     });
 
     it("accepts what a test device presents until something is wrong with it", async function () {
@@ -917,11 +1053,15 @@ describe("InProcessControllerAdapter attestation", () => {
     it("refuses a revocation set it cannot read rather than commissioning as if nothing was revoked", async function () {
         this.timeout(20_000);
 
-        adapter = new InProcessControllerAdapter("attestation-malformed", { attestation: true });
+        adapter = new InProcessControllerAdapter("attestation-malformed", {
+            attestation: true,
+            revocationSet: REVOCATION_SET,
+        });
         await adapter.start();
 
         await expect(adapter.attestation!.installRevocations("{ not a revocation set }")).to.be.rejectedWith(
             ImplementationError,
+            /"attestation-malformed": the revocation set to install is not a revocation set: Revocation set is not JSON/,
         );
     });
 });
@@ -1076,7 +1216,7 @@ describe("ControllerAdapter registry", () => {
     it("throws when registering an implementation name that already has a factory", () => {
         // test/test.config.ts imports support/chip-testing/src/cert/index.ts once before any spec
         // file runs, which registers "matterjs" — so this throw needs no setup of its own here.
-        expect(() => registerControllerAdapterFactory("matterjs", fakeControllerAdapter)).to.throw(
+        expect(() => registerControllerAdapterFactory("matterjs", { factory: fakeControllerAdapter })).to.throw(
             /already registered/,
         );
     });
@@ -1103,7 +1243,7 @@ describe("ControllerAdapter registry", () => {
 
     it("throws naming the implementation and where to register it when no factory is registered", () => {
         env.MATTER_CERT_CONTROLLER = "chip-tool";
-        resetControllerAdapterFactoryForTesting("chip-tool");
+        const restore = replaceControllerAdapterRegistrationForTesting("chip-tool");
 
         try {
             expect(() => createControllerAdapter("registry-test-unregistered")).to.throw(/chip-tool/);
@@ -1112,33 +1252,30 @@ describe("ControllerAdapter registry", () => {
             );
 
             const builtIds = new Array<string>();
-            registerControllerAdapterFactory("chip-tool", id => {
-                builtIds.push(id);
-                return fakeControllerAdapter(id);
+            registerControllerAdapterFactory("chip-tool", {
+                factory: id => {
+                    builtIds.push(id);
+                    return fakeControllerAdapter(id);
+                },
             });
 
             const adapter = createControllerAdapter("registry-test-dispatch");
             expect(adapter.id).to.equal("registry-test-dispatch");
             expect(builtIds).to.deep.equal(["registry-test-dispatch"]);
         } finally {
-            // Restore what src/cert/index.ts registered at load time, for any later suite that
-            // resolves "chip-tool" through the registry.
-            resetControllerAdapterFactoryForTesting("chip-tool");
-            registerControllerAdapterFactory(
-                "chip-tool",
-                (id, options) => new ChipToolControllerAdapter(id, options),
-                CHIP_TOOL_CONTROLLER_PICS,
-            );
+            restore();
         }
     });
 
     it("reports the PICS each controller declares about itself", () => {
         expect(controllerPicsOverridesFor("matterjs")).deep.equal(MATTERJS_CONTROLLER_PICS);
         expect(controllerPicsOverridesFor("chip-tool")).deep.equal(CHIP_TOOL_CONTROLLER_PICS);
+        expect(controllerPicsOverridesFor("matterjs-server")).deep.equal(MATTERJS_SERVER_CONTROLLER_PICS);
         expect(MATTERJS_CONTROLLER_PICS["MCORE.IDM.C.InvokeRequest.BatchCommands"]).equal(1);
         expect(CHIP_TOOL_CONTROLLER_PICS["MCORE.IDM.C.InvokeRequest.BatchCommands"]).equal(0);
+        expect(MATTERJS_SERVER_CONTROLLER_PICS["MCORE.IDM.C.InvokeRequest.BatchCommands"]).equal(1);
 
-        for (const pics of [MATTERJS_CONTROLLER_PICS, CHIP_TOOL_CONTROLLER_PICS]) {
+        for (const pics of [MATTERJS_CONTROLLER_PICS, CHIP_TOOL_CONTROLLER_PICS, MATTERJS_SERVER_CONTROLLER_PICS]) {
             expect(pics["MCORE.ROLE.COMMISSIONER"]).equal(1);
             expect(pics["MCORE.DD.QR_COMMISSIONING"]).equal(1);
             expect(pics["MCORE.DD.MANUAL_PC_COMMISSIONING"]).equal(1);
@@ -1153,7 +1290,7 @@ describe("ControllerAdapter registry", () => {
         const groupsCommands = ["00", "02", "03", "04", "05"].map(id => `G.C.C${id}.Tx`);
         const asDevice = new PicsFile(groupsCommands.map(key => `${key}=0`));
 
-        for (const implementation of ["matterjs", "chip-tool"] as const) {
+        for (const implementation of IMPLEMENTATIONS) {
             const forRun = asDevice.with(controllerPicsOverridesFor(implementation));
 
             for (const key of groupsCommands) {
@@ -1168,7 +1305,7 @@ describe("ControllerAdapter registry", () => {
         const scenesKeys = ["00", "01", "02", "03", "04", "05", "06", "40"].map(id => `S.C.C${id}.Tx`);
         const asDevice = new PicsFile(["S.C=0", ...scenesKeys.map(key => `${key}=0`)]);
 
-        for (const implementation of ["matterjs", "chip-tool"] as const) {
+        for (const implementation of IMPLEMENTATIONS) {
             const forRun = asDevice.with(controllerPicsOverridesFor(implementation));
 
             for (const key of ["S.C", ...scenesKeys]) {
@@ -1183,7 +1320,7 @@ describe("ControllerAdapter registry", () => {
         const keys = ["TBRM.C", ...["00", "01", "03", "04"].map(id => `TBRM.C.C${id}.Tx`)];
         const asDevice = new PicsFile(["TBRM.S=1"]);
 
-        for (const implementation of ["matterjs", "chip-tool"] as const) {
+        for (const implementation of IMPLEMENTATIONS) {
             const forRun = asDevice.with(controllerPicsOverridesFor(implementation));
 
             for (const key of keys) {
@@ -1198,7 +1335,7 @@ describe("ControllerAdapter registry", () => {
         const keys = ["G.C.C01.Tx", "GRPKEY.C.C03.Tx", "GRPKEY.C.C04.Tx"];
         const asDevice = new PicsFile(["G.C.C01.Tx=0"]);
 
-        for (const implementation of ["matterjs", "chip-tool"] as const) {
+        for (const implementation of IMPLEMENTATIONS) {
             const forRun = asDevice.with(controllerPicsOverridesFor(implementation));
 
             for (const key of keys) {
@@ -1218,7 +1355,7 @@ describe("ControllerAdapter registry", () => {
         // Actions command. The DUT of those steps is the controller, so its own declaration has to win.
         const asDevice = new PicsFile(actionCommands.map(key => `${key}=0`));
 
-        for (const implementation of ["matterjs", "chip-tool"] as const) {
+        for (const implementation of IMPLEMENTATIONS) {
             const forRun = asDevice.with(controllerPicsOverridesFor(implementation));
 
             for (const key of actionCommands) {
@@ -1230,7 +1367,7 @@ describe("ControllerAdapter registry", () => {
     it("declares nothing about what the device advertises, which every run's report would inherit", () => {
         // certPicsFile() feeds every cert test's report, so a key describing the TH — what it
         // advertises, above all — has to come from the device's own file and never from an overlay.
-        for (const implementation of ["matterjs", "chip-tool"] as const) {
+        for (const implementation of IMPLEMENTATIONS) {
             const declared = controllerPicsOverridesFor(implementation);
 
             expect("MCORE.DD.DISCOVERY_BLE" in declared, implementation).equal(false);
@@ -1242,42 +1379,94 @@ describe("ControllerAdapter registry", () => {
         // A TC that needs TCP declares it, and the adapter must see it before it starts — a controller
         // cannot change a session's transport afterwards.
         env.MATTER_CERT_CONTROLLER = "chip-tool";
-        resetControllerAdapterFactoryForTesting("chip-tool");
-
         const seen = new Array<unknown>();
-        try {
-            registerControllerAdapterFactory("chip-tool", (id, options) => {
+        const restore = replaceControllerAdapterRegistrationForTesting("chip-tool", {
+            factory: (id, options) => {
                 seen.push(options?.transport);
                 return fakeControllerAdapter(id);
-            });
-
+            },
+        });
+        try {
             createControllerAdapter("with-tcp", { transport: "tcp" });
             createControllerAdapter("without");
 
             expect(seen).deep.equal(["tcp", undefined]);
         } finally {
-            resetControllerAdapterFactoryForTesting("chip-tool");
-            registerControllerAdapterFactory(
-                "chip-tool",
-                (id, options) => new ChipToolControllerAdapter(id, options),
-                CHIP_TOOL_CONTROLLER_PICS,
-            );
+            restore();
         }
     });
 
-    it("reports no declarations for an implementation registered without them", () => {
-        resetControllerAdapterFactoryForTesting("chip-tool");
+    it("gives helper roles the implementation the selection names for them", () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
 
+        const built = new Array<string>();
+        const restoreMatterJs = replaceControllerAdapterRegistrationForTesting("matterjs", {
+            factory: id => {
+                built.push(`matterjs:${id}`);
+                return fakeControllerAdapter(id);
+            },
+        });
+        const restoreServer = replaceControllerAdapterRegistrationForTesting("matterjs-server", {
+            factory: id => {
+                built.push(`matterjs-server:${id}`);
+                return fakeControllerAdapter(id);
+            },
+            helperImplementation: "matterjs",
+        });
         try {
-            registerControllerAdapterFactory("chip-tool", fakeControllerAdapter);
-            expect(controllerPicsOverridesFor("chip-tool")).deep.equal({});
+            expect(helperImplementationFor("matterjs-server")).equal("matterjs");
+            expect(resolveControllerSelection()).deep.equal({ dut: "matterjs-server", helper: "matterjs" });
+
+            createControllerAdapter("th_cr2", {}, "helper");
+            createControllerAdapter("dut", {}, "dut");
+            createControllerAdapter("dut-default");
+
+            expect(built).deep.equal(["matterjs:th_cr2", "matterjs-server:dut", "matterjs-server:dut-default"]);
         } finally {
-            resetControllerAdapterFactoryForTesting("chip-tool");
-            registerControllerAdapterFactory(
-                "chip-tool",
-                (id, options) => new ChipToolControllerAdapter(id, options),
-                CHIP_TOOL_CONTROLLER_PICS,
-            );
+            restoreServer();
+            restoreMatterJs();
+        }
+    });
+
+    it("keeps every role on chip-tool", () => {
+        expect(helperImplementationFor("chip-tool")).undefined;
+
+        env.MATTER_CERT_CONTROLLER = "chip-tool";
+        const built = new Array<string>();
+        const restore = replaceControllerAdapterRegistrationForTesting("chip-tool", {
+            factory: id => {
+                built.push(id);
+                return fakeControllerAdapter(id);
+            },
+        });
+        try {
+            expect(resolveControllerSelection().helper).equal("chip-tool");
+            createControllerAdapter("th_cr2", {}, "helper");
+            createControllerAdapter("dut", {}, "dut");
+
+            expect(built).deep.equal(["th_cr2", "dut"]);
+        } finally {
+            restore();
+        }
+    });
+
+    it("puts back the registration a test replaced", () => {
+        const restore = replaceControllerAdapterRegistrationForTesting("matterjs-server", {
+            factory: fakeControllerAdapter,
+        });
+        expect(helperImplementationFor("matterjs-server")).undefined;
+        restore();
+        expect(helperImplementationFor("matterjs-server")).equal("matterjs");
+        expect(controllerCapabilityGapsFor("matterjs-server")).deep.equal(MATTERJS_SERVER_CAPABILITY_GAPS);
+    });
+
+    it("reports no declarations for an implementation registered without them", () => {
+        const restore = replaceControllerAdapterRegistrationForTesting("chip-tool", { factory: fakeControllerAdapter });
+        try {
+            expect(controllerPicsOverridesFor("chip-tool")).deep.equal({});
+            expect(controllerCapabilityGapsFor("chip-tool")).deep.equal({});
+        } finally {
+            restore();
         }
     });
 });
@@ -1380,5 +1569,270 @@ describe("InProcessControllerAdapter ICD client", () => {
         expect(await icd.stayActive(5_000)).greaterThan(0);
 
         await node.decommission();
+    });
+});
+
+describe("controller capabilities", () => {
+    const originalController = env.MATTER_CERT_CONTROLLER;
+
+    afterEach(() => {
+        if (originalController === undefined) {
+            delete env.MATTER_CERT_CONTROLLER;
+        } else {
+            env.MATTER_CERT_CONTROLLER = originalController;
+        }
+    });
+
+    it("names the capability a chip-tool adapter refuses at construction", () => {
+        for (const [options, capability] of [
+            [{ attestation: true }, "attestation"],
+            [{ webRtcRequestor: true }, "webrtc-requestor"],
+        ] as const) {
+            let error: unknown;
+            try {
+                new ChipToolControllerAdapter(`chip-tool-${capability}`, options);
+            } catch (e) {
+                error = e;
+            }
+            if (!(error instanceof UnsupportedByControllerError)) {
+                expect.fail(`${capability}: expected an UnsupportedByControllerError, got ${error}`);
+            }
+            expect(error.capability).equal(capability);
+        }
+    });
+
+    it("reports the capabilities each controller declares it lacks", () => {
+        expect(controllerCapabilityGapsFor("matterjs")).deep.equal({});
+        expect(controllerCapabilityGapsFor("chip-tool")).deep.equal(CHIP_TOOL_CAPABILITY_GAPS);
+        expect(controllerCapabilityGapsFor("matterjs-server")).deep.equal(MATTERJS_SERVER_CAPABILITY_GAPS);
+    });
+
+    it("names the controller, the capability and the reason where the DUT controller lacks one", () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+
+        expect(controllerCapabilityGap(["session-introspection", "multi-path-write"])).equal(
+            `controller "matterjs-server" lacks session-introspection: ${MATTERJS_SERVER_CAPABILITY_GAPS["session-introspection"]}`,
+        );
+        expect(controllerCapabilityGap([])).undefined;
+    });
+
+    it("records a chunked write as a gap of chip-tool only", () => {
+        const required = ["chunked-write"] as const;
+
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+        expect(controllerCapabilityGap(required)).undefined;
+
+        env.MATTER_CERT_CONTROLLER = "matterjs";
+        expect(controllerCapabilityGap(required)).undefined;
+
+        env.MATTER_CERT_CONTROLLER = "chip-tool";
+        expect(controllerCapabilityGap(required)).equal(
+            `controller "chip-tool" lacks chunked-write: ${CHIP_TOOL_CAPABILITY_GAPS["chunked-write"]}`,
+        );
+    });
+
+    it("names the controller, the capability and the reason where the DUT controller declares one out of scope", () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+
+        expect(controllerCapabilityOutOfScope(["group-messaging", "multi-path-write"])).equal(
+            `controller "matterjs-server" does not offer multi-path-write: ${MATTERJS_SERVER_OUT_OF_SCOPE["multi-path-write"]}`,
+        );
+        expect(controllerCapabilityGap(["multi-path-write"])).undefined;
+
+        env.MATTER_CERT_CONTROLLER = "matterjs";
+        expect(controllerCapabilityOutOfScope(["multi-path-write"])).undefined;
+    });
+
+    it("applies only the DUT controller's out-of-scope declarations", () => {
+        const selection = { dut: "matterjs", helper: "matterjs-server" } as const;
+
+        expect(controllerCapabilityOutOfScope(["multi-path-write"], ["helper"], selection)).undefined;
+        expect(controllerCapabilityOutOfScope(["multi-path-write"], ["dut", "helper"], selection)).undefined;
+        expect(
+            controllerCapabilityOutOfScope(["multi-path-write"], ["dut"], {
+                dut: "matterjs-server",
+                helper: "matterjs",
+            }),
+        ).contains('controller "matterjs-server" does not offer multi-path-write');
+    });
+
+    it("refuses a registration that declares a capability both as a gap and out of scope", () => {
+        const restore = replaceControllerAdapterRegistrationForTesting("matterjs-server");
+        try {
+            expect(() =>
+                registerControllerAdapterFactory("matterjs-server", {
+                    factory: () => {
+                        throw new InternalError("never built");
+                    },
+                    gaps: { "icd-client": "a" },
+                    outOfScope: { "icd-client": "b" },
+                }),
+            ).throw(/icd-client both as a gap and as out of scope/);
+        } finally {
+            restore();
+        }
+    });
+
+    it("refuses a registration that names itself as the implementation for its helpers", () => {
+        const restore = replaceControllerAdapterRegistrationForTesting("matterjs-server");
+        try {
+            expect(() =>
+                registerControllerAdapterFactory("matterjs-server", {
+                    factory: () => {
+                        throw new InternalError("never built");
+                    },
+                    helperImplementation: "matterjs-server",
+                }),
+            ).throw(/names itself as the implementation for its helpers/);
+        } finally {
+            restore();
+        }
+    });
+
+    it("finds no gap for a controller that declares none of the required capabilities", () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs";
+
+        const required = Object.keys(MATTERJS_SERVER_CAPABILITY_GAPS).filter(isCapability);
+        expect(required).not.empty;
+        expect(controllerCapabilityGap(required)).undefined;
+    });
+
+    it("judges a helper role by the implementation that fills it", () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+        expect(controllerCapabilityGap(["tcp-transport"], ["helper"])).undefined;
+        expect(controllerCapabilityGap(["tcp-transport"], ["helper", "dut"])).equal(
+            `controller "matterjs-server" lacks tcp-transport: ${MATTERJS_SERVER_CAPABILITY_GAPS["tcp-transport"]}`,
+        );
+
+        env.MATTER_CERT_CONTROLLER = "chip-tool";
+        expect(controllerCapabilityGap(["tcp-transport"], ["helper"])).equal(
+            `controller "chip-tool" lacks tcp-transport: ${CHIP_TOOL_CAPABILITY_GAPS["tcp-transport"]}`,
+        );
+    });
+
+    it("derives what adapter options need of a controller", () => {
+        expect(capabilitiesFor()).deep.equal([]);
+        expect(capabilitiesFor({ transport: "tcp", attestation: true, webRtcRequestor: true })).deep.equal([
+            "tcp-transport",
+            "attestation",
+            "webrtc-requestor",
+        ]);
+    });
+
+    it("answers no gaps for an implementation without a registration", () => {
+        const restore = replaceControllerAdapterRegistrationForTesting("matterjs-server");
+        try {
+            expect(controllerCapabilityGapsFor("matterjs-server")).deep.equal({});
+        } finally {
+            restore();
+        }
+    });
+});
+
+function isCapability(key: string): key is ControllerCapability {
+    return Object.hasOwn(MATTERJS_SERVER_CAPABILITY_GAPS, key);
+}
+
+describe("InProcessControllerAdapter group key sets", () => {
+    const KEY_SET = {
+        groupKeySetId: 1,
+        groupKeySecurityPolicy: 0,
+        epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+        epochStartTime0: 1_600_000_000_000_000n,
+    };
+
+    let adapter: InProcessControllerAdapter | undefined;
+
+    afterEach(async function () {
+        this.timeout(30_000);
+        await adapter?.close();
+        adapter = undefined;
+    });
+
+    it("installs the declared key set and refuses one the case did not declare", async function () {
+        this.timeout(20_000);
+
+        adapter = new InProcessControllerAdapter("groups-dut", { groups: [{ groupId: 1, keySet: KEY_SET }] });
+        await adapter.start();
+
+        await adapter.group(1).defineKeySet(KEY_SET);
+        await expect(adapter.group(1).defineKeySet({ ...KEY_SET, epochKey0: new Uint8Array(16) })).rejectedWith(
+            ImplementationError,
+            /epochKey0/,
+        );
+        await expect(adapter.group(2).defineKeySet(KEY_SET)).rejectedWith(ImplementationError, /controllerGroups/);
+        await expect(adapter.group(2).invoke("OnOff", "toggle")).rejectedWith(ImplementationError, /group 2/);
+    });
+
+    /**
+     * Defines groups 1 (IanaAddr policy) and 2 (no policy) on a started controller and returns the FabricGroups they
+     * were installed on.
+     *
+     * The sending path resolves its own Fabric object, which the adapter does not expose, so the install is observed on
+     * the FabricGroups it writes to, with the real implementation called through.
+     */
+    async function definedGroups() {
+        const installed = new Array<FabricGroups>();
+        const original = FabricGroups.prototype.setFromGroupKeySet;
+        FabricGroups.prototype.setFromGroupKeySet = function (this: FabricGroups, ...args) {
+            installed.push(this);
+            return original.apply(this, args);
+        };
+
+        try {
+            adapter = new InProcessControllerAdapter("groups-install", {
+                groups: [
+                    { groupId: 1, keySet: KEY_SET, addressPolicy: "ianaAddr" },
+                    { groupId: 2, keySet: KEY_SET },
+                ],
+            });
+            await adapter.start();
+            expect(installed).lengthOf(0);
+
+            await adapter.group(1).defineKeySet(KEY_SET);
+            await adapter.group(2).defineKeySet(KEY_SET);
+        } finally {
+            FabricGroups.prototype.setFromGroupKeySet = original;
+        }
+
+        expect(installed).lengthOf(2);
+        expect(installed[1]).equals(installed[0]);
+        return installed[0];
+    }
+
+    it("installs the declared key set", async function () {
+        this.timeout(20_000);
+
+        const groups = await definedGroups();
+
+        expect(groups.keySets.get("groupKeySetId", KEY_SET.groupKeySetId)).not.undefined;
+    });
+
+    it("maps each declared group to its key set", async function () {
+        this.timeout(20_000);
+
+        const groups = await definedGroups();
+
+        expect(groups.groupKeyIdMap.get(GroupId(1))).equals(KEY_SET.groupKeySetId);
+        expect(groups.groupKeyIdMap.get(GroupId(2))).equals(KEY_SET.groupKeySetId);
+        expect(groups.isKeySetMapped(KEY_SET.groupKeySetId)).equals(true);
+    });
+
+    it("sets a declared address policy on its group only", async function () {
+        this.timeout(20_000);
+
+        const groups = await definedGroups();
+
+        expect(groups.multicastAddressFor(GroupId(1))).equals("ff05::fa");
+        expect(groups.multicastAddressFor(GroupId(2))).not.equals("ff05::fa");
+    });
+
+    it("refuses a declaration every controller refuses when it is built", () => {
+        expect(
+            () =>
+                new InProcessControllerAdapter("groups-invalid", {
+                    groups: [{ groupId: 1, keySet: { ...KEY_SET, groupKeySetId: 0 } }],
+                }),
+        ).throw(ImplementationError, /IPK/);
     });
 });

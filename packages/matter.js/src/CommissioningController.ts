@@ -20,6 +20,7 @@ import {
     Seconds,
     ServerAddress,
     UnexpectedDataError,
+    nextEmitOf,
 } from "@matter/general";
 import {
     ChangeNotificationService,
@@ -498,7 +499,9 @@ export class CommissioningController {
                 subscribeMaxIntervalCeilingSeconds:
                     nodeOptions.subscribeMaxIntervalCeilingSeconds ?? this.#options.subscribeMaxIntervalCeilingSeconds,
             });
-            await node.events.initialized;
+            if (!node.initialized) {
+                await nextEmitOf(node.events.initialized);
+            }
         }
 
         return nodeId;

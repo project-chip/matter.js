@@ -5,8 +5,8 @@
  */
 
 import { InteractionClientMessenger, MessageType } from "#interaction/InteractionMessenger.js";
-import { MessageExchange } from "#protocol/MessageExchange.js";
-import { Bytes, DataReadQueue, MatterFlowError } from "@matter/general";
+import { ExchangeReceiveOptions, ExchangeSendOptions, MessageExchange } from "#protocol/MessageExchange.js";
+import { AbortedError, Bytes, DataReadQueue, MatterFlowError } from "@matter/general";
 import { Specification } from "@matter/model";
 import {
     AttributeData,
@@ -347,6 +347,186 @@ describe("InteractionClientMessenger", () => {
 
         expect(closeFinished).to.be.true;
         expect(exchangeClosed).to.be.true;
+    });
+
+    describe("abandonSubscription", () => {
+        function report(fields: { suppressResponse?: boolean; moreChunkedMessages?: boolean } = {}) {
+            return {
+                packetHeader: {},
+                payloadHeader: { messageType: MessageType.ReportData },
+                payload: TlvDataReport.encode({
+                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    suppressResponse: false,
+                    subscriptionId: 7,
+                    ...fields,
+                }),
+            };
+        }
+
+        function subscribeResponse() {
+            return {
+                packetHeader: {},
+                payloadHeader: { messageType: MessageType.SubscribeResponse },
+                payload: TlvSubscribeResponse.encode({
+                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    subscriptionId: 7,
+                    maxInterval: 60,
+                }),
+            };
+        }
+
+        /**
+         * A peer that sends {@link messages} and records the statuses the client sends.  Unless {@link acks} it never
+         * acks, so an MRP send waits until its abort.
+         */
+        function peer(...messages: unknown[]) {
+            const queue = new DataReadQueue<unknown>();
+            for (const message of messages) {
+                queue.write(message);
+            }
+            const statuses = new Array<Status>();
+            const sendOptions = new Array<ExchangeSendOptions | undefined>();
+            let acks = true;
+            const exchange = {
+                maxPayloadSize: 1200,
+                send: async (messageType: number, payload: Bytes, options?: ExchangeSendOptions) => {
+                    if (options?.abort?.aborted) {
+                        throw new AbortedError();
+                    }
+                    expect(messageType).equals(MessageType.StatusResponse);
+                    statuses.push(TlvStatusResponse.decode(payload).status);
+                    sendOptions.push(options);
+                    const abort = options?.ackWaitAbort;
+                    if (!acks && abort !== undefined && !abort.aborted) {
+                        await new Promise(resolve => abort.addEventListener("abort", resolve, { once: true }));
+                    }
+                },
+                nextMessage: (options?: ExchangeReceiveOptions) => queue.read(options?.abort),
+                close: async () => {},
+            } as unknown as MessageExchange;
+            return {
+                messenger: new InteractionClientMessenger(exchange),
+                statuses,
+                sendOptions,
+                withoutAcks() {
+                    acks = false;
+                },
+            };
+        }
+
+        it("answers a report it has not answered yet with INVALID_SUBSCRIPTION", async () => {
+            const { messenger, statuses } = peer(report({ moreChunkedMessages: true }));
+            await messenger.readDataReports().next();
+
+            expect(messenger.reportAwaitsStatus).true;
+            await messenger.abandonSubscription({ awaitReport: false });
+
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
+            expect(messenger.reportAwaitsStatus).false;
+        });
+
+        it("answers the next report with INVALID_SUBSCRIPTION when asked to await it", async () => {
+            const { messenger, statuses } = peer(report());
+
+            await messenger.abandonSubscription({ awaitReport: true });
+
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
+        });
+
+        it("leaves a SubscribeResponse unanswered", async () => {
+            const { messenger, statuses } = peer(subscribeResponse());
+
+            await messenger.abandonSubscription({ awaitReport: true });
+
+            expect(statuses).deep.equals([]);
+        });
+
+        it("answers a report it has not answered yet once, without retransmission, after the abort", async () => {
+            const { messenger, statuses, sendOptions } = peer(report({ moreChunkedMessages: true }));
+            await messenger.readDataReports().next();
+
+            const abort = new AbortController();
+            abort.abort();
+            await messenger.abandonSubscription({ awaitReport: true, abort: abort.signal });
+
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
+            expect(sendOptions[0]?.abort).undefined;
+            expect(sendOptions[0]?.ackWaitAbort).equals(abort.signal);
+        });
+
+        it("stops waiting for the ack of its answer on abort", async () => {
+            const { messenger, statuses, sendOptions, withoutAcks } = peer(report({ moreChunkedMessages: true }));
+            await messenger.readDataReports().next();
+            withoutAcks();
+
+            const abort = new AbortController();
+            const abandoning = messenger.abandonSubscription({ awaitReport: false, abort: abort.signal });
+            await Promise.resolve();
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
+            expect(sendOptions[0]?.ackWaitAbort).equals(abort.signal);
+            abort.abort();
+            await abandoning;
+        });
+
+        it("stops waiting for the next report on abort", async () => {
+            const { messenger, statuses } = peer();
+            const abort = new AbortController();
+
+            const abandoning = messenger.abandonSubscription({ awaitReport: true, abort: abort.signal });
+            abort.abort();
+            await abandoning;
+
+            expect(statuses).deep.equals([]);
+        });
+
+        it("answers a next report it cannot decode with INVALID_SUBSCRIPTION", async () => {
+            const { messenger, statuses } = peer({
+                packetHeader: {},
+                payloadHeader: { messageType: MessageType.ReportData },
+                payload: Bytes.fromHex("ff"),
+            });
+
+            await messenger.abandonSubscription({ awaitReport: true });
+
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
+        });
+
+        it("answers a report it cannot decode with INVALID_SUBSCRIPTION", async () => {
+            const { messenger, statuses } = peer({
+                packetHeader: {},
+                payloadHeader: { messageType: MessageType.ReportData },
+                payload: Bytes.fromHex("ff"),
+            });
+            await expect(messenger.readDataReports().next()).rejected;
+
+            await messenger.abandonSubscription({ awaitReport: false });
+
+            expect(statuses).deep.equals([Status.InvalidSubscription]);
+        });
+
+        it("sends nothing when no report waits for a status and it is not asked to await one", async () => {
+            const { messenger, statuses } = peer(report());
+
+            await messenger.abandonSubscription({ awaitReport: false });
+
+            expect(statuses).deep.equals([]);
+        });
+
+        it("does not consider a report with SuppressResponse as waiting for a status", async () => {
+            const { messenger } = peer(report({ suppressResponse: true }));
+            await messenger.readDataReports().next();
+
+            expect(messenger.reportAwaitsStatus).false;
+        });
+
+        it("does not consider a report waiting for a status once it was answered", async () => {
+            const { messenger, statuses } = peer(report({ moreChunkedMessages: true }), report());
+            for await (const _report of messenger.readDataReports());
+            await messenger.close();
+
+            expect(statuses).deep.equals([Status.Success, Status.Success]);
+            expect(messenger.reportAwaitsStatus).false;
+        });
     });
 
     describe("writes", () => {
