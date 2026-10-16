@@ -392,15 +392,6 @@ export class FabricManager {
             // Nothing changed, so it is a restore without any change
             return;
         }
-        if (
-            fabric.globalId !== existingFabric.globalId ||
-            !Bytes.areEqual(fabric.identityProtectionKey, existingFabric.identityProtectionKey)
-        ) {
-            throw new ImplementationError(
-                `Fabric ${fabricIndex} can only be replaced by new operational credentials under the same root, fabric ID and IPK`,
-            );
-        }
-
         fabric.takeOverRuntimeStateOf(existingFabric);
         this.#addOrUpdateFabricEntry(fabric);
 

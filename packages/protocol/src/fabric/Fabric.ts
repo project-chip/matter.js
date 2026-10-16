@@ -281,9 +281,18 @@ export class Fabric {
     /**
      * Take over the runtime state of {@link previous}, the object this one replaces for the same fabric: groups, access
      * control, ICD state and the storage context.  Both objects then share the same instances, so sessions still bound
-     * to {@link previous} see every change.  Only valid when the root, fabric ID and IPK are unchanged.
+     * to {@link previous} see every change.  The derived group keys depend on the root, fabric ID and IPK, so these
+     * must be unchanged.
      */
     takeOverRuntimeStateOf(previous: Fabric) {
+        if (
+            this.globalId !== previous.globalId ||
+            !Bytes.areEqual(this.identityProtectionKey, previous.identityProtectionKey)
+        ) {
+            throw new ImplementationError(
+                `Fabric ${this.fabricIndex} can only be replaced by new operational credentials under the same root, fabric ID and IPK`,
+            );
+        }
         this.#groups = previous.#groups;
         this.#accessControl = previous.#accessControl;
         this.#icd = previous.icd;
