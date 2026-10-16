@@ -245,7 +245,6 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 - @matter/protocol
     - Breaking: Outgoing group messages use message privacy; matter.js based devices <0.17.2 will not receive them
-    - Breaking: `FabricBuilder.initializeFromFabricForUpdate()` is replaced by `updateOperationalCert()`
     - Breaking: Received group messages are decrypted only with key sets mapped in the GroupKeyMap
     - Breaking: Sending a group message without a usable key fails with `NoUsableGroupKeyError` (`GroupKeySetMissingError` or `GroupKeyNotStartedError`)
     - Breaking: `DclClient` maps DCL records to their schema types (empty values become `undefined`, `otaFileSize` is a `bigint`) and ignores records with unsupported schema versions
