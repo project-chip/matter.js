@@ -498,38 +498,54 @@ export function fieldsOf(text: string, names: string[]): Record<string, string |
     return fields;
 }
 
-/** The OTA download's BDX session in the server's log: its exchange and what it negotiated. */
+/**
+ * The OTA download's BDX session in the server's log: its exchange and what it negotiated.
+ *
+ * The session is the one the requestor completed with a `BlockAckEof`. A requestor may abort a download and retry it on
+ * a new exchange, so the first `ReceiveInit` after `from` can belong to a session that never ended.
+ */
 async function bdxSessionIn(log: LogFollower, nodeId: NodeId, from: number) {
-    const exchange = exchangeOf(nodeId);
-    const init = await logLine(
+    const end = await logLine(
         log,
-        new RegExp(String.raw`Message « for: BDX/ReceiveInit id: (${exchange})✉\S+ .* payload: ([0-9a-f]+)$`),
+        new RegExp(String.raw`Message « for: BDX/BlockAckEof id: (${exchangeOf(nodeId)})✉`),
         from,
+        `the BlockAckEof that ends node ${nodeId}'s download`,
+    );
+    const [, session] = end.match;
+    const sessionPattern = escaped(session);
+
+    const init = lastLineIn(
+        log,
+        new RegExp(String.raw`Message « for: BDX/ReceiveInit id: ${sessionPattern}✉\S+ .* payload: ([0-9a-f]+)$`),
+        from,
+        end.line.index,
         `the ReceiveInit node ${nodeId} opened its download with`,
     );
-    const [, session, initPayload] = init.match;
-    const proposal = proposalOf(Bytes.fromHex(initPayload));
+    const proposal = proposalOf(Bytes.fromHex(init.match[1]));
     if (!proposal.fileDesignator.startsWith("ota/")) {
         throw new MatterServerOtaError(
             `Node ${nodeId} opened a BDX session for ${proposal.fileDesignator}, which is no OTA image`,
         );
     }
 
-    const sessionPattern = escaped(session);
-    const accept = await logLine(
+    const accept = lastLineIn(
         log,
         new RegExp(String.raw`Message » for: BDX/ReceiveAccept .*id: ${sessionPattern}✉\S+ .* payload: ([0-9a-f]+)$`),
         init.line.index + 1,
+        end.line.index,
         `the ReceiveAccept the server answered node ${nodeId} with`,
-    );
-    await logLine(
-        log,
-        new RegExp(String.raw`Message « for: BDX/BlockAckEof id: ${sessionPattern}✉`),
-        accept.line.index + 1,
-        `the BlockAckEof that ends node ${nodeId}'s download`,
     );
 
     return { exchange: session, proposal, accept: acceptOf(Bytes.fromHex(accept.match[1])) };
+}
+
+/** The last line before `to` and at or after `from` that matches `pattern`. */
+function lastLineIn(log: LogFollower, pattern: RegExp, from: number, to: number, what: string) {
+    const found = log.lastMatchBefore(pattern, to, to - from);
+    if (found === undefined) {
+        throw new MatterServerOtaError(`matterjs-server logged no ${what}`);
+    }
+    return found;
 }
 
 async function logLine(log: LogFollower, pattern: RegExp, from: number, what: string) {

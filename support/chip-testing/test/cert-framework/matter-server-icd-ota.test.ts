@@ -755,6 +755,39 @@ describe("MatterServerControllerAdapter on the server's ICD client and OTA provi
             expect(transfer.transferredBytes).equals(2 * 1024 + 108);
         });
 
+        it("reads the session the requestor completed where it aborted a first one and retried", async () => {
+            const aborted = "@1:5•5ea5(tcp)⇵ea35";
+            const retried = "@1:5•5ea5(tcp)⇵ea41";
+            const bdxLines = [
+                `2026-10-16 13:10:04.645 DEBUG MessageExchange Message « for: BDX/ReceiveInit id: ${aborted}✉020be850 ` +
+                    "type: 0x2/0x4 size: 27 payload: 2000000415006f74612f666666312e383030312e6c6f63616c2e32",
+                `2026-10-16 13:10:04.647 DEBUG MessageChannel Message » for: BDX/ReceiveAccept id: ${aborted}✉06b3c7ad ` +
+                    "type: 0x2/0x5 size: 4 payload: 20000004",
+                `2026-10-16 13:10:04.648 DEBUG MessageChannel Message » for: BDX/Block cnt: 0 len: 1024 id: ${aborted}✉06b3c7ae ` +
+                    "type: 0x2/0x11 size: 1028 payload: 000000001ef1ee1b6c000100",
+                `2026-10-16 13:10:09.112 DEBUG MessageExchange Message « for: BDX/ReceiveInit id: ${retried}✉020be901 ` +
+                    "type: 0x2/0x4 size: 27 payload: 2000000215006f74612f666666312e383030312e6c6f63616c2e32",
+                `2026-10-16 13:10:09.114 DEBUG MessageChannel Message » for: BDX/ReceiveAccept id: ${retried}✉06b3c901 ` +
+                    "type: 0x2/0x5 size: 4 payload: 20000002",
+                `2026-10-16 13:10:09.115 DEBUG MessageChannel Message » for: BDX/Block cnt: 0 len: 512 id: ${retried}✉06b3c902 ` +
+                    "type: 0x2/0x11 size: 516 payload: 000000001ef1ee1b6c000100",
+                `2026-10-16 13:10:09.190 DEBUG MessageChannel Message » for: BDX/BlockEof cnt: 1 len: 108 id: ${retried}✉06b3c903 ` +
+                    "type: 0x2/0x12 size: 112 payload: 01000000d6d7d4d5dadbd8d9",
+                `2026-10-16 13:10:09.191 DEBUG MessageExchange Message « for: BDX/BlockAckEof id: ${retried}✉020be902 ` +
+                    "type: 0x2/0x14 size: 4 payload: 01000000",
+            ];
+            replies.update_node = () => {
+                setTimeout(() => serve("downloaded", undefined, bdxLines), 10);
+                return { result: null };
+            };
+
+            const transfer = await node().serveOtaUpdate({ timeoutMs: 5_000, applyTimeoutMs: 5_000 });
+
+            expect(transfer.proposal.maxBlockSize).equals(512);
+            expect(transfer.accept.maxBlockSize).equals(512);
+            expect(transfer.transferredBytes).equals(512 + 108);
+        });
+
         it("fails on the requestor's DownloadError", async () => {
             replies.update_node = () => {
                 setTimeout(() => serve("downloadError"), 10);
