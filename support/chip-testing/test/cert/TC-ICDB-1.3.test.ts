@@ -150,12 +150,9 @@ certTest("TC-ICDB-1.3", {
     controllerCapabilities: ["icd-client"],
     appArgs: { th: TH_ARGS },
 
-    // The in-process DUT can drop the subscription it recreates after registering while the TH's priming report is
-    // still unanswered. A TH that persists subscriptions keeps the entry when that report times out and sends no
-    // Check-In, so the case runs the variant without persistence, which only this project's image carries.
-    // chip-docker runs no variant
+    // This project's image carries only the lit-icd variant without subscription persistence; cert-bins runs the
+    // stock app. chip-docker runs no variant
     appVariant: { matterjs: "nopersist" },
-    chipBinsSources: ["matterjs"],
     flavors: ["chip-local", "matterjs"],
 })
     .step(

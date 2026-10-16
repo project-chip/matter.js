@@ -60,7 +60,7 @@ to an app this way:
 | `WEBRTCR`                           | `camera`     | `chip-camera-app`           | no — no matterjs camera `TestInstance` exists in this package yet |
 | `SU`, `BDX`                         | `ota-provider` / `ota-requestor` | `chip-ota-provider-app` / `chip-ota-requestor-app` | yes (`OtaProviderTestInstance`, `OtaRequestorTestInstance`) |
 | `TBRM`                              | `network-manager` | `matter-network-manager-app` | no — the case declares `flavors: ["chip-local"]`, which skips it before registration |
-| `ICDB`, `ICDM`                      | `lit-icd`    | `lit-icd-app-nopersist` (variant, own-built); `lit-icd-app` (cert-bins) | yes (`IcdTestInstance`); TC-ICDB-1.3 runs own-built binaries only |
+| `ICDB`, `ICDM`                      | `lit-icd`    | `lit-icd-app-nopersist` (variant, own-built); `lit-icd-app` (cert-bins) | yes (`IcdTestInstance`) |
 | `BIND`                              | `light-switch` | `chip-light-switch-app` (not in our image) | yes (`LightSwitchTestInstance`); the cases declare `flavors: ["matterjs"]` |
 | `BIND` (no Groupcast on the root)   | `light-switch-no-groupcast` | none | yes (`LightSwitchNoGroupcastTestInstance`); matterjs only |
 | `BIND` (no Groupcast on the root)   | `all-clusters-no-groupcast` | none under this name; chip-local runs the `nogroupcast` variant of `all-clusters` through `appVariant` | yes (`AllClustersNoGroupcastTestInstance`); matterjs only |
@@ -3754,10 +3754,9 @@ chip-cert-bins' stock `lit-icd-app`. Four things had to line up before any Check
   response"): with subscription timeout resumption (stock `lit-icd-app`) it then lives until every resumption attempt is
   spent, and a retry after a failed attempt waits at least 300 seconds. With persistence but no resumption,
   `mIsBootUpResumeSubscriptionExecuted` is only set after a boot-time resumption, so on a freshly started app such an
-  entry blocks Check-Ins for good. The in-process DUT hits the timeout (see "The DUT has to drop its own subscription"),
-  so the case runs `lit-icd-app-nopersist`, built with neither, which only this project's image carries. Run by hand
-  against the stock app (the declaration does not allow it), the server leg passed and the in-process leg got no
-  Check-In. The matter.js TH (`IcdTestInstance`) checks active subscriptions only and needs no variant. It implements
+  entry blocks Check-Ins for good. A matter.js controller that cancels a subscribe before the SubscribeResponse
+  answers the device's pending report with INVALID_SUBSCRIPTION, so the case runs against the stock app on cert-bins.
+  This project's image carries only `lit-icd-app-nopersist`, built with neither, which the own-built legs run. The matter.js TH (`IcdTestInstance`) checks active subscriptions only and needs no variant. It implements
   the counter triggers (`…03`, `…04`) through `IcdCounter.advance()`, by the amounts CHIP uses.
 - **TH2 must not become a Check-In client too.** `IcdClient` auto-registers with a LIT peer while subscribed, and
   TH1 turns LIT when the DUT registers, so step 0 ends TH2's subscription first.
