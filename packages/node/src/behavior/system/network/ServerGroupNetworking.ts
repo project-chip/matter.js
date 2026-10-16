@@ -133,6 +133,11 @@ export class ServerGroupNetworking {
                 }
             }
 
+            for (const address of this.#failedJoins) {
+                if (!wanted.has(address)) {
+                    this.#failedJoins.delete(address);
+                }
+            }
             for (const address of [...this.#joined]) {
                 if (!wanted.has(address)) {
                     await this.#leave(address);
