@@ -4028,7 +4028,7 @@ describe("a step declaring controller capabilities", () => {
         }
     });
 
-    async function runGroupcastStep(controllers: Record<string, ControllerRoleKind> = { dut: "dut" }) {
+    async function runSessionIntrospectionStep(controllers: Record<string, ControllerRoleKind> = { dut: "dut" }) {
         let ran = false;
         const ended = new Array<{ number: number | string; verdict: StepVerdict; skipReason?: string }>();
         const skipCounts = new Array<number>();
@@ -4042,8 +4042,8 @@ describe("a step declaring controller capabilities", () => {
             steps: [
                 {
                     number: 1,
-                    text: "Step needing group messaging",
-                    controllerCapabilities: ["group-messaging"],
+                    text: "Step needing session introspection",
+                    controllerCapabilities: ["session-introspection"],
                     run: async () => {
                         ran = true;
                     },
@@ -4083,11 +4083,11 @@ describe("a step declaring controller capabilities", () => {
     it("is skipped before it runs where the DUT controller lacks one, and counted as the controller's gap", async () => {
         env.MATTER_CERT_CONTROLLER = "matterjs-server";
 
-        const { ran, ended, skipCounts } = await runGroupcastStep();
+        const { ran, ended, skipCounts } = await runSessionIntrospectionStep();
 
         expect(ran).equal(false);
         expect(ended[0].verdict).equal("skipped");
-        expect(ended[0].skipReason).contains('controller "matterjs-server" lacks group-messaging');
+        expect(ended[0].skipReason).contains('controller "matterjs-server" lacks session-introspection');
         expect(ended[1].verdict).equal("pass");
         expect(skipCounts).deep.equal([1]);
     });
@@ -4095,7 +4095,7 @@ describe("a step declaring controller capabilities", () => {
     it("runs where the controller has it", async () => {
         env.MATTER_CERT_CONTROLLER = "matterjs";
 
-        const { ran, ended, skipCounts } = await runGroupcastStep();
+        const { ran, ended, skipCounts } = await runSessionIntrospectionStep();
 
         expect(ran).equal(true);
         expect(ended.map(({ verdict }) => verdict)).deep.equal(["pass", "pass"]);
@@ -4106,8 +4106,8 @@ describe("a step declaring controller capabilities", () => {
         // The server selection fills helper roles with matterjs, which lacks nothing
         env.MATTER_CERT_CONTROLLER = "matterjs-server";
 
-        expect((await runGroupcastStep({ th: "helper" })).ran).equal(true);
-        expect((await runGroupcastStep({ dut: "dut", th: "helper" })).ran).equal(false);
+        expect((await runSessionIntrospectionStep({ th: "helper" })).ran).equal(true);
+        expect((await runSessionIntrospectionStep({ dut: "dut", th: "helper" })).ran).equal(false);
     });
 });
 

@@ -629,13 +629,13 @@ describe("certTest under a controller that serves only the DUT role", () => {
                 plan: "n/a",
                 pics: [],
                 app: "all-clusters",
-                controllerCapabilities: ["group-messaging"],
+                controllerCapabilities: ["session-introspection"],
             });
 
         const underServer = withController("matterjs-server", () => collect(() => declare("TC-CAPABILITY-SKIP-0.0")));
         expect(underServer.pending).to.have.lengthOf(0);
         expect(underServer.active).to.have.lengthOf(1);
-        expect(underServer.active[0].name).to.contain('controller "matterjs-server" lacks group-messaging');
+        expect(underServer.active[0].name).to.contain('controller "matterjs-server" lacks session-introspection');
         expect(underServer.active[0].descriptor).undefined;
 
         const underMatterJs = withController("matterjs", () => collect(() => declare("TC-CAPABILITY-SKIP-0.1")));
@@ -722,7 +722,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
                         pics: [],
                         app: "all-clusters",
                         controllers: { dut: "dut", th: "helper" },
-                        controllerCapabilities: ["group-messaging"],
+                        controllerCapabilities: ["session-introspection"],
                     }),
                 ),
             );
@@ -748,7 +748,7 @@ describe("certTest under a controller that serves only the DUT role", () => {
             }
             const result = JSON.parse(await readFile(join(outDir, runDir, "result.json"), "utf-8"));
             expect(result.verdict).equal("controller-gap");
-            expect(result.controllerGap).contain('controller "matterjs-server" lacks group-messaging');
+            expect(result.controllerGap).contain('controller "matterjs-server" lacks session-introspection');
             expect(result.run.controllerImplementation).equal("matterjs-server");
             expect(result.run.helperControllerImplementation).equal("matterjs");
             expect(result.run.devices).deep.equal([]);
@@ -788,8 +788,8 @@ describe("certTest under a controller that serves only the DUT role", () => {
                 "lacks tcp-transport",
             );
             expect(
-                unmetControllerCapabilities({ controllerCapabilities: ["group-messaging"], controllers: dut }),
-            ).to.contain("lacks group-messaging");
+                unmetControllerCapabilities({ controllerCapabilities: ["session-introspection"], controllers: dut }),
+            ).to.contain("lacks session-introspection");
             expect(unmetControllerCapabilities({ transport: "tcp", controllers: { th: "helper" } })).equal(undefined);
             expect(unmetControllerCapabilities({ controllers: dut })).equal(undefined);
         });

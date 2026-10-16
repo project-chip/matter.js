@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, InternalError } from "@matter/main";
+import { Bytes, ImplementationError, InternalError } from "@matter/main";
 import { DeviceAttestationCheck } from "@matter/main/protocol";
 import { QrPairingCodeCodec, Status, StatusResponseError } from "@matter/main/types";
 import { Matter } from "@matter/model";
@@ -1566,8 +1566,8 @@ describe("controller capabilities", () => {
     it("names the controller, the capability and the reason where the DUT controller lacks one", () => {
         env.MATTER_CERT_CONTROLLER = "matterjs-server";
 
-        expect(controllerCapabilityGap(["group-messaging", "multi-path-write"])).equal(
-            `controller "matterjs-server" lacks group-messaging: ${MATTERJS_SERVER_CAPABILITY_GAPS["group-messaging"]}`,
+        expect(controllerCapabilityGap(["session-introspection", "multi-path-write"])).equal(
+            `controller "matterjs-server" lacks session-introspection: ${MATTERJS_SERVER_CAPABILITY_GAPS["session-introspection"]}`,
         );
         expect(controllerCapabilityGap([])).undefined;
     });
@@ -1691,3 +1691,44 @@ describe("controller capabilities", () => {
 function isCapability(key: string): key is ControllerCapability {
     return Object.hasOwn(MATTERJS_SERVER_CAPABILITY_GAPS, key);
 }
+
+describe("InProcessControllerAdapter group key sets", () => {
+    const KEY_SET = {
+        groupKeySetId: 1,
+        groupKeySecurityPolicy: 0,
+        epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+        epochStartTime0: 1_600_000_000_000_000n,
+    };
+
+    let adapter: InProcessControllerAdapter | undefined;
+
+    afterEach(async function () {
+        this.timeout(30_000);
+        await adapter?.close();
+        adapter = undefined;
+    });
+
+    it("installs the declared key set and refuses one the case did not declare", async function () {
+        this.timeout(20_000);
+
+        adapter = new InProcessControllerAdapter("groups-dut", { groups: [{ groupId: 1, keySet: KEY_SET }] });
+        await adapter.start();
+
+        await adapter.group(1).defineKeySet(KEY_SET);
+        await expect(adapter.group(1).defineKeySet({ ...KEY_SET, epochKey0: new Uint8Array(16) })).rejectedWith(
+            ImplementationError,
+            /epochKey0/,
+        );
+        await expect(adapter.group(2).defineKeySet(KEY_SET)).rejectedWith(ImplementationError, /controllerGroups/);
+        await expect(adapter.group(2).invoke("OnOff", "toggle")).rejectedWith(ImplementationError, /group 2/);
+    });
+
+    it("refuses a declaration every controller refuses when it is built", () => {
+        expect(
+            () =>
+                new InProcessControllerAdapter("groups-invalid", {
+                    groups: [{ groupId: 1, keySet: { ...KEY_SET, groupKeySetId: 0 } }],
+                }),
+        ).throw(ImplementationError, /IPK/);
+    });
+});

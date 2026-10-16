@@ -16,7 +16,7 @@ import {
 } from "@matter/main/types";
 import { Matter } from "@matter/model";
 import { UnsupportedByControllerError } from "@matter/testing";
-import type { AttributeReadEntry, CertNodeApi } from "@matter/testing";
+import type { AttributeReadEntry, CertNodeApi, ControllerAdapterOptions } from "@matter/testing";
 import { expect } from "chai";
 import { existsSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
@@ -196,7 +196,7 @@ describe("ChipToolControllerAdapter", function () {
         }
     });
 
-    async function start(options?: { transport?: "tcp" }) {
+    async function start(options?: ControllerAdapterOptions) {
         const started = new ChipToolControllerAdapter("dut", options);
         adapter = started;
         await started.start();
@@ -211,6 +211,60 @@ describe("ChipToolControllerAdapter", function () {
         fake.frames.splice(0);
         return { ref, node: started.node(ref) };
     }
+
+    describe("group key sets", () => {
+        const KEY_SET = {
+            groupKeySetId: 1,
+            groupKeySecurityPolicy: 0,
+            epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+            epochStartTime0: 1_600_000_000_000_000n,
+        };
+
+        it("provisions the declared key set through groupsettings", async () => {
+            const started = await start({ groups: [{ groupId: 1, keySet: KEY_SET }] });
+
+            await started.group(1).defineKeySet(KEY_SET);
+
+            expect(fake.commands).deep.equal([
+                "groupsettings add-group group1 1",
+                "groupsettings add-keysets 1 0 0 hex:d0d1d2d3d4d5d6d7d8d9dadbdcdddedf",
+                "groupsettings bind-keyset 1 1",
+            ]);
+        });
+
+        it("refuses a key set or group the case did not declare before sending anything", async () => {
+            const started = await start({ groups: [{ groupId: 1, keySet: KEY_SET }] });
+
+            await expect(started.group(1).defineKeySet({ ...KEY_SET, groupKeySetId: 2 })).rejectedWith(
+                ImplementationError,
+                /groupKeySetId/,
+            );
+            await expect(started.group(2).defineKeySet(KEY_SET)).rejectedWith(ImplementationError, /group 2/);
+            expect(fake.commands).deep.equal([]);
+        });
+
+        it("selects the IANA address where the case declares it", async () => {
+            const started = await start({ groups: [{ groupId: 1, keySet: KEY_SET, addressPolicy: "ianaAddr" }] });
+
+            await started.group(1).defineKeySet(KEY_SET);
+
+            expect(fake.commands[0]).equal("groupsettings add-group group1 1 --addressPolicy 0");
+        });
+
+        it("refuses a group invoke for an undeclared group before sending anything", async () => {
+            const started = await start({ groups: [{ groupId: 1, keySet: KEY_SET }] });
+
+            await expect(started.group(2).invoke("OnOff", "toggle")).rejectedWith(ImplementationError, /group 2/);
+            expect(fake.commands).deep.equal([]);
+        });
+
+        it("refuses a declaration every controller refuses when it is built", () => {
+            expect(() => new ChipToolControllerAdapter("dut", { groups: [{ groupId: 0, keySet: KEY_SET }] })).throw(
+                ImplementationError,
+                /application group id/,
+            );
+        });
+    });
 
     it("mints a node id and pairs with the device's original setup code", async () => {
         const started = await start();

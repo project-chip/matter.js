@@ -36,6 +36,7 @@ import type {
     AttributeWriteStatus,
     BatchCommandResult,
     BatchCommandSpec,
+    CertControllerGroup,
     CertGroupApi,
     CertIcdClientApi,
     CertNodeApi,
@@ -49,6 +50,7 @@ import type {
     ControllerCapabilityGaps,
     EventPathSpec,
     EventReadEntry,
+    GroupKeySetSpec,
     ManualPairingCodeFields,
     OnboardingPayloadFields,
     OtaAnnouncement,
@@ -65,6 +67,7 @@ import type {
 } from "@matter/testing";
 import { capabilitiesFor, CertConfigError, LogFollower, UnsupportedByControllerError } from "@matter/testing";
 import { env } from "node:process";
+import { type CertContextFile, certContextFor } from "../matter-server/matter-server-cert-context.js";
 import { type MatterServerClient, MatterServerCommandError } from "../matter-server/matter-server-client.js";
 import { MatterServerProcess } from "../matter-server/matter-server-process.js";
 import { MatterServerSubscriptions } from "../matter-server/matter-server-subscriptions.js";
@@ -81,6 +84,7 @@ import {
     type WirePathStatus,
     type WireValueResult,
 } from "../matter-server/matter-server-wire.js";
+import { assertDeclaredKeySet, declaredGroup, KeyedGroups, validateControllerGroups } from "./controller-groups.js";
 import { findCertCluster } from "./custom-clusters.js";
 import { MatterServerIcdClient } from "./matter-server-icd-client.js";
 import { MatterServerOtaError, serveOtaUpdateThroughServer } from "./matter-server-ota.js";
@@ -232,7 +236,6 @@ export const MATTERJS_SERVER_CAPABILITY_GAPS = {
     "basic-commissioning-window": "open_commissioning_window ignores its option and always opens an enhanced window",
     "max-value-path-ids": "the server reads endpoint 0xFFFF and cluster, attribute or event id 0xFFFFFFFF as wildcards",
     "session-introspection": "the WebSocket API exposes no session state",
-    "group-messaging": "the WebSocket API has no group key management and no group addressing",
     "tcp-transport": "the server chooses the transport of each session itself and the WebSocket API cannot ask for one",
     "unmodeled-requests":
         "device_command and write_attribute address only clusters, commands and attributes of the server's own " +
@@ -321,14 +324,25 @@ export interface MatterServerConnection {
  * Starts the server an adapter drives. `signal` aborts when the adapter closes before the server is ready. The
  * launcher must honour it and reject once it stopped what it started: `close()` waits for the launch to settle, so
  * a launcher that ignores the signal blocks `close()` until the server is ready.
+ *
+ * `certContext` is present where the case declares groups the controller sends on; the launcher hands it to the
+ * server before it starts (see `MatterServerProcessOptions.certContext`).
  */
-export type MatterServerLauncher = (role: string, signal: AbortSignal) => Promise<MatterServerConnection>;
+export type MatterServerLauncher = (
+    role: string,
+    signal: AbortSignal,
+    certContext?: CertContextFile,
+) => Promise<MatterServerConnection>;
 
 /**
  * Starts matterjs-server from `MATTER_CERT_SERVER_ENTRY`, on the interface `MATTER_MDNS_NETWORKINTERFACE` names
  * where it is set.
  */
-async function launchFromEnvironment(role: string, signal: AbortSignal): Promise<MatterServerConnection> {
+async function launchFromEnvironment(
+    role: string,
+    signal: AbortSignal,
+    certContext?: CertContextFile,
+): Promise<MatterServerConnection> {
     const entry = env.MATTER_CERT_SERVER_ENTRY;
     if (entry === undefined || entry === "") {
         throw new CertConfigError(
@@ -340,6 +354,7 @@ async function launchFromEnvironment(role: string, signal: AbortSignal): Promise
         role,
         primaryInterface: env.MATTER_MDNS_NETWORKINTERFACE || undefined,
         signal,
+        certContext,
     });
 }
 
@@ -377,6 +392,9 @@ export class MatterServerControllerAdapter implements ControllerAdapter {
     readonly id: string;
 
     readonly #launch: MatterServerLauncher;
+    readonly #groups?: readonly CertControllerGroup[];
+    readonly #certContext?: CertContextFile;
+    readonly #keyedGroups = new KeyedGroups();
     readonly #invokeQueues = new Map<string, Mutex>();
     readonly #autoSubscriptions = new Map<string, Promise<void>>();
     readonly #icdClients = new Map<string, MatterServerIcdClient>();
@@ -394,6 +412,9 @@ export class MatterServerControllerAdapter implements ControllerAdapter {
 
         this.id = id;
         this.#launch = launch;
+        validateControllerGroups(id, options?.groups);
+        this.#groups = options?.groups;
+        this.#certContext = options?.groups === undefined ? undefined : certContextFor(options.groups);
     }
 
     get log(): LogFollower {
@@ -424,7 +445,7 @@ export class MatterServerControllerAdapter implements ControllerAdapter {
     }
 
     async #connect() {
-        const connection = await this.#launch(this.id, this.#closing.signal);
+        const connection = await this.#launch(this.id, this.#closing.signal, this.#certContext);
         if (this.#closing.signal.aborted) {
             await connection.close();
             throw new ClosedError(`Controller adapter "${this.id}" was closed while its server started`);
@@ -697,18 +718,69 @@ export class MatterServerControllerAdapter implements ControllerAdapter {
         await this.#started.client.command("disable_auto_subscription", { node_id: NodeId(BigInt(nodeId)) });
     }
 
-    group(_groupId: number): CertGroupApi {
-        return new MatterServerCertGroupApi();
+    group(groupId: number): CertGroupApi {
+        return new MatterServerCertGroupApi(
+            this.id,
+            groupId,
+            this.#groups,
+            this.#keyedGroups,
+            () => this.#started.client,
+        );
     }
 }
 
+/**
+ * A group the server sends on. The server's fabric holds the key from the {@link CertContextFile} the adapter wrote
+ * before the server started, so a case's key set is checked against that declaration rather than installed, and the
+ * groupcast is a `device_command` to the Group Node ID.
+ */
 class MatterServerCertGroupApi implements CertGroupApi {
-    async defineKeySet(): Promise<void> {
-        throw refusal("group-messaging", "installing a group key set");
+    readonly #adapterId: string;
+    readonly #groupId: number;
+    readonly #groups?: readonly CertControllerGroup[];
+    readonly #keyed: KeyedGroups;
+    readonly #client: () => MatterServerClient;
+
+    constructor(
+        adapterId: string,
+        groupId: number,
+        groups: readonly CertControllerGroup[] | undefined,
+        keyed: KeyedGroups,
+        client: () => MatterServerClient,
+    ) {
+        this.#adapterId = adapterId;
+        this.#groupId = groupId;
+        this.#groups = groups;
+        this.#keyed = keyed;
+        this.#client = client;
     }
 
-    async invoke(): Promise<void> {
-        throw refusal("group-messaging", "invoking a group command");
+    async defineKeySet(keySet: GroupKeySetSpec): Promise<void> {
+        assertDeclaredKeySet(this.#adapterId, this.#groups, this.#groupId, keySet);
+        this.#keyed.add(this.#groupId);
+    }
+
+    /** The server answers a group invoke with `null`: nobody answers a groupcast. */
+    async invoke(cluster: string | number, command: string, args?: object): Promise<void> {
+        declaredGroup(this.#adapterId, this.#groups, this.#groupId);
+        this.#keyed.assertKeyed(this.#adapterId, this.#groupId);
+        const clusterModel = serverClusterModel(cluster);
+        const commandModel = clusterModel?.commands(command);
+        if (clusterModel?.id === undefined || commandModel === undefined) {
+            throw new ImplementationError(`Unknown command "${command}" on cluster ${cluster}`);
+        }
+        const result = await this.#client().command("device_command", {
+            node_id: NodeId.fromGroupId(this.#groupId),
+            cluster_id: clusterModel.id,
+            command_name: commandModel.name,
+            payload: encodeCommandPayload(clusterModel.id, commandModel.name, args ?? {}),
+        });
+        if (result !== null && result !== undefined) {
+            throw new UnexpectedDataError(
+                `matterjs-server answered a group invoke of ${clusterModel.name}.${commandModel.name} with ` +
+                    Diagnostic.json(result),
+            );
+        }
     }
 }
 

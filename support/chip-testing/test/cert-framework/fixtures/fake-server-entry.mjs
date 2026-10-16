@@ -6,7 +6,8 @@
 
 // Stand-in for the matterjs-server entry point. Plain JavaScript because the child process is plain Node and
 // cannot load the TypeScript fake server.
-import { renameSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { WebSocketServer } from "ws";
 
 const args = process.argv.slice(2);
@@ -24,10 +25,51 @@ function writeReport(report) {
 const storageIndex = args.indexOf("--storage-path");
 const storagePath = storageIndex === -1 ? undefined : args[storageIndex + 1];
 
+const certContext = loadCertContext();
+
 if (reportFile) {
-    writeReport({ pid: process.pid, storagePath, environment: Object.keys(process.env) });
+    writeReport({ pid: process.pid, storagePath, environment: Object.keys(process.env), certContext });
 }
 runServer();
+
+/** Logs what the real server logs for a cert-context.json in its storage, or refuses it as the real server does. */
+function loadCertContext() {
+    const path = storagePath === undefined ? undefined : join(storagePath, "cert-context.json");
+    if (path === undefined || !existsSync(path)) {
+        return undefined;
+    }
+    const content = JSON.parse(readFileSync(path, "utf8"));
+    if (args.includes("--cert-context-refuse")) {
+        console.log(
+            `2026-10-16 06:46:37.222 FATAL MatterServer Server failed to start Invalid group key configuration ${path}: ` +
+                "keySets[0].groupKeySetId must not be 0, which is the fabric IPK",
+        );
+        console.log("  at Parser.fail (certContext.js:65:11)");
+        if (args.includes("--cert-context-slow-exit")) {
+            // The real server awaits its shutdown after a failed start before it exits
+            setInterval(() => {}, 1 << 30);
+            return content;
+        }
+        process.exit(1);
+    }
+    if (!args.includes("--cert-context-ignore")) {
+        const extra = args.includes("--cert-context-miscount") ? 1 : 0;
+        const loadedFrom = args.includes("--cert-context-other-path") ? "/elsewhere/cert-context.json" : path;
+        console.log(
+            `2026-10-16 06:46:44.840 NOTICE GroupKeyConfig Loaded group key configuration from ${loadedFrom}: ` +
+                `${content.keySets.length + extra} key sets, ${content.groupKeyMap.length} groups`,
+        );
+    }
+    if (args.includes("--cert-context-install-fail")) {
+        // The real server installs the file after it read it, and awaits its shutdown after a failed start
+        console.log(
+            "2026-10-16 06:46:45.001 FATAL MatterServer Server failed to start Cannot install group key configuration: " +
+                "storage closed",
+        );
+        setInterval(() => {}, 1 << 30);
+    }
+    return content;
+}
 
 function runServer() {
     if (args.includes("--ignore-sigterm")) {

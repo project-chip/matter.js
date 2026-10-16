@@ -1237,7 +1237,8 @@ export interface CertGroupApi {
      * device about the key cannot send one (Matter Core § 4.16.2).
      *
      * The plan has the controller *generate* this key, so a case provisions itself here with the same
-     * key set it writes to the device.
+     * key set it writes to the device. The key set must be the one {@link ControllerAdapterOptions.groups} declares
+     * for this group; a controller refuses any other.
      */
     defineKeySet(keySet: GroupKeySetSpec): Promise<void>;
 
@@ -1337,6 +1338,33 @@ export interface ControllerAdapterOptions {
      * @see {@link MatterSpecification.v161.Core} § 6.2.3.1
      */
     attestation?: boolean;
+
+    /**
+     * The groups the controller sends on, each with the key set it encrypts with. A controller that has to know its
+     * keys before it starts (matterjs-server) is provisioned from this; the others install a key set when the case
+     * calls {@link CertGroupApi.defineKeySet} and refuse one this does not declare, so every controller gets the key
+     * from one place.
+     */
+    groups?: readonly CertControllerGroup[];
+}
+
+/**
+ * A group the controller sends on and the key set it encrypts with.
+ *
+ * @see {@link MatterSpecification.v161.Core} § 4.16.2
+ */
+export interface CertControllerGroup {
+    groupId: number;
+    keySet: GroupKeySetSpec;
+
+    /**
+     * The multicast address the controller sends this group's messages to: the per-group address
+     * `FF35:0040:FD<fabric id>00:<group id>` (`"perGroupId"`), or the site-local IANA address Groupcast uses
+     * (`"ianaAddr"`). Absent, the per-group address.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 2.5.6.2
+     */
+    addressPolicy?: "ianaAddr" | "perGroupId";
 }
 
 /** What a case can tell a controller about the certificates it will be shown. */

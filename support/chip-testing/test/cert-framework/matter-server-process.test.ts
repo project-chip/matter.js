@@ -14,6 +14,11 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+    type CertContextFile,
+    certContextLoadedOf,
+    certContextRefusalOf,
+} from "../../src/matter-server/matter-server-cert-context.js";
+import {
     DISABLE_AUTO_SUBSCRIPTION_FLAG,
     MatterServerProcess,
     type MatterServerProcessOptions,
@@ -30,6 +35,11 @@ interface Report {
     pid: number;
     storagePath: string;
     environment: string[];
+    certContext?: unknown;
+}
+
+function messageOf(error: unknown) {
+    return error instanceof Error ? error.message : String(error);
 }
 
 const ARGS_PREFIX = "fake-server args: ";
@@ -355,6 +365,107 @@ describe("MatterServerProcess", () => {
         server = undefined;
         expect(process.listenerCount("exit")).equals(listeners);
     });
+
+    describe("with a cert-context.json", () => {
+        const CONTEXT: CertContextFile = {
+            keySets: [
+                {
+                    groupKeySetId: 1,
+                    epochKey0: "d0d1d2d3d4d5d6d7d8d9dadbdcdddedf",
+                    epochStartTime0: 1_600_000_000_000_000,
+                    groupKeySecurityPolicy: "TrustFirst",
+                },
+            ],
+            groupKeyMap: [{ groupId: 1, groupKeySetId: 1 }],
+        };
+
+        it("writes the file into the server's storage before it starts and waits for the server to load it", async () => {
+            server = await start({ entry: ENTRY, role: "dut", certContext: CONTEXT });
+
+            const report = await readReport();
+            expect(report.certContext).deep.equals(CONTEXT);
+            expect(
+                server.log.lines.some(({ text }) => text.includes("Loaded group key configuration")),
+                "the loaded line is in the log",
+            ).true;
+        });
+
+        it("writes no file where none is given", async () => {
+            server = await start({ entry: ENTRY, role: "dut" });
+
+            expect((await readReport()).certContext).undefined;
+        });
+
+        it("fails with the server's own reason where the server refuses the file", async () => {
+            const error = await rejectionOf(
+                start({ entry: withFlag("--cert-context-refuse"), role: "dut", certContext: CONTEXT }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error)).match(
+                /^matterjs-server refused its cert-context\.json: Invalid group key configuration \S+cert-context\.json: keySets\[0\]\.groupKeySetId must not be 0/,
+            );
+        });
+
+        it("fails at the refusal line, before a server that refused the file has exited", async () => {
+            const started = Date.now();
+            const error = await rejectionOf(
+                start({
+                    entry: withFlag("--cert-context-refuse --cert-context-slow-exit"),
+                    role: "dut",
+                    certContext: CONTEXT,
+                }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error)).contains("refused its cert-context.json: Invalid group key configuration");
+            expect(Date.now() - started, "failed without waiting for the exit").lessThan(10_000);
+        });
+
+        it("fails at a refusal to install the file the server already said it loaded", async () => {
+            const started = Date.now();
+            const error = await rejectionOf(
+                start({ entry: withFlag("--cert-context-install-fail"), role: "dut", certContext: CONTEXT }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error)).contains(
+                "refused its cert-context.json: Cannot install group key configuration: storage closed",
+            );
+            expect(Date.now() - started, "failed without waiting out the readiness timeout").lessThan(10_000);
+        });
+
+        it("fails where the server loaded other counts than it was given", async () => {
+            const error = await rejectionOf(
+                start({ entry: withFlag("--cert-context-miscount"), role: "dut", certContext: CONTEXT }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error))
+                .contains("loaded 2 key sets and 1 groups")
+                .contains("wrote 1 key sets and 1 groups");
+        });
+
+        it("fails where the server loaded the file from another path", async () => {
+            const error = await rejectionOf(
+                start({ entry: withFlag("--cert-context-other-path"), role: "dut", certContext: CONTEXT }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error)).match(/loaded 1 key sets and 1 groups from \/elsewhere\/cert-context\.json/);
+        });
+
+        it("fails at the readiness line where the server becomes ready without saying it loaded the file", async () => {
+            const started = Date.now();
+            const error = await rejectionOf(
+                start({ entry: withFlag("--cert-context-ignore"), role: "dut", certContext: CONTEXT }),
+            );
+
+            expect(error).instanceOf(CertConfigError);
+            expect(messageOf(error)).contains("became ready without logging that it loaded");
+            expect(Date.now() - started, "failed without waiting out the readiness timeout").lessThan(10_000);
+        });
+    });
 });
 
 describe("plainLogLine", () => {
@@ -377,5 +488,35 @@ describe("readinessPortOf", () => {
         expect(readinessPortOf("Webserver listening on http://127.0.0.1:0")).undefined;
         expect(readinessPortOf("Webserver listening on http://127.0.0.1:70000")).undefined;
         expect(readinessPortOf("Webserver listening on http://127.0.0.1:ws")).undefined;
+    });
+});
+
+describe("cert-context.json log lines", () => {
+    const PATH = "/private/tmp/matter-cert-server-abc/cert-context.json";
+
+    it("reads the path and counts from the server's loaded line", () => {
+        expect(
+            certContextLoadedOf(
+                `2026-10-16 06:46:44.840 NOTICE GroupKeyConfig Loaded group key configuration from ${PATH}: 1 key sets, 2 groups`,
+            ),
+        ).deep.equals({ path: PATH, keySets: 1, groups: 2 });
+        expect(certContextLoadedOf("NOTICE Runtime Shutting down")).undefined;
+    });
+
+    it("reads the server's reason from its refusal line", () => {
+        for (const reason of [
+            `Invalid group key configuration ${PATH}: groupKeyMap[0].groupId duplicates group 1`,
+            `Cannot read group key configuration ${PATH}: EACCES`,
+            "Cannot install group key configuration: storage closed",
+        ]) {
+            expect(certContextRefusalOf(`2026-10-16 FATAL MatterServer Server failed to start ${reason}`)).equals(
+                reason,
+            );
+        }
+        expect(
+            certContextRefusalOf(
+                `NOTICE GroupKeyConfig Loaded group key configuration from ${PATH}: 1 key sets, 1 groups`,
+            ),
+        ).undefined;
     });
 });

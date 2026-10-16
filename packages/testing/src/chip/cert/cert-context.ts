@@ -8,6 +8,7 @@ import type { Subject } from "../../device/subject.js";
 import type { ChipBinsSource } from "../chip-bins.js";
 import type { CertAppVariant } from "./cert-dsl.js";
 import type {
+    CertControllerGroup,
     ControllerCapability,
     ControllerRoleKind,
     ControllerSelection,
@@ -270,6 +271,15 @@ export type CertRunSetup = Pick<CertStepContext, "controllerSelection" | "device
 export type CertStepSetting = string | ((setup: CertRunSetup) => string | undefined);
 
 /**
+ * The groups a DUT controller sends on, given as is or as a function of the {@link CertRunSetup}: a case whose plan
+ * branches on the TH sends on another group address depending on the TH it runs against, and a controller that needs
+ * its keys before it starts has to know which before any step runs.
+ */
+export type CertControllerGroupsSetting =
+    | readonly CertControllerGroup[]
+    | ((setup: CertRunSetup) => readonly CertControllerGroup[] | undefined);
+
+/**
  * What a run's wiring provides before {@link CertTest} adds what only it can answer.
  *
  * {@link CertStepContext.picsMet} rests on the PICS the run resolves once it starts, the selection is the one the
@@ -339,6 +349,8 @@ export interface CertTestDefinition {
     controllers: Readonly<Record<string, ControllerRoleKind>>;
     /** What every step of this test needs of its controllers (see `cert-dsl.ts`'s `CertTestOptions`). */
     controllerCapabilities?: readonly ControllerCapability[];
+    /** The groups the DUT controller sends on (see `cert-dsl.ts`'s `CertTestOptions`). */
+    controllerGroups?: CertControllerGroupsSetting;
     /** Role name → arguments that role's app starts with (see `cert-dsl.ts`'s `CertTestOptions`). */
     appArgs?: Record<string, CertAppArgs>;
 }

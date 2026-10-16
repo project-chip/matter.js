@@ -709,9 +709,9 @@ with `outOfScope` naming the reason, no devices and verdict `skipped`.
   and handles conditional writes itself. They skip as "not reachable for controller use cases" and the TC passes on
   its other steps. A timed write (TC-IDM-5.1 step 2) sends `timed_request_timeout_ms`, and so does an invoke with a
   zero timeout, which the server sends as a Timed Request too.
-- TC-SC-3.5 (`single-handshake-attempt`), group cases (`group-messaging`) and the TCP block (`tcp-transport`) are
-  capability-gated the same way. So are, at test level, the OTA provider cases that script the server's provider or
-  announce it with nothing staged (TC-SU-3.2–3.4: `ota-provider-script`) and TC-BR-4 (`sustained-subscription`).
+- TC-SC-3.5 (`single-handshake-attempt`) and the TCP block (`tcp-transport`) are capability-gated the same way. So
+  are, at test level, the OTA provider cases that script the server's provider or announce it with nothing staged
+  (TC-SU-3.2–3.4: `ota-provider-script`) and TC-BR-4 (`sustained-subscription`).
 - The ICD client cases (TC-ICDM-6.1, TC-ICDB-1.3) and TC-SU-3.1 run on the server's own subscription to the node.
   `update_node` refuses a node the server does not hold as available, which it does only after its own subscription's
   first report (matterjs-server `ControllerCommandHandler.updateNode`, `Nodes.isAvailable`). That the server's ICD
@@ -2978,7 +2978,52 @@ through the same helpers in `tc-support.ts`.
 
 **A production change came with it.** The group invoke's diagnostic printed the address alone;
 `GroupSession.destination` now renders `[<address>]:<port>` so the log says where a message actually
-went. Steps 6 and 7 stay not-applicable: they need the Groupcast cluster, which neither TH has.
+went.
+
+**The TH's root decides the branch.** Plan step 3 names the DUT's root, but the CHIP YAML's verification text for
+the same step says "If Groupcast cluster is enabled on the RootNode endpoint of the TH, skip to step 6", and step 6
+sends JoinGroup to the TH. Step 1a therefore reads the TH's root `ServerList` after commissioning: without Groupcast
+the legacy steps 3–5 run and 6–7 skip, with it 3–5 skip and 6–7 run (`notApplicableAtRun`, so the skips count as
+plan conditions). matter.js's `all-clusters` TH mounts Groupcast on its root; the chip TH is the `nogroupcast` variant
+(or a released binary that predates the cluster). Step 6 invokes `Groupcast.JoinGroup` (group 1, endpoint 1, key set
+1, no key: step 2 already wrote it) on the TH; step 7 sends `OnOff.Toggle` to group 1 and checks the DUT's log names
+`ff05::fa` on port 5540 (matter.js `dest:`, chip-tool `[UDP:[ff05::fa]:5540]` on its `(G) Msg TX` line), the TH's
+dispatch, and the OnOff state flipping. The plan's group ids (1 and 2) are kept; the YAML's 259/257 are its example
+values.
+
+**The controller's keys are declared on the case.** `certTest({ controllerGroups })` names each group the DUT
+controller sends on, with its key set and an optional address policy, and the engine hands it to the DUT
+controller as `ControllerAdapterOptions.groups`. It may be a function of the run setup: TC-SC-5.3 declares group 1
+with `groupKeySet()` (the value step 2 writes), on `ianaAddr` for a matterjs TH and on the per-group address for a
+chip TH, because a controller that needs its keys before it starts must know the branch before step 1a can read it.
+Step 1a fails where the TH's root disagrees with that prediction. Every adapter validates the declaration when it is
+built (`validateControllerGroups`: application group id, no key set 0, no duplicate group, one key per key set id,
+policy 0/1, Unix-epoch start time), checks `defineKeySet` against it and refuses an undeclared group in `invoke`.
+The in-process adapter applies the address policy on the sending fabric; chip-tool passes `--addressPolicy 0` to
+`groupsettings add-group` for `ianaAddr` (without the flag it uses the per-group address).
+
+**On the matterjs-server leg the key is in place before the server starts.** The WebSocket API has no command to
+install a group key, so the adapter writes a certification-only `cert-context.json` into the server's
+`--storage-path` before it spawns the server. The server reads it once at start, only with
+`--disable-auto-subscription`, replaces the controller fabric's group state with it, and logs
+`Loaded group key configuration from <path>: N key sets, M groups` (logger `GroupKeyConfig`) before its readiness
+line. The start fails with `CertConfigError` at the refusal line (`Invalid group key configuration <path>: …`), at a
+readiness line with no loaded line before it (a server build without the loader), or on other counts or another
+path. Key sets never carry `groupKeyMulticastPolicy`, which the server refuses; the policy goes on the group map
+entry. `defineKeySet` on this leg only checks and marks the group keyed; `invoke` refuses a group not keyed that way
+(the other controllers fail without the key), then sends a `device_command` to the Group Node ID
+(`NodeId.fromGroupId`) without `endpoint_id`, answered with `null`.
+
+**Two server-leg traps seen live (server c8e3d07b).** The address policy from the file did not reach the send: with
+`IanaAddr` declared, step 7 went to `ff35:40:fd00::100:1`. The server logs `Rotated NOC for fabric 1` after it applied
+the file, so the policy set on the fabric object is most likely lost with that object (inferred). And against a
+matterjs TH the server's group send fails with `UDP send timeout` unless `MATTER_MDNS_NETWORKINTERFACE` names the
+interface: the session to that TH runs over TCP, so the UDP socket has seen no inbound message to learn its interface
+from and falls back to a default one (inferred from `NodeJsUdpSocket.send`); a chip TH session over UDP does not hit it.
+
+Step 5 reads the DUT's `Installing operational certificate … fabricId:` line from log offset 0. On the server leg
+that is the server's own startup line (matter.js `Fabric`, debug), logged before the readiness line; the server's
+`LineQueue` keeps every line and `follow()` replays from the first, so the adapter's log follower sees it.
 
 ## Operating a device, and observing the events it sends (`TC-SWTCH-3.2`)
 

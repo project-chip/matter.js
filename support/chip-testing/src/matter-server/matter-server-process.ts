@@ -6,9 +6,16 @@
 
 import { Abort, ClosedError, Duration, Seconds, TimeoutError } from "@matter/general";
 import { CertConfigError, type ChildExit, LineQueue, LogFollower, ManagedChildProcess } from "@matter/testing";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import {
+    CERT_CONTEXT_FILE,
+    type CertContextFile,
+    type CertContextLoaded,
+    certContextLoadedOf,
+    certContextRefusalOf,
+} from "./matter-server-cert-context.js";
 import { MatterServerClient } from "./matter-server-client.js";
 
 /** Makes the server leave attribute subscriptions to the cert test instead of subscribing on its own. */
@@ -83,6 +90,13 @@ export interface MatterServerProcessOptions {
 
     /** Variables the server gets in addition to the few it inherits from this process. */
     env?: Record<string, string>;
+
+    /**
+     * Written to {@link CERT_CONTEXT_FILE} in the server's storage before it starts. The start then also waits for the
+     * server to log that it loaded the file with as many key sets and groups as it holds, and fails with
+     * `CertConfigError` where the server refuses the file or never says it loaded it.
+     */
+    certContext?: CertContextFile;
 }
 
 /**
@@ -126,6 +140,7 @@ export class MatterServerProcess {
             readinessTimeout = DEFAULT_READINESS_TIMEOUT,
             exitGrace = EXIT_GRACE,
             env,
+            certContext,
         } = options;
 
         if (signal?.aborted) {
@@ -137,6 +152,11 @@ export class MatterServerProcess {
         let child: ManagedChildProcess | undefined;
 
         try {
+            const certContextPath = join(storagePath, CERT_CONTEXT_FILE);
+            if (certContext !== undefined) {
+                await writeFile(certContextPath, JSON.stringify(certContext, undefined, 4));
+            }
+
             const [command, ...entryArgs] = commandFor(entry);
             const args = [
                 ...entryArgs,
@@ -159,6 +179,7 @@ export class MatterServerProcess {
             const recent = new Array<string>();
             let announce = (_port: number) => {};
             const listening = new Promise<number>(resolve => (announce = resolve));
+            const load = new CertContextLoad(certContextPath);
             child = ManagedChildProcess.spawn(command, args, {
                 env: { ...inheritedEnvironment(), ...env },
                 stopGraceMs: exitGrace,
@@ -169,6 +190,9 @@ export class MatterServerProcess {
                         recent.shift();
                     }
                     lines.push(line);
+                    if (certContext !== undefined) {
+                        load.observe(line);
+                    }
                     const port = readinessPortOf(line);
                     if (port !== undefined) {
                         announce(port);
@@ -176,7 +200,13 @@ export class MatterServerProcess {
                 },
             });
 
-            const port = await readyPort(listening, child, command, recent, readinessTimeout, signal);
+            const ready =
+                certContext === undefined
+                    ? listening
+                    : Promise.all([listening, loadedAsWritten(load.loaded, certContextPath, certContext)]).then(
+                          ([port]) => port,
+                      );
+            const port = await readyPort(ready, child, command, recent, readinessTimeout, signal);
             const client = await MatterServerClient.connect(
                 `ws://${LISTEN_ADDRESS}:${port}${WEBSOCKET_PATH}`,
                 signal,
@@ -244,9 +274,80 @@ function commandFor(entry: string): string[] {
     return parts;
 }
 
-/** The port the server's readiness line names, once it logged one; fails when the server exits or takes too long. */
+/**
+ * The server's handling of {@link CERT_CONTEXT_FILE}, as its log reports it up to the readiness line.
+ *
+ * The server reads the file and installs it before it starts its web server, so the readiness line settles it: loaded
+ * where a loaded line came before it, ignored otherwise. A refusal of the file, or of installing it after it was read,
+ * ends the server's start and fails the wait when it is logged rather than when the server exits.
+ */
+class CertContextLoad {
+    readonly loaded: Promise<CertContextLoaded>;
+    readonly #path: string;
+    #announce = (_loaded: CertContextLoaded) => {};
+    #refuse = (_error: CertConfigError) => {};
+    #read?: CertContextLoaded;
+    #settled = false;
+
+    constructor(path: string) {
+        this.#path = path;
+        this.loaded = new Promise((resolve, reject) => {
+            this.#announce = resolve;
+            this.#refuse = reject;
+        });
+    }
+
+    observe(line: string) {
+        if (this.#settled) {
+            return;
+        }
+        this.#read ??= certContextLoadedOf(line);
+        const refusal = certContextRefusalOf(line);
+        if (refusal !== undefined) {
+            this.#settle(() =>
+                this.#refuse(new CertConfigError(`matterjs-server refused its ${CERT_CONTEXT_FILE}: ${refusal}`)),
+            );
+        } else if (readinessPortOf(line) !== undefined) {
+            const read = this.#read;
+            this.#settle(() =>
+                read === undefined
+                    ? this.#refuse(
+                          new CertConfigError(
+                              `matterjs-server became ready without logging that it loaded ${this.#path}; a server ` +
+                                  `build without support for ${CERT_CONTEXT_FILE} ignores it`,
+                          ),
+                      )
+                    : this.#announce(read),
+            );
+        }
+    }
+
+    #settle(settle: () => void) {
+        this.#settled = true;
+        settle();
+    }
+}
+
+/**
+ * Resolves once the server logged that it loaded the file at `path` with the counts `written` holds; rejects with
+ * `CertConfigError` where it loaded other counts or another file.
+ */
+async function loadedAsWritten(loaded: Promise<CertContextLoaded>, path: string, written: CertContextFile) {
+    const { path: loadedPath, keySets, groups } = await loaded;
+    if (loadedPath !== path || keySets !== written.keySets.length || groups !== written.groupKeyMap.length) {
+        throw new CertConfigError(
+            `matterjs-server loaded ${keySets} key sets and ${groups} groups from ${loadedPath}; the adapter wrote ` +
+                `${written.keySets.length} key sets and ${written.groupKeyMap.length} groups to ${path}`,
+        );
+    }
+}
+
+/**
+ * The port `ready` resolves with once the server logged its readiness line (and, where it was given a
+ * {@link CERT_CONTEXT_FILE}, that it loaded the file); fails when the server exits, refuses the file or takes too long.
+ */
 async function readyPort(
-    listening: Promise<number>,
+    ready: Promise<number>,
     child: ManagedChildProcess,
     command: string,
     recent: string[],
@@ -261,7 +362,7 @@ async function readyPort(
             this.abort(new TimeoutError(`matterjs-server did not become ready within ${Duration.format(timeout)}`));
         },
     });
-    const outcome = await abort.race<number | ChildExit>(listening, child.exited);
+    const outcome = await abort.race<number | ChildExit>(ready, child.exited);
     if (typeof outcome === "number") {
         return outcome;
     }

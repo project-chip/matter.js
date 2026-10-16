@@ -41,6 +41,7 @@ import {
     MatterServerReadError,
 } from "../../src/cert/MatterServerControllerAdapter.js";
 import { OnboardingPayloadRefusedError } from "../../src/cert/onboarding-payload.js";
+import { type CertContextFile, certContextFor } from "../../src/matter-server/matter-server-cert-context.js";
 import { MatterServerClient, MatterServerCommandError } from "../../src/matter-server/matter-server-client.js";
 import { MatterServerSubscriptionEndedError } from "../../src/matter-server/matter-server-subscriptions.js";
 import { MatterServerWireError } from "../../src/matter-server/matter-server-wire.js";
@@ -2129,17 +2130,6 @@ describe("MatterServerControllerAdapter", () => {
             ["basic-commissioning-window", () => n.openCommissioningWindow({ timeout: 180, enhanced: false })],
             ["ota-provider-script", () => n.announceOtaProvider()],
             ["ota-provider-script", () => n.scriptOtaProvider({})],
-            [
-                "group-messaging",
-                () =>
-                    adapter.group(1).defineKeySet({
-                        groupKeySetId: 1,
-                        groupKeySecurityPolicy: 0,
-                        epochKey0: new Uint8Array(16),
-                        epochStartTime0: 1n,
-                    }),
-            ],
-            ["group-messaging", () => adapter.group(1).invoke(ON_OFF, "On")],
         ];
 
         for (const [capability, call] of refusals) {
@@ -2489,5 +2479,203 @@ describe("MatterServerControllerAdapter construction", () => {
             "ota-provider-script",
             "sustained-subscription",
         ]);
+    });
+});
+
+describe("MatterServerControllerAdapter group messaging", () => {
+    const KEY_SET = {
+        groupKeySetId: 1,
+        groupKeySecurityPolicy: 0,
+        epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+        epochStartTime0: 1_600_000_000_000_000n,
+    };
+    const GROUPS: ControllerAdapterOptions["groups"] = [{ groupId: 1, keySet: KEY_SET }];
+
+    let server: FakeMatterServer;
+    let adapter: MatterServerControllerAdapter | undefined;
+    let launchedWith: { certContext?: CertContextFile }[];
+
+    beforeEach(async () => {
+        server = await FakeMatterServer.start();
+        launchedWith = [];
+    });
+
+    afterEach(async () => {
+        await adapter?.close();
+        adapter = undefined;
+        await server.close();
+        expect(server.failures).deep.equals([]);
+    });
+
+    async function started(options?: ControllerAdapterOptions) {
+        adapter = new MatterServerControllerAdapter("dut", options, async (_role, _signal, certContext) => {
+            launchedWith.push({ certContext });
+            const client = await MatterServerClient.connect(server.url);
+            const lines = new LineQueue();
+            return {
+                client,
+                entry: "fake-entry",
+                httpUrl: server.httpUrl,
+                log: new LogFollower(lines.follow(), "dut"),
+                close: async () => {
+                    await client.close();
+                    lines.close();
+                },
+            };
+        });
+        await adapter.start();
+        return adapter;
+    }
+
+    it("hands the server the declared key set and group map before it starts", async () => {
+        await started({ groups: GROUPS });
+
+        expect(launchedWith).deep.equals([
+            {
+                certContext: {
+                    keySets: [
+                        {
+                            groupKeySetId: 1,
+                            epochKey0: "d0d1d2d3d4d5d6d7d8d9dadbdcdddedf",
+                            epochStartTime0: 1_600_000_000_000_000,
+                            groupKeySecurityPolicy: "TrustFirst",
+                        },
+                    ],
+                    groupKeyMap: [{ groupId: 1, groupKeySetId: 1 }],
+                },
+            },
+        ]);
+    });
+
+    it("hands the server no file content where the case declares no groups", async () => {
+        await started();
+
+        expect(launchedWith).deep.equals([{ certContext: undefined }]);
+    });
+
+    it("lists a key set two groups share once and states a declared address policy", () => {
+        expect(
+            certContextFor([
+                { groupId: 1, keySet: KEY_SET, addressPolicy: "ianaAddr" },
+                { groupId: 2, keySet: KEY_SET, addressPolicy: "perGroupId" },
+            ]),
+        ).deep.equals({
+            keySets: [
+                {
+                    groupKeySetId: 1,
+                    epochKey0: "d0d1d2d3d4d5d6d7d8d9dadbdcdddedf",
+                    epochStartTime0: 1_600_000_000_000_000,
+                    groupKeySecurityPolicy: "TrustFirst",
+                },
+            ],
+            groupKeyMap: [
+                { groupId: 1, groupKeySetId: 1, addressPolicy: "IanaAddr" },
+                { groupId: 2, groupKeySetId: 1, addressPolicy: "PerGroupId" },
+            ],
+        });
+        // The server refuses the field as unknown; the address policy belongs on the group map entry only
+        for (const keySet of certContextFor([{ groupId: 1, keySet: KEY_SET, addressPolicy: "ianaAddr" }]).keySets) {
+            expect(keySet).not.have.property("groupKeyMulticastPolicy");
+        }
+        expect(certContextFor([{ groupId: 1, keySet: { ...KEY_SET, groupKeySecurityPolicy: 1 } }]).keySets[0])
+            .property("groupKeySecurityPolicy")
+            .equals("CacheAndSync");
+    });
+
+    it("refuses a declaration the server would refuse or read differently, before the server starts", () => {
+        const refused: [string, ControllerAdapterOptions["groups"]][] = [
+            [
+                "group 1 twice",
+                [
+                    { groupId: 1, keySet: KEY_SET },
+                    { groupId: 1, keySet: KEY_SET },
+                ],
+            ],
+            [
+                "key set 1 with two different keys",
+                [
+                    { groupId: 1, keySet: KEY_SET },
+                    { groupId: 2, keySet: { ...KEY_SET, epochKey0: new Uint8Array(16) } },
+                ],
+            ],
+            ["not Unix-epoch microseconds", [{ groupId: 1, keySet: { ...KEY_SET, epochStartTime0: 2_220_000n } }]],
+            ["not Unix-epoch microseconds", [{ groupId: 1, keySet: { ...KEY_SET, epochStartTime0: 1n << 60n } }]],
+            ["security policy 2", [{ groupId: 1, keySet: { ...KEY_SET, groupKeySecurityPolicy: 2 } }]],
+            ["key set 0, which is the fabric's IPK", [{ groupId: 1, keySet: { ...KEY_SET, groupKeySetId: 0 } }]],
+            ["group 65280, which is not an application group id", [{ groupId: 0xff00, keySet: KEY_SET }]],
+            ["group 0, which is not an application group id", [{ groupId: 0, keySet: KEY_SET }]],
+        ];
+        for (const [message, groups] of refused) {
+            expect(() => new MatterServerControllerAdapter("dut", { groups }), message)
+                .throw(ImplementationError)
+                .property("message")
+                .contains(message);
+        }
+        expect(launchedWith).deep.equals([]);
+    });
+
+    it("accepts the declared key set without sending anything, and refuses any other", async () => {
+        const dut = await started({ groups: GROUPS });
+
+        await dut.group(1).defineKeySet(KEY_SET);
+        expect(await rejectionOf(dut.group(1).defineKeySet({ ...KEY_SET, epochKey0: new Uint8Array(16) })))
+            .instanceOf(ImplementationError)
+            .property("message")
+            .contains("epochKey0");
+        expect(await rejectionOf(dut.group(2).defineKeySet(KEY_SET)))
+            .instanceOf(ImplementationError)
+            .property("message")
+            .contains("controllerGroups");
+        expect(server.requests).deep.equals([]);
+    });
+
+    it("sends a group invoke as device_command to the Group Node ID, without an endpoint", async () => {
+        server.reply = () => ({ result: null });
+        const dut = await started({ groups: GROUPS });
+
+        await dut.group(1).defineKeySet(KEY_SET);
+        await dut.group(1).invoke("Groups", "addGroup", { groupId: 2, groupName: "GroupTwo" });
+
+        expect(server.requests.map(({ command, args }) => ({ command, args }))).deep.equals([
+            {
+                command: "device_command",
+                args: {
+                    node_id: 0xffff_ffff_ffff_0001n,
+                    cluster_id: 4,
+                    command_name: "AddGroup",
+                    payload: { groupId: 2, groupName: "GroupTwo" },
+                },
+            },
+        ]);
+    });
+
+    it("refuses a group invoke for an undeclared group before sending anything", async () => {
+        const dut = await started({ groups: GROUPS });
+
+        expect(await rejectionOf(dut.group(2).invoke("Groups", "addGroup", { groupId: 2, groupName: "x" })))
+            .instanceOf(ImplementationError)
+            .property("message")
+            .contains("group 2");
+        expect(server.requests).deep.equals([]);
+    });
+
+    it("refuses a group invoke before the case keyed the group, as the other controllers fail without the key", async () => {
+        const dut = await started({ groups: GROUPS });
+
+        expect(await rejectionOf(dut.group(1).invoke("Groups", "addGroup", { groupId: 2, groupName: "x" })))
+            .instanceOf(ImplementationError)
+            .property("message")
+            .contains("before defineKeySet");
+        expect(server.requests).deep.equals([]);
+    });
+
+    it("fails a group invoke the server answers with something other than null", async () => {
+        server.reply = () => ({ result: { status: 0 } });
+        const dut = await started({ groups: GROUPS });
+        await dut.group(1).defineKeySet(KEY_SET);
+
+        expect(await rejectionOf(dut.group(1).invoke("Groups", "addGroup", { groupId: 2, groupName: "x" }))).instanceOf(
+            UnexpectedDataError,
+        );
     });
 });

@@ -109,6 +109,7 @@ import type {
     BatchCommandSpec,
     BdxTransferAccept,
     BdxTransferProposal,
+    CertControllerGroup,
     CertGroupApi,
     CertIcdClientApi,
     CertIcdEvent,
@@ -154,6 +155,7 @@ import type {
 import { LineQueue, LogFollower } from "@matter/testing";
 import { AsyncLocalStorage } from "node:async_hooks";
 import { OTA_TEST_PAYLOAD_SIZE, otaTestPayload, otaTestSoftwareVersionString } from "../OtaTestIdentity.js";
+import { assertDeclaredKeySet, declaredGroup, validateControllerGroups } from "./controller-groups.js";
 import { certClusterModelFor, findCertCluster } from "./custom-clusters.js";
 import { OriginDestination, registerLogOrigin } from "./log-origins.js";
 import { refusalOf, singleQrPayload } from "./onboarding-payload.js";
@@ -2611,6 +2613,7 @@ export class InProcessControllerAdapter implements ControllerAdapter {
     #webRtcRequestor?: InProcessWebRtcRequestorApi;
     readonly #judgesAttestation: boolean;
     #attestation?: InProcessAttestationApi;
+    readonly #groups?: readonly CertControllerGroup[];
     readonly #icdClients = new Map<NodeId, InProcessIcdClient>();
 
     /**
@@ -2636,6 +2639,8 @@ export class InProcessControllerAdapter implements ControllerAdapter {
         this.#transport = options?.transport;
         this.#hostsWebRtcRequestor = options?.webRtcRequestor === true;
         this.#judgesAttestation = options?.attestation === true;
+        validateControllerGroups(id, options?.groups);
+        this.#groups = options?.groups;
         this.#env = new Environment(`cert-${id}`, Environment.default);
         this.#releaseLogOrigin = registerLogOrigin(this.#env.logOrigin, "adapter", this.#logStream);
         new MockStorageService(this.#env);
@@ -2824,7 +2829,7 @@ export class InProcessControllerAdapter implements ControllerAdapter {
     }
 
     group(groupId: number): CertGroupApi {
-        return new InProcessCertGroupApi(this.id, this.#startedController, this.#adminFabric, groupId);
+        return new InProcessCertGroupApi(this.id, this.#startedController, this.#adminFabric, groupId, this.#groups);
     }
 }
 
@@ -2927,12 +2932,20 @@ class InProcessCertGroupApi implements CertGroupApi {
     readonly #controller: ServerNode;
     readonly #fabric: Fabric;
     readonly #groupId: number;
+    readonly #groups?: readonly CertControllerGroup[];
 
-    constructor(adapterId: string, controller: ServerNode, fabric: Fabric, groupId: number) {
+    constructor(
+        adapterId: string,
+        controller: ServerNode,
+        fabric: Fabric,
+        groupId: number,
+        groups: readonly CertControllerGroup[] | undefined,
+    ) {
         this.#adapterId = adapterId;
         this.#controller = controller;
         this.#fabric = fabric;
         this.#groupId = groupId;
+        this.#groups = groups;
     }
 
     /**
@@ -2949,6 +2962,7 @@ class InProcessCertGroupApi implements CertGroupApi {
     }
 
     async defineKeySet(keySet: GroupKeySetSpec): Promise<void> {
+        const { addressPolicy } = assertDeclaredKeySet(this.#adapterId, this.#groups, this.#groupId, keySet);
         await runTagged(this.#adapterId, async () => {
             const fabric = this.#sendingFabric;
             await fabric.groups.setFromGroupKeySet({
@@ -2959,10 +2973,14 @@ class InProcessCertGroupApi implements CertGroupApi {
                 epochStartTime2: null,
             });
             fabric.groups.groupKeyIdMap.set(GroupId(this.#groupId), keySet.groupKeySetId);
+            if (addressPolicy !== undefined) {
+                fabric.groups.setGroupMulticastPolicy(GroupId(this.#groupId), addressPolicy);
+            }
         });
     }
 
     async invoke(cluster: string | number, command: string, args?: object): Promise<void> {
+        declaredGroup(this.#adapterId, this.#groups, this.#groupId);
         await runTagged(this.#adapterId, async () => {
             const group = await this.#controller.peers.forAddress(this.#address);
 

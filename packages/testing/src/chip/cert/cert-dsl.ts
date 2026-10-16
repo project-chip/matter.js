@@ -28,6 +28,7 @@ import {
     CertStepSetting,
     appArgsFor,
     CertAppArgs,
+    CertControllerGroupsSetting,
     CertStepWiring,
     CertTestDefinition,
     DeviceFlavor,
@@ -142,6 +143,14 @@ export interface CertTestOptions {
      * without it. `transport: "tcp"` implies `tcp-transport`.
      */
     controllerCapabilities?: readonly ControllerCapability[];
+
+    /**
+     * The groups the DUT controller sends on, with their key sets (`ControllerAdapterOptions.groups`). Declare
+     * them for a case that sends a groupcast: a controller that has to know its keys before it starts is provisioned
+     * from this, and the others refuse a key set it does not declare. Only the controllers in a `"dut"` role get them.
+     * A function decides them from what the case was collected for.
+     */
+    controllerGroups?: CertControllerGroupsSetting;
 }
 
 export interface CertStepOptions {
@@ -335,6 +344,7 @@ export function certTest(tc: string, options: CertTestOptions): CertTestBuilder 
         transport: options.transport,
         controllers: controllerRoles,
         controllerCapabilities: options.controllerCapabilities,
+        controllerGroups: options.controllerGroups,
         appArgs: options.appArgs,
         steps: new Array<CertStepDefinition>(),
     };
@@ -961,6 +971,13 @@ class WiredCertTest extends CertTest {
         return this.#flavor;
     }
 
+    #controllerGroups() {
+        const groups = this.definition.controllerGroups;
+        return typeof groups === "function"
+            ? groups({ controllerSelection: this.selection, deviceFlavor: this.#flavor })
+            : groups;
+    }
+
     protected override contextFor(_subject: Subject): CertStepWiring {
         if (!this.#cx) {
             throw new Error("WiredCertTest.contextFor() called outside invoke()");
@@ -1011,16 +1028,20 @@ class WiredCertTest extends CertTest {
             let controllerBuild: Record<string, string> | undefined;
 
             for (const name of Object.keys(this.definition.controllers)) {
+                const kind = this.definition.controllers[name];
                 const controller = createControllerAdapter(
                     name,
-                    { transport: this.definition.transport },
-                    this.definition.controllers[name],
+                    {
+                        transport: this.definition.transport,
+                        groups: kind === "dut" ? this.#controllerGroups() : undefined,
+                    },
+                    kind,
                     this.selection,
                 );
                 controllers[name] = controller;
                 this.#openControllers = controllers;
                 await controller.start();
-                if (this.definition.controllers[name] === "dut") {
+                if (kind === "dut") {
                     controllerBuild ??= controller.build;
                 }
             }

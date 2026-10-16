@@ -25,6 +25,7 @@ import type {
     AttributeWriteStatus,
     BatchCommandResult,
     BatchCommandSpec,
+    CertControllerGroup,
     CertGroupApi,
     CertNodeApi,
     CertNodeRef,
@@ -60,6 +61,7 @@ import type { ChipToolCommissionerName } from "../chip-tool/chip-tool-client.js"
 import { ChipToolClient, resolveChipToolBinary } from "../chip-tool/chip-tool-client.js";
 import { chipJsonToMatter, matterToChipJson, stringifyChipJson } from "../chip-tool/json-codec.js";
 import { ControllerCommandError } from "./controller-command-error.js";
+import { assertDeclaredKeySet, declaredGroup, validateControllerGroups } from "./controller-groups.js";
 import { certClusterModelFor, findCertCluster } from "./custom-clusters.js";
 import { assertSingleQrPayload, OnboardingPayloadRefusedError } from "./onboarding-payload.js";
 import { timedInteractionTimeoutOf } from "./timed-interaction.js";
@@ -933,10 +935,16 @@ function portOverrideFor(id: string) {
 class ChipToolCertGroupApi implements CertGroupApi {
     readonly #adapter: ChipToolControllerAdapter;
     readonly #groupId: number;
+    readonly #groups?: readonly CertControllerGroup[];
 
-    constructor(adapter: ChipToolControllerAdapter, groupId: number) {
+    constructor(
+        adapter: ChipToolControllerAdapter,
+        groupId: number,
+        groups: readonly CertControllerGroup[] | undefined,
+    ) {
         this.#adapter = adapter;
         this.#groupId = groupId;
+        this.#groups = groups;
     }
 
     /**
@@ -946,6 +954,8 @@ class ChipToolCertGroupApi implements CertGroupApi {
      * commands together are what `defineKeySet` means on this controller.
      */
     async defineKeySet(keySet: GroupKeySetSpec): Promise<void> {
+        const { addressPolicy } = assertDeclaredKeySet(this.#adapter.id, this.#groups, this.#groupId, keySet);
+
         const group = `${this.#groupId}`;
         const keySetId = `${keySet.groupKeySetId}`;
 
@@ -953,7 +963,10 @@ class ChipToolCertGroupApi implements CertGroupApi {
         // provisioning step that silently did nothing surfaces much later as a groupcast that seems
         // never to have arrived
         assertCommandSucceeded(
-            await this.#adapter.execute(`groupsettings add-group group${group} ${group}`),
+            await this.#adapter.execute(
+                // Without the flag chip-tool sends to the per-group address; 0 is `MulticastAddrPolicyEnum.IanaAddr`
+                `groupsettings add-group group${group} ${group}${addressPolicy === "ianaAddr" ? " --addressPolicy 0" : ""}`,
+            ),
             "groupsettings add-group",
         );
         assertCommandSucceeded(
@@ -971,6 +984,7 @@ class ChipToolCertGroupApi implements CertGroupApi {
     }
 
     async invoke(cluster: string | number, command: string, args?: object): Promise<void> {
+        declaredGroup(this.#adapter.id, this.#groups, this.#groupId);
         const { cluster: clusterModel, clusterId, command: commandModel } = commandModelFor(cluster, command);
         const fields =
             args !== undefined && Object.keys(args).length > 0
@@ -1546,6 +1560,7 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
     readonly #eventSubscriptions = new Array<LiveEventSubscription>();
     readonly #commissionerName: ChipToolCommissionerName;
     readonly #transport?: ControllerTransport;
+    readonly #groups?: readonly CertControllerGroup[];
     #storageDirectory?: string;
     #client?: ChipToolClient;
     #nextNodeId = FIRST_NODE_ID;
@@ -1584,6 +1599,8 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
 
         this.id = id;
         this.#transport = options?.transport;
+        validateControllerGroups(id, options?.groups);
+        this.#groups = options?.groups;
         this.#commissionerName = commissionerName;
         claimedCommissioners.set(commissionerName, this);
         this.log = new LogFollower(this.#logStream.follow(), id);
@@ -1748,7 +1765,7 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
     }
 
     group(groupId: number): CertGroupApi {
-        return new ChipToolCertGroupApi(this, groupId);
+        return new ChipToolCertGroupApi(this, groupId, this.#groups);
     }
 
     /**
