@@ -36,6 +36,9 @@ export class ServerGroupNetworking {
     /** Addresses the socket has actually joined.  Changed only after addMembership/dropMembership succeeded. */
     #joined = new Set<string>();
 
+    /** Addresses whose join failed and is being retried, so only the first failure logs at info. */
+    #failedJoins = new Set<string>();
+
     #reconciling?: Promise<void>;
     #reconcileRequested = false;
     #closed = false;
@@ -153,12 +156,16 @@ export class ServerGroupNetworking {
         try {
             await this.#udpInterface.addMembership(address);
             this.#joined.add(address);
+            this.#failedJoins.delete(address);
             return true;
         } catch (error) {
-            logger.info(
-                `Failed to join multicast address ${address}, retrying in ${Duration.format(JOIN_RETRY_INTERVAL)}`,
-                error,
-            );
+            const message = `Failed to join multicast address ${address}, retrying in ${Duration.format(JOIN_RETRY_INTERVAL)}`;
+            if (this.#failedJoins.has(address)) {
+                logger.debug(message, error);
+            } else {
+                this.#failedJoins.add(address);
+                logger.info(message, error);
+            }
             return false;
         }
     }

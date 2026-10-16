@@ -22,7 +22,7 @@ import {
     NetworkError,
 } from "@matter/general";
 import { AccessLevel } from "@matter/model";
-import { MockExchange, MockServerNode, MockSite } from "@matter/node/testing";
+import { captureLog, MockExchange, MockServerNode, MockSite } from "@matter/node/testing";
 import { Fabric, FabricManager, IANA_GROUPCAST_MULTICAST_ADDRESS, SessionManager } from "@matter/protocol";
 import { EndpointNumber, FabricIndex, GroupId, MATTER_EPOCH_OFFSET_US, NodeId } from "@matter/types";
 import { Groupcast } from "@matter/types/clusters/groupcast";
@@ -1620,6 +1620,57 @@ describe("GroupcastServer", () => {
             await MockTime.advance(30_000);
             await MockTime.yield3();
             expect(network.isMemberOf(IANA_GROUPCAST_MULTICAST_ADDRESS)).equal(true);
+        });
+
+        it("logs a failing multicast join at info once per failure streak", async () => {
+            await using node = await MockServerNode.createOnline(IanaOnlyRootEndpoint, { device: undefined });
+            const { network } = recordMembershipChanges(node);
+            const addMembership = network.addMembership.bind(network);
+            let failing = true;
+            network.addMembership = (...ips: string[]) => {
+                if (failing) {
+                    throw new NetworkError("Simulated multicast join failure");
+                }
+                addMembership(...ips);
+            };
+            using log = captureLog(LogLevel.INFO);
+            const joinFailures = () => log.messages.filter(message => message.includes("Failed to join")).length;
+            const fabric = await node.addFabric();
+            const exchange = fabricExchange(fabric.fabricIndex, AccessLevel.Administer);
+            const join = (key?: Uint8Array) =>
+                node.online({ exchange, command: true }, agent =>
+                    agent.get(GroupcastServer).joinGroup({
+                        groupId: GroupId(0x0001),
+                        endpoints: [EndpointNumber(1)],
+                        keySetId: 1,
+                        key,
+                        mcastAddrPolicy: Groupcast.MulticastAddrPolicy.IanaAddr,
+                    }),
+                );
+            const retry = async () => {
+                await MockTime.advance(30_000);
+                await MockTime.yield3();
+            };
+
+            await join(TEST_KEY);
+            await MockTime.yield3();
+            await retry();
+            await retry();
+            expect(joinFailures()).equal(1);
+
+            failing = false;
+            await retry();
+            expect(network.isMemberOf(IANA_GROUPCAST_MULTICAST_ADDRESS)).equal(true);
+
+            await node.online({ exchange, command: true }, agent =>
+                agent.get(GroupcastServer).leaveGroup({ groupId: GroupId(0x0001) }),
+            );
+            await MockTime.yield3();
+            failing = true;
+            await join();
+            await MockTime.yield3();
+            await retry();
+            expect(joinFailures()).equal(2);
         });
     });
 
