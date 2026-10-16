@@ -258,7 +258,8 @@ describe("OperationalCredentialsServer", () => {
             await using site = new MockSite();
             const { controller, device, fabrics, previous } = await deviceWithGroup(site);
             expect(groupStateOf(previous)).deep.equals(expectedGroupState);
-            const { changes } = recordMembershipChanges(device);
+            const { network, changes } = recordMembershipChanges(device);
+            expect(network.isMemberOf(IANA_GROUPCAST_MULTICAST_ADDRESS)).true;
             const atReplacement = new Array<unknown>();
             fabrics.events.replaced.on(fabric => void atReplacement.push(groupStateOf(fabric)));
 
@@ -271,6 +272,7 @@ describe("OperationalCredentialsServer", () => {
                 await MockTime.yield3();
             }
             expect(changes).deep.equals([]);
+            expect(network.isMemberOf(IANA_GROUPCAST_MULTICAST_ADDRESS)).true;
         });
 
         it("keeps the group state when the fail-safe expires and restores the previous credentials", async () => {
