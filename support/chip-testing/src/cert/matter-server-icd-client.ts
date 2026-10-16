@@ -196,13 +196,15 @@ function* linesFrom(log: LogFollower, from: number): Generator<LogLine> {
     }
 }
 
-/** The key and counter of the first completed `RegisterClient` with `nodeId` at or after `from`. */
+/** The key and counter of the first `RegisterClient` the server sent `nodeId` at or after `from`, and its response. */
 async function registrationIn(log: LogFollower, nodeId: NodeId, from: number) {
     const peer = nodeId.toString(16);
     let request: LogLine;
     try {
         request = await log.expectPattern(
-            new RegExp(String.raw`ClientInteraction Invoke » @[0-9a-f]+:${peer}•.*\.icdManagement\.registerClient with `),
+            new RegExp(
+                String.raw`ClientInteraction Invoke » @[0-9a-f]+:${peer}•.*\.icdManagement\.registerClient with `,
+            ),
             { from, timeoutMs: REGISTRATION_LOG_TIMEOUT },
         );
     } catch (error) {

@@ -100,7 +100,7 @@ The convention this series has followed, worth stating explicitly for the next T
   practical way to get real chip-side evidence today, and satisfies the "at least one chip flavor"
   bar every pilot so far has used.
 - **`matterjs` is the fast, no-binary dev loop, not a certification claim on its own.**
-  It's what you run while iterating on a TC's step logic before touching Docker/a real binary at
+  It's what you run while iterating on a TC's step logic before touching a real binary at
   all, and it's also useful for confirming matter.js's own controller-side response shape
   independent of chip's TH-side implementation quirks. But a TC that only ever runs green on
   `matterjs` and skips or has never been tried against a chip flavor hasn't actually demonstrated
@@ -642,7 +642,8 @@ answer: a controller that cannot send a command says nothing about the device, a
   `MATTERJS_SERVER_CAPABILITY_GAPS`, registered as `gaps`. The in-process controller lacks none and registers no
   `gaps`. Every matterjs-server refusal names one of them
   (`UnsupportedByControllerError.capability`), built from the same text, and so does every chip-tool refusal of an
-  operation it always lacks. chip-tool declares `tcp-transport`, `attestation`, `webrtc-requestor`, `chunked-write`,
+  operation it always lacks, except `invokeBatch`: no capability covers it, and `MCORE.IDM.C.InvokeRequest.BatchCommands`
+  gates it. chip-tool declares `tcp-transport`, `attestation`, `webrtc-requestor`, `chunked-write`,
   `batch-arrival-order`, `session-introspection`, `sustained-subscription`, `ota-provider`, `ota-provider-script`
   and `icd-client`.
 - A test declares `controllerCapabilities` on `certTest()`, and a step declares it on `step()`. A test is skipped
@@ -663,9 +664,10 @@ answer: a controller that cannot send a command says nothing about the device, a
 - A refusal that names a capability and still reaches the step runner is a framework error (step verdict `error`,
   run verdict `error`, `CertFrameworkError`), whatever the step already did: either the step lacks the declaration or
   the implementation refuses something it declares neither as a gap nor out of scope.
-- A refusal without a capability (chip-tool's refusals that depend on the call, such as a read of more paths than it
-  accepts, or an `invokeBatch` and an `announceOtaProvider` naming another node's provider, which its PICS gate, and
-  the in-process adapter) stays a safety net: it skips a step that has not acted yet and fails one that has.
+- A refusal without a capability stays a safety net: it skips a step that has not acted yet and fails one that has.
+  chip-tool refuses this way where the call decides it (a read of more paths than it accepts, an
+  `announceOtaProvider` naming another node's provider, which its PICS gate) and for `invokeBatch`. The in-process
+  adapter refuses only this way.
 - A capability a controller deliberately does not offer is no gap: the adapter lists it in its `outOfScope`
   registration (`MATTERJS_SERVER_OUT_OF_SCOPE`), with the reason. A step needing it is skipped with that reason and
   counted in `outOfScopeSkips`, which never changes the verdict. A test needing it is skipped as a whole and writes a

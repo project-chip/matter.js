@@ -179,7 +179,8 @@ export interface CertStepOptions {
      * The engine calls it inside the step, after its `pics`, controller capability, out-of-scope and long-running
      * gates, so a step the controller cannot run skips as such without the decision's reads. It may read through the
      * controllers and the logs, but it may not record a check or make a controller call that may change the device:
-     * either is a framework error. A step that learns the same from its own first read throws `CertStepNotApplicableError` instead.
+     * either is a framework error. A step that learns the same from its own first read throws
+     * `CertStepNotApplicableError` instead.
      */
     notApplicableAtRun?: (cx: CertStepContext) => Promise<string | undefined>;
 
