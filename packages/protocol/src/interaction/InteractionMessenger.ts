@@ -1058,6 +1058,11 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         return this.#reportAwaitsStatus;
     }
 
+    /** The subscription ID of the last data report, if it had one. */
+    protected get reportSubscriptionId() {
+        return this.#subscriptionId;
+    }
+
     /**
      * Answers the peer's data report with INVALID_SUBSCRIPTION, which makes the peer terminate the subscription.
      *
@@ -1073,49 +1078,6 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
             multipleMessageInteraction: true,
             logContext: Subscription.diagnosticOf(subscriptionId),
         });
-    }
-
-    /**
-     * Ends a subscribe interaction the client gave up before the peer confirmed the subscription.
-     *
-     * The peer holds the subscription from the moment it accepts the request, so it must learn that the client no
-     * longer wants it.  Answers the report the peer waits on with INVALID_SUBSCRIPTION.  If there is none and
-     * `awaitReport` is set, waits for the next message until `abort` or the usual response time and answers it if it
-     * is a report.  A SubscribeResponse cannot be answered; the peer then drops the subscription when its next report
-     * is refused.
-     *
-     * `abort` never suppresses an owed answer: once it fired the answer goes out once without retransmission, and an
-     * abort while waiting for its ack stops the wait.  Never throws.
-     *
-     * @see {@link MatterSpecification.v161.Core} § 8.5
-     */
-    async abandonSubscription({ awaitReport, abort }: { awaitReport: boolean; abort?: AbortSignal }) {
-        try {
-            if (!this.#reportAwaitsStatus) {
-                if (!awaitReport) {
-                    return;
-                }
-                const message = await this.anyNextMessage("DataReport", { abort, suppressPeerLoss: true });
-                if (message.payloadHeader.messageType !== MessageType.ReportData) {
-                    return;
-                }
-                this.#subscriptionId = subscriptionIdOf(message);
-            }
-            await this.sendInvalidSubscription(
-                this.#subscriptionId,
-                abort?.aborted ? { disableMrpLogic: true } : { abort },
-            );
-        } catch (error) {
-            if (causedBy(error, InternalError, ImplementationError, MatterFlowError)) {
-                logger.warn(this.exchange.via, "Error terminating abandoned subscription on the peer:", error);
-            } else {
-                logger.debug(
-                    this.exchange.via,
-                    "Abandoned subscription not terminated on the peer:",
-                    Diagnostic.errorMessage(asError(error)),
-                );
-            }
-        }
     }
 
     #logContextOf(report: DataReport) {
@@ -1136,6 +1098,47 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     static async create(exchangeProvider: ExchangeProvider, options?: NewExchangeOptions) {
         const exchange = await exchangeProvider.initiateExchange(options);
         return new this(exchange);
+    }
+
+    /**
+     * Ends a subscribe interaction the client gave up before the peer confirmed the subscription.
+     *
+     * The peer holds the subscription from the moment it accepts the request, so it must learn that the client no
+     * longer wants it.  Answers the report the peer waits on with INVALID_SUBSCRIPTION.  If there is none and
+     * `awaitReport` is set, waits for the next message until `abort` or the usual response time and answers it if it
+     * is a report.  A SubscribeResponse cannot be answered; the peer then drops the subscription when its next report
+     * is refused.
+     *
+     * `abort` never suppresses an owed answer: once it fired the answer goes out once without retransmission, and an
+     * abort while waiting for its ack stops the wait.  Never throws.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 8.5
+     */
+    async abandonSubscription({ awaitReport, abort }: { awaitReport: boolean; abort?: AbortSignal }) {
+        try {
+            let subscriptionId = this.reportSubscriptionId;
+            if (!this.reportAwaitsStatus) {
+                if (!awaitReport) {
+                    return;
+                }
+                const message = await this.anyNextMessage("DataReport", { abort, suppressPeerLoss: true });
+                if (message.payloadHeader.messageType !== MessageType.ReportData) {
+                    return;
+                }
+                subscriptionId = subscriptionIdOf(message);
+            }
+            await this.sendInvalidSubscription(subscriptionId, abort?.aborted ? { disableMrpLogic: true } : { abort });
+        } catch (error) {
+            if (causedBy(error, InternalError, ImplementationError, MatterFlowError)) {
+                logger.warn(this.exchange.via, "Error terminating abandoned subscription on the peer:", error);
+            } else {
+                logger.debug(
+                    this.exchange.via,
+                    "Abandoned subscription not terminated on the peer:",
+                    Diagnostic.errorMessage(asError(error)),
+                );
+            }
+        }
     }
 
     async sendReadRequest(readRequest: ReadRequest, options?: ExchangeSendOptions) {

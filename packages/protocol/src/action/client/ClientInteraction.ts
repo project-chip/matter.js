@@ -12,7 +12,6 @@ import { MalformedRequestError } from "#action/request/MalformedRequestError.js"
 import { Read } from "#action/request/Read.js";
 import { resolvePathForSpecifier } from "#action/request/Specifier.js";
 import { Subscribe } from "#action/request/Subscribe.js";
-import { Write } from "#action/request/Write.js";
 import { DecodedInvokeResult, InvokeResult } from "#action/response/InvokeResult.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
@@ -219,7 +218,8 @@ export class ClientInteraction<
     readonly #environment: Environment;
     readonly #lifetime: Lifetime;
     readonly #exchangeProvider: ExchangeProvider;
-    readonly #interactions = new BasicSet<Read | Write | Invoke | Subscribe | ClientBdxRequest>();
+    /** One entry per running interaction; retries may reuse request objects. */
+    readonly #interactions = new BasicSet<symbol>();
     #subscriptions?: ClientSubscriptions;
     readonly #abort: Abort;
     readonly #sustainRetries: RetrySchedule;
@@ -1052,80 +1052,70 @@ export class ClientInteraction<
         }
 
         const subscribe = async (request: ClientSubscribe, extraAbort?: AbortSignal) => {
-            const context = await this.#begin("subscribing", request, interactionSession, extraAbort);
+            await using context = await this.#begin("subscribing", request, interactionSession, extraAbort);
             const { abort, messenger } = context;
-            let disposeContext = true;
 
+            logger.info(
+                "Subscribe",
+                Mark.OUTBOUND,
+                messenger.exchange.via,
+                Diagnostic.asFlags({ keepSubscriptions: request.keepSubscriptions }),
+                Diagnostic.dict({
+                    min: Duration.format(request.minIntervalFloor),
+                    max: Duration.format(request.maxIntervalCeiling),
+                }),
+                request,
+            );
+
+            let responseMessage: Message;
             try {
-                logger.info(
-                    "Subscribe",
-                    Mark.OUTBOUND,
-                    messenger.exchange.via,
-                    Diagnostic.asFlags({ keepSubscriptions: request.keepSubscriptions }),
-                    Diagnostic.dict({
-                        min: Duration.format(request.minIntervalFloor),
-                        max: Duration.format(request.maxIntervalCeiling),
-                    }),
-                    request,
+                await messenger.sendSubscribeRequest(
+                    {
+                        ...request,
+                        minIntervalFloorSeconds: Seconds.of(minIntervalFloor),
+                        maxIntervalCeilingSeconds: Seconds.of(maxIntervalCeiling),
+                    },
+                    { abort },
                 );
 
-                let responseMessage: Message;
-                try {
-                    await messenger.sendSubscribeRequest(
-                        {
-                            ...request,
-                            minIntervalFloorSeconds: Seconds.of(minIntervalFloor),
-                            maxIntervalCeilingSeconds: Seconds.of(maxIntervalCeiling),
-                        },
-                        { abort },
-                    );
+                await this.#handleSubscriptionResponse(request, readChunks(messenger, abort));
+                abort.throwIfAborted();
 
-                    await this.#handleSubscriptionResponse(request, readChunks(messenger, abort));
-                    abort.throwIfAborted();
-
-                    responseMessage = await messenger.nextMessage(MessageType.SubscribeResponse, { abort });
-                } catch (error) {
-                    // An abort can come after the peer accepted the request, even while we wait for its ack
-                    const awaitReport = abort.aborted;
-                    if (awaitReport || messenger.reportAwaitsStatus) {
-                        disposeContext = false;
-                        this.#abandonSubscription(context, awaitReport).catch(error =>
-                            logger.warn(messenger.exchange.via, "Error ending abandoned subscribe interaction", error),
-                        );
-                    }
-                    throw error;
+                responseMessage = await messenger.nextMessage(MessageType.SubscribeResponse, { abort });
+            } catch (error) {
+                // An abort can come after the peer accepted the request, even while we wait for its ack
+                const awaitReport = abort.aborted;
+                if (awaitReport || messenger.reportAwaitsStatus) {
+                    context.abandon(closing => messenger.abandonSubscription({ awaitReport, abort: closing }));
                 }
-                const response = TlvSubscribeResponse.decode(responseMessage.payload);
-
-                const subscription = new PeerSubscription({
-                    lifetime: this.subscriptions,
-                    request,
-                    peer,
-                    closed: () => this.subscriptions.delete(subscription),
-                    response,
-                    abort,
-                    maxPeerResponseTime: this.maximumPeerResponseTime(SUBSCRIPTION_PROCESSING_TIME),
-                });
-                this.subscriptions.addPeer(subscription);
-
-                logger.info(
-                    "Subscription successful",
-                    Mark.INBOUND,
-                    messenger.exchange.via,
-                    messenger.exchange.diagnostics,
-                    Diagnostic.dict({
-                        id: Subscription.idStrOf(response.subscriptionId),
-                        interval: Duration.format(Seconds(response.maxInterval)),
-                        timeout: Duration.format(subscription.timeout),
-                    }),
-                );
-
-                return subscription;
-            } finally {
-                if (disposeContext) {
-                    await context[Symbol.asyncDispose]();
-                }
+                throw error;
             }
+            const response = TlvSubscribeResponse.decode(responseMessage.payload);
+
+            const subscription = new PeerSubscription({
+                lifetime: this.subscriptions,
+                request,
+                peer,
+                closed: () => this.subscriptions.delete(subscription),
+                response,
+                abort,
+                maxPeerResponseTime: this.maximumPeerResponseTime(SUBSCRIPTION_PROCESSING_TIME),
+            });
+            this.subscriptions.addPeer(subscription);
+
+            logger.info(
+                "Subscription successful",
+                Mark.INBOUND,
+                messenger.exchange.via,
+                messenger.exchange.diagnostics,
+                Diagnostic.dict({
+                    id: Subscription.idStrOf(response.subscriptionId),
+                    interval: Duration.format(Seconds(response.maxInterval)),
+                    timeout: Duration.format(subscription.timeout),
+                }),
+            );
+
+            return subscription;
         };
 
         const read = (request: Read, extraAbort?: AbortSignal, logContext?: ExchangeLogContext) => {
@@ -1173,23 +1163,6 @@ export class ClientInteraction<
         return subscription as unknown as SubscriptionResult<T>;
     }
 
-    /**
-     * Ends a subscribe interaction that stopped before the peer confirmed the subscription, then disposes it.
-     *
-     * The peer holds the subscription from the moment it accepted the request.  The caller does not wait for this, so
-     * an abort stays as prompt as for other interactions.  {@link close} waits for it; it stops the wait for a report
-     * still to come but not the answer to a report already received.
-     */
-    async #abandonSubscription(context: RequestContext, awaitReport: boolean) {
-        try {
-            // Only this interactable's close bounds it: a caller cancel must not stop telling the peer, and session loss
-            // closes the exchange
-            await context.messenger.abandonSubscription({ awaitReport, abort: this.#abort.signal });
-        } finally {
-            await context[Symbol.asyncDispose]();
-        }
-    }
-
     async #handleSubscriptionResponse(request: Subscribe, result: ReadResult) {
         if (request.updated) {
             await request.updated(result);
@@ -1207,7 +1180,8 @@ export class ClientInteraction<
         if (this.#abort.aborted) {
             throw new ImplementationError("Client interaction unavailable after close");
         }
-        this.#interactions.add(request);
+        const entry = Symbol("bdx");
+        this.#interactions.add(entry);
 
         const abort = new Abort({ abort: [session?.abort, this.#abort] });
 
@@ -1218,7 +1192,7 @@ export class ClientInteraction<
             messenger,
             [Symbol.asyncDispose]: async () => {
                 await messenger.close();
-                this.#interactions.delete(request);
+                this.#interactions.delete(entry);
                 abort[Symbol.dispose]();
             },
         };
@@ -1274,7 +1248,8 @@ export class ClientInteraction<
             throw e;
         }
 
-        this.#interactions.add(request);
+        const entry = Symbol(what);
+        this.#interactions.add(entry);
 
         // Provide via dynamically so is up to date if exchange changes due to retry
         Object.defineProperty(lifetime.details, "via", {
@@ -1283,14 +1258,33 @@ export class ClientInteraction<
             },
         });
 
-        const context: RequestContext = {
+        const dispose = async () => {
+            using _closing = lifetime.closing();
+            await messenger.close();
+            this.#interactions.delete(entry);
+            abort[Symbol.dispose]();
+        };
+        let abandoned = false;
+        const context: InteractionContext = {
             abort,
             messenger,
+            abandon: task => {
+                abandoned = true;
+                const finish = async () => {
+                    try {
+                        await task(this.#abort.signal);
+                    } finally {
+                        await dispose();
+                    }
+                };
+                finish().catch(error =>
+                    logger.warn(messenger.exchange.via, "Error finishing abandoned interaction", error),
+                );
+            },
             [Symbol.asyncDispose]: async () => {
-                using _closing = lifetime.closing();
-                await messenger.close();
-                this.#interactions.delete(request);
-                abort[Symbol.dispose]();
+                if (!abandoned) {
+                    await dispose();
+                }
             },
         };
 
@@ -1331,6 +1325,18 @@ export interface RequestContext<M extends InteractionClientMessenger | BdxMessen
     messenger: M;
 
     [Symbol.asyncDispose](): Promise<void>;
+}
+
+/**
+ * The context of an interaction whose remainder can outlive the caller's scope.
+ */
+export interface InteractionContext extends RequestContext<InteractionClientMessenger> {
+    /**
+     * Hands the rest of the interaction to `task`, which runs in the background.  Disposal then waits for the task
+     * instead of the caller's scope, and {@link ClientInteraction.close} waits for it.  Caller and session aborts do not
+     * reach the task; only {@link ClientInteraction.close} stops it, through the signal it gets.
+     */
+    abandon(task: (closing: AbortSignal) => Promise<void>): void;
 }
 
 /**
