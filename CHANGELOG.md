@@ -24,6 +24,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Log messages name the environment they come from (`Diagnostic.Message.origin`), shown in brackets after the facility
     - Enhancement: Added `TransportClosedError` for an operation on a transport connection that is already closed
     - Enhancement: Storage drivers state how long dirty values may be buffered via `StorageDriver.writeCoalescingInterval`
+    - Enhancement: `nextEmitOf()` waits for the next emit of an `Observable` without missing one that comes right after a state check
     - Adjustment: The default log format is plain text instead of ANSI; set `log.format` or `Logger.format` to choose another
     - Fix: DNS-SD discovery ignores the known-answer records of mDNS queries, so a controller no longer dials a node through the wrong interface
     - Fix: (@grzonu) DNS-SD queries send known answers with their remaining TTL and omit those past half their TTL
@@ -308,6 +309,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: UpdateNOC rejects a NOC for another fabric ID (`InvalidNOC`)
     - Fix: Group messages carry the current node ID after the fabric's NOC changed
     - Fix: Removing a fabric that a fail-safe expiry restored emits `deleting` and `deleted` once
+    - Fix: A subscribe that is aborted, or fails to process a priming report, before the device's SubscribeResponse now answers the device's pending report with `INVALID_SUBSCRIPTION`, so the device drops the subscription
 
 - @matter/react-native
     - Fix: `ReactNativeBle.scanner` returns the same `BleScanner` on every access
@@ -352,6 +354,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: `InteractionClient` sends a timed write only when requested or required, so group writes work
     - Fix: A closed `PairedNode` starts no interaction, and closing nodes or the controller completes even when a step fails
     - Fix: PASE with a known address reports a wrong passcode, and falls back to discovery when the address is unreachable
+    - Fix: `CommissioningController.commissionNode()` no longer waits forever for a connected node that finished initializing before it started waiting
 
 ## 0.17.9 (2026-08-06)
 

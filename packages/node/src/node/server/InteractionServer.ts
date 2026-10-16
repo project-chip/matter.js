@@ -732,11 +732,12 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 message,
             );
         } catch (error) {
-            logger.warn(
+            const sre = StatusResponseError.of(error);
+            // A client refusing the priming report is routine and peer-triggered
+            logger[sre instanceof ReceivedStatusResponseError ? "debug" : "warn"](
                 `Subscription ${Subscription.idStrOf(subscriptionId)} for session ${session.via}: Error while sending initial data reports:`,
                 error instanceof MatterError ? error.message : error,
             );
-            const sre = StatusResponseError.of(error);
             if (sre && !(sre instanceof ReceivedStatusResponseError)) {
                 logger.info(
                     "Status",

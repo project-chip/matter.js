@@ -115,8 +115,19 @@ export interface ExchangeSendOptions {
     /** Additional context information for logging to be included at the beginning of the Message log. */
     logContext?: ExchangeLogContext;
 
-    /** Aborts sending; does not throw */
+    /**
+     * Aborts sending.  Before or during the first transmission the send rejects with {@link AbortedError} (cause: the
+     * reason).  While waiting for the ack it resolves if the reason is an {@link AbortedError}, otherwise it rejects with
+     * the reason.
+     */
     abort?: AbortSignal;
+
+    /**
+     * Ends only the waits for the ack and for retransmissions; the message is still transmitted once, even when this
+     * fired before.  The send then resolves.  Either this or {@link abort} ends the waits; only {@link abort} stops the
+     * transmission.
+     */
+    ackWaitAbort?: AbortSignal;
 
     /** Number of MRP retries to attempt (default: MRP.MAX_TRANSMISSIONS) */
     maxRetransmissions?: number;
@@ -132,7 +143,7 @@ export interface ExchangeSendOptions {
 }
 
 export interface ExchangeReceiveOptions {
-    /** Aborts sending; does not throw */
+    /** Aborts receiving; rejects with {@link AbortedError} (cause: the reason) unless a message is already queued. */
     abort?: AbortSignal;
 
     timeout?: Duration;
@@ -265,6 +276,9 @@ export class MessageExchange {
     #messageSendCounter = 0;
     #messageReceivedCounter = 0;
     #retransmissionTimer?: Timer;
+
+    /** A pending message whose ack wait ended: it still awaits its ack for close(), but is never transmitted again. */
+    #retransmissionEndedFor?: Message;
     #lastTransmissionAt?: Timestamp;
     #lastActive = Time.nowMs;
 
@@ -641,11 +655,13 @@ export class MessageExchange {
         const {
             expectAckOnly = false,
             disableMrpLogic,
+            ackWaitAbort,
             expectedProcessingTime = MRP.DEFAULT_EXPECTED_PROCESSING_TIME,
             logContext = {},
         } = this.#sendOptions;
 
         using abort = new Abort(this.#sendOptions);
+        using waiting = new Abort({ abort: [abort, ackWaitAbort] });
 
         const isStandaloneAck = standaloneAckMessageId !== undefined;
         if (standaloneAckMessageId !== undefined) {
@@ -775,7 +791,8 @@ export class MessageExchange {
                 this.channel.send(message, { exchange: this, logContext, addressOverride: this.#addressOverride }),
             );
         }
-        if (abort.aborted) {
+        if (waiting.aborted) {
+            this.#endAckWait();
             return;
         }
 
@@ -791,15 +808,16 @@ export class MessageExchange {
             // Use race (not attempt) so that on abort we fall through to the cleanup block below
             // instead of throwing immediately — we need to stop the retransmission timer first.
             using _waiting = sending.join("waiting for ack");
-            const responseMessage = await abort.race(ackPromise);
-            if (abort.aborted) {
+            const responseMessage = await waiting.race(ackPromise);
+            if (waiting.aborted) {
                 // Aborted — stop the retransmission timer immediately so we don't keep sending
                 // packets to an unreachable peer while the exchange is being torn down.
                 // Leave #sentMessageToAck and the ack callbacks intact so that exchange.close()
                 // still sees the pending ack and can handle cleanup properly.
+                this.#endAckWait();
                 this.#retransmissionTimer?.stop();
 
-                if (!causedBy(abort.reason, AbortedError)) {
+                if (abort.aborted && !causedBy(abort.reason, AbortedError)) {
                     throw abort.reason;
                 }
                 return;
@@ -878,9 +896,9 @@ export class MessageExchange {
      * drop whatever the transmission was meant to convey.
      */
     #retransmitMessage(message: Message, expectedProcessingTime?: Duration) {
-        // The message may have been acked while an earlier transmission of it was still in flight.  Its timers must
-        // neither outlive it nor spend the retransmission budget of whatever is pending now.
-        if (this.#sentMessageToAck !== message) {
+        // The message may have been acked, or its ack wait ended, while an earlier transmission of it was still in
+        // flight.  Its timers must neither outlive it nor spend the retransmission budget of whatever is pending now.
+        if (!this.#retransmits(message)) {
             return false;
         }
 
@@ -966,10 +984,22 @@ export class MessageExchange {
         return true;
     }
 
+    /**
+     * Ends the ack wait of the message awaiting an ack.  It stays pending for close() but is never transmitted again.
+     * Standalone acks never await one, so they cannot take its place.
+     */
+    #endAckWait() {
+        this.#retransmissionEndedFor = this.#sentMessageToAck;
+    }
+
+    #retransmits(message: Message) {
+        return this.#sentMessageToAck === message && this.#retransmissionEndedFor !== message;
+    }
+
     #initializeResubmission(message: Message, resubmissionBackoffTime: Duration, expectedProcessingTimeMs?: Duration) {
-        // An ack may have landed while the transmission we are following up on was in flight; arming a timer for a
-        // message that is no longer pending leaves it running unreferenced, so nothing can ever stop it
-        if (this.#sentMessageToAck !== message) {
+        // An ack may have landed, or the ack wait ended, while the transmission we are following up on was in flight;
+        // a timer armed then would retransmit a message nobody waits for
+        if (!this.#retransmits(message)) {
             return;
         }
 

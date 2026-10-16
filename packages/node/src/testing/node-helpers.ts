@@ -20,6 +20,7 @@ import {
     type LogLevel,
     Millis,
     Seconds,
+    nextEmitOf,
 } from "@matter/general";
 import { Specification } from "@matter/model";
 import {
@@ -305,7 +306,7 @@ export function CommissioningHelper() {
             });
 
             if (!node.lifecycle.isCommissioned) {
-                await node.lifecycle.commissioned;
+                await nextEmitOf(node.lifecycle.commissioned);
             }
 
             return { node, contextOptions, fabric: deviceFabric };
