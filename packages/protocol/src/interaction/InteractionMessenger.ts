@@ -1108,8 +1108,8 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
      * is a report.  A SubscribeResponse cannot be answered; the peer then drops the subscription when its next report
      * is refused.
      *
-     * `abort` never suppresses an owed answer: once it fired the answer goes out once without retransmission, and an
-     * abort while waiting for its ack stops the wait.  Never throws.
+     * `abort` never suppresses an owed answer: an abort that fired before the first transmission still sends it, once,
+     * without retransmission, and a later abort stops the waits for its ack and retransmissions.  Never throws.
      *
      * @see {@link MatterSpecification.v161.Core} § 8.5
      */

@@ -10,7 +10,16 @@ import { MessageExchange } from "#protocol/MessageExchange.js";
 import { MRP } from "#protocol/MRP.js";
 import { ProtocolMocks } from "#protocol/ProtocolMocks.js";
 import { SessionParameters } from "#session/SessionParameters.js";
-import { Bytes, Duration, MatterFlowError, Millis, NetworkError, Seconds, Semaphore } from "@matter/general";
+import {
+    AbortedError,
+    Bytes,
+    Duration,
+    MatterFlowError,
+    Millis,
+    NetworkError,
+    Seconds,
+    Semaphore,
+} from "@matter/general";
 import { BDX_PROTOCOL_ID, NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "@matter/types";
 
 /**
@@ -879,13 +888,28 @@ describe("MessageExchange", () => {
             expect(sent.length).equals(1);
         });
 
+        it("transmits despite an abort that fires while the message counter is allocated", async () => {
+            const { session, sent } = mrpSession();
+            const { exchange } = createExchange(session);
+            const abort = new AbortController();
+            const allocate = session.getIncrementedMessageCounter.bind(session);
+            session.getIncrementedMessageCounter = async () => {
+                abort.abort();
+                return allocate();
+            };
+
+            await exchange.send(1, Bytes.empty, { abort: abort.signal, abortOnlyWaiting: true });
+
+            expect(sent.length).equals(1);
+        });
+
         it("does not transmit when an abort that already fired may stop the transmission", async () => {
             const { session, sent } = mrpSession();
             const { exchange } = createExchange(session);
             const abort = new AbortController();
             abort.abort();
 
-            await expect(exchange.send(1, Bytes.empty, { abort: abort.signal })).rejected;
+            await expect(exchange.send(1, Bytes.empty, { abort: abort.signal })).rejectedWith(AbortedError);
 
             expect(sent.length).equals(0);
         });

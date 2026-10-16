@@ -10,7 +10,7 @@ import { Message } from "#codec/MessageCodec.js";
 import { MessageType } from "#interaction/InteractionMessenger.js";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { ExchangeManager } from "#protocol/ExchangeManager.js";
-import { ExchangeProvider } from "#protocol/ExchangeProvider.js";
+import { ExchangeProvider, NewExchangeOptions } from "#protocol/ExchangeProvider.js";
 import { ExchangeReceiveOptions, ExchangeSendOptions, MessageExchange } from "#protocol/MessageExchange.js";
 import {
     AbortedError,
@@ -327,5 +327,22 @@ describe("ClientInteraction subscribe", () => {
 
         const closed = await Promise.race([client.close().then(() => "closed"), new Promise(r => setTimeout(r, 10))]);
         expect(closed).equals("closed");
+    });
+
+    it("aborts the creation of a BDX exchange on close", async () => {
+        const provider = new ScriptedPeerExchangeProvider();
+        provider.initiateExchange = (options?: NewExchangeOptions) =>
+            new Promise((_, reject) => {
+                options?.abort?.addEventListener("abort", () => reject(new AbortedError()), { once: true });
+            });
+        const client = new ClientInteraction({ environment: Environment.default, exchangeProvider: provider });
+
+        const bdx = client.initBdx({}).then(
+            () => undefined,
+            (error: unknown) => error,
+        );
+        await client.close();
+
+        expect(await bdx).instanceOf(AbortedError);
     });
 });
