@@ -60,7 +60,7 @@ to an app this way:
 | `WEBRTCR`                           | `camera`     | `chip-camera-app`           | no — no matterjs camera `TestInstance` exists in this package yet |
 | `SU`, `BDX`                         | `ota-provider` / `ota-requestor` | `chip-ota-provider-app` / `chip-ota-requestor-app` | yes (`OtaProviderTestInstance`, `OtaRequestorTestInstance`) |
 | `TBRM`                              | `network-manager` | `matter-network-manager-app` | no — the case declares `flavors: ["chip-local"]`, which skips it before registration |
-| `ICDB`, `ICDM`                      | `lit-icd`    | `lit-icd-app-nopersist` (variant) | yes (`IcdTestInstance`); chip binaries own-built only |
+| `ICDB`, `ICDM`                      | `lit-icd`    | `lit-icd-app-nopersist` (variant, own-built); `lit-icd-app` (cert-bins) | yes (`IcdTestInstance`); TC-ICDB-1.3 runs own-built binaries only |
 | `BIND`                              | `light-switch` | `chip-light-switch-app` (not in our image) | yes (`LightSwitchTestInstance`); the cases declare `flavors: ["matterjs"]` |
 | `BIND` (no Groupcast on the root)   | `light-switch-no-groupcast` | none | yes (`LightSwitchNoGroupcastTestInstance`); matterjs only |
 | `BIND` (no Groupcast on the root)   | `all-clusters-no-groupcast` | none under this name; chip-local runs the `nogroupcast` variant of `all-clusters` through `appVariant` | yes (`AllClustersNoGroupcastTestInstance`); matterjs only |
@@ -3717,25 +3717,31 @@ The DUT registers as TH1's Check-In client, TH2 (a helper controller on TH1's se
 event triggers, and the DUT must refresh its key after half the counter range and drop a Check-In whose counter
 repeats. `CertNodeApi.icdClient()` is the controller side: `register()`, `unregister()`, `stayActive()`,
 `stopSubscription()`, and the Check-Ins and key refreshes it accepted (`events()`, `waitFor()`). TC-ICDM-6.1 uses
-the first three against the same `lit-icd` TH and needs none of the Check-In conditions below. Four things had to line up before any Check-In arrived:
+the first three against the same `lit-icd` TH and needs none of the Check-In conditions below, so it also runs
+chip-cert-bins' stock `lit-icd-app`. Four things had to line up before any Check-In arrived:
 
 - **An ICD sends no Check-In to a client that holds a subscription, active or persisted.** CHIP's
-  `ICDManager::ShouldCheckInMsgsBeSentAtActiveModeFunction` checks both. With subscription timeout resumption
-  (stock `lit-icd-app`), the persisted entry lives until every resumption attempt is spent, and a retry after a
-  failed attempt waits at least 300 seconds. With persistence but no resumption, `mIsBootUpResumeSubscriptionExecuted` is only set after a
-  boot-time resumption, so on a freshly started app a persisted subscription blocks Check-Ins for good. The case
-  therefore runs `lit-icd-app-nopersist`, built with neither, which only this project's image carries. The matter.js
-  TH (`IcdTestInstance`) checks active subscriptions only and needs no variant. It implements the counter triggers
-  (`…03`, `…04`) through `IcdCounter.advance()`, by the amounts CHIP uses.
+  `ICDManager::ShouldCheckInMsgsBeSentAtActiveModeFunction` checks both. A persisted entry goes away when the
+  subscription ends with an answer: a DUT that answers a report with INVALID_SUBSCRIPTION makes CHIP's
+  `ReadHandler::Close()` delete it. It stays when a report times out unanswered ("Time out! failed to receive status
+  response"): with subscription timeout resumption (stock `lit-icd-app`) it then lives until every resumption attempt is
+  spent, and a retry after a failed attempt waits at least 300 seconds. With persistence but no resumption,
+  `mIsBootUpResumeSubscriptionExecuted` is only set after a boot-time resumption, so on a freshly started app such an
+  entry blocks Check-Ins for good. The in-process DUT hits the timeout (see "The DUT has to drop its own subscription"),
+  so the case runs `lit-icd-app-nopersist`, built with neither, which only this project's image carries. Run by hand
+  against the stock app (the declaration does not allow it), the server leg passed and the in-process leg got no
+  Check-In. The matter.js TH (`IcdTestInstance`) checks active subscriptions only and needs no variant. It implements
+  the counter triggers (`…03`, `…04`) through `IcdCounter.advance()`, by the amounts CHIP uses.
 - **TH2 must not become a Check-In client too.** `IcdClient` auto-registers with a LIT peer while subscribed, and
   TH1 turns LIT when the DUT registers, so step 0 ends TH2's subscription first.
-- **The DUT has to drop its own subscription.** `IcdClient.register()` requires an active subscription (it reads
-  the peer's operating mode), and a registration makes matter.js recreate that subscription for the new operating
-  mode. `stopSubscription()` turns the peer's `autoSubscribe` off. A TH whose priming report for the recreated
-  subscription went out before that keeps the subscription alive with empty reports, which carry SuppressResponse
-  and so get no answer, and sends no Check-In. Step 1 therefore has TH2 write TH1's NodeLabel: the report carrying
-  that change asks for an answer, the DUT answers INVALID_SUBSCRIPTION, and TH1 ends the subscription. The
-  in-process leg mostly drops the subscription during its priming; the server leg does not.
+- **The DUT has to drop its own subscription.** `IcdClient.register()` requires an active subscription (it reads the
+  peer's operating mode), and a registration makes matter.js recreate that subscription for the new operating mode.
+  `stopSubscription()` turns the peer's `autoSubscribe` off. A CHIP TH sets SuppressResponse only on read reports, never
+  on subscription reports, so each report asks for an answer, and a DUT without the subscription answers
+  INVALID_SUBSCRIPTION, which ends it. Step 1 has TH2 write TH1's NodeLabel, which makes TH1 send a report at once
+  rather than at the next max interval. The server leg ends the DUT's subscription this way. The in-process leg drops
+  the recreated subscription while its priming report is in flight: matter.js ignores that report because its exchange
+  is closing and sends only a standalone ack, so the TH times out about 15 seconds later and keeps the persisted entry.
 - **The controller has to advertise operationally**, or the TH fails with "Node Address resolution failed for ICD
   Check-In". Every in-process cert controller advertises `_matter._tcp`: it creates its fabric before `start()`,
   and `CommissioningServer` counts such a fabric as commissioned once the node is online. TC-ICDB-1.3 is the case
