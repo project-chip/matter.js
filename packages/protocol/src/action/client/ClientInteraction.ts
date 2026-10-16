@@ -21,6 +21,8 @@ import { Mark } from "#common/Mark.js";
 import { InteractionClientMessenger, MessageType } from "#interaction/InteractionMessenger.js";
 import { Subscription } from "#interaction/Subscription.js";
 import { PeerAddress } from "#peer/PeerAddress.js";
+import { PeerCommunicationError } from "#peer/PeerCommunicationError.js";
+import { SessionClosedError } from "#protocol/errors.js";
 import { ExchangeProvider } from "#protocol/ExchangeProvider.js";
 import type { ExchangeLogContext } from "#protocol/MessageExchange.js";
 import { GroupSession } from "#session/GroupSession.js";
@@ -32,6 +34,7 @@ import {
     asError,
     AsyncIterator,
     BasicSet,
+    causedBy,
     ChannelType,
     ClosedError,
     createPromise,
@@ -57,6 +60,7 @@ import {
 } from "@matter/general";
 import {
     GroupId,
+    ReceivedStatusResponseError,
     Status,
     TlvAttributeReport,
     TlvOfModel,
@@ -1081,8 +1085,14 @@ export class ClientInteraction<
 
                 responseMessage = await messenger.nextMessage(MessageType.SubscribeResponse, { abort });
             } catch (error) {
-                // An abort can come after the peer accepted the request, even while we wait for its ack
-                const awaitReport = abort.aborted;
+                // The request may have reached the peer even if its send failed; unless the peer or the session ended the
+                // interaction, the peer may hold the subscription and its report may still come
+                const awaitReport = !causedBy(
+                    error,
+                    PeerCommunicationError,
+                    SessionClosedError,
+                    ReceivedStatusResponseError,
+                );
                 context.abandon(closing => messenger.abandonSubscription({ awaitReport, abort: closing }));
                 throw error;
             }

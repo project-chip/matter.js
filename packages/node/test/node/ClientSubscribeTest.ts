@@ -1272,6 +1272,34 @@ describe("ClientSubscribe", () => {
             expect(storedIdsOf(device)).deep.equals(stored);
         });
 
+        it("answers the priming report with INVALID_SUBSCRIPTION when processing fails before reading it", async () => {
+            await using site = new MockSite();
+            const { controller, device } = await site.addCommissionedPair();
+            const peer = await subscribedPeer(controller, "peer1");
+            const stored = storedIdsOf(device);
+
+            const request = subscribeRequest(new AbortController());
+            request.updated = async () => {
+                throw new SubscribeRefusedError("not reading");
+            };
+
+            let outcome: unknown;
+            const failures = await primingFailuresDuring(async () => {
+                outcome = await MockTime.resolve(
+                    peer.interaction.subscribe(request).then(
+                        () => undefined,
+                        (error: unknown) => error,
+                    ),
+                );
+                await MockTime.resolve(MockTime.sleep("device handles the status", Seconds(1)));
+            });
+
+            expect(outcome).instanceOf(SubscribeRefusedError);
+            expect(failures).length(1);
+            expect(failures[0]).contains("InvalidSubscription");
+            expect(storedIdsOf(device)).deep.equals(stored);
+        });
+
         it("answers the priming report with INVALID_SUBSCRIPTION when processing it fails", async () => {
             await using site = new MockSite();
             const { controller, device } = await site.addCommissionedPair();
