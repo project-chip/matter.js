@@ -5,7 +5,6 @@
  */
 
 import type { RemoteActorContext } from "#behavior/context/server/RemoteActorContext.js";
-import type { NodeLifecycle } from "#node/NodeLifecycle.js";
 import { CRYPTO_PBKDF_ITERATIONS_MAX, CRYPTO_PBKDF_ITERATIONS_MIN, Duration, Logger, Seconds } from "@matter/general";
 import {
     assertRemoteActor,
@@ -60,16 +59,6 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     declare readonly state: AdministratorCommissioningServer.State;
 
     static override lockOnInvoke = false;
-
-    override initialize() {
-        const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
-        this.reactTo(lifecycle.online, this.#online);
-    }
-
-    #online() {
-        // By fabric index through FabricManager, because UpdateNOC replaces the Fabric object of the admin fabric
-        this.reactTo(this.env.get(FabricManager).events.deleting, this.#fabricRemoved);
-    }
 
     /**
      * This method opens an Enhanced Commissioning Window (a dynamic passcode is used which was provided by the caller).
@@ -190,6 +179,12 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         this.state.windowStatus = windowStatus;
         this.state.adminFabricIndex = adminFabric.fabricIndex;
         this.state.adminVendorId = adminFabric.rootVendorId;
+
+        // By fabric index through FabricManager, because UpdateNOC replaces the Fabric object of the admin fabric
+        if (!this.internal.observesFabricRemoval) {
+            this.reactTo(this.env.get(FabricManager).events.deleting, this.#fabricRemoved);
+            this.internal.observesFabricRemoval = true;
+        }
     }
 
     /**
@@ -254,6 +249,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 export namespace AdministratorCommissioningServer {
     export class Internal {
         onWindowClosed?: () => void;
+        observesFabricRemoval = false;
 
         /**
          * Mandated by spec; should only be modified in testing.
