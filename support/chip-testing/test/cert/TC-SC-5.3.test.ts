@@ -14,7 +14,7 @@ import {
     attributeId,
     addGroupStep,
     GROUP,
-    GROUP_KEY_SET_ID,
+    GroupcastBranch,
     GROUPS,
     GROUPS_ENDPOINT,
     GROUPS_ID,
@@ -22,10 +22,10 @@ import {
     groupKeyMapStep,
     groupMulticastAddress,
     ipv6Bytes,
+    joinGroupStep,
     PRIVILEGE_MANAGE,
     keyMaterialStep,
     keySetWriteStep,
-    ROOT_ENDPOINT,
 } from "./tc-group-support.js";
 import {
     CertCheckFailedError,
@@ -36,7 +36,6 @@ import {
     GROUP_MESSAGE_PORT,
     expectGroupCommandArrival,
     type GroupCommandArrival,
-    invokeCommand,
     LOG_TIMEOUT,
     matterjsGroupInvokeSent,
     record,
@@ -217,17 +216,6 @@ async function groupcastSentCheck(cx: CertStepContext, from: number): Promise<Ch
     return invoke;
 }
 
-/**
- * The plan branches on whether the TH's root endpoint has the Groupcast cluster: without it the legacy steps 3 to 5
- * run, with it steps 6 and 7. The CHIP YAML of this case words the condition for the TH, and step 6 sends JoinGroup to
- * the TH, so the TH's root decides.
- */
-const GROUPCAST = Matter.clusters.require("Groupcast");
-const GROUPCAST_ID = requireId(GROUPCAST.id, "Groupcast cluster");
-
-/** `Groupcast.Feature.Listener` (Matter Core § 11.27.4). */
-const GROUPCAST_LISTENER = 1 << 0;
-const DESCRIPTOR = Matter.clusters.require("Descriptor");
 const ON_OFF = Matter.clusters.require("OnOff");
 const ON_OFF_ID = requireId(ON_OFF.id, "OnOff cluster");
 const TOGGLE = requireId(ON_OFF.commands.require("toggle").id, "OnOff.toggle");
@@ -265,104 +253,7 @@ function controllerGroups(setup: CertRunSetup): CertControllerGroup[] {
     ];
 }
 
-/** What step 1a learned of the TH's root, which the steps of both branches decide on. */
-class GroupcastBranch {
-    #root?: { groupcast: boolean; listener: boolean };
-
-    get #learned() {
-        if (this.#root === undefined) {
-            throw new CertCheckFailedError("step 1a did not read whether the TH's root has the Groupcast cluster");
-        }
-        return this.#root;
-    }
-
-    get thHasGroupcast() {
-        return this.#learned.groupcast;
-    }
-
-    /** Whether the TH can be told to join a group with endpoints, which JoinGroup refuses without Listener. */
-    get thListens() {
-        return this.#learned.listener;
-    }
-
-    reset() {
-        this.#root = undefined;
-    }
-
-    async learn(cx: CertStepContext) {
-        const serverList = await cx.controllers.dut.node(commissioned.require("dut")).readAttribute({
-            endpoint: ROOT_ENDPOINT,
-            cluster: requireId(DESCRIPTOR.id, "Descriptor cluster"),
-            attribute: attributeId(DESCRIPTOR, "serverList"),
-        });
-        if (!Array.isArray(serverList)) {
-            throw new CertCheckFailedError(`TH answered its root ServerList with ${describeValue(serverList)}`);
-        }
-        const present = serverList.some(id => Number(id) === GROUPCAST_ID);
-        const expected = thHasGroupcast(cx);
-        record(
-            cx,
-            {
-                type: "response",
-                verdict: present === expected ? "pass" : "fail",
-                detail:
-                    `the TH's root ServerList ${present ? "names" : "does not name"} Groupcast; the controller was ` +
-                    `provisioned for a TH ${expected ? "with" : "without"} it`,
-            },
-            "the TH's root decides the plan's branch, and the controller's group address follows it",
-        );
-        this.#root = { groupcast: present, listener: present && (await listensOnRoot(cx)) };
-    }
-}
-
 const branch = new GroupcastBranch();
-
-async function legacyStepsApply() {
-    return branch.thHasGroupcast
-        ? "The TH's root endpoint has the Groupcast cluster, so the plan skips to step 6."
-        : undefined;
-}
-
-async function groupcastStepsApply() {
-    if (!branch.thHasGroupcast) {
-        return "The TH's root endpoint has no Groupcast cluster, so the plan skips the remaining steps.";
-    }
-    return branch.thListens
-        ? undefined
-        : "The TH's root Groupcast cluster lacks the Listener feature, so the TH cannot join the group and the plan " +
-              "skips the remaining steps.";
-}
-
-/** The TH root's Groupcast `FeatureMap` names Listener, decoded as a bitmap object or read as the raw number. */
-async function listensOnRoot(cx: CertStepContext) {
-    const value = await cx.controllers.dut.node(commissioned.require("dut")).readAttribute({
-        endpoint: ROOT_ENDPOINT,
-        cluster: GROUPCAST_ID,
-        attribute: attributeId(GROUPCAST, "featureMap"),
-    });
-    if (typeof value === "number") {
-        return (value & GROUPCAST_LISTENER) !== 0;
-    }
-    if (typeof value === "object" && value !== null && "listener" in value) {
-        return Boolean(value.listener);
-    }
-    throw new CertCheckFailedError(`TH answered its Groupcast FeatureMap with ${describeValue(value)}`);
-}
-
-/** The plan's step 6: the DUT has the TH join group 1 on the endpoint the next step's command is for. */
-const joinGroupStep = commissioned.withRef("dut", async (cx, ref) => {
-    const { checks } = await invokeCommand(cx, ref, {
-        cluster: GROUPCAST,
-        endpoint: ROOT_ENDPOINT,
-        command: "joinGroup",
-        args: { groupId: GROUP.id, endpoints: [GROUPS_ENDPOINT], keySetId: GROUP_KEY_SET_ID },
-        fields: [
-            { id: 0, value: GROUP.id },
-            { id: 2, value: GROUP_KEY_SET_ID },
-        ],
-    });
-    await recordAll(cx, checks);
-});
 
 /**
  * The plan's step 7: an OnOff toggle sent as a group command over GroupID 1, which reaches the endpoint step 6 joined.
@@ -497,7 +388,11 @@ certTest("TC-SC-5.3", {
         async cx => {
             branch.reset();
             await aclAdmitsGroupStep(commissioned, PRIVILEGE_MANAGE)(cx);
-            await branch.learn(cx);
+            record(
+                cx,
+                await branch.learn(cx.controllers.dut.node(commissioned.require("dut")), thHasGroupcast(cx)),
+                "the TH's root decides the plan's branch, and the controller's group address follows it",
+            );
         },
         {
             expected:
@@ -528,7 +423,7 @@ certTest("TC-SC-5.3", {
         groupKeyMapStep(commissioned, [GROUP.id, SECOND_GROUP.id]),
         {
             pics: "GRPKEY.C.A0000",
-            notApplicableAtRun: legacyStepsApply,
+            notApplicableAtRun: branch.legacyStepsApply,
             expected: "Test Harness receives the binding of GroupKeySetID with the GroupID from DUT.",
         },
     )
@@ -540,7 +435,7 @@ certTest("TC-SC-5.3", {
         addGroupStep(commissioned),
         {
             pics: "G.C.C00.Tx",
-            notApplicableAtRun: legacyStepsApply,
+            notApplicableAtRun: branch.legacyStepsApply,
             expected: "Test Harness receives the AddGroup command from the DUT.",
         },
     )
@@ -551,7 +446,7 @@ certTest("TC-SC-5.3", {
         addGroupOverGroupcast,
         {
             pics: "G.C.C00.Tx",
-            notApplicableAtRun: legacyStepsApply,
+            notApplicableAtRun: branch.legacyStepsApply,
             expected:
                 "The group message goes to the multicast address for this fabric and group on port 5540, sent on a " +
                 "group session — which is what DSIZ names on the wire — and the TH holds the group it carried.",
@@ -560,9 +455,9 @@ certTest("TC-SC-5.3", {
     .step(
         6,
         "DUT sends the Groupcast JoinGroup command on the TH on EP0 with GroupID 1, Endpoints [1] and KeySetID 1",
-        joinGroupStep,
+        joinGroupStep(commissioned),
         {
-            notApplicableAtRun: groupcastStepsApply,
+            notApplicableAtRun: branch.groupcastStepsApply,
             expected: "The TH accepts the JoinGroup command from the DUT.",
         },
     )
@@ -572,7 +467,7 @@ certTest("TC-SC-5.3", {
             "a group command using GroupID 1",
         toggleOverGroupcast,
         {
-            notApplicableAtRun: groupcastStepsApply,
+            notApplicableAtRun: branch.groupcastStepsApply,
             expected:
                 "The group message goes to the IANA address FF05::FA on port 5540, sent on a group session, and the " +
                 "TH toggles the OnOff state of the endpoint it joined.",

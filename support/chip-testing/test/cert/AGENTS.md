@@ -2636,14 +2636,23 @@ group the fabric's key map must already carry. What it adds:
 
 ## The group-messaging block, and what its two cases share (`TC-SC-6.1`, `TC-SC-5.3`)
 
-Both cases open the same way — an access-control entry admitting the group, a key set, the GroupKeyMap
-binding, AddGroup — and that opening lives in `tc-group-support.ts` rather than in either file.
-`TC-SC-6.1` then reads the state back over unicast; `TC-SC-5.3` sends a group message through it. See
+Both cases open the same way — an access-control entry admitting the group, a key set, and, on the legacy branch
+(a TH without Groupcast on its root), the GroupKeyMap binding and AddGroup — and that opening lives in
+`tc-group-support.ts` rather than in either file. `TC-SC-6.1` then reads the state back over unicast; `TC-SC-5.3`
+sends a group message through it. See
 "what sending one actually needed" below for the four things that are not in the plan.
 
 `TC-SC-6.1` needed no new capability at all, only three more client PICS declarations (`G.C.C01.Tx`,
 `GRPKEY.C.C03.Tx`, `GRPKEY.C.C04.Tx`; the last two are absent from the device file entirely, and an
 absent key evaluates false).
+
+Both cases branch on the TH's root the same way, through `GroupcastBranch` in `tc-group-support.ts`: step 1a reads
+the root `ServerList` (and the Groupcast `FeatureMap` where it is listed), the GroupKeyMap and Groups steps skip with
+`notApplicableAtRun` where the root has Groupcast, and the Groupcast steps (6–7) skip where it has none or lacks Listener.
+In `TC-SC-6.1` step 6 is the shared `joinGroupStep` and step 7 reads `Groupcast.Membership` back and requires the
+joined group, endpoint and key set; neither step sends a groupcast, so this case declares no `controllerGroups` and
+no `group-messaging` capability. matter.js's `all-clusters` TH and the cert-bins chip app take the Groupcast steps;
+the own-built chip-local `nogroupcast` variant takes the legacy ones.
 
 Note the endpoint: `Groups` is not a root-node cluster, so both cases send `AddGroup`/`ViewGroup` to
 the on/off light rather than to endpoint 0, whatever the plan's own step text says. A step's text names
@@ -2932,8 +2941,8 @@ lives entirely in the three checks above.
 
 ## The group-messaging block, and what sending one actually needed (`TC-SC-5.3`)
 
-`TC-SC-5.3` is the mirror of `TC-SC-6.1`: the same four setup steps — an ACL entry admitting the
-group, a key set, the GroupKeyMap binding, AddGroup — and then, where 6.1 reads that state back over
+`TC-SC-5.3` is the mirror of `TC-SC-6.1`: the same four setup steps on the legacy branch — an ACL entry admitting
+the group, a key set, the GroupKeyMap binding, AddGroup — and then, where 6.1 reads that state back over
 unicast, 5.3 sends a **groupcast** through it. The setup is one module (`tc-group-support.ts`) both
 cases use, so the two cannot drift.
 
@@ -3000,8 +3009,8 @@ went.
 the same step says "If Groupcast cluster is enabled on the RootNode endpoint of the TH, skip to step 6", and step 6
 sends JoinGroup to the TH. Step 1a therefore reads the TH's root `ServerList` after commissioning: without Groupcast
 the legacy steps 3–5 run and 6–7 skip, with it 3–5 skip and 6–7 run (`notApplicableAtRun`, so the skips count as
-plan conditions). matter.js's `all-clusters` TH and the cert-bins chip app mount Groupcast on their root; only this project's own-built
-chip-local `nogroupcast` variant leaves it out. Step 6 invokes `Groupcast.JoinGroup` (group 1, endpoint 1, key set
+plan conditions; `GroupcastBranch`, shared with TC-SC-6.1). matter.js's `all-clusters` TH and the cert-bins chip
+app mount Groupcast on their root; only this project's own-built chip-local `nogroupcast` variant leaves it out. Step 6 invokes `Groupcast.JoinGroup` (group 1, endpoint 1, key set
 1, no key: step 2 already wrote it) on the TH; step 7 sends `OnOff.Toggle` to group 1 and checks the DUT's log names
 `ff05::fa` on port 5540 (matter.js `dest:`, chip-tool `[UDP:[ff05::fa]:5540]` on its `(G) Msg TX` line), the TH's
 dispatch, and the OnOff state flipping. The plan's group ids (1 and 2) are kept; the YAML's 259/257 are its example
