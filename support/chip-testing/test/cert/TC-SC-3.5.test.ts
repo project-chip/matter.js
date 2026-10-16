@@ -18,7 +18,7 @@ import {
     createControllerAdapter,
     EvidenceRecorder,
     PromptDrivenPythonTest,
-    resolveControllerImplementation,
+    skipOnControllerGap,
 } from "@matter/testing";
 import { join } from "node:path";
 import { env } from "node:process";
@@ -35,6 +35,8 @@ const TH_SERVER_DISCRIMINATOR = 1234;
 
 /** Windows the script opens: steps 1b, 2c, 3c and 5c always, plus 4c where the DUT's NOC chain has an ICAC. */
 const MINIMUM_PROMPTS = 4;
+
+const RUN = { tc: "TC-SC-3.5", plan: "securechannel.adoc", controllers: { dut: "dut" } } as const;
 
 const DESCRIPTOR = {
     kind: "py" as const,
@@ -264,6 +266,10 @@ describe("TC-SC-3.5", () => {
             this.skip();
         }
 
+        // Every attempt but the first asserts a refusal, which a commissioner that retries past the faulted handshake
+        // cannot show
+        const selection = await skipOnControllerGap(this, RUN, ["single-handshake-attempt"]);
+
         // The script's own default_timeout (25 min) is sized for a human operator; automated
         // handlers only need enough headroom for up to 5 real CASE handshake attempts.
         this.timeout(10 * 60_000);
@@ -273,14 +279,14 @@ describe("TC-SC-3.5", () => {
         let flushFailure: unknown;
         let closeFailure: unknown;
         let concludeFailure: unknown;
-        const dut = createControllerAdapter("dut");
+        const dut = createControllerAdapter("dut", undefined, "dut", selection);
 
         const recorder = new EvidenceRecorder(evidenceOutDir(), {
-            tc: "TC-SC-3.5",
-            plan: "securechannel.adoc",
+            tc: RUN.tc,
+            plan: RUN.plan,
             timestamp: new Date().toISOString(),
             controller: "dut",
-            controllerImplementation: resolveControllerImplementation(),
+            controllerImplementation: selection.dut,
             // The script spawns TH_SERVER itself, so the binary the run was pointed at is the only
             // provenance the harness can state for it.
             devices: [{ role: "th_server", app: appPath, flavor: "python-wrapped" }],
@@ -292,6 +298,7 @@ describe("TC-SC-3.5", () => {
 
         try {
             await dut.start();
+            recorder.recordControllerBuild(dut.build);
 
             await test.invoke(stubSubject(), () => {}, ["--string-arg", `th_server_app_path:${appPath}`], false);
 

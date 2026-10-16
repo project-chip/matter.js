@@ -11,6 +11,7 @@ import {
     CommissioningRefusals,
     flowTitle,
     ON_NETWORK_ONLY,
+    PARSES_PAYLOAD,
     qrPayloadWith,
     recordCommissionable,
     recordDiscriminatorHonored,
@@ -158,6 +159,7 @@ export function defineFlowQrTest(builder: CertTestBuilder, flowType: number): Ce
                     await recordParse(cx, payload, { offering: { capability: leg.capability, flowType } });
                 },
                 {
+                    controllerCapabilities: PARSES_PAYLOAD,
                     pics: scanGate,
                     expected: "Verify the QR code has been scanned successfully.",
                 },
@@ -170,6 +172,7 @@ export function defineFlowQrTest(builder: CertTestBuilder, flowType: number): Ce
                     await recordParse(cx, payload, { offering: { capability: leg.capability, flowType } });
                 },
                 {
+                    controllerCapabilities: PARSES_PAYLOAD,
                     pics: scanGate,
                     expected:
                         "Verify DUT has parsed the QR code. Verify TH has not been commissioned to the Matter " +

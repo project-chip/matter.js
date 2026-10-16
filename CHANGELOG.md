@@ -316,7 +316,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: `storage.clear` clears the storage on start
 
 - @matter/testing
-    - Feature: New certification test framework (`certTest()`) runs controller-side certification tests against chip and matter.js devices with matter.js and chip-tool controllers; see [Certification controller tests](support/chip-testing/README.md#certification-controller-tests-testcert)
+    - Feature: New certification test framework (`certTest()`) runs controller-side certification tests against chip and matter.js devices with matter.js, chip-tool and matterjs-server controllers; see [Certification controller tests](support/chip-testing/README.md#certification-controller-tests-testcert)
     - Feature: `MockTime.stepWallClock()` steps the wall clock without moving the monotonic clock
     - Fix: `MockTime.resolve` holds virtual time during `Blob` reads and stops after a test timeout
 
