@@ -7,8 +7,8 @@
 import { Bytes } from "@matter/main";
 import { Status } from "@matter/main/types";
 import { Matter } from "@matter/model";
-import type { CertControllerGroup, CertRunSetup, CertStepContext, CheckRecord } from "@matter/testing";
-import { certTest, flavorFamily } from "@matter/testing";
+import type { CertAppVariant, CertControllerGroup, CertRunSetup, CertStepContext, CheckRecord } from "@matter/testing";
+import { appVariantFor, certTest } from "@matter/testing";
 import {
     aclAdmitsGroupStep,
     attributeId,
@@ -236,15 +236,22 @@ const TOGGLE = requireId(ON_OFF.commands.require("toggle").id, "OnOff.toggle");
 const IANA_GROUP_ADDRESS = "ff05::fa";
 
 /**
+ * The legacy steps bind a group key through GroupKeyMap, which a chip all-clusters build with Groupcast refuses once
+ * Groups reaches cluster revision 5. Only this project's own chip build offers the variant without Groupcast, so the
+ * legacy branch runs there and a released binary takes the Groupcast branch.
+ */
+const APP_VARIANT: CertAppVariant = { matterjs: "nogroupcast" };
+
+/**
  * Whether the TH this case runs against has Groupcast on its root. The controller's group address depends on it and a
  * controller that needs its keys before it starts has to know it before any step runs, so it is decided from the
- * flavor; step 1a reads the TH's root and fails where the TH disagrees.
+ * app variant the TH runs; step 1a reads the TH's root and fails where the TH disagrees.
  *
- * matter.js's all-clusters app mounts Groupcast on its root. The chip app this case runs is the variant without
- * Groupcast, or a released binary that predates the cluster.
+ * matter.js's all-clusters app and the chip all-clusters app both mount Groupcast on their root; only the
+ * `nogroupcast` variant leaves it out.
  */
 function thHasGroupcast({ deviceFlavor }: CertRunSetup) {
-    return flavorFamily(deviceFlavor) === "matterjs";
+    return deviceFlavor !== undefined && appVariantFor(deviceFlavor, APP_VARIANT) !== "nogroupcast";
 }
 
 /** The group the DUT sends on, on the address the branch the TH takes needs. */
@@ -474,11 +481,8 @@ certTest("TC-SC-5.3", {
     pics: ["MCORE.ROLE.COMMISSIONER", "GRPKEY.C"],
     app: "all-clusters",
 
-    // Binds a group key through GroupKeyMap, which an all-clusters build with Groupcast on refuses once Groups
-    // reaches cluster revision 5.  Only this project's own build offers the variant with Groupcast off; the released
-    // binaries predate the change and run the ordinary app.  A chip-docker image runs its own binary and can offer
-    // neither, so it is left out
-    appVariant: { matterjs: "nogroupcast" },
+    // A chip-docker image runs its own binary and cannot run the variant, so it is left out
+    appVariant: APP_VARIANT,
     flavors: ["chip-local", "matterjs"],
 
     // The groupcast is the case's subject, and the steps before it rest on the key set step 2 gives both sides, so a
