@@ -408,6 +408,11 @@ export class SessionManager {
         return this.#context.fabrics.for(address);
     }
 
+    /** The fabric of {@link fabricIndex}, or undefined while it does not exist or is being removed. */
+    maybeFabricFor(fabricIndex: FabricIndex) {
+        return this.#context.fabrics.maybeFor(fabricIndex);
+    }
+
     /**
      * @deprecated Scheduled for removal in 0.19 with the legacy controller API.
      */

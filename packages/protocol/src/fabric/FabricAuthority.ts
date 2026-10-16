@@ -185,14 +185,14 @@ export class FabricAuthority {
         }
 
         const builder = await FabricBuilder.create(this.#fabrics.crypto);
-        builder.initializeFromFabricForUpdate(fabric);
         const {
             subject: { nodeId, fabricId, caseAuthenticatedTags },
         } = Noc.fromTlv(fabric.operationalCert).cert;
         if (nodeId !== fabric.nodeId) {
             throw new ImplementationError(`Cannot rotate NOC for fabric ${fabric.fabricIndex} because node ID changed`);
         }
-        await builder.setOperationalCert(
+        await builder.updateOperationalCert(
+            fabric,
             await this.#ca.generateNoc(builder.publicKey, fabricId, nodeId, caseAuthenticatedTags),
             fabric.intermediateCACert,
         );

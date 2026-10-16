@@ -221,6 +221,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: The ICD client keeps the controller and the device on the same Check-In key when a key refresh overlaps a Check-In, loses its response, or spans a restart
     - Fix: The Thermostat User Interface Configuration server keeps a configured or stored `keypadLockout` on startup instead of resetting it to `NoLockout`
     - Fix: Changing a fabric that the armed fail-safe did not add or update no longer logs an error and now emits `fabricsChanged`
+    - Fix: AdminFabricIndex becomes null when the admin fabric is removed after an UpdateNOC
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument
@@ -304,6 +305,10 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A closed `SustainedSubscription` always ends not live, whatever phase the close interrupts and even when an `active`/`inactive` observer throws
     - Fix: `FabricAuthority.createFabric()` resolves once the new fabric is persisted, rejects when persisting fails, and no longer reports the new fabric as replaced
     - Fix: Automatic invoke batching groups commands per network and sends a command with its own options alone, so it keeps them but may overtake earlier batched commands
+    - Fix: A fabric replaced by UpdateNOC or NOC rotation keeps its group state, ACL, ICD registrations and Check-In peers without interruption
+    - Fix: UpdateNOC rejects a NOC for another fabric ID (`InvalidNOC`)
+    - Fix: Group messages carry the current node ID after the fabric's NOC changed
+    - Fix: Removing a fabric that a fail-safe expiry restored emits `deleting` and `deleted` once
     - Fix: A subscribe that is aborted, or fails to process a priming report, before the device's SubscribeResponse now answers the device's pending report with `INVALID_SUBSCRIPTION`, so the device drops the subscription
 
 - @matter/react-native
