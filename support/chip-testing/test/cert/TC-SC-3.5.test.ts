@@ -298,6 +298,7 @@ describe("TC-SC-3.5", () => {
 
         try {
             await dut.start();
+            recorder.recordControllerBuild(dut.build);
 
             await test.invoke(stubSubject(), () => {}, ["--string-arg", `th_server_app_path:${appPath}`], false);
 

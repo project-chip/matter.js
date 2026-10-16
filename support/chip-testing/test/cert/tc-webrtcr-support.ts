@@ -284,6 +284,7 @@ export function certCameraCase<S>(definition: CameraCase<S> & { begin?: () => S 
 
             try {
                 await dut.start();
+                recorder.recordControllerBuild(dut.build);
 
                 let endsAt: number | undefined;
                 let scriptEndsAt = Number.MAX_SAFE_INTEGER;

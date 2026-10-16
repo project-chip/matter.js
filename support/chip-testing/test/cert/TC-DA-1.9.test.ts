@@ -307,6 +307,7 @@ describe("TC-DA-1.9", () => {
 
         try {
             await dut.start();
+            recorder.recordControllerBuild(dut.build);
 
             await test.invoke(
                 stubSubject(),

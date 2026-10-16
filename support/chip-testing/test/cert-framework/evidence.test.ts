@@ -580,6 +580,26 @@ describe("EvidenceRecorder", () => {
         expect(without.run).not.to.have.property("controllerBuild");
     });
 
+    it("persists a controllerBuild recorded after construction, as a case that starts its controller late does", async () => {
+        const recorder = new EvidenceRecorder(outDir, {
+            tc: "TC-DA-1.9",
+            plan: "deviceattestation.adoc",
+            timestamp: "2026-08-07T00:00:00.000Z",
+            controller: "dut",
+            controllerImplementation: "matterjs-server",
+            devices: [{ role: "th", app: "all-clusters", flavor: "python-wrapped" }],
+            matterJsCommit: "abc1234",
+        });
+        const controllerBuild = { entry: "dist/main.js", sdkVersion: "0.18.0" };
+
+        recorder.recordControllerBuild(controllerBuild);
+        recorder.recordControllerBuild(undefined);
+
+        const record = JSON.parse(await fsp.readFile(pathMod.join(await publish(recorder), "result.json"), "utf8"));
+        expect(record.run.controllerBuild).deep.equal(controllerBuild);
+        expect(recorder.runHeaderLines()).to.include("build      : entry=dist/main.js, sdkVersion=0.18.0");
+    });
+
     it("persists the controller-unsupported skip count, so a bare result.json says the run proved less", async () => {
         const recorder = new EvidenceRecorder(outDir, {
             tc: "TC-IDM-3.1",

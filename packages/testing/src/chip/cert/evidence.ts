@@ -295,6 +295,16 @@ export class EvidenceRecorder implements StepRecorder {
         this.#controllerUnsupportedSkips = count;
     }
 
+    /**
+     * Records the build of the controller under test (see `RunRecord.run.controllerBuild`), for a case that builds
+     * its recorder before it starts the controller, which is when an adapter knows its build.
+     */
+    recordControllerBuild(build: Record<string, string> | undefined): void {
+        if (build !== undefined) {
+            this.#meta = { ...this.#meta, controllerBuild: build };
+        }
+    }
+
     /** Records that the test case was skipped as a whole for `reason` (see {@link RunRecord.controllerGap}). */
     recordControllerGap(reason: string): void {
         this.#controllerGap = reason;
