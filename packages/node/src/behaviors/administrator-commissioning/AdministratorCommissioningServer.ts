@@ -5,6 +5,7 @@
  */
 
 import type { RemoteActorContext } from "#behavior/context/server/RemoteActorContext.js";
+import type { NodeLifecycle } from "#node/NodeLifecycle.js";
 import { CRYPTO_PBKDF_ITERATIONS_MAX, CRYPTO_PBKDF_ITERATIONS_MIN, Duration, Logger, Seconds } from "@matter/general";
 import {
     assertRemoteActor,
@@ -59,6 +60,16 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     declare readonly state: AdministratorCommissioningServer.State;
 
     static override lockOnInvoke = false;
+
+    override initialize() {
+        const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
+        this.reactTo(lifecycle.online, this.#online);
+    }
+
+    #online() {
+        // By fabric index through FabricManager, because UpdateNOC replaces the Fabric object of the admin fabric
+        this.reactTo(this.env.get(FabricManager).events.deleting, this.#fabricRemoved);
+    }
 
     /**
      * This method opens an Enhanced Commissioning Window (a dynamic passcode is used which was provided by the caller).
@@ -179,16 +190,6 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         this.state.windowStatus = windowStatus;
         this.state.adminFabricIndex = adminFabric.fabricIndex;
         this.state.adminVendorId = adminFabric.rootVendorId;
-
-        // Through FabricManager, because UpdateNOC replaces the Fabric object of the admin fabric
-        const fabrics = this.env.get(FabricManager);
-        const onAdminFabricDeleting = (this.internal.onAdminFabricDeleting ??= this.callback(
-            this.#fabricRemovedCallback,
-        ));
-        this.internal.stopMonitoringFabricForRemoval = () => {
-            fabrics.events.deleting.off(onAdminFabricDeleting);
-        };
-        fabrics.events.deleting.on(onAdminFabricDeleting);
     }
 
     /**
@@ -223,8 +224,6 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      */
     #windowClosed() {
         logger.debug("Commissioning window closed");
-        this.internal.stopMonitoringFabricForRemoval?.();
-        this.internal.stopMonitoringFabricForRemoval = undefined;
 
         this.state.windowStatus = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
         this.state.adminFabricIndex = null;
@@ -244,21 +243,17 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      *
      * @see {@link MatterSpecification.v161.Core} § 11.19.7.2
      */
-    #fabricRemovedCallback(fabric: Fabric) {
+    #fabricRemoved(fabric: Fabric) {
         if (fabric.fabricIndex !== this.state.adminFabricIndex) {
             return;
         }
         this.state.adminFabricIndex = null;
-        this.internal.stopMonitoringFabricForRemoval?.();
-        this.internal.stopMonitoringFabricForRemoval = undefined;
     }
 }
 
 export namespace AdministratorCommissioningServer {
     export class Internal {
-        stopMonitoringFabricForRemoval?: () => void;
         onWindowClosed?: () => void;
-        onAdminFabricDeleting?: (fabric: Fabric) => void;
 
         /**
          * Mandated by spec; should only be modified in testing.
