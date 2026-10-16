@@ -32,6 +32,7 @@ import {
     Bytes,
     CancelablePromise,
     createPromise,
+    DestroyedDependencyError,
     Diagnostic,
     Duration,
     ImplementationError,
@@ -172,7 +173,11 @@ export class Peers extends EndpointContainer<ClientNode> {
                     await peer.start();
                 } catch (e) {
                     MatterError.accept(e);
-                    logger.warn(`Error starting peer ${peer}:`, e);
+                    if (e instanceof DestroyedDependencyError) {
+                        logger.debug(`Peer ${peer} does not start as it or ${this.owner} closes:`, e);
+                    } else {
+                        logger.warn(`Error starting peer ${peer}:`, e);
+                    }
                 }
             }
         }

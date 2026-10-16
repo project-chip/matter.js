@@ -36,7 +36,8 @@ export abstract class EndpointInitializer {
     abstract prepareEraseDescendant(_endpoint: Endpoint): Promise<EndpointInitializer.Erasure>;
 
     /**
-     * Prepare {@link Endpoint.delete} of an endpoint and its parts.  The wipe releases their endpoint numbers.
+     * Prepare {@link Endpoint.delete} of an endpoint and its parts.  The wipe erases their persisted data and, on a server
+     * node, releases their endpoint numbers.
      */
     abstract prepareDeleteDescendant(_endpoint: Endpoint): Promise<EndpointInitializer.Erasure>;
 

@@ -6,7 +6,7 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { CommissioningClient } from "#behavior/system/commissioning/CommissioningClient.js";
-import { ClientNetworkRuntime } from "#behavior/system/network/ClientNetworkRuntime.js";
+import { ClientNetworkRuntime, OfflineError } from "#behavior/system/network/ClientNetworkRuntime.js";
 import { NetworkClient } from "#behavior/system/network/NetworkClient.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { Agent } from "#endpoint/Agent.js";
@@ -23,6 +23,7 @@ import { ServerNodeStore } from "#storage/server/ServerNodeStore.js";
 import {
     DependencyLifecycleError,
     Diagnostic,
+    DestroyedDependencyError,
     Duration,
     Identity,
     ImplementationError,
@@ -238,8 +239,8 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
      *
      * Rejects with a {@link MatterAggregateError} if a step fails.  A failed reset still erases the cache and
      * initializes the node again.  The node crashes if it cannot disconnect first, in which case nothing is erased, if
-     * the cache erase fails, or if it cannot reconnect while its server node is online.  If its server node is offline
-     * by then, the node stays offline instead.
+     * the cache erase fails, or if it cannot reconnect for another reason than its server node being offline.  If its
+     * server node is offline by then, the node stays offline instead.
      */
     override erase() {
         return super.erase();
@@ -250,22 +251,33 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
      * of this node fails.  Throws `DestroyedDependencyError` if the node or its server node is closing or closed, also
      * when a verb of its server node removes the node while this waits for the server node.
      */
-    override async start() {
-        this.assertNotTerminal("start");
+    override start() {
+        return super.start();
+    }
 
-        // The server node mutex comes before the peer node mutex: the server waits for its peers while holding its mutex.
-        // An online server node may hold its mutex while it starts this node, so this does not queue on it then
+    /**
+     * Start the server node if it is offline.  The server node mutex comes before the peer node mutex: the server node
+     * waits for its peers while it holds its mutex, and it may hold its mutex while it starts this node, so this only
+     * queues on it while the server node is offline.
+     */
+    protected override async prepareStart() {
         if (!this.owner.lifecycle.isOnline) {
             await this.owner.start();
         }
+    }
 
-        await super.start();
+    protected override assertNotTerminal(operation: string) {
+        super.assertNotTerminal(operation);
+        if (this.owner.lifecycle.isTerminal) {
+            throw new DestroyedDependencyError(`${this.owner}`, `is closing or closed, so ${this} cannot ${operation}`);
+        }
     }
 
     /**
      * Disable the node.
      *
-     * This shuts down any active connections and prevents future connections until re-enabled.
+     * This shuts down any active connections and prevents future connections until re-enabled.  Throws
+     * `DestroyedDependencyError` if the node or its server node is closing or closed.
      */
     async disable() {
         this.assertNotTerminal("disable");
@@ -299,15 +311,15 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
     }
 
     /**
-     * Erase drops what the node cached from the peer and keeps its commissioning and connection settings.
-     */
-    /**
      * Delete erases the store of the node itself, also when the node crashed before it installed its initializer.
      */
     protected override async prepareDelete(): Promise<EndpointInitializer.Erasure> {
         return { wipe: () => this.store.erase() };
     }
 
+    /**
+     * Erase drops what the node cached from the peer and keeps its commissioning and connection settings.
+     */
     protected override async prepareErase(): Promise<EndpointInitializer.Erasure> {
         return { wipe: () => this.env.get(ClientNodeStore).eraseCaches() };
     }
@@ -343,8 +355,8 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         }
     }
 
-    protected override get canGoOnline() {
-        return this.owner.lifecycle.isOnline;
+    protected override staysOfflineAfter(error: unknown) {
+        return error instanceof OfflineError;
     }
 
     // A peer belongs to its host's Peers, which closes it within the host's teardown

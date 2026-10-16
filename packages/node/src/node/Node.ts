@@ -27,6 +27,7 @@ import {
     Lifecycle,
     Logger,
     MatterAggregateError,
+    MaybePromise,
 } from "@matter/general";
 import { Matter, MatterModel } from "@matter/model";
 import { Interactable } from "@matter/protocol";
@@ -123,10 +124,16 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         const request = ++this.#startRequest;
         this.lifecycle.targetState = "online";
         try {
-            await this.lifecycle.mutex.hold(`starting ${this}`, () => {
+            const preparing = this.prepareStart();
+            if (MaybePromise.is(preparing)) {
+                await preparing;
+            }
+            await this.lifecycle.mutex.hold(`starting ${this}`, async () => {
                 // A close or delete may have been requested while this start waited for the mutex
                 this.assertNotTerminal("start");
-                return this.startWithMutex();
+                if (this.lifecycle.shouldBeOnline) {
+                    await this.startWithMutex();
+                }
             });
         } catch (error) {
             // A later start owns the target state
@@ -136,6 +143,11 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
             throw error;
         }
     }
+
+    /**
+     * Prepare a {@link start} once it recorded its target state and before it waits for the node mutex.
+     */
+    protected prepareStart(): MaybePromise<void> {}
 
     protected async startWithMutex() {
         if (this.isRuntimeWorker) {
@@ -263,7 +275,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
      * Take the node offline, run {@link step} while holding the tree mutex, and bring the node online again if its
      * network was running and it should stay online.  The runtime is not designed to operate with a node whose root
      * resets or closes, so it goes first.  A node that fails to go offline before an erase or to go online again
-     * crashes, unless it cannot go online now ({@link canGoOnline}); then it stays offline.
+     * crashes, unless the error lets it stay offline ({@link staysOfflineAfter}).
      */
     async #runOffline(operation: string, step: () => Promise<void>) {
         // A peer without a session is offline while its runtime runs and reconnects
@@ -290,19 +302,19 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
             try {
                 await this.startWithMutex();
             } catch (e) {
-                if (this.canGoOnline) {
+                if (this.staysOfflineAfter(e)) {
+                    logger.debug(
+                        Diagnostic.strong(this.toString()),
+                        `stays offline after ${operation} as it cannot go online now:`,
+                        e,
+                    );
+                } else {
                     errors.push(e);
 
                     // A failed start of the construction crashed it with its cause already
                     if (this.construction.status === Lifecycle.Status.Active) {
                         this.construction.crash();
                     }
-                } else {
-                    logger.debug(
-                        Diagnostic.strong(this.toString()),
-                        `stays offline after ${operation} as it cannot go online now:`,
-                        e,
-                    );
                 }
             }
         }
@@ -330,11 +342,10 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     protected abstract prepareRuntimeShutdown(): Promise<void>;
 
     /**
-     * Whether the node can go online now.  A node that cannot stays offline when it fails to go online again after a
-     * lifecycle verb, instead of crashing.
+     * Whether {@link error} of a start lets the node stay offline after a lifecycle verb instead of crashing.
      */
-    protected get canGoOnline() {
-        return true;
+    protected staysOfflineAfter(_error: unknown) {
+        return false;
     }
 
     /**

@@ -47,7 +47,7 @@ export class ClientNetworkRuntime extends NetworkRuntime {
             throw new InternalError(`Commissioned node ${this.owner} has no peer address`);
         }
 
-        // ClientNode.start() brings the server online first; a restart after a verb of this node does not
+        // Only ClientNode.start() brings the server node online
         const server = this.owner.owner;
         if (!server.lifecycle.isOnline) {
             throw new OfflineError(`Cannot interact with ${this.owner} because ${server} is offline`);

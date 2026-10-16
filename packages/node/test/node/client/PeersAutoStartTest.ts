@@ -34,9 +34,19 @@ describe("Peers auto-start on owner online", () => {
         const peer1 = await subscribedPeer(controller, "peer1");
         await MockTime.resolve(controller.stop());
 
-        (controller.env.get(Crypto) as MockCrypto).entropic = true;
-        await MockTime.resolve(Promise.all([controller.start(), controller.stop()]), { macrotasks: true });
+        // Request the stop while the owner holds its mutex to start its peers
+        let stopping: Promise<void> | undefined;
+        const start = peer1.start.bind(peer1);
+        peer1.start = () => {
+            stopping ??= controller.stop();
+            return start();
+        };
 
+        (controller.env.get(Crypto) as MockCrypto).entropic = true;
+        await MockTime.resolve(controller.start(), { macrotasks: true });
+        await MockTime.resolve(stopping, { macrotasks: true });
+
+        expect(stopping).not.undefined;
         expect(controller.lifecycle.isOnline).false;
         expect(peer1.lifecycle.isOnline).false;
     });
