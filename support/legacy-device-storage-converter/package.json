@@ -1,0 +1,25 @@
+{
+    "name": "@matter/legacy-device-storage-converter",
+    "version": "0.0.0-git",
+    "private": true,
+    "license": "Apache-2.0",
+    "author": "matter.js authors",
+    "scripts": {
+        "clean": "nacho-build clean",
+        "build": "nacho-build",
+        "build-clean": "nacho-build --clean",
+        "test": "matter-test"
+    },
+    "main": "src/ConvertLegacyStorage.ts",
+    "dependencies": {
+        "@matter/main": "*"
+    },
+    "devDependencies": {
+        "@matter/nodejs": "*",
+        "@matter/testing": "*"
+    },
+    "engines": {
+        "node": ">=20.19.0 <21.0.0 || >=22.13.0"
+    },
+    "type": "module"
+}

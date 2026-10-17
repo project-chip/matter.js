@@ -41,7 +41,8 @@
         "support/models",
         "support/codegen",
         "support/chip-testing",
-        "support/tests"
+        "support/tests",
+        "support/legacy-device-storage-converter"
     ],
     "scripts": {
         "prepare": "npm run build-clean",

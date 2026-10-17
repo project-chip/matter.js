@@ -120,6 +120,9 @@
         },
         {
             "path": "support/tests"
+        },
+        {
+            "path": "support/legacy-device-storage-converter"
         }
     ]
 }
