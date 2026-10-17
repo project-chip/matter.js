@@ -1685,19 +1685,9 @@ export class ChipToolControllerAdapter implements ControllerAdapter {
         const nodeId = NodeId(this.#nextNodeId++);
         const node = nodeId.toString();
 
-        if (target.singleHandshakeAttempt) {
-            // chip-tool exposes no equivalent bound, so the outcome is whatever its own retry policy produces. Said out
-            // loud because a step asking for this is asserting a refusal, and a recovered handshake would otherwise be
-            // recorded against the device rather than against the option nobody honored.
-            console.warn(
-                `chip-tool cannot bound commissioning of node ${node} to a single handshake attempt; its own retry ` +
-                    "policy decides the outcome",
-            );
-        }
-
         if (target.giveUpAfterMs !== undefined) {
-            // Said out loud for the same reason singleHandshakeAttempt is: a step asking for this is
-            // asserting an outcome, and chip-tool's own give-up is what decides it.
+            // Said out loud because a step asking for this is asserting an outcome, and chip-tool's own give-up is
+            // what decides it.
             console.warn(
                 `chip-tool cannot bound discovery for node ${node}; its own policy decides when it stops looking`,
             );

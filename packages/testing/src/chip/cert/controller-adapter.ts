@@ -57,18 +57,6 @@ export interface CommissioningTarget {
     giveUpAfterMs?: number;
 
     /**
-     * Ask for commissioning to give up after a single operational handshake attempt, so a step that means to prove the
-     * device refused a commissioner is not answered by a retry that succeeded instead.
-     *
-     * Only a step asserting a refusal should set this: shortening the budget also removes the recovery a healthy
-     * commissioning legitimately needs (a second candidate address, a device that answers the first handshake with
-     * `NoSharedTrustRoots`), so a step that expects to succeed must leave it alone.
-     *
-     * Advisory. An adapter whose commissioner already stops after one attempt has nothing to do.
-     */
-    singleHandshakeAttempt?: boolean;
-
-    /**
      * Leave the commissioned peer without the sustained wildcard subscription it otherwise holds, and do not wait
      * for one.
      *
@@ -1516,7 +1504,6 @@ export type ControllerRoleKind = "dut" | "helper";
  * Something a step can need of a controller that the {@link ControllerAdapter} interface cannot promise, because not
  * every controller behind it can do it:
  *
- * - `single-handshake-attempt` — commissioning honours {@link CommissioningTarget.singleHandshakeAttempt}
  * - `onboarding-payload-parse` — {@link ControllerAdapter.parseQrPayload} and
  *   {@link ControllerAdapter.parseManualPairingCode}
  * - `multi-path-write` — {@link CertNodeApi.writeAttributes} with several entries or a data version
@@ -1552,7 +1539,6 @@ export type ControllerRoleKind = "dut" | "helper";
  * @see {@link MatterSpecification.v161.Core} § 10.2.3 for `chunked-write`
  */
 export type ControllerCapability =
-    | "single-handshake-attempt"
     | "onboarding-payload-parse"
     | "multi-path-write"
     | "chunked-write"

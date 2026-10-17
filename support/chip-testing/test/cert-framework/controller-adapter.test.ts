@@ -161,21 +161,6 @@ describe("InProcessControllerAdapter", () => {
         await device?.close();
     });
 
-    // Guards the regression the per-step flag exists to prevent: the bound is short enough to rule out a retry, so a
-    // commissioning that expects to succeed has to fit inside it, discovery included. It does not prove the option
-    // reaches commissioning — a healthy device commissions either way — only that requesting it breaks nothing.
-    it("still commissions a healthy device when asked for a single handshake attempt", async function () {
-        this.timeout(30_000);
-
-        const ref = await adapter.commission({
-            passcode: 20202021,
-            discriminator: 3840,
-            singleHandshakeAttempt: true,
-        });
-
-        await adapter.node(ref).decommission();
-    });
-
     it("commissions without the sustained subscription when asked, leaving raw reads and decommissioning working", async function () {
         this.timeout(30_000);
 
@@ -1641,6 +1626,19 @@ describe("controller capabilities", () => {
 
         env.MATTER_CERT_CONTROLLER = "matterjs";
         expect(controllerCapabilityOutOfScope(["multi-path-write"])).undefined;
+    });
+
+    it("skips the scripted OTA provider cases on matterjs-server as out of scope, and as a gap on chip-tool", () => {
+        const required = ["ota-provider", "ota-provider-script"] as const;
+
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+        expect(controllerCapabilityGap(required)).undefined;
+        expect(controllerCapabilityOutOfScope(required)).equal(
+            `controller "matterjs-server" does not offer ota-provider-script: ${MATTERJS_SERVER_OUT_OF_SCOPE["ota-provider-script"]}`,
+        );
+
+        env.MATTER_CERT_CONTROLLER = "chip-tool";
+        expect(controllerCapabilityGap(required)).contains('controller "chip-tool" lacks ota-provider');
     });
 
     it("applies only the DUT controller's out-of-scope declarations", () => {
