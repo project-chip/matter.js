@@ -34,7 +34,7 @@ another TC:
 - **`TC-CADMIN-1.17`** (all-clusters) — multiple controllers against one device, pairing-code
   (rather than passcode/discriminator) commissioning, non-fabric-filtered reads, and a bounded
   "this must fail" check. See "Multi-controller wiring" and "Bounded negative checks" below.
-- **`TC-SC-3.5`** (python-wrapped, currently live-blocked) — a script that drives its own scenario
+- **`TC-SC-3.5`** (python-wrapped) — a script that drives its own scenario
   and only needs a human-in-the-loop (here, an automated `PromptHandler`) to react to prompts; not
   built on `certTest()` at all. See "Python-wrapped mode" below. Read this one last — it is the
   exception to almost everything above it.
@@ -649,7 +649,7 @@ answer: a controller that cannot send a command says nothing about the device, a
 - A test declares `controllerCapabilities` on `certTest()`, and a step declares it on `step()`. A test is skipped
   when any controller role lacks one, helper roles included (each role is judged by the implementation that fills
   it). `transport: "tcp"` implies `tcp-transport`. A skipped step is counted in `controllerUnsupportedSkips`.
-- A python-wrapped case (`TC-SC-3.5`, `TC-DA-1.9`, the `certCameraCase` WebRTC cases) does not go through
+- A python-wrapped case that needs a capability (`TC-DA-1.9`, the `certCameraCase` WebRTC cases) does not go through
   `certTest()`, so it calls `skipOnControllerGap()` itself, before it builds a controller or starts a process. That
   writes the same no-device `controller-gap` bundle and skips.
 - A `certTest()` case reads `MATTER_CERT_CONTROLLER` and `MATTER_CERT_DEVICE` once, at collection
@@ -718,8 +718,9 @@ with `outOfScope` naming the reason, no devices and verdict `skipped`.
   data version (TC-IDM-3.1 step 15) are out of scope (`multi-path-write`): the server writes one attribute per request
   and handles conditional writes itself. They skip as "not reachable for controller use cases" and the TC passes on
   its other steps. A timed write (TC-IDM-5.1 step 2) sends `timed_request_timeout_ms`.
-- TC-SC-3.5 (`single-handshake-attempt`) and the TCP block (`tcp-transport`) are capability-gated the same way. So
-  is TC-BR-4 (`sustained-subscription`), at test level.
+- The TCP block (`tcp-transport`) is capability-gated the same way, and so is TC-BR-4 (`sustained-subscription`), at
+  test level. TC-SC-3.5 runs: it does not wait for any commissioning result (see "A commissioner that retries turns a
+  one-shot fault into a pass" below).
 - The OTA provider cases that script the server's provider or announce it with nothing staged (TC-SU-3.2–3.4) are out
   of scope (`ota-provider-script` in `MATTERJS_SERVER_OUT_OF_SCOPE`), not a gap: the server's provider answers only
   with a staged image, and scripted answers stay excluded until the test plans' need for them is clarified. They skip
@@ -1063,9 +1064,9 @@ stdin open and, for each output line, runs the first `PromptHandler` whose `patt
 handler after it fires). A matched handler's returned string is written straight to the script's stdin.
 This TC is registered as a **bare `describe`/`it`**, not a `certTest()`, because there's no `CertDevice`
 in the picture at all — TH_SERVER lives entirely inside the container, spawned by the script itself, and
-the thing under test is `InProcessControllerAdapter`'s own commissioning stack acting as DUT_Commissioner
-against it. Building a `CertStepWiring` by hand (`{controllers: {dut: new InProcessControllerAdapter("dut")}, devices: {}, recorder}`)
-and calling `PromptDrivenPythonTest.invoke()` directly was simpler and more honest than forcing this
+the thing under test is the selected DUT controller's commissioning stack acting as DUT_Commissioner
+against it. Building a `CertStepWiring` by hand (`{controllers: {}, devices: {}, recorder}`; the handler owns the
+controllers, see below) and calling `PromptDrivenPythonTest.invoke()` directly was simpler and more honest than forcing this
 shape through `certTest()`'s device-flavor machinery just to obtain a `Subject` it doesn't need.
 
 **Finding what a prompt looks like.** `MatterBaseTest.wait_for_user_input()`
@@ -1091,25 +1092,13 @@ value is ever exposed outside the container. A handler that hardcodes 20202021 f
 precondition step will discover by nothing (auth failure) that it's DUT_Commissioner talking to a
 completely different, unrelated PAKE verifier.
 
-**Expected-failure counting, not hardcoded positions.** Steps 2c/3c/4c/5c all expect DUT commissioning
-to *fail* (a Sigma2 fault was injected right before each), but step 4c (responderICAC corruption) is
-skipped entirely — no prompt appears at all — if step 1c determined DUT_Commissioner has no ICAC in its
-NOC chain (a runtime fact, not something knowable ahead of a live run). `TC-SC-3.5.test.ts`'s handler
-tracks *occurrence count* in closure state (`state.attempts`), not step name: attempt 0 (step 1b) expects
-success, every attempt after that expects failure, whether there end up being 3 or 4 of them. Don't
-build a lookup keyed by the literal chip-tool node id in the prompt (`pairing onnetwork <n> ...`) — that
-`n` is just an incrementing suggestion for a human operator to avoid reusing a stale chip-tool node id,
-not a stable identifier for which script step is prompting.
-
-**Bounding a commissioning attempt that's supposed to fail.** A DUT that hangs instead of promptly
-rejecting a corrupted Sigma2 must not stall the whole run for the outer mocha timeout — same
-"`expectRejection`-style" concern as `TC-CADMIN-1.17`'s bounded negative checks (see above), applied here
-to `commission()` itself rather than a post-commissioning read/write. `TC-SC-3.5.test.ts` races
-`dut.commission(...)` against a fixed timeout (`COMMISSION_TIMEOUT_MS`, 60s) and records a `"fail"`
-check either way (unexpected success, or neither settling) — a real rejection is what actually proves the
-behavior; the timeout is only a backstop. Not live-verified against a real DUT/TH_SERVER handshake (see
-the prerequisite gap below), so this bound is a design choice informed by other TCs' precedent, not a
-number tuned against an observed real commissioning latency.
+**Attempts are counted, not keyed by step.** Step 4c (responderICAC corruption) is skipped entirely — no
+prompt appears at all — if step 1c determined DUT_Commissioner has no ICAC in its NOC chain (a runtime fact,
+not something knowable ahead of a live run). `CommissioningAttempts` (`tc-sc-3.5-support.ts`) counts the
+attempts it started, and the case checks that count against `MINIMUM_PROMPTS`. Don't build a lookup keyed by
+the literal chip-tool node id in the prompt (`pairing onnetwork <n> ...`) — that `n` is just an incrementing
+suggestion for a human operator to avoid reusing a stale chip-tool node id, not a stable identifier for which
+script step is prompting.
 
 **Framework fix reused by every python-wrapped/python test, not just this one:** `parseStep`
 (`chip-test-common.ts`) matched `Test Step \d+` — plain numbers only. `TC_SC_3_5.py`'s own steps are
@@ -1194,38 +1183,35 @@ notices a prompt-driven TC that stopped driving anything.
 ## A commissioner that retries turns a one-shot fault into a pass (`TC-SC-3.5`)
 
 `TC_SC_3_5.py` starts TH_SERVER once, in `setup_class`, and never restarts it. Each negative step only
-revokes and reopens the commissioning window and arms `FailAtFault` with `numCallsToFail=1`, so the
+opens a new commissioning window (revoking the previous one from step 3a on) and arms `FailAtFault` with `numCallsToFail=1`, so the
 *first* Sigma2 of that window is corrupt and every later one is clean. A commissioner that retries the
-handshake therefore commissions successfully on its second attempt, and the step the script means as
-"the DUT must reject this" passes.
+handshake (matter.js does, on purpose, and so does matterjs-server) therefore commissions successfully on
+its second attempt, so the DUT's own commissioning result says nothing about the step.
 
-matter.js retries deliberately — real devices sometimes need more than one chance — so the harness has
-to bound the attempt instead. A step sets `CommissioningTarget.singleHandshakeAttempt`, which
-`InProcessControllerAdapter` turns into a `caseConnectionTimeout` (10s) below every retry interval
-commissioning's operational connection uses, so commissioning ends on the first handshake outcome. The
-production default (4m15s) keeps the retries.
+The script does not need that result. It judges each attempt on TH_SERVER's side: step 1b by TH_SERVER
+logging `Commissioning completed successfully`, every negative step by TH_SERVER logging
+`Invalid CASE parameter` (the INVALID_PARAMETER status the DUT sent for the corrupted Sigma2) and then by
+reading `WindowStatus` as still open. The negative steps rely on a retry of the DUT coming later
+than that `WindowStatus` read, which follows the log line within a second; matter.js waits at least 15s before it
+retries the operational connection. The script prompts for the next attempt only after that, and the step 1d
+`RemoveFabric` and every later `RevokeCommissioning` (which expires the previous attempt's fail-safe, Core
+§ 11.19.8.3.1) remove the fabric an earlier attempt would retry CASE on. TH_SERVER then answers its Sigma1 with
+`NoSharedTrustRoots` and builds no Sigma2, so a stale retry cannot use up the fault armed for the next attempt.
 
-**Set it only on a step that expects a refusal.** The same short budget removes the recovery a healthy
-commissioning legitimately needs — a second candidate address (`delayBeforeNextAddress`, 15s), a device
-answering the first handshake with `NoSharedTrustRoots` (15s), a transient network error (15s) — so a
-step that expects to succeed must leave it alone. TC-SC-3.5 sets it for every attempt but its first.
+So the handler does not wait for any commissioning result, on every controller. `CommissioningAttempts`
+(`tc-sc-3.5-support.ts`) runs each attempt on a DUT controller of its own: on each prompt it closes the previous
+attempt's controller, starts a new one, starts commissioning and answers the prompt at once. Closing first means no
+earlier attempt still discovers TH_SERVER or retries its handshake while the next one runs, and each attempt's
+controller log is attached to the bundle as `controller-dut-attempt-<n>`. The commissioning's own outcome is logged
+at debug, or at warn where the controller refused the request itself; a rejection never reaches the case. Each
+attempt passes `giveUpAfterMs` 30s, which bounds discovery (and on matter.js PASE with it) far above what a present
+TH_SERVER needs and far below the 3-minute window, so an attempt that cannot reach TH_SERVER ends, with the reason
+in its controller log, before the script's own 90s wait. chip-tool cannot be bounded and says so.
 
-**It reports a budget, not the device's answer.** `Peer.connect`'s `connectionTimeout` bounds the caller's
-wait rather than the handshake — the two are orthogonal to cancellation by its own documentation — but
-commissioning's failure path then deletes the peer, and `Peer.close()` aborts the connection process, so
-nothing keeps handshaking behind our back. What the rejection cannot tell you is *why* the handshake did
-not finish: a device that merely answered slowly produces the same error as one that refused. TC-SC-3.5's
-step evidence says only "did not complete" for that reason, and the device's own answer is read from the
-attached controller log and from the script's. What no timeout cancels is the device-side commissioning
-state — the failsafe there still has to expire on its own — which is why an abort reaching past PASE is
-still worth having.
-
-Two things obscured this while it was being diagnosed. The script's prompt says "Input anything once
-commissioning has *started*", and a human answering there lets the script check `WindowStatus` and
-revoke the window long before matter.js's next attempt — so a manual run passes even without the
-timeout. And a CI runner with both `eth0` and `docker0` link-local addresses reaches the retry after
-~15s (the next-address delay) rather than the 2 min a single-address host waits, which is what brought
-the retry inside the handler's own budget.
+The evidence per attempt is one step with an accepted `"unverified"` check: the case starts the attempt, and the
+script's checks above, in `device-python.log`, decide. The case asserts no DUT-side refusal. A
+cancellable commissioning API would let the case end an attempt once the script has seen enough, instead of
+closing the controller.
 
 ## The write-path idiom (`writeAndCheck`, `TC-IDM-3.1`)
 

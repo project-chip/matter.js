@@ -2336,18 +2336,6 @@ const CERT_PEER_CONNECTION_TIMEOUT = Seconds(15);
 const CERT_PEER_SETTLE_TIMEOUT = Seconds(45);
 
 /**
- * Budget that expresses {@link CommissioningTarget.singleHandshakeAttempt}. Below every retry interval commissioning's
- * operational connection uses — `delayBeforeNextAddress` (15s), the `NoSharedTrustRoots` fast retry (15s) and
- * `delayAfterNetworkError` (15s) — so commissioning ends on the first handshake attempt, whether or not that attempt
- * produced an answer: initial contact retransmits until the device responds, so a silent device is cut off mid-attempt.
- *
- * This bounds only how long commissioning waits, not the handshake itself, so the rejection it produces reports a
- * budget that expired rather than what the device answered. A step needing the device's own answer reads it from the
- * controller log or from the counterparty's evidence.
- */
-const SINGLE_HANDSHAKE_TIMEOUT = Seconds(10);
-
-/**
  * Waits for the peer's sustained subscription to become active (`isConnected` tracks `subscriptionActive`,
  * and the subscription bootstraps with the structure read, so this covers both).
  *
@@ -2766,7 +2754,6 @@ export class InProcessControllerAdapter implements ControllerAdapter {
                 productId,
                 autoStateInitialize: false,
                 autoSubscribe: !target.withoutSubscription,
-                caseConnectionTimeout: target.singleHandshakeAttempt ? SINGLE_HANDSHAKE_TIMEOUT : undefined,
                 timeout: target.giveUpAfterMs === undefined ? undefined : Millis(target.giveUpAfterMs),
                 regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
                 regulatoryCountryCode: "XX",

@@ -253,9 +253,6 @@ export const MATTERJS_SERVER_CONTROLLER_PICS: PicsValues = {
  * (see `controllerCapabilityGap`). Every operation that needs one of them refuses naming it before it sends anything.
  */
 export const MATTERJS_SERVER_CAPABILITY_GAPS = {
-    "single-handshake-attempt":
-        "the WebSocket API has no option for it, and the server's own retries would answer the refusal the step " +
-        "means to prove",
     "basic-commissioning-window": "open_commissioning_window ignores its option and always opens an enhanced window",
     "max-value-path-ids": "the server reads endpoint 0xFFFF and cluster, attribute or event id 0xFFFFFFFF as wildcards",
     "session-introspection": "the WebSocket API exposes no session state",
@@ -527,13 +524,6 @@ export class MatterServerControllerAdapter implements ControllerAdapter {
     }
 
     async commission(target: CommissioningTarget): Promise<CertNodeRef> {
-        if (target.singleHandshakeAttempt) {
-            throw refusal(
-                "single-handshake-attempt",
-                "commissioning bounded to a single operational handshake attempt",
-            );
-        }
-
         // The server bounds discovery and PASE together with it, as matter.js does with its one `timeout`
         const discoveryTimeout = target.giveUpAfterMs === undefined ? undefined : Millis(target.giveUpAfterMs);
         const discovery =

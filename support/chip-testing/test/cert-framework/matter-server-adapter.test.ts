@@ -182,15 +182,6 @@ describe("MatterServerControllerAdapter", () => {
             );
         });
 
-        it("refuses singleHandshakeAttempt before any command is sent, for the reason it declares", async () => {
-            const error = await rejectionOf(
-                adapter.commission({ manualPairingCode: "34970112332", singleHandshakeAttempt: true }),
-            );
-
-            expectDeclaredRefusal(error, "single-handshake-attempt");
-            expect(server.requests).deep.equals([]);
-        });
-
         it("sends giveUpAfterMs as discovery_timeout_s in seconds on every commissioning command", async () => {
             replies.commission_with_code = commissioned;
             replies.commission_on_network = commissioned;
@@ -2501,6 +2492,8 @@ describe("MatterServerControllerAdapter construction", () => {
             "MCORE.BDX.SynchronousReceiver": 0,
             "MCORE.BDX.AsynchronousReceiver": 0,
         });
+        expect(MATTERJS_SERVER_CONTROLLER_PICS).deep.include({ "CGEN.C.F00": 0 });
+    });
 
     it("declares scripted OTA provider answers out of scope, not a gap", () => {
         expect(MATTERJS_SERVER_OUT_OF_SCOPE).have.property("ota-provider-script");
