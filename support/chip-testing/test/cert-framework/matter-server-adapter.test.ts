@@ -2487,6 +2487,21 @@ describe("MatterServerControllerAdapter construction", () => {
         expect(Object.keys(MATTERJS_SERVER_CAPABILITY_GAPS)).include("sustained-subscription");
     });
 
+    it("declares the BDX sender roles only, and no Terms and Conditions client feature", () => {
+        const bdx = Object.entries(MATTERJS_SERVER_CONTROLLER_PICS).filter(([key]) => key.startsWith("MCORE.BDX."));
+        expect(Object.fromEntries(bdx)).deep.equal({
+            "MCORE.BDX.Sender": 1,
+            "MCORE.BDX.Responder": 1,
+            "MCORE.BDX.SynchronousSender": 1,
+            "MCORE.BDX.AsynchronousSender": 0,
+            "MCORE.BDX.BlockQueryWithSkip": 0,
+            "MCORE.BDX.Receiver": 0,
+            "MCORE.BDX.Initiator": 0,
+            "MCORE.BDX.Driver": 0,
+            "MCORE.BDX.SynchronousReceiver": 0,
+            "MCORE.BDX.AsynchronousReceiver": 0,
+        });
+
     it("declares scripted OTA provider answers out of scope, not a gap", () => {
         expect(MATTERJS_SERVER_OUT_OF_SCOPE).have.property("ota-provider-script");
         expect(MATTERJS_SERVER_CAPABILITY_GAPS).not.have.property("ota-provider-script");

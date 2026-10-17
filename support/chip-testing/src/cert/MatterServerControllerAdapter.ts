@@ -159,6 +159,9 @@ export const MATTERJS_SERVER_CONTROLLER_PICS: PicsValues = {
     // `open_commissioning_window` ignores its `option` and always opens an enhanced window.
     "CADMIN.C.C01.Tx": 0,
 
+    // matter.js commissioning sends no SetTCAcknowledgements.
+    "CGEN.C.F00": 0,
+
     // The server hosts matter.js's OTA provider, so it takes the BDX and OTA roles the in-process controller declares.
     // The CHIP PICS file answers these for a device. Scripted provider answers are out of scope
     // (`ota-provider-script`).
@@ -167,6 +170,15 @@ export const MATTERJS_SERVER_CONTROLLER_PICS: PicsValues = {
     "MCORE.BDX.SynchronousSender": 1,
     "MCORE.BDX.AsynchronousSender": 0,
     "MCORE.BDX.BlockQueryWithSkip": 0,
+
+    // The server only sends images, on a requestor's ReceiveInit: it never receives a transfer or opens one, and as
+    // the sender it sends no BlockQuery, which the test plans check for the driver role. The CHIP PICS file answers 1
+    // for the initiator and the driver.
+    "MCORE.BDX.Receiver": 0,
+    "MCORE.BDX.Initiator": 0,
+    "MCORE.BDX.Driver": 0,
+    "MCORE.BDX.SynchronousReceiver": 0,
+    "MCORE.BDX.AsynchronousReceiver": 0,
     "MCORE.OTA.Provider": 1,
     "MCORE.OTA.HTTPS": 0,
     "OTAR.C.M.AnnounceOTAProvider": 1,

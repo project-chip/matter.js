@@ -780,8 +780,10 @@ with `outOfScope` naming the reason, no devices and verdict `skipped`.
   `env` execs the server, so SIGTERM still reaches it. Over UDP step 20 runs and proves the chunked read.
 
 **PICS.** `MATTERJS_SERVER_CONTROLLER_PICS` declares what the server is, as `MATTERJS_CONTROLLER_PICS` does for
-matter.js: commissioner roles, batched invoke, no concatenated QR code, no basic commissioning window, and the BDX,
-OTA provider, ICD client and bridge client roles the server has. A key is never set to 0 only
+matter.js: commissioner roles, batched invoke, no concatenated QR code, no basic commissioning window, no Terms and
+Conditions client feature (`CGEN.C.F00`), and the OTA provider, ICD client and bridge client roles the server has. Of
+the BDX keys only `Sender`, `Responder` and `SynchronousSender` are 1; every other `MCORE.BDX.*` key is set to 0
+explicitly, because CHIP's file answers 1 for `Initiator`, `Driver` and `BlockQueryWithSkip`. A key is never set to 0 only
 because this adapter cannot drive what the server does: that is a capability gap, so the step counts as a coverage
 gap of the controller (`controllerUnsupportedSkips`) instead of `picsSkips`.
 
