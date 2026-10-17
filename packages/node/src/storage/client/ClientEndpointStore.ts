@@ -52,7 +52,7 @@ export class ClientEndpointStore extends EndpointStore {
     }
 
     override async erase() {
-        this.#discardCaches();
+        await this.#discardCaches();
         await super.erase();
     }
 
@@ -63,7 +63,7 @@ export class ClientEndpointStore extends EndpointStore {
      * Anything else stays, so local state such as commissioning survives even if its behavior did not start.
      */
     async eraseCaches() {
-        this.#discardCaches();
+        await this.#discardCaches();
         for (const behaviorId of await this.storage.contexts()) {
             if (await this.storage.createContext(behaviorId).has(DatasourceCache.VERSION_KEY)) {
                 await this.eraseStoreForBehavior(behaviorId);
@@ -71,11 +71,14 @@ export class ClientEndpointStore extends EndpointStore {
         }
     }
 
-    #discardCaches() {
+    async #discardCaches() {
         for (const cache of this.#caches) {
             cache.discard();
         }
         this.#caches.clear();
+
+        // A running flush may still write the values of a discarded cache, so it must finish before the storage clears
+        await this.#owner.buffer?.settled();
     }
 
     /**

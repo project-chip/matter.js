@@ -229,6 +229,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A factory reset of a server node no longer hangs when one of its peers starts meanwhile
     - Fix: `start()` and `stop()` of a node take effect in call order; `start()` no longer returns at once while another start is in progress
     - Fix: `erase()` and `delete()` of an endpoint of a peer also erase the cached data of its parts
+    - Fix: Erasing an endpoint of a peer waits for a running cache flush, so the flush no longer writes the erased values back
     - Fix: A peer whose network start fails no longer logs an unhandled error when it closes its network runtime
     - Fix: An endpoint without a `number` no longer gets a number that another endpoint of the node sets in its options but is not yet added, so adding that endpoint later no longer fails
     - Fix: An endpoint refused for its number is not listed in `PartsList` and is not reported as deleted

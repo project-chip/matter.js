@@ -27,6 +27,7 @@ import {
     Logger,
     MatterAggregateError,
     MaybePromise,
+    nextEmitOf,
     Observable,
     toHex,
     UninitializedDependencyError,
@@ -1099,7 +1100,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     async #settle() {
         while (this.construction.status === Lifecycle.Status.Initializing) {
-            await this.construction.change;
+            await nextEmitOf(this.construction.change);
         }
     }
 
