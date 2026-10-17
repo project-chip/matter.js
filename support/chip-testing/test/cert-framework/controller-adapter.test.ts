@@ -1643,6 +1643,19 @@ describe("controller capabilities", () => {
         expect(controllerCapabilityOutOfScope(["multi-path-write"])).undefined;
     });
 
+    it("skips the scripted OTA provider cases on matterjs-server as out of scope, and as a gap on chip-tool", () => {
+        const required = ["ota-provider", "ota-provider-script"] as const;
+
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+        expect(controllerCapabilityGap(required)).undefined;
+        expect(controllerCapabilityOutOfScope(required)).equal(
+            `controller "matterjs-server" does not offer ota-provider-script: ${MATTERJS_SERVER_OUT_OF_SCOPE["ota-provider-script"]}`,
+        );
+
+        env.MATTER_CERT_CONTROLLER = "chip-tool";
+        expect(controllerCapabilityGap(required)).contains('controller "chip-tool" lacks ota-provider');
+    });
+
     it("applies only the DUT controller's out-of-scope declarations", () => {
         const selection = { dut: "matterjs", helper: "matterjs-server" } as const;
 

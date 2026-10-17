@@ -160,8 +160,8 @@ export const MATTERJS_SERVER_CONTROLLER_PICS: PicsValues = {
     "CADMIN.C.C01.Tx": 0,
 
     // The server hosts matter.js's OTA provider, so it takes the BDX and OTA roles the in-process controller declares.
-    // The CHIP PICS file answers these for a device. What this adapter cannot drive of its own provider is the
-    // `ota-provider-script` capability gap.
+    // The CHIP PICS file answers these for a device. Scripted provider answers are out of scope
+    // (`ota-provider-script`).
     "MCORE.BDX.Sender": 1,
     "MCORE.BDX.Responder": 1,
     "MCORE.BDX.SynchronousSender": 1,
@@ -254,8 +254,6 @@ export const MATTERJS_SERVER_CAPABILITY_GAPS = {
     "batch-arrival-order":
         "batched_device_commands answers in request order, so the order the device's answers arrived in is not visible",
     "webrtc-requestor": "the WebSocket API does not expose the server's requestor cluster to a case",
-    "ota-provider-script":
-        "the WebSocket API cannot script the answers of the server's OTA provider or announce it with nothing staged",
     "sustained-subscription":
         "this adapter keeps the server's own subscription to a node off except while an OTA update or an ICD " +
         "registration needs it, so it has none to observe events through or to keep its device list current",
@@ -270,6 +268,9 @@ export const MATTERJS_SERVER_OUT_OF_SCOPE = {
     "multi-path-write":
         "not reachable for controller use cases: the server writes one attribute per request, on one endpoint or on " +
         "all, and handles conditional writes itself",
+    "ota-provider-script":
+        "the server's OTA provider answers only with a staged image; scripted answers stay excluded until the test " +
+        "plans' need for them is clarified",
 } as const satisfies ControllerCapabilitiesOutOfScope;
 
 type MatterServerGap = keyof typeof MATTERJS_SERVER_CAPABILITY_GAPS;

@@ -719,8 +719,11 @@ with `outOfScope` naming the reason, no devices and verdict `skipped`.
   and handles conditional writes itself. They skip as "not reachable for controller use cases" and the TC passes on
   its other steps. A timed write (TC-IDM-5.1 step 2) sends `timed_request_timeout_ms`.
 - TC-SC-3.5 (`single-handshake-attempt`) and the TCP block (`tcp-transport`) are capability-gated the same way. So
-  are, at test level, the OTA provider cases that script the server's provider or announce it with nothing staged
-  (TC-SU-3.2–3.4: `ota-provider-script`) and TC-BR-4 (`sustained-subscription`).
+  is TC-BR-4 (`sustained-subscription`), at test level.
+- The OTA provider cases that script the server's provider or announce it with nothing staged (TC-SU-3.2–3.4) are out
+  of scope (`ota-provider-script` in `MATTERJS_SERVER_OUT_OF_SCOPE`), not a gap: the server's provider answers only
+  with a staged image, and scripted answers stay excluded until the test plans' need for them is clarified. They skip
+  with verdict `skipped` and that reason.
 - The ICD client cases (TC-ICDM-6.1, TC-ICDB-1.3) and TC-SU-3.1 run on the server's own subscription to the node.
   `update_node` refuses a node the server does not hold as available, which it does only after its own subscription's
   first report (matterjs-server `ControllerCommandHandler.updateNode`, `Nodes.isAvailable`). That the server's ICD

@@ -2484,10 +2484,12 @@ describe("MatterServerControllerAdapter construction", () => {
             "MCORE.DEVLIST.UseDevices": 1,
         });
         expect(MATTERJS_SERVER_CONTROLLER_PICS).not.have.property("ICDM.C");
-        expect(Object.keys(MATTERJS_SERVER_CAPABILITY_GAPS)).include.members([
-            "ota-provider-script",
-            "sustained-subscription",
-        ]);
+        expect(Object.keys(MATTERJS_SERVER_CAPABILITY_GAPS)).include("sustained-subscription");
+    });
+
+    it("declares scripted OTA provider answers out of scope, not a gap", () => {
+        expect(MATTERJS_SERVER_OUT_OF_SCOPE).have.property("ota-provider-script");
+        expect(MATTERJS_SERVER_CAPABILITY_GAPS).not.have.property("ota-provider-script");
     });
 });
 
