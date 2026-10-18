@@ -102,6 +102,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: `DoorLockServer` supports schedule users, `ExpiringUser`, `DisposableUser` and `ForcedUser`, and a lock implementation drives hardware via `handleLockOperation`
     - Feature: `OtaSoftwareUpdateProviderServer` state `applyDelay` sets the `DelayedActionTime` for an apply
     - Feature: `Discovery.Options.abort` cancels `locate()`, `discover()` and `pase()` like `cancel()`
+    - Feature: `network.tcp.maxMessageSize` sets the largest TCP message a node accepts and announces as its MAX_TCP_MESSAGE_SIZE (default 64000)
     - Enhancement: `locate()`, `commission()` and `pase()` report a discovery that found or reached no device as `DeviceNotDiscoveredError`, `DiscoveryIncompleteError` or `NoDiscoveryTransportError`, all subtypes of `DiscoveryError`; failed attempts or scanners stay `DiscoveryAggregateError`, and `discover()` still resolves with what it found
     - Enhancement: The commissioning test harness (`MockSite`, `MockServerNode`, …) is exported at `@matter/node/testing`
     - Enhancement: Added `EndpointLifecycle.isReadable` and `isGone`
@@ -268,10 +269,13 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: A custom `BleScannerClient` may report `listeningTime` and `isPeripheralReachable()`, so stale or unreachable peripherals are not offered for commissioning
     - Enhancement: Network profiles can define BDX transfer delays separately via `bdxAdditionalMrpDelay`
     - Enhancement: `NodeSession.reportedParameters` holds the session parameters the peer sent, without fallbacks
+    - Enhancement: A message the peer never acknowledges now fails with `PeerAckMissingError`, a `PeerUnresponsiveError` subtype with its own message text
+    - Enhancement: A message too large for its TCP channel fails with `MessageTooLargeError` instead of `NetworkError`
     - Adjustment: Once a sustained subscription processed an event, it replaces the `eventFilters` a `refreshRequest` returns
     - Adjustment: `DclVendorInfo` is a deprecated alias of `VendorDclSchema`
     - Adjustment: `DclVendorInfoService` always provides the built-in test vendors and no longer stores them
     - Adjustment: The error for a whole-interaction StatusResponse is the received class of its status, with a message like `Received error status NotFound (code 139)`
+    - Fix: Messages sent over TCP stay within the MAX_TCP_MESSAGE_SIZE the peer announced, and received TCP messages may use the full announced 64000 bytes
     - Fix: DNS-SD discovery ignores malformed or out-of-range `D`, `CM`, `VP`, `DT`, `PH`, `T` and `ICD` values
     - Fix: A client write is sent as chunked WriteRequest messages when the request or its WriteResponse would not fit one message, instead of one message that gets dropped
     - Fix: A client list write with a DataVersion sends its entries without the DataVersion once the list was replaced, so the device no longer rejects them
@@ -310,6 +314,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Group messages carry the current node ID after the fabric's NOC changed
     - Fix: Removing a fabric that a fail-safe expiry restored emits `deleting` and `deleted` once
     - Fix: A subscribe that is aborted, or fails to process a priming report, before the device's SubscribeResponse now answers the device's pending report with `INVALID_SUBSCRIPTION`, so the device drops the subscription
+    - Fix: When a Sigma1 stays unacknowledged on initial contact, the controller continues with fresh Sigma1 messages after a while instead of retransmitting the same one indefinitely
+    - Fix: Per-connection `timing` overrides of the kick parameters take effect
+    - Fix: A kick can restart a connection attempt to a peer's last known address once discovery confirms the address, instead of being always suppressed
 
 - @matter/react-native
     - Fix: `ReactNativeBle.scanner` returns the same `BleScanner` on every access
