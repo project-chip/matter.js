@@ -363,7 +363,8 @@ export class SessionManager {
      * Change session parameters.
      *
      * Parameters values you omit in {@link parameters} will retain their current values.  This only affects new
-     * sessions.
+     * sessions.  A ServerNode uses `maxTcpMessageSize` as the receive limit of its TCP transport when the node starts,
+     * so change that value before the start.
      */
     set sessionParameters(parameters: Partial<SessionParameters>) {
         if (parameters.activeThreshold !== undefined) {

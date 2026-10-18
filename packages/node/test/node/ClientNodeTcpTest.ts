@@ -16,7 +16,7 @@ import {
     ServerAddress,
 } from "@matter/general";
 import { MockSite, subscribedPeer } from "@matter/node/testing";
-import { ExchangeManager, Peer, PeerSet } from "@matter/protocol";
+import { ExchangeManager, Peer, PeerSet, SessionManager, TcpTransport } from "@matter/protocol";
 
 /**
  * TCP transport variant tests for ClientNode integration.
@@ -104,6 +104,35 @@ describe("ClientNodeTcp", () => {
 
             const exchanges = device.env.get(ExchangeManager);
             expect(exchanges.hasInterfaceFor(ChannelType.TCP)).true;
+        });
+
+        it("receives TCP messages up to the MAX_TCP_MESSAGE_SIZE it announces", async () => {
+            await using site = new MockSite();
+            const device = await site.addDevice({ network: { tcp: true }, online: false });
+            device.env.get(SessionManager).sessionParameters = { maxTcpMessageSize: 100_000 };
+
+            await device.start();
+
+            const transport = device.env.get(ExchangeManager).interfaceFor(ChannelType.TCP);
+            expect(transport).instanceOf(TcpTransport);
+            if (transport instanceof TcpTransport) {
+                expect(transport.maxMessageSize).equal(100_000);
+            }
+            expect(device.env.get(SessionManager).sessionParameters.maxTcpMessageSize).equal(100_000);
+        });
+
+        it("stops announcing TCP after a restart with TCP disabled", async () => {
+            await using site = new MockSite();
+            const device = await site.addDevice({ network: { tcp: true } });
+            expect(device.env.get(SessionManager).sessionParameters.supportedTransports.tcpServer).true;
+
+            await device.stop();
+            await device.set({ network: { tcp: false } });
+            await device.start();
+
+            const { supportedTransports, maxTcpMessageSize } = device.env.get(SessionManager).sessionParameters;
+            expect(supportedTransports).deep.equal({ tcpClient: false, tcpServer: false });
+            expect(maxTcpMessageSize).undefined;
         });
 
         it("enables TCP on controller only (outgoing)", async () => {

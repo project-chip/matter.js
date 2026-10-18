@@ -201,12 +201,19 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             }
 
             const tcpConfig = NetworkServer.resolveTcpConfig(netconf.tcp);
+            // TCP support is reported in our session parameters (not only mDNS) so peers learn it during PASE/CASE and
+            // can select TCP for sessions they initiate to us
+            const sessions = this.owner.env.get(SessionManager);
+            sessions.sessionParameters = {
+                supportedTransports: { tcpClient: tcpConfig.outgoing, tcpServer: tcpConfig.incoming },
+            };
             let tcpTransport: TcpTransport | undefined;
             if (tcpConfig.incoming || tcpConfig.outgoing) {
                 try {
                     tcpTransport = await TcpTransport.create({
                         network,
                         listeningPort: tcpConfig.incoming ? ipv6Interface.port : undefined,
+                        maxMessageSize: sessions.sessionParameters.maxTcpMessageSize,
                     });
                 } catch (error) {
                     if (error instanceof AddressInUseError && attempt < maxPortRetries) {
@@ -352,14 +359,10 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         await owner.act("start-network", agent => agent.load(ProductDescriptionServer));
 
-        // Apply settings to environmental components. TCP support is reported in our session parameters (not only
-        // mDNS) so peers learn it during PASE/CASE and can select TCP for sessions they initiate to us.
+        // Apply settings to environmental components
         env.get(SessionManager).sessionParameters = {
             maxPathsPerInvoke: this.owner.state.basicInformation.maxPathsPerInvoke,
             ...this.owner.state.sessions.intervals,
-            ...(tcpConfig.incoming || tcpConfig.outgoing
-                ? { supportedTransports: { tcpClient: tcpConfig.outgoing, tcpServer: tcpConfig.incoming } }
-                : {}),
         };
 
         await this.#initializeGroupNetworking();

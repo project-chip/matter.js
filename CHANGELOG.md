@@ -133,6 +133,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: A `ClientNode` takes a written attribute value locally only once the device accepts it
     - Adjustment: `IcdClient` emits `registered`, `unregistered` and `keyRefreshed` after the change is stored; `unregister()` keeps the registration when a sleeping peer does not wake in time, `register()` joins a registration with the same options in flight, and `forget()` abandons work in flight
     - Adjustment: Subscription keep-alives request a status response, so a subscription on a session without MRP (TCP, BLE) ends when the controller answers with `INVALID_SUBSCRIPTION`
+    - Fix: A server node's TCP transport accepts messages up to the MAX_TCP_MESSAGE_SIZE configured in its session parameters, which is the size it announces
     - Fix: A write to an attribute that another exchange is still writing in chunks is answered BUSY, and a group or wildcard write skips that attribute, as in the CHIP SDK
     - Fix: A `ClientNode` no longer emits `$Changed` with an outdated value for an attribute a transaction did not touch, when a report changed it during the transaction
     - Fix: `WebRtcTransportRequestorServer` keeps sessions of different peers with the same session id apart
