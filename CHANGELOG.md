@@ -268,6 +268,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: A custom `BleScannerClient` may report `listeningTime` and `isPeripheralReachable()`, so stale or unreachable peripherals are not offered for commissioning
     - Enhancement: Network profiles can define BDX transfer delays separately via `bdxAdditionalMrpDelay`
     - Enhancement: `NodeSession.reportedParameters` holds the session parameters the peer sent, without fallbacks
+    - Enhancement: A message the peer never acknowledges now fails with `PeerAckMissingError`, a `PeerUnresponsiveError` subtype with its own message text
     - Adjustment: Once a sustained subscription processed an event, it replaces the `eventFilters` a `refreshRequest` returns
     - Adjustment: `DclVendorInfo` is a deprecated alias of `VendorDclSchema`
     - Adjustment: `DclVendorInfoService` always provides the built-in test vendors and no longer stores them
@@ -310,6 +311,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Group messages carry the current node ID after the fabric's NOC changed
     - Fix: Removing a fabric that a fail-safe expiry restored emits `deleting` and `deleted` once
     - Fix: A subscribe that is aborted, or fails to process a priming report, before the device's SubscribeResponse now answers the device's pending report with `INVALID_SUBSCRIPTION`, so the device drops the subscription
+    - Fix: When a Sigma1 stays unacknowledged on initial contact, the controller continues with fresh Sigma1 messages after a while instead of retransmitting the same one indefinitely
+    - Fix: Per-connection `timing` overrides of the kick parameters take effect
+    - Fix: A kick can restart a connection attempt to a peer's last known address once discovery confirms the address, instead of being always suppressed
 
 - @matter/react-native
     - Fix: `ReactNativeBle.scanner` returns the same `BleScanner` on every access

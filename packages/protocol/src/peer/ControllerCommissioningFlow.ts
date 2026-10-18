@@ -985,7 +985,7 @@ export class ControllerCommissioningFlow {
      *
      * Bare `AbortedError` is deliberately excluded: a user-initiated cancel or shutdown abort must
      * propagate cleanly, not be swallowed as a "non-concurrent signal".  Transport aborts surface
-     * with a more specific cause ({@link PeerUnresponsiveError} from MRP timeouts,
+     * with a more specific cause ({@link PeerUnresponsiveError}, e.g. `PeerAckMissingError` from MRP timeouts,
      * {@link BleDisconnectedError} from BLE loss) that `causedBy` already matches.
      */
     #isCommissioningChannelDrop(error: unknown) {
