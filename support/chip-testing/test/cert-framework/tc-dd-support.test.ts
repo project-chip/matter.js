@@ -2291,6 +2291,7 @@ describe("recordNotCommissionable and recordUserIntentCommissioningStart", () =>
     const CHIP_NO_WINDOW = "[1.0] [1:1:main] [DIS] Updating services using commissioning mode 0";
     const CHIP_BASIC_WINDOW = "[1.0] [1:1:main] [DIS] Updating services using commissioning mode 1";
     const CHIP_ENHANCED_WINDOW = "[1.0] [1:1:main] [DIS] Updating services using commissioning mode 2";
+    const CHIP_PUBLISHED = "[1.0] [1:1:chip] [DIS] mDNS service published: _matterc._udp; instance name: X";
     const MATTERJS_DISABLED =
         "DEBUG Commissioning binford-6100 does not advertise as commissionable: commissioning is disabled";
     const MATTERJS_ADVERTISEMENT =
@@ -2401,15 +2402,18 @@ describe("recordNotCommissionable and recordUserIntentCommissioningStart", () =>
         const cx = unusedContext();
         const queue = new LineQueue();
         const sent = new Array<string>();
-        const th = thLogging("chip-local", [CHIP_NO_WINDOW], queue, command => {
+        const th = thLogging("chip-local", [CHIP_BASIC_WINDOW, CHIP_PUBLISHED], queue, command => {
             sent.push(command.name);
             queue.push(CHIP_BASIC_WINDOW);
+            queue.push(CHIP_PUBLISHED);
         });
 
         await recordUserIntentCommissioningStart(cx, th);
 
         expect(sent).deep.equal(["userIntentCommissioningStart"]);
-        expect(checksOf(cx)).length(1);
-        expect(checksOf(cx)[0]).include({ verdict: "pass", matched: CHIP_BASIC_WINDOW, logLine: 1 });
+        expect(checksOf(cx).map(({ verdict, logLine }) => ({ verdict, logLine }))).deep.equal([
+            { verdict: "pass", logLine: 2 },
+            { verdict: "pass", logLine: 3 },
+        ]);
     });
 });

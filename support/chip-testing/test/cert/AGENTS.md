@@ -2392,8 +2392,10 @@ payload, so the TH's own flow does not matter there.
 that the TH's log has no `COMMISSIONING_MODE_ADVERTISEMENT` line. An mDNS absence check is not
 reliable here: the scanner's cache is shared by the whole run, every primary TH uses discriminator
 3840, and a record from an earlier TH can still be cached. The IP leg's `.d` is the user action: it
-sends the trigger, matches the same pattern in the TH's log, and only then commissions, so `.d` also
-shows that the pattern matches this TH's log at all.
+sends the trigger, matches the same pattern in the TH's log, which shows the pattern matches this TH's
+log at all, then waits for the published line `ADVERTISING_COMMISSIONABLE`, because chip logs its
+decision before the advertisement goes out. Only then does it run the discriminator check and
+commission.
 
 **The log is read only after the TH has logged its start-up decision.** A chip app's `start()`
 returns when the process is up, so a scan right after it can run before the app has decided anything

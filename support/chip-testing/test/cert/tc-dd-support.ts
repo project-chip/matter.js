@@ -1149,7 +1149,7 @@ export async function recordNotCommissionable(cx: CertStepContext, th = theTh(cx
         (await expectDeviceLog(th.log, th.flavor, ADVERTISING_DECIDED, 0, COMMISSIONING_LOG_TIMEOUT)).check,
         `${th.id} decided at start what to advertise`,
     );
-    await th.log.markSettled();
+    await th.log.settled();
     record(cx, noCommissioningModeAdvertisement(th), `${th.id} has not advertised in commissioning mode`);
 }
 
@@ -1181,8 +1181,9 @@ function noCommissioningModeAdvertisement(th: Pick<CertDevice, "flavor" | "log">
 }
 
 /**
- * The user action a user-intent flow waits for: sends `userIntentCommissioningStart` to `th` and records the
- * device deciding to advertise in commissioning mode.
+ * The user action a user-intent flow waits for: sends `userIntentCommissioningStart` to `th`, then records the
+ * device deciding to advertise in commissioning mode, which is the line {@link recordNotCommissionable} looks for,
+ * and the advertisement going out.
  */
 export async function recordUserIntentCommissioningStart(cx: CertStepContext, th = theTh(cx)): Promise<void> {
     const since = await markTransition(cx, th);
@@ -1191,7 +1192,12 @@ export async function recordUserIntentCommissioningStart(cx: CertStepContext, th
         cx,
         (await expectDeviceLog(th.log, th.flavor, COMMISSIONING_MODE_ADVERTISEMENT, since, COMMISSIONING_LOG_TIMEOUT))
             .check,
-        `${th.id} advertising in commissioning mode after the user action`,
+        `${th.id} decided to advertise in commissioning mode after the user action`,
+    );
+    record(
+        cx,
+        (await expectDeviceLog(th.log, th.flavor, ADVERTISING_COMMISSIONABLE, since, COMMISSIONING_LOG_TIMEOUT)).check,
+        `${th.id} published its commissionable advertisement`,
     );
 }
 
