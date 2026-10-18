@@ -688,7 +688,7 @@ with `outOfScope` naming the reason, no devices and verdict `skipped`.
 
 **What skips on the matterjs-server leg.**
 
-- The DD and SC-4.2 cases whose step 0 is the discriminator probe (TC-DD-1.8, 3.11-3.14, 3.16-3.18, 3.20, 3.21 and
+- The DD and SC-4.2 cases that run the discriminator probe (TC-DD-1.8, 3.11-3.14, 3.16-3.18, 3.20, 3.21 and
   TC-SC-4.2) run on this leg: the adapter sends the step's `giveUpAfterMs` as `discovery_timeout_s`, so a code naming no
   present device ends within the step's budget. Their steps that read a code through the DUT run too (next bullet).
 - Steps that read a code through the DUT (`PARSES_PAYLOAD`, `onboarding-payload-parse`) run: `parseQrPayload` and
@@ -2350,7 +2350,8 @@ rather than about any plan step, and a step of its own is also the only placemen
 skip: attaching it to TC-DD-3.14's `3.b`, which is gated on `MCORE.DD.DISCOVERY_BLE`, let a DUT
 without BLE skip the control and commission unbacked two steps later. No plan table numbers a step
 `0`, so the step's `expected` text says it is a precondition — a reviewer diffing bundle against plan
-has to be able to see why it is there.
+has to be able to see why it is there. TC-DD-3.12 and TC-DD-3.13 are the exception: their TH does
+not advertise until the IP leg's ungated `3.d` opens the window, so the probe runs there.
 
 The test case owns a `CommissioningRefusals` for the attempt and settles it in `finalize` alongside
 `decommissionAll`, through `runCleanups` so a failing settle cannot skip the decommission.
@@ -2361,16 +2362,16 @@ substituted discriminator is only known absent from `cx.devices` — a foreign c
 the LAN answering it would make matter.js record a failure for an unrelated reason. The value is
 deterministic, so if that ever happens it happens every run.
 
-## A flow the TH cannot publish has to be fabricated (`TC-DD-3.12`, `TC-DD-3.13`)
+## A TH that waits for the user, and a flow written into its payload (`TC-DD-3.12`, `TC-DD-3.13`)
 
 These two are one test case with one field changed — user-intent flow (1) and custom flow (2) — so
 they are declared from one place, `tc-dd-flow-support.ts`, and differ only in the constant they pass.
 Three transport legs of four steps each: generate, scan, parse, commission.
 
-**The flow is fabricated, unlike TC-DD-3.11's capability bitmask.** Every subject this harness runs
-publishes `flowType` 0, because a device that needs a user action or a manufacturer's steps is not
-something the harness can produce. `qrPayloadWith` gained a `flowType` field for exactly this, and the
-scan step reads it back through the DUT's own parser — which is what makes the step evidence about the
+**The flow in the payload is written by the test, unlike TC-DD-3.11's capability bitmask.** The TH
+runs a user-intent flow (see below), but no TH flavor offers a custom flow with its own vendor steps.
+So `qrPayloadWith` writes the flow the test case is named for into the TH's own payload, and the scan
+step reads it back through the DUT's own parser — which is what makes the step evidence about the
 flow rather than about the TH.
 
 **`recordParse`'s `offering` takes the expected flow from the caller.** A helper whose verdict names a
@@ -2378,18 +2379,44 @@ property must take that property from the caller; one holding the value itself r
 text names a flow nobody checked, and the second test case to use it silently asserts the first one's
 value.
 
-**The transition the flow is named for is not exercised, and each leg's `.a` says so.** A user-intent
-or custom flow means the device is not commissionable until someone acts, which is why `.a`'s text
-carries "Commissionee is NOT in commissioning mode" — but an uncommissioned node opens its basic
-commissioning window at boot and neither TH flavor can suppress that. `.a` records an `unverified`
-check carrying `accepted` for it: the step still passes, the bundle's unverified count carries the
-gap, and nothing in it implies a precondition that never held. A step whose setup the harness cannot
-establish states that in the bundle rather than recording only the parts it could do.
+**The TH starts without a commissioning window and opens it only on the user action.** Both cases
+pass `USER_INTENT_TH_ARGS` (`--custom-flow 1`) to the TH. chip's apps then skip the boot window
+(`advertiseCommissionableIfNoFabrics = false` in `AppMain.cpp`) and open it on the pipe command
+`UserIntentCommissioningStart`. The matter.js all-clusters app takes the same argument: it sets
+`commissioning.enabled = false` and opens the window on the backchannel command
+`userIntentCommissioningStart`. chip skips the boot window for flow 1 only, not for flow 2, so
+TC-DD-3.13 starts its TH with flow 1 as well. The flow the DUT reads is still written into the
+payload, so the TH's own flow does not matter there.
 
-The detail names what the leg does instead, and that differs per leg: the IP leg commissions a TH
-that was commissionable throughout, while the BLE and Wi-Fi PAF legs commission nothing at all
-because their `.d` is `notApplicable`. One text for all three put two contradictory statements about
-the same step in one bundle.
+**The TH's own log is the witness that it is not advertising, not mDNS.** Each leg's `.a` checks
+that the TH's log has no `COMMISSIONING_MODE_ADVERTISEMENT` line. An mDNS absence check is not
+reliable here: the scanner's cache is shared by the whole run, every primary TH uses discriminator
+3840, and a record from an earlier TH can still be cached. The IP leg's `.d` is the user action: it
+sends the trigger, matches the same pattern in the TH's log, which shows the pattern matches this TH's
+log at all, then waits for the published line `ADVERTISING_COMMISSIONABLE`, because chip logs its
+decision before the advertisement goes out. Only then does it run the discriminator check and
+commission.
+
+**The log is read only after the TH has logged its start-up decision.** A chip app's `start()`
+returns when the process is up, so a scan right after it can run before the app has decided anything
+and pass. `.a` first waits for `ADVERTISING_DECIDED`:
+
+| TH | Decision line | Commissioning mode line |
+|---|---|---|
+| chip | `Updating services using commissioning mode <n>` (`DnssdServer::StartServer`) | same line, `n` 1 or 2 |
+| matter.js | `does not advertise as commissionable: commissioning is disabled` (`CommissioningServer`, debug) or the publish line | `MdnsAdvertisement Publishing kind: commissionable` |
+
+chip prints its line on every platform at progress level, also when the decision waits for the
+platform's mDNS to come up (avahi). Mode 0 is no window, which includes extended discovery. The `mDNS
+service published` line other cases use is not usable for an absence: on Darwin it comes from an
+asynchronous Bonjour callback, and a TH that advertised from boot did not print it. The scan skips
+synthetic lines, which carry the step banners and reports the harness writes into every device's log.
+
+**The discriminator precondition runs inside `3.d`, not as step 0.** `recordDiscriminatorHonored`
+first checks that the TH advertises, so that a give-up proves the DUT used the discriminator and not
+that nothing was there. Before the trigger nothing advertises, so the check can run only after it.
+`3.d` is also the only step that commissions, so the precondition sits right before the commissioning
+it protects.
 
 **Both `.b` and `.c` parse the code, so both carry the `MCORE.DD.SCAN_QR_CODE` gate.** `.c` re-parses
 rather than citing `.b`'s parse, so on a controller declaring it cannot take a scanned payload an
