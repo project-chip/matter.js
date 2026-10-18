@@ -5,6 +5,7 @@
  */
 
 import { Message, SessionType } from "#codec/MessageCodec.js";
+import { MessageTooLargeError } from "#protocol/errors.js";
 import { MessageChannel } from "#protocol/MessageChannel.js";
 import { ProtocolMocks } from "#protocol/ProtocolMocks.js";
 import { MIN_TCP_SPEC_VERSION, SessionParameters } from "#session/SessionParameters.js";
@@ -14,7 +15,6 @@ import {
     isIpNetworkChannel,
     MAX_UDP_MESSAGE_SIZE,
     MockTcpConnection,
-    ImplementationError,
     type Channel,
     Bytes,
     type ServerAddressIp,
@@ -151,6 +151,13 @@ describe("MessageChannel maxPayloadSize", () => {
         await channel.close();
     });
 
+    it("ignores the peer's TCP limit on a non-TCP channel with large-message support", () => {
+        const channel = new ProtocolMocks.NetworkChannel({ index: 1, maxPayloadSize: 100_000 });
+        channel.supportsLargeMessages = true;
+
+        expect(messageChannel(channel, { ...tcpPeer, maxTcpMessageSize: 1526 }).maxPayloadSize).equal(100_000);
+    });
+
     it("ignores the peer's TCP limit on a channel without large-message support", () => {
         const channel = new ProtocolMocks.NetworkChannel({ index: 1 });
 
@@ -203,7 +210,7 @@ describe("MessageChannel send over TCP", () => {
         });
 
         await expect(new MessageChannel(tcp, session).send(message)).rejectedWith(
-            ImplementationError,
+            MessageTooLargeError,
             "exceeds the TCP limit",
         );
         expect(sent).false;

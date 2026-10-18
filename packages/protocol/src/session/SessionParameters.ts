@@ -5,7 +5,7 @@
  */
 
 import { SupportedTransportsBitmap, SupportedTransportsSchema } from "#common/SupportedTransportsBitmap.js";
-import { UINT16_MAX } from "@matter/general";
+import { DEFAULT_MAX_TCP_MESSAGE_SIZE, UINT16_MAX } from "@matter/general";
 import { Specification } from "@matter/model";
 import { SessionIntervals } from "./SessionIntervals.js";
 
@@ -154,12 +154,12 @@ export namespace SessionParameters {
         supportedTransports: {},
 
         /**
-         * Fallback value for MAX_TCP_MESSAGE_SIZE when a TCP-capable peer does not provide it, or reports zero, which
-         * cannot be a real limit and is what a CHIP-based stack sends when it announces TCP without setting a size.
+         * Fallback value for MAX_TCP_MESSAGE_SIZE when a TCP-capable peer does not provide it, or reports zero.
+         * Zero cannot be a real limit; a stack sends it when it announces TCP support without setting a size.
          *
          * @see {@link MatterSpecification.v161.Core} § 4.13.1
          */
-        maxTcpMessageSize: 64000,
+        maxTcpMessageSize: DEFAULT_MAX_TCP_MESSAGE_SIZE,
     };
 
     /**

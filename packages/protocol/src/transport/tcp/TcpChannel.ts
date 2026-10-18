@@ -5,6 +5,7 @@
  */
 
 import { Mark } from "#common/Mark.js";
+import { MessageTooLargeError } from "#protocol/errors.js";
 import {
     BasicMultiplex,
     Bytes,
@@ -13,7 +14,6 @@ import {
     DEFAULT_MAX_TCP_MESSAGE_SIZE,
     IpNetworkChannel,
     Logger,
-    NetworkError,
     Observable,
     ServerAddressIp,
     ServerAddressTcp,
@@ -35,7 +35,8 @@ const FRAMING_HEADER_SIZE = 4;
  * that follow. Incoming data is buffered and reassembled into complete messages before being emitted.
  *
  * The {@link maxPayloadSize} is the maximum message size excluding the 4-byte length header, as MAX_TCP_MESSAGE_SIZE
- * defines it.
+ * defines it.  It is our receive limit and also the ceiling for what we send, so a lower receive limit also lowers the
+ * messages we send even to a peer that accepts more.
  *
  * @see {@link MatterSpecification.v161.Core} § 4.13.1
  */
@@ -113,7 +114,9 @@ export class TcpChannel implements IpNetworkChannel<Bytes>, ConnectedChannel {
 
         const message = Bytes.of(data);
         if (message.length > this.maxPayloadSize) {
-            throw new NetworkError(`Message size ${message.length} exceeds TCP limit of ${this.maxPayloadSize}`);
+            throw new MessageTooLargeError(
+                `Message size ${message.length} exceeds TCP limit of ${this.maxPayloadSize}`,
+            );
         }
         const frame = new Uint8Array(FRAMING_HEADER_SIZE + message.length);
         const view = new DataView(frame.buffer, frame.byteOffset, frame.byteLength);

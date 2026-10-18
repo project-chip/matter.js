@@ -27,6 +27,7 @@ import {
     Time,
     Timespan,
     Timestamp,
+    MAX_UDP_MESSAGE_SIZE,
 } from "@matter/general";
 import type { NodeId, TypeFromPartialBitSchema } from "@matter/types";
 import type {
@@ -83,8 +84,7 @@ export abstract class Session {
     protected readonly messageCounter: MessageCounter;
     protected readonly messageReceptionState?: MessageReceptionState;
     protected readonly supportedTransports: TypeFromPartialBitSchema<typeof SupportedTransportsBitmap>;
-    /** The MAX_TCP_MESSAGE_SIZE the peer announced, or undefined when the peer does not support TCP. */
-    readonly maxTcpMessageSize?: number;
+    protected readonly maxTcpMessageSize?: number;
 
     constructor(config: Session.Configuration) {
         const { manager, channel, messageCounter, messageReceptionState, sessionParameters, setActiveTimestamp } =
@@ -225,6 +225,17 @@ export abstract class Session {
             supportedTransports,
             maxTcpMessageSize,
         };
+    }
+
+    /**
+     * The largest message the peer accepts over TCP: its announced MAX_TCP_MESSAGE_SIZE, or the spec default when it
+     * announced none.  Only meaningful for a session on a TCP channel.  Never below {@link MAX_UDP_MESSAGE_SIZE}, because every node accepts that size over UDP anyway
+     * and a smaller value would leave no room to send anything.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 4.13.1
+     */
+    get peerMaxTcpMessageSize() {
+        return Math.max(this.maxTcpMessageSize ?? SessionParameters.fallbacks.maxTcpMessageSize, MAX_UDP_MESSAGE_SIZE);
     }
 
     /**

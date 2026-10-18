@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MessageTooLargeError } from "#protocol/errors.js";
 import { TcpChannel } from "#transport/tcp/TcpChannel.js";
 import {
     Bytes,
@@ -374,14 +375,7 @@ describe("TcpChannel", () => {
 
             const oversized = new Uint8Array(DEFAULT_MAX_TCP_MESSAGE_SIZE + 1);
 
-            let threw = false;
-            try {
-                await conn.send(oversized);
-            } catch (e) {
-                threw = true;
-                expect((e as Error).message).to.include("exceeds TCP limit");
-            }
-            expect(threw).true;
+            await expect(conn.send(oversized)).rejectedWith(MessageTooLargeError, "exceeds TCP limit");
 
             await conn.close();
         });

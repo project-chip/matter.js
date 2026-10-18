@@ -64,14 +64,6 @@ export class TcpTransport implements ConnectionOrientedTransport {
     }
 
     /**
-     * The largest message this transport accepts, excluding the 4-byte length header.  A node announces it as its
-     * MAX_TCP_MESSAGE_SIZE session parameter.
-     */
-    get maxMessageSize() {
-        return this.#maxMessageSize;
-    }
-
-    /**
      * Create a TcpTransport. Async because server listen is async.
      */
     static async create(options: TcpTransportOptions): Promise<TcpTransport> {

@@ -42,6 +42,8 @@ import {
     toHex,
     Transport,
     UnexpectedDataError,
+    MAX_UDP_MESSAGE_SIZE,
+    UINT32_MAX,
 } from "@matter/general";
 import { CaseAuthenticatedTag, ClusterId, EndpointNumber, FabricId, FabricIndex, GroupId, NodeId } from "@matter/types";
 import { Groupcast } from "@matter/types/clusters/groupcast";
@@ -75,6 +77,18 @@ function assertMaxPathsPerInvoke(maxPathsPerInvoke: number) {
     if (!Number.isInteger(maxPathsPerInvoke) || maxPathsPerInvoke < 1) {
         throw new ImplementationError(
             `Max Paths Per Invoke of ${maxPathsPerInvoke} is not a whole number of at least 1`,
+        );
+    }
+}
+
+function assertMaxTcpMessageSize(maxTcpMessageSize: number) {
+    if (
+        !Number.isInteger(maxTcpMessageSize) ||
+        maxTcpMessageSize < MAX_UDP_MESSAGE_SIZE ||
+        maxTcpMessageSize > UINT32_MAX
+    ) {
+        throw new ImplementationError(
+            `Max TCP Message Size of ${maxTcpMessageSize} is not a whole number between ${MAX_UDP_MESSAGE_SIZE} and ${UINT32_MAX}`,
         );
     }
 }
@@ -259,6 +273,9 @@ export class SessionManager {
         if (context.parameters?.maxPathsPerInvoke !== undefined) {
             assertMaxPathsPerInvoke(context.parameters.maxPathsPerInvoke);
         }
+        if (context.parameters?.maxTcpMessageSize !== undefined) {
+            assertMaxTcpMessageSize(context.parameters.maxTcpMessageSize);
+        }
         this.#sessionParameters = SessionParameters({ ...SessionParameters.defaults, ...context.parameters });
         assertActiveThreshold(this.#sessionParameters.activeThreshold);
         this.#nextSessionId = (crypto.randomUint16 % ID_SPACE_UPPER_BOUND) + 1;
@@ -363,8 +380,7 @@ export class SessionManager {
      * Change session parameters.
      *
      * Parameters values you omit in {@link parameters} will retain their current values.  This only affects new
-     * sessions.  A ServerNode uses `maxTcpMessageSize` as the receive limit of its TCP transport when the node starts,
-     * so change that value before the start.
+     * sessions.
      */
     set sessionParameters(parameters: Partial<SessionParameters>) {
         if (parameters.activeThreshold !== undefined) {
@@ -372,6 +388,9 @@ export class SessionManager {
         }
         if (parameters.maxPathsPerInvoke !== undefined) {
             assertMaxPathsPerInvoke(parameters.maxPathsPerInvoke);
+        }
+        if (parameters.maxTcpMessageSize !== undefined) {
+            assertMaxTcpMessageSize(parameters.maxTcpMessageSize);
         }
         for (const [key, value] of Object.entries(parameters)) {
             if (value !== undefined) {
