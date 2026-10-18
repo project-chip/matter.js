@@ -124,12 +124,12 @@ describe("SecureSession", () => {
                 );
             }
 
-            it("logs a notice and uses the default when the peer announces zero", () => {
+            it("logs and uses the default when the peer announces zero", () => {
                 const { result: session, logs } = tcpSession(0);
 
                 expect(session.maxTcpMessageSize).equals(64000);
                 const notices = logs.filter(({ message }) => message.includes("MAX_TCP_MESSAGE_SIZE of 0"));
-                expect(notices.map(({ level }) => level)).deep.equals([LogLevel.NOTICE]);
+                expect(notices.map(({ level }) => level)).deep.equals([LogLevel.INFO]);
             });
 
             it("uses the default silently when the peer announces no size", () => {

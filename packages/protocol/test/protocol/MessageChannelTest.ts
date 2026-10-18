@@ -132,6 +132,15 @@ describe("MessageChannel maxPayloadSize", () => {
         await channel.close();
     });
 
+    it("uses the spec default for a peer that announces no TCP support", async () => {
+        const [, server] = MockTcpConnection.createPair("1.2.3.4", 5000, "5.6.7.8", 6000);
+        const channel = new TcpChannel(server, 100_000);
+
+        expect(messageChannel(channel, {}).maxPayloadSize).equal(DEFAULT_MAX_TCP_MESSAGE_SIZE);
+
+        await channel.close();
+    });
+
     it("does not cap a TCP channel below the UDP message size", async () => {
         const channel = tcpChannel();
 

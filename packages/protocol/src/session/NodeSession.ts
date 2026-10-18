@@ -137,7 +137,7 @@ export class NodeSession extends SecureSession {
         this.#isInitiator = isInitiator;
 
         if (this.maxTcpMessageSize !== undefined && this.#reportedParameters?.maxTcpMessageSize === 0) {
-            logger.notice(
+            logger.info(
                 this.via,
                 `Peer announced a MAX_TCP_MESSAGE_SIZE of 0, using the default of ${this.maxTcpMessageSize} bytes`,
             );

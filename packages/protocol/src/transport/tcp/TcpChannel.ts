@@ -28,9 +28,6 @@ const logger = Logger.get("TcpChannel");
 /** Size of the length-prefix header in bytes. */
 const FRAMING_HEADER_SIZE = 4;
 
-/** Maximum receive buffer size before closing the connection (DoS protection). */
-const MAX_RECEIVE_BUFFER_FACTOR = 2;
-
 /**
  * TCP channel implementing Matter message framing.
  *
@@ -54,9 +51,6 @@ export class TcpChannel implements IpNetworkChannel<Bytes>, ConnectedChannel {
     readonly #closeListeners = new Set<() => void>();
     readonly #workers = new BasicMultiplex();
 
-    /** Maximum allowed receive buffer size before connection is closed for protection. */
-    readonly #maxReceiveBufferSize: number;
-
     /** Receive buffer — accumulated chunks not yet consumed. */
     #receiveChunks = new Array<Uint8Array>();
     #receiveLength = 0;
@@ -75,7 +69,6 @@ export class TcpChannel implements IpNetworkChannel<Bytes>, ConnectedChannel {
         this.#socket = socket;
         this.#isIncoming = isIncoming;
         this.maxPayloadSize = maxPayloadSize;
-        this.#maxReceiveBufferSize = (FRAMING_HEADER_SIZE + maxPayloadSize) * MAX_RECEIVE_BUFFER_FACTOR;
 
         socket.onClose(() => this.#handleClose());
         socket.onError(error => this.#handleError(error));
@@ -205,15 +198,7 @@ export class TcpChannel implements IpNetworkChannel<Bytes>, ConnectedChannel {
         this.#receiveChunks.push(chunk);
         this.#receiveLength += chunk.length;
 
-        // Receive buffer cap — prevent memory exhaustion from slow/malicious peers
-        if (this.#receiveLength > this.#maxReceiveBufferSize) {
-            logger.warn(
-                `Receive buffer exceeded ${this.#maxReceiveBufferSize} bytes without completing a message, closing`,
-            );
-            this.#workers.add(this.close());
-            return;
-        }
-
+        // Memory stays bounded without a buffer cap: a header announcing more than maxPayloadSize closes the connection
         this.#extractMessages();
     }
 

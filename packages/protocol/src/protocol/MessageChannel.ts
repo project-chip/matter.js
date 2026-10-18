@@ -13,6 +13,7 @@ import {
     Bytes,
     Channel,
     ChannelType,
+    DEFAULT_MAX_TCP_MESSAGE_SIZE,
     Diagnostic,
     Duration,
     ImplementationError,
@@ -80,7 +81,8 @@ export class MessageChannel implements Channel<Message> {
      * Maximum size of an encoded Matter message sent on this channel.
      *
      * On a large-message transport (TCP) this is also capped at the MAX_TCP_MESSAGE_SIZE the peer announced in its
-     * session parameters, because the peer closes the connection when it receives a larger message.  A peer value
+     * session parameters, or at the spec default of 64000 when the peer announced none, because the peer closes the
+     * connection when it receives a larger message.  A peer value
      * below {@link MAX_UDP_MESSAGE_SIZE} is raised to it, because every node accepts that size over UDP anyway.
      *
      * @see {@link MatterSpecification.v161.Core} § 4.13.1
@@ -88,10 +90,10 @@ export class MessageChannel implements Channel<Message> {
      */
     get maxPayloadSize() {
         const channelMax = this.#channel.maxPayloadSize;
-        const peerMax = this.supportsLargeMessages ? this.session.maxTcpMessageSize : undefined;
-        if (peerMax === undefined) {
+        if (!this.supportsLargeMessages) {
             return channelMax;
         }
+        const peerMax = this.session.maxTcpMessageSize ?? DEFAULT_MAX_TCP_MESSAGE_SIZE;
         return Math.min(channelMax, Math.max(peerMax, MAX_UDP_MESSAGE_SIZE));
     }
 

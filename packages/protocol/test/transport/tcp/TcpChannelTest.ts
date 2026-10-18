@@ -288,6 +288,27 @@ describe("TcpChannel", () => {
             await conn.close();
         });
 
+        it("accepts several messages at a small limit arriving in one chunk", async () => {
+            const { client, server } = createPair();
+            const conn = new TcpChannel(server, 1526);
+
+            let closed = false;
+            conn.onClose(() => {
+                closed = true;
+            });
+
+            const messages: Bytes[] = [];
+            conn.onMessage(data => messages.push(data));
+
+            const payload = new Uint8Array(1526);
+            await client.send(concat(frame(payload), frame(payload), frame(payload)));
+
+            expect(messages).length(3);
+            expect(closed).false;
+
+            await conn.close();
+        });
+
         it("rejects way-oversized message", async () => {
             const { client, server } = createPair();
             const conn = new TcpChannel(server);
