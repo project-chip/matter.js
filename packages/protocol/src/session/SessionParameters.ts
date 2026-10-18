@@ -43,6 +43,7 @@ export function SessionParameters(config?: SessionParameters.Config): SessionPar
     const {
         supportedTransports: reportedTransports,
         maxPathsPerInvoke,
+        maxTcpMessageSize: reportedMaxTcpMessageSize,
         ...reported
     } = SessionParameters.reported(config) ?? {};
 
@@ -59,7 +60,10 @@ export function SessionParameters(config?: SessionParameters.Config): SessionPar
     // supported
     let maxTcpMessageSize: number | undefined;
     if (supportedTransports.tcpClient || supportedTransports.tcpServer) {
-        maxTcpMessageSize = reported.maxTcpMessageSize ?? SessionParameters.fallbacks.maxTcpMessageSize;
+        maxTcpMessageSize =
+            reportedMaxTcpMessageSize === undefined || reportedMaxTcpMessageSize === 0
+                ? SessionParameters.fallbacks.maxTcpMessageSize
+                : reportedMaxTcpMessageSize;
     }
 
     // The MaxPathsPerInvoke attribute defines zero as "assume one", and the MAX_PATHS_PER_INVOKE session parameter
@@ -149,6 +153,12 @@ export namespace SessionParameters {
          */
         supportedTransports: {},
 
+        /**
+         * Fallback value for MAX_TCP_MESSAGE_SIZE when a TCP-capable peer does not provide it, or reports zero, which
+         * cannot be a real limit and is what a CHIP-based stack sends when it announces TCP without setting a size.
+         *
+         * @see {@link MatterSpecification.v161.Core} § 4.13.1
+         */
         maxTcpMessageSize: 64000,
     };
 

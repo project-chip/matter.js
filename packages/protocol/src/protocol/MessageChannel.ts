@@ -15,10 +15,12 @@ import {
     ChannelType,
     Diagnostic,
     Duration,
+    ImplementationError,
     IpNetworkChannel,
     isIpNetworkChannel,
     isUdpNetworkChannel,
     Logger,
+    MAX_UDP_MESSAGE_SIZE,
     MaybePromise,
     Observable,
     sameIpNetworkChannel,
@@ -75,11 +77,22 @@ export class MessageChannel implements Channel<Message> {
     }
 
     /**
-     * Max Payload size of the exchange which bases on the maximum payload size of the channel. The full encoded matter
-     * message payload sent here can be as huge as allowed by the channel.
+     * Maximum size of an encoded Matter message sent on this channel.
+     *
+     * On a large-message transport (TCP) this is also capped at the MAX_TCP_MESSAGE_SIZE the peer announced in its
+     * session parameters, because the peer closes the connection when it receives a larger message.  A peer value
+     * below {@link MAX_UDP_MESSAGE_SIZE} is raised to it, because every node accepts that size over UDP anyway.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 4.13.1
+     * @see {@link MatterSpecification.v161.Core} § 4.15.2.3
      */
     get maxPayloadSize() {
-        return this.#channel.maxPayloadSize;
+        const channelMax = this.#channel.maxPayloadSize;
+        const peerMax = this.supportsLargeMessages ? this.session.maxTcpMessageSize : undefined;
+        if (peerMax === undefined) {
+            return channelMax;
+        }
+        return Math.min(channelMax, Math.max(peerMax, MAX_UDP_MESSAGE_SIZE));
     }
 
     async send(message: Message, options?: MessageChannelSendOptions) {
@@ -95,6 +108,12 @@ export class MessageChannel implements Channel<Message> {
         const packet = this.session.encode(message);
         const bytes = MessageCodec.encodePacket(packet);
         if (bytes.byteLength > this.maxPayloadSize) {
+            if (this.supportsLargeMessages) {
+                // The peer closes the TCP connection on an oversized message, which would end every exchange on it
+                throw new ImplementationError(
+                    `Matter message to send to ${this.name} is ${bytes.byteLength} bytes long, which exceeds the TCP limit of ${this.maxPayloadSize}; split it by maxPayloadSize`,
+                );
+            }
             logger.warn(
                 `Matter message to send to ${this.name} is ${bytes.byteLength}bytes long, which is larger than the maximum allowed size of ${this.maxPayloadSize}. This only works if both nodes support it.`,
             );

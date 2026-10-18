@@ -83,7 +83,8 @@ export abstract class Session {
     protected readonly messageCounter: MessageCounter;
     protected readonly messageReceptionState?: MessageReceptionState;
     protected readonly supportedTransports: TypeFromPartialBitSchema<typeof SupportedTransportsBitmap>;
-    protected readonly maxTcpMessageSize?: number;
+    /** The MAX_TCP_MESSAGE_SIZE the peer announced, or undefined when the peer does not support TCP. */
+    readonly maxTcpMessageSize?: number;
 
     constructor(config: Session.Configuration) {
         const { manager, channel, messageCounter, messageReceptionState, sessionParameters, setActiveTimestamp } =
