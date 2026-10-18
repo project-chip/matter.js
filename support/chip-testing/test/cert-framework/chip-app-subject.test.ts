@@ -729,6 +729,10 @@ describe("ChipLocalSubject", () => {
             expect(await collectLines(lines, 1, 5_000)).deep.equal([
                 'pipe {"Name":"SimulateSwitchIdle","EndpointId":3}',
             ]);
+
+            await device.backchannel({ name: "userIntentCommissioningStart" });
+
+            expect(await collectLines(lines, 1, 5_000)).deep.equal(['pipe {"Name":"UserIntentCommissioningStart"}']);
         } finally {
             await device.stop();
             await device.close();

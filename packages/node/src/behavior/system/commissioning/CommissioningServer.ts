@@ -265,6 +265,7 @@ export class CommissioningServer extends Behavior {
 
         // Skip auto commissioning if disabled
         if (this.state.enabled === false) {
+            logger.debug(this.endpoint.toString(), "does not advertise as commissionable: commissioning is disabled");
             return;
         }
 
