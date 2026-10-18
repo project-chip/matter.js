@@ -42,8 +42,6 @@ import {
     toHex,
     Transport,
     UnexpectedDataError,
-    MAX_UDP_MESSAGE_SIZE,
-    UINT32_MAX,
 } from "@matter/general";
 import { CaseAuthenticatedTag, ClusterId, EndpointNumber, FabricId, FabricIndex, GroupId, NodeId } from "@matter/types";
 import { Groupcast } from "@matter/types/clusters/groupcast";
@@ -77,18 +75,6 @@ function assertMaxPathsPerInvoke(maxPathsPerInvoke: number) {
     if (!Number.isInteger(maxPathsPerInvoke) || maxPathsPerInvoke < 1) {
         throw new ImplementationError(
             `Max Paths Per Invoke of ${maxPathsPerInvoke} is not a whole number of at least 1`,
-        );
-    }
-}
-
-function assertMaxTcpMessageSize(maxTcpMessageSize: number) {
-    if (
-        !Number.isInteger(maxTcpMessageSize) ||
-        maxTcpMessageSize < MAX_UDP_MESSAGE_SIZE ||
-        maxTcpMessageSize > UINT32_MAX
-    ) {
-        throw new ImplementationError(
-            `Max TCP Message Size of ${maxTcpMessageSize} is not a whole number between ${MAX_UDP_MESSAGE_SIZE} and ${UINT32_MAX}`,
         );
     }
 }
@@ -274,7 +260,7 @@ export class SessionManager {
             assertMaxPathsPerInvoke(context.parameters.maxPathsPerInvoke);
         }
         if (context.parameters?.maxTcpMessageSize !== undefined) {
-            assertMaxTcpMessageSize(context.parameters.maxTcpMessageSize);
+            SessionParameters.assertMaxTcpMessageSize(context.parameters.maxTcpMessageSize);
         }
         this.#sessionParameters = SessionParameters({ ...SessionParameters.defaults, ...context.parameters });
         assertActiveThreshold(this.#sessionParameters.activeThreshold);
@@ -390,7 +376,7 @@ export class SessionManager {
             assertMaxPathsPerInvoke(parameters.maxPathsPerInvoke);
         }
         if (parameters.maxTcpMessageSize !== undefined) {
-            assertMaxTcpMessageSize(parameters.maxTcpMessageSize);
+            SessionParameters.assertMaxTcpMessageSize(parameters.maxTcpMessageSize);
         }
         for (const [key, value] of Object.entries(parameters)) {
             if (value !== undefined) {

@@ -130,6 +130,16 @@ describe("ClientNodeTcp", () => {
             await expect(device.start()).rejectedWith("network.tcp.maxMessageSize of 0");
         });
 
+        it("refuses to start with a TCP maxMessageSize above the uint32 range", async () => {
+            await using site = new MockSite();
+            const device = await site.addDevice({
+                network: { tcp: { incoming: true, maxMessageSize: 2 ** 32 } },
+                online: false,
+            });
+
+            await expect(device.start()).rejectedWith("network.tcp.maxMessageSize of 4294967296");
+        });
+
         it("ignores the TCP maxMessageSize while TCP is disabled", async () => {
             await using site = new MockSite();
             const device = await site.addDevice({ network: { tcp: { maxMessageSize: 0 } } });

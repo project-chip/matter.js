@@ -102,6 +102,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: `DoorLockServer` supports schedule users, `ExpiringUser`, `DisposableUser` and `ForcedUser`, and a lock implementation drives hardware via `handleLockOperation`
     - Feature: `OtaSoftwareUpdateProviderServer` state `applyDelay` sets the `DelayedActionTime` for an apply
     - Feature: `Discovery.Options.abort` cancels `locate()`, `discover()` and `pase()` like `cancel()`
+    - Feature: `network.tcp.maxMessageSize` sets the largest TCP message a node accepts and announces as its MAX_TCP_MESSAGE_SIZE (default 64000)
     - Enhancement: `locate()`, `commission()` and `pase()` report a discovery that found or reached no device as `DeviceNotDiscoveredError`, `DiscoveryIncompleteError` or `NoDiscoveryTransportError`, all subtypes of `DiscoveryError`; failed attempts or scanners stay `DiscoveryAggregateError`, and `discover()` still resolves with what it found
     - Enhancement: The commissioning test harness (`MockSite`, `MockServerNode`, …) is exported at `@matter/node/testing`
     - Enhancement: Added `EndpointLifecycle.isReadable` and `isGone`
@@ -133,7 +134,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: A `ClientNode` takes a written attribute value locally only once the device accepts it
     - Adjustment: `IcdClient` emits `registered`, `unregistered` and `keyRefreshed` after the change is stored; `unregister()` keeps the registration when a sleeping peer does not wake in time, `register()` joins a registration with the same options in flight, and `forget()` abandons work in flight
     - Adjustment: Subscription keep-alives request a status response, so a subscription on a session without MRP (TCP, BLE) ends when the controller answers with `INVALID_SUBSCRIPTION`
-    - Feature: `network.tcp.maxMessageSize` sets the largest TCP message a node accepts and announces as its MAX_TCP_MESSAGE_SIZE (default 64000)
     - Fix: A write to an attribute that another exchange is still writing in chunks is answered BUSY, and a group or wildcard write skips that attribute, as in the CHIP SDK
     - Fix: A `ClientNode` no longer emits `$Changed` with an outdated value for an attribute a transaction did not touch, when a report changed it during the transaction
     - Fix: `WebRtcTransportRequestorServer` keeps sessions of different peers with the same session id apart
@@ -269,12 +269,12 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: A custom `BleScannerClient` may report `listeningTime` and `isPeripheralReachable()`, so stale or unreachable peripherals are not offered for commissioning
     - Enhancement: Network profiles can define BDX transfer delays separately via `bdxAdditionalMrpDelay`
     - Enhancement: `NodeSession.reportedParameters` holds the session parameters the peer sent, without fallbacks
+    - Enhancement: A message too large for its TCP channel fails with `MessageTooLargeError` instead of `NetworkError`
     - Adjustment: Once a sustained subscription processed an event, it replaces the `eventFilters` a `refreshRequest` returns
     - Adjustment: `DclVendorInfo` is a deprecated alias of `VendorDclSchema`
     - Adjustment: `DclVendorInfoService` always provides the built-in test vendors and no longer stores them
     - Adjustment: The error for a whole-interaction StatusResponse is the received class of its status, with a message like `Received error status NotFound (code 139)`
     - Fix: Messages sent over TCP stay within the MAX_TCP_MESSAGE_SIZE the peer announced, and received TCP messages may use the full announced 64000 bytes
-    - Enhancement: A message too large for its TCP channel fails with `MessageTooLargeError` instead of `NetworkError`
     - Fix: DNS-SD discovery ignores malformed or out-of-range `D`, `CM`, `VP`, `DT`, `PH`, `T` and `ICD` values
     - Fix: A client write is sent as chunked WriteRequest messages when the request or its WriteResponse would not fit one message, instead of one message that gets dropped
     - Fix: A client list write with a DataVersion sends its entries without the DataVersion once the list was replaced, so the device no longer rejects them

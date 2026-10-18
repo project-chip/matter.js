@@ -5,16 +5,9 @@
  */
 
 import { ServerSubscriptionConfig } from "#node/server/ServerSubscription.js";
-import {
-    DEFAULT_MAX_TCP_MESSAGE_SIZE,
-    DeepPartial,
-    Duration,
-    ImplementationError,
-    Logger,
-    MAX_UDP_MESSAGE_SIZE,
-} from "@matter/general";
+import { DEFAULT_MAX_TCP_MESSAGE_SIZE, DeepPartial, Duration, Logger } from "@matter/general";
 import { duration, field, uint16 } from "@matter/model";
-import { Ble, FabricManager, NetworkProfiles, PeerTimingParameters } from "@matter/protocol";
+import { Ble, FabricManager, NetworkProfiles, PeerTimingParameters, SessionParameters } from "@matter/protocol";
 import { DiscoveryCapabilitiesBitmap, TypeFromPartialBitSchema } from "@matter/types";
 import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
@@ -222,8 +215,8 @@ export namespace NetworkServer {
          * Disabled by default.
          *
          * `maxMessageSize` is the largest TCP message in bytes, without the 4-byte length header, that the node accepts.
-         * The node announces it to peers as MAX_TCP_MESSAGE_SIZE.  It must be a whole number of at least
-         * {@link MAX_UDP_MESSAGE_SIZE}; the default is {@link DEFAULT_MAX_TCP_MESSAGE_SIZE}.
+         * The node announces it to peers as MAX_TCP_MESSAGE_SIZE.  It must be a whole number from
+         * {@link MAX_UDP_MESSAGE_SIZE} to the uint32 maximum; the default is {@link DEFAULT_MAX_TCP_MESSAGE_SIZE}.
          *
          * @see {@link MatterSpecification.v161.Core} § 4.13.1
          */
@@ -277,8 +270,8 @@ export namespace NetworkServer {
     /**
      * Resolve the tcp shorthand to explicit incoming/outgoing booleans and the effective maximum message size.
      *
-     * @throws ImplementationError when TCP is enabled with a `maxMessageSize` that is not a whole number of at least
-     * {@link MAX_UDP_MESSAGE_SIZE}
+     * @throws ImplementationError when TCP is enabled with a `maxMessageSize` that
+     * {@link SessionParameters.assertMaxTcpMessageSize} rejects
      */
     export function resolveTcpConfig(tcp?: boolean | TcpConfig): Required<TcpConfig> {
         if (tcp === true) {
@@ -293,11 +286,7 @@ export namespace NetworkServer {
             return { incoming, outgoing, maxMessageSize: DEFAULT_MAX_TCP_MESSAGE_SIZE };
         }
         const { maxMessageSize = DEFAULT_MAX_TCP_MESSAGE_SIZE } = tcp;
-        if (!Number.isInteger(maxMessageSize) || maxMessageSize < MAX_UDP_MESSAGE_SIZE) {
-            throw new ImplementationError(
-                `network.tcp.maxMessageSize of ${maxMessageSize} is not a whole number of at least ${MAX_UDP_MESSAGE_SIZE}`,
-            );
-        }
+        SessionParameters.assertMaxTcpMessageSize(maxMessageSize, "network.tcp.maxMessageSize");
         return { incoming, outgoing, maxMessageSize };
     }
 }

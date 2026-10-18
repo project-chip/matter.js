@@ -5,7 +5,13 @@
  */
 
 import { SupportedTransportsBitmap, SupportedTransportsSchema } from "#common/SupportedTransportsBitmap.js";
-import { DEFAULT_MAX_TCP_MESSAGE_SIZE, UINT16_MAX } from "@matter/general";
+import {
+    DEFAULT_MAX_TCP_MESSAGE_SIZE,
+    ImplementationError,
+    MAX_UDP_MESSAGE_SIZE,
+    UINT16_MAX,
+    UINT32_MAX,
+} from "@matter/general";
 import { Specification } from "@matter/model";
 import { SessionIntervals } from "./SessionIntervals.js";
 
@@ -110,6 +116,25 @@ export namespace SessionParameters {
                     : supportedTransports;
         }
         return Object.keys(result).length ? result : undefined;
+    }
+
+    /**
+     * Validate a MAX_TCP_MESSAGE_SIZE we configure for ourselves: a whole number from {@link MAX_UDP_MESSAGE_SIZE} to
+     * the uint32 maximum of the session parameter field.
+     *
+     * @param name names the setting in the error message
+     * @throws ImplementationError for any other value
+     */
+    export function assertMaxTcpMessageSize(maxTcpMessageSize: number, name = "Max TCP Message Size") {
+        if (
+            !Number.isInteger(maxTcpMessageSize) ||
+            maxTcpMessageSize < MAX_UDP_MESSAGE_SIZE ||
+            maxTcpMessageSize > UINT32_MAX
+        ) {
+            throw new ImplementationError(
+                `${name} of ${maxTcpMessageSize} is not a whole number from ${MAX_UDP_MESSAGE_SIZE} to ${UINT32_MAX}`,
+            );
+        }
     }
 
     export interface Config extends Partial<Omit<SessionParameters, "supportedTransports">> {
