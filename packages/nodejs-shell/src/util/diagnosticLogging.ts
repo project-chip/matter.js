@@ -4,11 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Duration, Logger, Millis, ObserverGroup, Timestamp } from "@matter/general";
+import { Diagnostic, Duration, Millis, ObserverGroup, Timestamp } from "@matter/general";
 import { ChangeNotificationService, ClientNode, ClusterBehavior, NodeConnectionState, ServerNode } from "@matter/node";
 import { Priority } from "@matter/types";
-
-const logger = Logger.get("DiagnosticLogging");
 
 function occurredAt(timestamp: Timestamp, kind: ChangeNotificationService.TimestampKind) {
     switch (kind) {
