@@ -329,6 +329,7 @@ export class ControllerCommissioningFlow {
     protected collectedCommissioningData: CollectedCommissioningData = {};
     #defaultFailSafeTime = DEFAULT_FAILSAFE_TIME;
     #armFailsafeInterval?: Timer;
+    #commissioningChannelDropped = false;
 
     constructor(
         /** ClientInteraction for the initiated PASE session */
@@ -413,7 +414,11 @@ export class ControllerCommissioningFlow {
                      * command (see Section 11.10.7.2, “ArmFailSafe Command”)
                      */
                     const timeLeft = Timespan(Time.nowMs, this.#currentFailSafeEndTime).duration;
-                    if (timeLeft < this.#defaultFailSafeTime / 2) {
+                    if (
+                        timeLeft < this.#defaultFailSafeTime / 2 &&
+                        !this.#commissioningChannelDropped &&
+                        !this.interaction.session?.isClosed
+                    ) {
                         logger.info(
                             `After Commissioning step ${step.stepNumber}.${step.subStepNumber}: ${
                                 step.name
@@ -998,15 +1003,15 @@ export class ControllerCommissioningFlow {
     }
 
     /**
-     * Respond to a commissioning-channel drop by treating the device as non-concurrent: stop the
-     * periodic failsafe re-arm timer (BLE is gone anyway) and flip the flag so `#reconnectWithDevice`
-     * takes the non-concurrent path straight to operational discovery.
+     * Mark the commissioning channel unavailable for post-step failsafe re-arming, even if a timeout leaves the
+     * session open. Stop periodic re-arming and select the non-concurrent operational discovery path.
      */
     #handleCommissioningChannelDrop(error: unknown) {
         logger.warn(
             "Commissioning channel dropped while configuring the operational network — assuming device is non-concurrent, proceeding to CASE",
             Diagnostic.errorMessage(asError(error)),
         );
+        this.#commissioningChannelDropped = true;
         this.collectedCommissioningData.supportsConcurrentConnection = false;
         this.#armFailsafeInterval?.stop();
         this.#armFailsafeInterval = undefined;
@@ -2043,6 +2048,7 @@ export class ControllerCommissioningFlow {
 
         await this.interaction.close();
         this.interaction = transitionResult;
+        this.#commissioningChannelDropped = false;
 
         logger.debug("Successfully reconnected with device ...");
 
