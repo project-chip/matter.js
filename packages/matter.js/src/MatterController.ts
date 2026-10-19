@@ -696,6 +696,7 @@ export class MatterController {
 
     getCommissionedNodes() {
         return this.node.peers
+            .filter(peer => peer.lifecycle.isReadable)
             .map(peer => peer.maybeStateOf(CommissioningClient)?.peerAddress?.nodeId)
             .filter(nodeId => nodeId !== undefined);
     }
@@ -719,7 +720,9 @@ export class MatterController {
 
     getCommissionedNodesDetails(): PairedNodeDetails[] {
         return this.node.peers
-            .filter(peer => peer.maybeStateOf(CommissioningClient)?.peerAddress !== undefined)
+            .filter(
+                peer => peer.lifecycle.isReadable && peer.maybeStateOf(CommissioningClient)?.peerAddress !== undefined,
+            )
             .map(peer => this.#commissionedNodeDetailsForNode(peer));
     }
 
