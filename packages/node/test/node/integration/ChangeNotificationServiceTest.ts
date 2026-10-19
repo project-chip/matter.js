@@ -80,6 +80,17 @@ describe("ChangeNotificationService", () => {
         expect(recorded.endpointsOf("readable")).deep.equals([light, light]);
     });
 
+    it("keeps notifying the other observers when one throws", async () => {
+        await using node = await MockServerNode.createOnline(undefined, { device: undefined });
+        node.env.get(ChangeNotificationService).change.on(() => {
+            throw new Error("observer failure");
+        });
+        const recorded = record(node);
+
+        const light = await node.add(OnOffLightDevice, { id: "light" });
+        expect(recorded.endpointsOf("readable")).deep.equals([light]);
+    });
+
     // Characterization: peers added after the service started were observed before the restored-peer fix as well
     it("reports the deletion of a peer created after a restart", async () => {
         await using site = new MockSite();

@@ -435,7 +435,7 @@ describe("Client Event Notification", () => {
             expect(subscription.active.value).true;
         });
 
-        it("warns once per node and kind of failure when a change observer fails for each event report", async () => {
+        it("warns once per kind of failure when a change observer fails for each event report", async () => {
             await using site = new MockSite();
             const { peer, press, observed, settle } = await switchPair(site);
             const subscription = sustained(peer.behaviors.internalsOf(NetworkClient).activeSubscription);
@@ -476,7 +476,7 @@ describe("Client Event Notification", () => {
                 LogLevel.DEBUG,
                 LogLevel.WARN,
             ]);
-            expect(failures.every(({ text }) => text.includes("failed locally"))).true;
+            expect(failures.every(({ text }) => text.includes("Change notification observer failed"))).true;
             expect(observed.length).equals(4);
             await stored(peer, observed[3]);
             expect(peer.behaviors.internalsOf(NetworkClient).activeSubscription).equals(subscription);

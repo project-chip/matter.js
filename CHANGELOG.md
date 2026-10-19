@@ -204,6 +204,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: `ServiceAreaServer` without the Maps feature no longer fails to initialize
     - Fix: A node whose fabric was created before start counts as commissioned and advertises operationally
     - Fix: `ChangeNotificationService` reports nothing once its node is being destroyed, keeps working after a factory reset, and carries `timestampKind` on events
+    - Fix: A throwing `ChangeNotificationService` observer is logged instead of skipping the other observers and failing the change
     - Fix: A peer cluster ID outside the allowed ranges no longer fails node initialization
     - Fix: `endpoints.size` no longer double-counts the root endpoint
     - Fix: `RemoteServer` declares `certificate` and `key` as PEM strings
