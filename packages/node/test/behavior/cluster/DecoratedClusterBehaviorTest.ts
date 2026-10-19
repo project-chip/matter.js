@@ -6,6 +6,8 @@
 
 import { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import type { GlobalAttributeState } from "#behavior/cluster/ClusterState.js";
+import { OnlineEvent } from "#behavior/Events.js";
+import { ActionsServer } from "#behaviors/actions";
 import { IdentifyBehavior, IdentifyServer } from "#behaviors/identify";
 import { OnOffServer } from "#behaviors/on-off";
 import { ImplementationError, Observable } from "@matter/general";
@@ -23,7 +25,8 @@ import {
     uint8,
     writable,
 } from "@matter/model";
-import { ClusterType } from "@matter/types";
+import { NumberedOccurrence, OccurrenceManager } from "@matter/protocol";
+import { ClusterType, Priority } from "@matter/types";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 import { MockEndpointType } from "../mock-behavior.js";
 
@@ -428,7 +431,7 @@ describe("ClusterBehavior declared with the model decorators", () => {
         expect(() => Schema(ReentrantServer)).throws(ImplementationError, "while its schema resolves");
     });
 
-    it("serves the attribute events and the declared events of a new cluster", async () => {
+    it("serves the attribute events of a new cluster", async () => {
         await using endpoint = await MockEndpoint.create(MockEndpointType.with(EventfulServer));
         const events = endpoint.eventsOf(EventfulServer);
         const changed = new Promise<number>(resolve => events.value$Changed.once(value => resolve(value)));
@@ -436,7 +439,30 @@ describe("ClusterBehavior declared with the model decorators", () => {
         await endpoint.setStateOf(EventfulServer, { value: 7 });
 
         expect(await changed).equals(7);
-        expect(events.happened).instanceOf(Observable().constructor);
+    });
+
+    it("records an event a new cluster declares", async () => {
+        await using endpoint = await MockEndpoint.create(MockEndpointType.with(EventfulServer));
+
+        await endpoint.act(agent => {
+            agent.get(EventfulServer).events.happened.emit({ level: 3 });
+        });
+
+        const occurrences = new Array<NumberedOccurrence>();
+        for await (const occurrence of endpoint.env.get(OccurrenceManager).get()) {
+            if (occurrence.clusterId === 0xfff1fc09 && occurrence.eventId === 0) {
+                occurrences.push(occurrence);
+            }
+        }
+        expect(occurrences.map(({ payload, priority }) => ({ payload, priority }))).deep.equals([
+            { payload: { level: 3 }, priority: Priority.Info },
+        ]);
+    });
+
+    it("keeps the internal stateChanged observable of a standard cluster with a StateChanged event", async () => {
+        await using endpoint = await MockEndpoint.create(MockEndpointType.with(ActionsServer));
+
+        expect(endpoint.eventsOf(ActionsServer).stateChanged).not.instanceOf(OnlineEvent);
     });
 
     it("refuses a State assigned after the schema resolved", async () => {

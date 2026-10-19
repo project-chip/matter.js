@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Events, OfflineEvent, OnlineEvent, QuietEvent } from "#behavior/Events.js";
+import { ElementEvent, Events, OfflineEvent, OnlineEvent, QuietEvent } from "#behavior/Events.js";
 import { AsyncObservable, camelize, EventEmitter, GeneratedClass, ImplementationError } from "@matter/general";
 import { ClusterModel, ElementTag, FeatureMap, Schema, Scope, SelectDefaultValue, ValueModel } from "@matter/model";
 import { Val } from "@matter/protocol";
@@ -166,6 +166,7 @@ function createDerivedEvents({ scope, base, newProps, forClient }: DerivationCon
     const baseInstance = new base.Events() as unknown as Record<string, unknown>;
 
     const eventNames = new Set<string>();
+    const plainEventFields = new Set<string>();
 
     // Events are generally OnlineEvent except in the case of server-side elements marked Q
     const quieterImplementation = forClient ? OnlineEvent : QuietEvent;
@@ -180,18 +181,28 @@ function createDerivedEvents({ scope, base, newProps, forClient }: DerivationCon
         applicableClusterEvents.add(name);
         const Implementation = event.effectiveQuality.quieter ? quieterImplementation : OnlineEvent;
 
+        // An own field holding a plain observable, as a decorated Events class declares for its events, neither records
+        // nor reports, so an element event replaces it; the field counts as the class's support for the event.  An
+        // inherited value is internal to the base, such as the "stateChanged" observable every Events class has
+        const declared = baseInstance[name];
+        const isPlain =
+            Object.hasOwn(baseInstance, name) && declared !== undefined && !(declared instanceof ElementEvent);
+
         // Do not implement if already supported
-        if (isImplementedBy(baseInstance[name], Implementation)) {
+        if (!isPlain && isImplementedBy(declared, Implementation)) {
             continue;
         }
 
         // For clients we implement all events because we can't know what's supported now that EventList is gone.  For
         // servers we only add events that are explicitly
-        if (!forClient && !scope.hasOperationalSupport(event)) {
+        if (!forClient && !isPlain && !scope.hasOperationalSupport(event)) {
             continue;
         }
 
         // Add the event
+        if (isPlain) {
+            plainEventFields.add(name);
+        }
         eventNames.add(name);
         instanceDescriptors[name] = createEventDescriptor(name, event, Implementation);
     }
@@ -222,6 +233,10 @@ function createDerivedEvents({ scope, base, newProps, forClient }: DerivationCon
         instanceDescriptors,
 
         initialize(this: EventEmitter) {
+            // Own fields shadow the prototype getters these events use
+            for (const name of plainEventFields) {
+                Reflect.deleteProperty(this, name);
+            }
             for (const name of eventNames) {
                 this.addEvent(name);
             }

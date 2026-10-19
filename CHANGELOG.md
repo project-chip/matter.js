@@ -218,6 +218,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Changing a fabric that the armed fail-safe did not add or update no longer logs an error and emits `fabricsChanged`
     - Fix: AdminFabricIndex becomes null when the admin fabric is removed after an UpdateNOC
     - Fix: A cluster behavior declared with the model decorators gets its namespace, ID, global attributes, ServerList entry and command responses like a generated one, and manufacturer-specific elements added to a standard cluster appear in its namespace and element lists
+    - Fix: An event a decorated Events class declares with a plain `Observable` is recorded and reported; an event without a priority uses INFO
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument
