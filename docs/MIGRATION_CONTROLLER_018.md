@@ -12,6 +12,9 @@ With 0.18 the legacy controller API is being deprecated. The two legacy entry po
 The legacy API stays functional through the deprecation period but will be removed. New code and
 migrating consumers should target the `ClientNode` API.
 
+If you migrate in steps, move connection state and change handling to the new API together. `PairedNode` keeps
+its own connection state, which can differ from `clientNode.lifecycle.connectionState` for the same peer.
+
 The new API lives in `@matter/node`, `@matter/protocol`, `@matter/types` and `@matter/general` (or `@matter/main`,
 which re-exports them). Once nothing imports from `@project-chip/matter.js` anymore, drop it from `package.json` and
 from the `tsconfig.json` project references.
@@ -672,6 +675,10 @@ discriminator/passcode/salt/iterations and PAKE verifier and returns the pairing
 `passcode`, long `discriminator`, `vendorId` and `productId` they encode and the `commissioningTimeout` sent to
 the device; basic throws `ImplementationError` if the peer's `AdministratorCommissioning` cluster lacks the
 `Basic` feature.
+
+The enhanced window encodes the vendor and product ID from the cached `BasicInformationClient` state, so it throws
+`ImplementationError` until the peer is seeded. Both take a `Duration` such as `Seconds(900)`, not a number of
+seconds.
 
 ---
 
