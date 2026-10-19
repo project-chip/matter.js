@@ -234,7 +234,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Added `--cleanup-legacy-storage` to remove leftover pre-0.16 storage artifacts
     - Fix: Attribute changes log one line per attribute, and the web UI recognizes attribute, event and connection-state lines again
     - Fix: Clusters with IDs outside the allowed ranges are addressable
-    - Fix: The legacy storage migration completes a peer whose migration a crash interrupted, instead of keeping it without its address and event number
 
 - @matter/protocol
     - Breaking: Outgoing group messages use message privacy; matter.js based devices <0.17.2 will not receive them
