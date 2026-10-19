@@ -21,6 +21,32 @@ from the `tsconfig.json` project references.
 
 ---
 
+## Controller storage from before 0.16
+
+The legacy `CommissioningController` migrates a controller storage from before 0.16 into the `ServerNode` layout
+when it starts: the fabric (`credentials.fabric` → `fabrics.*`), the certificates (`credentials.*` →
+`certificates.*`), and per peer the cached attribute data (`node-<ID>.*` → `nodes.peerX.endpoints.*`) with the
+`commissionedNodes` list. The new API does not run this migration.
+
+- Storage that a 0.16 or later build has used is already in the new layout; `FabricAuthority.defaultFabric` reuses it.
+- Storage from before 0.16 needs one start with the legacy controller API (0.16 to 0.18) first, or a migration of
+  your own as described below. Otherwise the devices must be commissioned again. The legacy API is removed in 0.19.
+
+To migrate such a storage yourself, copy the shell's self-contained
+`packages/nodejs-shell/src/util/legacyStorageMigration.ts` and call its functions around your controller
+`ServerNode` construction:
+
+1. `migrateLegacyControllerCredentials` before `ServerNode.create`.
+2. `migrateLegacyCommissionedNodes(node)` after the node is created and before it goes online.
+3. `cleanupLegacyStorage` (irreversible) only once the migration succeeded and the storage will not be used with a
+   version below 0.16 again.
+
+Call steps 1 and 2 on every start. Each is a no-op when there is nothing to migrate, and a migration interrupted
+after some peers continues on the next start. `legacyMigrationNeeded` is a quick check for logging only; do not use
+it to decide whether to run the migration, because it reports false once any peer is migrated.
+
+---
+
 ## Quick map: what moved how
 
 ### Already 1:1 (PairedNode already delegates — just drop `PairedNode`, use the `ClientNode`)
@@ -799,23 +825,3 @@ connect call. See the diagnostic logging example above.
 **How do I wait until a node's structure is usable?** `if (!clientNode.lifecycle.isSeeded) await clientNode.lifecycle.seeded;`
 before reading its endpoints/behaviors. For an offline peer this can wait indefinitely, so bound it (timeout /
 abort on `WaitingForDeviceDiscovery`) if the caller must not hang.
-
-**I'm upgrading directly from a pre-0.16 (pre-`ServerNode`-controller) install — is my controller storage migrated?**
-The legacy `CommissioningController` carried a one-time migration of the old on-disk layout into the `ServerNode`
-stores when the controller moved onto `ServerNode` in 0.16: the fabric (`credentials.fabric` → `fabrics.*`) and
-certificates (`credentials.*` → `certificates.*`), then, separately, per-node data (cached attribute data
-`node-<ID>.*` → `nodes.peerX.endpoints.*`, and the `commissionedNodes` list folded into the peer data). The new
-API has no equivalent hook. Anyone who has already run a 0.16+ build is unaffected — that storage is already in
-the new format and is reused as-is via `FabricAuthority.defaultFabric`. Only a *direct* jump from a pre-0.16
-layout to 0.18 needs a manual re-commission (or an interim run on a 0.16–0.17 build to migrate).
-
-A developer who wants to migrate such a storage themselves, outside the shell, can copy the shell's
-self-contained `packages/nodejs-shell/src/util/legacyStorageMigration.ts` and call its functions around their
-own controller `ServerNode` construction. Call them unconditionally on every start — each is an idempotent
-no-op when there is nothing to migrate, and calling them regardless (rather than gating on
-`legacyMigrationNeeded`) is what makes a migration interrupted after only some peers resume on the next run:
-call `migrateLegacyControllerCredentials` before `ServerNode.create`, then `migrateLegacyCommissionedNodes(node)`
-once the node is created and before it goes online. Run `cleanupLegacyStorage` (irreversible) only once certain
-the migration succeeded and the storage will not be downgraded below 0.16. `legacyMigrationNeeded` is available
-as a cheap "is there anything to do" probe for logging, but must not be used as the guard that decides whether
-to run the migration — it reports false once any peer has been migrated, so gating on it strands the rest.
