@@ -5,27 +5,10 @@
  */
 
 import { Diagnostic, Duration, Logger, Millis, ObserverGroup, Timestamp } from "@matter/general";
-import {
-    ChangeNotificationService,
-    ClientNode,
-    ClusterBehavior,
-    Endpoint,
-    NodeConnectionState,
-    ServerNode,
-} from "@matter/node";
+import { ChangeNotificationService, ClientNode, ClusterBehavior, NodeConnectionState, ServerNode } from "@matter/node";
 import { Priority } from "@matter/types";
 
 const logger = Logger.get("DiagnosticLogging");
-
-/** True if `endpoint` belongs to `node`'s endpoint tree (the node itself is its own root endpoint). */
-function ownedBy(endpoint: Endpoint, node: Endpoint) {
-    for (let e: Endpoint | undefined = endpoint; e !== undefined; e = e.owner) {
-        if (e === node) {
-            return true;
-        }
-    }
-    return false;
-}
 
 function occurredAt(timestamp: Timestamp, kind: ChangeNotificationService.TimestampKind) {
     switch (kind) {
@@ -70,7 +53,7 @@ export function installDiagnosticLogging(node: ServerNode, observers: ObserverGr
         // Observers share one emit that rethrows: a throw here would skip every later consumer of the change and
         // surface in the peer's report processing, so diagnostics must not fail the interaction that produced them
         try {
-            logChange(node, change);
+            logChange(change);
         } catch (error) {
             logger.warn("Failed to log a peer change:", error);
         }
@@ -107,11 +90,11 @@ export function installDiagnosticLogging(node: ServerNode, observers: ObserverGr
     observers.on(node.peers.deleted, unwatchConnection);
 }
 
-function logChange(node: ServerNode, change: ChangeNotificationService.Change) {
+function logChange(change: ChangeNotificationService.Change) {
     const { endpoint } = change;
-    const peer = node.peers.commissioned.find(peer => ownedBy(endpoint, peer));
-    if (peer === undefined) {
-        return; // A change on the controller's own node, not a peer.
+    const peer = endpoint.ownerOfType(ClientNode.RootEndpoint);
+    if (!(peer instanceof ClientNode) || peer.nodeType !== "client" || !peer.lifecycle.isCommissioned) {
+        return; // A change on the controller's own node, a group or a discovered node.
     }
     const nodeId = peer.peerAddress?.nodeId;
 
