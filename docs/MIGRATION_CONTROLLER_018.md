@@ -1,8 +1,9 @@
 # Migration guide: Controller API to 0.18 (PairedNode/CommissioningController → ClientNode)
 
-> **Status: WORK IN PROGRESS.** This guide is written alongside the actual migration of the
-> matter.js shell and the matter.js WebSocket server. Sections are filled with verified before/after
-> code as each capability is migrated. Open items are marked `TODO`.
+> This guide comes from four real migrations: the matter.js shell (`packages/nodejs-shell`), the
+> certification controller adapter (`support/chip-testing`), the [matterjs-server](https://github.com/matter-js/matterjs-server)
+> and [ioBroker.matter](https://github.com/ioBroker/ioBroker.matter). Each "Trap" note below names a problem one of
+> them ran into.
 
 With 0.18 the legacy controller API is being deprecated. The two legacy entry points are:
 
@@ -16,6 +17,10 @@ With 0.18 the legacy controller API is being deprecated. The two legacy entry po
 The legacy API stays functional through the deprecation period but will be removed. New code and
 migrating consumers should target the `ClientNode` API.
 
+The new API lives in `@matter/node`, `@matter/protocol`, `@matter/types` and `@matter/general` (or `@matter/main`,
+which re-exports them). Once nothing imports from `@project-chip/matter.js` anymore, drop it from `package.json` and
+from the `tsconfig.json` project references.
+
 ---
 
 ## Quick map: what moved how
@@ -26,8 +31,10 @@ migrating consumers should target the `ClientNode` API.
 `globalsOf`, `maybeGlobalsOf`, `get`, `getStateOf`, `eventsOf`, `id`, `decommission`, `close`,
 `disconnect` (→ `disable()`).
 
-Device info: `basicInformation` / `deviceInformation` → `new DeviceInformation(clientNode).basicInformation` / `.meta`
-(or read the `BasicInformationClient` behavior state directly).
+Device info: `basicInformation` → `clientNode.maybeStateOf(BasicInformationClient)` (from
+`@matter/node/behaviors/basic-information`); `deviceInformation` → `ClientNodePhysicalProperties(clientNode)` (from
+`@matter/node`). The legacy `DeviceInformation` class is
+deprecated with the rest of `@project-chip/matter.js`.
 
 ### Paradigm shift (no more `ClusterClient` objects)
 
@@ -48,18 +55,19 @@ Device info: `basicInformation` / `deviceInformation` → `new DeviceInformation
 | --- | --- |
 | `new CommissioningController({...})` | controller `ServerNode` (+ `ControllerBehavior`) |
 | `controller.commissionNode(opts)` | `serverNode.peers.commission(opts)` / discovered → `clientNode.commission(opts)` |
-| `controller.getNode(nodeId)` / `getPairedNode(nodeId)` | `serverNode.peers.get(nodeId \| address)` (returns `ClientNode`) |
+| `controller.getNode(nodeId)` / `getPairedNode(nodeId)` | `serverNode.peers.get(fabric.addressOf(nodeId))` (returns `ClientNode`; a bare number or string is the local id such as `"peer1"`, not a node id) |
 | `controller.getNode(nodeId, allowUnknown)` | `serverNode.peers.forAddress(address)` |
-| `controller.getCommissionedNodes()` | `serverNode.peers.commissioned` → map `peerAddress.nodeId` |
+| `controller.getCommissionedNodes()` | `serverNode.peers.commissioned` → map `state.commissioning.peerAddress?.nodeId` (optional in the type; a commissioned peer always has it) |
 | `controller.getCommissionedNodesDetails()` | `serverNode.peers.commissioned` + per-node `stateOf(CommissioningClient)` / `BasicInformationClient` |
-| `controller.isNodeCommissioned(id)` | `serverNode.peers.get(id)?.lifecycle.isCommissioned` |
+| `controller.isNodeCommissioned(id)` | `serverNode.peers.get(fabric.addressOf(id))?.lifecycle.isCommissioned` |
 | `controller.removeNode(id, tryDecommission)` | `clientNode.decommission()` (fallback `clientNode.delete()` for force) |
 | `controller.disconnectNode(id)` | `clientNode.disable()` |
 | `controller.connectNode(id)` | `clientNode.enable()` / `clientNode.start()` |
 | `controller.discoverCommissionableDevices(opts)` | `serverNode.peers.discover(opts)` / `peers.locate(opts)` |
 | `controller.getActiveSessionInformation()` | `serverNode.stateOf(SessionsBehavior).sessions` |
-| `controller.updateFabricLabel(label)` | `fabric.setLabel(label)` (+ auto per-node sync on online) — **moves to node-management layer** |
-| `controller.fabric` / `nodeId` | multi-fabric via `env.get(FabricAuthority)`; common case `FabricAuthority.defaultFabric` |
+| `controller.updateFabricLabel(label)` | `controller.adminFabricLabel` state + `fabric.setLabel(label)`, plus pushing it to connected peers yourself (see "Fabric label" below) |
+| `controller.fabric` / `nodeId` | multi-fabric via `env.get(FabricAuthority)`; common case `FabricAuthority.defaultFabric`; own node id is `fabric.rootNodeId` |
+| `controller.otaProvider` / `enableOtaProvider` | add an `OtaProviderEndpoint` (see "Controller construction") |
 | `controller.resetStorage()` | `serverNode.erase()` |
 | `controller.start()` / `close()` | `serverNode.start()` / `serverNode.close()` |
 
@@ -95,7 +103,19 @@ await node.start();
 ```
 
 A controller typically also sets `subscriptions: { persistenceEnabled: false }` (subscription persistence is a
-device feature). The port is ephemeral by default (see above).
+device feature). The port is ephemeral by default (see above). Legacy `tcp` / `transportPreference` options move to
+`network: { tcp, transportPreference }`.
+
+Construction traps:
+
+- **Register your listeners before `node.start()`.** Going online connects and subscribes the commissioned peers,
+  so a `ChangeNotificationService` or `peers.added` listener attached after `start()` misses their first reports.
+- **Register BLE before `ServerNode.create`.** `ControllerBehavior` records whether BLE is available
+  (`controller.ble`) when the node is created; a `Ble` instance set in the environment later is not used.
+- **Use the fabric that `defaultFabric()` returns.** It rotates the NOC key once per runtime and returns a new
+  `Fabric` object; an object kept from before that call is stale.
+- **Close the node when your own setup fails after `ServerNode.create`.** The node holds storage, sockets and
+  timers; close it before you retry.
 
 `ServerNode.RootEndpointWithoutGroupcast` leaves out the Groupcast cluster and the Access Control Auxiliary
 feature that Groupcast needs. A controller uses neither, and the legacy `CommissioningController` builds its node
@@ -103,30 +123,45 @@ the same way. Use `ServerNode.RootEndpoint` only if the controller should also r
 device. Switching between the two on an existing storage keeps the persisted ACL entries.
 
 To act as an OTA provider, add an `OtaProviderEndpoint` (`import { OtaProviderEndpoint } from
-"@matter/node/endpoints/ota-provider"`); it pulls in `SoftwareUpdateManager` (query/check/download/apply
-updates) and `DclBehavior` (DCL services). This is a new controller capability rather than a legacy mapping.
+"@matter/node/endpoints/ota-provider"`) before `start()`:
+`await node.add(new Endpoint(OtaProviderEndpoint, { id: "ota-provider" }))`. It pulls in `SoftwareUpdateManager`
+(query/check/download/apply updates) and `DclBehavior` (DCL services). `SoftwareUpdateManager.forceUpdate()` and
+`addUpdateConsent()` take the peer address and the update as an object:
+`forceUpdate(peerAddress, { vendorId, productId, targetSoftwareVersion })`.
 
 ### Fabric label (and propagating it to peers) — interim recipe
 
 `controller.updateFabricLabel(label)` did two things: set the local admin fabric label **and** push the new
-label to every already-commissioned peer (`AdministratorCommissioning`/`OperationalCredentials` update per
-node). The new `fabric.setLabel(label)` only does the local half; the automatic per-peer fan-out is slated for
-a node-management layer that does not exist yet. Until it does, propagate it yourself:
+label to every already-commissioned peer. On the new API the label has three places:
+
+- `controller.adminFabricLabel` state is the configured label. The controller sets the fabric label to it each time
+  the node goes online, so update it too, or the label reverts on the next start.
+- `fabric.setLabel(label)` changes the local fabric label.
+- Each peer reconciles its fabric label to the controller's once per controller runtime, after its first
+  subscription. A change while peers are connected reaches them only after a controller restart.
+
+To push it immediately:
 
 ```ts
-import { OperationalCredentialsClient } from "@matter/node";
+import { ControllerBehavior } from "@matter/node";
+import { OperationalCredentialsClient } from "@matter/node/behaviors/operational-credentials";
+import { OperationalCredentials } from "@matter/types/clusters";
 
+await serverNode.setStateOf(ControllerBehavior, { adminFabricLabel: label }); // survives restarts
 await fabric.setLabel(label);                       // local fabric label
 for (const peer of serverNode.peers.commissioned) { // push to connected peers
-    if (!peer.lifecycle.isConnected) continue;       // skip offline; re-run on reconnect if you need them updated
-    await peer.act(agent => agent.get(OperationalCredentialsClient).updateFabricLabel({ label }));
+    if (!peer.lifecycle.isConnected) continue;       // offline peers reconcile after their next subscription
+    const { statusCode } = await peer.act(agent =>
+        agent.get(OperationalCredentialsClient).updateFabricLabel({ label }),
+    );
+    if (statusCode !== OperationalCredentials.NodeOperationalCertStatus.Ok) {
+        // the device refused the label (e.g. LabelConflict); it does not throw
+    }
 }
 ```
 
 `UpdateFabricLabel` carries only `{ label }` — it targets the fabric of the accessing session, i.e. the
-controller's own fabric on that peer, so there is no fabric index to pass (and none to hardcode). Keep this
-small loop in your own code (guarding offline peers, optionally retrying on `connectionStateChanged` →
-`Connected`) until the node-management layer subsumes it.
+controller's own fabric on that peer, so there is no fabric index to pass (and none to hardcode).
 
 ---
 
@@ -174,8 +209,10 @@ gap versus the legacy record.
 ## Commissioning a device
 
 Legacy `controller.commissionNode(options)` splits into two paths on the new API depending on whether you
-already have the device's address. Both return the peer `ClientNode`; the `options` are
-`CommissioningClient.CommissioningOptions`.
+already have the device's address. Both return the peer `ClientNode`. `peers.commission()` takes
+`CommissioningDiscovery.Options`: the `CommissioningClient.CommissioningOptions` plus the discovery filters
+(discriminator, `vendorId`/`productId`, `discoveryCapabilities`, `timeout`). A QR code does not always carry vendor
+and product ID; pass only what the code states.
 
 Discovered (mDNS / BLE):
 
@@ -207,10 +244,17 @@ await node.commission({ passcode: 20202021 /* ...same CommissioningOptions... */
 peer node for a known address, which you then `node.commission(options)`. Wait for the peer's structure
 before reading it, bounding the wait so an offline peer does not hang (see "Is the node ready?").
 
-`onAttestationFailure(findings)` replaces the legacy attestation callback — return `true`/`false` to accept
-or reject; each finding carries `level` (`"error"` / `"warn"` / `"info"`), `type` and `message`. To
-decommission, use `node.decommission()` (contacts the device) or `node.delete()` (force-drop locally when
-the peer is unreachable).
+Trap: when `node.commission()` on a known address fails, check `node.lifecycle.isCommissioned`. If it is false,
+`node.delete()` the local node before you retry (for example with discovery). If it is true, the device is on your
+fabric; do not commission it again.
+
+A wrong passcode fails with `PasscodeMismatchError` (`@matter/protocol`), possibly wrapped; test with
+`causedBy(error, PasscodeMismatchError)` from `@matter/general` instead of matching error messages.
+
+`onAttestationFailure(findings)` replaces the legacy attestation callback — return `true` to accept, `false` to
+reject, or a string to reject with that message; each finding carries `level` (`"error"` / `"warn"` / `"info"`),
+`type` and `message`. To decommission, use `node.decommission()` (contacts the device, so call it only while
+`lifecycle.isConnected`) or `node.delete()` (force-drop locally when the peer is unreachable).
 
 ### Delegated / split commissioning (legacy `PaseCommissioner`)
 
@@ -298,7 +342,7 @@ state:
 | `subscribeAllAttributesAndEvents(opts)` / interval tuning | `defaultSubscription`: `Subscribe.Options` (interval floor/ceiling, filters) merged into the default wildcard subscription, or a built `Subscribe`/`Read` sent as given, with its paths and fabric filter; the node sets the event filter from the higher of the stored and the emitted event number, injects known data versions and defaults `keepSubscriptions` to false. To keep Leave handling, a built request needs the Basic Information attributes and events and the Operational Credentials `fabrics` attribute; without them the node notices a device going offline only through the subscription timeout and does not see a fabric Leave. The subscription re-applies automatically when you change it |
 | `node.connect()` | `clientNode.enable()` (subscription follows automatically) |
 | `node.disconnect()` | `clientNode.disable()` |
-| `node.reconnect()` / `triggerReconnect()` | not needed — `SustainedSubscription` re-establishes; observe `lifecycle.connectionState` |
+| `node.reconnect()` / `triggerReconnect()` | not needed — `SustainedSubscription` re-establishes; observe `lifecycle.connectionState`. To force a fresh subscription (e.g. after `IcdClient.forget()`), set `autoSubscribe` to `false`, then back to `true` |
 
 ```ts
 clientNode.set({ network: { autoSubscribe: true, defaultSubscription: { /* Subscribe.Options: interval floor/ceiling, filters */ } } });
@@ -310,10 +354,28 @@ subscription, so there is no persistent liveness signal. Read current status via
 (`subscriptionActive` / `subscriptionAlive`).
 
 Legacy `currentSubscriptionIntervalSeconds` (the *negotiated* interval, vs the requested `defaultSubscription`)
-is `ClientSubscription.maxInterval` on the active subscription, held in `NetworkClient` internal state. It is
-not surfaced publicly today — if a consumer needs to display it, add a one-line getter on a `NetworkClient`
-subclass (`get negotiatedMaxInterval() { … activeSubscription instanceof SustainedSubscription ? .maxInterval : undefined }`).
-Low effort, not a blocker.
+has no public API. It is held in internal state:
+`clientNode.behaviors.internalsOf(NetworkClient).activeSubscription?.maxInterval`. Internal state may change
+without notice.
+
+### Peers stored by the legacy API
+
+At each start the legacy controller reset `autoSubscribe` to `false` on every peer and turned it on only while a
+`PairedNode` ran. With `autoConnect: false` it stored `isDisabled: true` on every peer, and a legacy `disconnect()`
+stored `isDisabled: true` on that peer. After the switch these peers start without a subscription, or do not start
+at all.
+
+Repair them once, before `start()`, and record that you did, so the user's later choices stay. Also set
+`isDisabled: false` on the peers your application considers enabled:
+
+```ts
+for (const peer of serverNode.peers.commissioned) {
+    await peer.set({ network: { autoSubscribe: true } });
+}
+```
+
+If your application keeps its own "node enabled" flag, decide which store wins and apply it before waiting for
+seeding — a disabled peer never seeds.
 
 ---
 
@@ -388,6 +450,10 @@ disabled; `Reconnecting` = started and (re-)establishing; `WaitingForDeviceDisco
 offline (establishment past the MRP budget, or a missed ICD check-in for registered LIT ICDs). The
 2-state `lifecycle.isOnline` still exists for simple online/offline needs.
 
+Neither `connectionStateChanged` nor `seeded` replays: read `lifecycle.connectionState` and `lifecycle.isSeeded`
+when you attach, then follow the events. Legacy availability debounce and reconnect timers can go; a common
+"available" mapping is `Connected` or `Reconnecting`.
+
 ---
 
 ## Accessing clusters
@@ -421,23 +487,44 @@ endpoint.behaviors.elementsOf(behaviorType).attributes.has(attributeName);
 endpoint.behaviors.elementsOf(behaviorType).commands.has(commandName);
 ```
 
-Live (un-cached) read via the interaction protocol — for a fresh value, or a cluster the node holds no
-behavior for (the shell's `--remote` / by-id reads):
+An empty set means the peer has not reported its `AttributeList`/`AcceptedCommandList` (yet); treat it as
+"unknown", not as "unsupported".
+
+### Raw interactions (replaces `getInteractionClient()`)
+
+`node.interaction` takes request objects built with `Read`, `Write`, `Invoke` and `Subscribe` from
+`@matter/protocol`. Results are async iterables of chunks of reports — for a fresh value, or a cluster the node holds
+no behavior for (the shell's `--remote` / by-id reads):
 
 ```ts
 import { Read } from "@matter/protocol";
 
-for await (const chunk of node.interaction.read(Read({ attributes: [{ endpointId, clusterId, attributeId }], fabricFilter: true }))) {
+const request = { ...Read({ attributes: [{ endpointId, clusterId, attributeId }], fabricFilter: true }), includeKnownVersions: true };
+for await (const chunk of node.interaction.read(request)) {
     for await (const report of chunk) {
-        if (report.kind === "attr-value") {
-            // report.path, report.value
+        switch (report.kind) {
+            case "attr-value":  /* report.path, report.value */ break;
+            case "attr-status": /* the device declined this path: report.status */ break;
         }
     }
 }
 ```
 
-(Events: pass `{ events: [...] }` and match `report.kind === "event-value"`.  Events a read or a subscription of
-your own returns reach only its result; they do not reach `eventsOf(...)` observers or `ChangeNotificationService`.)
+Traps:
+
+- **Data version injection.** `node.interaction.read()` adds the node's cached data versions to the request, so a
+  cluster that did not change comes back without values (the cache is current, your result is empty). Set
+  `includeKnownVersions: true` when you need the values in the result.
+- **No throw on status.** Unlike the legacy `InteractionClient`, a declined path arrives as an `attr-status`,
+  `event-status` or `cmd-status` report. Use `ResultStatus.errorOf(report)` to turn one into the matching error, and
+  `WriteResult.assertSuccess(await node.interaction.write(request))` for writes.
+- **Timed requests.** `Invoke({ commands: [command], timed: true, timeout: Millis(5000) })` and
+  `Write({ timed: true, timeout }, ...attributes)`. Commands and attributes the model marks as timed use a timed
+  interaction automatically.
+
+Events: pass `{ events: [...] }` and match `report.kind === "event-value"`. Events a read or a subscription of
+your own returns reach only its result; they do not reach `eventsOf(...)` observers or `ChangeNotificationService`.
+A peer keeps no local event history, so an event read is always a live read.
 
 Name ↔ id conversion uses `ClusterLookup` from `@matter/types`, e.g.
 `ClusterLookup.attributeName(ClusterId(clusterId), attributeId, node.matter)` (also `attributeId`, `eventId`,
@@ -491,8 +578,9 @@ Mapping from the legacy flat bus:
 | `eventTriggered` | `change.kind === "event"` (`endpoint` + `behavior` + `event` + occurrence) |
 | `deviceInformationChanged` | `"update"` on `BasicInformationClient` |
 | `nodeEndpointRemoved` / node removed | `change.kind === "delete"` |
-| `structureChanged` / `nodeEndpointAdded` | `clientNode.lifecycle.changed` + `clientNode.endpoints` (structure signal; `ChangeNotificationService` reports deletions, additions surface as endpoints appear) |
-| `connectionAlive` | `NetworkClient` `subscriptionAlive`, or `lifecycle.connectionStateChanged` (connection, not a data change) |
+| `structureChanged` / `nodeEndpointAdded` | `clientNode.lifecycle.changed` with `EndpointLifecycle.Change.PartsReady`, `ServersChanged`, `Destroying`; one burst per structure update, so debounce a rebuild |
+| `decommissioned` | `clientNode.lifecycle.decommissioned` |
+| `connectionAlive` | `clientNode.eventsOf(NetworkClient).subscriptionAlive` (also marks the end of a report batch) |
 | `stateChanged` | `lifecycle.connectionStateChanged` (see Connection state) |
 | `initialized` / init-done flags | `lifecycle.isSeeded` / `seeded` (see "Is the node ready?") |
 
@@ -504,7 +592,25 @@ For a single specific value you can instead `reactTo` that behavior's `<attr>$Ch
 own event) directly — fault-isolated and torn down with the behavior. That is the exception, not the
 common case; reach for `ChangeNotificationService` when you need the whole node/peer change feed.
 
-### Verified shell idiom: node-wide diagnostic logging (all peers)
+Traps when consuming `ChangeNotificationService.change`:
+
+- **A throwing handler starves everyone else.** The observable is shared with matter.js's own listeners, and a
+  throw aborts the emit. Wrap your handler in `try`/`catch` and log.
+- **`properties` is undefined for "all properties"**; iterate the behavior's state then. Properties are names, not
+  ids: map them with `change.behavior.schema` or `ClusterLookup.attributeId(clusterId, name, node.matter)`.
+  Attributes the model does not know arrive as `attr$<hex id>`.
+- **Events** carry `change.event` (the `EventModel`; use its `propertyName` for the camelCase name) and
+  `change.timestampKind` (`"epoch"`, `"system"`, `"epoch-delta"` or `"system-delta"`) — convert the timestamp
+  accordingly; do not assume epoch milliseconds.
+- **There is a fourth kind, `"readable"`**, emitted when an endpoint's state becomes readable. Handle or ignore it.
+- **The first report after commissioning contains every attribute** as an `"update"`. After a restart only changed
+  clusters are reported; for a full snapshot, read the cached state on `"readable"` or `lifecycle.seeded`.
+- **Removing a peer emits one `"delete"` per endpoint.** Mark the peer as being torn down on
+  `lifecycle.changed` → `Destroying` and skip its deletes, instead of rebuilding per endpoint.
+- **Map a change to its peer** with `change.endpoint.ownerOfType(RootEndpoint)`: it returns the peer `ClientNode`
+  (a peer is its own root endpoint), or the controller `ServerNode` for a change on the controller itself.
+
+### Example: node-wide diagnostic logging (all peers)
 
 The legacy per-connect diagnostic callbacks (`attributeChangedCallback` / `eventTriggeredCallback` /
 `stateInformationCallback`, passed into every `PairedNode.connect`) map onto **one** node-wide listener,
@@ -512,39 +618,57 @@ registered once, rather than a callback bundle per connect. The shell wires this
 `MatterNode` (`installDiagnosticLogging`, `util/diagnosticLogging.ts`):
 
 ```ts
-import { ChangeNotificationService, ClusterBehavior, NodeConnectionState } from "@matter/node";
+import { Logger, ObserverGroup } from "@matter/general";
+import { ChangeNotificationService, ClientNode, ClusterBehavior, NodeConnectionState } from "@matter/node";
+import { RootEndpoint } from "@matter/node/endpoints/root";
+
+const logger = Logger.get("Diagnostics");
 
 const observers = new ObserverGroup();
 
-// attributeChangedCallback / eventTriggeredCallback: one aggregate stream for every peer. Map each change
-// back to its peer via the owner chain (a peer node is its own root endpoint).
+// attributeChangedCallback / eventTriggeredCallback: one aggregate stream for every peer.
 observers.on(serverNode.env.get(ChangeNotificationService).change, change => {
-    const peer = serverNode.peers.commissioned.find(p => ownedBy(change.endpoint, p));
-    if (peer === undefined) return; // a change on the controller node itself, not a peer
-    switch (change.kind) {
-        case "update": {
-            if (!ClusterBehavior.is(change.behavior)) break;
-            const state = change.endpoint.stateOf(change.behavior.id);
-            const changed = change.properties?.reduce((o, n) => ((o[n] = state[n]), o), {}) ?? state;
-            // peer.peerAddress.nodeId, change.endpoint.number, change.behavior.cluster.id, change.version
-            break;
+    try {
+        const peer = change.endpoint.ownerOfType(RootEndpoint);
+        if (!(peer instanceof ClientNode)) return; // a change on the controller node itself, not a peer
+        switch (change.kind) {
+            case "update": {
+                if (!ClusterBehavior.is(change.behavior)) break;
+                const state = change.endpoint.stateOf(change.behavior.id);
+                const changed =
+                    change.properties?.reduce<Record<string, unknown>>((o, n) => ((o[n] = state[n]), o), {}) ?? state;
+                // peer.peerAddress.nodeId, change.endpoint.number, change.behavior.cluster.id, change.version
+                break;
+            }
+            case "event":  /* change.behavior/event/number/timestamp/timestampKind/priority/payload */ break;
+            case "delete": /* change.endpoint removed */ break;
         }
-        case "event":  /* change.behavior/event/number/timestamp/priority/payload */ break;
-        case "delete": /* change.endpoint removed */ break;
+    } catch (error) {
+        logger.warn("Change handler failed", error);
     }
 });
 
 // stateInformationCallback: each peer's connection-state transitions, for existing and future peers.
-const watch = peer =>
-    observers.on(peer.lifecycle.connectionStateChanged, state => {
+// `peers.added`/`deleted` also fire for discovered and group nodes, and `added` fires before a new peer is
+// commissioned or readable — watch every added node, and stop watching on `deleted`.
+const peerObservers = new Map<ClientNode, ObserverGroup>();
+const watch = (peer: ClientNode) => {
+    const group = new ObserverGroup();
+    group.on(peer.lifecycle.connectionStateChanged, state => {
         /* NodeConnectionState.Connected / Disconnected / Reconnecting / WaitingForDeviceDiscovery */
     });
+    peerObservers.set(peer, group);
+};
 for (const peer of serverNode.peers.commissioned) watch(peer);
 observers.on(serverNode.peers.added, watch);
+observers.on(serverNode.peers.deleted, peer => {
+    peerObservers.get(peer)?.close();
+    peerObservers.delete(peer);
+});
 ```
 
 To watch a **single** node instead (e.g. the shell `subscribe` command establishing an on-demand
-subscription), filter the same aggregate stream to that node's endpoint subtree with `ownedBy`, and use
+subscription), filter the same aggregate stream to `change.endpoint.ownerOfType(RootEndpoint) === node`, and use
 `node.eventsOf(NetworkClient).subscriptionStatusChanged` for its subscription liveness. Establishing the
 sustained subscription is just a state write — `await node.set({ network: { autoSubscribe: true } })` — after
 which changes flow to the node-wide listener above.
@@ -646,8 +770,9 @@ unless `allowMultiAdmin` is set. Connection status uses `NodeConnectionState` (s
 instances in `serverNode.peers`; `PairedNode` (and `CommissioningController`) are deprecated and removed in
 0.19.
 
-**How do I get a commissioned peer by node id?** `serverNode.peers.get(nodeId)` (or `.forAddress(address)`)
-returns the `ClientNode`. Enumerate with `serverNode.peers.commissioned`.
+**How do I get a commissioned peer by node id?** `serverNode.peers.get(fabric.addressOf(nodeId))` returns the
+`ClientNode`, or `undefined`. `.forAddress(address)` also creates it when unknown. Enumerate with
+`serverNode.peers.commissioned`.
 
 **How do I read/invoke a cluster when I only have a numeric cluster id?** `endpoint.stateOf(behaviors.forCluster(id))`
 / `commandsOf(...)`. For name↔id conversion use the `ClusterLookup` namespace from `@matter/types`
@@ -669,15 +794,15 @@ react to `connectionStateChanged`; drop any reconnect timers / availability debo
 needed (bulk connect happens automatically on controller start unless `autoStartCommissionedPeers` is `false`; see above).
 
 **How do I subscribe to a node's changes?** Register a listener on
-`serverNode.env.get(ChangeNotificationService).change` and filter to the node's endpoint subtree (see the
-verified shell idiom above), then `await clientNode.set({ network: { autoSubscribe: true } })`. Do **not** look
+`serverNode.env.get(ChangeNotificationService).change` and keep changes where
+`change.endpoint.ownerOfType(RootEndpoint) === clientNode` (see the diagnostic logging example above), then `await clientNode.set({ network: { autoSubscribe: true } })`. Do **not** look
 for a `subscribeAllAttributesAndEvents` — the sustained subscription is state-driven.
 
 **Where did the per-connect diagnostic callbacks go?** There is no per-connect callback bundle. Wire it once,
 node-wide: a single `ChangeNotificationService.change` listener (attribute/event/structure changes for every
 peer) plus, per peer, `lifecycle.connectionStateChanged` (attach to `serverNode.peers.commissioned` now and to
 `serverNode.peers.added` for future peers) — one registration set instead of callbacks threaded through each
-connect call. See the node-wide diagnostic-logging idiom above.
+connect call. See the diagnostic logging example above.
 
 **How do I wait until a node's structure is usable?** `if (!clientNode.lifecycle.isSeeded) await clientNode.lifecycle.seeded;`
 before reading its endpoints/behaviors. For an offline peer this can wait indefinitely, so bound it (timeout /
