@@ -161,6 +161,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A throwing change or event observer no longer fails a `ClientNode` read or skips the remaining events; the failure is logged
     - Fix: A sustained `ClientNode` subscription applies the caller's own `refreshRequest` when it resubscribes
     - Fix: A `ClientNode` runs at most one default subscription and reports it as not subscribed whenever it ends
+    - Fix: A `ClientNode` with neither a known nor a discovered address reports `WaitingForDeviceDiscovery` instead of `Reconnecting`
     - Fix: A peer's endpoint tree follows each endpoint's `PartsList`, so bridged composed devices are structured correctly
     - Fix: A peer endpoint's parent no longer depends on report order when several endpoints claim it in one read
     - Fix: A peer's state drops attributes its `AttributeList` omits, records the peer's `ClusterRevision`, migrates values persisted under property names, and hides storage metadata

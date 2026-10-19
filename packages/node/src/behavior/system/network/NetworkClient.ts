@@ -85,6 +85,7 @@ export class NetworkClient extends NetworkBehavior {
                     this.reactTo(peer.establishmentUnresponsive, this.#markLikelyOffline, { offline: true });
                     this.reactTo(peer.sessions.added, this.#onSessionEstablished, { offline: true });
                     this.reactTo(peer.sessions.deleted, this.#recomputeConnectionState, { offline: true });
+                    this.reactTo(peer.service.changed, this.#recomputeConnectionState, { offline: true });
                 }
             }
         }
@@ -386,7 +387,8 @@ export class NetworkClient extends NetworkBehavior {
             // resume in WaitingForDeviceDiscovery before any fresh session.
             this.internal.likelyOffline = false;
             state = NodeConnectionState.Disconnected;
-        } else if (this.internal.likelyOffline) {
+        } else if (this.internal.likelyOffline || (peer !== undefined && !hasAnyAddress(peer))) {
+            // With no address to try, establishmentUnresponsive never fires to mark the peer offline
             state = NodeConnectionState.WaitingForDeviceDiscovery;
         } else {
             state = NodeConnectionState.Reconnecting;
@@ -534,6 +536,12 @@ export class NetworkClient extends NetworkBehavior {
             }),
         ],
     });
+}
+
+function hasAnyAddress(peer: Peer) {
+    return (
+        peer.sessions.size > 0 || peer.descriptor.operationalAddress !== undefined || peer.service.addresses.size > 0
+    );
 }
 
 export namespace NetworkClient {
