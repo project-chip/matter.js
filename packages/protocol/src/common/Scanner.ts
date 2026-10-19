@@ -68,11 +68,20 @@ export type DiscoveryData = {
     ICD?: number;
 };
 
+const DISCOVERY_KEYS = ["DN", "RI", "PI", "VP", "DT", "PH", "ICD", "T", "SII", "SAI", "SAT"] as const;
+
+/**
+ * Decode the {@link DiscoveryData} keys of a DNS-SD TXT record.  Keys are looked up through `kvs.get`, so the
+ * case-insensitive `DnssdParameters` of a discovered name matches them regardless of case.
+ */
 export function DiscoveryData(kvs: ReadonlyMap<string, string>) {
     const dd: DiscoveryData = {};
 
-    for (const key of kvs.keys()) {
+    for (const key of DISCOVERY_KEYS) {
         const value = kvs.get(key);
+        if (value === undefined) {
+            continue;
+        }
 
         switch (key) {
             case "DN":
@@ -111,16 +120,16 @@ export function DiscoveryData(kvs: ReadonlyMap<string, string>) {
             }
 
             case "ICD": {
-                const num = Number(value);
-                if (isFinite(num)) {
+                const num = parseTxtDecimal(value, 1);
+                if (num !== undefined) {
                     dd.ICD = num;
                 }
                 break;
             }
 
             case "T": {
-                const num = Number(value);
-                if (isFinite(num)) {
+                const num = parseTxtDecimal(value, UINT16_MAX);
+                if (num !== undefined) {
                     dd.T = SupportedTransportsSchema.decode(num);
                 }
                 break;

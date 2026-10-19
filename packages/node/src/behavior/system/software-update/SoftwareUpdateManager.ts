@@ -7,6 +7,7 @@
 import { Behavior } from "#behavior/Behavior.js";
 import type { ActionContext } from "#behavior/context/ActionContext.js";
 import { DclBehavior } from "#behavior/system/dcl/DclBehavior.js";
+import { NetworkClient } from "#behavior/system/network/NetworkClient.js";
 import { OtaAnnouncements } from "#behavior/system/software-update/OtaAnnouncements.js";
 import { OTA_PROGRESS_TIMEOUT } from "#behavior/system/software-update/OtaProgress.js";
 import { BasicInformationClient } from "#behaviors/basic-information";
@@ -552,8 +553,8 @@ export class SoftwareUpdateManager extends Behavior {
      * Returns a list of peers for which updates are available along with the collected update info.
      *
      * If `includeStoredUpdates` is set to true, locally stored/imported OTA images are considered as update candidates
-     * alongside the DCL. The DCL is always queried regardless; across all candidates the highest applicable and allowed
-     * version wins.
+     * alongside the DCL. The DCL is always queried regardless, unless the OTA service is offline; across all candidates
+     * the highest applicable and allowed version wins.
      */
     async queryUpdates(options: { peerToCheck?: ClientNode; includeStoredUpdates?: boolean } = {}) {
         const { peerToCheck, includeStoredUpdates = false } = options;
@@ -739,6 +740,20 @@ export class SoftwareUpdateManager extends Behavior {
             this.internal.versionUpdateObservers.on(startUpEvent, this.callback(triggerStartUp));
         }
 
+        // A device that applies without restarting sends neither a version change nor startUp; the controller's
+        // resubscription then reports the version it still runs
+        const subscriptionEvent = peer.eventsOf(NetworkClient).subscriptionStatusChanged;
+        if (!this.internal.versionUpdateObservers.observes(subscriptionEvent)) {
+            const that = this;
+            function triggerSubscribed(isActive: boolean) {
+                if (isActive) {
+                    that.#onSubscribedAfterApply(peerAddress);
+                }
+            }
+
+            this.internal.versionUpdateObservers.on(subscriptionEvent, this.callback(triggerSubscribed));
+        }
+
         return { otaEndpoint, peerAddress, vendorId, productId, softwareVersion, softwareVersionString };
     }
 
@@ -748,7 +763,8 @@ export class SoftwareUpdateManager extends Behavior {
      * Also called from the startUp event with `isStartUp = true`. When a device reboots after applying an update,
      * softwareVersion$Changed fires if the version actually changed (success). But if the device reboots with the
      * same version (failed apply), softwareVersion$Changed does NOT fire — so startUp feeds the version through
-     * this same handler to detect the failure.
+     * this same handler to detect the failure.  A device that does not restart at all is caught by
+     * {@link #onSubscribedAfterApply}.
      */
     #onSoftwareVersionChanged(
         peerAddress: PeerAddress,
@@ -797,10 +813,7 @@ export class SoftwareUpdateManager extends Behavior {
                 logger.warn(
                     `Device ${peerAddress.toString()} rebooted after applying update but reports softwareVersion ${newVersion} (expected >= ${expectedVersion}), update failed to apply`,
                 );
-                this.internal.updateQueue.splice(entryIndex, 1);
-                this.internal.pendingStartUpSuppress.delete(peerAddress);
-                this.events.updateFailed.emit(peerAddress);
-                this.#triggerQueuedUpdate();
+                this.#failAppliedUpdate(entryIndex);
                 return;
             }
             logger.info(
@@ -822,6 +835,47 @@ export class SoftwareUpdateManager extends Behavior {
                 !PeerAddress.is(peerAddress, consentAddress) || targetSoftwareVersion > newVersion,
         );
 
+        this.#triggerQueuedUpdate();
+    }
+
+    /**
+     * Handler for a peer's subscription becoming active.
+     *
+     * An update in `Applying` whose peer reports a version below the target over a subscription established after the
+     * device's restart deadline did not apply, so it is handled like a reboot into the old version.  The deadline is
+     * {@link RebootResubscribeArmer.returnTimeout}, after which the armer forces that resubscription.
+     */
+    #onSubscribedAfterApply(peerAddress: PeerAddress) {
+        const entryIndex = this.internal.updateQueue.findIndex(
+            e => e.peerAddress.fabricIndex === peerAddress.fabricIndex && e.peerAddress.nodeId === peerAddress.nodeId,
+        );
+        const softwareVersion = (Node.forEndpoint(this.endpoint) as ServerNode).peers
+            .get(peerAddress)
+            ?.maybeStateOf(BasicInformationClient)?.softwareVersion;
+        if (entryIndex === -1 || softwareVersion === undefined) {
+            return;
+        }
+        const { lastProgressStatus, lastProgressUpdateTime, applyDelay, targetSoftwareVersion } =
+            this.internal.updateQueue[entryIndex];
+        if (
+            lastProgressStatus !== OtaUpdateStatus.Applying ||
+            lastProgressUpdateTime === undefined ||
+            Time.nowMs < lastProgressUpdateTime + RebootResubscribeArmer.returnTimeout(applyDelay) ||
+            softwareVersion >= targetSoftwareVersion
+        ) {
+            return;
+        }
+
+        logger.warn(
+            `Device ${peerAddress.toString()} resubscribed after applying update but reports softwareVersion ${softwareVersion} (expected >= ${targetSoftwareVersion}), update failed to apply`,
+        );
+        this.#failAppliedUpdate(entryIndex);
+    }
+
+    #failAppliedUpdate(entryIndex: number) {
+        const [{ peerAddress }] = this.internal.updateQueue.splice(entryIndex, 1);
+        this.internal.pendingStartUpSuppress.delete(peerAddress);
+        this.events.updateFailed.emit(peerAddress);
         this.#triggerQueuedUpdate();
     }
 

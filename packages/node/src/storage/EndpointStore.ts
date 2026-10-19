@@ -96,7 +96,10 @@ export class EndpointStore {
             }
 
             if (ownTx) {
-                tx.commit();
+                const committed = tx.commit();
+                if (MaybePromise.is(committed)) {
+                    await committed;
+                }
             }
         } catch (e) {
             if (ownTx) {

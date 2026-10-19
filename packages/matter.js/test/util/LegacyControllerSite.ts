@@ -70,9 +70,23 @@ export class LegacyControllerSite {
     }
 
     /**
-     * Commissions the device into the controller's fabric without creating a `PairedNode` for it.
+     * Creates an {@link Environment} with mock crypto, in-memory storage and a host on the shared network.
      */
-    async commission(controller: CommissioningController, device: ServerNode) {
+    addEnvironment() {
+        const index = this.#nextControllerIndex++;
+        const environment = new Environment(`legacy-environment${index}`);
+        this.#environments.add(environment);
+        const crypto = MockCrypto(index);
+        environment.set(Entropy, crypto);
+        environment.set(Crypto, crypto);
+        environment.set(Network, this.#simulator.addHost(index));
+        return environment;
+    }
+
+    /**
+     * Commissions the device into the controller's fabric, without creating a `PairedNode` for it unless `connect` is true.
+     */
+    async commission(controller: CommissioningController, device: ServerNode, { connect = false } = {}) {
         const { passcode, discriminator } = device.state.commissioning;
 
         // Without entropy both sides derive colliding session parameters
@@ -88,7 +102,7 @@ export class LegacyControllerSite {
                         discovery: { identifierData: { longDiscriminator: discriminator } },
                         passcode,
                     },
-                    { connectNodeAfterCommissioning: false },
+                    { connectNodeAfterCommissioning: connect },
                 ),
                 { macrotasks: true },
             );

@@ -5,7 +5,6 @@
  */
 
 import { isClientBehavior } from "#behavior/cluster/cluster-behavior-utils.js";
-import { Migration } from "#behavior/state/migrations/Migration.js";
 import type { Agent } from "#endpoint/Agent.js";
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import { BehaviorInitializationError } from "#endpoint/errors.js";
@@ -27,7 +26,7 @@ import {
     Timer,
 } from "@matter/general";
 import type { ClusterId } from "@matter/types";
-import type { Behavior } from "../Behavior.js";
+import { Behavior } from "../Behavior.js";
 import { Reactor } from "../Reactor.js";
 import { Datasource } from "../state/managed/Datasource.js";
 import { BackingEvents } from "./BackingEvents.js";
@@ -121,10 +120,6 @@ export abstract class BehaviorBacking {
     initializeDataSource() {
         if (this.#datasource) {
             return;
-        }
-
-        if (this.store.initialValues !== undefined) {
-            Migration.migrate(this.type, this.store.initialValues);
         }
 
         this.#datasource = Datasource(this.datasourceOptions);
@@ -271,6 +266,7 @@ export abstract class BehaviorBacking {
             events: this.events as unknown as Datasource.Events,
             defaults: this.#endpoint.behaviors.defaultsFor(this.type),
             store: this.store,
+            migrate: this.#type.migrate === Behavior.migrate ? undefined : values => this.#type.migrate(values),
             owner: this.#endpoint,
             onChange: this.broadcastChanges.bind(this),
         };

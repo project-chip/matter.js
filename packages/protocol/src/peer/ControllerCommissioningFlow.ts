@@ -10,6 +10,7 @@ import { WriteResult } from "#action/index.js";
 import { Invoke } from "#action/request/Invoke.js";
 import { Read } from "#action/request/Read.js";
 import { Write } from "#action/request/Write.js";
+import { ResultStatus } from "#action/response/ResultStatus.js";
 import { BleDisconnectedError } from "#ble/Ble.js";
 import { Certificate } from "#certificate/kinds/Certificate.js";
 import { PeerMessageMissingError, PeerUnresponsiveError } from "#peer/PeerCommunicationError.js";
@@ -518,7 +519,7 @@ export class ControllerCommissioningFlow {
                 switch (entry.kind) {
                     case "cmd-status":
                         if (entry.status !== Status.Success) {
-                            throw StatusResponseError.create(entry.status, undefined, entry.clusterStatus);
+                            throw ResultStatus.errorOf(entry);
                         }
                         return;
 
@@ -984,7 +985,7 @@ export class ControllerCommissioningFlow {
      *
      * Bare `AbortedError` is deliberately excluded: a user-initiated cancel or shutdown abort must
      * propagate cleanly, not be swallowed as a "non-concurrent signal".  Transport aborts surface
-     * with a more specific cause ({@link PeerUnresponsiveError} from MRP timeouts,
+     * with a more specific cause ({@link PeerUnresponsiveError}, e.g. `PeerAckMissingError` from MRP timeouts,
      * {@link BleDisconnectedError} from BLE loss) that `causedBy` already matches.
      */
     #isCommissioningChannelDrop(error: unknown) {

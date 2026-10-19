@@ -376,6 +376,14 @@ class ClusterState implements ClusterProtocol {
     }
 
     readState(session: InteractionSession): Val.ProtocolStruct {
+        // A reference lives until its session's transaction closes, so a session without one would never release it
+        if (session.transaction === undefined) {
+            if (hasRemoteActor(session)) {
+                throw new ImplementationError(`${this} state for a remote subject must be read with a transaction`);
+            }
+            return this.#datasource.view;
+        }
+
         const { interactionComplete: _ic, ...readOnly } = LocalActorContext.ReadOnly;
         const supervisorSession: ValueSupervisor.Session = {
             ...readOnly,

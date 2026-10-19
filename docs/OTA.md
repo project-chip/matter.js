@@ -154,7 +154,7 @@ async function monitorUpdateProgress(node: PairedNode): Promise<void> {
 }
 ```
 
-When the update state switches to "Applying", the device applies the update and restarts. This usually takes longer than normal restarts. The controller will detect this and reconnect automatically, but this may take some extra time. The device should come back online automatically.
+When the update state switches to "Applying", the device applies the update and restarts. This usually takes longer than normal restarts. The controller will detect this and reconnect automatically, but this may take some extra time. The device should come back online automatically. If the device still reports its previous software version when the controller resubscribes later than three minutes after the apply delay, the update is reported as failed via the `updateFailed` event.
 
 The `updateDone` event is triggered on a best-effort basis, based on (formally optional) events from the device and validation of software version changes on reconnect. We cannot guarantee that the `updateDone` event will always be triggered.
 

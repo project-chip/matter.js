@@ -11,6 +11,7 @@ import { ClientNetworkRuntime } from "#behavior/system/network/ClientNetworkRunt
 import { NetworkClient } from "#behavior/system/network/NetworkClient.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { Agent } from "#endpoint/Agent.js";
+import type { Endpoint } from "#endpoint/Endpoint.js";
 import { ClientNodeEndpoints } from "#endpoint/properties/ClientNodeEndpoints.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
@@ -35,6 +36,7 @@ import { Matter, MatterModel } from "@matter/model";
 import { Interactable, OccurrenceManager, PeerAddress, PeerSet } from "@matter/protocol";
 import { ClientEndpointInitializer } from "./client/ClientEndpointInitializer.js";
 import { ClientNodeInteraction } from "./client/ClientNodeInteraction.js";
+import { ClientStructure } from "./client/ClientStructure.js";
 import { ClientNodeLifecycle } from "./ClientNodeLifecycle.js";
 import { Node } from "./Node.js";
 import type { ServerNode } from "./ServerNode.js";
@@ -111,6 +113,7 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
 
         const initializer = new ClientEndpointInitializer(this);
         this.env.set(EndpointInitializer, initializer);
+        this.env.set(ClientStructure, initializer.structure);
 
         store.write = RemoteWriter(this, initializer.structure);
 
@@ -314,6 +317,7 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
     override act<R>(
         purpose: string,
         actor: (agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>,
+        options?: Endpoint.ActOptions,
     ): MaybePromise<R>;
 
     override act<R>(actor: (agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>): MaybePromise<R>;
@@ -321,6 +325,7 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
     override act<R>(
         actorOrPurpose: string | ((agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>),
         actor?: (agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>,
+        options?: Endpoint.ActOptions,
     ): MaybePromise<R> {
         if (this.construction.status === Lifecycle.Status.Inactive) {
             // Between the reset and the close of a deletion; restarting would revive a node that is going away
@@ -329,10 +334,10 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         }
 
         if (this.construction.status === Lifecycle.Status.Initializing) {
-            return this.construction.then(() => (super.act as any)(actorOrPurpose, actor));
+            return this.construction.then(() => (super.act as any)(actorOrPurpose, actor, options));
         }
 
-        return (super.act as any)(actorOrPurpose, actor);
+        return (super.act as any)(actorOrPurpose, actor, options);
     }
 
     get interaction(): Interactable<ActionContext> {

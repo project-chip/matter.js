@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { PersistedFileDesignator } from "#bdx/PersistedFileDesignator.js";
 import {
     DclOtaUpdateService,
     DeviceSoftwareVersionModelDclSchemaWithSource,
@@ -21,6 +22,7 @@ import {
     MockFetch,
     MockStorageService,
     StandardCrypto,
+    StorageError,
     StorageService,
 } from "@matter/general";
 import { VendorId } from "@matter/types";
@@ -1839,6 +1841,203 @@ describe("DclOtaUpdateService", () => {
 
             const callLog = fetchMock.getCallLog();
             expect(callLog.some(call => call.url.includes("on.dcl.csa-iot.org"))).to.be.true;
+        });
+    });
+
+    describe("offline", () => {
+        function updateInfoFor(softwareVersion: number): DeviceSoftwareVersionModelDclSchemaWithSource {
+            return {
+                vid: VendorId(0xfff1),
+                pid: 0x8000,
+                softwareVersion,
+                softwareVersionString: `v${softwareVersion}.0.0`,
+                cdVersionNumber: 1,
+                softwareVersionValid: true,
+                otaUrl: `https://example.com/ota-v${softwareVersion}.bin`,
+                minApplicableSoftwareVersion: softwareVersion - 1,
+                maxApplicableSoftwareVersion: softwareVersion - 1,
+                schemaVersion: 0,
+                source: "dcl-prod",
+            };
+        }
+
+        function streamOf(image: Bytes) {
+            return new ReadableStream({
+                start(controller) {
+                    controller.enqueue(image);
+                    controller.close();
+                },
+            });
+        }
+
+        async function storedV3Service(offline = true) {
+            const image = await createOtaImage(crypto, 0xfff1, 0x8000, 3);
+            const info = updateInfoFor(3);
+            const service = new DclOtaUpdateService(environment, { offline });
+            await service.store(streamOf(image), info, "prod");
+            return { service, info };
+        }
+
+        it("asks the DCL nothing and finds only stored updates", async () => {
+            fetchMock.addResponse("/dcl/model/versions/65521/32768", mockVersionsList);
+            fetchMock.addResponse("/dcl/model/versions/65521/32768/3", createVersionMetadata(3));
+            fetchMock.install();
+
+            const { service } = await storedV3Service();
+
+            const stored = await service.checkForUpdate({
+                vendorId: 0xfff1,
+                productId: 0x8000,
+                currentSoftwareVersion: 2,
+                includeStoredUpdates: true,
+            });
+            expect(stored?.softwareVersion).equal(3);
+            expect(stored?.source).equal("dcl-prod");
+
+            expect(
+                await service.checkForUpdate({ vendorId: 0xfff1, productId: 0x8000, currentSoftwareVersion: 2 }),
+            ).equal(undefined);
+            expect(fetchMock.getCallLog()).deep.equal([]);
+        });
+
+        it("serves a stored image and downloads none it lacks", async () => {
+            const missing = await createOtaImage(crypto, 0xfff1, 0x8000, 4);
+            fetchMock.addResponse("https://example.com/ota-v4.bin", missing, { binary: true });
+            fetchMock.install();
+
+            const { service, info } = await storedV3Service();
+
+            expect((await service.downloadUpdate(info)).text).equal("ota/fff1.8000.prod.3");
+            await expect(service.downloadUpdate(updateInfoFor(4))).rejectedWith(OtaUpdateError, /offline/);
+            expect(fetchMock.getCallLog()).deep.equal([]);
+        });
+
+        it("keeps a stored image when a forced download is refused", async () => {
+            const image = await createOtaImage(crypto, 0xfff1, 0x8000, 3);
+            fetchMock.addResponse("https://example.com/ota-v3.bin", image, { binary: true });
+            fetchMock.install();
+
+            const { service, info } = await storedV3Service();
+
+            await expect(service.downloadUpdate(info, true)).rejectedWith(OtaUpdateError, /stored image is kept/);
+            expect((await service.find({ vendorId: 0xfff1, productId: 0x8000 })).map(e => e.filename)).deep.equal([
+                "fff1.8000.prod.3",
+            ]);
+            expect(fetchMock.getCallLog()).deep.equal([]);
+        });
+
+        it("removes a stored image that fails validation and downloads none", async () => {
+            const image = await createOtaImage(crypto, 0xfff1, 0x8000, 3);
+            fetchMock.addResponse("https://example.com/ota-v3.bin", image, { binary: true });
+            fetchMock.install();
+
+            const { service, info } = await storedV3Service();
+
+            await expect(service.downloadUpdate({ ...info, otaChecksum: "x", otaChecksumType: 99 })).rejectedWith(
+                OtaUpdateError,
+                "No valid OTA image fff1.8000.prod.3 (v3.0.0) is stored and the service is offline, so none is downloaded",
+            );
+            expect(await service.find({ vendorId: 0xfff1, productId: 0x8000 })).deep.equal([]);
+            expect(fetchMock.getCallLog()).deep.equal([]);
+        });
+
+        for (const [kind, readError] of [
+            ["storage error", new StorageError("read failed")],
+            ["I/O error", new TypeError("stream failed")],
+        ] as const) {
+            /** Fail the next read of a stored image with `readError`. */
+            function failNextRead() {
+                const { openBlob } = PersistedFileDesignator.prototype;
+                PersistedFileDesignator.prototype.openBlob = () => {
+                    PersistedFileDesignator.prototype.openBlob = openBlob;
+                    return Promise.reject(readError);
+                };
+                return () => (PersistedFileDesignator.prototype.openBlob = openBlob);
+            }
+
+            it(`keeps a stored image it cannot read (${kind})`, async () => {
+                const image = await createOtaImage(crypto, 0xfff1, 0x8000, 3);
+                fetchMock.addResponse("https://example.com/ota-v3.bin", image, { binary: true });
+                fetchMock.install();
+
+                const { service, info } = await storedV3Service();
+
+                const restore = failNextRead();
+                try {
+                    await expect(service.downloadUpdate(info)).rejectedWith(
+                        OtaUpdateError,
+                        "Cannot read stored OTA image fff1.8000.prod.3 (v3.0.0) to validate it and the service is offline; the stored image is kept",
+                    );
+                } finally {
+                    restore();
+                }
+                expect((await service.find({ vendorId: 0xfff1, productId: 0x8000 })).map(e => e.filename)).deep.equal([
+                    "fff1.8000.prod.3",
+                ]);
+                expect(fetchMock.getCallLog()).deep.equal([]);
+            });
+
+            it(`online, replaces a stored image it cannot read (${kind})`, async () => {
+                const image = await createOtaImage(crypto, 0xfff1, 0x8000, 3);
+                fetchMock.addResponse("https://example.com/ota-v3.bin", image, { binary: true });
+                fetchMock.install();
+
+                const { service, info } = await storedV3Service(false);
+
+                const restore = failNextRead();
+                try {
+                    expect((await service.downloadUpdate(info)).text).equal("ota/fff1.8000.prod.3");
+                } finally {
+                    restore();
+                }
+                expect(fetchMock.getCallLog().map(({ url }) => url)).deep.equal(["https://example.com/ota-v3.bin"]);
+            });
+
+            it(`online, removes a stored image it cannot read even when no replacement arrives (${kind})`, async () => {
+                fetchMock.addResponse("https://example.com/ota-v3.bin", {}, { status: 404 });
+                fetchMock.install();
+
+                const { service, info } = await storedV3Service(false);
+
+                const restore = failNextRead();
+                try {
+                    await expect(service.downloadUpdate(info)).rejectedWith(OtaUpdateError);
+                } finally {
+                    restore();
+                }
+                expect(await service.find({ vendorId: 0xfff1, productId: 0x8000 })).deep.equal([]);
+            });
+        }
+
+        it("keeps a stored image that fails validation when forced", async () => {
+            const image = await createOtaImage(crypto, 0xfff1, 0x8000, 3);
+            fetchMock.addResponse("https://example.com/ota-v3.bin", image, { binary: true });
+            fetchMock.install();
+
+            const { service, info } = await storedV3Service();
+
+            await expect(service.downloadUpdate({ ...info, otaChecksum: "x", otaChecksumType: 99 }, true)).rejectedWith(
+                OtaUpdateError,
+                /stored image is kept/,
+            );
+            expect((await service.find({ vendorId: 0xfff1, productId: 0x8000 })).map(e => e.filename)).deep.equal([
+                "fff1.8000.prod.3",
+            ]);
+            expect(fetchMock.getCallLog()).deep.equal([]);
+        });
+
+        it("reads no image from a URL", async () => {
+            const image = await createOtaImage(crypto, 0xfff1, 0x8000, 3);
+            fetchMock.addResponse("https://example.com/ota-v3.bin", image, { binary: true });
+            fetchMock.install();
+
+            const service = new DclOtaUpdateService(environment, { offline: true });
+
+            await expect(service.createUpdateInfoFromFile("https://example.com/ota-v3.bin")).rejectedWith(
+                OtaUpdateError,
+                /offline/,
+            );
+            expect(fetchMock.getCallLog()).deep.equal([]);
         });
     });
 });

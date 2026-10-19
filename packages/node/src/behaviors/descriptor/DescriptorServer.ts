@@ -255,10 +255,9 @@ export class DescriptorServer extends DescriptorBehavior {
 
     /**
      * Whether this endpoint's device type composes its `PartsList` of every descendant rather than of
-     * its own children (Matter Core § 9.2.3).
+     * its own children (Matter Core § 9.2.7).
      *
-     * {@link IndexBehavior} is how the flat list is obtained, not what decides it is wanted: the
-     * behavior is installed on bridged nodes too, which compose a tree.
+     * {@link IndexBehavior} is how the flat list is obtained, not what decides it is wanted.
      */
     get #composesFullFamily() {
         const deviceTypes = this.state.deviceTypeList.length

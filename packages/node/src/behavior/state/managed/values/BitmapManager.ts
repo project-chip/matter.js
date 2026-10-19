@@ -143,7 +143,7 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
                         throw new PhantomReferenceError(this[Internal.reference].location);
                     }
                     bits[name] = !!value;
-                });
+                }, name);
             },
         };
     }
@@ -186,7 +186,7 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
                     throw new PhantomReferenceError(this[Internal.reference].location);
                 }
                 bits[name] = value ? value : 0;
-            });
+            }, name);
         },
     };
 }

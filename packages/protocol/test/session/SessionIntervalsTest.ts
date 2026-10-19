@@ -65,4 +65,35 @@ describe("SessionIntervals", () => {
             );
         });
     });
+
+    describe("advertisable", () => {
+        it("keeps intervals within the DNS-SD limits", () => {
+            expect(
+                SessionIntervals.advertisable({
+                    idleInterval: Millis(0),
+                    activeInterval: Hours(1),
+                    activeThreshold: Millis(65535),
+                }),
+            ).deep.equal({ idleInterval: 0, activeInterval: 3_600_000, activeThreshold: 65535 });
+        });
+
+        it("drops negative and fractional intervals and an active threshold of zero", () => {
+            expect(
+                SessionIntervals.advertisable({
+                    idleInterval: Millis(-1),
+                    activeInterval: Millis(1.5),
+                    activeThreshold: Millis(0),
+                }),
+            ).undefined;
+        });
+
+        it("drops intervals above the DNS-SD limits", () => {
+            expect(
+                SessionIntervals.advertisable({
+                    idleInterval: Millis(3_600_001),
+                    activeThreshold: Millis(65536),
+                }),
+            ).undefined;
+        });
+    });
 });

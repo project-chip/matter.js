@@ -6,10 +6,17 @@
 
 import { Bytes, Crypto, Environment, ImplementationError, InternalError, UnexpectedDataError } from "@matter/main";
 import { CertificateAuthority, getOperationalDeviceQname, Rcac } from "@matter/main/protocol";
-import { FabricId, GlobalFabricId, NodeId, Status, StatusResponseError } from "@matter/main/types";
+import {
+    FabricId,
+    GlobalFabricId,
+    NodeId,
+    ReceivedStatusResponseError,
+    Status,
+    StatusResponseError,
+} from "@matter/main/types";
 import { Matter } from "@matter/model";
 import { UnsupportedByControllerError } from "@matter/testing";
-import type { CertNodeApi } from "@matter/testing";
+import type { AttributeReadEntry, CertNodeApi, ControllerAdapterOptions } from "@matter/testing";
 import { expect } from "chai";
 import { existsSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
@@ -17,13 +24,15 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { env } from "node:process";
 import {
+    CHIP_TOOL_CAPABILITY_GAPS,
+    CHIP_TOOL_CONTROLLER_PICS,
     ChipToolCommandError,
     ChipToolControllerAdapter,
     ChipToolUnmappedStatusError,
 } from "../../src/cert/ChipToolControllerAdapter.js";
 import { registerCertCustomCluster } from "../../src/cert/custom-clusters.js";
 import { OnboardingPayloadRefusedError } from "../../src/cert/onboarding-payload.js";
-import { ChipToolExitError } from "../../src/chip-tool/chip-tool-client.js";
+import { ChipToolStartupError } from "../../src/chip-tool/chip-tool-client.js";
 import { FaultInjectionCluster } from "../cert/fault-injection.js";
 import { delay, FakeChipTool, waitFor, writeStandInBinary } from "./fake-chip-tool.js";
 
@@ -59,6 +68,15 @@ async function rejectionOf(promise: Promise<unknown>): Promise<unknown> {
         return e;
     }
     throw new InternalError("Expected the operation to reject but it resolved");
+}
+
+/** Asserts a status the device sent, by its code and the end of its message. */
+function expectReceivedStatus(failure: unknown, code: Status, messageEnd: string) {
+    if (!(failure instanceof ReceivedStatusResponseError)) {
+        throw new InternalError(`Expected a ReceivedStatusResponseError, got ${failure}`);
+    }
+    expect(failure.code).equal(code);
+    expect(failure.message.endsWith(messageEnd), failure.message).true;
 }
 
 /** The operation an {@link UnsupportedByControllerError} names, so a test asserts on it without a cast. */
@@ -180,7 +198,7 @@ describe("ChipToolControllerAdapter", function () {
         }
     });
 
-    async function start(options?: { transport?: "tcp" }) {
+    async function start(options?: ControllerAdapterOptions) {
         const started = new ChipToolControllerAdapter("dut", options);
         adapter = started;
         await started.start();
@@ -195,6 +213,60 @@ describe("ChipToolControllerAdapter", function () {
         fake.frames.splice(0);
         return { ref, node: started.node(ref) };
     }
+
+    describe("group key sets", () => {
+        const KEY_SET = {
+            groupKeySetId: 1,
+            groupKeySecurityPolicy: 0,
+            epochKey0: Bytes.fromHex("d0d1d2d3d4d5d6d7d8d9dadbdcdddedf"),
+            epochStartTime0: 1_600_000_000_000_000n,
+        };
+
+        it("provisions the declared key set through groupsettings", async () => {
+            const started = await start({ groups: [{ groupId: 1, keySet: KEY_SET }] });
+
+            await started.group(1).defineKeySet(KEY_SET);
+
+            expect(fake.commands).deep.equal([
+                "groupsettings add-group group1 1",
+                "groupsettings add-keysets 1 0 0 hex:d0d1d2d3d4d5d6d7d8d9dadbdcdddedf",
+                "groupsettings bind-keyset 1 1",
+            ]);
+        });
+
+        it("refuses a key set or group the case did not declare before sending anything", async () => {
+            const started = await start({ groups: [{ groupId: 1, keySet: KEY_SET }] });
+
+            await expect(started.group(1).defineKeySet({ ...KEY_SET, groupKeySetId: 2 })).rejectedWith(
+                ImplementationError,
+                /groupKeySetId/,
+            );
+            await expect(started.group(2).defineKeySet(KEY_SET)).rejectedWith(ImplementationError, /group 2/);
+            expect(fake.commands).deep.equal([]);
+        });
+
+        it("selects the IANA address where the case declares it", async () => {
+            const started = await start({ groups: [{ groupId: 1, keySet: KEY_SET, addressPolicy: "ianaAddr" }] });
+
+            await started.group(1).defineKeySet(KEY_SET);
+
+            expect(fake.commands[0]).equal("groupsettings add-group group1 1 --addressPolicy 0");
+        });
+
+        it("refuses a group invoke for an undeclared group before sending anything", async () => {
+            const started = await start({ groups: [{ groupId: 1, keySet: KEY_SET }] });
+
+            await expect(started.group(2).invoke("OnOff", "toggle")).rejectedWith(ImplementationError, /group 2/);
+            expect(fake.commands).deep.equal([]);
+        });
+
+        it("refuses a declaration every controller refuses when it is built", () => {
+            expect(() => new ChipToolControllerAdapter("dut", { groups: [{ groupId: 0, keySet: KEY_SET }] })).throw(
+                ImplementationError,
+                /application group id/,
+            );
+        });
+    });
 
     it("mints a node id and pairs with the device's original setup code", async () => {
         const started = await start();
@@ -612,8 +684,7 @@ describe("ChipToolControllerAdapter", function () {
 
         fake.reply = () => ({ results: [{ error: "UNSUPPORTED_ATTRIBUTE" }], status: 1 });
         const bare = await rejectionOf(node.readAttribute(path));
-        expect(bare).instanceOf(StatusResponseError);
-        expect(StatusResponseError.of(bare)?.code).equal(Status.UnsupportedAttribute);
+        expectReceivedStatus(bare, Status.UnsupportedAttribute, "failed (code 134)");
 
         fake.reply = () => ({
             results: [
@@ -627,8 +698,7 @@ describe("ChipToolControllerAdapter", function () {
             status: 1,
         });
         const scoped = await rejectionOf(node.readAttribute(path));
-        expect(scoped).instanceOf(StatusResponseError);
-        expect(StatusResponseError.of(scoped)?.code).equal(Status.UnsupportedAttribute);
+        expectReceivedStatus(scoped, Status.UnsupportedAttribute, "failed (code 134)");
     });
 
     it("reads paths spanning two clusters through one zipped id-list command", async () => {
@@ -693,8 +763,7 @@ describe("ChipToolControllerAdapter", function () {
                 { endpoint: 1, cluster: LEVEL_CONTROL.id, attribute: ON_LEVEL.id },
             ]),
         );
-        expect(rejection).instanceOf(StatusResponseError);
-        expect(StatusResponseError.of(rejection)?.code).equal(Status.UnsupportedAttribute);
+        expectReceivedStatus(rejection, Status.UnsupportedAttribute, "failed (code 134)");
     });
 
     it("reads a wildcard path's own status as a per-item result of the expansion", async () => {
@@ -736,16 +805,72 @@ describe("ChipToolControllerAdapter", function () {
         expect(fake.commands).deep.equal([]);
     });
 
-    it("reports what the controller itself holds as unsupported, without issuing anything", async () => {
+    it("refuses a read that needs a large-payload session as tcp-transport, without issuing it", async () => {
         const { node } = await commissioned();
 
-        expect(await rejectionOf(node.clientEndpoints())).instanceOf(UnsupportedByControllerError);
-        expect(
-            await rejectionOf(
-                node.clientAttribute({ endpoint: 1, cluster: requireId(ON_OFF.id, "OnOff"), attribute: 0 }),
+        const failure = await rejectionOf(
+            node.readAttribute(
+                { endpoint: 0, cluster: BASIC_INFORMATION.id, attribute: requireId(VENDOR_ID.id, "vendorId") },
+                { largeMessage: true },
             ),
-        ).instanceOf(UnsupportedByControllerError);
+        );
+        if (!(failure instanceof UnsupportedByControllerError)) {
+            throw new InternalError(`Expected an UnsupportedByControllerError, got ${failure}`);
+        }
+        expect(failure.capability).equal("tcp-transport");
         expect(fake.commands).deep.equal([]);
+    });
+
+    it("refuses what it always lacks naming a declared gap, without issuing anything", async () => {
+        const { node } = await commissioned();
+
+        const refusals = {
+            clientEndpoints: () => node.clientEndpoints(),
+            clientAttribute: () =>
+                node.clientAttribute({ endpoint: 1, cluster: requireId(ON_OFF.id, "OnOff"), attribute: 0 }),
+            observeEvents: () => node.observeEvents([{ endpoint: 0, cluster: 0x28, event: 0 }], {}),
+            sessions: () => node.sessions(),
+            severTransportConnection: () => node.severTransportConnection(1),
+            serveOtaUpdate: () => node.serveOtaUpdate(),
+            scriptOtaProvider: () => node.scriptOtaProvider({}),
+            announceOtaProvider: () => node.announceOtaProvider(),
+            icdClient: async () => node.icdClient(),
+        };
+        const capabilities: Record<string, string | undefined> = {};
+        for (const [operation, refuse] of Object.entries(refusals)) {
+            const failure = await rejectionOf(refuse());
+            if (!(failure instanceof UnsupportedByControllerError)) {
+                throw new InternalError(`Expected ${operation} to refuse, got ${failure}`);
+            }
+            capabilities[operation] = failure.capability;
+        }
+
+        expect(capabilities).deep.equal({
+            clientEndpoints: "sustained-subscription",
+            clientAttribute: "sustained-subscription",
+            observeEvents: "sustained-subscription",
+            sessions: "session-introspection",
+            severTransportConnection: "session-introspection",
+            serveOtaUpdate: "ota-provider",
+            scriptOtaProvider: "ota-provider-script",
+            announceOtaProvider: "ota-provider-script",
+            icdClient: "icd-client",
+        });
+        for (const capability of Object.values(capabilities)) {
+            expect(CHIP_TOOL_CAPABILITY_GAPS).have.property(capability ?? "");
+        }
+        expect(fake.commands).deep.equal([]);
+    });
+
+    it("refuses to announce another node's OTA provider without naming a capability, as its PICS gate it", async () => {
+        const { node } = await commissioned();
+
+        const failure = await rejectionOf(node.announceOtaProvider({ provider: "2" }));
+        if (!(failure instanceof UnsupportedByControllerError)) {
+            throw new InternalError(`Expected an UnsupportedByControllerError, got ${failure}`);
+        }
+        expect(failure.capability).undefined;
+        expect(CHIP_TOOL_CONTROLLER_PICS["OTAR.C.M.AnnounceOTAProvider"]).equal(0);
     });
 
     it("writes two attributes of two clusters, with their data versions, in one command", async () => {
@@ -924,8 +1049,7 @@ describe("ChipToolControllerAdapter", function () {
         const failure = await rejectionOf(
             node.writeAttribute({ endpoint: 0, cluster: BASIC_INFORMATION.id, attribute: VENDOR_ID.id }, 1),
         );
-        expect(failure).instanceOf(StatusResponseError);
-        expect(StatusResponseError.of(failure)?.code).equal(Status.UnsupportedWrite);
+        expectReceivedStatus(failure, Status.UnsupportedWrite, "failed (code 136)");
         expect(fake.commands).deep.equal([`any write-by-id 0x28 0x2 1 ${ref} 0`]);
     });
 
@@ -991,8 +1115,7 @@ describe("ChipToolControllerAdapter", function () {
         });
 
         const failure = await rejectionOf(node.invoke("OnOff", "on", {}, 3));
-        expect(failure).instanceOf(StatusResponseError);
-        expect(StatusResponseError.of(failure)?.code).equal(Status.UnsupportedEndpoint);
+        expectReceivedStatus(failure, Status.UnsupportedEndpoint, "Unsupported endpoint (code 127)");
     });
 
     it("fails an invoke that exited non-zero beside a response payload", async () => {
@@ -1158,17 +1281,18 @@ describe("ChipToolControllerAdapter", function () {
 
         // Only the IM global-status part of a CHIP_ERROR yields a status other than Failure
         fake.reply = () => ({ results: [{ error: "UNSUPPORTED_ACCESS" }], status: 1 });
-        expect(StatusResponseError.of(await rejectionOf(node.readAttribute(path)))?.code).equal(
+        expectReceivedStatus(
+            await rejectionOf(node.readAttribute(path)),
             Status.UnsupportedAccess,
+            "failed (code 126)",
         );
 
         // ...and only its IM cluster-status part yields a cluster code, which is how a device's
         // cluster-specific answer to an invoke reaches chip-tool's non-extendable CommandSender
         // callback (`CommandSender::ProcessInvokeResponseIB`)
         fake.reply = () => ({ results: [{ error: "FAILURE", clusterError: 3 }], status: 1 });
-        const clusterSpecific = StatusResponseError.of(await rejectionOf(node.invoke("OnOff", "on", {}, 1)));
-        expect(clusterSpecific?.code).equal(Status.Failure);
-        expect(clusterSpecific?.clusterCode).equal(3);
+        const clusterSpecific = await rejectionOf(node.invoke("OnOff", "on", {}, 1));
+        expectReceivedStatus(clusterSpecific, Status.Failure, "failed (code 1; cluster code 3)");
     });
 
     it("rejects an enhanced window whose reply logged no pairing code", async () => {
@@ -1319,8 +1443,7 @@ describe("ChipToolControllerAdapter", function () {
             });
 
             const rejection = await rejectionOf(node.readEvents([EVENT_PATH]));
-            expect(rejection).instanceOf(StatusResponseError);
-            expect((rejection as StatusResponseError).code).equal(Status.UnsupportedAccess);
+            expectReceivedStatus(rejection, Status.UnsupportedAccess, "failed (code 126)");
         });
 
         it("fails a read whose event chip-tool reported without an event number", async () => {
@@ -1417,8 +1540,7 @@ describe("ChipToolControllerAdapter", function () {
                 const failure = await rejectionOf(
                     node.subscribeEvents([EVENT_PATH], { ...INTERVALS, onUpdate: report => abandoned.push(report) }),
                 );
-                expect(failure, `exit status ${status}`).instanceOf(StatusResponseError);
-                expect(StatusResponseError.of(failure)?.code, `exit status ${status}`).equal(Status.UnsupportedAccess);
+                expectReceivedStatus(failure, Status.UnsupportedAccess, "failed (code 126)");
             }
 
             await delay(50);
@@ -1700,10 +1822,7 @@ describe("ChipToolControllerAdapter", function () {
                 const failure = await rejectionOf(
                     node.subscribe(PATH, { ...INTERVALS, onUpdate: value => abandoned.push(value) }),
                 );
-                expect(failure, `exit status ${status}`).instanceOf(StatusResponseError);
-                expect(StatusResponseError.of(failure)?.code, `exit status ${status}`).equal(
-                    Status.UnsupportedAttribute,
-                );
+                expectReceivedStatus(failure, Status.UnsupportedAttribute, "failed (code 134)");
             }
 
             // A subscription the device refused has no reports to pump, and a later report on its path
@@ -1734,6 +1853,95 @@ describe("ChipToolControllerAdapter", function () {
                 { endpoint: 1, cluster: ON_OFF.id, attribute: ON_OFF_ATTRIBUTE.id, value: true, version: 3 },
             ]);
             await waitFor(() => fake.armings.length === 1, "the adapter to park a report frame");
+        });
+
+        it("subscribes to several paths in one subscribe-by-id and names the attribute of each update", async () => {
+            const { ref, node } = await commissioned();
+            const updates = new Array<AttributeReadEntry>();
+
+            fake.reply = () => ({ results: [vendorIdValue(), report(1, true, 5)] });
+
+            // The update below is for the second path, so a subscription matching its first path alone misses it
+            expect(
+                await node.subscribeAttributes([VENDOR_ID_PATH, PATH], {
+                    ...INTERVALS,
+                    onUpdate: entry => updates.push(entry),
+                }),
+            ).deep.equal([
+                { ...VENDOR_ID_PATH, value: 0xfff1, version: undefined },
+                { ...PATH, value: true, version: 5 },
+            ]);
+            expect(fake.commands).deep.equal([
+                `any subscribe-by-id 0x28,0x6 0x2,0x0 1 10 ${ref} 0,1 --keepSubscriptions true`,
+            ]);
+            expect(updates).deep.equal([]);
+
+            await waitFor(() => fake.armings.length === 1, "the adapter to park a report frame");
+            expect(fake.pushReport(report(1, false))).equal("sent");
+            await waitFor(() => updates.length === 1, "the report to reach onUpdate");
+            expect(updates).deep.equal([{ ...PATH, value: false, version: undefined }]);
+        });
+
+        it("rejects a multi-path subscribe when the device rejected one of its concrete paths", async () => {
+            const { node } = await commissioned();
+
+            fake.reply = () => ({
+                results: [
+                    vendorIdValue(),
+                    {
+                        clusterId: ON_OFF.id,
+                        endpointId: 1,
+                        attributeId: requireId(ON_OFF_ATTRIBUTE.id, "onOff"),
+                        error: "UNSUPPORTED_ATTRIBUTE",
+                    },
+                ],
+                status: 0,
+            });
+
+            const failure = await rejectionOf(node.subscribeAttributes([VENDOR_ID_PATH, PATH], INTERVALS));
+            expectReceivedStatus(failure, Status.UnsupportedAttribute, "failed (code 134)");
+            expect(failure instanceof Error && failure.message).match(/subscribeAttributes {/);
+            await delay(50);
+            expect(fake.armings).deep.equal([]);
+        });
+
+        it("drops a wildcard path's statuses from a multi-path subscribe", async () => {
+            const { node } = await commissioned();
+
+            fake.reply = () => ({
+                results: [
+                    vendorIdValue(),
+                    report(1, true, 3),
+                    {
+                        clusterId: ON_OFF.id,
+                        endpointId: 2,
+                        attributeId: requireId(ON_OFF_ATTRIBUTE.id, "onOff"),
+                        error: "UNSUPPORTED_ACCESS",
+                    },
+                ],
+                status: 1,
+            });
+
+            expect(await node.subscribeAttributes([VENDOR_ID_PATH, { cluster: ON_OFF.id }], INTERVALS)).deep.equal([
+                { ...VENDOR_ID_PATH, value: 0xfff1, version: undefined },
+                { endpoint: 1, cluster: ON_OFF.id, attribute: ON_OFF_ATTRIBUTE.id, value: true, version: 3 },
+            ]);
+            await waitFor(() => fake.armings.length === 1, "the adapter to park a report frame");
+        });
+
+        it("refuses an empty path list and more paths than one chip-tool command carries", async () => {
+            const { node } = await commissioned();
+
+            expect(await rejectionOf(node.subscribeAttributes([], INTERVALS))).instanceOf(ImplementationError);
+            expect(
+                await rejectionOf(
+                    node.subscribeAttributes(
+                        Array.from({ length: 65 }, () => PATH),
+                        INTERVALS,
+                    ),
+                ),
+            ).instanceOf(UnsupportedByControllerError);
+            expect(fake.commands).deep.equal([]);
         });
 
         describe("a failed command whose reply carries a report", () => {
@@ -1790,6 +1998,28 @@ describe("ChipToolControllerAdapter", function () {
                 expect(await rejectionOf(node.writeAttributes([{ path: PATH, value: true }]))).instanceOf(
                     ChipToolCommandError,
                 );
+            });
+
+            it("fails a decommission beside a report on the second path of a multi-path subscription", async () => {
+                const { node } = await commissioned();
+
+                fake.reply = () => ({ results: [vendorIdValue(), report(1, true)] });
+                await node.subscribeAttributes([VENDOR_ID_PATH, PATH], INTERVALS);
+                await waitFor(() => fake.armings.length === 1, "the adapter to park a report frame");
+
+                // A status the subscription reports on its second path is no account of the decommission's failure
+                fake.reply = () => ({
+                    results: [
+                        {
+                            clusterId: ON_OFF.id,
+                            endpointId: 1,
+                            attributeId: requireId(ON_OFF_ATTRIBUTE.id, "onOff"),
+                            error: "UNSUPPORTED_ATTRIBUTE",
+                        },
+                    ],
+                    status: 1,
+                });
+                expect(await rejectionOf(node.decommission())).instanceOf(ChipToolCommandError);
             });
 
             it("fails a read of the subscribed path itself, whose value the report is not", async () => {
@@ -1921,6 +2151,18 @@ describe("ChipToolControllerAdapter", function () {
         expect(fake.commands).deep.equal([`pairing unpair ${ref}`]);
     });
 
+    it("reports a path status a pairing command carries as the device's", async () => {
+        const { node } = await commissioned();
+
+        fake.reply = () => ({
+            results: [
+                { clusterId: OPERATIONAL_CREDENTIALS.id, endpointId: 0, commandId: 0x0a, error: "INVALID_COMMAND" },
+            ],
+        });
+
+        expectReceivedStatus(await rejectionOf(node.decommission()), Status.InvalidCommand, "failed (code 133)");
+    });
+
     it("closes cleanly after a failed start, removing its storage directory", async () => {
         // An app dir with no chip-tool in it: start() creates the storage directory, then the spawn
         // fails, so close() has a partially started adapter to clean up
@@ -1945,7 +2187,7 @@ describe("ChipToolControllerAdapter", function () {
             expect(started.storageDirectory).equal(undefined);
             // The spawn failure, not a generic Error: a closed adapter must still say why it is unusable
             expect(await rejectionOf(started.commission({ passcode: 1, discriminator: 1 }))).instanceOf(
-                ChipToolExitError,
+                ChipToolStartupError,
             );
         } finally {
             await rm(emptyDir, { recursive: true, force: true });

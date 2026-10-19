@@ -10,6 +10,7 @@ import { CertificationDeclaration } from "#certificate/kinds/CertificationDeclar
 import { DclCertificateService } from "#dcl/DclCertificateService.js";
 import {
     Bytes,
+    ClosedError,
     Crypto,
     Diagnostic,
     Environment,
@@ -110,6 +111,24 @@ async function captureLogs(fn: () => Promise<unknown>) {
         dest.format = format;
         dest.write = write;
     }
+}
+
+/** Replaces the installed fetch mock by one that holds every request until `settle` is called. */
+function gateFetch() {
+    const mockedFetch = globalThis.fetch;
+    let started!: () => void;
+    const fetchStarted = new Promise<void>(resolve => (started = resolve));
+    let settle!: (failure?: Error) => void;
+    const gate = new Promise<Error | undefined>(resolve => (settle = resolve));
+    globalThis.fetch = async (...args: Parameters<typeof fetch>) => {
+        started();
+        const failure = await gate;
+        if (failure) {
+            throw failure;
+        }
+        return mockedFetch(...args);
+    };
+    return { fetchStarted, settle };
 }
 
 describe("DclCertificateService", () => {
@@ -366,6 +385,70 @@ describe("DclCertificateService", () => {
 
             const finalCallCount = fetchMock.getCallLog().length;
             expect(finalCallCount).to.equal(callCountAfterClose);
+        });
+
+        it("leaves no update timer running when closed during the startup fetch", async () => {
+            fetchMock.addResponse("/dcl/pki/root-certificates", mockDclRootCertificateList);
+            fetchMock.install();
+
+            const { fetchStarted, settle } = gateFetch();
+
+            const service = new DclCertificateService(environment, { updateInterval: Minutes.one });
+            await fetchStarted;
+
+            const closing = service.close();
+            settle();
+            await closing;
+
+            expect(MockTime.timerCountFor("DCL Certificate Update")).to.equal(0);
+        });
+
+        it("stops the timer and closes storage when the in-flight fetch fails during close()", async () => {
+            const storageService = new MockStorageService(environment);
+            fetchMock.addResponse("/dcl/pki/root-certificates", mockDclRootCertificateList);
+            fetchMock.install();
+
+            const service = new DclCertificateService(environment, { updateInterval: Minutes.one });
+            await service.construction;
+            expect(MockTime.timerCountFor("DCL Certificate Update")).to.equal(1);
+
+            const { fetchStarted, settle } = gateFetch();
+            const updating = service.update(true);
+            await fetchStarted;
+
+            const closing = service.close();
+            settle(new Error("network down"));
+            await closing;
+            await updating;
+
+            expect(MockTime.timerCountFor("DCL Certificate Update")).to.equal(0);
+            expect(storageService.store("certificates").initialized).to.equal(false);
+        });
+
+        it("resolves concurrent close() calls only after cleanup is done", async () => {
+            const storageService = new MockStorageService(environment);
+            fetchMock.addResponse("/dcl/pki/root-certificates", mockDclRootCertificateList);
+            fetchMock.install();
+
+            const service = new DclCertificateService(environment, { updateInterval: Minutes.one });
+            await service.construction;
+
+            const { fetchStarted, settle } = gateFetch();
+            const updating = service.update(true);
+            await fetchStarted;
+
+            let resolved = 0;
+            const first = service.close().then(() => resolved++);
+            const second = service.close().then(() => resolved++);
+            await MockTime.macrotask;
+            expect(resolved).to.equal(0);
+
+            settle();
+            await Promise.all([first, second, updating]);
+
+            expect(resolved).to.equal(2);
+            expect(MockTime.timerCountFor("DCL Certificate Update")).to.equal(0);
+            expect(storageService.store("certificates").initialized).to.equal(false);
         });
     });
 
@@ -1649,6 +1732,28 @@ describe("DclCertificateService", () => {
             expect(result).to.be.false;
 
             await service.close();
+        });
+
+        it("isRevoked rejects instead of answering not revoked while and after the service closes", async () => {
+            fetchMock.addResponse("/dcl/pki/root-certificates", mockDclRootCertificateList);
+            fetchMock.addResponse(
+                "/dcl/pki/certificates/MDAxGDAWBgNVBAMMD01hdHRlciBUZXN0IFBBQQ%3D%3D/78%3A5C%3AE7%3A05%3AB8%3A6B%3A8F%3A4E%3A6F%3AC7%3A93%3AAA%3A60%3ACB%3A43%3AEA%3A69%3A68%3A82%3AD5",
+                mockDclCertificateNoVID,
+            );
+            fetchMock.addResponse(
+                "/dcl/pki/certificates/MDAEFjAUBgorBgEEAYKefAIBDARGRkYx/6A%3AFD%3A22%3A77%3A1F%3A51%3A1F%3AEC%3ABF%3A16%3A41%3A97%3A67%3A10%3ADC%3ADC%3A31%3AA1%3A71%3A7E",
+                mockDclCertificateFFF1,
+            );
+            fetchMock.install();
+
+            const service = new DclCertificateService(environment);
+            await service.construction;
+
+            const closing = service.close();
+            await expect(service.isRevoked("AABBCCDD", "01AB")).rejectedWith(ClosedError);
+            await closing;
+
+            await expect(service.isRevoked("AABBCCDD", "01AB")).rejectedWith(ClosedError);
         });
 
         it("isRevoked fetches CRL on demand and checks serial", async () => {

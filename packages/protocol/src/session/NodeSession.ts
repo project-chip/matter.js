@@ -56,6 +56,7 @@ export class NodeSession extends SecureSession {
     readonly #encryptKey: Bytes;
     readonly #attestationKey: Bytes;
     #caseAuthenticatedTags: readonly CaseAuthenticatedTag[];
+    readonly #reportedParameters?: Partial<SessionParameters>;
     readonly supportsMRP = true;
     readonly type = SessionType.Unicast;
     readonly #suppressPeerLoss: boolean;
@@ -63,6 +64,7 @@ export class NodeSession extends SecureSession {
     #rolloverCloseTimer?: Timer;
     readonly #rolloverClose = new Mutex(this);
     #isPeerLost = false;
+    #closingForShutdown = false;
 
     // TODO - remove this; subscriptions should be owned by the peer, not the session
     readonly #subscriptions = new BasicSet<Subscription>();
@@ -91,7 +93,7 @@ export class NodeSession extends SecureSession {
             decryptKey,
             encryptKey,
             attestationKey,
-            sessionParameters: peerSessionParameters,
+            sessionParameters: peerSessionParameters ?? config.reportedSessionParameters,
         });
     }
 
@@ -110,6 +112,7 @@ export class NodeSession extends SecureSession {
             isInitiator,
             delayManagerRegistration,
             suppressPeerLoss = false,
+            reportedSessionParameters,
         } = config;
 
         super({
@@ -130,7 +133,15 @@ export class NodeSession extends SecureSession {
         this.#encryptKey = encryptKey;
         this.#attestationKey = attestationKey;
         this.#caseAuthenticatedTags = caseAuthenticatedTags ?? [];
+        this.#reportedParameters = SessionParameters.reported(reportedSessionParameters);
         this.#isInitiator = isInitiator;
+
+        if (this.maxTcpMessageSize !== undefined && this.#reportedParameters?.maxTcpMessageSize === 0) {
+            logger.info(
+                this.via,
+                `Peer announced a MAX_TCP_MESSAGE_SIZE of 0, using the default of ${this.maxTcpMessageSize} bytes`,
+            );
+        }
 
         logger.debug(
             `Created secure ${this.isPase ? "PASE" : "CASE"} session for fabric index ${fabric?.fabricIndex}`,
@@ -162,6 +173,14 @@ export class NodeSession extends SecureSession {
 
     get caseAuthenticatedTags() {
         return this.#caseAuthenticatedTags;
+    }
+
+    /**
+     * The session parameters the peer sent while establishing this session, without fallbacks.  Undefined when the peer
+     * sent none.  {@link parameters} holds the effective values.
+     */
+    get reportedParameters() {
+        return this.#reportedParameters;
     }
 
     get isPase(): boolean {
@@ -282,9 +301,20 @@ export class NodeSession extends SecureSession {
     override async closeSubscriptions(flush = false, currentExchange?: MessageExchange) {
         const subscriptions = [...this.#subscriptions]; // get all values because subscriptions will remove themselves when cancelled
         for (const subscription of subscriptions) {
-            await subscription.close(flush ? this : undefined, currentExchange);
+            const flushViaSession = flush ? this : undefined;
+            if (this.#closingForShutdown) {
+                // A subscription that joined during the shutdown flush is kept for re-establishment like the others
+                await subscription.closeForShutdown(flushViaSession);
+            } else {
+                await subscription.close(flushViaSession, currentExchange);
+            }
         }
         return subscriptions.length;
+    }
+
+    override async closeSubscriptionsForShutdown() {
+        this.#closingForShutdown = true;
+        return this.closeSubscriptions(true);
     }
 
     get closedByPeer() {
@@ -456,6 +486,9 @@ export namespace NodeSession {
 
         /** @see {@link NodeSession.suppressPeerLoss} */
         suppressPeerLoss?: boolean;
+
+        /** @see {@link NodeSession.reportedParameters} */
+        reportedSessionParameters?: SessionParameters.Config;
     }
 
     export interface Config extends CommonConfig {
@@ -471,6 +504,10 @@ export namespace NodeSession {
         salt: Bytes;
         isInitiator: boolean;
         isResumption: boolean;
+        /**
+         * The effective parameters of the peer when they differ from what it reported, e.g. with values the initiator
+         * already knew.  Defaults to {@link reportedSessionParameters}.
+         */
         peerSessionParameters?: SessionParameters.Config;
     }
 }

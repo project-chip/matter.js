@@ -41,7 +41,7 @@ import {
 } from "@matter/model";
 import { ReadScope, Val, type Read, type ReadResult } from "@matter/protocol";
 import { AttributeId, EndpointNumber } from "@matter/types";
-import type { ClusterId, CommandId } from "@matter/types";
+import type { ClusterId, CommandId, DataVersionFilter, EventNumber } from "@matter/types";
 import { Status } from "@matter/types";
 import { Descriptor } from "@matter/types/clusters/descriptor";
 import type { ClientEventEmitter } from "./ClientEventEmitter.js";
@@ -64,6 +64,14 @@ interface MutateContext {
      * the interaction because reads run concurrently with the sustained subscription's reports.
      */
     clustersWithData: Set<ClusterStructure>;
+    /** Events held back until the interaction's attribute data and structural changes are applied. */
+    delayedEvents: ReadResult.EventValue[];
+    /** Whether the interaction's events go to the node's event observers at this moment. */
+    emitsEvents(): boolean;
+    /** Called with the number of each event the interaction emits to the node's event observers. */
+    eventEmitted?: (number: EventNumber) => void;
+    /** The {@link ClientStructure.Epoch} of the cache the interaction's data versions belong to. */
+    epoch: ClientStructure.Epoch;
 }
 
 const DESCRIPTOR_ID = Descriptor.id;
@@ -116,13 +124,14 @@ export class ClientStructure {
     #storeFactory: ClientStructure.StoreFactory;
     #endpoints = new Map<EndpointNumber, EndpointStructure>();
     #node: Node;
-    #subscribedFabricFiltered?: boolean;
+    #cacheRecord: ClientStructure.CacheRecord;
+    #epoch = new ClientStructure.Epoch(true);
+    #adoptions = new Mutex(this);
     #pendingChanges = new Map<EndpointStructure, PendingChange>();
     #pendingStructureEvents = Array<PendingEvent>();
 
     // Keyed by cluster ID; a cluster's schema does not change for the life of the structure
     #attributeIds = new Map<ClusterId, Map<string, number>>();
-    #delayedClusterEvents = new Array<ReadResult.EventValue>();
 
     /**
      * Which endpoints have named each part in a `PartsList`, and what each of those lists contained.
@@ -145,6 +154,8 @@ export class ClientStructure {
     #composition = new Map<EndpointStructure, EndpointComposition>();
     #events: ClientStructureEvents;
     #changed = Observable<[void]>();
+    #applying = 0;
+    #localFailureKinds = new Set<unknown>();
     #commandFactory?: ClusterBehaviorType.CommandFactory;
 
     /**
@@ -152,10 +163,11 @@ export class ClientStructure {
      */
     eventEmitter?: ClientEventEmitter;
 
-    constructor(node: Node, storeFactory: ClientStructure.StoreFactory, options?: ClientStructure.Options) {
+    constructor(node: Node, storeFactory: ClientStructure.StoreFactory, options: ClientStructure.Options) {
         this.#node = node;
         this.#storeFactory = storeFactory;
-        this.#commandFactory = options?.commandFactory;
+        this.#commandFactory = options.commandFactory;
+        this.#cacheRecord = options.cacheRecord;
         this.#endpoints.set(node.number, {
             endpoint: node,
             clusters: new Map(),
@@ -165,6 +177,22 @@ export class ClientStructure {
 
     get changed() {
         return this.#changed;
+    }
+
+    /**
+     * True while structural changes are being applied and announced, when the endpoint tree and its behaviors may be
+     * only partly installed.
+     */
+    get isApplying() {
+        return this.#applying > 0;
+    }
+
+    /**
+     * Whether the peer has reported the Descriptor list `attribute` (DeviceTypeList or PartsList) of `endpoint`, from
+     * the wire or from the cache of an earlier report.
+     */
+    isDescriptorListReported(endpoint: EndpointNumber, attribute: AttributeId) {
+        return this.#endpoints.get(endpoint)?.reportedLists?.has(attribute) ?? false;
     }
 
     /**
@@ -208,6 +236,7 @@ export class ClientStructure {
             for (const id of knownBehaviors) {
                 const cluster = this.#clusterFor(endpoint, id);
                 this.#checkUnlistedSeedValues(cluster);
+                this.#noteReportedLists(endpoint, cluster, cluster.store.currentValues ?? {});
                 this.#synchronizeCluster(endpoint, cluster, new Set());
             }
         }
@@ -229,6 +258,7 @@ export class ClientStructure {
         }
 
         this.#emitPendingStructureEvents();
+        this.#announceApplied();
     }
 
     /**
@@ -242,16 +272,27 @@ export class ClientStructure {
     }
 
     /**
-     * Inject version filters into a Read or Subscribe request.
+     * Add a data version filter for each cluster whose cached data is current, so the peer omits those clusters from
+     * its response.  The caller's own filters are kept as given and its array is not modified; a cluster the caller
+     * filters gets no injected filter, so the peer sees exactly the caller's filter for that cluster.
      *
-     * A subscription does not report changes of an attribute with the changes-omitted quality, so the cached value of
-     * such an attribute is as of the last full report of its cluster, and a matching cluster version does not mean it
-     * is current. With {@link options.refreshChangesOmitted} a cluster in which the peer has such an attribute gets no
-     * filter, so the read returns the peer's current values.
+     * The cache holds only data of its own fabric filter ({@link cacheFabricFiltered}), so a request with the other
+     * fabric filter gets no filters.
+     *
+     * A subscription does not report changes of an attribute with the changes-omitted quality, so a matching version
+     * does not mean such an attribute is current.  With {@link options.refreshChangesOmitted} a cluster in which the
+     * peer has one gets no filter, so the response carries its current values.
      */
     injectVersionFilters<T extends Read>(request: T, options?: { refreshChangesOmitted?: boolean }): T {
         const scope = ReadScope(request);
-        let result = request;
+        if (!this.#epoch.trusted || scope.isFabricFiltered !== this.cacheFabricFiltered) {
+            return request;
+        }
+
+        let filters: DataVersionFilter[] | undefined;
+        const callerFiltered = new Set(
+            request.dataVersionFilters?.map(({ path: { endpointId, clusterId } }) => `${endpointId}/${clusterId}`),
+        );
 
         for (const {
             endpoint: { number: endpointId },
@@ -266,52 +307,131 @@ export class ClientStructure {
                     continue;
                 }
 
-                if (options?.refreshChangesOmitted && hasChangesOmittedAttribute(cluster)) {
+                if (
+                    version === Datasource.UNKNOWN_VERSION ||
+                    callerFiltered.has(`${endpointId}/${clusterId}`) ||
+                    (options?.refreshChangesOmitted && hasChangesOmittedAttribute(cluster))
+                ) {
                     continue;
                 }
 
-                if (version === Datasource.UNKNOWN_VERSION) {
-                    continue;
-                }
-
-                if (result === request) {
-                    result = { ...request };
-                }
-
-                if (result.dataVersionFilters === undefined) {
-                    result.dataVersionFilters = [];
-                }
-
-                result.dataVersionFilters.push({ path: { endpointId, clusterId }, dataVersion: version });
+                filters ??= [...(request.dataVersionFilters ?? [])];
+                filters.push({ path: { endpointId, clusterId }, dataVersion: version });
             }
         }
 
-        return result;
+        return filters === undefined ? request : { ...request, dataVersionFilters: filters };
+    }
+
+    /**
+     * The fabric filter of the interactions the cache takes data from.  Only interactions with this filter update
+     * cached values and data versions, and only they get versions injected.  Defaults to fabric filtered until
+     * {@link adoptFabricFilter} recorded one.
+     */
+    get cacheFabricFiltered() {
+        return this.#cacheRecord.cacheFabricFiltered ?? true;
+    }
+
+    /**
+     * The epoch an interaction starting now belongs to.  An interaction records the data versions it reports only if
+     * its epoch is still the current one and trusted when the data is applied.
+     */
+    get epoch() {
+        return this.#epoch;
+    }
+
+    /**
+     * Make {@link fabricFiltered} the fabric filter of the cache.  Calls run one after the other.
+     *
+     * Data versions do not depend on the fabric filter, but cached values of fabric-scoped data do.  So when the cache
+     * was filled under the other filter, every cached data version becomes unknown while values stay, and the next
+     * full report refreshes them.  A cache without a recorded filter is trusted to hold data of the first filter
+     * adopted, which is the configured default subscription's, so that filter is recorded and the versions stay.
+     *
+     * Each change of the filter starts a new {@link epoch}.  An interaction that started before the change records no
+     * data version; its data is still applied if it was received before the change or matches the new filter, and
+     * data of the old filter received after the change is dropped.  While the versions are forgotten the epoch is not
+     * trusted, so no version is recorded or injected.  Rejects if storage refuses a write; the old record then stays,
+     * so the next attempt forgets the versions again.
+     */
+    adoptFabricFilter(fabricFiltered: boolean) {
+        return this.#adoptions.produce(() => this.#adoptFabricFilter(fabricFiltered));
+    }
+
+    async #adoptFabricFilter(fabricFiltered: boolean) {
+        const record = this.#cacheRecord;
+        const recorded = record.cacheFabricFiltered;
+        if (recorded === fabricFiltered) {
+            return;
+        }
+
+        if (recorded === undefined) {
+            if (this.cacheFabricFiltered !== fabricFiltered) {
+                this.#epoch = new ClientStructure.Epoch(true);
+            }
+            await record.recordCacheFabricFiltered(fabricFiltered);
+            return;
+        }
+
+        this.#epoch = new ClientStructure.Epoch(false);
+        try {
+            for (const { clusters } of this.#endpoints.values()) {
+                for (const { store } of clusters.values()) {
+                    // Also when unknown in memory only: storage can still hold a version of the old filter
+                    await store.forgetVersion();
+                }
+            }
+
+            // Written last: if forgetting a version fails, the old record makes the next attempt forget them again
+            await record.recordCacheFabricFiltered(fabricFiltered);
+        } finally {
+            this.#epoch = new ClientStructure.Epoch(true);
+        }
     }
 
     /**
      * Update the node structure by applying attribute changes from a Matter protocol interaction.
+     *
+     * The interaction's events also go to the node's event observers while {@link options.emitEvents} is true or
+     * returns true, and {@link options.eventEmitted} receives the number of each.  {@link options.epoch} defaults to
+     * the current {@link epoch}.
+     *
+     * A local failure to apply data, persist it or notify an event observer is logged and does not stop the processing
+     * of the interaction's other data and events; it never rejects the iteration.  Failures of {@link changes} itself
+     * and of applying structural changes still reject.
      */
-    async *mutate(request: Read, changes: ReadResult) {
+    async *mutate(
+        request: Read,
+        changes: ReadResult,
+        options?: {
+            emitEvents?: boolean | (() => boolean);
+            eventEmitted?: (number: EventNumber) => void;
+            epoch?: ClientStructure.Epoch;
+        },
+    ) {
+        const emitEvents = options?.emitEvents ?? false;
+
         // We collect updates and only apply when we transition clusters
         let currentUpdates: AttributeUpdates | undefined;
 
         // Serial FIFO for deferred persist/emit so Status.Success is not gated on internal and consumer data processing.
         // Ordering is preserved by insertion order; the Mutex runs one job at a time.
         const queue = new Mutex(this);
-        const jobErrors = new Array<unknown>();
         let pendingJobs = 0;
         const q: MutateContext = {
             endpointsWithData: new Set<EndpointNumber>(),
             clustersWithData: new Set<ClusterStructure>(),
+            delayedEvents: new Array<ReadResult.EventValue>(),
+            emitsEvents: typeof emitEvents === "function" ? emitEvents : () => emitEvents,
+            eventEmitted: options?.eventEmitted,
+            epoch: options?.epoch ?? this.#epoch,
             enqueue: job => {
                 pendingJobs++;
                 queue.run(async () => {
                     try {
                         await job();
                     } catch (error) {
-                        jobErrors.push(error);
-                        logger.warn("Deferred data report job failed:", error);
+                        this.#localFailed(error);
                     } finally {
                         pendingJobs--;
                     }
@@ -357,7 +477,7 @@ export class ClientStructure {
             // The last cluster still needs its changes applied
             if (currentUpdates) {
                 const toFlush = currentUpdates;
-                q.enqueue(() => this.#updateCluster(toFlush, q.clustersWithData));
+                q.enqueue(() => this.#applyUpdates(toFlush, q));
             }
         } finally {
             // Drain deferred jobs on every exit path (normal completion, consumer break/throw, or a `changes`
@@ -366,17 +486,30 @@ export class ClientStructure {
             await queue;
         }
 
-        if (jobErrors.length) {
-            logger.warn(`${jobErrors.length} deferred data report job(s) failed during interaction`);
-        }
-
         // We don't apply structural changes until we've processed all attribute data if a.) listeners might otherwise
         // see partially initialized endpoints, or b.) the change requires an async operation
-        await this.#applyPendingChanges();
+        await this.#applyAndAnnounce();
+        for (const occurrence of q.delayedEvents) {
+            try {
+                await this.#emitOccurrence(occurrence, q);
+            } catch (error) {
+                this.#localFailed(error);
+            }
+        }
+    }
 
-        // Likewise, we don't emit events until we've applied all structural changes
-        this.#emitPendingStructureEvents();
-        await this.#emitPendingEvents();
+    /**
+     * A peer can trigger the same local failure with every report, so only the first of each kind is a warning; a
+     * different kind, such as storage refusing writes after an observer failed, warns again.
+     */
+    #localFailed(error: unknown) {
+        const kind = error instanceof Error ? error.constructor : typeof error;
+        if (this.#localFailureKinds.has(kind)) {
+            logger.debug(`Processing data reported by ${this.#node} failed locally:`, error);
+            return;
+        }
+        this.#localFailureKinds.add(kind);
+        logger.warn(`Processing data reported by ${this.#node} failed locally; repeats log at debug level:`, error);
     }
 
     /**
@@ -409,8 +542,12 @@ export class ClientStructure {
                     this.#pruneUnlistedAttributes(cluster, values);
                     this.#invalidateOnDefinitionChange(cluster, values);
 
-                    await cluster.store.externalSet(values);
+                    const { persistFailure } = await cluster.store.externalSet(values);
+                    this.#noteReportedLists(endpoint, cluster, values);
                     this.#synchronizeCluster(endpoint, cluster, clustersWithData);
+                    if (persistFailure !== undefined) {
+                        this.#localFailed(persistFailure);
+                    }
                     break;
                 }
 
@@ -425,38 +562,7 @@ export class ClientStructure {
             }
         }
 
-        // Apply pending structural changes
-        await this.#applyPendingChanges();
-
-        this.#emitPendingStructureEvents();
-    }
-
-    /**
-     * Determines if the subscription is fabric filtered.
-     */
-    get subscribedFabricFiltered(): boolean {
-        if (this.#subscribedFabricFiltered === undefined) {
-            this.#subscribedFabricFiltered = true;
-
-            // Attempt to read from network behavior if available
-            try {
-                const state = this.#node.state as Record<string, unknown>;
-                const network = state?.network as undefined | Record<string, unknown>;
-                this.#subscribedFabricFiltered = ClientStructure.isFabricFiltered(
-                    network?.defaultSubscription as undefined | object,
-                );
-
-                const events = this.#node.events as Record<string, unknown>;
-                const networkEvents = events?.network as undefined | Record<string, unknown>;
-                const changedEvent = networkEvents?.defaultSubscription$Changed as undefined | Observable;
-                changedEvent?.on((newSubscription: undefined | object) => {
-                    this.#subscribedFabricFiltered = ClientStructure.isFabricFiltered(newSubscription);
-                });
-            } catch {
-                // Not a ClientNode or network behavior not available; default to true
-            }
-        }
-        return this.#subscribedFabricFiltered;
+        await this.#applyAndAnnounce();
     }
 
     #mutateAttribute(
@@ -465,8 +571,8 @@ export class ClientStructure {
         currentUpdates: undefined | AttributeUpdates,
         q: MutateContext,
     ): AttributeUpdates | undefined {
-        // We only store values when an initial subscription is defined and the fabric filter matches
-        if (this.subscribedFabricFiltered !== scope.isFabricFiltered) {
+        // We only store values when the fabric filter matches the cache's
+        if (scope.isFabricFiltered !== this.cacheFabricFiltered) {
             return currentUpdates;
         }
 
@@ -479,7 +585,7 @@ export class ClientStructure {
         // If we are building updates to a cluster and the cluster/endpoint changes, apply the current update set
         if (currentUpdates && (currentUpdates.endpointId !== endpointId || currentUpdates.clusterId !== clusterId)) {
             const toFlush = currentUpdates;
-            q.enqueue(() => this.#updateCluster(toFlush, q.clustersWithData));
+            q.enqueue(() => this.#applyUpdates(toFlush, q));
             currentUpdates = undefined;
         }
 
@@ -504,8 +610,7 @@ export class ClientStructure {
     }
 
     #emitEvent(occurrence: ReadResult.EventValue, q: MutateContext): void {
-        const emitter = this.eventEmitter;
-        if (!emitter) {
+        if (!this.eventEmitter) {
             return;
         }
 
@@ -521,9 +626,9 @@ export class ClientStructure {
             q.endpointsWithData.has(endpointId) ||
             this.#pendingChanges?.has(endpoint)
         ) {
-            this.#delayedClusterEvents.push(occurrence);
-        } else {
-            q.enqueue(() => Promise.resolve(emitter(occurrence)));
+            q.delayedEvents.push(occurrence);
+        } else if (q.emitsEvents()) {
+            q.enqueue(() => this.#emitOccurrence(occurrence, q));
         }
     }
 
@@ -564,6 +669,15 @@ export class ClientStructure {
         delete cluster.pendingDelete;
     }
 
+    async #applyUpdates(attrs: AttributeUpdates, q: MutateContext) {
+        // Data of an interaction that began before a fabric filter switch is still applied, but its version does not
+        // describe the cache under the current filter
+        if (q.epoch !== this.#epoch || !q.epoch.trusted) {
+            attrs.values.set(DatasourceCache.VERSION_KEY, Datasource.UNKNOWN_VERSION);
+        }
+        await this.#updateCluster(attrs, q.clustersWithData);
+    }
+
     /**
      * Apply new attribute values for a specific endpoint / cluster.
      *
@@ -582,8 +696,12 @@ export class ClientStructure {
         this.#pruneUnlistedAttributes(cluster, attrs.values);
         this.#invalidateOnDefinitionChange(cluster, attrs.values);
 
-        await cluster.store.externalSet(attrs.values);
+        const { persistFailure } = await cluster.store.externalSet(attrs.values);
+        this.#noteReportedLists(endpoint, cluster, attrs.values);
         this.#synchronizeCluster(endpoint, cluster, clustersWithData);
+        if (persistFailure !== undefined) {
+            this.#localFailed(persistFailure);
+        }
     }
 
     /**
@@ -845,6 +963,24 @@ export class ClientStructure {
                 attrs = cluster.store.currentValues ?? {};
             }
             this.#synchronizeDescriptor(structure, attrs, clustersWithData);
+        }
+    }
+
+    #noteReportedLists(structure: EndpointStructure, cluster: ClusterStructure, values: Val.StructMap | Val.Struct) {
+        if (cluster.id !== Descriptor.id) {
+            return;
+        }
+
+        const lists = [
+            [DEVICE_TYPE_LIST_ATTR_ID, DEVICE_TYPE_LIST_ATTR_NAME],
+            [PARTS_LIST_ATTR_ID, PARTS_LIST_ATTR_NAME],
+        ] as const;
+        for (const [id, name] of lists) {
+            const value =
+                values instanceof Map ? (values.get(id) ?? values.get(name)) : getStoreValue(values, id, name);
+            if (value !== undefined) {
+                (structure.reportedLists ??= new Set()).add(id);
+            }
         }
     }
 
@@ -1303,16 +1439,17 @@ export class ClientStructure {
             placedAny = false;
             for (const [part, claimants] of [...this.#partClaims]) {
                 // Nothing is reparented: an endpoint the peer has already placed keeps its parent, and
-                // Matter has no operation that would move it (Core § 9.2.3's single-parent requirement)
+                // Matter has no operation that would move it (Core § 9.2.7.3's single-parent requirement)
                 if (this.#ownerOf(part) !== undefined) {
                     this.#partClaims.delete(part);
                     continue;
                 }
 
-                const owner = this.#ownerFor(part, claimants);
-                if (owner === undefined || !this.#isPlaced(owner)) {
+                const decision = this.#ownerFor(claimants);
+                if (decision === undefined || !this.#isPlaced(decision.owner)) {
                     continue;
                 }
+                const { owner, contenders } = decision;
 
                 this.#partClaims.delete(part);
 
@@ -1321,6 +1458,15 @@ export class ClientStructure {
                 // an endpoint that scan has already passed over.
                 if (!this.#isOnTheNode(part)) {
                     continue;
+                }
+
+                if (contenders.length) {
+                    logger.warn(
+                        `Taking ${owner.endpoint} as the parent of ${part.endpoint}:`,
+                        `the peer also named it a part of ${contenders
+                            .map(claimant => claimant.endpoint.toString())
+                            .join(", ")}, and an endpoint has a single parent`,
+                    );
                 }
 
                 part.pendingOwner = owner;
@@ -1341,7 +1487,7 @@ export class ClientStructure {
     /**
      * Whether the peer's root names `structure`, so far as the root has said.
      *
-     * A root endpoint composes its `PartsList` of every descendant (Matter Core § 9.2.3), so an
+     * A root endpoint composes its `PartsList` of every descendant (Matter Core § 9.2.8), so an
      * endpoint the root does not name is not a descendant of the node at all — whether it has gone
      * away or was never part of the tree the peer describes. Until the root has reported a list there
      * is nothing to judge against and every endpoint is taken as present.
@@ -1356,8 +1502,11 @@ export class ClientStructure {
         return rootParts === undefined || rootParts.has(structure.endpoint.number);
     }
 
-    /** The claimant that owns `part`, or `undefined` while that cannot be told from what has arrived. */
-    #ownerFor(part: EndpointStructure, claimants: Set<EndpointStructure>) {
+    /**
+     * The claimant that owns a part, with the claimants that conflict with that choice, or `undefined` while that
+     * cannot be told from what has arrived.
+     */
+    #ownerFor(claimants: Set<EndpointStructure>) {
         const ordinary = new Array<EndpointStructure>();
         const fullFamily = new Array<EndpointStructure>();
         for (const claimant of claimants) {
@@ -1378,36 +1527,71 @@ export class ClientStructure {
             (this.#isFullFamily(claimant) ? fullFamily : ordinary).push(claimant);
         }
 
-        if (ordinary.length) {
-            if (ordinary.length > 1) {
-                logger.warn(
-                    `Taking ${ordinary[0].endpoint} as the parent of ${part.endpoint}:`,
-                    `the peer also named it a part of ${ordinary
-                        .slice(1)
-                        .map(claimant => claimant.endpoint.toString())
-                        .join(", ")}, and an endpoint has a single parent`,
-                );
-            }
-            return ordinary[0];
+        // A list of children names nothing further down, so a claimant composing one is closer to the part than any
+        // full-family claimant
+        const candidates = ordinary.length ? ordinary : fullFamily;
+        if (!candidates.length) {
+            return undefined;
         }
 
-        // The innermost full-family claimant, which is the one the others also name
-        const innermost = fullFamily.find(
-            candidate =>
-                !fullFamily.some(
-                    other => other !== candidate && this.#partsListOf.get(candidate)?.has(other.endpoint.number),
-                ),
-        );
+        const owner = this.#closestClaimant(candidates, [...ordinary, ...fullFamily]);
+        if (!ordinary.length && !this.#partsAccountedFor(owner)) {
+            return undefined;
+        }
 
-        return innermost !== undefined && this.#partsAccountedFor(innermost) ? innermost : undefined;
+        // Every other full-family claimant of a valid peer is an ancestor of the owner and names it
+        const contenders = ordinary.length
+            ? ordinary.filter(claimant => claimant !== owner)
+            : fullFamily.filter(
+                  claimant => claimant !== owner && !this.#partsListOf.get(claimant)?.has(owner.endpoint.number),
+              );
+
+        return { owner, contenders };
+    }
+
+    /**
+     * The candidate closest to the part they all claim: the one naming the fewest of the other claimants, then the one
+     * with the shorter `PartsList`, then the one with the lower endpoint number.
+     *
+     * The choice depends on the lists, not on the order they arrived in.  The matterjs-server Python client ranks by
+     * the same criteria.
+     */
+    #closestClaimant(candidates: EndpointStructure[], claimants: EndpointStructure[]) {
+        const rank = (candidate: EndpointStructure) => {
+            const parts = this.#partsListOf.get(candidate);
+            return [
+                claimants.filter(other => other !== candidate && parts?.has(other.endpoint.number)).length,
+                parts?.size ?? 0,
+                candidate.endpoint.number,
+            ];
+        };
+
+        let closest = candidates[0];
+        let closestRank = rank(closest);
+        for (const candidate of candidates.slice(1)) {
+            const candidateRank = rank(candidate);
+            const index = candidateRank.findIndex((value, i) => value !== closestRank[i]);
+            if (index !== -1 && candidateRank[index] < closestRank[index]) {
+                closest = candidate;
+                closestRank = candidateRank;
+            }
+        }
+        return closest;
     }
 
     /**
      * Whether every endpoint `structure` names has reported a `PartsList` of its own, which is what
-     * makes the parts it names and nobody else's its own children.
+     * makes the parts it names and nobody else's its own children.  An endpoint the root no longer
+     * names reports nothing more, so it is not waited for.
      */
     #partsAccountedFor(structure: EndpointStructure) {
+        const root = this.#endpoints.get(ROOT_ENDPOINT_NUMBER);
+        const rootParts = root === undefined ? undefined : this.#partsListOf.get(root);
         for (const partNo of this.#partsListOf.get(structure) ?? []) {
+            if (rootParts !== undefined && !rootParts.has(partNo)) {
+                continue;
+            }
+
             const part = this.#endpoints.get(partNo);
             if (part === undefined || this.#partsListOf.get(part) === undefined) {
                 return false;
@@ -1547,38 +1731,62 @@ export class ClientStructure {
                 }
             }
         }
-        this.#changed.emit();
     }
 
-    async #emitPendingEvents() {
-        if (!this.eventEmitter) {
+    /**
+     * Apply pending structural changes, then emit their events, so no listener sees a partly applied structure.
+     */
+    async #applyAndAnnounce() {
+        // A count because interactions are not serialized and one may apply while another awaits
+        this.#applying++;
+        try {
+            await this.#applyPendingChanges();
+            this.#emitPendingStructureEvents();
+        } finally {
+            this.#applying--;
+        }
+        this.#announceApplied();
+    }
+
+    #announceApplied() {
+        this.#changed.emit();
+        this.#events.emitStructureApplied(this.#node);
+    }
+
+    async #emitOccurrence(occurrence: ReadResult.EventValue, q: MutateContext) {
+        if (!this.eventEmitter || !q.emitsEvents()) {
             return;
         }
 
-        const clusterEvents = this.#delayedClusterEvents;
-        this.#delayedClusterEvents = [];
-        for (const occurrence of clusterEvents) {
-            await this.eventEmitter(occurrence);
+        // A report can still arrive while the node is deleted, also when a leave event triggered the deletion
+        if (this.#node.lifecycle.isGone) {
+            logger.debug(
+                `Ignoring event ${occurrence.path.clusterId}/${occurrence.path.eventId} for ${this.#node} because it is closing, being deleted or crashed`,
+            );
+            return;
         }
+
+        // Counted before the emit, so a successor starting while observers run does not request the event again
+        q.eventEmitted?.(occurrence.number);
+        await this.eventEmitter(occurrence);
     }
 }
 
 export namespace ClientStructure {
     /**
-     * Whether the sustained subscription `defaultSubscription` describes is fabric filtered. The cache stores values
-     * only from interactions with the same fabric filter, so a read meant to update it has to use this one.
+     * A period in which the cache's fabric filter does not change.  Data versions are recorded only for interactions
+     * of the current epoch, and only if it is trusted, which it is not while versions are being forgotten.
      */
-    export function isFabricFiltered(defaultSubscription: undefined | object): boolean {
-        if (defaultSubscription === undefined) {
-            return true;
-        }
-        if ("isFabricFiltered" in defaultSubscription) {
-            return defaultSubscription.isFabricFiltered !== false;
-        }
-        if ("fabricFiltered" in defaultSubscription) {
-            return defaultSubscription.fabricFiltered !== false;
-        }
-        return true;
+    export class Epoch {
+        constructor(readonly trusted: boolean) {}
+    }
+
+    /**
+     * The persisted record of the fabric filter the cache was filled under.
+     */
+    export interface CacheRecord {
+        readonly cacheFabricFiltered?: boolean;
+        recordCacheFabricFiltered(fabricFiltered: boolean): Promise<void>;
     }
 
     /**
@@ -1595,6 +1803,11 @@ export namespace ClientStructure {
          * Factory for command implementations used when generating peer behaviors.
          */
         commandFactory?: ClusterBehaviorType.CommandFactory;
+
+        /**
+         * Where the fabric filter of the cache is recorded.
+         */
+        cacheRecord: CacheRecord;
     }
 }
 
@@ -1608,6 +1821,12 @@ interface EndpointStructure {
     pendingOwner?: EndpointStructure;
     endpoint: Endpoint;
     clusters: Map<ClusterId | string, ClusterStructure>;
+
+    /**
+     * The Descriptor lists the peer has reported for this endpoint.  A mandatory list it has not reported still reads
+     * as empty from the behavior's state.
+     */
+    reportedLists?: Set<AttributeId>;
 }
 
 interface ClusterStructure extends Partial<PeerBehavior.DiscoveredClusterShape> {

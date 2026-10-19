@@ -5,7 +5,13 @@
  */
 
 import { SupportedTransportsBitmap, SupportedTransportsSchema } from "#common/SupportedTransportsBitmap.js";
-import { UINT16_MAX } from "@matter/general";
+import {
+    DEFAULT_MAX_TCP_MESSAGE_SIZE,
+    ImplementationError,
+    MAX_UDP_MESSAGE_SIZE,
+    UINT16_MAX,
+    UINT32_MAX,
+} from "@matter/general";
 import { Specification } from "@matter/model";
 import { SessionIntervals } from "./SessionIntervals.js";
 
@@ -40,16 +46,18 @@ export interface SessionParameters extends SessionIntervals {
 }
 
 export function SessionParameters(config?: SessionParameters.Config): SessionParameters {
-    // Decode supported transports if supplied as a number
-    let supportedTransports = config?.supportedTransports;
-    if (typeof supportedTransports === "number") {
-        supportedTransports = SupportedTransportsSchema.decode(supportedTransports);
-    }
-    supportedTransports ??= SessionParameters.fallbacks.supportedTransports;
+    const {
+        supportedTransports: reportedTransports,
+        maxPathsPerInvoke,
+        maxTcpMessageSize: reportedMaxTcpMessageSize,
+        ...reported
+    } = SessionParameters.reported(config) ?? {};
 
     // TCP is only honored for Matter 1.5.0+ peers; clear it for older or unknown spec versions so supportedTransports
     // is the single source of truth for transport selection.
-    const specificationVersion = config?.specificationVersion ?? SessionParameters.fallbacks.specificationVersion;
+    let supportedTransports: SessionParameters.SupportedTransports =
+        reportedTransports ?? SessionParameters.fallbacks.supportedTransports;
+    const specificationVersion = reported.specificationVersion ?? SessionParameters.fallbacks.specificationVersion;
     if (specificationVersion < MIN_TCP_SPEC_VERSION) {
         supportedTransports = { tcpClient: false, tcpServer: false };
     }
@@ -58,36 +66,76 @@ export function SessionParameters(config?: SessionParameters.Config): SessionPar
     // supported
     let maxTcpMessageSize: number | undefined;
     if (supportedTransports.tcpClient || supportedTransports.tcpServer) {
-        maxTcpMessageSize = config?.maxTcpMessageSize;
-        maxTcpMessageSize ??= SessionParameters.fallbacks.maxTcpMessageSize;
-    }
-
-    // Ensure that undefined values in config are not overriding the fallbacks
-    const sanitizedConfig: Record<string, unknown> = { ...config };
-    for (const key of Object.keys(sanitizedConfig)) {
-        if ((sanitizedConfig as any)[key] === undefined) {
-            delete sanitizedConfig[key];
-        }
+        maxTcpMessageSize =
+            reportedMaxTcpMessageSize === undefined || reportedMaxTcpMessageSize === 0
+                ? SessionParameters.fallbacks.maxTcpMessageSize
+                : reportedMaxTcpMessageSize;
     }
 
     // The MaxPathsPerInvoke attribute defines zero as "assume one", and the MAX_PATHS_PER_INVOKE session parameter
     // carries that same attribute as a uint16. Persisted parameters reach us untyped, so anything the wire could not
     // have carried takes the fallback.
-    const maxPathsPerInvoke = sanitizedConfig.maxPathsPerInvoke;
-    if (
-        typeof maxPathsPerInvoke !== "number" ||
-        !Number.isInteger(maxPathsPerInvoke) ||
-        maxPathsPerInvoke < 1 ||
-        maxPathsPerInvoke > UINT16_MAX
-    ) {
-        delete sanitizedConfig.maxPathsPerInvoke;
-    }
+    const validMaxPathsPerInvoke =
+        typeof maxPathsPerInvoke === "number" &&
+        Number.isInteger(maxPathsPerInvoke) &&
+        maxPathsPerInvoke >= 1 &&
+        maxPathsPerInvoke <= UINT16_MAX;
 
-    return { ...SessionParameters.fallbacks, ...sanitizedConfig, supportedTransports, maxTcpMessageSize };
+    return {
+        ...SessionParameters.fallbacks,
+        ...reported,
+        ...(validMaxPathsPerInvoke ? { maxPathsPerInvoke } : {}),
+        supportedTransports,
+        maxTcpMessageSize,
+    };
 }
 
 export namespace SessionParameters {
     export interface SupportedTransports extends Partial<SupportedTransportsBitmap> {}
+
+    /**
+     * Normalize the session parameters a peer sent without filling fallbacks: decode the supported transports and drop
+     * values the peer left out.  Undefined when nothing remains.
+     */
+    export function reported(config?: Config): Partial<SessionParameters> | undefined {
+        if (config === undefined) {
+            return undefined;
+        }
+
+        const { supportedTransports, ...rest } = config;
+        const result: Partial<SessionParameters> = {};
+        for (const [key, value] of Object.entries(rest)) {
+            if (value !== undefined) {
+                Object.assign(result, { [key]: value });
+            }
+        }
+        if (supportedTransports !== undefined) {
+            result.supportedTransports =
+                typeof supportedTransports === "number"
+                    ? SupportedTransportsSchema.decode(supportedTransports)
+                    : supportedTransports;
+        }
+        return Object.keys(result).length ? result : undefined;
+    }
+
+    /**
+     * Validate a MAX_TCP_MESSAGE_SIZE we configure for ourselves: a whole number from {@link MAX_UDP_MESSAGE_SIZE} to
+     * the uint32 maximum of the session parameter field.
+     *
+     * @param name names the setting in the error message
+     * @throws ImplementationError for any other value
+     */
+    export function assertMaxTcpMessageSize(maxTcpMessageSize: number, name = "Max TCP Message Size") {
+        if (
+            !Number.isInteger(maxTcpMessageSize) ||
+            maxTcpMessageSize < MAX_UDP_MESSAGE_SIZE ||
+            maxTcpMessageSize > UINT32_MAX
+        ) {
+            throw new ImplementationError(
+                `${name} of ${maxTcpMessageSize} is not a whole number from ${MAX_UDP_MESSAGE_SIZE} to ${UINT32_MAX}`,
+            );
+        }
+    }
 
     export interface Config extends Partial<Omit<SessionParameters, "supportedTransports">> {
         supportedTransports?: number | SupportedTransports;
@@ -130,7 +178,13 @@ export namespace SessionParameters {
          */
         supportedTransports: {},
 
-        maxTcpMessageSize: 64000,
+        /**
+         * Fallback value for MAX_TCP_MESSAGE_SIZE when a TCP-capable peer does not provide it, or reports zero.
+         * Zero cannot be a real limit; a stack sends it when it announces TCP support without setting a size.
+         *
+         * @see {@link MatterSpecification.v161.Core} § 4.13.1
+         */
+        maxTcpMessageSize: DEFAULT_MAX_TCP_MESSAGE_SIZE,
     };
 
     /**

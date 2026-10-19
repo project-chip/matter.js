@@ -19,6 +19,7 @@ import {
     Logger,
     MatterError,
     Minutes,
+    StorageError,
     StorageService,
 } from "@matter/general";
 import { DeviceSoftwareVersionModelDclSchema, VendorId } from "@matter/types";
@@ -88,6 +89,11 @@ export class DclOtaUpdateService {
         return this.#construction;
     }
 
+    /** Whether the service runs {@link DclOtaUpdateService.Options.offline}. */
+    get offline() {
+        return this.#options?.offline ?? false;
+    }
+
     constructor(environment: Environment, options?: DclOtaUpdateService.Options) {
         environment.root.set(DclOtaUpdateService, this);
         this.#crypto = environment.get(Crypto);
@@ -97,6 +103,7 @@ export class DclOtaUpdateService {
             Diagnostic.dict({
                 prod: options?.productionDclConfig?.url ?? DclConfig.production.url,
                 test: options?.testDclConfig?.url ?? DclConfig.test.url,
+                flags: Diagnostic.asFlags({ offline: options?.offline }),
             }),
         );
 
@@ -180,6 +187,10 @@ export class DclOtaUpdateService {
         isProduction: boolean;
         targetSoftwareVersion?: number;
     }) {
+        if (this.#options?.offline) {
+            return;
+        }
+
         const { vendorId, productId, currentSoftwareVersion, isProduction, targetSoftwareVersion } = options;
 
         const config = isProduction
@@ -275,6 +286,8 @@ export class DclOtaUpdateService {
      * ignoring other newer versions.
      * If isProduction flag is specified, it is exactly used to find updates. Leave that flag undefined to find both
      * test and production updates.
+     * When the service is {@link DclOtaUpdateService.Options.offline} the DCL is not asked, so only stored updates
+     * (`includeStoredUpdates`) can be found.
      */
     async checkForUpdate(options: {
         vendorId: number;
@@ -413,6 +426,30 @@ export class DclOtaUpdateService {
     /**
      * Location of the metadata for an image, given by its filename or by its image contexts and key.
      */
+    /**
+     * Validate a stored image against the update info. A storage or I/O error makes the image "unreadable", not
+     * "invalid", because it says nothing about the image content.
+     */
+    async #checkStoredImage(
+        updateInfo: OtaUpdateInfo,
+        fileDesignator: PersistedFileDesignator,
+    ): Promise<{ kind: "valid" } | { kind: "invalid" } | { kind: "unreadable"; cause: unknown }> {
+        try {
+            await this.#verifyUpdate(updateInfo, fileDesignator);
+            return { kind: "valid" };
+        } catch (error) {
+            if (!(error instanceof MatterError) || error instanceof StorageError) {
+                logger.info(
+                    `Cannot read stored OTA image ${fileDesignator.text} to validate it`,
+                    Diagnostic.errorMessage(asError(error)),
+                );
+                return { kind: "unreadable", cause: error };
+            }
+            logger.info(`Existing OTA image ${fileDesignator.text} failed validation`, Diagnostic.errorMessage(error));
+            return { kind: "invalid" };
+        }
+    }
+
     #metadataLocation(filenameOrContexts: string | readonly string[], key?: string) {
         let imageContexts: readonly string[];
         if (typeof filenameOrContexts === "string") {
@@ -566,6 +603,14 @@ export class DclOtaUpdateService {
      * Production and test files are stored separately to avoid conflicts.
      *
      * Returns a PersistedFileDesignator for the validated OTA image
+     *
+     * A stored image that fails validation is removed. Online, a stored image that cannot be read is replaced by a
+     * download as well.
+     *
+     * @throws {OtaUpdateError} if the image is neither stored and valid nor downloadable. When the service is
+     *   {@link DclOtaUpdateService.Options.offline} it throws instead of downloading: after a stored image that fails
+     *   validation was removed, when none is stored, when the stored image cannot be read (it is kept) and with
+     *   `force` (the stored image is kept)
      */
     async downloadUpdate(updateInfo: OtaUpdateInfo, force = false, timeout = OTA_DOWNLOAD_TIMEOUT) {
         if (this.#storage === undefined) {
@@ -585,27 +630,38 @@ export class DclOtaUpdateService {
 
         const filename = this.#fileName(vid, pid, mode, softwareVersion);
         const fileDesignator = new PersistedFileDesignator(filename, storage);
+        const exists = await fileDesignator.exists();
 
-        if (await fileDesignator.exists()) {
-            if (!force) {
-                // File exists, and we do not force to overwrite it, validate it
-                try {
-                    await this.#verifyUpdate(updateInfo, fileDesignator);
-                    logger.info(`Existing OTA image validated successfully`, Diagnostic.dict(diagnosticInfo));
-                    if (updateInfo.specificationVersion !== undefined) {
-                        await this.#recordMetadata(filename, { specificationVersion: updateInfo.specificationVersion });
-                    }
-                    return fileDesignator;
-                } catch (error) {
-                    logger.info(
-                        `Existing OTA image validation failed, Re-downloading ...`,
-                        Diagnostic.errorMessage(asError(error)),
-                    );
-                }
+        const check = exists && !force ? await this.#checkStoredImage(updateInfo, fileDesignator) : undefined;
+        if (check?.kind === "valid") {
+            logger.info(`Existing OTA image validated successfully`, Diagnostic.dict(diagnosticInfo));
+            if (updateInfo.specificationVersion !== undefined) {
+                await this.#recordMetadata(filename, { specificationVersion: updateInfo.specificationVersion });
             }
+            return fileDesignator;
+        }
 
+        const offline = this.#options?.offline ?? false;
+
+        // Offline nothing can replace the image, so only one shown to be invalid is removed
+        const keepStored = exists && offline && check?.kind !== "invalid";
+        if (exists && !keepStored) {
             await fileDesignator.delete();
             await this.#deleteMetadata(filename);
+        }
+
+        if (offline) {
+            if (check?.kind === "unreadable") {
+                throw new OtaUpdateError(
+                    `Cannot read stored OTA image ${filename} (${softwareVersionString}) to validate it and the service is offline; the stored image is kept`,
+                    { cause: check.cause },
+                );
+            }
+            throw new OtaUpdateError(
+                keepStored
+                    ? `Cannot force a download of OTA image ${filename} (${softwareVersionString}) while the service is offline; the stored image is kept`
+                    : `No valid OTA image ${filename} (${softwareVersionString}) is stored and the service is offline, so none is downloaded`,
+            );
         }
 
         if (!otaUrl?.trim()) {
@@ -862,6 +918,8 @@ export class DclOtaUpdateService {
      * @param fileUrl - HTTPS URL to the OTA image file
      * @param options - Optional parameters for DCL-specific fields not in OTA header
      * @returns OtaUpdateInfo with file URL and header data
+     * @throws {OtaUpdateError} if the image cannot be read, including when the service is
+     *   {@link DclOtaUpdateService.Options.offline}
      */
     async createUpdateInfoFromFile(
         fileUrl: string,
@@ -890,7 +948,13 @@ export class DclOtaUpdateService {
         // Validate URL is HTTPS
         if (fileProtocol !== "https" && fileProtocol !== "http") {
             throw new OtaUpdateError(
-                `Only HTTP(S) URLs are supported. For local files, use createUpdateInfoFromStream() instead.`,
+                `Only HTTP(S) URLs are supported. For local files, use updateInfoFromStream() instead.`,
+            );
+        }
+
+        if (this.#options?.offline) {
+            throw new OtaUpdateError(
+                `Cannot read OTA image from ${fileUrl}: the service is offline, use updateInfoFromStream() instead`,
             );
         }
 
@@ -1216,6 +1280,19 @@ export namespace DclOtaUpdateService {
         productionDclConfig?: DclConfig;
         /** DCL config for test endpoint. Defaults to DclConfig.test. */
         testDclConfig?: DclConfig;
+
+        /**
+         * Reaches no network at all: the DCL is not asked for updates and no OTA image is downloaded. Update checks
+         * find only images already in storage (with `includeStoredUpdates`). {@link DclOtaUpdateService.downloadUpdate}
+         * returns a stored image that validates; a stored image that fails validation is removed as online, and the
+         * call then fails with {@link OtaUpdateError}. When the stored image cannot be read, or with `force`, it fails
+         * without touching the stored image, since it cannot be replaced. Reading an image from a URL fails with
+         * {@link OtaUpdateError}.
+         *
+         * For a deployment with no route to the ledger, and for short-lived test processes that must not depend on
+         * it.
+         */
+        offline?: boolean;
     }
 
     export type OtaUpdateListEntry = {

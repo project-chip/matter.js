@@ -8,6 +8,7 @@ import {
     asError,
     AsyncCache,
     Bytes,
+    ClosedError,
     Construction,
     Crypto,
     Days,
@@ -34,7 +35,7 @@ import {
     Timer,
 } from "@matter/general";
 import { DeviceAttestationPkiRevocationDclSchema, RevocationTypeEnum } from "@matter/types";
-import { Paa, Pai } from "../certificate/kinds/AttestationCertificates.js";
+import { MlDsaAttestationDisabledError, Paa, Pai } from "../certificate/kinds/AttestationCertificates.js";
 import { Certificate } from "../certificate/kinds/Certificate.js";
 import { certificateSignatureOf, verifyCertificateSignature } from "../certificate/kinds/CertificateSignature.js";
 import { DclClient, MatterDclError, MatterDclResponseError } from "./DclClient.js";
@@ -49,6 +50,11 @@ function parseTrustStoreCertificate(der: Bytes, kind: DclCertificateService.Cert
     return kind === "PAA"
         ? Paa.fromAsn1(der).cert
         : Certificate.parseAsn1Certificate(der, Certificate.REQUIRED_EXTENSIONS);
+}
+
+/** A certificate that needs a disabled forward feature is expected configuration, not a fault worth reporting. */
+function skippedCertificateLogLevel(error: unknown) {
+    return error instanceof MlDsaAttestationDisabledError ? LogLevel.DEBUG : LogLevel.INFO;
 }
 
 function statedString(value: unknown, field: string, index: number) {
@@ -315,14 +321,8 @@ export class DclCertificateService {
                 prod: options.dclConfig?.url ?? DclConfig.production.url,
                 test: options.fetchTestCertificates ? (options.testDclConfig?.url ?? DclConfig.test.url) : undefined,
                 github: options.fetchTestCertificates && options.fetchGithubCertificates ? "yes" : undefined,
-                flags: Diagnostic.asFlags({ acceptTest: this.acceptsTestCertificates }),
+                flags: Diagnostic.asFlags({ acceptTest: this.acceptsTestCertificates, offline: options.offline }),
             }),
-        );
-
-        this.#revocationCache = new AsyncCache(
-            "CRL revocation",
-            (akid: string) => this.#fetchAndValidateRevocation(akid),
-            Hours(1),
         );
 
         if (options.revocations !== undefined) {
@@ -350,10 +350,22 @@ export class DclCertificateService {
                 ).start();
             }
         });
+
+        this.#revocationCache = new AsyncCache(
+            "CRL revocation",
+            this.#construction,
+            (akid: string) => this.#fetchAndValidateRevocation(akid),
+            Hours(1),
+        );
     }
 
     get construction() {
         return this.#construction;
+    }
+
+    /** Whether the service runs {@link DclCertificateService.Options.offline}. */
+    get offline() {
+        return this.#options.offline ?? false;
     }
 
     /**
@@ -442,7 +454,7 @@ export class DclCertificateService {
         const metadata = this.#certificateIndex.get(normalizedId);
 
         const parseError = this.#certificateParseError(der, metadata?.kind);
-        if (parseError === undefined) {
+        if (parseError === undefined || parseError instanceof MlDsaAttestationDisabledError) {
             return der;
         }
 
@@ -489,7 +501,8 @@ export class DclCertificateService {
         try {
             parsed = parseTrustStoreCertificate(der, kind);
         } catch (error) {
-            logger.info(
+            logger.log(
+                skippedCertificateLogLevel(error),
                 `${source}: certificate cannot be used as a ${kind}, skipped`,
                 Diagnostic.dict({ skid: statedSkid }),
                 Diagnostic.errorMessage(asError(error)),
@@ -682,12 +695,18 @@ export class DclCertificateService {
      *
      * Returns true if the certificate is revoked, false otherwise.
      * If revocation data is not available for the given authority, returns false.
+     *
+     * @throws {ClosedError} if the service is closing or closed
      */
     async isRevoked(
         authorityKeyIdentifier: Bytes | string,
         serialNumber: Bytes | string,
         issuerDnDerHex?: string,
     ): Promise<boolean> {
+        // A closing service must not answer "not revoked" for a lookup it never ran
+        if (this.#closed) {
+            throw new ClosedError("DCL certificate service is closed");
+        }
         this.construction.assert();
 
         const akid = this.#normalizeSubjectKeyId(authorityKeyIdentifier);
@@ -708,7 +727,7 @@ export class DclCertificateService {
         try {
             lookup = await this.#revocationCache.get(akid);
         } catch {
-            // Underlying fetch already logged the cause; treat unreachable CRL as not-revoked
+            // A failed fetch already logged its cause; an unreachable CRL counts as not revoked
             return false;
         }
 
@@ -721,8 +740,9 @@ export class DclCertificateService {
     }
 
     /**
-     * Get certificate metadata by subject key identifier, fetching from DCL if not in local storage.
-     * Returns undefined if not found or if the entry is filtered by the effective trust policy.
+     * Get certificate metadata by subject key identifier, fetching from DCL if not in local storage and the service
+     * is not {@link DclCertificateService.Options.offline}. Returns undefined if not found or if the entry is filtered
+     * by the effective trust policy.
      */
     async getOrFetchCertificate(
         subjectKeyId: Bytes | string,
@@ -735,6 +755,10 @@ export class DclCertificateService {
         const existing = this.#certificateIndex.get(normalizedId);
         if (existing && this.#isRelevant(existing, options)) {
             return existing;
+        }
+
+        if (this.#options.offline) {
+            return undefined;
         }
 
         if (this.#fetchPromise !== undefined) {
@@ -885,10 +909,12 @@ export class DclCertificateService {
      */
     async close() {
         this.#closed = true;
-        this.#updateTimer?.stop();
         await this.#revocationCache.close();
         await this.#construction.close(async () => {
-            await this.#fetchPromise;
+            this.#updateTimer?.stop();
+            this.#updateTimer = undefined;
+            // update() logs a failed fetch; close only waits for it to settle
+            await Promise.allSettled([this.#fetchPromise]);
             await this.#storageManager?.close();
         });
     }
@@ -1306,7 +1332,11 @@ export class DclCertificateService {
 
             logger.debug(`Stored GitHub certificate`, Diagnostic.dict({ skid: subjectKeyId, filename }));
         } catch (error) {
-            logger.info(`Failed to fetch GitHub certificate ${filename}`, Diagnostic.errorMessage(asError(error)));
+            logger.log(
+                skippedCertificateLogLevel(error),
+                `Failed to fetch GitHub certificate ${filename}`,
+                Diagnostic.errorMessage(asError(error)),
+            );
         }
     }
 
@@ -2034,7 +2064,10 @@ export namespace DclCertificateService {
         /** GitHub config for development certificates. Programmatic override only. Defaults to DclGithubConfig.defaults. */
         githubConfig?: DclGithubConfig;
 
-        /** Pre-populate storage from snapshot before the initial network update. Network update still runs after. */
+        /**
+         * Pre-populate storage from snapshot before the initial network update, which still runs after unless
+         * `offline`.
+         */
         seed?: {
             paaRoots?: SeedSource<CertSeedEntry>;
             cdSigners?: SeedSource<CertSeedEntry>;
@@ -2044,10 +2077,10 @@ export namespace DclCertificateService {
         revocations?: RevocationSetEntry[];
 
         /**
-         * Reaches no network at all: no update, no CRL, no certificate fetched on demand and no
-         * re-fetch of one that would not parse. The trust store is whatever `seed` carried, revocation
-         * is whatever {@link DclCertificateService.installRevocations} was given, and a certificate
-         * neither of those holds reads as absent.
+         * Reaches no network at all: no update, no CRL, no certificate fetched on demand and no re-fetch of one that
+         * would not parse. The trust store is whatever storage from earlier runs and `seed` carried, revocation is
+         * whatever {@link DclCertificateService.installRevocations} was given, and a certificate neither of those holds
+         * reads as absent.
          *
          * For a deployment with no route to the ledger, and for a test that must judge attestation
          * against a stated PKI rather than against whatever the ledger holds today.

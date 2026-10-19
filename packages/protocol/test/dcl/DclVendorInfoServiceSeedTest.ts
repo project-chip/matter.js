@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DclVendorInfoService } from "#dcl/DclVendorInfoService.js";
+import { DclVendorInfoService, type VendorInfo } from "#dcl/DclVendorInfoService.js";
 import type { SeedSource, VendorEntry } from "#dcl/SeedTypes.js";
-import { Environment, MockFetch, MockStorageService } from "@matter/general";
+import { Environment, MockFetch, MockStorageService, StorageService } from "@matter/general";
 
 function makeAsyncIterable<T>(items: T[]): AsyncIterable<T> {
     return {
@@ -88,8 +88,8 @@ describe("DclVendorInfoService seed", () => {
         await service.close();
     });
 
-    it("skips seed when storage has more vendors than expectedCount", async () => {
-        // Pre-populate storage via first service (gets 5 hardcoded + vendor 0xaaaa)
+    it("skips seed when storage already holds expectedCount vendors", async () => {
+        // Pre-populate storage via first service; only the DCL vendor 0xaaaa is stored
         fetchMock.addResponse("on.dcl.csa-iot.org/dcl/vendorinfo/vendors", {
             vendorInfo: [
                 {
@@ -108,10 +108,9 @@ describe("DclVendorInfoService seed", () => {
 
         const svc1 = new DclVendorInfoService(environment, { updateInterval: null });
         await svc1.construction;
-        const storedCount = svc1.vendors.size; // 6 (5 hardcoded + 0xaaaa)
         await svc1.close();
 
-        // Second service: seed expectedCount < storedCount → skip seed
+        // Second service: storage already holds expectedCount vendors → skip seed
         fetchMock.addResponse("on.dcl.csa-iot.org/dcl/vendorinfo/vendors", DCL_EMPTY);
         const vendorBbbEntry: VendorEntry = {
             vendorId: 0xbbbb,
@@ -120,7 +119,7 @@ describe("DclVendorInfoService seed", () => {
             kind: "production",
         };
         const svc2 = new DclVendorInfoService(environment, {
-            seed: { vendors: makeSeedSource([vendorBbbEntry], storedCount - 1) }, // expectedCount < storedCount
+            seed: { vendors: makeSeedSource([vendorBbbEntry], 1) },
             updateInterval: null,
         });
         await svc2.construction;
@@ -165,5 +164,107 @@ describe("DclVendorInfoService seed", () => {
         expect(service.infoFor(0x1234)).to.not.be.undefined;
 
         await service.close();
+    });
+
+    it("stores only DCL vendors, not the built-in test vendors", async () => {
+        fetchMock.addResponse("on.dcl.csa-iot.org/dcl/vendorinfo/vendors", DCL_WITH_VENDOR_1);
+        fetchMock.install();
+
+        const service = new DclVendorInfoService(environment, { updateInterval: null });
+        await service.construction;
+        expect(service.infoFor(0xfff1)).not.undefined;
+        await service.close();
+
+        const storage = await environment.get(StorageService).open("vendors");
+        const stored = await storage.createContext("info").get<VendorInfo[]>("vendors", []);
+        await storage.close();
+        expect(stored.map(({ vendorId }) => vendorId)).deep.equal([0x1234]);
+    });
+
+    describe("offline", () => {
+        it("serves seeded vendors without asking the DCL and starts no update timer", async () => {
+            fetchMock.addResponse("on.dcl.csa-iot.org/dcl/vendorinfo/vendors", DCL_EMPTY);
+            fetchMock.install();
+
+            const service = new DclVendorInfoService(environment, {
+                seed: { vendors: makeSeedSource([VENDOR_1]) },
+                offline: true,
+            });
+            await service.construction;
+
+            expect(service.infoFor(0x1234)?.vendorName).equal("Acme Corp");
+            expect(MockTime.timerCountFor("DCL Vendor Info Update")).equal(0);
+
+            await service.update();
+            expect(fetchMock.getCallLog()).deep.equal([]);
+
+            await service.close();
+        });
+
+        it("serves the test vendors with fresh storage and no seed", async () => {
+            fetchMock.install();
+
+            const service = new DclVendorInfoService(environment, { offline: true });
+            await service.construction;
+
+            expect([...service.vendors.keys()].sort((a, b) => a - b)).deep.equal([
+                4939, 0xfff1, 0xfff2, 0xfff3, 0xfff4,
+            ]);
+            expect(fetchMock.getCallLog()).deep.equal([]);
+
+            await service.close();
+        });
+
+        it("prefers a stored DCL record over the built-in test vendor", async () => {
+            fetchMock.addResponse("on.dcl.csa-iot.org/dcl/vendorinfo/vendors", {
+                vendorInfo: [{ ...DCL_WITH_VENDOR_1.vendorInfo[0], vendorID: 0xfff1, vendorName: "Ledger Name" }],
+                pagination: {},
+            });
+            fetchMock.install();
+
+            const online = new DclVendorInfoService(environment, { updateInterval: null });
+            await online.construction;
+            await online.close();
+
+            const service = new DclVendorInfoService(environment, { offline: true });
+            await service.construction;
+
+            expect(service.infoFor(0xfff1)?.vendorName).equal("Ledger Name");
+
+            await service.close();
+        });
+
+        it("serves vendors stored by an earlier run", async () => {
+            fetchMock.addResponse("on.dcl.csa-iot.org/dcl/vendorinfo/vendors", DCL_WITH_VENDOR_1);
+            fetchMock.install();
+
+            const online = new DclVendorInfoService(environment, { updateInterval: null });
+            await online.construction;
+            await online.close();
+            fetchMock.clearCallLog();
+
+            const service = new DclVendorInfoService(environment, { offline: true });
+            await service.construction;
+
+            expect(service.infoFor(0x1234)?.vendorName).equal("Acme Corp");
+            expect(fetchMock.getCallLog()).deep.equal([]);
+
+            await service.close();
+        });
+
+        it("answers a product lookup as absent without asking the DCL", async () => {
+            fetchMock.addResponse("on.dcl.csa-iot.org/dcl/model/models/4660/1", {
+                model: { vid: 0x1234, pid: 1 },
+            });
+            fetchMock.install();
+
+            const service = new DclVendorInfoService(environment, { offline: true });
+            await service.construction;
+
+            expect(await service.productInfoFor(0x1234, 1)).equal(undefined);
+            expect(fetchMock.getCallLog()).deep.equal([]);
+
+            await service.close();
+        });
     });
 });

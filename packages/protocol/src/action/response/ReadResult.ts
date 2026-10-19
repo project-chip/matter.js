@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { ResultStatus } from "#action/response/ResultStatus.js";
 import type {
     AttributeId,
     AttributePath,
@@ -14,7 +15,6 @@ import type {
     EventPath,
     NodeId,
     Priority,
-    Status,
     TlvSchema,
 } from "@matter/types";
 
@@ -54,11 +54,9 @@ export namespace ReadResult {
         tlv: TlvSchema<unknown>; // TODO: Remove when we also move encoding to the new format
     }
 
-    export interface AttributeStatus {
+    export interface AttributeStatus extends ResultStatus {
         kind: "attr-status";
         path: ConcreteAttributePath;
-        status: Status;
-        clusterStatus?: number;
     }
 
     export interface ConcreteEventPath extends EventPath {
@@ -96,10 +94,8 @@ export namespace ReadResult {
         tlv: TlvSchema<unknown>;
     }
 
-    export interface EventStatus {
+    export interface EventStatus extends ResultStatus {
         kind: "event-status";
         path: ConcreteEventPath;
-        status: Status;
-        clusterStatus?: number;
     }
 }

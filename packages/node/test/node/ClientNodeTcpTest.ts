@@ -5,9 +5,20 @@
  */
 
 import { OnOffClient } from "#behaviors/on-off";
-import { ChannelType, Crypto, MockCrypto, Seconds, ServerAddress } from "@matter/general";
+import { ServerNode } from "#node/ServerNode.js";
+import {
+    Bytes,
+    ChannelType,
+    Crypto,
+    DnsRecordClass,
+    DnsRecordType,
+    MockCrypto,
+    Network,
+    Seconds,
+    ServerAddress,
+} from "@matter/general";
 import { MockSite, subscribedPeer } from "@matter/node/testing";
-import { ExchangeManager, Peer, PeerSet } from "@matter/protocol";
+import { ExchangeManager, Peer, PeerSet, SessionManager } from "@matter/protocol";
 
 /**
  * TCP transport variant tests for ClientNode integration.
@@ -95,6 +106,59 @@ describe("ClientNodeTcp", () => {
 
             const exchanges = device.env.get(ExchangeManager);
             expect(exchanges.hasInterfaceFor(ChannelType.TCP)).true;
+        });
+
+        it("accepts and announces the configured TCP maxMessageSize", async () => {
+            await using site = new MockSite();
+            const device = await site.addDevice({
+                network: { tcp: { incoming: true, outgoing: true, maxMessageSize: 100_000 } },
+            });
+
+            expect(device.env.get(SessionManager).sessionParameters.maxTcpMessageSize).equal(100_000);
+            expect(await tcpFrameClosesConnection(device, 100)).false;
+            expect(await tcpFrameClosesConnection(device, 70_000)).false;
+            expect(await tcpFrameClosesConnection(device, 100_001)).true;
+        });
+
+        it("refuses to start with a TCP maxMessageSize below the UDP message size", async () => {
+            await using site = new MockSite();
+            const device = await site.addDevice({
+                network: { tcp: { incoming: true, maxMessageSize: 0 } },
+                online: false,
+            });
+
+            await expect(device.start()).rejectedWith("network.tcp.maxMessageSize of 0");
+        });
+
+        it("refuses to start with a TCP maxMessageSize above the uint32 range", async () => {
+            await using site = new MockSite();
+            const device = await site.addDevice({
+                network: { tcp: { incoming: true, maxMessageSize: 2 ** 32 } },
+                online: false,
+            });
+
+            await expect(device.start()).rejectedWith("network.tcp.maxMessageSize of 4294967296");
+        });
+
+        it("ignores the TCP maxMessageSize while TCP is disabled", async () => {
+            await using site = new MockSite();
+            const device = await site.addDevice({ network: { tcp: { maxMessageSize: 0 } } });
+
+            expect(device.env.get(SessionManager).sessionParameters.maxTcpMessageSize).undefined;
+        });
+
+        it("stops announcing TCP after a restart with TCP disabled", async () => {
+            await using site = new MockSite();
+            const device = await site.addDevice({ network: { tcp: true } });
+            expect(device.env.get(SessionManager).sessionParameters.supportedTransports.tcpServer).true;
+
+            await device.stop();
+            await device.set({ network: { tcp: false } });
+            await device.start();
+
+            const { supportedTransports, maxTcpMessageSize } = device.env.get(SessionManager).sessionParameters;
+            expect(supportedTransports).deep.equal({ tcpClient: false, tcpServer: false });
+            expect(maxTcpMessageSize).undefined;
         });
 
         it("enables TCP on controller only (outgoing)", async () => {
@@ -269,7 +333,7 @@ describe("ClientNodeTcp", () => {
             const { controller } = await commissionPair(site, { tcp: true }, { tcp: true });
 
             const peer = protocolPeer(controller);
-            peer.descriptor.sessionParameters = {
+            peer.descriptor.reportedSessionParameters = {
                 ...peer.sessionParameters,
                 supportedTransports: { tcpClient: false, tcpServer: false },
             };
@@ -283,11 +347,37 @@ describe("ClientNodeTcp", () => {
 
             const peer = protocolPeer(controller);
             // Some 1.5+ peers omit SUPPORTED_TRANSPORTS (tag 8) yet serve TCP; mDNS T must then decide.
-            peer.descriptor.sessionParameters = { ...peer.sessionParameters, supportedTransports: {} };
+            peer.descriptor.reportedSessionParameters = { ...peer.sessionParameters, supportedTransports: {} };
             expect(peer.sessionParameters.supportedTransports?.tcpServer).undefined;
             expect(peer.descriptor.discoveryData?.T?.tcpServer).true;
 
             expect(peer.resolveTransports(undefined, ChannelType.TCP)).deep.equals([ChannelType.TCP, ChannelType.UDP]);
+        });
+
+        it("falls back to UDP as soon as the live TXT record drops the TCP server", async () => {
+            await using site = new MockSite();
+            const { controller } = await commissionPair(site, { tcp: true }, { tcp: true });
+
+            const peer = protocolPeer(controller);
+            peer.descriptor.reportedSessionParameters = { ...peer.sessionParameters, supportedTransports: {} };
+            const { name } = peer.service;
+            for (const record of [...name.records]) {
+                if (record.recordType === DnsRecordType.TXT) {
+                    name.deleteRecord(record);
+                }
+            }
+            name.installRecord({
+                name: name.qname,
+                recordType: DnsRecordType.TXT,
+                recordClass: DnsRecordClass.IN,
+                flushCache: true,
+                ttl: Seconds(120),
+                value: [Bytes.fromString("SII=5000")],
+            });
+
+            // The descriptor still holds the T the device advertised before
+            expect(peer.descriptor.discoveryData?.T?.tcpServer).true;
+            expect(peer.resolveTransports(undefined, ChannelType.TCP)).undefined;
         });
 
         it("falls back to UDP when session parameters omit TCP support and mDNS does not advertise a TCP server", async () => {
@@ -295,7 +385,7 @@ describe("ClientNodeTcp", () => {
             const { controller } = await commissionPair(site, { tcp: true }, /* deviceNetwork: */ undefined);
 
             const peer = protocolPeer(controller);
-            peer.descriptor.sessionParameters = { ...peer.sessionParameters, supportedTransports: {} };
+            peer.descriptor.reportedSessionParameters = { ...peer.sessionParameters, supportedTransports: {} };
             expect(peer.sessionParameters.supportedTransports?.tcpServer).undefined;
             expect(peer.descriptor.discoveryData?.T?.tcpServer).not.true;
 
@@ -313,6 +403,22 @@ describe("ClientNodeTcp", () => {
 
             peer.markTcpUnsupported();
             expect(peer.resolveTransports(undefined, ChannelType.TCP)).undefined;
+        });
+
+        it("clears the flag when a later session reports TCP server support", async () => {
+            await using site = new MockSite();
+            const { controller } = await commissionPair(site, { tcp: true }, { tcp: true });
+
+            const peer = protocolPeer(controller);
+            peer.markTcpUnsupported();
+
+            for (const session of [...peer.sessions]) {
+                await MockTime.resolve(session.initiateClose(), { macrotasks: true });
+            }
+            await MockTime.resolve(peer.connect(), { macrotasks: true });
+
+            expect(peer.descriptor.tcpUnsupported).undefined;
+            expect(peer.resolveTransports(undefined, ChannelType.TCP)).deep.equals([ChannelType.TCP, ChannelType.UDP]);
         });
     });
 
@@ -334,3 +440,30 @@ describe("ClientNodeTcp", () => {
         });
     });
 });
+
+/**
+ * Opens a raw TCP connection to the node and sends a frame header announcing a message of {@link length} bytes.
+ */
+async function tcpFrameClosesConnection(node: ServerNode, length: number) {
+    const network = node.env.get(Network);
+    const details = await network.getIpMac("fake0");
+    const ip = details?.ipV6[0];
+    expect(ip).not.undefined;
+    if (ip === undefined) {
+        return false;
+    }
+    const connection = await network.connectTcp(ip, node.state.network.operationalPort);
+    let closed = false;
+    connection.onClose(() => {
+        closed = true;
+    });
+
+    const header = new Uint8Array(4);
+    new DataView(header.buffer).setUint32(0, length, true);
+    await connection.send(header);
+    await MockTime.yield3();
+
+    const closedByNode = closed;
+    await connection.close();
+    return closedByNode;
+}
