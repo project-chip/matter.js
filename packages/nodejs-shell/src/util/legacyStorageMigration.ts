@@ -185,10 +185,17 @@ export async function migrateLegacyCommissionedNodes(
         if (existingPeer !== undefined) {
             if (await oldNode.has(MIGRATION_PENDING_KEY)) {
                 try {
-                    // Addresses mean the state write happened, or the peer has run since; legacy values are older
-                    if (!existingPeer.stateOf(CommissioningClient).addresses?.length) {
-                        await existingPeer.set(await legacyState());
-                    }
+                    // The interrupted write may have persisted either part; keep whatever is newer than the legacy data
+                    const { commissioning, network } = await legacyState();
+                    const { maxEventNumber } = existingPeer.stateOf(NetworkClient);
+                    await existingPeer.set({
+                        ...(existingPeer.stateOf(CommissioningClient).addresses?.length ? {} : { commissioning }),
+                        network: {
+                            ...network,
+                            maxEventNumber:
+                                maxEventNumber > network.maxEventNumber ? maxEventNumber : network.maxEventNumber,
+                        },
+                    });
                     await oldNode.delete(MIGRATION_PENDING_KEY);
                     migratedNodes++;
                     logger.info(`Completed interrupted migration of commissioned node ${nodeId} as ${existingPeer.id}`);
