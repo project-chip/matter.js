@@ -8,9 +8,11 @@ import { OnOffLightDevice } from "#devices/on-off-light";
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import { ChangeNotificationService } from "#node/integration/ChangeNotificationService.js";
 import type { ServerNode } from "#node/ServerNode.js";
-import { Lifecycle } from "@matter/general";
+import { Lifecycle, MatterError } from "@matter/general";
 import { MockServerNode, MockSite } from "@matter/node/testing";
 import type { CommissionableDevice } from "@matter/protocol";
+
+class ObserverFailedError extends MatterError {}
 
 const DEVICE: CommissionableDevice = {
     deviceIdentifier: "device-a",
@@ -83,7 +85,7 @@ describe("ChangeNotificationService", () => {
     it("keeps notifying the other observers when one throws", async () => {
         await using node = await MockServerNode.createOnline(undefined, { device: undefined });
         node.env.get(ChangeNotificationService).change.on(() => {
-            throw new Error("observer failure");
+            throw new ObserverFailedError("observer failure");
         });
         const recorded = record(node);
 
