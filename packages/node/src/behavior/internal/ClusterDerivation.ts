@@ -200,11 +200,15 @@ function createDerivedEvents({ scope, base, newProps, forClient }: DerivationCon
         }
 
         // Add the event
-        if (isPlain) {
-            plainEventFields.add(name);
-        }
         eventNames.add(name);
         instanceDescriptors[name] = createEventDescriptor(name, event, Implementation);
+        if (isPlain) {
+            plainEventFields.add(name);
+
+            // Code compiled without useDefineForClassFields assigns the field in the base constructor; the element
+            // event takes the place of the assigned value
+            instanceDescriptors[name].set = () => {};
+        }
     }
 
     // Add events for mandatory attributes that are not present in the base class

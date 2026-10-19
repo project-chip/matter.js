@@ -15,6 +15,7 @@ import {
     attribute,
     cluster,
     ClusterModel,
+    EventModel,
     command,
     event,
     field,
@@ -457,6 +458,43 @@ describe("ClusterBehavior declared with the model decorators", () => {
         expect(occurrences.map(({ payload, priority }) => ({ payload, priority }))).deep.equals([
             { payload: { level: 3 }, priority: Priority.Info },
         ]);
+    });
+
+    it("records an event its Events class assigns in the constructor", async () => {
+        class AssignedEvents extends ClusterBehavior.Events {
+            declare happened: Observable<[payload: { level: number }]>;
+
+            constructor() {
+                super();
+                this.happened = Observable();
+            }
+        }
+
+        class AssignedServer extends ClusterBehavior {
+            declare events: AssignedEvents;
+
+            static override readonly schema = new ClusterModel({
+                name: "Assigned",
+                id: 0xfff1fc0c,
+                children: [new EventModel({ name: "Happened", id: 0, priority: "info" })],
+            });
+
+            static override readonly Events = AssignedEvents;
+        }
+
+        await using endpoint = await MockEndpoint.create(MockEndpointType.with(AssignedServer));
+
+        await endpoint.act(agent => {
+            agent.get(AssignedServer).events.happened.emit({ level: 1 });
+        });
+
+        const recorded = new Array<number>();
+        for await (const occurrence of endpoint.env.get(OccurrenceManager).get()) {
+            if (occurrence.clusterId === 0xfff1fc0c) {
+                recorded.push(occurrence.eventId);
+            }
+        }
+        expect(recorded).deep.equals([0]);
     });
 
     it("keeps the internal stateChanged observable of a standard cluster with a StateChanged event", async () => {
