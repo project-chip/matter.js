@@ -11,10 +11,12 @@ import type { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
 import type { Node } from "#node/Node.js";
 import type { ServerNode } from "#node/ServerNode.js";
-import { Lifecycle, Observable, ObserverGroup, Timestamp } from "@matter/general";
+import { Lifecycle, Logger, Observable, Observer, ObserverGroup, Timestamp } from "@matter/general";
 import { EventModel } from "@matter/model";
 import { Val } from "@matter/protocol";
 import { EventNumber, Priority } from "@matter/types";
+
+const logger = Logger.get("ChangeNotificationService");
 
 /**
  * High-level change notification service.
@@ -24,9 +26,15 @@ import { EventNumber, Priority } from "@matter/types";
  *
  * The service reports nothing once its node begins destruction.  Destruction destroys every endpoint, peers included,
  * and that teardown is not a removal of the endpoints.
+ *
+ * An observer that throws is logged; the remaining observers still receive the change, and the code that made the
+ * change does not see the error.
  */
 export class ChangeNotificationService {
-    #change = new Observable<[changes: ChangeNotificationService.Change]>();
+    #change = new Observable<[changes: ChangeNotificationService.Change]>((error, observer) =>
+        this.#observerFailed(error, observer),
+    );
+    #observerFailureKinds = new WeakMap<Observer<any[], any>, Set<Function>>();
     #nodeDestroying = false;
     #nodeObservers = new Map<Node, NodeObserver>();
     #observers = new ObserverGroup();
@@ -45,6 +53,24 @@ export class ChangeNotificationService {
         } else {
             node.lifecycle.ready.once(() => this.#beginPeerObservation(node));
         }
+    }
+
+    /**
+     * A peer can trigger the same observer failure with every report, so only the first failure of each kind per
+     * observer is a warning.
+     */
+    #observerFailed(error: Error, observer: Observer<any[], any>) {
+        let kinds = this.#observerFailureKinds.get(observer);
+        if (kinds === undefined) {
+            kinds = new Set();
+            this.#observerFailureKinds.set(observer, kinds);
+        }
+        if (kinds.has(error.constructor)) {
+            logger.debug("Change notification observer failed:", error);
+            return;
+        }
+        kinds.add(error.constructor);
+        logger.warn("Change notification observer failed; repeats log at debug level:", error);
     }
 
     /**
