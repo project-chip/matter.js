@@ -1272,21 +1272,6 @@ class InProcessIcdClient implements CertIcdClientApi {
     }
 }
 
-/**
- * Whether `endpoint` sits under `owner`.
- *
- * The controller's peers are endpoints of the controller's own tree, so the root of an endpoint's owner
- * chain is that controller rather than the node the endpoint belongs to.
- */
-function ownedBy(endpoint: Endpoint, owner: Endpoint) {
-    for (let current: Endpoint | undefined = endpoint; current !== undefined; current = current.owner) {
-        if (current === owner) {
-            return true;
-        }
-    }
-    return false;
-}
-
 class InProcessCertNodeApi implements CertNodeApi {
     readonly #adapterId: string;
     readonly #controller: ServerNode;
@@ -2238,7 +2223,7 @@ class InProcessCertNodeApi implements CertNodeApi {
             // it buffering reports for a call that never returned
             const observers = new ObserverGroup();
             observers.on(peer.env.get(ChangeNotificationService).change, change => {
-                if (change.kind !== "event" || !ownedBy(change.endpoint, peer)) {
+                if (change.kind !== "event" || change.endpoint.ownerOfType(ClientNode.RootEndpoint) !== peer) {
                     return;
                 }
                 const cluster = change.event.parent?.id;
