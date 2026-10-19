@@ -49,15 +49,7 @@ function connectionStateLabel(state: NodeConnectionState) {
  * lifecycle. Registered handlers are owned by `observers` and torn down when it closes.
  */
 export function installDiagnosticLogging(node: ServerNode, observers: ObserverGroup): void {
-    observers.on(node.env.get(ChangeNotificationService).change, change => {
-        // Observers share one emit that rethrows: a throw here would skip every later consumer of the change and
-        // surface in the peer's report processing, so diagnostics must not fail the interaction that produced them
-        try {
-            logChange(change);
-        } catch (error) {
-            logger.warn("Failed to log a peer change:", error);
-        }
-    });
+    observers.on(node.env.get(ChangeNotificationService).change, logChange);
 
     // Log each commissioned peer's connection-state transitions, torn down when the peer is removed.
     // peers.added/deleted fire for every node in the container (including transient discovery and group nodes),
