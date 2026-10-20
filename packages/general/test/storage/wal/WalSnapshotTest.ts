@@ -5,6 +5,7 @@
  */
 
 import { MockFilesystem } from "#fs/MockFilesystem.js";
+import { StorageError } from "#storage/StorageDriver.js";
 import { toJson } from "#storage/StringifyTools.js";
 import { WalSnapshot } from "#storage/wal/WalSnapshot.js";
 
@@ -120,69 +121,181 @@ describe("WalSnapshot", () => {
         });
     });
 
-    describe("query methods", () => {
-        it("get returns a value", () => {
-            const snapshot = new WalSnapshot({ segment: 1, offset: 0 }, 1000, {
-                "ctx.sub": { key1: "value1", key2: 42 },
+    describe("fsync", () => {
+        let restoreFsync: (() => void) | undefined;
+
+        afterEach(() => {
+            restoreFsync?.();
+            restoreFsync = undefined;
+        });
+
+        /**
+         * Record, for each fsync on a mock file handle, whether the final snapshot file already existed.
+         */
+        async function recordFsyncs() {
+            const probe = await fs.file("probe").open("probe", "w");
+            const handlePrototype = Object.getPrototypeOf(probe);
+            await probe.close();
+
+            const originalFsync = handlePrototype.fsync;
+            const finalFileExisted = new Array<boolean>();
+            handlePrototype.fsync = async function (this: unknown) {
+                finalFileExisted.push(await fs.directory("storage").file("snapshot.json").exists());
+                return originalFsync.call(this);
+            };
+            restoreFsync = () => (handlePrototype.fsync = originalFsync);
+            return finalFileExisted;
+        }
+
+        it("flushes the snapshot before renaming it into place", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            const fsyncs = await recordFsyncs();
+
+            await new WalSnapshot({ segment: 1, offset: 0 }, 1000, { ctx: { key: "value" } }).save(storageDir, {
+                compress: false,
             });
-            expect(snapshot.get(["ctx", "sub"], "key1")).equal("value1");
-            expect(snapshot.get(["ctx", "sub"], "key2")).equal(42);
+
+            expect(fsyncs).deep.equal([false]);
+            expect((await WalSnapshot.load(storageDir))!.data.ctx.key).equal("value");
         });
 
-        it("get returns undefined for missing key", () => {
-            const snapshot = new WalSnapshot({ segment: 1, offset: 0 }, 1000, {
-                ctx: { key: "value" },
+        it("skips the flush when fsync is disabled", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            const fsyncs = await recordFsyncs();
+
+            await new WalSnapshot({ segment: 1, offset: 0 }, 1000, { ctx: { key: "value" } }).save(storageDir, {
+                compress: false,
+                fsync: false,
             });
-            expect(snapshot.get(["ctx"], "missing")).equal(undefined);
+
+            expect(fsyncs).deep.equal([]);
+        });
+    });
+
+    describe("backup", () => {
+        const first = new WalSnapshot({ segment: 1, offset: 0 }, 1000, { ctx: { key: "first" } });
+        const second = new WalSnapshot({ segment: 2, offset: 0 }, 2000, { ctx: { key: "second" } }, first.commitId);
+
+        it("keeps the replaced snapshot as backup", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            await first.save(storageDir);
+            await second.save(storageDir);
+
+            const current = await WalSnapshot.load(storageDir);
+            expect(current!.commitId).deep.equal(second.commitId);
+            expect(current!.previousCommitId).deep.equal(first.commitId);
+            const backup = await WalSnapshot.load(storageDir, { basename: "snapshot.prev" });
+            expect(backup!.data.ctx.key).equal("first");
         });
 
-        it("get returns undefined for missing context", () => {
-            const snapshot = new WalSnapshot({ segment: 1, offset: 0 }, 1000, {});
-            expect(snapshot.get(["missing"], "key")).equal(undefined);
+        it("restores the current snapshot and names its backup", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            await first.save(storageDir);
+            await second.save(storageDir);
+
+            const restored = await WalSnapshot.restore(storageDir);
+
+            expect(restored!.snapshot.data.ctx.key).equal("second");
+            expect(restored!.backupCommitId).deep.equal(first.commitId);
         });
 
-        it("keys returns all keys in a context", () => {
-            const snapshot = new WalSnapshot({ segment: 1, offset: 0 }, 1000, {
-                ctx: { a: 1, b: 2, c: 3 },
-            });
-            expect(snapshot.keys(["ctx"]).sort()).deep.equal(["a", "b", "c"]);
+        it("restores the backup and moves an unreadable snapshot aside", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            await first.save(storageDir);
+            await second.save(storageDir);
+            await storageDir.file("snapshot.json.gz").write("not gzip");
+
+            const restored = await WalSnapshot.restore(storageDir);
+
+            expect(restored!.snapshot.data.ctx.key).equal("first");
+            expect(restored!.backupCommitId).deep.equal(first.commitId);
+            expect(await storageDir.file("snapshot.json.gz").exists()).equal(false);
+            expect(await storageDir.file("snapshot.corrupt.json.gz").exists()).equal(true);
         });
 
-        it("keys returns empty array for missing context", () => {
-            const snapshot = new WalSnapshot({ segment: 1, offset: 0 }, 1000, {});
-            expect(snapshot.keys(["missing"])).deep.equal([]);
+        it("restores the backup when the snapshot is missing", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            await first.save(storageDir);
+            await second.save(storageDir);
+            await storageDir.file("snapshot.json.gz").delete();
+
+            const restored = await WalSnapshot.restore(storageDir);
+
+            expect(restored!.snapshot.data.ctx.key).equal("first");
+            expect(restored!.backupCommitId).deep.equal(first.commitId);
         });
 
-        it("values returns all values in a context", () => {
-            const snapshot = new WalSnapshot({ segment: 1, offset: 0 }, 1000, {
-                ctx: { a: 1, b: 2 },
-            });
-            expect(snapshot.values(["ctx"])).deep.equal({ a: 1, b: 2 });
+        it("throws when the snapshot and the backup are unreadable", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            await first.save(storageDir);
+            await second.save(storageDir);
+            await storageDir.file("snapshot.json.gz").write("not gzip");
+            await storageDir.file("snapshot.prev.json.gz").write("not gzip");
+
+            await expect(WalSnapshot.restore(storageDir)).rejectedWith(StorageError, "is unreadable");
         });
 
-        it("values returns a copy", () => {
-            const data = { ctx: { a: 1 } };
-            const snapshot = new WalSnapshot({ segment: 1, offset: 0 }, 1000, data);
-            const vals = snapshot.values(["ctx"]);
-            vals.a = 99;
-            expect(snapshot.get(["ctx"], "a")).equal(1);
+        it("throws when the snapshot is unreadable and no backup exists", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            await storageDir.file("snapshot.json").write("{}");
+
+            await expect(WalSnapshot.restore(storageDir)).rejectedWith("has no valid commitId");
         });
 
-        it("contexts returns sub-contexts", () => {
-            const snapshot = new WalSnapshot({ segment: 1, offset: 0 }, 1000, {
-                "root.child1": { key: "v1" },
-                "root.child2": { key: "v2" },
-                other: { key: "v3" },
-            });
-            expect(snapshot.contexts(["root"]).sort()).deep.equal(["child1", "child2"]);
+        it("removes a backup that predates a snapshot without previousCommitId", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            await first.save(storageDir);
+            await new WalSnapshot({ segment: 3, offset: 0 }, 3000, { ctx: { key: "third" } }).save(storageDir);
+
+            const restored = await WalSnapshot.restore(storageDir);
+
+            expect(restored!.snapshot.data.ctx.key).equal("third");
+            expect(restored!.backupCommitId).equal(undefined);
+            expect(await storageDir.file("snapshot.prev.json.gz").exists()).equal(false);
         });
 
-        it("contexts returns top-level contexts when given empty array", () => {
-            const snapshot = new WalSnapshot({ segment: 1, offset: 0 }, 1000, {
-                "root.child": { key: "v1" },
-                other: { key: "v2" },
-            });
-            expect(snapshot.contexts([]).sort()).deep.equal(["other", "root"]);
+        it("returns undefined when no snapshot was written", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+
+            expect(await WalSnapshot.restore(storageDir)).equal(undefined);
+        });
+    });
+
+    describe("validation", () => {
+        it("rejects a snapshot whose data is not an object of contexts", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            await storageDir.file("snapshot.json").write('{"commitId":{"segment":1,"offset":0},"data":{"ctx":1}}');
+
+            await expect(WalSnapshot.load(storageDir)).rejectedWith("data is not an object of contexts");
+        });
+
+        it("rejects an unreadable snapshot with a StorageError", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            await storageDir.file("snapshot.json.gz").write("not gzip");
+
+            await expect(WalSnapshot.load(storageDir)).rejectedWith(StorageError, "storage/snapshot is unreadable");
+        });
+
+        it("rejects an invalid previousCommitId", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            await storageDir
+                .file("snapshot.json")
+                .write('{"commitId":{"segment":1,"offset":0},"data":{},"previousCommitId":7}');
+
+            await expect(WalSnapshot.load(storageDir)).rejectedWith("invalid previousCommitId");
         });
     });
 
@@ -226,7 +339,7 @@ describe("WalSnapshot", () => {
             expect(loaded!.data["ctx"].key).equal("uncompressed");
         });
 
-        it("deletes old-format file when switching to compressed", async () => {
+        it("moves the old-format file to the backup when switching to compressed", async () => {
             const storageDir = fs.directory("storage");
             await storageDir.mkdir();
 
@@ -241,9 +354,10 @@ describe("WalSnapshot", () => {
 
             expect(await storageDir.file("snapshot.json.gz").exists()).equal(true);
             expect(await storageDir.file("snapshot.json").exists()).equal(false);
+            expect(await storageDir.file("snapshot.prev.json").exists()).equal(true);
         });
 
-        it("deletes old-format file when switching to uncompressed", async () => {
+        it("moves the old-format file to the backup when switching to uncompressed", async () => {
             const storageDir = fs.directory("storage");
             await storageDir.mkdir();
 
@@ -258,19 +372,21 @@ describe("WalSnapshot", () => {
 
             expect(await storageDir.file("snapshot.json").exists()).equal(true);
             expect(await storageDir.file("snapshot.json.gz").exists()).equal(false);
+            expect(await storageDir.file("snapshot.prev.json.gz").exists()).equal(true);
         });
 
         it("prefers newer .json.gz when both files exist", async () => {
             const storageDir = fs.directory("storage");
             await storageDir.mkdir();
 
-            // Write uncompressed first (older mtime)
             const snap1 = new WalSnapshot({ segment: 1, offset: 0 }, 1000, { ctx: { key: "old" } });
             await snap1.save(storageDir, { compress: false });
 
-            // Write compressed second (newer mtime)
-            const snap2 = new WalSnapshot({ segment: 2, offset: 0 }, 2000, { ctx: { key: "new" } });
-            await snap2.save(storageDir, { compress: true });
+            // save() never leaves both formats, so copy in a compressed file written elsewhere
+            const otherDir = fs.directory("other");
+            await otherDir.mkdir();
+            await new WalSnapshot({ segment: 2, offset: 0 }, 2000, { ctx: { key: "new" } }).save(otherDir);
+            await storageDir.file("snapshot.json.gz").write(otherDir.file("snapshot.json.gz").readBytes());
 
             // Both files exist — should prefer the newer .json.gz
             const loaded = await WalSnapshot.load(storageDir);

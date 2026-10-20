@@ -10,6 +10,7 @@ import { Hours } from "#time/TimeUnit.js";
 import { Abort } from "#util/Abort.js";
 import { Gzip } from "#util/Gzip.js";
 import { BasicMultiplex } from "#util/Multiplex.js";
+import { Mutex } from "#util/Mutex.js";
 import type { Directory } from "../../fs/Directory.js";
 import type { DataNamespace } from "../DataNamespace.js";
 import { type CloneableStorage, FilesystemStorageDriver, StorageDriver, StorageError } from "../StorageDriver.js";
@@ -24,6 +25,7 @@ import {
     parseSegmentFilename,
     segmentFilename,
 } from "./WalCommit.js";
+import { writeSynced } from "./WalFiles.js";
 import { WalReader } from "./WalReader.js";
 import { WalSnapshot } from "./WalSnapshot.js";
 import { WalTransaction, applyCommit } from "./WalTransaction.js";
@@ -46,7 +48,6 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
             fsync: descriptor.fsync,
             compressSnapshot: descriptor.compressSnapshot,
             compressLog: descriptor.compressLog,
-            headSnapshot: descriptor.headSnapshot,
         });
         try {
             await storage.initialize();
@@ -64,10 +65,12 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
     #pendingOps?: WalCommit[];
     #abort = new Abort();
     #workers = new BasicMultiplex();
+    #maintenance = new Mutex(this);
     #initialized = false;
     #lastCommitId?: WalCommitId;
     #lastCommitTs?: number;
     #lastSnapshotCommitId?: WalCommitId;
+    #backupSnapshotCommitId?: WalCommitId;
     #writer?: WalWriter;
     #reader?: WalReader;
     #cleaner?: WalCleaner;
@@ -92,13 +95,16 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
 
         this.#abort = new Abort();
         this.#workers = new BasicMultiplex();
+        this.#maintenance = new Mutex(this);
         this.#cache = undefined;
         this.#pendingOps = undefined;
         this.#lastCommitId = undefined;
         this.#lastCommitTs = undefined;
         this.#lastSnapshotCommitId = undefined;
+        this.#backupSnapshotCommitId = undefined;
 
         await this.#storageDir.mkdir();
+        await this.#deleteObsoleteHeadSnapshot();
 
         const walDir = this.#storageDir.directory("wal");
         await walDir.mkdir();
@@ -112,38 +118,19 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
             fsync: this.#options.fsync,
             onRotate: compressLog
                 ? () => {
-                      this.#workers.add(this.#compressRotatedSegments(), "wal-compress");
+                      this.#maintenance.run(() => this.#compressRotatedSegments());
                   }
                 : undefined,
         });
         this.#compressSnapshot = this.#options.compressSnapshot ?? WalStorageDriver.defaults.compressSnapshot;
 
-        const headSnapshot = this.#options.headSnapshot ?? WalStorageDriver.defaults.headSnapshot;
-        this.#cleaner = new WalCleaner(
-            walDir,
-            headSnapshot
-                ? {
-                      dir: this.#storageDir,
-                      compress: this.#compressSnapshot,
-                      reader: this.#reader,
-                  }
-                : undefined,
-        );
+        this.#cleaner = new WalCleaner(walDir);
 
-        // Start background workers
         const snapshotInterval = this.#options.snapshotInterval ?? WalStorageDriver.defaults.snapshotInterval;
         this.#workers.add(
-            this.#runWorker("wal-snapshot", snapshotInterval, () => this.#runSnapshot()),
+            this.#runWorker("wal-snapshot", snapshotInterval, () => this.#snapshotAndClean()),
             "wal-snapshot",
         );
-
-        const cleanInterval = this.#options.cleanInterval ?? WalStorageDriver.defaults.cleanInterval;
-        if (cleanInterval !== undefined) {
-            this.#workers.add(
-                this.#runWorker("wal-clean", cleanInterval, () => this.#runClean()),
-                "wal-clean",
-            );
-        }
 
         this.#initialized = true;
     }
@@ -152,13 +139,12 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         this.#abort();
         await this.#workers;
 
-        // Final snapshot
-        if (this.#lastCommitId) {
-            await this.#runSnapshot();
-            await this.#runClean();
+        if (this.#initialized) {
+            await this.#snapshotAndClean();
         }
 
         await this.#writer?.close();
+        await this.#maintenance.close();
         this.#cache = undefined;
         this.#initialized = false;
 
@@ -168,12 +154,12 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
     async clone(): Promise<StorageDriver> {
         this.#assertInitialized();
 
-        // Flush current state to snapshot so the copy is consistent
-        await this.#runSnapshot();
-
-        // Copy the entire storage directory to a temp location
+        // Snapshot and copy in one maintenance task, so no compression or cleanup changes files during the copy
         const tempDir = this.#storageDir.fs.tempDirectory();
-        await this.#storageDir.fs.copy(this.#storageDir, tempDir);
+        await this.#maintenance.produce(async () => {
+            await this.#runSnapshot();
+            await this.#storageDir.fs.copy(this.#storageDir, tempDir);
+        });
 
         // Return a new WalStorageDriver backed by the copy (no root lock for the clone)
         const clone = new WalStorageDriver(undefined, { ...this.#options, storageDir: tempDir });
@@ -272,45 +258,6 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         });
     }
 
-    // --- Snapshot reconstruction ---
-
-    /**
-     * Reconstruct a snapshot as of the given timestamp.
-     *
-     * If `asOf` is omitted, returns the full current state.
-     */
-    async snapshotAtTime(asOf?: number): Promise<WalSnapshot> {
-        this.#assertInitialized();
-
-        if (asOf !== undefined && asOf > Date.now()) {
-            throw new StorageError("Timestamp is in the future");
-        }
-
-        return this.#reconstruct(
-            asOf !== undefined ? (_id, commitTs) => commitTs > asOf : undefined,
-            asOf !== undefined
-                ? baseTs => {
-                      if (baseTs > 0 && asOf < baseTs) {
-                          throw new StorageError("Timestamp predates available logs");
-                      }
-                  }
-                : undefined,
-        );
-    }
-
-    /**
-     * Reconstruct a snapshot at the given commit ID.
-     *
-     * If `commitId` is omitted, returns the full current state.
-     */
-    async snapshotAtCommit(commitId?: WalCommitId): Promise<WalSnapshot> {
-        this.#assertInitialized();
-
-        return this.#reconstruct(
-            commitId !== undefined ? (id, _commitTs) => compareCommitIds(id, commitId) > 0 : undefined,
-        );
-    }
-
     // --- Internal ---
 
     async #loadCache(): Promise<StoreData> {
@@ -335,14 +282,16 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         const store: StoreData = {};
         let afterCommitId: WalCommitId | undefined;
 
-        // Load snapshot
-        const snap = await WalSnapshot.load(this.#storageDir);
-        if (snap) {
-            Object.assign(store, snap.data);
-            afterCommitId = snap.commitId;
-            this.#lastSnapshotCommitId = snap.commitId;
-            this.#lastCommitTs = snap.ts || undefined;
-            logger.debug("Loaded snapshot at commit", snap.commitId);
+        const restored = await WalSnapshot.restore(this.#storageDir);
+        if (restored) {
+            const { snapshot, backupCommitId } = restored;
+            await this.#assertWalCovers(snapshot.commitId);
+            Object.assign(store, snapshot.data);
+            afterCommitId = snapshot.commitId;
+            this.#lastSnapshotCommitId = snapshot.commitId;
+            this.#backupSnapshotCommitId = backupCommitId;
+            this.#lastCommitTs = snapshot.ts || undefined;
+            logger.debug("Loaded snapshot at commit", snapshot.commitId);
         }
 
         // Replay WAL from after the snapshot (or from the beginning)
@@ -373,46 +322,15 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
     }
 
     /**
-     * Shared reconstruction logic for snapshotAtTime/snapshotAtCommit.
-     *
-     * @param shouldStop - if provided, called for each commit; return true to stop before applying that commit
-     * @param validateBase - if provided, called with the base snapshot ts for pre-condition checks
+     * Throw if the WAL starts after the segment of {@link commitId}, because a replay from there would skip commits.
      */
-    async #reconstruct(
-        shouldStop?: (id: WalCommitId, commitTs: number) => boolean,
-        validateBase?: (baseTs: number) => void,
-    ): Promise<WalSnapshot> {
-        const store: StoreData = {};
-        let afterCommitId: WalCommitId | undefined;
-        let lastId: WalCommitId | undefined;
-        let lastTs = 0;
-
-        // Load base snapshot
-        const snap = await WalSnapshot.load(this.#storageDir);
-        if (snap) {
-            Object.assign(store, snap.data);
-            afterCommitId = snap.commitId;
-            lastId = snap.commitId;
-            lastTs = snap.ts;
+    async #assertWalCovers(commitId: WalCommitId) {
+        const [oldest] = await this.#reader!.segments();
+        if (oldest !== undefined && oldest > commitId.segment) {
+            throw new StorageError(
+                `Snapshot in ${this.#storageDir.path} at WAL segment ${commitId.segment} cannot be restored because the WAL starts at segment ${oldest}`,
+            );
         }
-
-        validateBase?.(lastTs);
-
-        // Replay WAL commits
-        for await (const { id, commit } of this.#reader!.read(afterCommitId)) {
-            if (shouldStop?.(id, commit.ts)) {
-                break;
-            }
-            applyCommit(store, commit);
-            lastId = id;
-            lastTs = commit.ts || lastTs;
-        }
-
-        if (!lastId) {
-            throw new StorageError("No data available");
-        }
-
-        return new WalSnapshot(lastId, lastTs, store);
     }
 
     async #runWorker(name: string, interval: Duration, task: () => Promise<void>): Promise<void> {
@@ -428,60 +346,99 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         }
     }
 
+    /**
+     * Write a snapshot, then delete the WAL segments before the backup snapshot.
+     *
+     * Runs in the maintenance mutex so it never overlaps segment compression or another snapshot.
+     */
+    #snapshotAndClean(): Promise<void> {
+        return this.#maintenance.produce(async () => {
+            await this.#runSnapshot();
+            await this.#runClean();
+        });
+    }
+
     async #runSnapshot(): Promise<void> {
         if (!this.#lastCommitId) return;
         try {
             const store = await this.#loadCache();
-            const snapshot = new WalSnapshot(this.#lastCommitId, this.#lastCommitTs ?? 0, store);
-            await snapshot.save(this.#storageDir, { compress: this.#compressSnapshot });
-            this.#lastSnapshotCommitId = this.#lastCommitId;
+            const commitId = this.#lastCommitId;
+            const previousCommitId = this.#lastSnapshotCommitId;
+            if (previousCommitId !== undefined && compareCommitIds(commitId, previousCommitId) === 0) {
+                return;
+            }
+
+            const snapshot = new WalSnapshot(commitId, this.#lastCommitTs ?? 0, store, previousCommitId);
+            await snapshot.save(this.#storageDir, {
+                compress: this.#compressSnapshot,
+                fsync: this.#options.fsync ?? WalStorageDriver.defaults.fsync,
+            });
+            this.#lastSnapshotCommitId = commitId;
+            this.#backupSnapshotCommitId = previousCommitId;
         } catch (e) {
             logger.warn("Snapshot failed:", e);
         }
     }
 
+    /**
+     * Delete the WAL segments before the backup snapshot, so a fallback to the backup can still replay to the current
+     * state.
+     */
     async #runClean(): Promise<void> {
-        if (!this.#lastSnapshotCommitId) return;
+        if (!this.#backupSnapshotCommitId) return;
         try {
-            await this.#cleaner!.run(this.#lastSnapshotCommitId);
+            await this.#cleaner!.run(this.#backupSnapshotCommitId);
         } catch (e) {
             logger.warn("WAL cleanup failed:", e);
         }
     }
 
+    /**
+     * Remove the "head" snapshot that earlier versions wrote at the cleanup boundary.  Nothing reads it.
+     */
+    async #deleteObsoleteHeadSnapshot(): Promise<void> {
+        for (const name of ["head.json", "head.json.gz", "head.tmp.json", "head.tmp.json.gz"]) {
+            await this.#storageDir.file(name).delete();
+        }
+    }
+
     async #compressRotatedSegments(): Promise<void> {
-        const walDir = this.#storageDir.directory("wal");
-        if (!(await walDir.exists())) return;
+        try {
+            const walDir = this.#storageDir.directory("wal");
+            if (!(await walDir.exists())) return;
 
-        const activeSegment = this.#writer!.currentSegment;
+            const activeSegment = this.#writer!.currentSegment;
+            const fsync = this.#options.fsync ?? WalStorageDriver.defaults.fsync;
 
-        for await (const entry of walDir.entries()) {
-            if (entry.kind !== "file") continue;
-            if (!entry.name.endsWith(".jsonl")) continue;
+            for await (const entry of walDir.entries()) {
+                if (entry.kind !== "file") continue;
+                if (!entry.name.endsWith(".jsonl")) continue;
 
-            const seg = parseSegmentFilename(entry.name);
-            if (seg === undefined || seg === activeSegment) continue;
+                const seg = parseSegmentFilename(entry.name);
+                if (seg === undefined || seg === activeSegment) continue;
 
-            try {
-                const gzName = compressedSegmentFilename(seg);
-                const gzFile = walDir.file(gzName);
+                try {
+                    const gzName = compressedSegmentFilename(seg);
+                    const gzFile = walDir.file(gzName);
 
-                if (await gzFile.exists()) {
-                    // Compressed file already exists — just remove the original
-                    await entry.delete();
-                    continue;
+                    if (await gzFile.exists()) {
+                        // Compressed file already exists — just remove the original
+                        await entry.delete();
+                        continue;
+                    }
+
+                    const srcFile = walDir.file(segmentFilename(seg));
+                    const tmpFile = walDir.file(gzName + ".tmp");
+
+                    await writeSynced(tmpFile, Gzip.compress(srcFile.readBytes()), fsync);
+                    await tmpFile.rename(gzName);
+                    await srcFile.delete();
+                } catch (e) {
+                    logger.warn(`Failed to compress WAL segment ${seg}:`, e);
                 }
-
-                const srcFile = walDir.file(segmentFilename(seg));
-                const tmpName = gzName + ".tmp";
-                const tmpFile = walDir.file(tmpName);
-
-                await tmpFile.write(Gzip.compress(srcFile.readBytes()));
-                await tmpFile.rename(gzName);
-                await srcFile.delete();
-            } catch (e) {
-                logger.warn(`Failed to compress WAL segment ${seg}:`, e);
             }
+        } catch (e) {
+            logger.warn("Failed to compress rotated WAL segments:", e);
         }
     }
 
@@ -509,7 +466,7 @@ export namespace WalStorageDriver {
         maxSegmentSize?: number;
 
         /**
-         * Whether to fsync after each WAL write.
+         * Whether to fsync after each WAL write and before a snapshot or compressed WAL segment replaces older data.
          */
         fsync?: boolean;
 
@@ -522,11 +479,6 @@ export namespace WalStorageDriver {
          * Whether to gzip-compress rotated WAL segments.  Defaults to true if the runtime supports gzip.
          */
         compressLog?: boolean;
-
-        /**
-         * Whether to capture a head snapshot at the truncation boundary when cleaning old WAL segments.
-         */
-        headSnapshot?: boolean;
     }
 
     export interface Options {
@@ -542,20 +494,16 @@ export namespace WalStorageDriver {
         maxSegmentSize?: number;
 
         /**
-         * Whether to fsync after each WAL write for durability against unexpected process termination.
+         * Whether to fsync after each WAL write and before a snapshot or compressed WAL segment replaces older data, for
+         * durability against power loss.
          */
         fsync?: boolean;
 
         /**
-         * Interval between periodic snapshots that consolidate WAL state into a single file.
+         * Interval between periodic snapshots that consolidate WAL state into a single file.  After each snapshot, the
+         * WAL segments before the previous snapshot are deleted, so the WAL holds up to about two intervals of writes.
          */
         snapshotInterval?: Duration;
-
-        /**
-         * Interval between periodic WAL cleanup that removes segments already captured in a snapshot.  Undefined
-         * disables cleanup.
-         */
-        cleanInterval?: Duration;
 
         /**
          * Whether to gzip-compress snapshots.  Defaults to true if the runtime supports gzip.
@@ -566,20 +514,13 @@ export namespace WalStorageDriver {
          * Whether to gzip-compress rotated WAL segments.  Defaults to true if the runtime supports gzip.
          */
         compressLog?: boolean;
-
-        /**
-         * Whether to capture a head snapshot at the truncation boundary when cleaning old WAL segments.
-         */
-        headSnapshot?: boolean;
     }
 
     export const defaults = {
         maxSegmentSize: 16 * 1024 * 1024,
         fsync: true,
         snapshotInterval: Hours(6),
-        cleanInterval: undefined as Duration | undefined,
         compressSnapshot: Gzip.isAvailable,
         compressLog: Gzip.isAvailable,
-        headSnapshot: true,
     } as const satisfies { [K in keyof Required<Omit<Options, "storageDir">>]: Omit<Options, "storageDir">[K] };
 }

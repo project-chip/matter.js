@@ -26,6 +26,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Storage drivers state how long dirty values may be buffered via `StorageDriver.writeCoalescingInterval`
     - Enhancement: `nextEmitOf()` waits for the next emit of an `Observable` without missing one that comes right after a state check
     - Adjustment: The default log format is plain text instead of ANSI; set `log.format` or `Logger.format` to choose another
+    - Adjustment: Removed the unused WAL storage history API (`WalStorageDriver.snapshotAtTime()`/`snapshotAtCommit()`, the `headSnapshot` and `cleanInterval` options, and the `WalSnapshot` query methods)
     - Fix: DNS-SD discovery ignores the known-answer records of mDNS queries, so a controller no longer dials a node through the wrong interface
     - Fix: (@grzonu) DNS-SD queries send known answers with their remaining TTL and omit those past half their TTL
     - Fix: DNS-SD honors cache-flush bits and goodbyes, ignores invalid SRV records, resolves the SRV target host, and keeps messages with one unreadable record
@@ -34,6 +35,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Timers support intervals longer than 2^31-1 ms (about 24.8 days)
     - Fix: A failing log destination no longer breaks the code that logged
     - Fix: Opening a namespace whose `driver.json` names an unregistered storage driver throws `NoProviderError`
+    - Fix: WAL storage deletes old log segments after each periodic snapshot instead of only on close, flushes snapshots to disk, and restores from the previous snapshot when the current one is unreadable
     - Fix: Corrects log formatting of HTML escaping, `FormattedText` list nesting, list diff markers and `Lifetime.details`
     - Fix: The `Symbol.metadata` polyfill no longer conflicts with `lib.esnext.decorators` in the published declarations
     - Fix: DNS-SD TXT keys match regardless of case, and `IpService` reports a change when a newer TXT record drops a key
