@@ -349,6 +349,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A closed `PairedNode` starts no interaction, and closing nodes or the controller completes even when a step fails
     - Fix: PASE with a known address reports a wrong passcode, and falls back to discovery when the address is unreachable
     - Fix: `CommissioningController.commissionNode()` no longer waits forever for a connected node that finished initializing before it started waiting
+    - Fix: (@cwedgwood) Commissioned node enumeration and `isCommissioned()` skip peers whose state is not readable, such as a peer being deleted, and peers that have left the fabric
 
 ## 0.17.9 (2026-08-06)
 
