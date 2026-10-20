@@ -276,6 +276,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: PASE validates PBKDF parameters and message contents
     - Fix: New PASE and CASE sessions never use local session ID 0
     - Fix: The failsafe re-arm during BLE commissioning no longer shortens a longer failsafe
+    - Fix: Commissioning skips the failsafe re-arm between steps once the commissioning session is closed, instead of aborting
     - Fix: BLE discovery shares one scan, handles timeouts, forgets stale or just-commissioned devices and offers only reachable ones
     - Fix: BTP sessions respect the offered segment size, close on write failures and abort on cancel
     - Fix: A controller resubscribes at once on any message from a LIT ICD peer
