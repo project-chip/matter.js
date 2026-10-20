@@ -18,7 +18,6 @@ import type { SupportedStorageTypes } from "../StringifyTools.js";
 import { WalCleaner } from "./WalCleaner.js";
 import {
     type StoreData,
-    type WalCommit,
     type WalCommitId,
     compareCommitIds,
     compressedSegmentFilename,
@@ -36,8 +35,8 @@ const logger = Logger.get("WalStorageDriver");
 /**
  * Transactional storage backend using a write-ahead log (WAL).
  *
- * Data is loaded from the snapshot + WAL on first read and cached.  Writes update the cache incrementally so
- * subsequent reads avoid a full reload.
+ * {@link initialize} loads the snapshot and replays the WAL into memory before any read or write is possible.  Reads
+ * use that copy; each commit is appended to the WAL and then applied to it.
  */
 export class WalStorageDriver extends FilesystemStorageDriver implements CloneableStorage {
     static readonly id = "wal";
@@ -52,7 +51,9 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         try {
             await storage.initialize();
         } catch (error) {
-            await storage.close().catch(() => {});
+            await storage
+                .close()
+                .catch(closeError => logger.warn("Closing storage after a failed open failed:", closeError));
             throw error;
         }
         return storage;
@@ -60,48 +61,41 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
 
     readonly #storageDir: Directory;
     readonly #options: WalStorageDriver.Options;
-    #cache?: StoreData;
-    #cacheLoading?: Promise<StoreData>;
-    #pendingOps?: WalCommit[];
+    #state?: OpenState;
     #abort = new Abort();
     #workers = new BasicMultiplex();
     #maintenance = new Mutex(this);
-    #initialized = false;
-    #lastCommitId?: WalCommitId;
-    #lastCommitTs?: number;
-    #lastSnapshotCommitId?: WalCommitId;
-    #backupSnapshotCommitId?: WalCommitId;
-    #writer?: WalWriter;
-    #reader?: WalReader;
-    #cleaner?: WalCleaner;
-    #compressSnapshot = true;
+    readonly #compressSnapshot: boolean;
 
     constructor(namespace?: DataNamespace, options?: WalStorageDriver.Options) {
         super(namespace);
         this.#storageDir = options?.storageDir ?? this.root!.directory;
         this.#options = options ?? {};
+        this.#compressSnapshot = this.#options.compressSnapshot ?? WalStorageDriver.defaults.compressSnapshot;
     }
 
     get initialized() {
-        return this.#initialized;
+        return this.#state !== undefined;
     }
 
     override async initialize(): Promise<void> {
-        if (this.#initialized) {
+        if (this.#state) {
             throw new StorageError("WalStorageDriver already initialized");
         }
 
         await super.initialize();
+        try {
+            await this.#open();
+        } catch (error) {
+            await super.close();
+            throw error;
+        }
+    }
 
+    async #open() {
         this.#abort = new Abort();
         this.#workers = new BasicMultiplex();
         this.#maintenance = new Mutex(this);
-        this.#cache = undefined;
-        this.#pendingOps = undefined;
-        this.#lastCommitId = undefined;
-        this.#lastCommitTs = undefined;
-        this.#lastSnapshotCommitId = undefined;
-        this.#backupSnapshotCommitId = undefined;
 
         await this.#storageDir.mkdir();
         await this.#deleteObsoleteHeadSnapshot();
@@ -109,10 +103,11 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         const walDir = this.#storageDir.directory("wal");
         await walDir.mkdir();
 
-        const compressLog = this.#options.compressLog ?? WalStorageDriver.defaults.compressLog;
+        const reader = new WalReader(walDir);
+        const loaded = await this.#load(reader);
 
-        this.#reader = new WalReader(walDir);
-        this.#writer = new WalWriter(walDir, {
+        const compressLog = this.#options.compressLog ?? WalStorageDriver.defaults.compressLog;
+        const writer = new WalWriter(walDir, {
             name: this.root?.namespace,
             maxSegmentSize: this.#options.maxSegmentSize,
             fsync: this.#options.fsync,
@@ -122,37 +117,32 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
                   }
                 : undefined,
         });
-        this.#compressSnapshot = this.#options.compressSnapshot ?? WalStorageDriver.defaults.compressSnapshot;
-
-        this.#cleaner = new WalCleaner(walDir);
+        this.#state = { ...loaded, writer, cleaner: new WalCleaner(walDir) };
 
         const snapshotInterval = this.#options.snapshotInterval ?? WalStorageDriver.defaults.snapshotInterval;
         this.#workers.add(
             this.#runWorker("wal-snapshot", snapshotInterval, () => this.#snapshotAndClean()),
             "wal-snapshot",
         );
-
-        this.#initialized = true;
     }
 
     override async close(): Promise<void> {
         this.#abort();
         await this.#workers;
 
-        if (this.#initialized) {
+        const state = this.#state;
+        if (state) {
             await this.#snapshotAndClean();
+            await state.writer.close();
         }
-
-        await this.#writer?.close();
         await this.#maintenance.close();
-        this.#cache = undefined;
-        this.#initialized = false;
+        this.#state = undefined;
 
         await super.close();
     }
 
     async clone(): Promise<StorageDriver> {
-        this.#assertInitialized();
+        this.#requireState();
 
         // Snapshot and copy in one maintenance task, so no compression or cleanup changes files during the copy
         const tempDir = this.#storageDir.fs.tempDirectory();
@@ -163,36 +153,39 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
 
         // Return a new WalStorageDriver backed by the copy (no root lock for the clone)
         const clone = new WalStorageDriver(undefined, { ...this.#options, storageDir: tempDir });
-        await clone.initialize();
+        try {
+            await clone.initialize();
+        } catch (error) {
+            await tempDir
+                .delete()
+                .catch(deleteError => logger.warn(`Deleting clone directory ${tempDir.path} failed:`, deleteError));
+            throw error;
+        }
         return clone;
     }
 
-    // --- Read operations (loaded from cache) ---
+    // --- Read operations (from the in-memory copy) ---
 
     async get(contexts: string[], key: string): Promise<SupportedStorageTypes | undefined> {
-        this.#assertInitialized();
-        const store = await this.#loadCache();
+        const { store } = this.#requireState();
         const contextKey = this.#contextKey(contexts);
         return store[contextKey]?.[key];
     }
 
     async keys(contexts: string[]): Promise<string[]> {
-        this.#assertInitialized();
-        const store = await this.#loadCache();
+        const { store } = this.#requireState();
         const contextKey = this.#contextKey(contexts);
         return Object.keys(store[contextKey] ?? {});
     }
 
     async values(contexts: string[]): Promise<Record<string, SupportedStorageTypes>> {
-        this.#assertInitialized();
-        const store = await this.#loadCache();
+        const { store } = this.#requireState();
         const contextKey = this.#contextKey(contexts);
         return { ...(store[contextKey] ?? {}) };
     }
 
     async contexts(contexts: string[]): Promise<string[]> {
-        this.#assertInitialized();
-        const store = await this.#loadCache();
+        const { store } = this.#requireState();
         const contextKey = contexts.length ? contexts.join(".") : "";
         const prefix = contextKey.length ? `${contextKey}.` : "";
         const found = new Set<string>();
@@ -216,7 +209,6 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         keyOrValues: string | Record<string, SupportedStorageTypes>,
         value?: SupportedStorageTypes,
     ): Promise<void> {
-        this.#assertInitialized();
         await using tx = await this.begin();
         if (typeof keyOrValues === "string") {
             await tx.set(contexts, keyOrValues, value!);
@@ -227,14 +219,12 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
     }
 
     async delete(contexts: string[], key: string): Promise<void> {
-        this.#assertInitialized();
         await using tx = await this.begin();
         await tx.delete(contexts, key);
         await tx.commit();
     }
 
     async clearAll(contexts: string[]): Promise<void> {
-        this.#assertInitialized();
         await using tx = await this.begin();
         await tx.clearAll(contexts);
         await tx.commit();
@@ -243,89 +233,59 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
     // --- Transactions ---
 
     override async begin(): Promise<WalTransaction> {
-        this.#assertInitialized();
-        return new WalTransaction(this, this.#writer!, (id, ts, ops) => {
-            this.#lastCommitId = id;
-            this.#lastCommitTs = ts;
-
-            if (this.#cache !== undefined) {
-                applyCommit(this.#cache, { ts, ops });
-            } else if (this.#cacheLoading !== undefined || this.#pendingOps !== undefined) {
-                // Load in-flight — buffer so #doLoadCache can reconcile after replay
-                (this.#pendingOps ??= []).push({ ts, ops });
-            }
-            this.#cacheLoading = undefined;
+        const state = this.#requireState();
+        return new WalTransaction(this, state.writer, (id, ts, ops) => {
+            state.lastCommitId = id;
+            state.lastCommitTs = ts;
+            applyCommit(state.store, { ts, ops });
         });
     }
 
     // --- Internal ---
 
-    async #loadCache(): Promise<StoreData> {
-        if (this.#cache) {
-            return this.#cache;
+    #requireState(): OpenState {
+        if (this.#state === undefined) {
+            throw new StorageError("WalStorageDriver is not initialized");
         }
-
-        if (this.#cacheLoading) {
-            return this.#cacheLoading;
-        }
-
-        this.#cacheLoading = this.#doLoadCache();
-
-        try {
-            return await this.#cacheLoading;
-        } finally {
-            this.#cacheLoading = undefined;
-        }
+        return this.#state;
     }
 
-    async #doLoadCache(): Promise<StoreData> {
-        const store: StoreData = {};
-        let afterCommitId: WalCommitId | undefined;
+    /**
+     * Restore the snapshot and replay the WAL after it.
+     */
+    async #load(reader: WalReader): Promise<StoreState> {
+        const loaded: StoreState = { store: {} };
 
         const restored = await WalSnapshot.restore(this.#storageDir);
         if (restored) {
             const { snapshot, backupCommitId } = restored;
-            await this.#assertWalCovers(snapshot.commitId);
-            Object.assign(store, snapshot.data);
-            afterCommitId = snapshot.commitId;
-            this.#lastSnapshotCommitId = snapshot.commitId;
-            this.#backupSnapshotCommitId = backupCommitId;
-            this.#lastCommitTs = snapshot.ts || undefined;
+            await this.#assertWalCovers(reader, snapshot.commitId);
+            Object.assign(loaded.store, snapshot.data);
+            loaded.lastCommitId = loaded.lastSnapshotCommitId = snapshot.commitId;
+            loaded.lastCommitTs = snapshot.ts || undefined;
+            loaded.backupSnapshotCommitId = backupCommitId;
             logger.debug("Loaded snapshot at commit", snapshot.commitId);
         }
 
-        // Replay WAL from after the snapshot (or from the beginning)
         let replayCount = 0;
-        for await (const { id, commit } of this.#reader!.read(afterCommitId)) {
-            applyCommit(store, commit);
-            this.#lastCommitId = id;
-            this.#lastCommitTs = commit.ts || this.#lastCommitTs;
+        for await (const { id, commit } of reader.read(loaded.lastCommitId)) {
+            applyCommit(loaded.store, commit);
+            loaded.lastCommitId = id;
+            loaded.lastCommitTs = commit.ts || loaded.lastCommitTs;
             replayCount++;
         }
         if (replayCount > 0) {
             logger.debug(`Replayed ${replayCount} WAL commits`);
-        } else if (afterCommitId) {
-            this.#lastCommitId = afterCommitId;
         }
 
-        // Reconcile commits that arrived during the load (idempotent if already replayed)
-        const pending = this.#pendingOps;
-        if (pending !== undefined) {
-            this.#pendingOps = undefined;
-            for (const commit of pending) {
-                applyCommit(store, commit);
-            }
-        }
-
-        this.#cache = store;
-        return store;
+        return loaded;
     }
 
     /**
      * Throw if the WAL starts after the segment of {@link commitId}, because a replay from there would skip commits.
      */
-    async #assertWalCovers(commitId: WalCommitId) {
-        const [oldest] = await this.#reader!.segments();
+    async #assertWalCovers(reader: WalReader, commitId: WalCommitId) {
+        const [oldest] = await reader.segments();
         if (oldest !== undefined && oldest > commitId.segment) {
             throw new StorageError(
                 `Snapshot in ${this.#storageDir.path} at WAL segment ${commitId.segment} cannot be restored because the WAL starts at segment ${oldest}`,
@@ -359,22 +319,21 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
     }
 
     async #runSnapshot(): Promise<void> {
-        if (!this.#lastCommitId) return;
+        const state = this.#requireState();
+        const { store, lastCommitId: commitId, lastSnapshotCommitId: previousCommitId } = state;
+        if (commitId === undefined) return;
         try {
-            const store = await this.#loadCache();
-            const commitId = this.#lastCommitId;
-            const previousCommitId = this.#lastSnapshotCommitId;
             if (previousCommitId !== undefined && compareCommitIds(commitId, previousCommitId) === 0) {
                 return;
             }
 
-            const snapshot = new WalSnapshot(commitId, this.#lastCommitTs ?? 0, store, previousCommitId);
+            const snapshot = new WalSnapshot(commitId, state.lastCommitTs ?? 0, store, previousCommitId);
             await snapshot.save(this.#storageDir, {
                 compress: this.#compressSnapshot,
                 fsync: this.#options.fsync ?? WalStorageDriver.defaults.fsync,
             });
-            this.#lastSnapshotCommitId = commitId;
-            this.#backupSnapshotCommitId = previousCommitId;
+            state.lastSnapshotCommitId = commitId;
+            state.backupSnapshotCommitId = previousCommitId;
         } catch (e) {
             logger.warn("Snapshot failed:", e);
         }
@@ -385,9 +344,10 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
      * state.
      */
     async #runClean(): Promise<void> {
-        if (!this.#backupSnapshotCommitId) return;
+        const { cleaner, backupSnapshotCommitId } = this.#requireState();
+        if (backupSnapshotCommitId === undefined) return;
         try {
-            await this.#cleaner!.run(this.#backupSnapshotCommitId);
+            await cleaner.run(backupSnapshotCommitId);
         } catch (e) {
             logger.warn("WAL cleanup failed:", e);
         }
@@ -407,7 +367,7 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
             const walDir = this.#storageDir.directory("wal");
             if (!(await walDir.exists())) return;
 
-            const activeSegment = this.#writer!.currentSegment;
+            const activeSegment = this.#requireState().writer.currentSegment;
             const fsync = this.#options.fsync ?? WalStorageDriver.defaults.fsync;
 
             for await (const entry of walDir.entries()) {
@@ -450,12 +410,31 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         }
         return contexts.join(".");
     }
+}
 
-    #assertInitialized(): void {
-        if (!this.#initialized) {
-            throw new StorageError("WalStorageDriver is not initialized");
-        }
-    }
+/**
+ * The in-memory data of a {@link WalStorageDriver} and the WAL position it reflects.  Commits update the store and the
+ * last commit; snapshots update the snapshot commits.
+ */
+interface StoreState {
+    store: StoreData;
+    lastCommitId?: WalCommitId;
+    lastCommitTs?: number;
+    lastSnapshotCommitId?: WalCommitId;
+
+    /**
+     * Commit of the backup snapshot.  WAL segments before its segment may be deleted.
+     */
+    backupSnapshotCommitId?: WalCommitId;
+}
+
+/**
+ * The data and file access that a successful {@link WalStorageDriver.initialize} creates.  The workers and the
+ * maintenance mutex stay outside, because {@link WalStorageDriver.close} must also run after a failed initialize.
+ */
+interface OpenState extends StoreState {
+    writer: WalWriter;
+    cleaner: WalCleaner;
 }
 
 export namespace WalStorageDriver {

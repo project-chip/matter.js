@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Directory } from "#fs/Directory.js";
 import { MockFilesystem } from "#fs/MockFilesystem.js";
+import { StorageError } from "#storage/StorageDriver.js";
 import {
     compressedSegmentFilename,
     parseSegmentFilename,
@@ -25,6 +27,18 @@ describe("WalStorageDriver", () => {
     beforeEach(() => {
         fs = new MockFilesystem();
     });
+
+    async function deleteSnapshots(storageDir: Directory) {
+        for (const name of ["snapshot.json", "snapshot.json.gz", "snapshot.prev.json", "snapshot.prev.json.gz"]) {
+            await storageDir.file(name).delete();
+        }
+    }
+
+    async function deleteWal(storageDir: Directory) {
+        for await (const entry of storageDir.directory("wal").entries()) {
+            await entry.delete();
+        }
+    }
 
     async function createStorage(options?: WalStorageDriver.Options) {
         const storageDir = fs.directory("storage");
@@ -106,6 +120,8 @@ describe("WalStorageDriver", () => {
         await storage.set(["ctx"], "key", "value");
         await storage.close();
         await storage.close();
+
+        await expect(storage.get(["ctx"], "key")).rejectedWith(StorageError, "not initialized");
     });
 
     it("clones the current state into an independent storage", async () => {
@@ -400,25 +416,22 @@ describe("WalStorageDriver", () => {
         });
     });
 
-    describe("cache", () => {
-        it("invalidates cache on write", async () => {
+    describe("load", () => {
+        it("reads its own writes", async () => {
             const storage = await createStorage();
 
-            // First write + read populates cache
             await storage.set(["ctx"], "key", "v1");
             expect(await storage.get(["ctx"], "key")).equal("v1");
 
-            // Second write invalidates, next read reloads from disk
             await storage.set(["ctx"], "key", "v2");
             expect(await storage.get(["ctx"], "key")).equal("v2");
 
             await storage.close();
         });
 
-        it("defers loading until first read", async () => {
+        it("loads the stored state during initialize", async () => {
             const storageDir = fs.directory("storage");
 
-            // Write some data
             const storage1 = new WalStorageDriver(undefined, {
                 storageDir,
                 fsync: false,
@@ -428,21 +441,57 @@ describe("WalStorageDriver", () => {
             await storage1.set(["ctx"], "key", "value");
             await storage1.close();
 
-            // Reopen — initialize should not load data yet
             const storage2 = new WalStorageDriver(undefined, {
                 storageDir,
                 fsync: false,
                 snapshotInterval: Seconds(600),
             });
             await storage2.initialize();
+            await storageDir.delete();
+            expect(await storageDir.exists()).equal(false);
 
-            // Write without reading first — should work
-            await storage2.set(["ctx"], "key2", "value2");
-
-            // Now read — loads cache from disk
             expect(await storage2.get(["ctx"], "key")).equal("value");
-            expect(await storage2.get(["ctx"], "key2")).equal("value2");
             await storage2.close();
+        });
+
+        it("restores from the snapshot alone", async () => {
+            const storageDir = fs.directory("storage");
+            const storage = await createStorage();
+            await storage.set(["ctx"], "key", "value");
+            await storage.close();
+            await deleteWal(storageDir);
+
+            const reopened = await createStorage();
+            expect(await reopened.get(["ctx"], "key")).equal("value");
+            await reopened.close();
+        });
+
+        it("restores from the WAL alone and snapshots it again", async () => {
+            const storageDir = fs.directory("storage");
+            const storage = await createStorage();
+            await storage.set(["ctx"], "key", "value");
+            await storage.close();
+            await deleteSnapshots(storageDir);
+
+            const reopened = await createStorage();
+            expect(await reopened.get(["ctx"], "key")).equal("value");
+            await reopened.close();
+
+            const snapshot = await WalSnapshot.load(storageDir);
+            expect(snapshot!.data.ctx.key).equal("value");
+        });
+
+        it("can be closed after a failed initialize", async () => {
+            const storageDir = fs.directory("storage");
+            const storage = await createStorage();
+            await storage.set(["ctx"], "key", "value");
+            await storage.close();
+            await storageDir.file("snapshot.json.gz").write("not gzip");
+
+            const failed = new WalStorageDriver(undefined, { storageDir, fsync: false });
+            await expect(failed.initialize()).rejectedWith(StorageError);
+            await failed.close();
+            expect(failed.initialized).equal(false);
         });
     });
 
@@ -555,10 +604,17 @@ describe("WalStorageDriver", () => {
             }
             await storageDir.file("snapshot.json.gz").write("not gzip");
 
-            const storage = await createStorage({ maxSegmentSize: 50 });
+            await expect(createStorage({ maxSegmentSize: 50 })).rejectedWith("cannot be restored");
+        });
 
-            await expect(storage.get(["ctx"], "key1a")).rejectedWith("cannot be restored");
+        it("fails to open when the snapshot is unreadable and no backup exists", async () => {
+            const storageDir = fs.directory("storage");
+            const storage = await createStorage();
+            await storage.set(["ctx"], "key", "value");
             await storage.close();
+            await storageDir.file("snapshot.json.gz").write("not gzip");
+
+            await expect(createStorage()).rejectedWith(StorageError, "is unreadable");
         });
 
         it("flushes snapshots and compressed WAL segments before renaming them into place", async () => {
