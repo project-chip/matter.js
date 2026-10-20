@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.18.0 (2026-10-20)
 
 - Breaking: Matter 1.6.1 brings specification changes that may require code adjustments
     - The Groupcast cluster and the Access Control auxiliary ACL are enabled by default for devices and bridges
