@@ -53,6 +53,9 @@ export class WalSnapshot {
      *
      * The write is atomic: data goes to a temporary file first and is renamed into place.  With `fsync` (default true)
      * the data is flushed to persistent storage before the rename, so a power loss cannot leave a truncated snapshot.
+     *
+     * The data is serialized before the first `await`, so the caller may change {@link data} as soon as this returns its
+     * promise.
      */
     async save(dir: Directory, options?: { compress?: boolean; basename?: string; fsync?: boolean }): Promise<void> {
         const compress = options?.compress ?? true;

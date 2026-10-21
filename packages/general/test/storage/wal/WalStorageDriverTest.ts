@@ -29,6 +29,33 @@ describe("WalStorageDriver", () => {
         fs = new MockFilesystem();
     });
 
+    const snapshotInterval = Seconds(600);
+
+    /**
+     * Let queued maintenance work run, well before the periodic snapshot is due.  For checks that nothing happens.
+     */
+    async function settle() {
+        await MockTime.resolve(Time.sleep("maintenance", Seconds(5)), { macrotasks: true, stepMs: 1000 });
+    }
+
+    /**
+     * Wait for {@link condition}, failing well before the periodic snapshot could satisfy it.
+     */
+    async function waitFor(condition: () => Promise<boolean>) {
+        const attempts = snapshotInterval / Seconds(10);
+        await MockTime.resolve(
+            (async () => {
+                for (let attempt = 0; !(await condition()); attempt++) {
+                    if (attempt === attempts) {
+                        expect.fail(`Condition not reached within ${attempts} seconds of mock time`);
+                    }
+                    await Time.sleep("wait for condition", Seconds(1));
+                }
+            })(),
+            { macrotasks: true, stepMs: 1000 },
+        );
+    }
+
     async function deleteSnapshots(storageDir: Directory) {
         for (const name of ["snapshot.json", "snapshot.json.gz", "snapshot.prev.json", "snapshot.prev.json.gz"]) {
             await storageDir.file(name).delete();
@@ -46,7 +73,7 @@ describe("WalStorageDriver", () => {
         const storage = new WalStorageDriver(undefined, {
             storageDir,
             fsync: false,
-            snapshotInterval: Seconds(600),
+            snapshotInterval,
             ...options,
         });
         await storage.initialize();
@@ -142,7 +169,7 @@ describe("WalStorageDriver", () => {
         const storage = new WalStorageDriver(undefined, {
             storageDir,
             fsync: false,
-            snapshotInterval: Seconds(600),
+            snapshotInterval,
         });
         await storage.initialize();
         await storage.set(["ctx"], "key", "value1");
@@ -201,7 +228,7 @@ describe("WalStorageDriver", () => {
         const opts: WalStorageDriver.Options = {
             storageDir,
             fsync: false,
-            snapshotInterval: Seconds(600),
+            snapshotInterval,
         };
 
         const storage = new WalStorageDriver(undefined, opts);
@@ -230,7 +257,7 @@ describe("WalStorageDriver", () => {
         const storage = new WalStorageDriver(undefined, {
             storageDir,
             fsync: false,
-            snapshotInterval: Seconds(600),
+            snapshotInterval,
         });
         await storage.initialize();
 
@@ -243,7 +270,7 @@ describe("WalStorageDriver", () => {
         const storage2 = new WalStorageDriver(undefined, {
             storageDir,
             fsync: false,
-            snapshotInterval: Seconds(600),
+            snapshotInterval,
         });
         await storage2.initialize();
 
@@ -319,7 +346,7 @@ describe("WalStorageDriver", () => {
             const storage = new WalStorageDriver(undefined, {
                 storageDir,
                 fsync: false,
-                snapshotInterval: Seconds(600),
+                snapshotInterval,
             });
             await storage.initialize();
 
@@ -331,7 +358,7 @@ describe("WalStorageDriver", () => {
             const storage2 = new WalStorageDriver(undefined, {
                 storageDir,
                 fsync: false,
-                snapshotInterval: Seconds(600),
+                snapshotInterval,
             });
             await storage2.initialize();
             await storage2.set(["ctx"], "key3", "from-wal-3");
@@ -341,7 +368,7 @@ describe("WalStorageDriver", () => {
             const storage3 = new WalStorageDriver(undefined, {
                 storageDir,
                 fsync: false,
-                snapshotInterval: Seconds(600),
+                snapshotInterval,
             });
             await storage3.initialize();
             expect(await storage3.get(["ctx"], "key1")).equal("from-wal-1");
@@ -356,7 +383,7 @@ describe("WalStorageDriver", () => {
                 storageDir,
                 fsync: false,
                 compressSnapshot: true,
-                snapshotInterval: Seconds(600),
+                snapshotInterval,
             });
             await storage.initialize();
 
@@ -373,7 +400,7 @@ describe("WalStorageDriver", () => {
                 storageDir,
                 fsync: false,
                 compressSnapshot: true,
-                snapshotInterval: Seconds(600),
+                snapshotInterval,
             });
             await storage2.initialize();
             await storage2.set(["ctx"], "key3", "from-wal-3");
@@ -384,7 +411,7 @@ describe("WalStorageDriver", () => {
                 storageDir,
                 fsync: false,
                 compressSnapshot: true,
-                snapshotInterval: Seconds(600),
+                snapshotInterval,
             });
             await storage3.initialize();
             expect(await storage3.get(["ctx"], "key1")).equal("from-wal-1");
@@ -407,7 +434,7 @@ describe("WalStorageDriver", () => {
             const storage = new WalStorageDriver(undefined, {
                 storageDir,
                 fsync: false,
-                snapshotInterval: Seconds(600),
+                snapshotInterval,
             });
             await storage.initialize();
 
@@ -436,7 +463,7 @@ describe("WalStorageDriver", () => {
             const storage1 = new WalStorageDriver(undefined, {
                 storageDir,
                 fsync: false,
-                snapshotInterval: Seconds(600),
+                snapshotInterval,
             });
             await storage1.initialize();
             await storage1.set(["ctx"], "key", "value");
@@ -445,7 +472,7 @@ describe("WalStorageDriver", () => {
             const storage2 = new WalStorageDriver(undefined, {
                 storageDir,
                 fsync: false,
-                snapshotInterval: Seconds(600),
+                snapshotInterval,
             });
             await storage2.initialize();
             await storageDir.delete();
@@ -554,7 +581,7 @@ describe("WalStorageDriver", () => {
             await restarted.close();
         });
 
-        it("restores from the WAL alone and snapshots it again", async () => {
+        it("restores from the WAL alone and snapshots it right after opening", async () => {
             const storageDir = fs.directory("storage");
             const storage = await createStorage();
             await storage.set(["ctx"], "key", "value");
@@ -563,10 +590,10 @@ describe("WalStorageDriver", () => {
 
             const reopened = await createStorage();
             expect(await reopened.get(["ctx"], "key")).equal("value");
-            await reopened.close();
+            await waitFor(() => storageDir.file("snapshot.json.gz").exists());
 
-            const snapshot = await WalSnapshot.load(storageDir);
-            expect(snapshot!.data.ctx.key).equal("value");
+            expect((await WalSnapshot.load(storageDir))!.data.ctx.key).equal("value");
+            await reopened.close();
         });
 
         it("can be closed after a failed initialize", async () => {
@@ -666,12 +693,10 @@ describe("WalStorageDriver", () => {
             expect(await storageDir.file("snapshot.corrupt.json.gz").exists()).equal(true);
             const backup = await WalSnapshot.load(storageDir, { basename: "snapshot.prev" });
 
-            await storage.set(["ctx"], "key4a", "a");
-            await storage.close();
-
+            await waitFor(async () => (await segmentNumbers())[0] === backup!.commitId.segment);
             const current = await WalSnapshot.load(storageDir);
             expect(current!.previousCommitId).deep.equal(backup!.commitId);
-            expect((await segmentNumbers())[0]).most(backup!.commitId.segment);
+            await storage.close();
         });
 
         it("refuses to restore the backup snapshot when the WAL it needs is gone", async () => {
@@ -758,6 +783,46 @@ describe("WalStorageDriver", () => {
             await storage2.close();
 
             expect(await storageDir.file("snapshot.prev.json.gz").exists()).equal(false);
+        });
+
+        it("snapshots right after opening when a crash left commits after the snapshot", async () => {
+            const storageDir = fs.directory("storage");
+            const storage = await createStorage();
+            await storage.set(["ctx"], "key", "value");
+            await storage.close();
+            const before = await WalSnapshot.load(storageDir);
+
+            // crashed stays open while restarted opens the same directory, as after a kill
+            const crashed = await createStorage();
+            await crashed.set(["ctx"], "key2", "value2");
+
+            const restarted = await createStorage();
+            await waitFor(async () => (await WalSnapshot.load(storageDir))?.data.ctx.key2 === "value2");
+
+            expect((await WalSnapshot.load(storageDir))!.previousCommitId).deep.equal(before!.commitId);
+            expect((await WalSnapshot.load(storageDir, { basename: "snapshot.prev" }))!.commitId).deep.equal(
+                before!.commitId,
+            );
+            await restarted.close();
+            await crashed.close();
+        });
+
+        it("keeps the backup when it opens after a clean stop", async () => {
+            const storageDir = fs.directory("storage");
+            for (const value of ["v1", "v2"]) {
+                const storage = await createStorage();
+                await storage.set(["ctx"], "key", value);
+                await storage.close();
+            }
+            const backup = await WalSnapshot.load(storageDir, { basename: "snapshot.prev" });
+
+            const reopened = await createStorage();
+            await settle();
+
+            expect((await WalSnapshot.load(storageDir, { basename: "snapshot.prev" }))!.commitId).deep.equal(
+                backup!.commitId,
+            );
+            await reopened.close();
         });
 
         it("deletes an obsolete head snapshot on initialize", async () => {

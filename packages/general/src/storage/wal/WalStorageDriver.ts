@@ -121,11 +121,7 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         });
         this.#state = { ...loaded, writer, cleaner: new WalCleaner(walDir) };
 
-        const snapshotInterval = this.#options.snapshotInterval ?? WalStorageDriver.defaults.snapshotInterval;
-        this.#workers.add(
-            this.#runWorker("wal-snapshot", snapshotInterval, () => this.#snapshotAndClean()),
-            "wal-snapshot",
-        );
+        this.#workers.add(this.#runSnapshotWorker(), "wal-snapshot");
     }
 
     override async close(): Promise<void> {
@@ -299,21 +295,27 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         }
     }
 
-    async #runWorker(name: string, interval: Duration, task: () => Promise<void>): Promise<void> {
+    /**
+     * Snapshot and clean right away and then every snapshot interval until {@link close} aborts it.
+     *
+     * The first run snapshots what an unclean stop left in the WAL, so the following open does not replay it again.
+     * After a clean stop it writes no snapshot.
+     */
+    async #runSnapshotWorker(): Promise<void> {
+        const interval = this.#options.snapshotInterval ?? WalStorageDriver.defaults.snapshotInterval;
         while (!this.#abort.aborted) {
-            await this.#abort.sleep(name, interval);
-            if (this.#abort.aborted) return;
-
             try {
-                await task();
+                await this.#snapshotAndClean();
             } catch (e) {
-                logger.warn(`${name} worker error:`, e);
+                logger.warn("WAL snapshot worker error:", e);
             }
+            await this.#abort.sleep("wal-snapshot", interval);
         }
     }
 
     /**
-     * Write a snapshot, then delete the WAL segments before the backup snapshot.
+     * Write a snapshot if anything was committed since the last one, then delete the WAL segments before the backup
+     * snapshot.
      *
      * Runs in the maintenance mutex so it never overlaps segment compression or another snapshot.
      */
