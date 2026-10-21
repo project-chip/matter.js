@@ -16,7 +16,12 @@ import {
 } from "@matter/main/types";
 import { Matter } from "@matter/model";
 import { UnsupportedByControllerError } from "@matter/testing";
-import type { AttributeReadEntry, CertNodeApi, ControllerAdapterOptions } from "@matter/testing";
+import type {
+    AttributeReadEntry,
+    CertNodeApi,
+    ControllerAdapterOptions,
+    ControllerCapabilityGaps,
+} from "@matter/testing";
 import { expect } from "chai";
 import { existsSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
@@ -79,12 +84,21 @@ function expectReceivedStatus(failure: unknown, code: Status, messageEnd: string
     expect(failure.message.endsWith(messageEnd), failure.message).true;
 }
 
-/** The operation an {@link UnsupportedByControllerError} names, so a test asserts on it without a cast. */
-function unsupportedOperationOf(failure: unknown) {
+/**
+ * The capability an {@link UnsupportedByControllerError} names, so a test asserts on it without a cast. Every refusal
+ * names one that chip-tool declares as a gap.
+ */
+function refusedCapabilityOf(failure: unknown) {
     if (!(failure instanceof UnsupportedByControllerError)) {
         throw new InternalError(`Expected an UnsupportedByControllerError, got ${failure}`);
     }
-    return failure.operation;
+    const gaps: ControllerCapabilityGaps = CHIP_TOOL_CAPABILITY_GAPS;
+    const reason = gaps[failure.capability];
+    if (reason === undefined) {
+        expect.fail(`chip-tool refused ${failure.capability}, which it does not declare as a gap`);
+    }
+    expect(failure.message).contains(reason);
+    return failure.capability;
 }
 
 /** The discriminator argument of an `open-commissioning-window` command line, given the args before it. */
@@ -793,15 +807,27 @@ describe("ChipToolControllerAdapter", function () {
         ]);
     });
 
-    it("reports a read of more paths than chip-tool accepts as unsupported, without issuing it", async () => {
+    it("refuses more paths than one chip-tool command carries as many-paths-per-request, without issuing it", async () => {
         const { node } = await commissioned();
 
-        const paths = new Array<{ endpoint: number; cluster: number; attribute: number }>();
-        for (let endpoint = 0; endpoint < 65; endpoint++) {
-            paths.push({ endpoint, cluster: requireId(ON_OFF.id, "OnOff"), attribute: 0 });
-        }
+        const attributes = Array.from({ length: 65 }, (_, endpoint) => ({
+            endpoint,
+            cluster: requireId(ON_OFF.id, "OnOff"),
+            attribute: 0,
+        }));
+        const events = Array.from({ length: 65 }, (_, endpoint) => ({ endpoint, cluster: 0x28, event: 0 }));
+        const intervals = { minIntervalFloorSeconds: 1, maxIntervalCeilingSeconds: 10 };
+        const refusals = [
+            () => node.readAttributes(attributes),
+            () => node.writeAttributes(attributes.map(path => ({ path, value: true }))),
+            () => node.subscribeAttributes(attributes, intervals),
+            () => node.readEvents(events),
+            () => node.subscribeEvents(events, intervals),
+        ];
 
-        expect(await rejectionOf(node.readAttributes(paths))).instanceOf(UnsupportedByControllerError);
+        for (const refuse of refusals) {
+            expect(refusedCapabilityOf(await rejectionOf(refuse()))).equal("many-paths-per-request");
+        }
         expect(fake.commands).deep.equal([]);
     });
 
@@ -814,10 +840,7 @@ describe("ChipToolControllerAdapter", function () {
                 { largeMessage: true },
             ),
         );
-        if (!(failure instanceof UnsupportedByControllerError)) {
-            throw new InternalError(`Expected an UnsupportedByControllerError, got ${failure}`);
-        }
-        expect(failure.capability).equal("tcp-transport");
+        expect(refusedCapabilityOf(failure)).equal("tcp-transport");
         expect(fake.commands).deep.equal([]);
     });
 
@@ -862,15 +885,14 @@ describe("ChipToolControllerAdapter", function () {
         expect(fake.commands).deep.equal([]);
     });
 
-    it("refuses to announce another node's OTA provider without naming a capability, as its PICS gate it", async () => {
+    it("refuses to announce another node's OTA provider as ota-provider-announcement, as its PICS say", async () => {
         const { node } = await commissioned();
 
-        const failure = await rejectionOf(node.announceOtaProvider({ provider: "2" }));
-        if (!(failure instanceof UnsupportedByControllerError)) {
-            throw new InternalError(`Expected an UnsupportedByControllerError, got ${failure}`);
-        }
-        expect(failure.capability).undefined;
+        expect(refusedCapabilityOf(await rejectionOf(node.announceOtaProvider({ provider: "2" })))).equal(
+            "ota-provider-announcement",
+        );
         expect(CHIP_TOOL_CONTROLLER_PICS["OTAR.C.M.AnnounceOTAProvider"]).equal(0);
+        expect(fake.commands).deep.equal([]);
     });
 
     it("writes two attributes of two clusters, with their data versions, in one command", async () => {
@@ -941,7 +963,7 @@ describe("ChipToolControllerAdapter", function () {
             ]);
         });
 
-        it("is refused as unsupported in a request with other attributes, before anything is sent", async () => {
+        it("is refused as typed-list-write-with-others in a request with other attributes, before anything is sent", async () => {
             const { node } = await commissioned();
 
             const failure = await rejectionOf(
@@ -950,7 +972,7 @@ describe("ChipToolControllerAdapter", function () {
                     { path: { endpoint: 0, cluster: BASIC_INFORMATION.id, attribute: NODE_LABEL.id }, value: "a" },
                 ]),
             );
-            expect(failure).instanceOf(UnsupportedByControllerError);
+            expect(refusedCapabilityOf(failure)).equal("typed-list-write-with-others");
             expect(fake.commands).deep.equal([]);
         });
 
@@ -1002,32 +1024,31 @@ describe("ChipToolControllerAdapter", function () {
         ]);
     });
 
-    it("reports a wildcard-endpoint write as unsupported, without issuing it", async () => {
+    it("refuses a wildcard-endpoint write as wildcard-write-statuses, without issuing it", async () => {
         const { node } = await commissioned();
 
         const failure = await rejectionOf(
             node.writeAttributes([{ path: { cluster: IDENTIFY.id, attribute: IDENTIFY_TIME.id }, value: 5 }]),
         );
 
-        expect(unsupportedOperationOf(failure)).equal("writeAttributes");
+        expect(refusedCapabilityOf(failure)).equal("wildcard-write-statuses");
         expect(fake.commands).deep.equal([]);
     });
 
-    it("reports a write mixing versioned and unversioned paths as unsupported, without issuing it", async () => {
+    it("refuses a write mixing versioned and unversioned paths as mixed-version-write, without issuing it", async () => {
         const { node } = await commissioned();
 
-        expect(
-            await rejectionOf(
-                node.writeAttributes([
-                    {
-                        path: { endpoint: 0, cluster: BASIC_INFORMATION.id, attribute: NODE_LABEL.id },
-                        value: "a-label",
-                        dataVersion: 11,
-                    },
-                    { path: { endpoint: 1, cluster: LEVEL_CONTROL.id, attribute: ON_LEVEL.id }, value: 3 },
-                ]),
-            ),
-        ).instanceOf(UnsupportedByControllerError);
+        const failure = await rejectionOf(
+            node.writeAttributes([
+                {
+                    path: { endpoint: 0, cluster: BASIC_INFORMATION.id, attribute: NODE_LABEL.id },
+                    value: "a-label",
+                    dataVersion: 11,
+                },
+                { path: { endpoint: 1, cluster: LEVEL_CONTROL.id, attribute: ON_LEVEL.id }, value: 3 },
+            ]),
+        );
+        expect(refusedCapabilityOf(failure)).equal("mixed-version-write");
         expect(fake.commands).deep.equal([]);
     });
 
@@ -1066,17 +1087,14 @@ describe("ChipToolControllerAdapter", function () {
         expect(fake.commands).deep.equal([`any write-by-id 0x28 0x5 '"a label with spaces"' ${ref} 0`]);
     });
 
-    it("reports a value chip-tool's own value separator would split as unsupported", async () => {
+    it("rejects a value chip-tool's own value separator would split as the step's error, without issuing it", async () => {
         const { node } = await commissioned();
 
-        expect(
-            await rejectionOf(
-                node.writeAttribute(
-                    { endpoint: 0, cluster: BASIC_INFORMATION.id, attribute: NODE_LABEL.id },
-                    "a;label",
-                ),
-            ),
-        ).instanceOf(UnsupportedByControllerError);
+        const failure = await rejectionOf(
+            node.writeAttribute({ endpoint: 0, cluster: BASIC_INFORMATION.id, attribute: NODE_LABEL.id }, "a;label"),
+        );
+        expect(failure).instanceOf(ImplementationError);
+        expect(String(failure)).contains('chip-tool splits attribute values on ";"');
         expect(fake.commands).deep.equal([]);
     });
 
@@ -1580,7 +1598,7 @@ describe("ChipToolControllerAdapter", function () {
     });
 
     describe("batched invoke", () => {
-        it("refuses a batch, since chip-tool sends one command per request", async () => {
+        it("refuses a batch as batch-invoke, since chip-tool sends one command per request", async () => {
             const { node } = await commissioned();
 
             const rejection = await rejectionOf(
@@ -1590,7 +1608,7 @@ describe("ChipToolControllerAdapter", function () {
                 ]),
             );
 
-            expect(rejection).instanceOf(UnsupportedByControllerError);
+            expect(refusedCapabilityOf(rejection)).equal("batch-invoke");
             expect(fake.commands).deep.equal([]);
         });
     });
@@ -1934,13 +1952,15 @@ describe("ChipToolControllerAdapter", function () {
 
             expect(await rejectionOf(node.subscribeAttributes([], INTERVALS))).instanceOf(ImplementationError);
             expect(
-                await rejectionOf(
-                    node.subscribeAttributes(
-                        Array.from({ length: 65 }, () => PATH),
-                        INTERVALS,
+                refusedCapabilityOf(
+                    await rejectionOf(
+                        node.subscribeAttributes(
+                            Array.from({ length: 65 }, () => PATH),
+                            INTERVALS,
+                        ),
                     ),
                 ),
-            ).instanceOf(UnsupportedByControllerError);
+            ).equal("many-paths-per-request");
             expect(fake.commands).deep.equal([]);
         });
 

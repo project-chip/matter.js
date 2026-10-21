@@ -1656,6 +1656,39 @@ describe("controller capabilities", () => {
         expect(controllerCapabilityOutOfScope(["multi-path-write"])).undefined;
     });
 
+    it("skips a step needing a mixed-version or typed list write on matterjs-server as out of scope on its own", () => {
+        env.MATTER_CERT_CONTROLLER = "matterjs-server";
+
+        for (const capability of ["mixed-version-write", "typed-list-write-with-others"] as const) {
+            expect(controllerCapabilityGap([capability])).undefined;
+            expect(controllerCapabilityOutOfScope([capability])).equal(
+                `controller "matterjs-server" does not offer ${capability}: ${MATTERJS_SERVER_OUT_OF_SCOPE[capability]}`,
+            );
+        }
+    });
+
+    it("lacks batch invoke, long path lists, wildcard write statuses and announcing another provider on chip-tool alone", () => {
+        const shapes = [
+            "batch-invoke",
+            "many-paths-per-request",
+            "wildcard-write-statuses",
+            "ota-provider-announcement",
+        ] as const;
+
+        for (const controller of ["matterjs", "matterjs-server"]) {
+            env.MATTER_CERT_CONTROLLER = controller;
+            expect(controllerCapabilityGap(shapes), controller).undefined;
+            expect(controllerCapabilityOutOfScope(shapes), controller).undefined;
+        }
+
+        env.MATTER_CERT_CONTROLLER = "chip-tool";
+        for (const capability of shapes) {
+            expect(controllerCapabilityGap([capability])).equal(
+                `controller "chip-tool" lacks ${capability}: ${CHIP_TOOL_CAPABILITY_GAPS[capability]}`,
+            );
+        }
+    });
+
     it("skips the scripted OTA provider cases on matterjs-server as out of scope, and as a gap on chip-tool", () => {
         const required = ["ota-provider", "ota-provider-script"] as const;
 

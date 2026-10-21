@@ -524,9 +524,8 @@ This is a framework-level fix (`log-follower.ts`), not something an individual T
   checks still carry the behavioral claim on either flavor — the device-log check is the TH-side
   corroboration of it.
 - **Never leave the DUT commissioned.** With ~21 steps sharing one commissioned node, the step engine aborts
-  (skips, doesn't run) every step after the one that threw — see `cert-test.ts`'s `invoke()` — except a
-  step that throws `UnsupportedByControllerError` before it recorded a check or made a controller call that
-  may change the device, which is recorded `"skipped"` and lets later steps run.
+  (skips, doesn't run) every step after the one that threw — see `cert-test.ts`'s `invoke()`. A step skipped
+  before it runs (PICS, flavor, a declared controller capability the controller lacks) lets later steps run.
   Either way a decommission written into any single step is unreliable. `.finalize()` owns it instead (see
   "Commission/decommission lifecycle" above).
 
@@ -559,25 +558,42 @@ this reason, matching the `"all-clusters"` registration already there.
 `MATTER_CERT_CONTROLLER=chip-tool` swaps `InProcessControllerAdapter` for
 `ChipToolControllerAdapter`, and the two are not interchangeable in every direction (the matterjs-server
 controller is covered in "External controller adapters" below). A step asking for
-something chip-tool cannot express gets `UnsupportedByControllerError` — recorded `"skipped"`, later
-steps still run — rather than a wrong answer. That holds only while the step has neither recorded a check
-nor made a controller call that may change the device (`step-actions.ts` classifies every controller API member); a
-refusal after either fails the run, so a step that needs such an operation after acting declares it as a
-controller capability or in the controller's PICS instead. Today the refusals are:
+something chip-tool cannot express gets `UnsupportedByControllerError` naming the capability it lacks, rather than a
+wrong answer. The step declares that capability, so it is skipped before it runs on chip-tool (see "Capabilities are
+declared up front" below). These refusals depend on the request's shape, so a step whose arguments have that shape
+declares the capability:
 
-- **A `writeAttributes` mixing versioned and unversioned entries** — chip-tool takes `--data-version`
-  once per command, applying to all its paths or none, so a request where only some entries carry a
+- **`mixed-version-write`: a `writeAttributes` mixing versioned and unversioned entries** — chip-tool takes
+  `--data-version` once per command, applying to all its paths or none, so a request where only some entries carry a
   `dataVersion` cannot be expressed as one write.
-- **A wildcard-endpoint `writeAttributes`** (`TC-IDM-3.1` step 2) — chip-tool's `WriteAttribute`
-  callback records a JSON result only for a path the device *rejected*, so successfully written
+- **`wildcard-write-statuses`: a wildcard-endpoint `writeAttributes`** (`TC-IDM-3.1` step 2) — chip-tool's
+  `WriteAttribute` callback records a JSON result only for a path the device *rejected*, so successfully written
   endpoints are invisible and the per-endpoint statuses the method contracts to return cannot be
   reconstructed. Concrete-endpoint writes are fine: absence of a status *is* the success signal, since
   Matter Core § 8.9.2.8 requires one per concrete path.
-- **A value whose encoded form contains `;`** — chip-tool splits its `attribute-values` argument on it.
-- **More than 64 paths in one read or write** — chip-tool's own `kMaxAllowedPaths`.
-- **What the controller itself holds** — `clientEndpoints()` and `clientAttribute()` (`TC-BR-4`).
-  chip-tool answers each command straight from the device and keeps nothing between them, so it has
-  no device list and no attribute state of its own to report.
+- **`typed-list-write-with-others`: `DefaultOTAProviders` written together with other entries** — chip-tool writes that
+  list through its typed cluster command, which encodes it as an empty REPLACE and one ADD per entry but writes one
+  attribute per request. Every other list goes through `write-by-id` as one REPLACE, with or without other entries,
+  and is not refused.
+- **`many-paths-per-request`: more than 64 paths in one read, subscription or write** — chip-tool's own
+  `kMaxAllowedPaths`.
+
+These refusals are whole features chip-tool, or this adapter, does not have, so a step or test that uses the feature
+at all declares the capability:
+
+- **`tcp-transport`: a TCP-backed session, which a read with `largeMessage` requires** — chip-tool reuses the session
+  commissioning established. A case asks for TCP with `transport: "tcp"`, which implies the capability.
+- **`batch-invoke`: `invokeBatch`** (`TC-IDM-1.3`) — `command-by-id` sends one command per request.
+- **`ota-provider-announcement`: `announceOtaProvider` naming another node** (`TC-SU-1.1`) — this adapter sends no
+  `AnnounceOTAProvider`, and its PICS say so too.
+- **What the controller itself holds** — `clientEndpoints()` and `clientAttribute()` (`TC-BR-4`,
+  `sustained-subscription`). chip-tool answers each command straight from the device and keeps nothing between them,
+  so it has no device list and no attribute state of its own to report.
+
+A value whose encoded form contains `;` is not a refusal: chip-tool splits its `attribute-values` argument on it, and
+the adapter throws `ImplementationError` before it sends anything, like its other input guards. The step fails, and
+inside `attempt()` the write is recorded as a failed response. No case writes such a value today, but a value read
+back from the device and written again can contain one.
 
 Multi-cluster reads and multi-attribute writes *are* supported: chip-tool zips its cluster/attribute/
 endpoint id lists element-wise when their lengths match (`InteractionModelConfig::GetAttributePaths`),
@@ -640,12 +656,11 @@ answer: a controller that cannot send a command says nothing about the device, a
   lists them.
 - An adapter that lacks something lists it, with the reason, in `CHIP_TOOL_CAPABILITY_GAPS` or
   `MATTERJS_SERVER_CAPABILITY_GAPS`, registered as `gaps`. The in-process controller lacks none and registers no
-  `gaps`. Every matterjs-server refusal names one of them
-  (`UnsupportedByControllerError.capability`), built from the same text, and so does every chip-tool refusal of an
-  operation it always lacks, except `invokeBatch`: no capability covers it, and `MCORE.IDM.C.InvokeRequest.BatchCommands`
-  gates it. chip-tool declares `tcp-transport`, `attestation`, `webrtc-requestor`, `chunked-write`,
-  `batch-arrival-order`, `session-introspection`, `sustained-subscription`, `ota-provider`, `ota-provider-script`
-  and `icd-client`.
+  `gaps`. Every refusal names a capability (`UnsupportedByControllerError.capability`, which the constructor
+  requires) that its implementation declares as a gap or out of scope, with the registered text as its detail. chip-tool declares `tcp-transport`, `attestation`, `webrtc-requestor`,
+  `chunked-write`, `batch-invoke`, `batch-arrival-order`, `many-paths-per-request`, `wildcard-write-statuses`,
+  `mixed-version-write`, `typed-list-write-with-others`, `session-introspection`, `sustained-subscription`, `ota-provider`,
+  `ota-provider-script`, `ota-provider-announcement` and `icd-client`.
 - A test declares `controllerCapabilities` on `certTest()`, and a step declares it on `step()`. A test is skipped
   when any controller role lacks one, helper roles included (each role is judged by the implementation that fills
   it). `transport: "tcp"` implies `tcp-transport`. A skipped step is counted in `controllerUnsupportedSkips`.
@@ -661,13 +676,10 @@ answer: a controller that cannot send a command says nothing about the device, a
   `unitTestingNotApplicable` or `longRunningReason(...)`. `skipOnControllerGap()` reads the controller when the test
   runs and returns the selection it judged by; the case builds its controller and writes its evidence from that
   value.
-- A refusal that names a capability and still reaches the step runner is a framework error (step verdict `error`,
-  run verdict `error`, `CertFrameworkError`), whatever the step already did: either the step lacks the declaration or
-  the implementation refuses something it declares neither as a gap nor out of scope.
-- A refusal without a capability stays a safety net: it skips a step that has not acted yet and fails one that has.
-  chip-tool refuses this way where the call decides it (a read of more paths than it accepts, an
-  `announceOtaProvider` naming another node's provider, which its PICS gate) and for `invokeBatch`. The in-process
-  adapter refuses only this way.
+- A refusal that still reaches the step runner is a framework error (step verdict `error`, run verdict `error`,
+  `CertFrameworkError`), whatever the step already did: either the step lacks the declaration or the implementation
+  refuses something it declares neither as a gap nor out of scope. A refusal is never a step outcome, so a step that
+  catches one rethrows it without recording a check. The in-process adapter refuses nothing.
 - A capability a controller deliberately does not offer is no gap: the adapter lists it in its `outOfScope`
   registration (`MATTERJS_SERVER_OUT_OF_SCOPE`), with the reason. A step needing it is skipped with that reason and
   counted in `outOfScopeSkips`, which never changes the verdict. A test needing it is skipped as a whole and writes a
@@ -1610,8 +1622,10 @@ Two gates use it, both before the device starts:
 - **Step level** — unchanged in mechanism, but the file it evaluates against now carries the overlay
   too, so a step and its test agree about what the controller can do.
 
-`UnsupportedByControllerError` stays for what PICS cannot express: a capability a controller has in
-general but not for the shape a particular step needs.
+A controller capability (`ControllerCapability`) stays for what PICS cannot express: a whole feature the adapter
+interface cannot promise (sessions, an OTA provider of its own, a sustained subscription), or a request shape a
+controller cannot send although it has the operation in general (a wildcard-endpoint write, more paths than one
+command takes).
 
 `certTest()` also takes test-level `flavors`, decided at declaration time (the flavor comes from the
 environment, not the container). A test whose device cannot exist on a flavor — an app variant only
@@ -1629,9 +1643,9 @@ command the device never answers still yields a result, carrying `NoCommandRespo
 `ClientInteraction` synthesises it for every unanswered `CommandRef` once the response ends.
 
 chip-tool has no batch invoke at all (its `command-by-id` takes one command path and sends no
-`CommandRef`). It declares that in its own PICS, so a chiptool leg skips this TC outright rather than
-running its commissioning steps and reporting the rest unsupported. The adapter still refuses the call
-itself, which is what a controller whose declaration outran its implementation would run into.
+`CommandRef`). It declares that in its own PICS and as its `batch-invoke` gap, and the TC declares
+`batch-invoke`, so a chiptool leg skips this TC outright rather than running its commissioning steps. The
+adapter still refuses the call naming `batch-invoke`, which ends a step that reaches it as a framework error.
 
 The interaction layer splits a batch the peer cannot take in one message into separate single-command
 exchanges. That is right for an ordinary caller and wrong here — the test would prove nothing about
@@ -2767,9 +2781,10 @@ controller established a new one — the controller's own id decides both, which
 keeps `{ tag, channel, controllerSessionId }` rather than the tag alone.
 
 **A session operation naming a session the controller does not hold is a state error, not a refusal.**
-`UnsupportedByControllerError` means "this controller cannot do this kind of thing" and the step runner
-records it as *skipped* when the step has not acted yet; using it for a runtime state would turn the precise defect step 1 exists to
-rule out into a clean-looking run. The in-process adapter throws `SessionStateError` for an unknown id,
+`UnsupportedByControllerError` means "this controller cannot do this kind of thing": a step that declares the
+capability is skipped before it runs, and a refusal that reaches the step runner ends the step as a framework error
+(`error`). Using it for a runtime state would report the precise defect step 1 exists to rule out as a defect of
+the framework instead of a failure. The in-process adapter throws `SessionStateError` for an unknown id,
 a detached channel, or a transport with no connection to sever, so such a step fails.
 
 ## The claim only the controller can make (`TC-SC-8.2`)
