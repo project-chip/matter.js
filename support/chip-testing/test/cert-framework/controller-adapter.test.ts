@@ -1342,6 +1342,31 @@ describe("ControllerAdapter registry", () => {
         }
     });
 
+    it("declares the diagnostics client keys of TC-DGETH-3.2, TC-DGSW-3.2, TC-DGTHREAD-3.4 and TC-DGWIFI-3.2", () => {
+        // The base file answers every key 0, so each one has to come from the overlay. The real device file answers
+        // only DGTHREAD.C and DGWIFI.C.C00.Tx 0.
+        const keys = [
+            "DGETH.C",
+            "DGETH.C.C00.Tx",
+            "DGSW.C",
+            "DGSW.C.C00.Tx",
+            "DGTHREAD.C",
+            "DGTHREAD.C.C00.Tx",
+            "DGTHREAD.C.A0006",
+            "DGWIFI.C",
+            "DGWIFI.C.C00.Tx",
+        ];
+        const asDevice = new PicsFile(keys.map(key => `${key}=0`));
+
+        for (const implementation of IMPLEMENTATIONS) {
+            const forRun = asDevice.with(controllerPicsOverridesFor(implementation));
+
+            for (const key of keys) {
+                expect(new PicsExpression(key).evaluate(forRun), `${implementation} ${key}`).equal(true);
+            }
+        }
+    });
+
     it("declares the group-administration client commands TC-SC-6.1 sends", () => {
         // ViewGroup is 0 in the device file; the two GroupKeyManagement keys are absent from it
         // entirely, and an absent key evaluates false, so either omission skips a step silently.
