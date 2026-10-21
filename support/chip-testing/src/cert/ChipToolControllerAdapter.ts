@@ -235,8 +235,8 @@ export const CHIP_TOOL_CAPABILITY_GAPS = {
     "ota-provider-script":
         "chip-tool hosts no OtaSoftwareUpdateProvider cluster, so there is no provider of its own to script or announce",
     "ota-provider-announcement":
-        "this adapter sends no AnnounceOTAProvider command, and its PICS declare OTAR.C.M.AnnounceOTAProvider " +
-        "unsupported",
+        "this adapter does not drive chip-tool's announce-otaprovider command yet, so its PICS declare " +
+        "OTAR.C.M.AnnounceOTAProvider unsupported",
     "icd-client":
         "this adapter drives chip-tool's commands for single interactions and does not expose its ICD client " +
         "(registration, key refresh and Check-In handling)",
