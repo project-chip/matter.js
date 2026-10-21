@@ -3965,3 +3965,19 @@ all-clusters app, except `TC-MOD-2.2` step 1, which reads SupportedModes. What t
   `matter-js-pics.properties` answers `OO.C` 0 and CHIP's file answers `WNCV.C` 0, and both gate their whole case.
   CHIP's file answers the other keys 1 already; the overlays declare them so that they state the controller's full
   client surface for these cases rather than rely on what a device file says.
+
+## The diagnostics client cases (`TC-DGETH-3.2`, `TC-DGSW-3.2`, `TC-DGTHREAD-3.4`, `TC-DGWIFI-3.2`)
+
+Same shape as the single-command cluster-client cases above: step 1 commissions the TH, step 2 sends one command
+without fields, and `TC-DGTHREAD-3.4` step 3 reads OverrunCount. Two points:
+
+- **All four target endpoint 0 and run on the chip flavors only.** chip's all-clusters app has all four diagnostics
+  clusters on its root, and on the macOS build each accepts its reset command: SoftwareDiagnostics has the Watermarks
+  feature, the three network clusters have ErrorCounts, and ThreadNetworkDiagnostics answers OverrunCount with 0
+  although the host has no Thread interface. Only the macOS build was checked; chip-docker runs the Linux build, whose
+  answers for Thread and Wi-Fi without such an interface are unverified. matter.js's all-clusters test device has
+  none of the four, and adding them would make it claim Thread, Wi-Fi and Ethernet interfaces it does not have, with
+  made-up counters. The DUT here is the controller, which the chip TH already tests, so the cases declare test-level
+  `flavors` instead.
+- **PICS:** CHIP's file answers `DGTHREAD.C` and `DGWIFI.C.C00.Tx` 0. Without the controller overlay the first leaves
+  `TC-DGTHREAD-3.4` pending and the second skips `TC-DGWIFI-3.2`'s only command step.
