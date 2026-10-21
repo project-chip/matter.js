@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic } from "#log/Diagnostic.js";
 import { Logger } from "#log/Logger.js";
 import type { Duration } from "#time/Duration.js";
 import { Hours } from "#time/TimeUnit.js";
@@ -266,14 +267,23 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         }
 
         let replayCount = 0;
+        const elapsed = Diagnostic.elapsed();
         for await (const { id, commit } of reader.read(loaded.lastCommitId)) {
+            if (replayCount === 0) {
+                logger.notice(
+                    `Restoring storage ${this.#storageDir.path} from its log, which the last stop did not fully save; this can take a while`,
+                );
+            }
             applyCommit(loaded.store, commit);
             loaded.lastCommitId = id;
             loaded.lastCommitTs = commit.ts || loaded.lastCommitTs;
             replayCount++;
         }
         if (replayCount > 0) {
-            logger.debug(`Replayed ${replayCount} WAL commits`);
+            loaded.restoredFromLog = true;
+            logger.notice(
+                `Restored ${replayCount} log entries of ${this.#storageDir.path} in ${elapsed}; saving the restored state, this can take a while`,
+            );
         }
 
         return loaded;
@@ -326,6 +336,9 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         });
     }
 
+    /**
+     * Write a snapshot unless nothing was committed since the last one.
+     */
     async #runSnapshot(): Promise<void> {
         const state = this.#requireState();
         const { store, lastCommitId: commitId, lastSnapshotCommitId: previousCommitId } = state;
@@ -335,15 +348,20 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
                 return;
             }
 
+            const elapsed = Diagnostic.elapsed();
             const snapshot = new WalSnapshot(commitId, state.lastCommitTs ?? 0, store, previousCommitId);
             await snapshot.save(this.#storageDir, {
                 compress: this.#compressSnapshot,
                 fsync: this.#options.fsync ?? WalStorageDriver.defaults.fsync,
             });
+            if (state.restoredFromLog) {
+                state.restoredFromLog = false;
+                logger.notice(`Saved the restored state of ${this.#storageDir.path} in ${elapsed}`);
+            }
             state.lastSnapshotCommitId = commitId;
             state.backupSnapshotCommitId = previousCommitId;
         } catch (e) {
-            logger.warn("Snapshot failed:", e);
+            logger.warn(`Snapshot of ${this.#storageDir.path} failed:`, e);
         }
     }
 
@@ -434,6 +452,12 @@ interface StoreState {
      * Commit of the backup snapshot.  WAL segments before its segment may be deleted.
      */
     backupSnapshotCommitId?: WalCommitId;
+
+    /**
+     * Set when the open replayed WAL entries, until the next snapshot saves them.  The open announces that snapshot,
+     * because its serialization delays the open.
+     */
+    restoredFromLog?: boolean;
 }
 
 /**
