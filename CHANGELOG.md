@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.18.0 (2026-10-20)
 
 - Breaking: Matter 1.6.1 brings specification changes that may require code adjustments
     - The Groupcast cluster and the Access Control auxiliary ACL are enabled by default for devices and bridges
@@ -276,6 +276,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: PASE validates PBKDF parameters and message contents
     - Fix: New PASE and CASE sessions never use local session ID 0
     - Fix: The failsafe re-arm during BLE commissioning no longer shortens a longer failsafe
+    - Fix: Commissioning skips the failsafe re-arm between steps once the commissioning session is closed, instead of aborting
     - Fix: BLE discovery shares one scan, handles timeouts, forgets stale or just-commissioned devices and offers only reachable ones
     - Fix: BTP sessions respect the offered segment size, close on write failures and abort on cancel
     - Fix: A controller resubscribes at once on any message from a LIT ICD peer
