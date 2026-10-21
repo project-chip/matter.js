@@ -33,6 +33,8 @@ export interface WalCommit {
 
 /**
  * 48-bit commit ID: high 32 bits = segment number, low 16 bits = line offset.
+ *
+ * The offset is the line's position in the segment file, counting every line, as `WalReader` reads it.
  */
 export interface WalCommitId {
     segment: number;
@@ -136,13 +138,6 @@ export function segmentFilename(segment: number): string {
  */
 export function compressedSegmentFilename(segment: number): string {
     return segment.toString(16).padStart(8, "0") + ".jsonl.gz";
-}
-
-/**
- * Returns true if the filename is a gzip-compressed segment file.
- */
-export function isCompressedSegmentFile(name: string): boolean {
-    return /^[0-9a-f]{8}\.jsonl\.gz$/i.test(name);
 }
 
 /**

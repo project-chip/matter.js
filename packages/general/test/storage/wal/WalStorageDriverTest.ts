@@ -18,6 +18,7 @@ import { WalSnapshot } from "#storage/wal/WalSnapshot.js";
 import { WalStorageDriver } from "#storage/wal/WalStorageDriver.js";
 import { Time } from "#time/Time.js";
 import { Seconds } from "#time/TimeUnit.js";
+import { Gzip } from "#util/Gzip.js";
 
 describe("WalStorageDriver", () => {
     before(() => MockTime.enable());
@@ -466,6 +467,93 @@ describe("WalStorageDriver", () => {
             await reopened.close();
         });
 
+        it("keeps a write made after restoring from the snapshot alone", async () => {
+            const storageDir = fs.directory("storage");
+            const storage = await createStorage();
+            await storage.set(["ctx"], "key", "value");
+            await storage.close();
+            await deleteWal(storageDir);
+
+            const reopened = await createStorage();
+            await reopened.set(["ctx"], "key2", "value2");
+            await reopened.close();
+
+            const restarted = await createStorage();
+            expect(await restarted.values(["ctx"])).deep.equal({ key: "value", key2: "value2" });
+            await restarted.close();
+        });
+
+        it("keeps a write made after restoring from the snapshot alone when the process then crashes", async () => {
+            const storageDir = fs.directory("storage");
+            const storage = await createStorage();
+            await storage.set(["ctx"], "key", "value");
+            await storage.close();
+            await deleteWal(storageDir);
+
+            const crashed = await createStorage();
+            await crashed.set(["ctx"], "key2", "value2");
+
+            const restarted = await createStorage();
+            expect(await restarted.values(["ctx"])).deep.equal({ key: "value", key2: "value2" });
+            await restarted.close();
+            await crashed.close();
+        });
+
+        it("keeps a write made after a segment that holds only a truncated line", async () => {
+            const storageDir = fs.directory("storage");
+            const walDir = storageDir.directory("wal");
+            await walDir.mkdir();
+            const commit: WalCommit = { ts: 1000, ops: [{ op: "upd", key: "ctx", values: { key: "value" } }] };
+            await walDir.file(segmentFilename(1)).write(serializeCommit(commit) + "\n");
+            await walDir.file(segmentFilename(2)).write('{"truncated');
+
+            const storage = await createStorage();
+            await storage.set(["ctx"], "key2", "value2");
+            await storage.close();
+            await deleteSnapshots(storageDir);
+
+            const restarted = await createStorage();
+            expect(await restarted.values(["ctx"])).deep.equal({ key: "value", key2: "value2" });
+            await restarted.close();
+        });
+
+        it("writes after a WAL that holds only compressed segments", async () => {
+            const storageDir = fs.directory("storage");
+            const walDir = storageDir.directory("wal");
+            await walDir.mkdir();
+            const commit: WalCommit = { ts: 1000, ops: [{ op: "upd", key: "ctx", values: { key: "value" } }] };
+            await walDir
+                .file(compressedSegmentFilename(3))
+                .write(Gzip.compress([new TextEncoder().encode(serializeCommit(commit) + "\n")]));
+
+            const storage = await createStorage();
+            await storage.set(["ctx"], "key2", "value2");
+            await storage.close();
+            await deleteSnapshots(storageDir);
+
+            expect(await walDir.file(segmentFilename(4)).exists()).equal(true);
+            const restarted = await createStorage();
+            expect(await restarted.values(["ctx"])).deep.equal({ key: "value", key2: "value2" });
+            await restarted.close();
+        });
+
+        it("keeps a write made after a segment that ends in a truncated line", async () => {
+            const storageDir = fs.directory("storage");
+            const walDir = storageDir.directory("wal");
+            await walDir.mkdir();
+            const commit: WalCommit = { ts: 1000, ops: [{ op: "upd", key: "ctx", values: { key: "value" } }] };
+            await walDir.file(segmentFilename(1)).write(serializeCommit(commit) + "\n" + '{"truncated');
+
+            const storage = await createStorage();
+            await storage.set(["ctx"], "key2", "value2");
+            await storage.close();
+            await deleteSnapshots(storageDir);
+
+            const restarted = await createStorage();
+            expect(await restarted.values(["ctx"])).deep.equal({ key: "value", key2: "value2" });
+            await restarted.close();
+        });
+
         it("restores from the WAL alone and snapshots it again", async () => {
             const storageDir = fs.directory("storage");
             const storage = await createStorage();
@@ -597,7 +685,7 @@ describe("WalStorageDriver", () => {
             const backup = await WalSnapshot.load(storageDir, { basename: "snapshot.prev" });
             const walDir = storageDir.directory("wal");
             for (const segment of await segmentNumbers()) {
-                if (segment <= backup!.commitId.segment) {
+                if (segment <= backup!.commitId.segment + 1) {
                     await walDir.file(segmentFilename(segment)).delete();
                     await walDir.file(compressedSegmentFilename(segment)).delete();
                 }

@@ -105,12 +105,14 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
 
         const reader = new WalReader(walDir);
         const loaded = await this.#load(reader);
+        const firstSegment = Math.max(loaded.lastCommitId?.segment ?? 0, ...(await reader.segments())) + 1;
 
         const compressLog = this.#options.compressLog ?? WalStorageDriver.defaults.compressLog;
         const writer = new WalWriter(walDir, {
             name: this.root?.namespace,
             maxSegmentSize: this.#options.maxSegmentSize,
             fsync: this.#options.fsync,
+            firstSegment,
             onRotate: compressLog
                 ? () => {
                       this.#maintenance.run(() => this.#compressRotatedSegments());
@@ -282,11 +284,15 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
     }
 
     /**
-     * Throw if the WAL starts after the segment of {@link commitId}, because a replay from there would skip commits.
+     * Throw if WAL segments that may hold commits after {@link commitId} are missing, because a replay would skip them.
+     *
+     * After the WAL was lost, the next run starts at the snapshot's segment + 1, so that segment may be the oldest one
+     * without anything missing.  A missing tail of the snapshot's own segment cannot be detected, the same as a fully
+     * missing WAL.
      */
     async #assertWalCovers(reader: WalReader, commitId: WalCommitId) {
         const [oldest] = await reader.segments();
-        if (oldest !== undefined && oldest > commitId.segment) {
+        if (oldest !== undefined && oldest > commitId.segment + 1) {
             throw new StorageError(
                 `Snapshot in ${this.#storageDir.path} at WAL segment ${commitId.segment} cannot be restored because the WAL starts at segment ${oldest}`,
             );
@@ -375,7 +381,7 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
                 if (!entry.name.endsWith(".jsonl")) continue;
 
                 const seg = parseSegmentFilename(entry.name);
-                if (seg === undefined || seg === activeSegment) continue;
+                if (seg === undefined || seg >= activeSegment) continue;
 
                 try {
                     const gzName = compressedSegmentFilename(seg);
