@@ -20,6 +20,18 @@ const UNIT_TESTING = 0xfff1fc05;
 const IDENTIFY = 0x3;
 const LEVEL_CONTROL = 0x8;
 
+/** A response to a write whose wildcard reached no endpoint the device may write. */
+const EMPTY_RESPONSE = [
+    "WriteResponseMessage =",
+    "{",
+    "\tAttributeStatusIBs =",
+    "\t[",
+    "\t],",
+    "\t",
+    "\tInteractionModelRevision = 12",
+    "}",
+];
+
 /** The lines of the first `WriteResponseMessage` block of `logs`, closing brace included. */
 function firstBlock(logs: string[]) {
     const start = logs.indexOf("WriteResponseMessage =");
@@ -69,11 +81,15 @@ describe("loggedWriteResponseStatuses", () => {
         ]);
     });
 
-    it("answers undefined for a reply without a WriteResponseMessage, and an empty list for one without statuses", () => {
+    it("answers undefined for a reply without a WriteResponseMessage, and an empty list for an empty status list", () => {
         expect(loggedWriteResponseStatuses(CHIP_APP_WILDCARD_REFUSED.logs)).undefined;
-        expect(
+        expect(loggedWriteResponseStatuses(EMPTY_RESPONSE)).deep.equal([]);
+    });
+
+    it("rejects a message without its status list", () => {
+        expect(() =>
             loggedWriteResponseStatuses(["WriteResponseMessage =", "{", "\tInteractionModelRevision = 12", "}"]),
-        ).deep.equal([]);
+        ).throws(UnexpectedDataError, /carries 0 AttributeStatusIBs/);
     });
 
     it("reads a status printed without its name", () => {
@@ -97,33 +113,130 @@ describe("loggedWriteResponseStatuses", () => {
         );
     });
 
-    describe("entry boundaries", () => {
+    describe("structure", () => {
         const HEADER = "\t\tAttributeStatusIB =";
         const CLOSING = "\t\t},";
+        const LIST_CLOSING = "\t],";
         const block = firstBlock(MATTERJS_WILDCARD_SUCCESS.logs);
 
         /** `block` without the `occurrence`-th (from 0) line equal to `line`. */
-        function without(line: string, occurrence: number) {
-            const indices = block.flatMap((candidate, index) => (candidate === line ? [index] : []));
+        function without(line: string, occurrence: number, lines = block) {
+            const indices = lines.flatMap((candidate, index) => (candidate === line ? [index] : []));
             expect(indices.length).greaterThan(occurrence);
-            return block.filter((_, index) => index !== indices[occurrence]);
+            return lines.filter((_, index) => index !== indices[occurrence]);
         }
 
         it("rejects the fields of an entry whose header is missing, rather than letting them overwrite the previous one", () => {
-            expect(() => loggedWriteResponseStatuses(without(HEADER, 1))).throws(
+            expect(() => loggedWriteResponseStatuses(without(HEADER, 1))).throws(UnexpectedDataError, /nameless entry/);
+        });
+
+        it("rejects an entry that does not close before the next one or before its list closes", () => {
+            for (const occurrence of [0, 3]) {
+                expect(() => loggedWriteResponseStatuses(without(CLOSING, occurrence)), String(occurrence)).throws(
+                    UnexpectedDataError,
+                    /"\]," closes a struct/,
+                );
+            }
+        });
+
+        it("rejects a message whose last entry and list terminator are missing", () => {
+            const lastEntry = block.lastIndexOf(HEADER);
+            const truncated = [
+                ...block.slice(0, lastEntry),
+                ...block.slice(block.indexOf(LIST_CLOSING) + 1).filter(line => line.trim() !== ""),
+            ];
+            expect(truncated.slice(-2)).deep.equal(["\tInteractionModelRevision = 12", "}"]);
+            expect(() => loggedWriteResponseStatuses(truncated)).throws(UnexpectedDataError, /"\}" starts inside it/);
+        });
+
+        /** `block` with the `occurrence`-th (from 0) line equal to `line` replaced by `replacements`. */
+        function replaced(line: string, occurrence: number, ...replacements: string[]) {
+            const indices = block.flatMap((candidate, index) => (candidate === line ? [index] : []));
+            expect(indices.length).greaterThan(occurrence);
+            return block.flatMap((candidate, index) => (index === indices[occurrence] ? replacements : [candidate]));
+        }
+
+        it("accepts fields, unknown tags and indentation chip prints that carry no status", () => {
+            const decorated = replaced(
+                "\t\t\t\tEndpoint = 0x1,",
+                0,
+                "\t\t\t\tenableTagCompression = true, ",
+                "\t\t\t\tEndpoint = 0x1,",
+                "\t\t\t\tListIndex = Null,",
+                "\t\t\tUnknown tag num 7",
+            );
+            const withUnknownTag = replaced(
+                "\tInteractionModelRevision = 12",
+                0,
+                "Unknown tag num 9",
+                "\tInteractionModelRevision = 12",
+            );
+            const expected = loggedWriteResponseStatuses(block);
+            expect(loggedWriteResponseStatuses(decorated)).deep.equal(expected);
+            expect(loggedWriteResponseStatuses(withUnknownTag)).deep.equal(expected);
+        });
+
+        it("rejects an unindented line inside the message, a trailing space notwithstanding", () => {
+            expect(() =>
+                loggedWriteResponseStatuses(
+                    replaced("\t\tAttributeStatusIB =", 1, "Command: something ", "\t\tAttributeStatusIB ="),
+                ),
+            ).throws(UnexpectedDataError, /"Command: something" starts inside it/);
+        });
+
+        it("rejects a message header that no opening brace follows", () => {
+            expect(() => loggedWriteResponseStatuses(["WriteResponseMessage =", ...block.slice(2)])).throws(
                 UnexpectedDataError,
-                /"Endpoint = 0x2," stands outside any AttributeStatusIB/,
+                /its header is not followed by "\{"/,
             );
         });
 
-        it("rejects an entry that does not close before the next one or before the message ends", () => {
-            expect(() => loggedWriteResponseStatuses(without(CLOSING, 0))).throws(
+        it("rejects a status list with a field of its own, or with an entry or itself of the wrong kind", () => {
+            expect(() => loggedWriteResponseStatuses(replaced("\t[", 0, "\t[", "\t\tCount = 0x4,"))).throws(
                 UnexpectedDataError,
-                /starts before the previous one closed/,
+                /list carries a field of its own/,
             );
-            expect(() => loggedWriteResponseStatuses(without(CLOSING, 3))).throws(
+            const listEntry = block.map((line, index) =>
+                index === block.indexOf("\t\t{") ? "\t\t[" : index === block.indexOf("\t\t},") ? "\t\t]," : line,
+            );
+            expect(() => loggedWriteResponseStatuses(listEntry)).throws(
                 UnexpectedDataError,
-                /closes inside an AttributeStatusIB/,
+                /AttributeStatusIB as a list/,
+            );
+            const structList = block.map(line => (line === "\t[" ? "\t{" : line === "\t]," ? "\t}," : line));
+            expect(() => loggedWriteResponseStatuses(structList)).throws(
+                UnexpectedDataError,
+                /carries AttributeStatusIBs as a struct/,
+            );
+        });
+
+        it("rejects a path value that is not a number", () => {
+            expect(() =>
+                loggedWriteResponseStatuses(replaced("\t\t\t\tEndpoint = 0x1,", 0, "\t\t\t\tEndpoint = one,")),
+            ).throws(UnexpectedDataError, /Endpoint "one" is not a number/);
+        });
+
+        it("rejects a header that no bracket follows", () => {
+            expect(() => loggedWriteResponseStatuses(without("\t\t\t{", 0))).throws(
+                UnexpectedDataError,
+                /the header "AttributePathIB =" is not followed by a bracket/,
+            );
+        });
+
+        it("rejects a closing bracket of the other kind", () => {
+            const swapped = block.map(line => (line === LIST_CLOSING ? "\t}," : line));
+            expect(() => loggedWriteResponseStatuses(swapped)).throws(UnexpectedDataError, /"\}," closes a list/);
+        });
+
+        it("rejects more of the message after its closing brace", () => {
+            for (const after of [LIST_CLOSING, "\tInteractionModelRevision = 12", "\t\tAttributeStatusIB ="]) {
+                expect(() => loggedWriteResponseStatuses([...EMPTY_RESPONSE, after]), after).throws(
+                    UnexpectedDataError,
+                    /follows its closing brace/,
+                );
+            }
+            expect(loggedWriteResponseStatuses([...EMPTY_RESPONSE, "WriteClient moving to [AwaitingDe]"])).deep.equal(
+                [],
             );
         });
 
@@ -131,47 +244,51 @@ describe("loggedWriteResponseStatuses", () => {
             const doubled = block.flatMap(line =>
                 line === "\t\t\t\tEndpoint = 0x1," ? [line, "\t\t\t\tEndpoint = 0x5,"] : [line],
             );
-            expect(() => loggedWriteResponseStatuses(doubled)).throws(UnexpectedDataError, /carries endpoint twice/);
+            expect(() => loggedWriteResponseStatuses(doubled)).throws(UnexpectedDataError, /carries Endpoint 2 times/);
         });
-    });
 
-    it("rejects a message the log ends inside", () => {
-        const block = firstBlock(MATTERJS_WILDCARD_SUCCESS.logs);
-        expect(() => loggedWriteResponseStatuses(block.slice(0, -1))).throws(UnexpectedDataError, /ends inside/);
-    });
+        it("rejects an entry with two status structs", () => {
+            const status = block.indexOf("\t\t\tStatusIB =");
+            const doubled = [...block.slice(0, status), ...block.slice(status, status + 5), ...block.slice(status)];
+            expect(() => loggedWriteResponseStatuses(doubled)).throws(UnexpectedDataError, /carries 2 StatusIB/);
+        });
 
-    it("rejects a message another decoded block starts inside, rather than taking that block's statuses", () => {
-        const block = firstBlock(MATTERJS_WILDCARD_SUCCESS.logs);
-        const report = [
-            "ReportDataMessage =",
-            "{",
-            "\tAttributeReportIBs =",
-            "\t[",
-            ...block.slice(4, 19),
-            "\t],",
-            "}",
-        ];
-        expect(() => loggedWriteResponseStatuses([...block.slice(0, -1), ...report])).throws(
-            UnexpectedDataError,
-            /starts "ReportDataMessage =" inside/,
-        );
-    });
+        it("rejects a message the log ends inside", () => {
+            expect(() => loggedWriteResponseStatuses(block.slice(0, -1))).throws(UnexpectedDataError, /ends inside/);
+        });
 
-    it("rejects an entry without a status or without a concrete path", () => {
-        const block = firstBlock(MATTERJS_WILDCARD_SUCCESS.logs);
-        for (const dropped of [
-            "\t\t\t\tstatus = 0x00 (SUCCESS),",
-            "\t\t\t\tEndpoint = 0x2,",
-            "\t\t\t\tCluster = 0x3,",
-        ]) {
-            const index = block.indexOf(dropped);
-            expect(index, dropped).not.equal(-1);
-            const lines = [...block.slice(0, index), ...block.slice(index + 1)];
-            expect(() => loggedWriteResponseStatuses(lines), dropped).throws(UnexpectedDataError, /AttributeStatusIB/);
-        }
-        const attribute = block.indexOf("\t\t\t\tAttribute = 0x0000_0000,");
-        expect(() => loggedWriteResponseStatuses([...block.slice(0, attribute), ...block.slice(attribute + 1)])).throws(
-            UnexpectedDataError,
-        );
+        it("rejects a message another decoded block starts inside, rather than taking that block's statuses", () => {
+            const report = [
+                "ReportDataMessage =",
+                "{",
+                "\tAttributeReportIBs =",
+                "\t[",
+                ...block.slice(4, 19),
+                "\t],",
+                "}",
+            ];
+            expect(() => loggedWriteResponseStatuses([...block.slice(0, -1), ...report])).throws(
+                UnexpectedDataError,
+                /"ReportDataMessage =" starts inside it/,
+            );
+            // An earlier pretty print that failed part way leaves the depth raised, so the header can be indented
+            expect(() =>
+                loggedWriteResponseStatuses([...block.slice(0, -1), ...report.map(line => `\t\t${line}`)]),
+            ).throws(UnexpectedDataError, /another message/);
+        });
+
+        it("rejects an entry without a status or without a concrete path", () => {
+            for (const dropped of [
+                "\t\t\t\tstatus = 0x00 (SUCCESS),",
+                "\t\t\t\tEndpoint = 0x2,",
+                "\t\t\t\tCluster = 0x3,",
+                "\t\t\t\tAttribute = 0x0000_0000,",
+            ]) {
+                expect(() => loggedWriteResponseStatuses(without(dropped, 0)), dropped).throws(
+                    UnexpectedDataError,
+                    /carries no (status|Endpoint|Cluster|Attribute)/,
+                );
+            }
+        });
     });
 });

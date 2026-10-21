@@ -1194,7 +1194,15 @@ describe("ChipToolControllerAdapter", function () {
 
             fake.reply = () => ({
                 results: [],
-                logs: ["WriteResponseMessage =", "{", "\tInteractionModelRevision = 12", "}"],
+                logs: [
+                    "WriteResponseMessage =",
+                    "{",
+                    "\tAttributeStatusIBs =",
+                    "\t[",
+                    "\t],",
+                    "\tInteractionModelRevision = 12",
+                    "}",
+                ],
             });
 
             expect(await node.writeAttributes([{ path: identifyTime, value: 5 }])).deep.equal([]);
