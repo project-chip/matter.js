@@ -2417,10 +2417,10 @@ describe("attempt", () => {
             attempt(
                 async () => {
                     throw new UnsupportedByControllerError(
-                        "writeAttributes",
+                        "invokeBatch",
                         "chip-tool",
-                        "no per-path status",
-                        "wildcard-write-statuses",
+                        "one command per invoke request",
+                        "batch-invoke",
                     );
                 },
                 () => "",
