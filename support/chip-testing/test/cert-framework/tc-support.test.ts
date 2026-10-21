@@ -2412,11 +2412,16 @@ describe("group message patterns", () => {
 });
 
 describe("attempt", () => {
-    it("lets a controller's refusal through, so the harness can skip the step", async () => {
+    it("lets a controller's refusal through, so the step runner reports it", async () => {
         await expect(
             attempt(
                 async () => {
-                    throw new UnsupportedByControllerError("writeAttributes", "chip-tool", "no per-path status");
+                    throw new UnsupportedByControllerError(
+                        "writeAttributes",
+                        "chip-tool",
+                        "no per-path status",
+                        "wildcard-write-statuses",
+                    );
                 },
                 () => "",
             ),
@@ -2912,7 +2917,7 @@ describe("expectRejection", () => {
     });
 
     it("rejects with a controller refusal rather than passing on it, whatever it accepts", async () => {
-        const refusal = new UnsupportedByControllerError("commission", "matterjs-server");
+        const refusal = new UnsupportedByControllerError("commission", "matterjs-server", "not offered", "attestation");
 
         await expect(expectRejection("op", Promise.reject(refusal), BUDGET)).rejectedWith(refusal);
         await expect(expectRejection("op", Promise.reject(refusal), BUDGET, () => true)).rejectedWith(refusal);
@@ -2921,7 +2926,7 @@ describe("expectRejection", () => {
 
 describe("settleWithin", () => {
     it("rejects with a controller refusal instead of reporting the operation rejected", async () => {
-        const refusal = new UnsupportedByControllerError("commission", "matterjs-server");
+        const refusal = new UnsupportedByControllerError("commission", "matterjs-server", "not offered", "attestation");
         const before = Time.timers.size;
 
         await expect(settleWithin("op", Promise.reject(refusal), Millis(200))).rejectedWith(refusal);

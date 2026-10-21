@@ -39,6 +39,7 @@ certTest("TC-SU-1.1", {
     // whole case rests on the DUT sending AnnounceOTAProvider, so a controller that cannot must skip
     // before it commissions anything rather than fail its first step.
     pics: ["MCORE.ACL.Administrator", "OTAR.C.M.AnnounceOTAProvider"],
+    controllerCapabilities: ["ota-provider-announcement"],
     app: "ota-requestor",
     devices: { th: "ota-requestor", th2: "ota-provider" },
 })

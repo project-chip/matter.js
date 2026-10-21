@@ -478,7 +478,12 @@ describe("recordParse", () => {
 
     it("hands a controller refusal on without recording it as the DUT failing to parse", async () => {
         const cx = contextWithParser();
-        const refusal = new UnsupportedByControllerError("parseQrPayload", "test");
+        const refusal = new UnsupportedByControllerError(
+            "parseQrPayload",
+            "test",
+            "not offered",
+            "onboarding-payload-parse",
+        );
         cx.controllers.dut.parseQrPayload = async () => {
             throw refusal;
         };
@@ -1639,9 +1644,8 @@ describe("commissionChecked", () => {
         expect(fixture.checks[0].detail).match(/^DUT commissions TH failed: /);
     });
 
-    // The engine skips a step on this refusal only while the step has recorded nothing
     it("lets a controller refusal through before adding any check", async () => {
-        const refusal = new UnsupportedByControllerError("commission", "test");
+        const refusal = new UnsupportedByControllerError("commission", "test", "not offered", "attestation");
         const fixture = new UnpairFixture("matterjs", {
             commission: async () => {
                 throw refusal;
@@ -1861,7 +1865,12 @@ describe("recordManualParse", () => {
     });
 
     it("hands a controller refusal on without recording it as the DUT failing to parse", async () => {
-        const refusal = new UnsupportedByControllerError("parseManualPairingCode", "test");
+        const refusal = new UnsupportedByControllerError(
+            "parseManualPairingCode",
+            "test",
+            "not offered",
+            "onboarding-payload-parse",
+        );
         const fixture = new UnpairFixture("matterjs", {
             parseManualPairingCode: async () => {
                 throw refusal;

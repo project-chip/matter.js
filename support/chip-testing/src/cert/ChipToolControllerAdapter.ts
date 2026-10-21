@@ -186,6 +186,14 @@ export const CHIP_TOOL_CONTROLLER_PICS: PicsValues = {
 };
 
 /**
+ * chip-tool's `kMaxAllowedPaths` (`src/app/tests/suites/commands/interaction_model/InteractionModel.h`).
+ * chip-tool checks it in `InteractionModelConfig::GetAttributePaths`, which its read and write paths
+ * reach only with a live `DeviceProxy` in hand, so this guard is what keeps an over-long id list from
+ * costing a CASE session first.
+ */
+const MAX_PATHS_PER_COMMAND = 64;
+
+/**
  * What chip-tool lacks, declared with its registration so a step or case needing one of these is skipped before it acts
  * (see `controllerCapabilityGap`).
  *
@@ -203,8 +211,18 @@ export const CHIP_TOOL_CAPABILITY_GAPS = {
     "chunked-write":
         "chip-tool write-by-id encodes the whole write into one message and fails with CHIP Error 0x0000000B (No memory) " +
         "when it does not fit",
+    "batch-invoke":
+        "command-by-id sends one command per invoke request: it takes a single command path and no CommandRef",
     "batch-arrival-order":
         "command-by-id sends one command per invoke request, so there is no batch whose answers arrive in an order",
+    "many-paths-per-request": `chip-tool takes at most ${MAX_PATHS_PER_COMMAND} paths per command, so a step naming more declares this`,
+    "wildcard-write-statuses":
+        "chip-tool reports no status for a successfully written path, so a wildcard endpoint yields no per-endpoint " +
+        "statuses",
+    "mixed-version-write": "chip-tool takes one data version per path or none at all, not a mix",
+    "typed-list-write-with-others":
+        "chip-tool writes DefaultOTAProviders only through its typed cluster command, which writes one attribute per " +
+        "request",
     "session-introspection":
         "chip-tool exposes no session state of its own: a session lives inside the process it spawns per command, and " +
         "nothing it prints names the transport beneath one",
@@ -216,6 +234,9 @@ export const CHIP_TOOL_CAPABILITY_GAPS = {
         "image catalog to serve one from",
     "ota-provider-script":
         "chip-tool hosts no OtaSoftwareUpdateProvider cluster, so there is no provider of its own to script or announce",
+    "ota-provider-announcement":
+        "this adapter does not drive chip-tool's announce-otaprovider command yet, so its PICS declare " +
+        "OTAR.C.M.AnnounceOTAProvider unsupported",
     "icd-client":
         "this adapter drives chip-tool's commands for single interactions and does not expose its ICD client " +
         "(registration, key refresh and Check-In handling)",
@@ -229,14 +250,6 @@ const WILDCARD_CLUSTER = 0xffffffff;
 const WILDCARD_ATTRIBUTE = 0xffffffff;
 const WILDCARD_EVENT = 0xffffffff;
 const WILDCARD_ENDPOINT = 0xffff;
-
-/**
- * chip-tool's `kMaxAllowedPaths` (`src/app/tests/suites/commands/interaction_model/InteractionModel.h`).
- * chip-tool checks it in `InteractionModelConfig::GetAttributePaths`, which its read and write paths
- * reach only with a live `DeviceProxy` in hand, so this guard is what keeps an over-long id list from
- * costing a CASE session first.
- */
-const MAX_PATHS_PER_COMMAND = 64;
 
 /** Digit count of the manual code form that carries a vendor and product id (§ 5.1.4.1 Table 64). */
 const MANUAL_CODE_LONG_LENGTH = 21;
@@ -1086,12 +1099,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
         if (options?.provider === undefined) {
             throw refusal("ota-provider-script", "announcing the controller's own OTA provider");
         }
-        throw new UnsupportedByControllerError(
-            "announceOtaProvider",
-            CONTROLLER,
-            "this adapter sends no AnnounceOTAProvider command, and its PICS declare OTAR.C.M.AnnounceOTAProvider " +
-                "unsupported",
-        );
+        throw refusal("ota-provider-announcement", "announcing another node as the OTA provider");
     }
 
     async scriptOtaProvider(): Promise<never> {
@@ -1099,12 +1107,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
     }
 
     async invokeBatch(commands: BatchCommandSpec[]): Promise<BatchCommandResult[]> {
-        throw new UnsupportedByControllerError(
-            "invokeBatch",
-            CONTROLLER,
-            `chip-tool sends one command per invoke request (${commands.length} requested); its command-by-id ` +
-                "takes a single command path and no CommandRef",
-        );
+        throw refusal("batch-invoke", `invokeBatch of ${commands.length} commands`);
     }
 
     async readAttribute(path: AttributePathSpec, options?: ReadAttributeOptions): Promise<unknown> {
@@ -1139,11 +1142,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
             throw new ImplementationError("readAttributes requires at least one path");
         }
         if (paths.length > MAX_PATHS_PER_COMMAND) {
-            throw new UnsupportedByControllerError(
-                "readAttributes",
-                CONTROLLER,
-                `${paths.length} paths exceeds chip-tool's limit of ${MAX_PATHS_PER_COMMAND} per read`,
-            );
+            throw refusal("many-paths-per-request", `readAttributes of ${paths.length} paths`);
         }
 
         const reply = await this.#read(paths, options);
@@ -1181,11 +1180,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
             throw new ImplementationError("writeAttributes requires at least one attribute");
         }
         if (entries.length > MAX_PATHS_PER_COMMAND) {
-            throw new UnsupportedByControllerError(
-                "writeAttributes",
-                CONTROLLER,
-                `${entries.length} attributes exceeds chip-tool's limit of ${MAX_PATHS_PER_COMMAND} per write`,
-            );
+            throw refusal("many-paths-per-request", `writeAttributes of ${entries.length} attributes`);
         }
 
         const paths = entries.map(({ path: { endpoint, cluster, attribute } }) => {
@@ -1193,26 +1188,14 @@ class ChipToolCertNodeApi implements CertNodeApi {
                 throw new ImplementationError("writeAttributes requires a concrete cluster and attribute");
             }
             if (endpoint === undefined) {
-                // chip-tool's WriteAttribute callback records a result only for a path the device
-                // rejected, so a wildcard endpoint's successful writes are invisible and the
-                // per-endpoint statuses this method contracts to return cannot be reconstructed.
-                throw new UnsupportedByControllerError(
-                    "writeAttributes",
-                    CONTROLLER,
-                    "chip-tool reports no status for a successfully written path, so a wildcard endpoint " +
-                        "yields no per-endpoint statuses",
-                );
+                throw refusal("wildcard-write-statuses", "writeAttributes to every endpoint");
             }
             return { endpoint, cluster, attribute };
         });
 
         const versioned = entries.filter(({ dataVersion }) => dataVersion !== undefined);
         if (versioned.length !== 0 && versioned.length !== entries.length) {
-            throw new UnsupportedByControllerError(
-                "writeAttributes",
-                CONTROLLER,
-                "chip-tool takes one data version per path or none at all, not a mix",
-            );
+            throw refusal("mixed-version-write", "writeAttributes with a data version on some entries only");
         }
 
         const reply = await this.#write(entries, "writeAttributes");
@@ -1266,11 +1249,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
             throw new ImplementationError("subscribeAttributes requires at least one path");
         }
         if (paths.length > MAX_PATHS_PER_COMMAND) {
-            throw new UnsupportedByControllerError(
-                "subscribeAttributes",
-                CONTROLLER,
-                `${paths.length} paths exceeds chip-tool's limit of ${MAX_PATHS_PER_COMMAND} per subscription`,
-            );
+            throw refusal("many-paths-per-request", `subscribeAttributes of ${paths.length} paths`);
         }
 
         const reply = await this.#adapter.subscribe("subscribeAttributes", this.#node, paths, opts);
@@ -1290,11 +1269,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
             throw new ImplementationError("readEvents requires at least one path");
         }
         if (paths.length > MAX_PATHS_PER_COMMAND) {
-            throw new UnsupportedByControllerError(
-                "readEvents",
-                CONTROLLER,
-                `${paths.length} paths exceeds chip-tool's limit of ${MAX_PATHS_PER_COMMAND} per read`,
-            );
+            throw refusal("many-paths-per-request", `readEvents of ${paths.length} paths`);
         }
 
         // chip-tool zips its cluster/event/endpoint id lists element-wise, as it does for attributes
@@ -1337,11 +1312,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
             throw new ImplementationError("subscribeEvents requires at least one path");
         }
         if (paths.length > MAX_PATHS_PER_COMMAND) {
-            throw new UnsupportedByControllerError(
-                "subscribeEvents",
-                CONTROLLER,
-                `${paths.length} paths exceeds chip-tool's limit of ${MAX_PATHS_PER_COMMAND} per subscription`,
-            );
+            throw refusal("many-paths-per-request", `subscribeEvents of ${paths.length} paths`);
         }
 
         const reply = await this.#adapter.subscribeEvents(this.#node, paths, opts);
@@ -1406,14 +1377,7 @@ class ChipToolCertNodeApi implements CertNodeApi {
 
     #read(paths: AttributePathSpec[], options?: ReadAttributeOptions) {
         if (options?.largeMessage) {
-            throw new UnsupportedByControllerError(
-                "a read that requires a session permitting large payloads",
-                "chip-tool",
-                "chip-tool decides a session's transport when it establishes one and reuses the session " +
-                    "pairing already made, so it cannot be made to answer a single read over a " +
-                    "TCP-backed session",
-                "tcp-transport",
-            );
+            throw refusal("tcp-transport", "a read that requires a session permitting large payloads");
         }
 
         // chip-tool zips the three id lists into paths when their lengths match
@@ -1434,11 +1398,9 @@ class ChipToolCertNodeApi implements CertNodeApi {
                 continue;
             }
             if (entries.length !== 1) {
-                throw new UnsupportedByControllerError(
-                    operation,
-                    CONTROLLER,
-                    `${typed.command} writes one attribute per request, so it cannot carry ` +
-                        `${entries.length - 1} other entries alongside it`,
+                throw refusal(
+                    "typed-list-write-with-others",
+                    `${operation} of ${typed.command} with ${entries.length - 1} other entries`,
                 );
             }
             return this.#writeTypedList(typed, entry, options);
@@ -1450,11 +1412,10 @@ class ChipToolCertNodeApi implements CertNodeApi {
             }
             const encoded = encodeAttributeValue(cluster, attribute, value);
             if (encoded.includes(";")) {
-                throw new UnsupportedByControllerError(
-                    operation,
-                    CONTROLLER,
-                    `chip-tool splits attribute values on ";", which ${JSON.stringify(encoded)} contains ` +
-                        `(endpoint ${endpoint}, cluster ${cluster}, attribute ${attribute})`,
+                throw new ImplementationError(
+                    `${operation} of ${JSON.stringify(encoded)} (endpoint ${endpoint}, cluster ${cluster}, ` +
+                        `attribute ${attribute}): chip-tool splits attribute values on ";", so a step writing ` +
+                        "through it needs a value without one",
                 );
             }
             return encoded;
@@ -1522,12 +1483,12 @@ function matchLog(logs: string[], pattern: RegExp) {
  * Each instance owns its own chip-tool process, storage directory (hence its own CA key and fabric)
  * and commissioner name, so several controller roles in one run never share fabric state.
  *
- * Operations chip-tool cannot express throw {@link UnsupportedByControllerError}, which the step
- * runner records as a skip. That covers a wildcard-endpoint `writeAttributes` (chip-tool reports no
- * status for a written path) and path counts above chip-tool's own limit. A capability asked of the
- * whole adapter rather than of a step — `webRtcRequestor` — throws the same error from the
- * constructor, where no step is running to record anything, so a case asking for one selects its
- * controller itself.
+ * Operations chip-tool cannot express throw {@link UnsupportedByControllerError} naming a capability in
+ * {@link CHIP_TOOL_CAPABILITY_GAPS}, such as `wildcard-write-statuses` (chip-tool reports no status for a
+ * written path) and `many-paths-per-request`. A step that needs one declares it and is skipped before it
+ * runs; a refusal that reaches the step runner is a framework error. A capability asked of the whole
+ * adapter rather than of a step — `webRtcRequestor` — throws the same error from the constructor, where
+ * no step is running to record anything, so a case asking for one selects its controller itself.
  *
  * While a subscription is live the adapter runs a report pump: chip-tool records nothing while its
  * result slot is disarmed, so the client keeps an async-report frame parked whenever no command needs
