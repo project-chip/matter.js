@@ -35,6 +35,7 @@ import {
     chunkingNotApplicableOverTcp,
     expectChunkedTransfer,
     expectCommandInvoke,
+    expectCommandPayload,
     expectMessageWithPath,
     expectNoCommandInvoke,
     expectRejection,
@@ -790,6 +791,100 @@ describe("eventPathIBSequence", () => {
 
         expect(sequence[0].test("[DMG] AttributePathIB =")).equal(false);
         expect(sequence[2].test("[DMG] }")).equal(false);
+    });
+});
+
+describe("expectCommandPayload", () => {
+    const ON_OFF = Matter.clusters.require("OnOff");
+    const OFF = { cluster: ON_OFF, endpoint: 1, command: "off" };
+    const NO_FIELDS = { label: "off carries no parameters", chip: [], matterjs: "(no payload)" };
+
+    // Shapes as a chip all-clusters TH prints an Off request, and as a matter.js TH prints one
+    const chipCommandData = (command: number) => [
+        "[DMG] \t\tCommandDataIB =",
+        "[DMG] \t\t{",
+        "[DMG] \t\t\tCommandPathIB =",
+        "[DMG] \t\t\t{",
+        "[DMG] \t\t\t\tEndpointId = 0x1,",
+        "[DMG] \t\t\t\tClusterId = 0x6,",
+        `[DMG] \t\t\t\tCommandId = 0x${command.toString(16)},`,
+        "[DMG] \t\t\t},",
+        "[DMG] \t\t\t",
+        "[DMG] \t\t\tCommandFields = ",
+        "[DMG] \t\t\t{",
+        "[DMG] \t\t\t},",
+        "[DMG] \t\t},",
+        "[DMG] \t\t",
+    ];
+    const chipRequest = (...commands: number[]) => [
+        "[DMG] \tInvokeRequests =",
+        "[DMG] \t[",
+        ...commands.flatMap(chipCommandData),
+        "[DMG] \t],",
+    ];
+
+    const EXCHANGE = "@1:1c2511c88402bfdf•7eb4⇵c8fe";
+    const summary = (exchange: string, invokes: string) =>
+        `INFO InteractionServer Invoke « ${exchange} invokes: ${invokes}`;
+    const dispatch = (exchange: string) =>
+        `INFO ProtocolService Invoke « th.ep1.onOff.off ${exchange}✉07eb2514 (no payload)`;
+
+    it("passes a chip request carrying only this command", async () => {
+        const record = await withFollower(chipRequest(0x0), follower =>
+            expectCommandPayload(follower, "chip-local", OFF, NO_FIELDS, 0, Millis(200)),
+        );
+
+        expect(record.verdict).equal("pass");
+    });
+
+    it("fails a chip request carrying a second command", async () => {
+        const record = await withFollower(chipRequest(0x0, 0x1), follower =>
+            expectCommandPayload(follower, "chip-local", OFF, NO_FIELDS, 0, Millis(200)),
+        );
+
+        expect(record.verdict).equal("fail");
+    });
+
+    it("passes a matter.js request whose summary on the same exchange lists only this command", async () => {
+        const record = await withFollower([summary(EXCHANGE, "1.onOff.off"), dispatch(EXCHANGE)], follower =>
+            expectCommandPayload(follower, "matterjs", OFF, NO_FIELDS, 0, Millis(200)),
+        );
+
+        expect(record.verdict).equal("pass");
+    });
+
+    it("fails a matter.js request whose summary lists a second command", async () => {
+        const record = await withFollower(
+            [summary(EXCHANGE, "1.onOff.off, 1.onOff.on"), dispatch(EXCHANGE)],
+            follower => expectCommandPayload(follower, "matterjs", OFF, NO_FIELDS, 0, Millis(200)),
+        );
+
+        expect(record.verdict).equal("fail");
+    });
+
+    it("does not take another exchange's single-command summary for this request's", async () => {
+        const record = await withFollower(
+            [
+                summary("@1:1c2511c88402bfdf•7eb4⇵c8fd", "1.onOff.off"),
+                summary(EXCHANGE, "1.onOff.off, 1.onOff.on"),
+                dispatch(EXCHANGE),
+            ],
+            follower => expectCommandPayload(follower, "matterjs", OFF, NO_FIELDS, 0, Millis(200)),
+        );
+
+        expect(record.verdict).equal("fail");
+    });
+
+    it("fails a matter.js dispatch line that carries fields where none are expected", async () => {
+        const record = await withFollower(
+            [
+                summary(EXCHANGE, "1.onOff.off"),
+                `INFO ProtocolService Invoke « th.ep1.onOff.off ${EXCHANGE}✉07eb2514 effectIdentifier: 1`,
+            ],
+            follower => expectCommandPayload(follower, "matterjs", OFF, NO_FIELDS, 0, Millis(200)),
+        );
+
+        expect(record.verdict).equal("fail");
     });
 });
 

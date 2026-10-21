@@ -3976,3 +3976,39 @@ and TH2's lines receiving it (`expectGroupCommandArrival`: the inbound invoke na
 that same exchange to endpoint 1). matter.js names the group on the send and receipt lines for this reason. The arrival is also what orders step 14b's read after
 the command. The same helpers carry TC-SC-5.3's groupcast evidence, so the two cases cannot drift; chip's lines use
 its own uppercase hex (`0x%04X` for the group, `0x%04X_%04X` for cluster and command).
+
+## The single-command cluster-client cases (`TC-OO-3.2`, `TC-I-3.2`, `TC-MOD-2.2`, `TC-LOWPOWER-2.2`, `TC-WNCV-6.1`, `TC-WNCV-7.1`)
+
+Each case commissions the TH in a precondition step (`commissionThStep` in `tc-dd-support.ts`); the WindowCovering
+cases read the TH's FeatureMap there too. Each later step has the DUT send one command to endpoint 1 of the
+all-clusters app, except `TC-MOD-2.2` step 1, which reads SupportedModes. What they add:
+
+- **A bare field line can match a subscription report.** chip prints the fields of a report's struct with the same
+  `0x0 = 1 (unsigned),` shape as a request's `CommandFields`, and the automatic node-level subscription keeps reports
+  arriving, so a bare pattern for a field can pass on a report's line. `expectCommandPayload` (`tc-support.ts`)
+  demands the request's whole `InvokeRequests` list as consecutive lines, from the command's own `CommandPathIB`
+  through its fields to the list's closing `],`, so a missing, different or extra field fails, and so does a second
+  command. `sendCommand` records it with `invokeCommand`'s response checks. `expectCommandInvoke`'s per-field
+  search still has the weakness, and so does the bare `CopyScene` Mode pattern in `TC-S-3.1`.
+- **What the payload check can see on a matter.js TH.** chip prints the raw TLV, so it shows every field the DUT
+  sent. matter.js prints the arguments only after decoding them through the command's schema, which drops a field
+  whose tag the schema does not know. On a matter.js TH the check therefore compares the decoded fields: the payload
+  text must end the `ProtocolService Invoke «` line that dispatches the command on the endpoint. An extra field with
+  an unknown tag is caught on the chip TH only. The "only this command" rule holds on both: `InteractionServer`
+  writes one summary line per request that lists every command path (`invokes: 1.onOff.off, …`) and names the same
+  exchange (`@<session>⇵<exchange>`) as the dispatch line, and the check requires that line to list this command
+  alone.
+- **"The command has no parameters" is a claim.** chip prints an empty `CommandFields = { },` block for it, and
+  matter.js ends its `ProtocolService Invoke «` line with `(no payload)` (`MATTERJS_NO_PAYLOAD`).
+- **A bitmap field is written per flavor**, as in `TC-S-3.1`: OnWithTimedOff's OnOffControl is `0x0 = 1
+  (unsigned),` on chip and `onOffControl: { acceptOnlyWhenOn: true }` on matter.js. Send a set bit; a cleared one
+  cannot tell a lost bitmap from a correct one.
+- **`TC-LOWPOWER-2.2` runs on the chip flavors only.** matter.js's all-clusters test device has no LowPower cluster;
+  `TvTestInstance` has one but is not a cert subject.
+- **The WindowCovering preconditions read the TH's FeatureMap** (`tc-wncv-support.ts`). `TC-WNCV-7.1` requires both
+  position-aware features, which is stricter than the plan's "and/or": for a TH with only one position-aware axis,
+  the plan defines no outcome for the other axis's command. Both THs have all four features.
+- **PICS:** each case's client keys are declared in all three controller overlays. Only two of them change a run:
+  `matter-js-pics.properties` answers `OO.C` 0 and CHIP's file answers `WNCV.C` 0, and both gate their whole case.
+  CHIP's file answers the other keys 1 already; the overlays declare them so that they state the controller's full
+  client surface for these cases rather than rely on what a device file says.
