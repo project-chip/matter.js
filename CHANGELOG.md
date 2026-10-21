@@ -23,7 +23,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A consent granted through `requestUserConsentForUpdate()` is no longer lost when the download starts
     - Fix: A queued OTA update is removed and reported via `updateFailed` when the announced node finds no image for it
     - Fix: A forced OTA update is announced once
-    - Fix: A failed OTA update drops its consent, so a later update check does not install the failed version again
+    - Fix: A failed or cancelled OTA update drops its consent and update tokens, so neither a later update check nor an old token installs that version again
 
 ## 0.18.0 (2026-10-20)
 

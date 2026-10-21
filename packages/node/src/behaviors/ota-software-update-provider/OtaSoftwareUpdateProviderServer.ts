@@ -101,6 +101,7 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
 
         this.agent.require(SoftwareUpdateManager);
         await this.agent.load(SoftwareUpdateManager);
+        this.reactTo(this.agent.get(SoftwareUpdateManager).events.updateFailed, this.#forgetUpdateTokens);
 
         // Verify and adjust ACL if needed
         const node = Node.forEndpoint(this.endpoint) as ServerNode;
@@ -263,7 +264,10 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
             );
             switch (consentState) {
                 case OtaSoftwareUpdateConsentState.Granted:
-                    // proceed
+                    if (this.#inProgressDetailsForPeer(peerAddress, updateToken) === undefined) {
+                        // The update failed or was cancelled while the consent was asked for
+                        return { status: OtaSoftwareUpdateProvider.Status.NotAvailable };
+                    }
                     this.#updateInProgressDetails(
                         peerAddress,
                         updateToken,
@@ -462,7 +466,9 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
                 `(${Bytes.toHex(updateToken)}) requests to apply version ${newVersion}, but its update token names version ${tokenVersion}`,
             );
         }
-        if (!matchesToken || !(await this.#hasUpdateConsent(session.peerAddress, newVersion, progressInfo))) {
+        // A failed or cancelled update forgets its token details meanwhile, see #forgetUpdateTokens
+        const currentInfo = this.#inProgressDetailsForPeer(session.peerAddress, updateToken);
+        if (!matchesToken || !(await this.#hasUpdateConsent(session.peerAddress, newVersion, currentInfo))) {
             this.#updateInProgressDetails(
                 session.peerAddress,
                 updateToken,
@@ -601,6 +607,11 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
         details.cleanup?.();
         this.internal.inProgressDetails.delete(key);
         return true;
+    }
+
+    /** A failed or cancelled update also ends what its update tokens allow, such as an apply with their consent. */
+    #forgetUpdateTokens(peerAddress: PeerAddress) {
+        this.#removeInProgressDetails(PeerAddress(peerAddress));
     }
 
     /**

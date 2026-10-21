@@ -82,16 +82,16 @@ interface UpdateConsent extends SoftwareUpdateManager.UpdateTarget {
  * | `state`      | Meaning                                                     | Leaves the state when                       |
  * |--------------|-------------------------------------------------------------|---------------------------------------------|
  * | `queued`     | Waits for an announcement; `resetAt` when it was reset      | an announcement starts                      |
- * | `announcing` | The announcement runs                                       | it ends, `abort` aborts, or a status arrives |
+ * | `announcing` | The announcement runs                                       | it ends or is aborted, or a status arrives  |
  * | `announced`  | The node was announced and reported no status since `since` | the node reports a status                   |
  * | `progress`   | The node reported `status` at `since`                       | the update is done, cancelled or fails      |
  *
- * `abort` aborts after {@link OTA_PROGRESS_TIMEOUT}.  `announced` and `progress` return to `queued` when the node
+ * An announcement aborts after {@link OTA_PROGRESS_TIMEOUT}.  `announced` and `progress` return to `queued` when the node
  * shows no activity for that long, plus the `applyDelay` of `progress`.  A removed entry leaves the queue in any state.
  */
 type UpdatePhase =
     | { state: "queued"; resetAt?: Timestamp }
-    | { state: "announcing"; abort: Abort }
+    | { state: "announcing" }
     | { state: "announced"; since: Timestamp }
     | {
           state: "progress";
@@ -113,6 +113,9 @@ function isUnderway({ state }: UpdatePhase) {
 interface UpdateQueueEntry extends UpdateConsent {
     endpoint: Endpoint;
     phase: UpdatePhase;
+
+    /** Aborts the announcement still running for this entry, also after a status moved the entry past `announcing`. */
+    announcement?: Abort;
 }
 
 interface CollectedNodesUpdateInfo {
@@ -414,10 +417,8 @@ export class SoftwareUpdateManager extends Behavior {
     }
 
     /** Ends a running announcement early; its result is ignored anyway, see {@link #runAnnouncement}. */
-    #abortAnnouncement({ phase }: UpdateQueueEntry) {
-        if (phase.state === "announcing") {
-            phase.abort();
-        }
+    #abortAnnouncement(entry: UpdateQueueEntry) {
+        entry.announcement?.abort();
     }
 
     #entryIndexFor(peerAddress: PeerAddress) {
@@ -500,7 +501,15 @@ export class SoftwareUpdateManager extends Behavior {
             return undefined;
         }
 
-        const consented = candidates.find(({ softwareVersion }) => this.hasConsent(peerAddress, softwareVersion));
+        const consented = candidates.find(({ softwareVersion }) =>
+            this.internal.consents.some(
+                consent =>
+                    PeerAddress.is(consent.peerAddress, peerAddress) &&
+                    consent.vendorId === vendorId &&
+                    consent.productId === productId &&
+                    consent.targetSoftwareVersion === softwareVersion,
+            ),
+        );
         const delegate = this.mayDelegateConsentTo(peerAddress, { requestorCanConsent });
         const candidate = consented ?? (delegate ? candidates[0] : undefined);
         if (candidate === undefined) {
@@ -1044,11 +1053,13 @@ export class SoftwareUpdateManager extends Behavior {
             return;
         }
 
-        const phase: UpdatePhase = { state: "announcing", abort: new Abort({ timeout: OTA_PROGRESS_TIMEOUT }) };
+        const phase: UpdatePhase = { state: "announcing" };
+        const abort = new Abort({ timeout: OTA_PROGRESS_TIMEOUT });
         entry.phase = phase;
+        entry.announcement = abort;
         runningAnnouncements.set(
-            phase.abort,
-            this.#runAnnouncement(announcements, entry, phase).finally(() => runningAnnouncements.delete(phase.abort)),
+            abort,
+            this.#runAnnouncement(announcements, entry, phase, abort).finally(() => runningAnnouncements.delete(abort)),
         );
     }
 
@@ -1057,13 +1068,12 @@ export class SoftwareUpdateManager extends Behavior {
      * aborted.  Once the entry left `phase`, the result is ignored, because a status or reset already decided how the
      * update goes on; on a removed entry it changes nothing.  Never rejects.
      */
-    async #runAnnouncement(
-        announcements: OtaAnnouncements,
-        entry: UpdateQueueEntry,
-        phase: Extract<UpdatePhase, { state: "announcing" }>,
-    ) {
-        const announced = await this.#announce(announcements, entry, phase.abort);
-        phase.abort.close();
+    async #runAnnouncement(announcements: OtaAnnouncements, entry: UpdateQueueEntry, phase: UpdatePhase, abort: Abort) {
+        const announced = await this.#announce(announcements, entry, abort);
+        abort.close();
+        if (entry.announcement === abort) {
+            entry.announcement = undefined;
+        }
         if (entry.phase === phase) {
             entry.phase = announced
                 ? { state: "announced", since: Time.nowMs }
@@ -1142,6 +1152,7 @@ export class SoftwareUpdateManager extends Behavior {
             // No active BDX session — entry is stale, clean it up
             logger.info(`Cleaning up stale update entry for node ${peerAddress.toString()} before forcing new update`);
             this.internal.updateQueue.splice(existingIndex, 1);
+            this.#abortAnnouncement(existingEntry);
             this.internal.pendingStartUpSuppress.delete(peerAddress);
             try {
                 await bdxProtocol.disablePeerForScope(peerAddress, this.storage, true);
