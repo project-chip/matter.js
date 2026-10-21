@@ -7,13 +7,13 @@
 import { camelize, GeneratedClass, isObject } from "@matter/general";
 import type { FieldModel, Schema } from "@matter/model";
 import { DataModelPath, FeatureMap, ValueModel } from "@matter/model";
-import { ConstraintError, PhantomReferenceError, SchemaImplementationError, Val } from "@matter/protocol";
+import { ConstraintError, SchemaImplementationError, Val } from "@matter/protocol";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
 import { assertBoolean, assertNumber } from "../../validation/assertions.js";
 import { Instrumentation } from "../Instrumentation.js";
 import { Internal } from "../Internal.js";
-import type { ValReference } from "../ValReference.js";
+import { ValReference } from "../ValReference.js";
 
 const SESSION = Symbol("options");
 
@@ -123,11 +123,7 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
             enumerable: true,
 
             get(this: Wrapper) {
-                const bits = this[Internal.reference].value;
-                if (bits === undefined) {
-                    throw new PhantomReferenceError(this[Internal.reference].location);
-                }
-                return !!bits[name];
+                return !!ValReference.containerOf(this[Internal.reference])[name];
             },
 
             set(this: Wrapper, value: Val) {
@@ -137,13 +133,7 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
                     assertBoolean(value, ref.location.path);
                 }
 
-                ref.change(() => {
-                    const bits = ref.value;
-                    if (bits === undefined) {
-                        throw new PhantomReferenceError(this[Internal.reference].location);
-                    }
-                    bits[name] = !!value;
-                }, name);
+                ref.change(() => (ref.value[name] = !!value), name);
             },
         };
     }
@@ -152,11 +142,7 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
         enumerable: true,
 
         get(this: Wrapper) {
-            const bits = this[Internal.reference].value;
-            if (bits === undefined) {
-                throw new PhantomReferenceError(this[Internal.reference].location);
-            }
-            return bits[name];
+            return ValReference.containerOf(this[Internal.reference])[name];
         },
 
         set(this: Wrapper, value: Val) {
@@ -180,13 +166,7 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
                 }
             }
 
-            ref.change(() => {
-                const bits = ref.value;
-                if (bits === undefined) {
-                    throw new PhantomReferenceError(this[Internal.reference].location);
-                }
-                bits[name] = value ? value : 0;
-            }, name);
+            ref.change(() => (ref.value[name] = value ? value : 0), name);
         },
     };
 }
