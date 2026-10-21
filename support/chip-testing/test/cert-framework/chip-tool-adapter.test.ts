@@ -970,6 +970,27 @@ describe("ChipToolControllerAdapter", function () {
             );
         });
 
+        it("takes the provider endpoint from ServerList alone, not from a list report riding along", async () => {
+            const { node } = await commissioned();
+            answerReads();
+            const reads = fake.reply;
+            fake.reply = command => {
+                const reply = reads(command);
+                if (command !== serverListRead(PROVIDER)) {
+                    return reply;
+                }
+                const clientList = {
+                    clusterId: DESCRIPTOR_ID,
+                    endpointId: 0,
+                    attributeId: requireId(DESCRIPTOR.attributes.require("clientList").id, "clientList"),
+                    value: [OTA_PROVIDER_ID],
+                };
+                return { ...reply, results: [clientList, ...(reply.results ?? [])] };
+            };
+
+            expect((await node.announceOtaProvider({ provider: PROVIDER })).announcement.endpoint).equal(1);
+        });
+
         it("takes no attribute status of a subscription report riding along for the command's answer", async () => {
             const { node } = await commissioned();
             answerReads(() => ({
@@ -1241,6 +1262,23 @@ describe("ChipToolControllerAdapter", function () {
 
             fake.reply = () => ({ results: [{ ...failure, clusterError: 0x12 }], logs, status: 1 });
             await expect(node.writeAttributes(request)).rejectedWith(UnexpectedDataError, /cluster status 0x11/);
+        });
+
+        it("rejects a failure without a code when the decoded message lists only a success for its path", async () => {
+            const { node } = await commissioned();
+
+            fake.reply = () => ({
+                results: [
+                    { endpointId: 2, clusterId: IDENTIFY.id, attributeId: IDENTIFY_TIME.id, error: "Unallocated" },
+                ],
+                logs: MATTERJS_WILDCARD_SUCCESS.logs,
+                status: 1,
+            });
+
+            await expect(node.writeAttributes([{ path: identifyTime, value: 5 }])).rejectedWith(
+                UnexpectedDataError,
+                /reported Unallocated for endpoint 2/,
+            );
         });
 
         it("accepts a failure matching any of several statuses the device sent for one path", async () => {

@@ -268,7 +268,9 @@ const SERVER_LIST: AttributePathSpec = {
 
 /** The lowest endpoint of `node` whose ServerList carries `cluster`. */
 async function endpointServing(node: CertNodeApi, ref: CertNodeRef, cluster: number): Promise<number> {
+    // The reply can also carry reports of a live subscription, such as a ClientList naming the same cluster
     const endpoints = (await node.readAttributes([SERVER_LIST]))
+        .filter(entry => pathCovers(SERVER_LIST, entry))
         .filter(({ value }) => Array.isArray(value) && value.map(Number).includes(cluster))
         .map(({ endpoint }) => endpoint);
     if (endpoints.length === 0) {
@@ -1017,7 +1019,7 @@ function loggedWriteStatuses(
         );
         const same = listed.some(
             entry =>
-                (!("code" in status) || entry.status === status.code) &&
+                ("code" in status ? entry.status === status.code : entry.status !== Status.Success) &&
                 (clusterStatus === undefined || entry.clusterStatus === clusterStatus),
         );
         if (!same) {
