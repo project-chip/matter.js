@@ -86,7 +86,8 @@ function TestState() {
 }
 
 interface FabricEntry {
-    n: number;
+    n?: number;
+    targets?: { cluster: number }[] | null;
 }
 
 /**
@@ -95,10 +96,14 @@ interface FabricEntry {
 function FabricState() {
     const struct = TestStruct(
         {
-            acl: listOf(structOf({ fabricIndex: "fabric-idx", n: { type: "uint8", constraint: "max 10" } }), {
-                access: "F",
-                quality: "X",
-            }),
+            acl: listOf(
+                structOf({
+                    fabricIndex: "fabric-idx",
+                    n: { type: "uint8", constraint: "max 10" },
+                    targets: listOf(structOf({ cluster: "uint32" }), { quality: "X" }),
+                }),
+                { access: "F", quality: "X" },
+            ),
         },
         { acl: [] },
     );
@@ -256,29 +261,8 @@ describe("ManagedReference", () => {
         });
 
         it("accepts a nested write into a nullable list of a fabric-scoped entry after it was null", async () => {
-            const struct = TestStruct(
-                {
-                    acl: listOf(
-                        structOf({
-                            fabricIndex: "fabric-idx",
-                            targets: listOf(structOf({ cluster: "uint32" }), { quality: "X" }),
-                        }),
-                        { access: "F" },
-                    ),
-                },
-                { acl: [] },
-            );
-
-            const cx = {
-                fabricFiltered: true,
-                exchange: new MockExchange({ fabricIndex: FabricIndex(1), nodeId: NodeId(1) }),
-                node: aclEndpoint(),
-            };
-
-            await struct.online(cx, async (ref, cx) => {
-                type Acl = { targets: { cluster: number }[] | null }[];
-                const acl = ref.acl as Acl;
-
+            await FabricState().online(async (state, cx) => {
+                const acl = state.acl!;
                 acl[0] = { targets: [{ cluster: 1 }] };
                 await cx.transaction.commit();
                 expect(acl[0].targets![0].cluster).equals(1);
@@ -408,6 +392,16 @@ describe("ManagedReference", () => {
 
             expect(() => Reflect.deleteProperty(held!, "0")).throws(ExpiredReferenceError);
             expect(() => (held!.length = 0)).throws(ExpiredReferenceError);
+        });
+
+        it("refuses a read through a held root proxy (characterization)", async () => {
+            const state = TestState();
+            let root: State | undefined;
+            await state.write(s => {
+                root = s;
+            });
+
+            expect(() => root!.holder).throws(ExpiredReferenceError);
         });
 
         it("serves the last values through held nested proxies (characterization)", async () => {

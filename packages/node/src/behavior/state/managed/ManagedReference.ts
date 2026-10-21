@@ -107,7 +107,7 @@ export class ManagedReference implements ValReference {
     }
 
     get rootOwner() {
-        return this.parent!.rootOwner;
+        return this.parent.rootOwner;
     }
 
     get value() {
@@ -128,27 +128,27 @@ export class ManagedReference implements ValReference {
     }
 
     get original() {
-        if (!this.parent!.original) {
+        if (!this.parent.original) {
             return undefined;
         }
         if (this.#dynamicContainer !== undefined) {
-            const origProperties = (this.parent!.original as Val.Dynamic)[Val.properties](
-                this.parent!.rootOwner,
+            const origProperties = (this.parent.original as Val.Dynamic)[Val.properties](
+                this.parent.rootOwner,
                 this.#session,
             );
             return memberValueOf(origProperties as Container, this.#key, this.#fallbackKey);
         }
-        return memberValueOf(this.parent!.original as Container, this.#key, this.#readFallbackKey);
+        return memberValueOf(this.parent.original as Container, this.#key, this.#readFallbackKey);
     }
 
     change(mutator: () => void) {
         ValReference.writableContainerOf(this);
 
-        this.parent!.change(() => {
+        this.parent.change(() => {
             // In transactions, clone the value if we haven't done so yet
             if (this.#value === this.original) {
                 const newValue = this.#clone(this.#value);
-                this.#writeTo(this.#dynamicContainer ?? (this.parent!.value as Container), newValue);
+                this.#writeTo(this.#dynamicContainer ?? (this.parent.value as Container), newValue);
                 this.#replaceValue(newValue);
             }
 
@@ -162,14 +162,14 @@ export class ManagedReference implements ValReference {
             return;
         }
 
-        if (this.parent!.value === undefined || this.parent!.value === null) {
+        if (this.parent.value === undefined || this.parent.value === null) {
             this.#replaceValue(undefined);
             return;
         }
 
         // A member the parent serves from a provider must stay served for the life of this reference; a reference that
         // found no provider is never asked again, so a parent may not start serving one either
-        if (this.#dynamicContainer !== undefined && this.parent!.value !== this.#dynamicSource) {
+        if (this.#dynamicContainer !== undefined && this.parent.value !== this.#dynamicSource) {
             this.#bindDynamicContainer();
             if (this.#dynamicContainer === undefined) {
                 throw new InternalError(`Value at ${this.location.path} no longer serves ${this.#key}`);
@@ -178,7 +178,7 @@ export class ManagedReference implements ValReference {
 
         const value =
             this.#dynamicContainer === undefined
-                ? memberValueOf(this.parent!.value as Container, this.#key, this.#readFallbackKey)
+                ? memberValueOf(this.parent.value as Container, this.#key, this.#readFallbackKey)
                 : memberValueOf(this.#dynamicContainer as Container, this.#key, this.#fallbackKey);
 
         this.#replaceValue(value);
@@ -189,7 +189,7 @@ export class ManagedReference implements ValReference {
      * struct it was derived from, so this runs again whenever the parent replaces that struct.
      */
     #bindDynamicContainer() {
-        const parent = this.parent!;
+        const parent = this.parent;
 
         this.#dynamicSource = parent.value;
         this.#dynamicContainer = undefined;

@@ -19,7 +19,7 @@ export interface ValReference<T extends Val = Val> {
      * it, is absent.  After the owning context exits, a nested reference keeps the last value it saw and the root
      * reference throws {@link ExpiredReferenceError}.
      */
-    readonly value: T;
+    readonly value: T | undefined | null;
 
     /**
      * The current canonical value of the referenced property.

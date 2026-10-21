@@ -133,7 +133,9 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
                     assertBoolean(value, ref.location.path);
                 }
 
-                ref.change(() => (ref.value[name] = !!value), name);
+                ref.change(() => {
+                    ValReference.containerOf(ref)[name] = !!value;
+                }, name);
             },
         };
     }
@@ -166,7 +168,9 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
                 }
             }
 
-            ref.change(() => (ref.value[name] = value ? value : 0), name);
+            ref.change(() => {
+                ValReference.containerOf(ref)[name] = value ? value : 0;
+            }, name);
         },
     };
 }

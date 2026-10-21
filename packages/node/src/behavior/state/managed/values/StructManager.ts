@@ -199,7 +199,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
             const self = this;
 
             this[Internal.reference].change(() => {
-                const struct = this[Internal.reference].value;
+                const struct = ValReference.containerOf(this[Internal.reference]);
 
                 // Identify the target.  Usually just "struct" except when struct supports Val.Dynamic
                 let target;
