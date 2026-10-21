@@ -1692,13 +1692,8 @@ describe("controller capabilities", () => {
         }
     });
 
-    it("lacks batch invoke, long path lists, wildcard write statuses and announcing another provider on chip-tool alone", () => {
-        const shapes = [
-            "batch-invoke",
-            "many-paths-per-request",
-            "wildcard-write-statuses",
-            "ota-provider-announcement",
-        ] as const;
+    it("lacks batch invoke and long path lists on chip-tool alone", () => {
+        const shapes = ["batch-invoke", "many-paths-per-request"] as const;
 
         for (const controller of ["matterjs", "matterjs-server"]) {
             env.MATTER_CERT_CONTROLLER = controller;
