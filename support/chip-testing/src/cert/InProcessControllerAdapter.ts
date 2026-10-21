@@ -1096,7 +1096,8 @@ export class NoCommissionedPeerError extends MatterError {}
  * transport has nothing to sever.
  *
  * A state error rather than a refusal: a step that reached it has already established something
- * untrue about the session it captured, so it must fail rather than be recorded as skipped.
+ * untrue about the session it captured, so it fails as a finding about the session. A refusal would
+ * end it as a framework error instead.
  */
 export class SessionStateError extends MatterError {}
 

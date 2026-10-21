@@ -281,6 +281,7 @@ certTest("TC-IDM-3.1", { plan: "interactiondatamodel.adoc", pics: ["MCORE.IDM.C.
         {
             expected: "Verify on the TH that the correct WriteRequestMessage has been received.",
             flavors: STEP_2_FLAVORS,
+            controllerCapabilities: ["wildcard-write-statuses"],
         },
     )
     .step(

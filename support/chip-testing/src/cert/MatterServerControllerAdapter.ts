@@ -268,15 +268,19 @@ export const MATTERJS_SERVER_CAPABILITY_GAPS = {
         "registration needs it, so it has none to observe events through or to keep its device list current",
 } as const satisfies ControllerCapabilityGaps;
 
+const MULTI_PATH_WRITE_OUT_OF_SCOPE =
+    "not reachable for controller use cases: the server writes one attribute per request, on one endpoint or on " +
+    "all, and handles conditional writes itself";
+
 /**
  * What this controller deliberately does not offer, declared with its registration so a step needing one of these does
  * not apply to it and does not count against its test case (see `controllerCapabilityOutOfScope`). The operations
  * refuse naming the capability, like those of a gap.
  */
 export const MATTERJS_SERVER_OUT_OF_SCOPE = {
-    "multi-path-write":
-        "not reachable for controller use cases: the server writes one attribute per request, on one endpoint or on " +
-        "all, and handles conditional writes itself",
+    "multi-path-write": MULTI_PATH_WRITE_OUT_OF_SCOPE,
+    "mixed-version-write": MULTI_PATH_WRITE_OUT_OF_SCOPE,
+    "typed-list-write-with-others": MULTI_PATH_WRITE_OUT_OF_SCOPE,
     "ota-provider-script":
         "the server's OTA provider answers only with a staged image; scripted answers stay excluded until the test " +
         "plans' need for them is clarified",
