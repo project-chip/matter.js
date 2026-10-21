@@ -17,15 +17,16 @@ export class WalSnapshot {
     readonly data: StoreData;
 
     /**
-     * Commit of the snapshot this one replaced, which the store keeps as the backup.
+     * Commit of the snapshot this one replaced, which the store keeps as the backup.  Stored as the JSON field
+     * `previousCommitId`.
      */
-    readonly previousCommitId?: WalCommitId;
+    readonly backupCommitId?: WalCommitId;
 
-    constructor(commitId: WalCommitId, ts: number, data: StoreData, previousCommitId?: WalCommitId) {
+    constructor(commitId: WalCommitId, ts: number, data: StoreData, backupCommitId?: WalCommitId) {
         this.commitId = commitId;
         this.ts = ts;
         this.data = data;
-        this.previousCommitId = previousCommitId;
+        this.backupCommitId = backupCommitId;
     }
 
     /**
@@ -36,7 +37,7 @@ export class WalSnapshot {
             commitId: this.commitId,
             ts: this.ts,
             data: this.data,
-            ...(this.previousCommitId ? { previousCommitId: this.previousCommitId } : {}),
+            ...(this.backupCommitId ? { previousCommitId: this.backupCommitId } : {}),
         };
         return toJson(snapshot, 2);
     }

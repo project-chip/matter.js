@@ -19,6 +19,7 @@ const EXTENSIONS = ["json.gz", "json"] as const;
 const CURRENT = "snapshot";
 const BACKUP = "snapshot.prev";
 const CORRUPT = "snapshot.corrupt";
+const TMP = "snapshot.tmp";
 
 /**
  * The snapshot files of a WAL storage directory.
@@ -54,7 +55,7 @@ export class WalSnapshotStore {
         const extension = options.compress ? "json.gz" : "json";
         const content = options.compress ? Gzip.compress([new TextEncoder().encode(json)]) : [json];
 
-        const tmpFile = this.#dir.file(`${CURRENT}.tmp.${extension}`);
+        const tmpFile = this.#dir.file(`${TMP}.${extension}`);
         await writeSynced(tmpFile, content, options.fsync);
 
         if (await this.#exists(CURRENT)) {
@@ -68,13 +69,15 @@ export class WalSnapshotStore {
      *
      * When it falls back to the backup, an unreadable current snapshot is moved to `snapshot.corrupt.*`.  A backup is
      * deleted when the current snapshot has no `previousCommitId`, because a version without backups wrote that
-     * snapshot and may have deleted the WAL the backup needs.  The "head" snapshot of older versions is deleted too.
+     * snapshot and may have deleted the WAL the backup needs.  The "head" snapshot of older versions and a temporary
+     * file that a crash during {@link save} left are deleted too.
      * Throws a {@link StorageError} if no readable snapshot exists although one was written before.
      *
      * @returns undefined if no snapshot was ever written
      */
     async restore(): Promise<WalSnapshotStore.Restored | undefined> {
         await this.#deleteLegacyHeadSnapshot();
+        await this.#remove(TMP);
 
         let snapshot: WalSnapshot | undefined;
         let failure: unknown;
@@ -85,10 +88,10 @@ export class WalSnapshotStore {
         }
 
         if (snapshot) {
-            if (snapshot.previousCommitId === undefined) {
+            if (snapshot.backupCommitId === undefined) {
                 await this.#remove(BACKUP);
             }
-            return { snapshot, backupCommitId: snapshot.previousCommitId };
+            return { snapshot, backupCommitId: snapshot.backupCommitId };
         }
 
         let backup: WalSnapshot | undefined;

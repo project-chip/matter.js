@@ -99,8 +99,9 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
         await walDir.mkdir();
 
         const reader = new WalReader(walDir);
-        const loaded = await this.#load(reader);
-        const firstSegment = Math.max(loaded.lastCommitId?.segment ?? 0, ...(await reader.segments())) + 1;
+        const segments = await reader.segments();
+        const loaded = await this.#load(reader, segments[0]);
+        const firstSegment = Math.max(loaded.lastCommitId?.segment ?? 0, ...segments) + 1;
 
         const compressLog = this.#options.compressLog ?? WalStorageDriver.defaults.compressLog;
         const writer = new WalWriter(walDir, {
@@ -125,8 +126,11 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
 
         const state = this.#state;
         if (state) {
+            // The store already holds every commit, so the snapshot saves them even if the last segment close failed
+            await state.writer
+                .close()
+                .catch(error => logger.warn(`Closing the WAL writer of ${this.#storageDir.path} failed:`, error));
             await this.#snapshotAndClean();
-            await state.writer.close();
         }
         await this.#maintenance.close();
         this.#state = undefined;
@@ -246,13 +250,13 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
     /**
      * Restore the snapshot and replay the WAL after it.
      */
-    async #load(reader: WalReader): Promise<StoreState> {
+    async #load(reader: WalReader, oldestSegment: number | undefined): Promise<StoreState> {
         const loaded: StoreState = { store: {} };
 
         const restored = await this.#snapshots.restore();
+        this.#assertWalCovers(oldestSegment, restored?.snapshot.commitId);
         if (restored) {
             const { snapshot, backupCommitId } = restored;
-            await this.#assertWalCovers(reader, snapshot.commitId);
             Object.assign(loaded.store, snapshot.data);
             loaded.lastCommitId = loaded.lastSnapshotCommitId = snapshot.commitId;
             loaded.lastCommitTs = snapshot.ts || undefined;
@@ -284,19 +288,22 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
     }
 
     /**
-     * Throw if WAL segments that may hold commits after {@link commitId} are missing, because a replay would skip them.
+     * Throw if WAL segments that may hold commits after the snapshot at {@link commitId}, or after an empty store when
+     * there is no snapshot, are missing, because a replay would skip them.
      *
      * After the WAL was lost, the next run starts at the snapshot's segment + 1, so that segment may be the oldest one
-     * without anything missing.  A missing tail of the snapshot's own segment cannot be detected, the same as a fully
-     * missing WAL.
+     * without anything missing.  Without a snapshot, the first writer started at segment 1.  A missing tail of the
+     * oldest segment cannot be detected, the same as a fully missing WAL.
      */
-    async #assertWalCovers(reader: WalReader, commitId: WalCommitId) {
-        const [oldest] = await reader.segments();
-        if (oldest !== undefined && oldest > commitId.segment + 1) {
-            throw new StorageError(
-                `Snapshot in ${this.#storageDir.path} at WAL segment ${commitId.segment} cannot be restored because the WAL starts at segment ${oldest}`,
-            );
+    #assertWalCovers(oldestSegment: number | undefined, commitId: WalCommitId | undefined) {
+        const firstNeeded = commitId === undefined ? 1 : commitId.segment + 1;
+        if (oldestSegment === undefined || oldestSegment <= firstNeeded) {
+            return;
         }
+        const base = commitId === undefined ? "No snapshot" : `Snapshot at WAL segment ${commitId.segment}`;
+        throw new StorageError(
+            `${base} in ${this.#storageDir.path} cannot be restored because the WAL starts at segment ${oldestSegment}`,
+        );
     }
 
     /**
@@ -335,25 +342,26 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
      */
     async #runSnapshot(): Promise<void> {
         const state = this.#requireState();
-        const { store, lastCommitId: commitId, lastSnapshotCommitId: previousCommitId } = state;
+        const { store, lastCommitId: commitId, lastSnapshotCommitId } = state;
         if (commitId === undefined) return;
         try {
-            if (previousCommitId !== undefined && compareCommitIds(commitId, previousCommitId) === 0) {
+            if (lastSnapshotCommitId !== undefined && compareCommitIds(commitId, lastSnapshotCommitId) === 0) {
                 return;
             }
 
+            const announce = state.restoredFromLog;
+            state.restoredFromLog = false;
             const elapsed = Diagnostic.elapsed();
-            const snapshot = new WalSnapshot(commitId, state.lastCommitTs ?? 0, store, previousCommitId);
+            const snapshot = new WalSnapshot(commitId, state.lastCommitTs ?? 0, store, lastSnapshotCommitId);
             await this.#snapshots.save(snapshot, {
                 compress: this.#options.compressSnapshot ?? WalStorageDriver.defaults.compressSnapshot,
                 fsync: this.#options.fsync ?? WalStorageDriver.defaults.fsync,
             });
-            if (state.restoredFromLog) {
-                state.restoredFromLog = false;
+            if (announce) {
                 logger.notice(`Saved the restored state of ${this.#storageDir.path} in ${elapsed}`);
             }
             state.lastSnapshotCommitId = commitId;
-            state.backupCommitId = previousCommitId;
+            state.backupCommitId = lastSnapshotCommitId;
         } catch (e) {
             logger.warn(`Snapshot of ${this.#storageDir.path} failed:`, e);
         }
@@ -410,7 +418,7 @@ interface StoreState {
     backupCommitId?: WalCommitId;
 
     /**
-     * Set when the open replayed WAL entries, until the next snapshot saves them.  The open announces that snapshot,
+     * Set when the open replayed WAL entries, until the next snapshot attempt.  The open announces that snapshot,
      * because its serialization delays the open.
      */
     restoredFromLog?: boolean;

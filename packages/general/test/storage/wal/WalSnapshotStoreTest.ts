@@ -160,9 +160,18 @@ describe("WalSnapshotStore", () => {
 
             const current = await new WalSnapshotStore(storageDir).loadCurrent();
             expect(current!.commitId).deep.equal(second.commitId);
-            expect(current!.previousCommitId).deep.equal(first.commitId);
+            expect(current!.backupCommitId).deep.equal(first.commitId);
             const backup = await new WalSnapshotStore(storageDir).loadBackup();
             expect(backup!.data.ctx.key).equal("first");
+        });
+
+        it("stores the backup commit as the previousCommitId field that earlier versions wrote", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            await new WalSnapshotStore(storageDir).save(second, { compress: false, fsync: false });
+
+            const stored = JSON.parse(await storageDir.file("snapshot.json").readAllText());
+            expect(stored.previousCommitId).deep.equal(first.commitId);
         });
 
         it("restores the current snapshot and names its backup", async () => {

@@ -25,7 +25,7 @@ export class WalWriter {
     readonly #name: string;
     readonly #maxSegmentSize: number;
     readonly #fsync: boolean;
-    readonly #onRotate?: (closedSegment: number) => void;
+    readonly #onRotate?: () => void;
     readonly #mutex = new Mutex(this);
 
     #handle?: File.Handle;
@@ -110,10 +110,9 @@ export class WalWriter {
     }
 
     async #rotate(): Promise<void> {
-        const closedSegment = this.#currentSegment;
         await this.#closeHandle();
         await this.#openSegment();
-        this.#onRotate?.(closedSegment);
+        this.#onRotate?.();
     }
 
     /**
@@ -138,8 +137,8 @@ export namespace WalWriter {
         maxSegmentSize?: number;
         /** Whether to fsync after each write. Default true. */
         fsync?: boolean;
-        /** Called after a segment is rotated, with the closed segment number. */
-        onRotate?: (closedSegment: number) => void;
+        /** Called after a segment is rotated. */
+        onRotate?: () => void;
 
         /**
          * Number of the first segment to write.  Must be higher than every existing segment and than the segment of
