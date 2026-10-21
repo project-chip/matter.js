@@ -3926,9 +3926,16 @@ all-clusters app, except `TC-MOD-2.2` step 1, which reads SupportedModes. What t
   arriving, so a bare pattern for a field can pass on a report's line. `expectCommandPayload` (`tc-support.ts`)
   demands the request's whole `InvokeRequests` list as consecutive lines, from the command's own `CommandPathIB`
   through its fields to the list's closing `],`, so a missing, different or extra field fails, and so does a second
-  command. On matter.js the payload text must end the line that dispatches the command on the endpoint.
-  `sendCommand` records it with `invokeCommand`'s response checks. `expectCommandInvoke`'s per-field search still
-  has the weakness, and so does the bare `CopyScene` Mode pattern in `TC-S-3.1`.
+  command. `sendCommand` records it with `invokeCommand`'s response checks. `expectCommandInvoke`'s per-field
+  search still has the weakness, and so does the bare `CopyScene` Mode pattern in `TC-S-3.1`.
+- **What the payload check can see on a matter.js TH.** chip prints the raw TLV, so it shows every field the DUT
+  sent. matter.js prints the arguments only after decoding them through the command's schema, which drops a field
+  whose tag the schema does not know. On a matter.js TH the check therefore compares the decoded fields: the payload
+  text must end the `ProtocolService Invoke «` line that dispatches the command on the endpoint. An extra field with
+  an unknown tag is caught on the chip TH only. The "only this command" rule holds on both: `InteractionServer`
+  writes one summary line per request that lists every command path (`invokes: 1.onOff.off, …`) and names the same
+  exchange (`@<session>⇵<exchange>`) as the dispatch line, and the check requires that line to list this command
+  alone.
 - **"The command has no parameters" is a claim.** chip prints an empty `CommandFields = { },` block for it, and
   matter.js ends its `ProtocolService Invoke «` line with `(no payload)` (`MATTERJS_NO_PAYLOAD`).
 - **A bitmap field is written per flavor**, as in `TC-S-3.1`: OnWithTimedOff's OnOffControl is `0x0 = 1

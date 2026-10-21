@@ -7,7 +7,7 @@
 import { Matter } from "@matter/model";
 import { certTest } from "@matter/testing";
 import { commissionThStep } from "./tc-dd-support.js";
-import { CommissionedRefs, invokeCommand, recordAll } from "./tc-support.js";
+import { CommissionedRefs, MATTERJS_NO_PAYLOAD, sendCommand } from "./tc-support.js";
 
 const LOW_POWER = Matter.clusters.require("LowPower");
 
@@ -31,16 +31,14 @@ certTest("TC-LOWPOWER-2.2", {
     .step(
         1,
         "DUT sends Sleep command to TH",
-        commissioned.withRef("dut", async (cx, ref) => {
-            const { checks } = await invokeCommand(cx, ref, {
-                cluster: LOW_POWER,
-                endpoint: ENDPOINT,
-                command: "sleep",
-                args: {},
-                fields: [],
-            });
-            await recordAll(cx, checks);
-        }),
+        commissioned.withRef("dut", (cx, ref) =>
+            sendCommand(
+                cx,
+                ref,
+                { cluster: LOW_POWER, endpoint: ENDPOINT, command: "sleep", args: {} },
+                { label: "Sleep carries no parameters", chip: [], matterjs: MATTERJS_NO_PAYLOAD },
+            ),
+        ),
         { pics: "LOWPOWER.C.C00.Tx", expected: "Verify command is successfully received by TH" },
     )
     .finalize(cx => commissioned.decommissionAll(cx));

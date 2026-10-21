@@ -5,23 +5,21 @@
  */
 
 import { certTest } from "@matter/testing";
-import { CommissionedRefs, invokeCommand, recordAll } from "./tc-support.js";
+import { CommissionedRefs, MATTERJS_NO_PAYLOAD, sendCommand } from "./tc-support.js";
 import { WINDOW_COVERING, WINDOW_COVERING_ENDPOINT, windowCoveringPreconditions } from "./tc-wncv-support.js";
 
 const commissioned = new CommissionedRefs();
 
-/** A step that has the DUT send `command`, which has no fields, and records the TH's answer and log. */
+/** A step that has the DUT send `command`, which has no parameters, and checks that the TH received none. */
 function sendsCommand(command: string) {
-    return commissioned.withRef("dut", async (cx, ref) => {
-        const { checks } = await invokeCommand(cx, ref, {
-            cluster: WINDOW_COVERING,
-            endpoint: WINDOW_COVERING_ENDPOINT,
-            command,
-            args: {},
-            fields: [],
-        });
-        await recordAll(cx, checks);
-    });
+    return commissioned.withRef("dut", (cx, ref) =>
+        sendCommand(
+            cx,
+            ref,
+            { cluster: WINDOW_COVERING, endpoint: WINDOW_COVERING_ENDPOINT, command, args: {} },
+            { label: `${command} carries no parameters`, chip: [], matterjs: MATTERJS_NO_PAYLOAD },
+        ),
+    );
 }
 
 certTest("TC-WNCV-6.1", { plan: "window_covering.adoc", pics: ["WNCV.C"], app: "all-clusters" })

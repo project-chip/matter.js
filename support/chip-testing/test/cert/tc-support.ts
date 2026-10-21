@@ -1663,31 +1663,41 @@ export interface CommandPayload {
 }
 
 /**
- * Checks that the TH's log shows `command`'s request at or after `from` carrying exactly `payload`, and returns the
- * check for {@link recordAll}. The request must carry `command` as its only `CommandDataIB`.
+ * Checks that the TH's log shows `command`'s request at or after `from` carrying exactly `payload` and no other
+ * command, within `timeout`.
  *
  * {@link expectCommandInvoke} finds each field line anywhere after the command path, which also matches a TH
- * subscription report printing a field of the same id and value. On chip this check demands the request's whole
- * `InvokeRequests` list as consecutive lines: the command's own `CommandPathIB`, then `payload`'s field lines, then
- * the closing lines of the fields, the `CommandDataIB` and the list. So a field that is missing, has another value or
- * is extra fails it, and so does a second command in the request. On matter.js `payload` must end the line that
- * dispatches the command on `endpoint`.
+ * subscription report printing a field of the same id and value. This check reads the request itself:
+ *
+ * - chip prints the request's raw TLV. The check demands its whole `InvokeRequests` list as consecutive lines: the
+ *   command's own `CommandPathIB`, then `payload`'s field lines, then the closing lines of the fields, the
+ *   `CommandDataIB` and the list. A field that is missing, has another value or is extra fails it, an extra field
+ *   with a tag the schema does not know included, and so does a second command in the request.
+ * - matter.js prints the arguments after decoding them through the command's schema, which drops a field whose tag
+ *   the schema does not know. The check demands `payload` at the end of the line that dispatches the command on
+ *   `endpoint`, so a missing or different known field, or an extra one, fails it; an extra unknown field cannot. It
+ *   then demands that the request summary line of the same exchange lists this command and no other.
  */
 export async function expectCommandPayload(
-    cx: CertStepContext,
+    log: LogFollower,
+    flavor: LogFlavor,
     invocation: { cluster: ClusterModel; endpoint: number; command: string },
-    from: number,
     payload: CommandPayload,
-): Promise<RecordedCheck> {
+    from: number,
+    timeout: Duration,
+): Promise<CheckRecord> {
     const { label } = payload;
     const { cluster, endpoint, command } = invocation;
     const model = cluster.commands.require(command);
     const clusterId = requireId(cluster.id, `${cluster.name} cluster`);
     const commandId = requireId(model.id, `${cluster.name}.${command}`);
-    const th = theTh(cx);
-    const check = await expectSequence(
-        th.log,
-        th.flavor,
+
+    if (flavorFamily(flavor) === "matterjs") {
+        return matterjsCommandPayload(log, flavor, endpoint, cluster, command, payload, from, timeout);
+    }
+    return expectSequence(
+        log,
+        flavor,
         label,
         {
             chip: [
@@ -1704,17 +1714,66 @@ export async function expectCommandPayload(
                 /\[DMG\]\s*$/,
                 /\],\s*$/,
             ],
-            matterjs: [
-                new RegExp(
-                    `ProtocolService Invoke « \\S+\\.ep${endpoint}\\.${camelize(cluster.name)}\\.` +
-                        `${camelize(model.name)} @\\S+ ${literally(payload.matterjs)}$`,
-                ),
-            ],
         },
         from,
-        LOG_TIMEOUT,
+        timeout,
     );
-    return { what: label, check: () => check };
+}
+
+/**
+ * As {@link expectCommandPayload} against a matter.js TH: the line dispatching the command, then the summary line
+ * `InteractionServer` writes for the request on the same exchange (`@<session>⇵<exchange>`), which names every
+ * command path the request carried.
+ */
+async function matterjsCommandPayload(
+    log: LogFollower,
+    flavor: LogFlavor,
+    endpoint: number,
+    cluster: ClusterModel,
+    command: string,
+    payload: CommandPayload,
+    from: number,
+    timeout: Duration,
+): Promise<CheckRecord> {
+    const deadline = Time.nowUs + timeout;
+    const remaining = () => Millis(Math.max(1, deadline - Time.nowUs));
+    const model = cluster.commands.require(command);
+
+    // The dispatch line names the exchange, then the message (`✉…`) the command arrived in
+    const dispatchLine = new RegExp(
+        `ProtocolService Invoke « \\S+\\.ep${endpoint}\\.${camelize(cluster.name)}\\.${camelize(model.name)} ` +
+            `(@[^\\s✉]+)\\S* ${literally(payload.matterjs)}$`,
+    );
+    const dispatch = await expectDeviceLog(log, flavor, { matterjs: dispatchLine }, from, remaining());
+    const exchange = dispatch.check.matched?.match(dispatchLine)?.[1];
+    if (dispatch.check.verdict !== "pass" || exchange === undefined) {
+        return { ...dispatch.check, pattern: payload.label };
+    }
+
+    const commandPath = matterjsCommandPath(
+        endpoint,
+        requireId(cluster.id, `${cluster.name} cluster`),
+        requireId(model.id, `${cluster.name}.${command}`),
+    );
+    const request = await expectDeviceLog(
+        log,
+        flavor,
+        {
+            matterjs: new RegExp(`InteractionServer Invoke « ${literally(exchange)} (?:.* )?invokes: ${commandPath}$`),
+        },
+        from,
+        remaining(),
+    );
+    if (request.check.verdict !== "pass") {
+        return {
+            ...request.check,
+            pattern: payload.label,
+            detail:
+                `no summary line on ${exchange} lists ${command} as the request's only command: ` +
+                `${request.check.detail}`,
+        };
+    }
+    return { ...dispatch.check, pattern: payload.label };
 }
 
 /**
@@ -1731,7 +1790,9 @@ export function sendCommand(
     return withChecks(cx, async checks => {
         const invoked = await invokeWithResponseChecks(cx, ref, invocation);
         checks.push(...invoked.checks);
-        checks.push(await expectCommandPayload(cx, invocation, invoked.from, payload));
+        const th = theTh(cx);
+        const logged = await expectCommandPayload(th.log, th.flavor, invocation, payload, invoked.from, LOG_TIMEOUT);
+        checks.push({ what: payload.label, check: () => logged });
     });
 }
 
