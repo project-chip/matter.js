@@ -227,6 +227,32 @@ export const MATTERJS_CONTROLLER_PICS: PicsValues = {
     "S.C.C06.Tx": 1,
     "S.C.C40.Tx": 1,
 
+    // The client commands, and the one attribute, that the single-command client cases send or read
+    // (TC-OO-3.2, TC-I-3.2, TC-MOD-2.2, TC-LOWPOWER-2.2, TC-WNCV-6.1, TC-WNCV-7.1). Only `OO.C` (0 in
+    // matter.js's own PICS file) and `WNCV.C` (0 in CHIP's) need the overlay, because both files
+    // describe a device; the other keys state the controller's full client surface for these cases.
+    "OO.C": 1,
+    "OO.C.C00.Tx": 1,
+    "OO.C.C01.Tx": 1,
+    "OO.C.C02.Tx": 1,
+    "OO.C.C40.Tx": 1,
+    "OO.C.C41.Tx": 1,
+    "OO.C.C42.Tx": 1,
+    "I.C": 1,
+    "I.C.C00.Tx": 1,
+    "I.C.C40.Tx": 1,
+    "MOD.C": 1,
+    "MOD.C.A0002": 1,
+    "MOD.C.C00.Tx": 1,
+    "LOWPOWER.C": 1,
+    "LOWPOWER.C.C00.Tx": 1,
+    "WNCV.C": 1,
+    "WNCV.C.C00.Tx": 1,
+    "WNCV.C.C01.Tx": 1,
+    "WNCV.C.C02.Tx": 1,
+    "WNCV.C.C05.Tx": 1,
+    "WNCV.C.C08.Tx": 1,
+
     // Every ThreadBorderRouterManagement client command TC-TBRM-3.1 sends. The CHIP PICS file answers
     // only the server side, because it describes a device; here the client is the controller.
     "TBRM.C": 1,
