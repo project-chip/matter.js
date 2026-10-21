@@ -6,7 +6,8 @@
 
 import { MockFilesystem } from "#fs/MockFilesystem.js";
 import { StorageError } from "#storage/StorageDriver.js";
-import { type WalOp, deserializeCommit, segmentFilename } from "#storage/wal/WalCommit.js";
+import { type WalOp, deserializeCommit } from "#storage/wal/WalCommit.js";
+import { segmentFilename } from "#storage/wal/WalSegments.js";
 import { WalWriter } from "#storage/wal/WalWriter.js";
 
 describe("WalWriter", () => {
@@ -89,17 +90,13 @@ describe("WalWriter", () => {
         const writer = new WalWriter(walDir, { fsync: true, firstSegment: 1 });
         await writer.write([{ op: "upd", key: "a", values: { x: 1 } }]);
 
-        const probe = await fs.file("probe").open("probe", "w");
-        const handlePrototype = Object.getPrototypeOf(probe);
-        await probe.close();
-        const originalFsync = handlePrototype.fsync;
-        handlePrototype.fsync = async () => {
-            throw new StorageError("disk failure");
-        };
-        try {
+        {
+            using _failingFsync = fs.intercept(operation => {
+                if (operation === "fsync") {
+                    throw new StorageError("disk failure");
+                }
+            });
             await expect(writer.write([{ op: "upd", key: "b", values: { y: 2 } }])).rejectedWith("disk failure");
-        } finally {
-            handlePrototype.fsync = originalFsync;
         }
 
         const result = await writer.write([{ op: "upd", key: "c", values: { z: 3 } }]);
@@ -113,16 +110,13 @@ describe("WalWriter", () => {
         const writer = new WalWriter(walDir, { fsync: false, maxSegmentSize: 10, firstSegment: 1 });
         await writer.write([{ op: "upd", key: "a", values: { x: 1 } }]);
 
-        const segment2 = walDir.file(segmentFilename(2));
-        const filePrototype = Object.getPrototypeOf(segment2);
-        const originalOpen = filePrototype.open;
-        filePrototype.open = async () => {
-            throw new StorageError("cannot open");
-        };
-        try {
+        {
+            using _failingOpen = fs.intercept((operation, path) => {
+                if (operation === "open" && path.endsWith(segmentFilename(2))) {
+                    throw new StorageError("cannot open");
+                }
+            });
             await expect(writer.write([{ op: "upd", key: "b", values: { y: 2 } }])).rejectedWith("cannot open");
-        } finally {
-            filePrototype.open = originalOpen;
         }
 
         const result = await writer.write([{ op: "upd", key: "c", values: { z: 3 } }]);
@@ -136,18 +130,12 @@ describe("WalWriter", () => {
         const writer = new WalWriter(walDir, { fsync: false, firstSegment: 1 });
         await writer.write([{ op: "upd", key: "a", values: { x: 1 } }]);
 
-        const probe = await fs.file("probe").open("probe", "w");
-        const handlePrototype = Object.getPrototypeOf(probe);
-        await probe.close();
-        const originalClose = handlePrototype.close;
-        handlePrototype.close = async () => {
-            throw new StorageError("close failed");
-        };
-        try {
-            await expect(writer.close()).rejectedWith("close failed");
-        } finally {
-            handlePrototype.close = originalClose;
-        }
+        using _failingClose = fs.intercept(operation => {
+            if (operation === "close") {
+                throw new StorageError("close failed");
+            }
+        });
+        await expect(writer.close()).rejectedWith("close failed");
     });
 
     it("serializes concurrent writes", async () => {

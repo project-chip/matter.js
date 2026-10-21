@@ -8,7 +8,8 @@ import { Logger } from "#log/Logger.js";
 import { Mutex } from "#util/Mutex.js";
 import type { Directory } from "../../fs/Directory.js";
 import type { File } from "../../fs/File.js";
-import { MAX_SEGMENT_LINES, type WalCommitId, type WalOp, segmentFilename, serializeCommit } from "./WalCommit.js";
+import { MAX_SEGMENT_LINES, type WalCommitId, type WalOp, serializeCommit } from "./WalCommit.js";
+import { segmentFilename } from "./WalSegments.js";
 
 const logger = Logger.get("WalWriter");
 

@@ -5,7 +5,8 @@
  */
 
 import type { File } from "../../fs/File.js";
-import type { Bytes } from "../../util/Bytes.js";
+import { Bytes } from "../../util/Bytes.js";
+import { Gzip } from "../../util/Gzip.js";
 import type { MaybeAsyncIterable } from "../../util/Streams.js";
 
 /**
@@ -26,4 +27,15 @@ export async function writeSynced(file: File, content: MaybeAsyncIterable<Bytes 
     } finally {
         await handle.close();
     }
+}
+
+/**
+ * Read a gzip-compressed text file completely.
+ */
+export async function readGzipText(file: File): Promise<string> {
+    const chunks = new Array<Uint8Array>();
+    for await (const chunk of Gzip.decompress(file.readBytes())) {
+        chunks.push(chunk);
+    }
+    return new TextDecoder().decode(Bytes.of(Bytes.concat(...chunks)));
 }

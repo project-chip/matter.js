@@ -27,7 +27,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: `nextEmitOf()` waits for the next emit of an `Observable` without missing one that comes right after a state check
     - Enhancement: WAL storage logs at notice level when an open restores entries from its log and when it has saved the restored state, with the time each took
     - Adjustment: The default log format is plain text instead of ANSI; set `log.format` or `Logger.format` to choose another
-    - Adjustment: Removed the unused WAL storage history API (`WalStorageDriver.snapshotAtTime()`/`snapshotAtCommit()`, the `headSnapshot` and `cleanInterval` options, and the `WalSnapshot` query methods)
+    - Adjustment: Removed the unused WAL storage history API (`WalStorageDriver.snapshotAtTime()`/`snapshotAtCommit()`, the `headSnapshot` and `cleanInterval` options) and the `WalSnapshot` export
     - Fix: DNS-SD discovery ignores the known-answer records of mDNS queries, so a controller no longer dials a node through the wrong interface
     - Fix: (@grzonu) DNS-SD queries send known answers with their remaining TTL and omit those past half their TTL
     - Fix: DNS-SD honors cache-flush bits and goodbyes, ignores invalid SRV records, resolves the SRV target host, and keeps messages with one unreadable record
