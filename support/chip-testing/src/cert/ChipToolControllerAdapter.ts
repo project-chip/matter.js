@@ -1342,6 +1342,16 @@ class ChipToolCertNodeApi implements CertNodeApi {
             return { endpoint, cluster, attribute };
         });
 
+        const versionedWildcard = entries.find(
+            ({ path, dataVersion }) => path.endpoint === undefined && dataVersion !== undefined,
+        );
+        if (versionedWildcard !== undefined) {
+            throw new ImplementationError(
+                `writeAttributes of ${JSON.stringify(versionedWildcard.path)} with a data version needs a concrete ` +
+                    "endpoint: a data version applies to one cluster instance",
+            );
+        }
+
         const versioned = entries.filter(({ dataVersion }) => dataVersion !== undefined);
         if (versioned.length !== 0 && versioned.length !== entries.length) {
             throw refusal("mixed-version-write", "writeAttributes with a data version on some entries only");

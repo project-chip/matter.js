@@ -34,6 +34,37 @@ const FIELDS = {
 
 type PartialStatus = Partial<LoggedAttributeStatus> & { lines: string[] };
 
+type OpenEntry = PartialStatus & { closing: string };
+
+type StatusField = keyof LoggedAttributeStatus;
+
+/** The status field `field` sets, with its value, or `undefined` for a line that sets none. */
+function parsedField(field: string): [StatusField, number] | undefined {
+    let match;
+    if ((match = FIELDS.endpoint.exec(field))) {
+        return ["endpoint", Number.parseInt(match[1], 16)];
+    }
+    if ((match = FIELDS.cluster.exec(field))) {
+        return ["cluster", Number.parseInt(match[1], 16)];
+    }
+    if ((match = FIELDS.attribute.exec(field))) {
+        return ["attribute", Number.parseInt(match[1] + match[2], 16)];
+    }
+    if ((match = FIELDS.status.exec(field))) {
+        return ["status", Number.parseInt(match[1], 16)];
+    }
+    if ((match = FIELDS.clusterStatus.exec(field))) {
+        return ["clusterStatus", Number.parseInt(match[1], 16)];
+    }
+    return undefined;
+}
+
+function incomplete(what: string, lines: string[]) {
+    return new UnexpectedDataError(
+        `chip-tool's decoded WriteResponseMessage is incomplete: ${what}: ${JSON.stringify(lines)}`,
+    );
+}
+
 function completed(entry: PartialStatus): LoggedAttributeStatus {
     const { endpoint, cluster, attribute, status, clusterStatus } = entry;
     if (endpoint === undefined || cluster === undefined || attribute === undefined || status === undefined) {
@@ -58,15 +89,18 @@ function completed(entry: PartialStatus): LoggedAttributeStatus {
  * arguments (`chip_logging`, `chip_detail_logging`). Unlike chip-tool's JSON results, which carry only the paths a
  * write failed on, the decoded message names every path with its status.
  *
+ * An entry opens at its `AttributeStatusIB =` header and closes at the brace with the header's indentation.
+ *
  * Throws {@link UnexpectedDataError} for a message that ends before its closing line or contains the start of another
- * block before its closing line, and for an entry without a concrete path or a status: each means a line is missing,
- * and the statuses would then be incomplete.
+ * block before its closing line; for an entry that does not close before the next one or the message ends, that carries
+ * a field twice, or that lacks a concrete path or a status; and for a path or status field outside any entry. Each
+ * means a line is missing, and the statuses would then be incomplete.
  */
 export function loggedWriteResponseStatuses(lines: readonly string[]): LoggedAttributeStatus[] | undefined {
     const statuses = new Array<LoggedAttributeStatus>();
     let found = false;
     let inMessage = false;
-    let entry: PartialStatus | undefined;
+    let entry: OpenEntry | undefined;
 
     for (const line of lines) {
         if (!inMessage) {
@@ -80,8 +114,7 @@ export function loggedWriteResponseStatuses(lines: readonly string[]): LoggedAtt
         // Every line inside the message is indented, so only the message's own closing brace is not
         if (line === MESSAGE_END) {
             if (entry !== undefined) {
-                statuses.push(completed(entry));
-                entry = undefined;
+                throw incomplete(`the message closes inside an ${ENTRY_START} entry`, entry.lines);
             }
             inMessage = false;
             continue;
@@ -95,27 +128,33 @@ export function loggedWriteResponseStatuses(lines: readonly string[]): LoggedAtt
         const field = line.trim();
         if (field === ENTRY_START) {
             if (entry !== undefined) {
-                statuses.push(completed(entry));
+                throw incomplete(`an ${ENTRY_START} entry starts before the previous one closed`, entry.lines);
             }
-            entry = { lines: [field] };
+            // The entry's own closing brace has the indentation of its header
+            entry = { lines: [field], closing: `${line.slice(0, line.indexOf(ENTRY_START))}},` };
             continue;
         }
+
+        const parsed = parsedField(field);
         if (entry === undefined) {
+            if (parsed !== undefined) {
+                throw incomplete(`"${field}" stands outside any ${ENTRY_START} entry`, [field]);
+            }
             continue;
         }
         entry.lines.push(field);
 
-        let match;
-        if ((match = FIELDS.endpoint.exec(field))) {
-            entry.endpoint = Number.parseInt(match[1], 16);
-        } else if ((match = FIELDS.cluster.exec(field))) {
-            entry.cluster = Number.parseInt(match[1], 16);
-        } else if ((match = FIELDS.attribute.exec(field))) {
-            entry.attribute = Number.parseInt(match[1] + match[2], 16);
-        } else if ((match = FIELDS.status.exec(field))) {
-            entry.status = Number.parseInt(match[1], 16);
-        } else if ((match = FIELDS.clusterStatus.exec(field))) {
-            entry.clusterStatus = Number.parseInt(match[1], 16);
+        if (line === entry.closing) {
+            statuses.push(completed(entry));
+            entry = undefined;
+            continue;
+        }
+        if (parsed !== undefined) {
+            const [key, value] = parsed;
+            if (entry[key] !== undefined) {
+                throw incomplete(`an ${ENTRY_START} entry carries ${key} twice`, entry.lines);
+            }
+            entry[key] = value;
         }
     }
 

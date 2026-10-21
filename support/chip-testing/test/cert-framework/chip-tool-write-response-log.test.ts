@@ -97,6 +97,44 @@ describe("loggedWriteResponseStatuses", () => {
         );
     });
 
+    describe("entry boundaries", () => {
+        const HEADER = "\t\tAttributeStatusIB =";
+        const CLOSING = "\t\t},";
+        const block = firstBlock(MATTERJS_WILDCARD_SUCCESS.logs);
+
+        /** `block` without the `occurrence`-th (from 0) line equal to `line`. */
+        function without(line: string, occurrence: number) {
+            const indices = block.flatMap((candidate, index) => (candidate === line ? [index] : []));
+            expect(indices.length).greaterThan(occurrence);
+            return block.filter((_, index) => index !== indices[occurrence]);
+        }
+
+        it("rejects the fields of an entry whose header is missing, rather than letting them overwrite the previous one", () => {
+            expect(() => loggedWriteResponseStatuses(without(HEADER, 1))).throws(
+                UnexpectedDataError,
+                /"Endpoint = 0x2," stands outside any AttributeStatusIB/,
+            );
+        });
+
+        it("rejects an entry that does not close before the next one or before the message ends", () => {
+            expect(() => loggedWriteResponseStatuses(without(CLOSING, 0))).throws(
+                UnexpectedDataError,
+                /starts before the previous one closed/,
+            );
+            expect(() => loggedWriteResponseStatuses(without(CLOSING, 3))).throws(
+                UnexpectedDataError,
+                /closes inside an AttributeStatusIB/,
+            );
+        });
+
+        it("rejects an entry that carries a field twice", () => {
+            const doubled = block.flatMap(line =>
+                line === "\t\t\t\tEndpoint = 0x1," ? [line, "\t\t\t\tEndpoint = 0x5,"] : [line],
+            );
+            expect(() => loggedWriteResponseStatuses(doubled)).throws(UnexpectedDataError, /carries endpoint twice/);
+        });
+    });
+
     it("rejects a message the log ends inside", () => {
         const block = firstBlock(MATTERJS_WILDCARD_SUCCESS.logs);
         expect(() => loggedWriteResponseStatuses(block.slice(0, -1))).throws(UnexpectedDataError, /ends inside/);

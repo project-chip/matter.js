@@ -1339,6 +1339,22 @@ describe("ChipToolControllerAdapter", function () {
         });
     });
 
+    it("rejects a data version on a wildcard-endpoint entry before refusing anything or sending a command", async () => {
+        const { node } = await commissioned();
+        const wildcard = { cluster: IDENTIFY.id, attribute: IDENTIFY_TIME.id };
+
+        for (const entries of [
+            [{ path: wildcard, value: 5, dataVersion: 3 }],
+            [
+                { path: wildcard, value: 5, dataVersion: 3 },
+                { path: { endpoint: 1, cluster: LEVEL_CONTROL.id, attribute: ON_LEVEL.id }, value: 3 },
+            ],
+        ]) {
+            await expect(node.writeAttributes(entries)).rejectedWith(ImplementationError, /needs a concrete endpoint/);
+        }
+        expect(fake.commands).deep.equal([]);
+    });
+
     it("refuses a write mixing versioned and unversioned paths as mixed-version-write, without issuing it", async () => {
         const { node } = await commissioned();
 
