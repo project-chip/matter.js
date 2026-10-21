@@ -13,11 +13,11 @@ import { LogLevel } from "#log/LogLevel.js";
 import { StorageError } from "#storage/StorageDriver.js";
 import { serializeCommit, type WalCommit } from "#storage/wal/WalCommit.js";
 import { compressedSegmentFilename, listSegments, segmentFilename } from "#storage/wal/WalSegments.js";
-import { WalSnapshotStore } from "#storage/wal/WalSnapshotStore.js";
 import { WalStorageDriver } from "#storage/wal/WalStorageDriver.js";
 import { Time } from "#time/Time.js";
 import { Seconds } from "#time/TimeUnit.js";
 import { Gzip } from "#util/Gzip.js";
+import { readSnapshot } from "./snapshot-files.js";
 
 describe("WalStorageDriver", () => {
     before(() => MockTime.enable());
@@ -612,7 +612,7 @@ describe("WalStorageDriver", () => {
             expect(await reopened.get(["ctx"], "key")).equal("value");
             await waitFor(() => storageDir.file("snapshot.json").exists());
 
-            expect((await new WalSnapshotStore(storageDir).loadCurrent())!.data.ctx.key).equal("value");
+            expect((await readSnapshot(storageDir, "snapshot"))!.data.ctx.key).equal("value");
             await reopened.close();
         });
 
@@ -706,10 +706,10 @@ describe("WalStorageDriver", () => {
                 key3b: "b",
             });
             expect(await storageDir.file("snapshot.corrupt.json").exists()).equal(true);
-            const backup = await new WalSnapshotStore(storageDir).loadBackup();
+            const backup = await readSnapshot(storageDir, "snapshot.prev");
 
             await waitFor(async () => (await segmentNumbers())[0] === backup!.commitId.segment);
-            const current = await new WalSnapshotStore(storageDir).loadCurrent();
+            const current = await readSnapshot(storageDir, "snapshot");
             expect(current!.backupCommitId).deep.equal(backup!.commitId);
             await storage.close();
         });
@@ -722,7 +722,7 @@ describe("WalStorageDriver", () => {
                 await storage.set(["ctx"], `key${session}b`, "b");
                 await storage.close();
             }
-            const backup = await new WalSnapshotStore(storageDir).loadBackup();
+            const backup = await readSnapshot(storageDir, "snapshot.prev");
             const walDir = storageDir.directory("wal");
             for (const segment of await segmentNumbers()) {
                 if (segment <= backup!.commitId.segment + 1) {
@@ -813,7 +813,7 @@ describe("WalStorageDriver", () => {
             await storage.set(["ctx"], "key2", "value2");
             await storage.set(["ctx"], "key3", "value3");
             await storage.close();
-            const olderSnapshot = await new WalSnapshotStore(fs.directory("storage")).loadCurrent();
+            const olderSnapshot = await readSnapshot(fs.directory("storage"), "snapshot");
             expect(olderSnapshot!.backupCommitId).equal(undefined);
             expect((await segmentNumbers())[0]).equal(1);
 
@@ -842,7 +842,7 @@ describe("WalStorageDriver", () => {
             const storage = await createStorage(withoutGzip);
             await storage.set(["ctx"], "key", "value");
             await storage.close();
-            const before = await new WalSnapshotStore(storageDir).loadCurrent();
+            const before = await readSnapshot(storageDir, "snapshot");
 
             // crashed stays open while restarted opens the same directory, as after a kill
             const crashed = await createStorage(withoutGzip);
@@ -851,10 +851,10 @@ describe("WalStorageDriver", () => {
             using notices = captureNotices();
             const restarted = await createStorage(withoutGzip);
             await waitFor(async () => notices.length === 3);
-            expect((await new WalSnapshotStore(storageDir).loadCurrent())!.data.ctx.key2).equal("value2");
+            expect((await readSnapshot(storageDir, "snapshot"))!.data.ctx.key2).equal("value2");
 
-            expect((await new WalSnapshotStore(storageDir).loadCurrent())!.backupCommitId).deep.equal(before!.commitId);
-            expect((await new WalSnapshotStore(storageDir).loadBackup())!.commitId).deep.equal(before!.commitId);
+            expect((await readSnapshot(storageDir, "snapshot"))!.backupCommitId).deep.equal(before!.commitId);
+            expect((await readSnapshot(storageDir, "snapshot.prev"))!.commitId).deep.equal(before!.commitId);
             expect(notices.map(notice => notice.split(" ")[0])).deep.equal(["Restoring", "Restored", "Saved"]);
             await restarted.set(["ctx"], "key3", "value3");
             await restarted.close();
@@ -883,9 +883,7 @@ describe("WalStorageDriver", () => {
             const restarted = await createStorage(withoutGzip);
             await waitFor(async () => !failSave);
             await MockTime.advance(snapshotInterval);
-            await waitFor(
-                async () => (await new WalSnapshotStore(storageDir).loadCurrent())!.data.ctx.key2 !== undefined,
-            );
+            await waitFor(async () => (await readSnapshot(storageDir, "snapshot"))!.data.ctx.key2 !== undefined);
 
             expect(notices.map(notice => notice.split(" ")[0])).deep.equal(["Restoring", "Restored"]);
             await restarted.close();
@@ -937,7 +935,7 @@ describe("WalStorageDriver", () => {
             }
 
             expect(storage.initialized).equal(false);
-            expect((await new WalSnapshotStore(storageDir).loadCurrent())!.data.ctx.key).equal("value");
+            expect((await readSnapshot(storageDir, "snapshot"))!.data.ctx.key).equal("value");
         });
 
         it("keeps the backup when it opens after a clean stop", async () => {
@@ -947,7 +945,7 @@ describe("WalStorageDriver", () => {
                 await storage.set(["ctx"], "key", value);
                 await storage.close();
             }
-            const backup = await new WalSnapshotStore(storageDir).loadBackup();
+            const backup = await readSnapshot(storageDir, "snapshot.prev");
 
             using notices = captureNotices();
             const reopened = await createStorage();
@@ -955,7 +953,7 @@ describe("WalStorageDriver", () => {
 
             expect(notices).deep.equal([]);
 
-            expect((await new WalSnapshotStore(storageDir).loadBackup())!.commitId).deep.equal(backup!.commitId);
+            expect((await readSnapshot(storageDir, "snapshot.prev"))!.commitId).deep.equal(backup!.commitId);
             await reopened.close();
         });
 

@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Directory } from "#fs/Directory.js";
 import { MockFilesystem } from "#fs/MockFilesystem.js";
 import { StorageError } from "#storage/StorageDriver.js";
 import { toJson } from "#storage/StringifyTools.js";
 import { WalSnapshot } from "#storage/wal/WalSnapshot.js";
 import { WalSnapshotStore } from "#storage/wal/WalSnapshotStore.js";
+import { readSnapshot } from "./snapshot-files.js";
 
 describe("WalSnapshotStore", () => {
     let fs: MockFilesystem;
@@ -17,11 +19,15 @@ describe("WalSnapshotStore", () => {
         fs = new MockFilesystem();
     });
 
+    async function restoreSnapshot(storageDir: Directory) {
+        return (await new WalSnapshotStore(storageDir).restore())?.snapshot;
+    }
+
     describe("load/save", () => {
         it("returns undefined when no snapshot exists", async () => {
             const storageDir = fs.directory("storage");
             await storageDir.mkdir();
-            const result = await new WalSnapshotStore(storageDir).loadCurrent();
+            const result = await restoreSnapshot(storageDir);
             expect(result).equal(undefined);
         });
 
@@ -39,7 +45,7 @@ describe("WalSnapshotStore", () => {
             const snapshot = new WalSnapshot(commitId, ts, data);
             await new WalSnapshotStore(storageDir).save(snapshot, { compress: false, fsync: true });
 
-            const loaded = await new WalSnapshotStore(storageDir).loadCurrent();
+            const loaded = await restoreSnapshot(storageDir);
             expect(loaded).not.equal(undefined);
             expect(loaded!.commitId).deep.equal(commitId);
             expect(loaded!.ts).equal(ts);
@@ -65,7 +71,7 @@ describe("WalSnapshotStore", () => {
             const snapshot = new WalSnapshot(commitId, ts, data as any);
             await new WalSnapshotStore(storageDir).save(snapshot, { compress: false, fsync: true });
 
-            const loaded = await new WalSnapshotStore(storageDir).loadCurrent();
+            const loaded = await restoreSnapshot(storageDir);
             expect(loaded).not.equal(undefined);
             expect(loaded!.commitId).deep.equal(commitId);
             expect(loaded!.ts).equal(ts);
@@ -83,7 +89,7 @@ describe("WalSnapshotStore", () => {
             const snap2 = new WalSnapshot({ segment: 2, offset: 3 }, 2000, { b: { y: 2 } });
             await new WalSnapshotStore(storageDir).save(snap2, { compress: false, fsync: true });
 
-            const loaded = await new WalSnapshotStore(storageDir).loadCurrent();
+            const loaded = await restoreSnapshot(storageDir);
             expect(loaded!.commitId).deep.equal({ segment: 2, offset: 3 });
             expect(loaded!.ts).equal(2000);
             expect(loaded!.data["b"].y).equal(2);
@@ -99,7 +105,7 @@ describe("WalSnapshotStore", () => {
             const legacy = { commitId: { segment: 1, offset: 0 }, data: { ctx: { key: "val" } } };
             await storageDir.file("snapshot.json").write(toJson(legacy as any, 2));
 
-            const loaded = await new WalSnapshotStore(storageDir).loadCurrent();
+            const loaded = await restoreSnapshot(storageDir);
             expect(loaded).not.equal(undefined);
             expect(loaded!.ts).equal(0);
             expect(loaded!.data["ctx"].key).equal("val");
@@ -131,7 +137,7 @@ describe("WalSnapshotStore", () => {
             );
 
             expect(fsyncs).deep.equal([false]);
-            expect((await new WalSnapshotStore(storageDir).loadCurrent())!.data.ctx.key).equal("value");
+            expect((await restoreSnapshot(storageDir))!.data.ctx.key).equal("value");
         });
 
         it("skips the flush when fsync is disabled", async () => {
@@ -158,20 +164,20 @@ describe("WalSnapshotStore", () => {
             await new WalSnapshotStore(storageDir).save(first, { compress: true, fsync: true });
             await new WalSnapshotStore(storageDir).save(second, { compress: true, fsync: true });
 
-            const current = await new WalSnapshotStore(storageDir).loadCurrent();
+            const current = await readSnapshot(storageDir, "snapshot");
             expect(current!.commitId).deep.equal(second.commitId);
             expect(current!.backupCommitId).deep.equal(first.commitId);
-            const backup = await new WalSnapshotStore(storageDir).loadBackup();
+            const backup = await readSnapshot(storageDir, "snapshot.prev");
             expect(backup!.data.ctx.key).equal("first");
         });
 
-        it("stores the backup commit as the previousCommitId field that earlier versions wrote", async () => {
+        it("stores the backup commit in the snapshot file", async () => {
             const storageDir = fs.directory("storage");
             await storageDir.mkdir();
             await new WalSnapshotStore(storageDir).save(second, { compress: false, fsync: false });
 
             const stored = JSON.parse(await storageDir.file("snapshot.json").readAllText());
-            expect(stored.previousCommitId).deep.equal(first.commitId);
+            expect(stored.backupCommitId).deep.equal(first.commitId);
         });
 
         it("restores the current snapshot and names its backup", async () => {
@@ -226,8 +232,8 @@ describe("WalSnapshotStore", () => {
             const third = new WalSnapshot({ segment: 3, offset: 0 }, 3000, { ctx: { key: "third" } }, first.commitId);
             await store.save(third, { compress: true, fsync: true });
 
-            expect((await store.loadBackup())!.commitId).deep.equal(first.commitId);
-            expect((await store.loadCurrent())!.commitId).deep.equal(third.commitId);
+            expect((await readSnapshot(storageDir, "snapshot.prev"))!.commitId).deep.equal(first.commitId);
+            expect((await readSnapshot(storageDir, "snapshot"))!.commitId).deep.equal(third.commitId);
         });
 
         it("throws the backup's error when the snapshot is missing and the backup is unreadable", async () => {
@@ -263,7 +269,7 @@ describe("WalSnapshotStore", () => {
             await expect(new WalSnapshotStore(storageDir).restore()).rejectedWith("has no valid commitId");
         });
 
-        it("removes a backup that predates a snapshot without previousCommitId", async () => {
+        it("removes a backup that predates a snapshot without backupCommitId", async () => {
             const storageDir = fs.directory("storage");
             await storageDir.mkdir();
             await new WalSnapshotStore(storageDir).save(first, { compress: true, fsync: true });
@@ -299,7 +305,7 @@ describe("WalSnapshotStore", () => {
                 await storageDir.mkdir();
                 await storageDir.file("snapshot.json").write(content);
 
-                await expect(new WalSnapshotStore(storageDir).loadCurrent()).rejectedWith(StorageError, message);
+                await expect(restoreSnapshot(storageDir)).rejectedWith(StorageError, message);
             });
         }
 
@@ -308,9 +314,7 @@ describe("WalSnapshotStore", () => {
             await storageDir.mkdir();
             await storageDir.file("snapshot.json").write('{"commitId":{"segment":1,"offset":0},"data":{"ctx":1}}');
 
-            await expect(new WalSnapshotStore(storageDir).loadCurrent()).rejectedWith(
-                "data is not an object of contexts",
-            );
+            await expect(restoreSnapshot(storageDir)).rejectedWith("data is not an object of contexts");
         });
 
         it("rejects an unreadable snapshot with a StorageError", async () => {
@@ -318,20 +322,17 @@ describe("WalSnapshotStore", () => {
             await storageDir.mkdir();
             await storageDir.file("snapshot.json.gz").write("not gzip");
 
-            await expect(new WalSnapshotStore(storageDir).loadCurrent()).rejectedWith(
-                StorageError,
-                "storage/snapshot is unreadable",
-            );
+            await expect(restoreSnapshot(storageDir)).rejectedWith(StorageError, "storage/snapshot is unreadable");
         });
 
-        it("rejects an invalid previousCommitId", async () => {
+        it("rejects an invalid backupCommitId", async () => {
             const storageDir = fs.directory("storage");
             await storageDir.mkdir();
             await storageDir
                 .file("snapshot.json")
-                .write('{"commitId":{"segment":1,"offset":0},"data":{},"previousCommitId":7}');
+                .write('{"commitId":{"segment":1,"offset":0},"data":{},"backupCommitId":7}');
 
-            await expect(new WalSnapshotStore(storageDir).loadCurrent()).rejectedWith("invalid previousCommitId");
+            await expect(restoreSnapshot(storageDir)).rejectedWith("invalid backupCommitId");
         });
     });
 
@@ -353,7 +354,7 @@ describe("WalSnapshotStore", () => {
             expect(await storageDir.file("snapshot.json.gz").exists()).equal(true);
             expect(await storageDir.file("snapshot.json").exists()).equal(false);
 
-            const loaded = await new WalSnapshotStore(storageDir).loadCurrent();
+            const loaded = await restoreSnapshot(storageDir);
             expect(loaded).not.equal(undefined);
             expect(loaded!.commitId).deep.equal(commitId);
             expect(loaded!.data["ctx.sub"].key1).equal("value1");
@@ -370,7 +371,7 @@ describe("WalSnapshotStore", () => {
             await new WalSnapshotStore(storageDir).save(snap, { compress: false, fsync: true });
 
             // Load should auto-detect .json
-            const loaded = await new WalSnapshotStore(storageDir).loadCurrent();
+            const loaded = await restoreSnapshot(storageDir);
             expect(loaded).not.equal(undefined);
             expect(loaded!.data["ctx"].key).equal("uncompressed");
         });
@@ -428,7 +429,7 @@ describe("WalSnapshotStore", () => {
             await storageDir.file("snapshot.json.gz").write(otherDir.file("snapshot.json.gz").readBytes());
 
             // Both files exist — should prefer the newer .json.gz
-            const loaded = await new WalSnapshotStore(storageDir).loadCurrent();
+            const loaded = await restoreSnapshot(storageDir);
             expect(loaded).not.equal(undefined);
             expect(loaded!.data["ctx"].key).equal("new");
             expect(loaded!.commitId).deep.equal({ segment: 2, offset: 0 });
@@ -450,7 +451,7 @@ describe("WalSnapshotStore", () => {
             const snapshot = new WalSnapshot(commitId, 2000, data as any);
             await new WalSnapshotStore(storageDir).save(snapshot, { compress: true, fsync: true });
 
-            const loaded = await new WalSnapshotStore(storageDir).loadCurrent();
+            const loaded = await restoreSnapshot(storageDir);
             expect(loaded).not.equal(undefined);
             expect(loaded!.commitId).deep.equal(commitId);
             expect(loaded!.data["ctx.special"].bigint).equal(BigInt("123456789012345678"));

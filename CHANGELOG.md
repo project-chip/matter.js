@@ -9,6 +9,16 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+- @matter/general
+    - Enhancement: WAL storage logs at notice level when an open restores entries from its log and when it has saved the restored state, with the time each took
+    - Adjustment: Removed the unused WAL storage history API (`WalStorageDriver.snapshotAtTime()`/`snapshotAtCommit()`, the `headSnapshot` and `cleanInterval` options) and the `WalSnapshot` export
+    - Fix: WAL storage deletes old log segments after each periodic snapshot instead of only on close, and restores from the previous snapshot when the current one is unreadable
+    - Fix: WAL storage loads its data when it opens, so a write during the first reads after opening is no longer lost
+    - Fix: WAL storage starts a new log segment on every open, so a write after a crash that cut off the last log line is no longer lost
+    - Fix: WAL storage snapshots right after an open that replayed its log, and refuses to open when its log is incomplete instead of opening with partial data
+
 ## 0.18.0 (2026-10-20)
 
 - Breaking: Matter 1.6.1 brings specification changes that may require code adjustments
@@ -25,9 +35,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Added `TransportClosedError` for an operation on a transport connection that is already closed
     - Enhancement: Storage drivers state how long dirty values may be buffered via `StorageDriver.writeCoalescingInterval`
     - Enhancement: `nextEmitOf()` waits for the next emit of an `Observable` without missing one that comes right after a state check
-    - Enhancement: WAL storage logs at notice level when an open restores entries from its log and when it has saved the restored state, with the time each took
     - Adjustment: The default log format is plain text instead of ANSI; set `log.format` or `Logger.format` to choose another
-    - Adjustment: Removed the unused WAL storage history API (`WalStorageDriver.snapshotAtTime()`/`snapshotAtCommit()`, the `headSnapshot` and `cleanInterval` options) and the `WalSnapshot` export
     - Fix: DNS-SD discovery ignores the known-answer records of mDNS queries, so a controller no longer dials a node through the wrong interface
     - Fix: (@grzonu) DNS-SD queries send known answers with their remaining TTL and omit those past half their TTL
     - Fix: DNS-SD honors cache-flush bits and goodbyes, ignores invalid SRV records, resolves the SRV target host, and keeps messages with one unreadable record
@@ -36,8 +44,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Timers support intervals longer than 2^31-1 ms (about 24.8 days)
     - Fix: A failing log destination no longer breaks the code that logged
     - Fix: Opening a namespace whose `driver.json` names an unregistered storage driver throws `NoProviderError`
-    - Fix: WAL storage deletes old log segments after each periodic snapshot instead of only on close, and restores from the previous snapshot when the current one is unreadable
-    - Fix: WAL storage no longer loses writes made during the first reads after opening or after a crash, and snapshots right after an open that replayed its log
     - Fix: Corrects log formatting of HTML escaping, `FormattedText` list nesting, list diff markers and `Lifetime.details`
     - Fix: The `Symbol.metadata` polyfill no longer conflicts with `lib.esnext.decorators` in the published declarations
     - Fix: DNS-SD TXT keys match regardless of case, and `IpService` reports a change when a newer TXT record drops a key

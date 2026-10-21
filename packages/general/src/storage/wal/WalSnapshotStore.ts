@@ -29,7 +29,7 @@ const TMP = "snapshot.tmp";
  *
  * | File                 | Content                                                            |
  * |----------------------|--------------------------------------------------------------------|
- * | `snapshot.*`         | Current snapshot; `previousCommitId` names the backup's commit     |
+ * | `snapshot.*`         | Current snapshot; `backupCommitId` names the backup's commit       |
  * | `snapshot.prev.*`    | Backup: the snapshot that `snapshot.*` replaced                    |
  * | `snapshot.corrupt.*` | Unreadable snapshot that `restore()` moved aside for analysis      |
  *
@@ -68,7 +68,7 @@ export class WalSnapshotStore {
      * Load the current snapshot, or the backup if the current snapshot is missing or unreadable.
      *
      * When it falls back to the backup, an unreadable current snapshot is moved to `snapshot.corrupt.*`.  A backup is
-     * deleted when the current snapshot has no `previousCommitId`, because a version without backups wrote that
+     * deleted when the current snapshot has no `backupCommitId`, because a version without backups wrote that
      * snapshot and may have deleted the WAL the backup needs.  The "head" snapshot of older versions and a temporary
      * file that a crash during {@link save} left are deleted too.
      * Throws a {@link StorageError} if no readable snapshot exists although one was written before.
@@ -82,7 +82,7 @@ export class WalSnapshotStore {
         let snapshot: WalSnapshot | undefined;
         let failure: unknown;
         try {
-            snapshot = await this.loadCurrent();
+            snapshot = await this.#load(CURRENT);
         } catch (error) {
             failure = error;
         }
@@ -96,7 +96,7 @@ export class WalSnapshotStore {
 
         let backup: WalSnapshot | undefined;
         try {
-            backup = await this.loadBackup();
+            backup = await this.#load(BACKUP);
         } catch (backupFailure) {
             if (failure === undefined) {
                 throw backupFailure;
@@ -124,20 +124,6 @@ export class WalSnapshotStore {
         }
 
         return { snapshot: backup, backupCommitId: backup.commitId };
-    }
-
-    /**
-     * Load the current snapshot.  No fallback to the backup and no change to any file.
-     */
-    loadCurrent(): Promise<WalSnapshot | undefined> {
-        return this.#load(CURRENT);
-    }
-
-    /**
-     * Load the backup snapshot.  No change to any file.
-     */
-    loadBackup(): Promise<WalSnapshot | undefined> {
-        return this.#load(BACKUP);
     }
 
     /**
