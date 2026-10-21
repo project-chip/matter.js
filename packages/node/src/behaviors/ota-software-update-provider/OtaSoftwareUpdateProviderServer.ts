@@ -58,7 +58,11 @@ interface OtaUpdateInProgressDetails {
     lastState: OtaUpdateStatus;
     timestamp: Timestamp;
     versionToApply?: number;
-    directConsentObtained?: boolean;
+    /**
+     * The apply under this update token is allowed, because the consent was granted to us or delegated to the requestor
+     * with UserConsentNeeded.  It stays set for the token's lifetime.
+     */
+    applyAllowed?: boolean;
     /** Called when the entry is removed to clean up external listeners (e.g. sessionStarted) */
     cleanup?: () => void;
 }
@@ -79,14 +83,14 @@ export enum OtaSoftwareUpdateConsentState {
  *
  *
  * For special use cases the cluster provides the following extension point methods:
- * * {@link checkUpdateAvailable}: By default, the implementation uses the SoftwareUpdateManager to check for available
- *     updates from the DCL or being available in the local OTA storage. If this needs to be more vendor-specific, it
- *     can be implemented by overriding this method.
+ * * {@link checkUpdateAvailable}: By default, the implementation uses the SoftwareUpdateManager to find an update
+ *     in the OTA storage, which the SoftwareUpdateManager fills from the DCL, or which holds imported local files. If this needs to be
+ *     more vendor-specific, it can be implemented by overriding this method.
  *
  * * {@link requestUserConsentForUpdate}: If the client is able to gather user update consent via other means, then this can be
  *     implemented by overriding this method. One example could be that users state "automatic update" for certain peers
- *     or device types (e.g., sensors and lights but not sockets). This method then can be used to get such automatic
- *     consents that will be then applied in a queue.
+ *     or device types (e.g., sensors and lights but not sockets). A consent granted this way is kept for the update
+ *     token of that query, so the node may apply the offered version.
  */
 export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBehavior {
     declare readonly internal: OtaSoftwareUpdateProviderServer.Internal;
@@ -240,9 +244,11 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
         const crypto = this.env.get(Crypto);
         const updateToken = crypto.randomBytes(OTA_UPDATE_TOKEN_LENGTH_BYTES);
 
-        // If the requestor can consent, we send the update without asking for a consent
-        //  else we need to ask for consent if required by the update details
-        if (consentRequired && !request.requestorCanConsent) {
+        // A requestor that may obtain the consent itself gets the update without asking; else we ask for a consent if
+        // the update details require one
+        const delegated =
+            consentRequired && this.agent.get(SoftwareUpdateManager).mayDelegateConsentTo(peerAddress, request);
+        if (consentRequired && !delegated) {
             this.#updateInProgressDetails(peerAddress, updateToken, OtaUpdateStatus.WaitForConsent, newSoftwareVersion);
 
             const { consentState, delayTime = Seconds(120) } = await this.requestUserConsentForUpdate(
@@ -280,7 +286,14 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
                     };
             }
         } else {
-            this.#updateInProgressDetails(peerAddress, updateToken, OtaUpdateStatus.Querying, newSoftwareVersion);
+            // With UserConsentNeeded the requestor obtains the consent itself, so we accept its apply for this token
+            this.#updateInProgressDetails(
+                peerAddress,
+                updateToken,
+                OtaUpdateStatus.Querying,
+                newSoftwareVersion,
+                delegated,
+            );
         }
 
         let imageUri: string;
@@ -396,7 +409,7 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
             softwareVersion: newSoftwareVersion,
             softwareVersionString: newSoftwareVersionString,
             updateToken,
-            userConsentNeeded: consentRequired === true ? true : undefined,
+            userConsentNeeded: delegated ? true : undefined,
             metadataForRequestor,
         };
     }
@@ -449,7 +462,7 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
                 `(${Bytes.toHex(updateToken)}) requests to apply version ${newVersion}, but its update token names version ${tokenVersion}`,
             );
         }
-        if (!matchesToken || !(await this.#hasUpdateConsent(session.peerAddress, newVersion))) {
+        if (!matchesToken || !(await this.#hasUpdateConsent(session.peerAddress, newVersion, progressInfo))) {
             this.#updateInProgressDetails(
                 session.peerAddress,
                 updateToken,
@@ -505,7 +518,8 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
 
     /**
      * Extension method if the node wants to handle automatic user consent gathering itself. By default, it declines
-     * the update request and informs the node of the available update.
+     * the update request, which answers "not available".  It is asked only for an offer with `consentRequired` that is
+     * not delegated to the requestor, which the default {@link checkUpdateAvailable} never makes.
      */
     protected requestUserConsentForUpdate(
         _request: OtaSoftwareUpdateProvider.QueryImageRequest,
@@ -516,21 +530,34 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
     }
 
     /**
-     * Override to customize how to check for available updates.
-     * The default logic also validates the node details like vendorId and productId and the current version.
-     * When the requestorCanConsent is true, we send the latest update we have also without a consent.
+     * Override to customize how to check for available updates.  Returning `undefined` answers "not available".
+     * The default offers what {@link SoftwareUpdateManager.updateExistsFor} selects, and when that is nothing, it lets
+     * {@link SoftwareUpdateManager.dropUndeliverableUpdate} end the update queued for the node.  An override decides
+     * itself whether to call the latter.
      * All additional data like hardware, location, and MetadataForProvider can be checked here for specific logic
      */
     protected checkUpdateAvailable(
         request: OtaSoftwareUpdateProvider.QueryImageRequest,
         peerAddress: PeerAddress,
     ): MaybePromise<OtaUpdateAvailableDetails | undefined> {
-        return this.endpoint.act(agent => agent.get(SoftwareUpdateManager).updateExistsFor(peerAddress, request));
+        return this.endpoint.act(async agent => {
+            const manager = agent.get(SoftwareUpdateManager);
+            const details = await manager.updateExistsFor(peerAddress, request);
+            if (details === undefined) {
+                manager.dropUndeliverableUpdate(peerAddress, request.softwareVersion);
+            }
+            return details;
+        });
     }
 
-    async #hasUpdateConsent(peerAddress: PeerAddress, targetSoftwareVersion?: number) {
+    /** The update token allows its apply (`tokenDetails`), or the manager has a consent for exactly this version. */
+    async #hasUpdateConsent(
+        peerAddress: PeerAddress,
+        targetSoftwareVersion: number,
+        tokenDetails: OtaUpdateInProgressDetails | undefined,
+    ) {
         return (
-            !!this.#inProgressDetailsForPeer(peerAddress)?.directConsentObtained ||
+            !!tokenDetails?.applyAllowed ||
             (await this.endpoint.act(agent =>
                 agent.get(SoftwareUpdateManager).hasConsent(peerAddress, targetSoftwareVersion),
             ))
@@ -598,7 +625,7 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
         updateToken: Bytes,
         lastState: OtaUpdateStatus,
         versionToApply?: number,
-        directConsentObtained = false,
+        applyAllowed = false,
         applyDelay?: Duration,
     ) {
         const { fabricIndex, nodeId: requestorNodeId } = peerAddress;
@@ -610,7 +637,7 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
             fabricIndex,
             lastState,
             timestamp: Time.nowMs,
-            directConsentObtained,
+            applyAllowed,
         };
         details.lastState = lastState;
         details.timestamp = Time.nowMs;
@@ -624,7 +651,7 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
             }
             details.versionToApply = versionToApply;
         }
-        details.directConsentObtained = directConsentObtained;
+        details.applyAllowed ||= applyAllowed;
 
         logger.info(
             `OTA Update ${details.versionToApply !== undefined ? `to version ${details.versionToApply} ` : ""}for Requestor`,
@@ -685,7 +712,7 @@ export namespace OtaSoftwareUpdateProviderServer {
         ): MaybePromise<{ consentState: OtaSoftwareUpdateConsentState; delayTime?: Duration }>;
 
         /**
-         * Override to customize how to check for available updates.
+         * Override to customize how to check for available updates.  Returning `undefined` answers "not available".
          * @param request
          * @param peerAddress
          */

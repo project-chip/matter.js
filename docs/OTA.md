@@ -82,21 +82,22 @@ interface SoftwareUpdateInfo {
 
 To initiate a firmware update, you have two options:
 
-* **Option A**: Use `SoftwareUpdateManager.forceUpdate()` to trigger an update on a specific node immediately. The update starts right away and runs in parallel to other potentially queued updates.
+* **Option A**: Use `SoftwareUpdateManager.forceUpdate()` to trigger an update on a specific node immediately. The node is announced right away, also while other queued updates run. The call does not wait for the announcement; once the node takes the update, the outcome is reported via the `updateDone` and `updateFailed` events.
 * **Option B**: Use `SoftwareUpdateManager.addUpdateConsent()` to grant consent for the update. The update is added to a queue and executed automatically in the background.
 
 ```typescript
 await commissioningController.otaProvider.act(agent => {
     return agent
         .get(SoftwareUpdateManager)
-        .forceUpdate(
-            PeerAddress({ nodeId, fabricIndex: FabricIndex(1) }),
+        .forceUpdate(PeerAddress({ nodeId, fabricIndex: FabricIndex(1) }), {
             vendorId,
             productId,
-            targetVersion
-        );
+            targetSoftwareVersion: targetVersion,
+        });
 });
 ```
+
+A consent is for exactly one version: the node is offered that version and may apply only that version. When that version is not stored, the node is offered nothing. With `delegateConsentToRequestor` set, a node that can obtain consent itself is offered the newest applicable stored image instead, and it should ask its user before it downloads it.
 
 You can check if consent has already been granted for a specific node using `hasConsent()`:
 
@@ -154,7 +155,7 @@ async function monitorUpdateProgress(node: PairedNode): Promise<void> {
 }
 ```
 
-When the update state switches to "Applying", the device applies the update and restarts. This usually takes longer than normal restarts. The controller will detect this and reconnect automatically, but this may take some extra time. The device should come back online automatically. If the device still reports its previous software version when the controller resubscribes later than three minutes after the apply delay, the update is reported as failed via the `updateFailed` event.
+When the update state switches to "Applying", the device applies the update and restarts. This usually takes longer than normal restarts. The controller will detect this and reconnect automatically, but this may take some extra time. The device should come back online automatically. If the device still reports its previous software version when the controller resubscribes later than three minutes after the apply delay, the update is reported as failed via the `updateFailed` event. `updateFailed` is also emitted when the node finds no stored image for its queued update; see `SoftwareUpdateManager.dropUndeliverableUpdate()` for the exact condition. A failed update is removed from the queue together with its consent, so a later update check does not install the same version again. Give a new consent to retry it.
 
 The `updateDone` event is triggered on a best-effort basis, based on (formally optional) events from the device and validation of software version changes on reconnect. We cannot guarantee that the `updateDone` event will always be triggered.
 
@@ -239,10 +240,11 @@ const updates = await commissioningController.otaProvider.act(agent =>
 
 The SoftwareUpdateManager can be configured via its state variables. The defaults are usually good and compliant with the Matter specification, but you can adjust them if needed.
 
-* `allowTestOtaImages`: Set to true to also query/consider the CSA Test DCL or local files for OTA updates
+* `allowTestOtaImages`: Set to true to also query the CSA Test DCL and offer test-net images. Production and local images are offered either way
 * `updateCheckInterval`: Interval in milliseconds for checking for updates (default 24 hours should be sufficient for most cases)
 * `announceAsDefaultProvider`: By default, we announce this node as the default OTA provider on startup and on new commissionings to all commissioned devices. Set to false to disable this behavior.
 * `announcementInterval`: Interval in milliseconds for verifying the OTA provider on the devices (default 24 hours should be sufficient for most cases). In reality, a random portion is added to the interval as defined by the Matter specification.
+* `delegateConsentToRequestor`: Set to true to offer a node that can obtain user consent itself the newest applicable stored image without a consent given to the `SoftwareUpdateManager`, and to let it apply that image. Default is false. A node with `LocalConfigDisabled` set is never asked to obtain consent itself. Such an update has no queue entry, so it is not reported via `updateDone` or `updateFailed`.
 
 The `OtaSoftwareUpdateProviderServer` state has one setting of its own:
 
@@ -252,13 +254,12 @@ The `OtaSoftwareUpdateProviderServer` state has one setting of its own:
 
 The `OtaSoftwareUpdateProviderServer` is the default implementation of the OTA Provider endpoint. It provides two extension methods you can override for custom behavior:
 
-* `checkUpdateAvailable`: By default, this method uses the `SoftwareUpdateManager` to check for available updates from the DCL or local OTA storage. Override this method to implement vendor-specific update logic.
-* `requestUserConsentForUpdate`: Override this method to gather user consent through alternative means. For example, you could implement automatic consent for certain device types (e.g., sensors and lights) while requiring manual approval for others (e.g., sockets). Consents granted through this method are applied via the update queue.
+* `checkUpdateAvailable`: By default, this method uses the `SoftwareUpdateManager` to find a stored update for the querying node: the stored version it has a consent for, or, with `delegateConsentToRequestor` set, the newest applicable stored image for a node that can obtain consent itself. When it finds nothing, it calls `SoftwareUpdateManager.dropUndeliverableUpdate()`. Override this method to implement vendor-specific update logic. Returning `undefined` answers "not available"; an override decides itself whether to call `dropUndeliverableUpdate()`.
+* `requestUserConsentForUpdate`: Override this method to gather user consent through alternative means. For example, you could implement automatic consent for certain device types (e.g., sensors and lights) while requiring manual approval for others (e.g., sockets). A consent granted through this method is kept for the update token of that query, so the node may apply the offered version. The method is asked only for an offer with `consentRequired` that is not delegated to the node; the default `checkUpdateAvailable` makes no such offer, so this needs an override of `checkUpdateAvailable` too.
 
 ## Enhanced: Test and Local OTA Images
 
-When enabled (see above), you can also use local OTA files for testing purposes.
-For testing or providing custom firmware updates that aren't available through the DCL, you can import local files that need to be Matter OTA files.
+For testing or providing custom firmware updates that aren't available through the DCL, you can import local files that need to be Matter OTA files. Local images are offered independent of `allowTestOtaImages`. A local image is preferred over a test-net or production image of the same version.
 
 ### Importing Custom OTA Files
 

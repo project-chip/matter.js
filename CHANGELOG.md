@@ -9,6 +9,22 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+- @matter/protocol
+    - Enhancement: Added `DclOtaUpdateService.findApplicable()` to list the stored update images a device can apply, in offer order
+
+- @matter/node
+    - Adjustment: A requestor that can obtain user consent itself is no longer offered an image it may not apply; the new `SoftwareUpdateManager` state `delegateConsentToRequestor` offers it the newest stored image and accepts its apply
+    - Enhancement: Added `SoftwareUpdateManager.dropUndeliverableUpdate()` for `checkUpdateAvailable()` overrides
+    - Adjustment: `SoftwareUpdateManager.forceUpdate()` does not wait for the announcement to the node
+    - Adjustment: A failed OTA update announcement is retried by the next queue check, within 5 minutes, instead of after the 15-minute stall timeout; a hanging one ends after 15 minutes
+    - Fix: The OTA provider offers the same stored image as the update check, including local images while test-net DCL images are disabled, and the consented version instead of a lower one
+    - Fix: A consent granted through `requestUserConsentForUpdate()` is no longer lost when the download starts
+    - Fix: A queued OTA update is removed and reported via `updateFailed` when the announced node finds no image for it
+    - Fix: A forced OTA update is announced once
+    - Fix: A failed OTA update drops its consent, so a later update check does not install the failed version again
+
 ## 0.18.0 (2026-10-20)
 
 - Breaking: Matter 1.6.1 brings specification changes that may require code adjustments
