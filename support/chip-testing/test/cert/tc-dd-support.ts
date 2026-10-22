@@ -155,6 +155,26 @@ export async function commissionChecked(
 }
 
 /**
+ * A precondition step for a case that needs nothing on the TH but the DUT's fabric: the DUT commissions the TH through
+ * {@link commissionChecked}, and `commissioned` holds the node for the DUT role, so the case's finalizer removes the
+ * fabric again.
+ */
+export function commissionThStep(commissioned: CommissionedRefs): (cx: CertStepContext) => Promise<void> {
+    return cx =>
+        withChecks(cx, async checks => {
+            const th = theTh(cx);
+            const ref = await commissionChecked(
+                cx.controllers.dut,
+                { passcode: th.commissioning.passcode, discriminator: th.commissioning.discriminator },
+                th,
+                "DUT commissions TH",
+                checks,
+            );
+            commissioned.set("dut", ref);
+        });
+}
+
+/**
  * Records that `th` did **not** complete a commissioning since `from`, which is how a plan's "only
  * the other device was commissioned" is stated: the device that must not have joined is the only
  * thing that can say so.

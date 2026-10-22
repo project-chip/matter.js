@@ -11,6 +11,20 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+- @matter/general
+    - Enhancement: WAL storage logs at notice level when an open restores entries from its log and when it has saved the restored state, with the time each took
+    - Adjustment: Removed the unused WAL storage history API (`WalStorageDriver.snapshotAtTime()`/`snapshotAtCommit()`, the `headSnapshot` and `cleanInterval` options) and the `WalSnapshot` export
+    - Fix: WAL storage deletes old log segments after each periodic snapshot instead of only on close, and restores from the previous snapshot when the current one is unreadable
+    - Fix: WAL storage loads its data when it opens, so a write during the first reads after opening is no longer lost
+    - Fix: WAL storage starts a new log segment on every open, so a write after a crash that cut off the last log line is no longer lost
+    - Fix: WAL storage snapshots right after an open that replayed its log, and refuses to open when its log is incomplete instead of opening with partial data
+
+- @matter/node
+    - Fix: Nested lists and structs in state show the current values after a containing value was null or removed and set again, instead of stale entries or `PhantomReferenceError`
+    - Fix: Access through a held state proxy whose container was removed throws `PhantomReferenceError` (`ExpiredReferenceError` once its context has exited) instead of a `TypeError`, a stale `ExpiredReferenceError` or, for list reads, an empty list
+
+## 0.18.0 (2026-10-20)
+
 - Breaking: Matter 1.6.1 brings specification changes that may require code adjustments
     - The Groupcast cluster and the Access Control auxiliary ACL are enabled by default for devices and bridges
     - See the @matter/model and @matter/node sections below for more specific details
@@ -281,6 +295,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: PASE validates PBKDF parameters and message contents
     - Fix: New PASE and CASE sessions never use local session ID 0
     - Fix: The failsafe re-arm during BLE commissioning no longer shortens a longer failsafe
+    - Fix: Commissioning skips the failsafe re-arm between steps once the commissioning session is closed, instead of aborting
     - Fix: BLE discovery shares one scan, handles timeouts, forgets stale or just-commissioned devices and offers only reachable ones
     - Fix: BTP sessions respect the offered segment size, close on write failures and abort on cancel
     - Fix: A controller resubscribes at once on any message from a LIT ICD peer
@@ -354,6 +369,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A closed `PairedNode` starts no interaction, and closing nodes or the controller completes even when a step fails
     - Fix: PASE with a known address reports a wrong passcode, and falls back to discovery when the address is unreachable
     - Fix: `CommissioningController.commissionNode()` no longer waits forever for a connected node that finished initializing before it started waiting
+    - Fix: (@cwedgwood) Commissioned node enumeration and `isCommissioned()` skip peers whose state is not readable, such as a peer being deleted, and peers that have left the fabric
 
 ## 0.17.9 (2026-08-06)
 
