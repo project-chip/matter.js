@@ -101,11 +101,15 @@ export namespace ValReference {
      * owning context exited still serves the last container it saw.
      *
      * @throws PhantomReferenceError when the property, or a container above it, is absent
-     * @throws ExpiredReferenceError when {@link reference} is a root reference whose owning context has exited
+     * @throws ExpiredReferenceError when the container is absent and the owning context has exited, or when
+     * {@link reference} is a root reference whose owning context has exited
      */
     export function containerOf<T extends Val>(reference: ValReference<T>): NonNullable<T> {
         const container = reference.value;
         if (container === undefined || container === null) {
+            if (reference.expired) {
+                throw new ExpiredReferenceError(reference.location);
+            }
             throw new PhantomReferenceError(reference.location);
         }
         return container;

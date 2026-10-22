@@ -370,6 +370,19 @@ describe("ManagedReference", () => {
             expect(() => (list!.length = 0)).throws(ExpiredReferenceError);
         });
 
+        it("refuses reads and array methods through a proxy held while its container was absent", async () => {
+            const state = TestState();
+            let list: Entry[] | undefined;
+            await state.write(s => {
+                list = s.holder!.list;
+                s.holder = null;
+            });
+
+            expect(() => list!.length).throws(ExpiredReferenceError);
+            expect(() => list!.push({ x: 1, sub: null })).throws(ExpiredReferenceError);
+            expect(() => list!.splice(0, 1)).throws(ExpiredReferenceError);
+        });
+
         it("refuses a struct write through a proxy held while it was absent", async () => {
             const state = TestState();
             let held: Holder | undefined;
