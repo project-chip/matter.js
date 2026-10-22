@@ -41,6 +41,9 @@ export type WalCommitId = {
     offset: number;
 };
 
+/** Maximum segment number (32-bit). */
+export const MAX_SEGMENT = 0xffffffff;
+
 /** Maximum line offset within a single segment (16-bit). */
 export const MAX_SEGMENT_LINES = 0xffff;
 

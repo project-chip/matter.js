@@ -140,6 +140,23 @@ describe("WalSnapshotStore", () => {
             expect((await restoreSnapshot(storageDir))!.data.ctx.key).equal("value");
         });
 
+        it("reports the flush failure when closing the file fails as well", async () => {
+            const storageDir = fs.directory("storage");
+            await storageDir.mkdir();
+            using _interception = fs.intercept(operation => {
+                if (operation !== "open") {
+                    throw new StorageError(`${operation} failed`);
+                }
+            });
+
+            await expect(
+                new WalSnapshotStore(storageDir).save(
+                    new WalSnapshot({ segment: 1, offset: 0 }, 1000, { ctx: { key: "value" } }),
+                    { compress: false, fsync: true },
+                ),
+            ).rejectedWith("fsync failed");
+        });
+
         it("skips the flush when fsync is disabled", async () => {
             const storageDir = fs.directory("storage");
             await storageDir.mkdir();
@@ -298,6 +315,10 @@ describe("WalSnapshotStore", () => {
             ["invalid JSON", "{ not json", "is unreadable"],
             ["an array", "[]", "is not an object"],
             ["a commitId without offset", '{"commitId":{"segment":1},"data":{}}', "has no valid commitId"],
+            ["a fractional segment", '{"commitId":{"segment":1.5,"offset":0},"data":{}}', "has no valid commitId"],
+            ["a segment above 32 bits", '{"commitId":{"segment":1e10,"offset":0},"data":{}}', "has no valid commitId"],
+            ["a negative offset", '{"commitId":{"segment":1,"offset":-1},"data":{}}', "has no valid commitId"],
+            ["an offset above 16 bits", '{"commitId":{"segment":1,"offset":65536},"data":{}}', "has no valid commitId"],
             ["data that is not an object", '{"commitId":{"segment":1,"offset":0},"data":[]}', "data is not an object"],
         ]) {
             it(`rejects a snapshot with ${what}`, async () => {

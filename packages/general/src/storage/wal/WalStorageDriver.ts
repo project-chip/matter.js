@@ -100,7 +100,7 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
 
         const reader = new WalReader(walDir);
         const segments = await reader.segments();
-        const loaded = await this.#load(reader, segments[0]);
+        const loaded = await this.#load(reader, segments);
         const firstSegment = Math.max(loaded.lastCommitId?.segment ?? 0, ...segments) + 1;
 
         const compressLog = this.#options.compressLog ?? WalStorageDriver.defaults.compressLog;
@@ -250,11 +250,11 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
     /**
      * Restore the snapshot and replay the WAL after it.
      */
-    async #load(reader: WalReader, oldestSegment: number | undefined): Promise<StoreState> {
+    async #load(reader: WalReader, segments: number[]): Promise<StoreState> {
         const loaded: StoreState = { store: {} };
 
         const restored = await this.#snapshots.restore();
-        this.#assertWalCovers(oldestSegment, restored?.snapshot.commitId);
+        this.#assertWalCovers(segments, restored?.snapshot.commitId);
         if (restored) {
             const { snapshot, backupCommitId } = restored;
             Object.assign(loaded.store, snapshot.data);
@@ -291,18 +291,23 @@ export class WalStorageDriver extends FilesystemStorageDriver implements Cloneab
      * Throw if WAL segments that may hold commits after the snapshot at {@link commitId}, or after an empty store when
      * there is no snapshot, are missing, because a replay would skip them.
      *
-     * After the WAL was lost, the next run starts at the snapshot's segment + 1, so that segment may be the oldest one
-     * without anything missing.  Without a snapshot, the first writer started at segment 1.  A missing tail of the
-     * oldest segment cannot be detected, the same as a fully missing WAL.
+     * Writers number segments without gaps.  After the WAL was lost, the next run starts at the snapshot's segment + 1,
+     * so every segment from there on must exist up to the newest one.  Without a snapshot, the first writer started at
+     * segment 1.  A missing tail of a segment cannot be detected, the same as a fully missing WAL.
+     *
+     * @param segments all segment numbers on disk, in ascending order
      */
-    #assertWalCovers(oldestSegment: number | undefined, commitId: WalCommitId | undefined) {
+    #assertWalCovers(segments: number[], commitId: WalCommitId | undefined) {
         const firstNeeded = commitId === undefined ? 1 : commitId.segment + 1;
-        if (oldestSegment === undefined || oldestSegment <= firstNeeded) {
+        const missing = segments
+            .filter(segment => segment >= firstNeeded)
+            .findIndex((segment, index) => segment !== firstNeeded + index);
+        if (missing === -1) {
             return;
         }
         const base = commitId === undefined ? "No snapshot" : `Snapshot at WAL segment ${commitId.segment}`;
         throw new StorageError(
-            `${base} in ${this.#storageDir.path} cannot be restored because the WAL starts at segment ${oldestSegment}`,
+            `${base} in ${this.#storageDir.path} cannot be restored because WAL segment ${firstNeeded + missing} is missing`,
         );
     }
 

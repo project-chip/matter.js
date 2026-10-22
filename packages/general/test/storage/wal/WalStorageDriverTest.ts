@@ -750,6 +750,22 @@ describe("WalStorageDriver", () => {
             await expect(createStorage({ maxSegmentSize: 50 })).rejectedWith("No snapshot");
         });
 
+        it("refuses to open when a WAL segment in the middle is missing", async () => {
+            const storageDir = fs.directory("storage");
+            const storage = await createStorage({ maxSegmentSize: 50 });
+            for (const key of ["key1", "key2", "key3", "key4"]) {
+                await storage.set(["ctx"], key, "value");
+            }
+            await storage.close();
+            await deleteSnapshots(storageDir);
+            expect((await segmentNumbers()).slice(0, 3)).deep.equal([1, 2, 3]);
+            const walDir = storageDir.directory("wal");
+            await walDir.file(segmentFilename(2)).delete();
+            await walDir.file(compressedSegmentFilename(2)).delete();
+
+            await expect(createStorage({ maxSegmentSize: 50 })).rejectedWith("WAL segment 2 is missing");
+        });
+
         it("fails to open when the snapshot is unreadable and no backup exists", async () => {
             const storageDir = fs.directory("storage");
             const storage = await createStorage();

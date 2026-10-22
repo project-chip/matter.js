@@ -6,7 +6,7 @@
 
 import { StorageError } from "../StorageDriver.js";
 import { type SupportedStorageTypes, fromJson, toJson } from "../StringifyTools.js";
-import type { StoreData, WalCommitId } from "./WalCommit.js";
+import { MAX_SEGMENT, MAX_SEGMENT_LINES, type StoreData, type WalCommitId } from "./WalCommit.js";
 
 /**
  * The WAL storage state as of a specific commit.  `WalSnapshotStore` writes and reads it as a file.
@@ -78,5 +78,13 @@ function isStoreData(value: unknown): value is StoreData {
 }
 
 function isCommitId(value: unknown): value is WalCommitId {
-    return isPlainRecord(value) && typeof value.segment === "number" && typeof value.offset === "number";
+    return (
+        isPlainRecord(value) &&
+        isIntegerInRange(value.segment, MAX_SEGMENT) &&
+        isIntegerInRange(value.offset, MAX_SEGMENT_LINES)
+    );
+}
+
+function isIntegerInRange(value: unknown, max: number): boolean {
+    return typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= max;
 }

@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger } from "#log/Logger.js";
 import type { File } from "../../fs/File.js";
 import { Bytes } from "../../util/Bytes.js";
 import { Gzip } from "../../util/Gzip.js";
 import type { MaybeAsyncIterable } from "../../util/Streams.js";
+
+const logger = Logger.get("WalFiles");
 
 /**
  * Replace the content of {@link file} and, if {@link fsync} is set, flush it to persistent storage before returning.
@@ -24,9 +27,13 @@ export async function writeSynced(file: File, content: MaybeAsyncIterable<Bytes 
         if (fsync) {
             await handle.fsync();
         }
-    } finally {
-        await handle.close();
+    } catch (error) {
+        await handle
+            .close()
+            .catch(closeError => logger.debug(`Closing ${file.path} after a failed write failed:`, closeError));
+        throw error;
     }
+    await handle.close();
 }
 
 /**
