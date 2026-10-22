@@ -60,9 +60,11 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Model support for device type requirements (conditions, locations, component counts), see [Device Type Validation](docs/DEVICE_TYPE_VALIDATION.md)
     - Feature: Enum members can define manufacturer value ranges (`FieldModel.isEnumRange`)
     - Feature: Conformance `Z` (obsolete) is supported (`Conformance.Flag.Obsolete`, `isObsolete`)
+    - Feature: `ClassSemantics.afterFinalize` runs once a class's model is final; an error it throws repeats on every later resolution
     - Enhancement: Model lookups reuse their index until the model changes, e.g. `Matter.clusters(id)` drops from about 180 µs to under 1 µs
     - Enhancement: Device type and condition documentation carries the specification prose
     - Adjustment: `ValidateModel` reports errors only in its result; `Model.errors`, `Model.valid`, `Model.error()` and `Resource.errors` are deprecated
+    - Fix: The ClusterRevision of a cluster outside the standard model defaults to 1 instead of 0
     - Fix: `percent` and `percent100ths` values are bounded to 0–100 and 0–10000 as the specification defines
     - Fix: Specification constraints are enforced completely, including exact 64-bit bounds, units, computed bounds and bounds referencing other elements (e.g. `OccupancySensing.HoldTime`)
     - Fix: Feature conformance handles disjunctions, choice sets, otherwise lists and provisional choice sets correctly; unconditionally mandatory features are always selected
@@ -146,6 +148,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: A node's `ClusterProtocol.readState()` throws `ImplementationError` for a remote session without a transaction
     - Adjustment: `IcdClient` emits `registered`, `unregistered` and `keyRefreshed` after storing the change; `unregister()` keeps the registration when a sleeping peer does not wake
     - Adjustment: Subscription keep-alives request a status response, so a subscription on a session without MRP (TCP, BLE) ends when the controller answers with `INVALID_SUBSCRIPTION`
+    - Adjustment: A behavior whose State or Events is assigned after its schema resolved, a decorated cluster behavior that declares a cluster ID other than its parent's, and an assignment to `cluster`, `features` or `id` after the schema resolved throw an `ImplementationError`
     - Fix: A write to an attribute another exchange is writing in chunks is answered BUSY; group and wildcard writes skip it
     - Fix: A `ClientNode` no longer emits `$Changed` with an outdated value when a report changed an attribute during a transaction
     - Fix: `WebRtcTransportRequestorServer` keeps sessions of different peers with the same session id apart
@@ -228,6 +231,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: The Thermostat User Interface Configuration server keeps a configured or stored `keypadLockout` on startup instead of resetting it to `NoLockout`
     - Fix: Changing a fabric that the armed fail-safe did not add or update no longer logs an error and emits `fabricsChanged`
     - Fix: AdminFabricIndex becomes null when the admin fabric is removed after an UpdateNOC
+    - Fix: A cluster behavior declared with the model decorators gets its namespace, ID, global attributes, ServerList entry and command responses like a generated one, and manufacturer-specific elements added to a standard cluster appear in its namespace and element lists
+    - Fix: An event a decorated Events class declares with a plain `Observable` is recorded and reported; an event without a priority uses INFO
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument
