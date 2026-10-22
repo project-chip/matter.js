@@ -667,7 +667,12 @@ export interface OtaAnnouncementRecord {
     /** `ProviderNodeID`, in the form {@link ControllerAdapter.commission} answers with. */
     providerNodeId: CertNodeRef;
 
-    /** `VendorID`, which is the announcing controller's own `BasicInformation` value. */
+    /**
+     * `VendorID`: the announcing controller's vendor id as it would appear in its Basic Information cluster. A
+     * controller without that cluster sends its commissioner (admin) vendor id.
+     *
+     * @see {@link MatterSpecification.v161.Core} § 11.20.7.6.1.2
+     */
     vendorId: number;
 
     /** `AnnouncementReason`: 0 SimpleAnnouncement, 1 UpdateAvailable, 2 UrgentUpdateAvailable. */
@@ -930,8 +935,8 @@ export interface CertNodeApi {
      *
      * An adapter whose controller cannot express the write throws {@link UnsupportedByControllerError} naming the
      * capability it lacks or does not offer, among them `multi-path-write`, `mixed-version-write`,
-     * `typed-list-write-with-others`, `wildcard-write-statuses` and `many-paths-per-request` (see {@link CertNodeApi}'s
-     * own doc for the general contract).
+     * `typed-list-write-with-others` and `many-paths-per-request` (see {@link CertNodeApi}'s own doc for the general
+     * contract).
      *
      * @see {@link MatterSpecification.v161.Core} § 8.9.2.7, § 8.7.3.2
      */
@@ -1508,8 +1513,6 @@ export type ControllerRoleKind = "dut" | "helper";
  * - `typed-list-write-with-others` — {@link CertNodeApi.writeAttributes} with several entries, one of them a list
  *   attribute the controller writes only through a command of its own for that attribute, which carries no other
  *   entry (the implementation's gap text names the attributes)
- * - `wildcard-write-statuses` — {@link CertNodeApi.writeAttributes} of an entry without an endpoint, answered with a
- *   status for each endpoint written
  * - `many-paths-per-request` — a read, subscription or write that names more paths in one request than a controller
  *   accepts in one command (the implementation's gap text names its limit)
  * - `chunked-write` — a write too large for one message sent as chunked WriteRequestMessages, each next one after the
@@ -1533,8 +1536,6 @@ export type ControllerRoleKind = "dut" | "helper";
  * - `ota-provider-script` — that provider driven beyond its own answers: {@link CertNodeApi.scriptOtaProvider}, and
  *   {@link CertNodeApi.announceOtaProvider} without {@link AnnounceOtaProviderOptions.provider}, which announces it
  *   with nothing staged
- * - `ota-provider-announcement` — {@link CertNodeApi.announceOtaProvider} with
- *   {@link AnnounceOtaProviderOptions.provider}: another node named to a requestor as its provider
  * - `icd-client` — {@link CertNodeApi.icdClient}
  * - `sustained-subscription` — a subscription the controller keeps to a node on its own, which
  *   {@link CertNodeApi.observeEvents} reports through and which keeps what {@link CertNodeApi.clientEndpoints} and
@@ -1551,7 +1552,6 @@ export type ControllerCapability =
     | "multi-path-write"
     | "mixed-version-write"
     | "typed-list-write-with-others"
-    | "wildcard-write-statuses"
     | "many-paths-per-request"
     | "chunked-write"
     | "batch-invoke"
@@ -1567,7 +1567,6 @@ export type ControllerCapability =
     | "attestation"
     | "webrtc-requestor"
     | "ota-provider"
-    | "ota-provider-announcement"
     | "ota-provider-script"
     | "icd-client"
     | "sustained-subscription";

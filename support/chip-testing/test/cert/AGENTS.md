@@ -566,11 +566,6 @@ declares the capability:
 - **`mixed-version-write`: a `writeAttributes` mixing versioned and unversioned entries** — chip-tool takes
   `--data-version` once per command, applying to all its paths or none, so a request where only some entries carry a
   `dataVersion` cannot be expressed as one write.
-- **`wildcard-write-statuses`: a wildcard-endpoint `writeAttributes`** (`TC-IDM-3.1` step 2) — chip-tool's
-  `WriteAttribute` callback records a JSON result only for a path the device *rejected*, so successfully written
-  endpoints are invisible and the per-endpoint statuses the method contracts to return cannot be
-  reconstructed. Concrete-endpoint writes are fine: absence of a status *is* the success signal, since
-  Matter Core § 8.9.2.8 requires one per concrete path.
 - **`typed-list-write-with-others`: `DefaultOTAProviders` written together with other entries** — chip-tool writes that
   list through its typed cluster command, which encodes it as an empty REPLACE and one ADD per entry but writes one
   attribute per request. Every other list goes through `write-by-id` as one REPLACE, with or without other entries,
@@ -584,8 +579,6 @@ at all declares the capability:
 - **`tcp-transport`: a TCP-backed session, which a read with `largeMessage` requires** — chip-tool reuses the session
   commissioning established. A case asks for TCP with `transport: "tcp"`, which implies the capability.
 - **`batch-invoke`: `invokeBatch`** (`TC-IDM-1.3`) — `command-by-id` sends one command per request.
-- **`ota-provider-announcement`: `announceOtaProvider` naming another node** (`TC-SU-1.1`) — this adapter sends no
-  `AnnounceOTAProvider`, and its PICS say so too.
 - **What the controller itself holds** — `clientEndpoints()` and `clientAttribute()` (`TC-BR-4`,
   `sustained-subscription`). chip-tool answers each command straight from the device and keeps nothing between them,
   so it has no device list and no attribute state of its own to report.
@@ -594,6 +587,59 @@ A value whose encoded form contains `;` is not a refusal: chip-tool splits its `
 the adapter throws `ImplementationError` before it sends anything, like its other input guards. The step fails, and
 inside `attempt()` the write is recorded as a failed response. No case writes such a value today, but a value read
 back from the device and written again can contain one.
+
+**A wildcard-endpoint `writeAttributes` reads its statuses from chip-tool's log** (`TC-IDM-3.1` step 2). chip-tool's
+JSON results name only the paths the device *rejected* (`WriteAttributeCommand::OnResponse`), so they cannot say which
+endpoints the wildcard reached. chip's `WriteClient` also decodes every `WriteResponseMessage` it receives into its log,
+one line per field, and the reply's `logs` carry those lines for the command that caused them, so no correlation by
+time or exchange is needed. `loggedWriteResponseStatuses` (`src/chip-tool/write-response-log.ts`) reads every
+`AttributeStatusIB` from them:
+
+```
+WriteResponseMessage =
+{
+	AttributeStatusIBs =
+	[
+		AttributeStatusIB =
+		{
+			AttributePathIB =
+			{
+				Endpoint = 0x1,
+				Cluster = 0xfff1fc05,
+				Attribute = 0x0000_0032,
+			}
+
+			StatusIB =
+			{
+				status = 0x01 (FAILURE),
+				cluster-status = 0x11,
+			},
+
+		},
+	...
+```
+
+- The decode needs `CHIP_CONFIG_IM_PRETTY_PRINT` and detail logging, which every debug build on Linux or macOS has
+  with the default logging arguments (`chip_logging`, `chip_detail_logging`). The cert-bins chip-tool is one: its default
+  build profile keeps GN's `is_debug = true`.
+- `--trace_decode 1` is not needed and adds nothing here: chip-tool turns off its decoding of inbound
+  interaction-model messages because `WriteClient` already prints them.
+- A reply without the block rejects with `UnexpectedDataError` rather than report no endpoint written.
+- Each failure the JSON results report for a requested path must appear in the decoded block with the same code and
+  cluster status, and each concrete requested path must appear in it at all; a miss means the log lost lines, and
+  rejects.
+- Concrete-endpoint writes keep using the JSON results: absence of a status *is* the success signal, since Matter Core
+  § 8.7.3.2 and § 8.7.3.3 require one per concrete path.
+- The fixtures in `test/cert-framework/chip-tool-write-response-captures.ts` are real replies (chip app and matter.js
+  app). Regenerate them from a real chip-tool rather than editing them by hand.
+
+Step 2 still runs on a matter.js TH only: chip's `WriteHandler` answers any non-concrete write path `InvalidAction`.
+
+**`announceOtaProvider` naming another node** (`TC-SU-1.1`) goes through `otasoftwareupdaterequestor
+announce-otaprovider`. The provider's endpoint is the lowest one whose ServerList carries the provider cluster, and
+the VendorID is the AdminVendorId of chip-tool's entry in the requestor's Fabrics list, which chip-tool sets from its
+commissioner vendor id. Announcing the controller itself stays refused as `ota-provider-script`: chip-tool hosts no
+provider.
 
 Multi-cluster reads and multi-attribute writes *are* supported: chip-tool zips its cluster/attribute/
 endpoint id lists element-wise when their lengths match (`InteractionModelConfig::GetAttributePaths`),
@@ -658,9 +704,9 @@ answer: a controller that cannot send a command says nothing about the device, a
   `MATTERJS_SERVER_CAPABILITY_GAPS`, registered as `gaps`. The in-process controller lacks none and registers no
   `gaps`. Every refusal names a capability (`UnsupportedByControllerError.capability`, which the constructor
   requires) that its implementation declares as a gap or out of scope, with the registered text as its detail. chip-tool declares `tcp-transport`, `attestation`, `webrtc-requestor`,
-  `chunked-write`, `batch-invoke`, `batch-arrival-order`, `many-paths-per-request`, `wildcard-write-statuses`,
-  `mixed-version-write`, `typed-list-write-with-others`, `session-introspection`, `sustained-subscription`, `ota-provider`,
-  `ota-provider-script`, `ota-provider-announcement` and `icd-client`.
+  `chunked-write`, `batch-invoke`, `batch-arrival-order`, `many-paths-per-request`, `mixed-version-write`,
+  `typed-list-write-with-others`, `session-introspection`, `sustained-subscription`, `ota-provider`,
+  `ota-provider-script` and `icd-client`.
 - A test declares `controllerCapabilities` on `certTest()`, and a step declares it on `step()`. A test is skipped
   when any controller role lacks one, helper roles included (each role is judged by the implementation that fills
   it). `transport: "tcp"` implies `tcp-transport`. A skipped step is counted in `controllerUnsupportedSkips`.
@@ -3618,8 +3664,9 @@ because chip-tool's `MCORE.OTA.Provider` `0` skips every provider case first.
 
 **A case whose DUT is the requestor gates on the TH's provider keys too.** `MCORE.OTA.Provider` and
 `OTAR.C.M.AnnounceOTAProvider` are answered by the controller there, since the requestor app declares
-neither. chip-tool answers both `0`, so its leg skips before commissioning instead of passing on the
-precondition alone.
+neither. chip-tool answers `MCORE.OTA.Provider` `0`, so its leg skips before commissioning instead of passing on the
+precondition alone. Its `OTAR.C.M.AnnounceOTAProvider` is `1`: it announces another node as the provider, which is all
+`TC-SU-1.1` needs.
 
 **Step 2 is a `Busy` answer and a two-minute watch, as chip's own `Test_TC_SU_2_1.yaml` runs it.**
 That script starts its provider with `-q busy`: `Busy` invites a retry, and § 11.20.3.2.4 requires the
@@ -3929,3 +3976,55 @@ and TH2's lines receiving it (`expectGroupCommandArrival`: the inbound invoke na
 that same exchange to endpoint 1). matter.js names the group on the send and receipt lines for this reason. The arrival is also what orders step 14b's read after
 the command. The same helpers carry TC-SC-5.3's groupcast evidence, so the two cases cannot drift; chip's lines use
 its own uppercase hex (`0x%04X` for the group, `0x%04X_%04X` for cluster and command).
+
+## The single-command cluster-client cases (`TC-OO-3.2`, `TC-I-3.2`, `TC-MOD-2.2`, `TC-LOWPOWER-2.2`, `TC-WNCV-6.1`, `TC-WNCV-7.1`)
+
+Each case commissions the TH in a precondition step (`commissionThStep` in `tc-dd-support.ts`); the WindowCovering
+cases read the TH's FeatureMap there too. Each later step has the DUT send one command to endpoint 1 of the
+all-clusters app, except `TC-MOD-2.2` step 1, which reads SupportedModes. What they add:
+
+- **A bare field line can match a subscription report.** chip prints the fields of a report's struct with the same
+  `0x0 = 1 (unsigned),` shape as a request's `CommandFields`, and the automatic node-level subscription keeps reports
+  arriving, so a bare pattern for a field can pass on a report's line. `expectCommandPayload` (`tc-support.ts`)
+  demands the request's whole `InvokeRequests` list as consecutive lines, from the command's own `CommandPathIB`
+  through its fields to the list's closing `],`, so a missing, different or extra field fails, and so does a second
+  command. `sendCommand` records it with `invokeCommand`'s response checks. `expectCommandInvoke`'s per-field
+  search still has the weakness, and so does the bare `CopyScene` Mode pattern in `TC-S-3.1`.
+- **What the payload check can see on a matter.js TH.** chip prints the raw TLV, so it shows every field the DUT
+  sent. matter.js prints the arguments only after decoding them through the command's schema, which drops a field
+  whose tag the schema does not know. On a matter.js TH the check therefore compares the decoded fields: the payload
+  text must end the `ProtocolService Invoke «` line that dispatches the command on the endpoint. An extra field with
+  an unknown tag is caught on the chip TH only. The "only this command" rule holds on both: `InteractionServer`
+  writes one summary line per request that lists every command path (`invokes: 1.onOff.off, …`) and names the same
+  exchange (`@<session>⇵<exchange>`) as the dispatch line, and the check requires that line to list this command
+  alone.
+- **"The command has no parameters" is a claim.** chip prints an empty `CommandFields = { },` block for it, and
+  matter.js ends its `ProtocolService Invoke «` line with `(no payload)` (`MATTERJS_NO_PAYLOAD`).
+- **A bitmap field is written per flavor**, as in `TC-S-3.1`: OnWithTimedOff's OnOffControl is `0x0 = 1
+  (unsigned),` on chip and `onOffControl: { acceptOnlyWhenOn: true }` on matter.js. Send a set bit; a cleared one
+  cannot tell a lost bitmap from a correct one.
+- **`TC-LOWPOWER-2.2` runs on the chip flavors only.** matter.js's all-clusters test device has no LowPower cluster;
+  `TvTestInstance` has one but is not a cert subject.
+- **The WindowCovering preconditions read the TH's FeatureMap** (`tc-wncv-support.ts`). `TC-WNCV-7.1` requires both
+  position-aware features, which is stricter than the plan's "and/or": for a TH with only one position-aware axis,
+  the plan defines no outcome for the other axis's command. Both THs have all four features.
+- **PICS:** each case's client keys are declared in all three controller overlays. Only two of them change a run:
+  `matter-js-pics.properties` answers `OO.C` 0 and CHIP's file answers `WNCV.C` 0, and both gate their whole case.
+  CHIP's file answers the other keys 1 already; the overlays declare them so that they state the controller's full
+  client surface for these cases rather than rely on what a device file says.
+
+## The diagnostics client cases (`TC-DGETH-3.2`, `TC-DGSW-3.2`, `TC-DGTHREAD-3.4`, `TC-DGWIFI-3.2`)
+
+Same shape as the single-command cluster-client cases above: step 1 commissions the TH, step 2 sends one command
+without fields, and `TC-DGTHREAD-3.4` step 3 reads OverrunCount. Two points:
+
+- **All four target endpoint 0 and run on the chip flavors only.** chip's all-clusters app has all four diagnostics
+  clusters on its root, and on the macOS build each accepts its reset command: SoftwareDiagnostics has the Watermarks
+  feature, the three network clusters have ErrorCounts, and ThreadNetworkDiagnostics answers OverrunCount with 0
+  although the host has no Thread interface. Only the macOS build was checked; chip-docker runs the Linux build, whose
+  answers for Thread and Wi-Fi without such an interface are unverified. matter.js's all-clusters test device has
+  none of the four, and adding them would make it claim Thread, Wi-Fi and Ethernet interfaces it does not have, with
+  made-up counters. The DUT here is the controller, which the chip TH already tests, so the cases declare test-level
+  `flavors` instead.
+- **PICS:** CHIP's file answers `DGTHREAD.C` and `DGWIFI.C.C00.Tx` 0. Without the controller overlay the first leaves
+  `TC-DGTHREAD-3.4` pending and the second skips `TC-DGWIFI-3.2`'s only command step.

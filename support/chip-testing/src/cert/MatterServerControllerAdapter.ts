@@ -237,6 +237,44 @@ export const MATTERJS_SERVER_CONTROLLER_PICS: PicsValues = {
     "S.C.C06.Tx": 1,
     "S.C.C40.Tx": 1,
 
+    // The client commands and the attribute the single-command client cases send or read (TC-OO-3.2, TC-I-3.2,
+    // TC-MOD-2.2, TC-LOWPOWER-2.2, TC-WNCV-6.1, TC-WNCV-7.1). Only `OO.C` (0 in matter.js's own PICS file) and `WNCV.C`
+    // (0 in CHIP's) need the overlay; the other keys state the server's full client surface for these cases.
+    "OO.C": 1,
+    "OO.C.C00.Tx": 1,
+    "OO.C.C01.Tx": 1,
+    "OO.C.C02.Tx": 1,
+    "OO.C.C40.Tx": 1,
+    "OO.C.C41.Tx": 1,
+    "OO.C.C42.Tx": 1,
+    "I.C": 1,
+    "I.C.C00.Tx": 1,
+    "I.C.C40.Tx": 1,
+    "MOD.C": 1,
+    "MOD.C.A0002": 1,
+    "MOD.C.C00.Tx": 1,
+    "LOWPOWER.C": 1,
+    "LOWPOWER.C.C00.Tx": 1,
+    "WNCV.C": 1,
+    "WNCV.C.C00.Tx": 1,
+    "WNCV.C.C01.Tx": 1,
+    "WNCV.C.C02.Tx": 1,
+    "WNCV.C.C05.Tx": 1,
+    "WNCV.C.C08.Tx": 1,
+
+    // The diagnostics client commands, and the one attribute, that TC-DGETH-3.2, TC-DGSW-3.2, TC-DGTHREAD-3.4 and
+    // TC-DGWIFI-3.2 send or read. Only `DGTHREAD.C` and `DGWIFI.C.C00.Tx` need the overlay, because CHIP's file
+    // answers them 0; the other keys state the server's full client surface for these cases.
+    "DGETH.C": 1,
+    "DGETH.C.C00.Tx": 1,
+    "DGSW.C": 1,
+    "DGSW.C.C00.Tx": 1,
+    "DGTHREAD.C": 1,
+    "DGTHREAD.C.C00.Tx": 1,
+    "DGTHREAD.C.A0006": 1,
+    "DGWIFI.C": 1,
+    "DGWIFI.C.C00.Tx": 1,
+
     // The same Switch client declaration as the other controllers: the switch it observes is an action switch
     "SWTCH.C": 1,
     "SWTCH.C.F02": 0,

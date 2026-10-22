@@ -1314,6 +1314,59 @@ describe("ControllerAdapter registry", () => {
         }
     });
 
+    it("declares the client keys of the single-command cluster-client cases, the clusters included", () => {
+        // The base file answers every key 0, so each one has to come from the overlay, which states the controller's
+        // whole client surface for these cases. The real device files answer only OO.C and WNCV.C 0.
+        const keys = [
+            "OO.C",
+            ...["00", "01", "02", "40", "41", "42"].map(id => `OO.C.C${id}.Tx`),
+            "I.C",
+            "I.C.C00.Tx",
+            "I.C.C40.Tx",
+            "MOD.C",
+            "MOD.C.A0002",
+            "MOD.C.C00.Tx",
+            "LOWPOWER.C",
+            "LOWPOWER.C.C00.Tx",
+            "WNCV.C",
+            ...["00", "01", "02", "05", "08"].map(id => `WNCV.C.C${id}.Tx`),
+        ];
+        const asDevice = new PicsFile(keys.map(key => `${key}=0`));
+
+        for (const implementation of IMPLEMENTATIONS) {
+            const forRun = asDevice.with(controllerPicsOverridesFor(implementation));
+
+            for (const key of keys) {
+                expect(new PicsExpression(key).evaluate(forRun), `${implementation} ${key}`).equal(true);
+            }
+        }
+    });
+
+    it("declares the diagnostics client keys of TC-DGETH-3.2, TC-DGSW-3.2, TC-DGTHREAD-3.4 and TC-DGWIFI-3.2", () => {
+        // The base file answers every key 0, so each one has to come from the overlay. The real device file answers
+        // only DGTHREAD.C and DGWIFI.C.C00.Tx 0.
+        const keys = [
+            "DGETH.C",
+            "DGETH.C.C00.Tx",
+            "DGSW.C",
+            "DGSW.C.C00.Tx",
+            "DGTHREAD.C",
+            "DGTHREAD.C.C00.Tx",
+            "DGTHREAD.C.A0006",
+            "DGWIFI.C",
+            "DGWIFI.C.C00.Tx",
+        ];
+        const asDevice = new PicsFile(keys.map(key => `${key}=0`));
+
+        for (const implementation of IMPLEMENTATIONS) {
+            const forRun = asDevice.with(controllerPicsOverridesFor(implementation));
+
+            for (const key of keys) {
+                expect(new PicsExpression(key).evaluate(forRun), `${implementation} ${key}`).equal(true);
+            }
+        }
+    });
+
     it("declares the group-administration client commands TC-SC-6.1 sends", () => {
         // ViewGroup is 0 in the device file; the two GroupKeyManagement keys are absent from it
         // entirely, and an absent key evaluates false, so either omission skips a step silently.
@@ -1639,13 +1692,8 @@ describe("controller capabilities", () => {
         }
     });
 
-    it("lacks batch invoke, long path lists, wildcard write statuses and announcing another provider on chip-tool alone", () => {
-        const shapes = [
-            "batch-invoke",
-            "many-paths-per-request",
-            "wildcard-write-statuses",
-            "ota-provider-announcement",
-        ] as const;
+    it("lacks batch invoke and long path lists on chip-tool alone", () => {
+        const shapes = ["batch-invoke", "many-paths-per-request"] as const;
 
         for (const controller of ["matterjs", "matterjs-server"]) {
             env.MATTER_CERT_CONTROLLER = controller;
