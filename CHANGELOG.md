@@ -11,6 +11,14 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+- @matter/general
+    - Enhancement: WAL storage logs at notice level when an open restores entries from its log and when it has saved the restored state, with the time each took
+    - Adjustment: Removed the unused WAL storage history API (`WalStorageDriver.snapshotAtTime()`/`snapshotAtCommit()`, the `headSnapshot` and `cleanInterval` options) and the `WalSnapshot` export
+    - Fix: WAL storage deletes old log segments after each periodic snapshot instead of only on close, and restores from the previous snapshot when the current one is unreadable
+    - Fix: WAL storage loads its data when it opens, so a write during the first reads after opening is no longer lost
+    - Fix: WAL storage starts a new log segment on every open, so a write after a crash that cut off the last log line is no longer lost
+    - Fix: WAL storage snapshots right after an open that replayed its log, and refuses to open when its log is incomplete instead of opening with partial data
+
 - @matter/node
     - Fix: Nested lists and structs in state show the current values after a containing value was null or removed and set again, instead of stale entries or `PhantomReferenceError`
     - Fix: Access through a held state proxy whose container was removed throws `PhantomReferenceError` (`ExpiredReferenceError` once its context has exited) instead of a `TypeError`, a stale `ExpiredReferenceError` or, for list reads, an empty list
