@@ -84,7 +84,8 @@ export enum OtaSoftwareUpdateConsentState {
  *
  * For special use cases the cluster provides the following extension point methods:
  * * {@link checkUpdateAvailable}: By default, the implementation uses the SoftwareUpdateManager to find an update
- *     in the OTA storage, which the SoftwareUpdateManager fills from the DCL, or which holds imported local files. If this needs to be
+ *     in the OTA storage, which the SoftwareUpdateManager fills from the DCL, or which holds imported local files
+ *     (offered, like test-net images, only with `allowTestOtaImages`). If this needs to be
  *     more vendor-specific, it can be implemented by overriding this method.
  *
  * * {@link requestUserConsentForUpdate}: If the client is able to gather user update consent via other means, then this can be
@@ -101,7 +102,7 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
 
         this.agent.require(SoftwareUpdateManager);
         await this.agent.load(SoftwareUpdateManager);
-        this.reactTo(this.agent.get(SoftwareUpdateManager).events.updateFailed, this.#forgetUpdateTokens);
+        this.reactTo(this.agent.get(SoftwareUpdateManager).internal.updateStopped, this.#forgetUpdateTokens);
 
         // Verify and adjust ACL if needed
         const node = Node.forEndpoint(this.endpoint) as ServerNode;
@@ -466,7 +467,7 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
                 `(${Bytes.toHex(updateToken)}) requests to apply version ${newVersion}, but its update token names version ${tokenVersion}`,
             );
         }
-        // A failed or cancelled update forgets its token details meanwhile, see #forgetUpdateTokens
+        // A failed or cancelled update has no token details left, see #forgetUpdateTokens
         const currentInfo = this.#inProgressDetailsForPeer(session.peerAddress, updateToken);
         if (!matchesToken || !(await this.#hasUpdateConsent(session.peerAddress, newVersion, currentInfo))) {
             this.#updateInProgressDetails(
@@ -609,7 +610,10 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
         return true;
     }
 
-    /** A failed or cancelled update also ends what its update tokens allow, such as an apply with their consent. */
+    /**
+     * When the manager stops a peer's update (`updateStopped`), forgets the peer's update tokens and the apply rights
+     * stored with them.  A consent the manager keeps for a failed update still allows its apply.
+     */
     #forgetUpdateTokens(peerAddress: PeerAddress) {
         this.#removeInProgressDetails(PeerAddress(peerAddress));
     }

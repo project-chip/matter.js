@@ -85,9 +85,12 @@ interface UpdateConsent extends SoftwareUpdateManager.UpdateTarget {
  * | `announcing` | The announcement runs                                       | it ends or is aborted, or a status arrives  |
  * | `announced`  | The node was announced and reported no status since `since` | the node reports a status                   |
  * | `progress`   | The node reported `status` at `since`                       | the update is done, cancelled or fails      |
+ * | `failed`     | The update failed; it is not announced again                | the node reports a status                   |
+ * |              |                                                             | (a new consent removes the entry)           |
  *
  * An announcement aborts after {@link OTA_PROGRESS_TIMEOUT}.  `announced` and `progress` return to `queued` when the node
- * shows no activity for that long, plus the `applyDelay` of `progress`.  A removed entry leaves the queue in any state.
+ * shows no activity for that long, plus the `applyDelay` of `progress`.  An entry with `failedAt` returns to `failed`
+ * instead, so after a failure only the node itself retries the update.  A removed entry leaves the queue in any state.
  */
 type UpdatePhase =
     | { state: "queued"; resetAt?: Timestamp }
@@ -100,7 +103,14 @@ type UpdatePhase =
           /** With `Applying`, the delay the device waits out before it applies; progress is not expected meanwhile. */
           applyDelay?: Duration;
           bdxTransferredBytes?: number;
-      };
+      }
+    | { state: "failed" };
+
+/**
+ * How long after its first failure an update keeps its queue entry and consent.  Meanwhile, the node may query and
+ * apply the update on its own, as devices that need several attempts do, but it is not announced to the node again.
+ */
+const FAILED_UPDATE_RETENTION = Hours(24);
 
 /**
  * The node was announced for the update or reported a status for it.  An `announcing` entry is not underway yet, so
@@ -116,6 +126,9 @@ interface UpdateQueueEntry extends UpdateConsent {
 
     /** Aborts the announcement still running for this entry, also after a status moved the entry past `announcing`. */
     announcement?: Abort;
+
+    /** When the update first failed; a new consent clears it. */
+    failedAt?: Timestamp;
 }
 
 interface CollectedNodesUpdateInfo {
@@ -181,7 +194,7 @@ export interface PendingUpdateInfo {
      * - `"in-progress"` — the OTA provider is being announced or has been announced to the node, and we are waiting for
      *   the update to complete.
      * - `"stalled"` — no status update and no BDX transfer activity within {@link OTA_PROGRESS_TIMEOUT}. The entry
-     *   will be automatically reset and retried.
+     *   is reset and announced again, unless the update failed before; then it is no longer listed.
      */
     status: "queued" | "in-progress" | "stalled";
     lastProgressStatus?: OtaUpdateStatus;
@@ -201,8 +214,8 @@ export interface PendingUpdateInfo {
  *
  * The following state allows configuring the behavior:
  * * {@link allowTestOtaImages}: When set to true, we also query the Test DCL additionally to the production DCL for update
- *     and use this when a newer version is found. Default is false. Stored test-net images are only offered while it is
- *     true; production and local images are offered either way
+ *     and use this when a newer version is found. Default is false. Stored test-net and local images are only offered
+ *     while it is true; production images are offered either way
  *
  * * {@link updateCheckInterval}: By default, we check the DCL for updates every 24h. This state value allows adjusting this.
  *
@@ -328,12 +341,16 @@ export class SoftwareUpdateManager extends Behavior {
     }
 
     /**
-     * Returns a snapshot of the current update queue for introspection.
+     * Returns a snapshot of the current update queue for introspection.  A failed update is not listed; the
+     * `updateFailed` event reported it.
      */
     get queuedUpdates(): PendingUpdateInfo[] {
         const now = Time.nowMs;
-        return this.internal.updateQueue.map(entry => {
+        return this.internal.updateQueue.flatMap(entry => {
             const { phase } = entry;
+            if (phase.state === "failed") {
+                return [];
+            }
             const bdxSession = this.#bdxSessionFor(entry.peerAddress);
             let status: PendingUpdateInfo["status"];
             if (phase.state === "queued") {
@@ -408,7 +425,7 @@ export class SoftwareUpdateManager extends Behavior {
 
     #resetEntryProgress(entry: UpdateQueueEntry) {
         this.#abortAnnouncement(entry);
-        entry.phase = { state: "queued", resetAt: Time.nowMs };
+        entry.phase = entry.failedAt === undefined ? { state: "queued", resetAt: Time.nowMs } : { state: "failed" };
     }
 
     #retryUpdate(entry: UpdateQueueEntry) {
@@ -463,7 +480,7 @@ export class SoftwareUpdateManager extends Behavior {
         return basicInfo !== undefined && basicInfo.localConfigDisabled !== true;
     }
 
-    /** Stored test-net images are offered, and the test DCL is asked, only with {@link State.allowTestOtaImages}. */
+    /** Stored test-net and local images are offered, and the test DCL is asked, only with {@link State.allowTestOtaImages}. */
     get #includeTestImages() {
         return this.state.allowTestOtaImages;
     }
@@ -472,7 +489,8 @@ export class SoftwareUpdateManager extends Behavior {
      * Used to determine if an update is existing in our storage for a peer with a certain software version.
      *
      * It uses the already checked details and does not check again on-demand, but validates the peer data.  A peer
-     * is offered the version it has a consent for when that version is stored.  Otherwise, a requestor that can
+     * is offered the version it has a consent for when that version is stored and allowed (a local or test-net image
+     * only with {@link State.allowTestOtaImages}), also for 24 hours after that update failed.  Otherwise, a requestor that can
      * consent itself is offered the newest applicable version with `consentRequired` when
      * {@link mayDelegateConsentTo} allows it.  Any other requestor is offered nothing.
      */
@@ -480,6 +498,7 @@ export class SoftwareUpdateManager extends Behavior {
         peerAddress: PeerAddress,
         { softwareVersion, vendorId, productId, requestorCanConsent }: OtaSoftwareUpdateProvider.QueryImageRequest,
     ): Promise<OtaUpdateAvailableDetails | undefined> {
+        this.#expireFailedUpdates();
         if (this.#matchingBasicInformation(peerAddress, { softwareVersion, vendorId, productId }) === undefined) {
             logger.info(
                 `Peer details for node ${peerAddress.toString()} do not match values the update was requested for, ignoring`,
@@ -616,13 +635,14 @@ export class SoftwareUpdateManager extends Behavior {
      *
      * Returns a list of peers for which updates are available along with the collected update info.
      *
-     * If `includeStoredUpdates` is set to true, locally stored/imported OTA images are considered as update candidates
-     * alongside the DCL. The DCL is always queried regardless, unless the OTA service is offline; across all candidates
+     * If `includeStoredUpdates` is set to true, stored OTA images are considered as update candidates alongside the DCL;
+     * local and test-net images only with {@link State.allowTestOtaImages}. The DCL is always queried regardless, unless the OTA service is offline; across all candidates
      * the highest applicable and allowed version wins.
      */
     async queryUpdates(options: { peerToCheck?: ClientNode; includeStoredUpdates?: boolean } = {}) {
         const { peerToCheck, includeStoredUpdates = false } = options;
         const rootNode = Node.forEndpoint(this.endpoint) as ServerNode;
+        this.#expireFailedUpdates();
 
         // Collect all client nodes and their versions, so we only need to check each version once
         const updateDetails = new Map<string, CollectedNodesUpdateInfo>();
@@ -738,6 +758,13 @@ export class SoftwareUpdateManager extends Behavior {
                 break;
             }
             if (consent !== undefined) {
+                const entry = this.internal.updateQueue[this.#entryIndexFor(peerAddress)];
+                if (entry?.phase.state === "failed") {
+                    logger.debug(
+                        `Update of node ${peerAddress.toString()} to version ${entry.targetSoftwareVersion} failed, not announcing it again`,
+                    );
+                    continue;
+                }
                 // We already have a consent for this update, so just announce the provider
                 this.#queueUpdate({
                     endpoint,
@@ -876,7 +903,7 @@ export class SoftwareUpdateManager extends Behavior {
                 logger.warn(
                     `Device ${peerAddress.toString()} rebooted after applying update but reports softwareVersion ${newVersion} (expected >= ${expectedVersion}), update failed to apply`,
                 );
-                this.#failUpdate(entryIndex);
+                this.#failUpdate(entry);
                 return;
             }
             logger.info(
@@ -906,7 +933,8 @@ export class SoftwareUpdateManager extends Behavior {
         if (entryIndex === -1 || softwareVersion === undefined) {
             return;
         }
-        const { phase, targetSoftwareVersion } = this.internal.updateQueue[entryIndex];
+        const entry = this.internal.updateQueue[entryIndex];
+        const { phase, targetSoftwareVersion } = entry;
         if (
             phase.state !== "progress" ||
             phase.status !== OtaUpdateStatus.Applying ||
@@ -919,7 +947,7 @@ export class SoftwareUpdateManager extends Behavior {
         logger.warn(
             `Device ${peerAddress.toString()} resubscribed after applying update but reports softwareVersion ${softwareVersion} (expected >= ${targetSoftwareVersion}), update failed to apply`,
         );
-        this.#failUpdate(entryIndex);
+        this.#failUpdate(entry);
     }
 
     /** Removes the entry as done, with the consents up to the version the node now runs, and runs the queue on. */
@@ -938,20 +966,76 @@ export class SoftwareUpdateManager extends Behavior {
     }
 
     /**
-     * Removes the entry as failed, with the consent for its target version, and runs the queue on.  Without the consent
-     * a later update check does not queue the failed version again; only a new consent does.
+     * Marks the entry as failed and runs the queue on.  The entry and its consent stay for
+     * {@link FAILED_UPDATE_RETENTION} after the first failure, so the node may still query and apply the update on its
+     * own, but neither the queue nor a later update check announces it again.  A new consent does.  `updateFailed` is
+     * emitted at the first failure only, not again when an update the node retried on its own fails again.
      */
-    #failUpdate(entryIndex: number) {
-        const [entry] = this.internal.updateQueue.splice(entryIndex, 1);
+    #failUpdate(entry: UpdateQueueEntry) {
         this.#abortAnnouncement(entry);
-        this.internal.consents = this.internal.consents.filter(
-            ({ peerAddress, targetSoftwareVersion }) =>
-                !PeerAddress.is(peerAddress, entry.peerAddress) ||
-                targetSoftwareVersion !== entry.targetSoftwareVersion,
-        );
+        entry.phase = { state: "failed" };
         this.internal.pendingStartUpSuppress.delete(entry.peerAddress);
-        this.events.updateFailed.emit(entry.peerAddress);
+        this.internal.updateStopped.emit(entry.peerAddress);
+        if (entry.failedAt === undefined) {
+            entry.failedAt = Time.nowMs;
+            this.events.updateFailed.emit(entry.peerAddress);
+        }
         this.#triggerQueuedUpdate();
+    }
+
+    /** Removes the entry with the consent for its target, reporting it as failed unless it already was. */
+    #cancelEntry(entryIndex: number) {
+        const [entry] = this.internal.updateQueue.splice(entryIndex, 1);
+        const { peerAddress, targetSoftwareVersion } = entry;
+        this.#abortAnnouncement(entry);
+        this.internal.pendingStartUpSuppress.delete(peerAddress);
+        this.#removeConsentFor(peerAddress, targetSoftwareVersion);
+        this.internal.updateStopped.emit(peerAddress);
+        if (entry.failedAt === undefined) {
+            this.events.updateFailed.emit(peerAddress);
+        }
+        this.#triggerQueuedUpdate();
+    }
+
+    /**
+     * Ends the record of a failed update of the peer, for a new consent: a resting `failed` entry is removed, so the
+     * consent queues a fresh one, also when the node is offline now; an entry the node revived loses its `failedAt`.
+     */
+    #clearFailure(peerAddress: PeerAddress) {
+        const entryIndex = this.#entryIndexFor(peerAddress);
+        const entry = this.internal.updateQueue[entryIndex];
+        if (entry?.failedAt === undefined) {
+            return;
+        }
+        if (entry.phase.state === "failed") {
+            this.internal.updateQueue.splice(entryIndex, 1);
+        } else {
+            entry.failedAt = undefined;
+        }
+    }
+
+    /** Removes failed entries, with their consents, once {@link FAILED_UPDATE_RETENTION} has passed. */
+    #expireFailedUpdates() {
+        const now = Time.nowMs;
+        this.internal.updateQueue = this.internal.updateQueue.filter(entry => {
+            const { phase, failedAt } = entry;
+            if (phase.state !== "failed" || failedAt === undefined || failedAt + FAILED_UPDATE_RETENTION > now) {
+                return true;
+            }
+            logger.info(
+                `Dropping the failed update of node ${entry.peerAddress.toString()} to version ${entry.targetSoftwareVersion} and its consent`,
+            );
+            this.#removeConsentFor(entry.peerAddress, entry.targetSoftwareVersion);
+            return false;
+        });
+    }
+
+    #removeConsentFor(peerAddress: PeerAddress, targetSoftwareVersion: number) {
+        this.internal.consents = this.internal.consents.filter(
+            consent =>
+                !PeerAddress.is(consent.peerAddress, peerAddress) ||
+                consent.targetSoftwareVersion !== targetSoftwareVersion,
+        );
     }
 
     /**
@@ -992,8 +1076,9 @@ export class SoftwareUpdateManager extends Behavior {
     /**
      * Runs the update queue: resets stalled entries, and announces the first queued entry when no other entry is
      * active.  Entries reset for a retry go after fresh ones, the longest-waiting first, so one node that never
-     * answers does not hold back the others.  While entries remain, a periodic timer runs the queue
-     * again every 5 minutes; it is how an entry whose announcement failed is announced again.
+     * answers does not hold back the others.  While an entry waits or is active, a periodic timer runs the queue again
+     * every 5 minutes; it is how an entry whose announcement failed is announced again, and how a stall is found.  A
+     * failed entry is never announced and needs no timer.
      */
     #triggerQueuedUpdate() {
         if (this.internal.suppressUpdates) {
@@ -1002,7 +1087,7 @@ export class SoftwareUpdateManager extends Behavior {
         const now = Time.nowMs;
         let activeCount = 0;
         for (const entry of this.internal.updateQueue) {
-            if (entry.phase.state === "queued") {
+            if (entry.phase.state === "queued" || entry.phase.state === "failed") {
                 continue;
             }
             if (!this.#refreshBdxProgress(entry, now) && this.#isStalled(entry, now)) {
@@ -1015,6 +1100,9 @@ export class SoftwareUpdateManager extends Behavior {
             activeCount++;
         }
         if (activeCount > 0) {
+            if (!this.internal.updateQueueTimer?.isRunning) {
+                this.#restartQueueTimer();
+            }
             return;
         }
 
@@ -1022,11 +1110,16 @@ export class SoftwareUpdateManager extends Behavior {
         const resetAt = ({ phase }: UpdateQueueEntry) =>
             phase.state === "queued" && phase.resetAt !== undefined ? phase.resetAt : 0;
         this.internal.updateQueue.sort((a, b) => resetAt(a) - resetAt(b));
-        const nextEntry = this.internal.updateQueue[0];
+        const nextEntry = this.internal.updateQueue.find(({ phase }) => phase.state === "queued");
         if (nextEntry === undefined) {
             return;
         }
         this.#startAnnouncement(nextEntry);
+        this.#restartQueueTimer();
+    }
+
+    #restartQueueTimer() {
+        this.internal.updateQueueTimer?.stop();
         this.internal.updateQueueTimer = this.periodicReactorTimer(
             "checkQueuedUpdates",
             Minutes(5),
@@ -1204,7 +1297,7 @@ export class SoftwareUpdateManager extends Behavior {
         // armed so the imminent reboot still gets fast re-subscription.
         this.internal.rebootResubscribeArmer?.disarm(peerAddress);
         logger.info(`Cancelled OTA update for node ${peerAddress.toString()}`);
-        this.#failUpdate(entryIndex);
+        this.#cancelEntry(entryIndex);
     }
 
     /**
@@ -1258,6 +1351,7 @@ export class SoftwareUpdateManager extends Behavior {
             peerAddress,
         });
         this.internal.consents = consents;
+        this.#clearFailure(peerAddress);
 
         if (otaEndpoint === undefined) {
             logger.info(`Node ${peerAddress.toString()} is currently not applicable for OTA updates, try again later`);
@@ -1277,9 +1371,11 @@ export class SoftwareUpdateManager extends Behavior {
     }
 
     /**
-     * Checks if consent exists for the given peer address and optionally for a specific target software version.
+     * Checks if consent exists for the given peer address and optionally for a specific target software version.  A
+     * failed update keeps its consent for 24 hours; an update cancelled with {@link removeConsent} loses it.
      */
     hasConsent(peerAddress: PeerAddress, targetSoftwareVersion?: number) {
+        this.#expireFailedUpdates();
         return this.internal.consents.some(
             consent =>
                 PeerAddress.is(consent.peerAddress, peerAddress) &&
@@ -1391,19 +1487,22 @@ export class SoftwareUpdateManager extends Behavior {
                     this.events.updateApplying.emit(peerAddress);
                 }
             }
+            if (phase.state === "failed") {
+                this.#triggerQueuedUpdate();
+            }
         }
     }
 
     /**
-     * Drops the peer's queued update when it cannot be delivered, because the peer's QueryImage found no image for
+     * Ends the peer's queued update as failed when it cannot be delivered, because the peer's QueryImage found no image for
      * it.  The default `checkUpdateAvailable()` of OtaSoftwareUpdateProviderServer calls this when
      * {@link updateExistsFor} offers nothing.
      *
-     * The update is removed and reported via the `updateFailed` event only when the peer is being or was announced for
-     * it, reported no status since (querying, consent, download, apply, done), and still runs a version below the
-     * update's target, both by its QueryImage and by the cached Basic Information.
+     * The update fails like an apply that did not take, reported via the `updateFailed` event, only when the peer is
+     * being or was announced for it, reported no status since (querying, consent, download, apply, done), and still
+     * runs a version below the update's target, both by its QueryImage and by the cached Basic Information.
      * A peer that already runs the target, as after a slow restart into it, keeps its entry, so the update ends as
-     * done.  The consent for the target version is removed with the entry.
+     * done.
      */
     dropUndeliverableUpdate(peerAddress: PeerAddress, reportedSoftwareVersion: number) {
         peerAddress = PeerAddress(peerAddress);
@@ -1411,7 +1510,8 @@ export class SoftwareUpdateManager extends Behavior {
         if (entryIndex < 0) {
             return;
         }
-        const { targetSoftwareVersion, phase } = this.internal.updateQueue[entryIndex];
+        const entry = this.internal.updateQueue[entryIndex];
+        const { targetSoftwareVersion, phase } = entry;
         const waitsForQuery = phase.state === "announcing" || phase.state === "announced";
         const cachedSoftwareVersion = (Node.forEndpoint(this.endpoint) as ServerNode).peers
             .get(peerAddress)
@@ -1425,9 +1525,9 @@ export class SoftwareUpdateManager extends Behavior {
         }
 
         logger.info(
-            `No image for the update to version ${targetSoftwareVersion} of node ${peerAddress.toString()}, removed it from the queue`,
+            `No image for the update to version ${targetSoftwareVersion} of node ${peerAddress.toString()}, the update failed`,
         );
-        this.#failUpdate(entryIndex);
+        this.#failUpdate(entry);
     }
 
     override async [Symbol.asyncDispose]() {
@@ -1442,7 +1542,7 @@ export class SoftwareUpdateManager extends Behavior {
 
 export namespace SoftwareUpdateManager {
     export class State {
-        /** Set this to true to also allow updates from the Test DCL, including stored test-net images */
+        /** Set this to true to also allow updates from the Test DCL, and to offer stored test-net and local images */
         allowTestOtaImages = false;
 
         /** Default Update check Interval */
@@ -1541,6 +1641,12 @@ export namespace SoftwareUpdateManager {
 
         /** Raised whenever the node is not online, so update work cannot start before the first online transition. */
         suppressUpdates = true;
+
+        /**
+         * Emitted at every failure and every cancel of a queued update, also those `updateFailed` does not report again.
+         * The OTA provider forgets the peer's update tokens on it.
+         */
+        updateStopped = Observable<[peer: PeerAddress]>();
     }
 
     export class Events extends EventEmitter {
@@ -1560,7 +1666,10 @@ export namespace SoftwareUpdateManager {
         /** Emitted when an update for a Peer is finished */
         updateDone = Observable<[peer: PeerAddress]>();
 
-        /** Emitted when an update for a Peer has failed or was cancelled */
+        /**
+         * Emitted when a queued update for a Peer fails for the first time or is cancelled before it failed.  A failed update keeps its consent for 24
+         * hours, so the Peer may still retry it on its own; an update cancelled with `removeConsent()` loses its consent.
+         */
         updateFailed = Observable<[peer: PeerAddress]>();
 
         announceAsDefaultProvider$Changed = Observable<[announceAsDefaultProvider: boolean]>();

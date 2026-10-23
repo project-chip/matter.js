@@ -131,7 +131,7 @@ When disabled (default), only production certificates from DCL are fetched. Chan
 
 ### OTA Test Images
 
-By default, the shell only offers OTA updates from the production DCL. To also consider the test DCL, use the `config ota-test-images` command:
+By default, the shell only offers OTA updates from the production DCL. To also consider the test DCL and to offer stored local images (added with `ota add`), use the `config ota-test-images` command:
 
 ```
 config ota-test-images set true
@@ -281,7 +281,7 @@ ota add file:///path/to/firmware.bin
 ota add https://example.org/firmware.bin
 ```
 
-The command takes no options and accepts an absolute path, a `file://` URL or an `http(s)` URL. It validates the OTA file format, extracts the metadata and stores the image in `local` mode.
+The command takes no options and accepts an absolute path, a `file://` URL or an `http(s)` URL. It validates the OTA file format, extracts the metadata and stores the image in `local` mode. A local image is only offered to nodes while `config ota-test-images` is set.
 
 #### Delete OTA images from storage
 

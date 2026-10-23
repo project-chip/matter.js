@@ -1757,20 +1757,17 @@ describe("Ota", () => {
         // so the isStartUp + Applying check should detect the failure and emit updateFailed.
         expect(updateFailedEvents).length(1);
 
-        // Queue entry should have been removed since update failed
-        const queue = await otaProvider.act(agent => agent.get(SoftwareUpdateManager).queuedUpdates);
-        expect(queue).length(0);
-
-        // The consent went with the failed update, so a later check does not queue the same version again
+        // The failed update keeps its consent, but neither the queue nor a later check announces it again
         const afterCheck = await otaProvider.act(async agent => {
             const manager = agent.get(SoftwareUpdateManager);
             await manager.queryUpdates({ includeStoredUpdates: true });
             return {
                 consent: manager.hasConsent(peerAddress, targetSoftwareVersion),
                 queued: manager.queuedUpdates.length,
+                phase: manager.internal.updateQueue.map(({ phase }) => phase.state),
             };
         });
-        expect(afterCheck).deep.equals({ consent: false, queued: 0 });
+        expect(afterCheck).deep.equals({ consent: true, queued: 0, phase: ["failed"] });
 
         // A new consent still starts the update
         await otaProvider.act(agent =>
@@ -2990,21 +2987,55 @@ describe("Ota", () => {
             };
         }
 
-        it("offers and transfers a stored local image", async () => {
-            const { site, storeImage, expectApplied, queryUpdates, forceUpdate } = await initSiteWithoutTestImages();
+        it("offers neither a stored local nor a stored test-net image", async () => {
+            const {
+                site,
+                otaProvider,
+                provider,
+                storeImage,
+                queryUpdates,
+                offerToRequestorThatCanConsent,
+                forceUpdate,
+            } = await initSiteWithoutTestImages({ delegateConsent: true });
             await using _localSite = site;
 
-            const local = await storeImage(1, "local");
+            await storeImage(1, "local");
+            await storeImage(2, "test");
 
-            expect(await queryUpdates()).deep.equals([{ softwareVersion: 1, source: "local" }]);
+            expect(await queryUpdates()).deep.equals([]);
+            expect(await offerToRequestorThatCanConsent()).undefined;
 
+            const { promise: failed, resolver: failedResolver } = createPromise<void>();
+            await otaProvider.act(agent => {
+                agent.get(SoftwareUpdateManager).events.updateFailed.once(() => failedResolver());
+            });
             await forceUpdate(1);
-            await expectApplied(local);
+            await MockTime.resolve(failed);
+            expect(provider.queryImageResponses.map(({ status }) => status)).deep.equals([
+                OtaSoftwareUpdateProvider.Status.NotAvailable,
+            ]);
         }).timeout(10_000);
 
-        it("offers a stored local image over an older stored production image", async () => {
+        it("offers a stored production image, not a newer stored local image", async () => {
             const { site, storeImage, expectApplied, queryUpdates, forceUpdate } = await initSiteWithoutTestImages();
             await using _localSite = site;
+
+            const prod = await storeImage(1, "prod");
+            await storeImage(2, "local");
+
+            expect(await queryUpdates()).deep.equals([{ softwareVersion: 1, source: "dcl-prod" }]);
+
+            await forceUpdate(1);
+            await expectApplied(prod);
+        }).timeout(10_000);
+
+        it("offers and transfers a stored local image once test images are enabled", async () => {
+            const { site, otaProvider, storeImage, expectApplied, queryUpdates, forceUpdate } =
+                await initSiteWithoutTestImages();
+            await using _localSite = site;
+            await otaProvider.act(agent => {
+                agent.get(SoftwareUpdateManager).state.allowTestOtaImages = true;
+            });
 
             await storeImage(1, "prod");
             const local = await storeImage(2, "local");
@@ -3015,10 +3046,13 @@ describe("Ota", () => {
             await expectApplied(local);
         }).timeout(10_000);
 
-        it("offers a stored local image over an older version on the production DCL", async () => {
-            const { site, device, storeImage, expectApplied, queryUpdates, forceUpdate } =
+        it("offers a stored local image over an older version on the production DCL once test images are enabled", async () => {
+            const { site, device, otaProvider, storeImage, expectApplied, queryUpdates, forceUpdate } =
                 await initSiteWithoutTestImages();
             await using _localSite = site;
+            await otaProvider.act(agent => {
+                agent.get(SoftwareUpdateManager).state.allowTestOtaImages = true;
+            });
 
             const { vendorId, productId } = device.state.basicInformation;
             const versionsPath = `on\\.dcl\\.csa-iot\\.org/dcl/model/versions/${vendorId}/${productId}`;
@@ -3057,39 +3091,13 @@ describe("Ota", () => {
             await expectApplied(local);
         }).timeout(10_000);
 
-        it("offers a stored local image, not a newer stored test-net image", async () => {
-            const { site, device, otaProvider, peerAddress, storeImage, expectApplied, queryUpdates, forceUpdate } =
-                await initSiteWithoutTestImages({ delegateConsent: true });
-            await using _localSite = site;
-
-            const local = await storeImage(1, "local");
-            await storeImage(2, "test");
-
-            expect(await queryUpdates()).deep.equals([{ softwareVersion: 1, source: "local" }]);
-
-            // Without a consent, a requestor that can consent itself is offered the newest allowed image
-            const offered = await otaProvider.act(agent =>
-                agent.get(SoftwareUpdateManager).updateExistsFor(peerAddress, {
-                    vendorId: VendorId(local.updateInfo.vendorId),
-                    productId: local.updateInfo.productId,
-                    softwareVersion: device.state.basicInformation.softwareVersion,
-                    protocolsSupported: [OtaSoftwareUpdateProvider.DownloadProtocol.BdxSynchronous],
-                    requestorCanConsent: true,
-                }),
-            );
-            expect(offered?.newSoftwareVersion).equals(1);
-
-            await forceUpdate(1);
-            await expectApplied(local);
-        }).timeout(10_000);
-
         it("offers no image at the version the device already runs", async () => {
             const { site, device, otaProvider, peerAddress, storeImage, queryUpdates } =
                 await initSiteWithoutTestImages();
             await using _localSite = site;
 
             const { softwareVersion, vendorId, productId } = device.state.basicInformation;
-            await storeImage(softwareVersion, "local");
+            await storeImage(softwareVersion, "prod");
 
             expect(await queryUpdates()).deep.equals([]);
             const offered = await otaProvider.act(agent =>
@@ -3121,9 +3129,13 @@ describe("Ota", () => {
             await expectApplied(test);
         }).timeout(10_000);
 
-        it("offers a stored local image over a stored production image of the same version", async () => {
-            const { site, storeImage, expectApplied, queryUpdates, forceUpdate } = await initSiteWithoutTestImages();
+        it("offers a stored local image over a stored production image of the same version once test images are enabled", async () => {
+            const { site, otaProvider, storeImage, expectApplied, queryUpdates, forceUpdate } =
+                await initSiteWithoutTestImages();
             await using _localSite = site;
+            await otaProvider.act(agent => {
+                agent.get(SoftwareUpdateManager).state.allowTestOtaImages = true;
+            });
 
             await storeImage(1, "prod", 0x10);
             const local = await storeImage(1, "local", 0x20);
@@ -3134,7 +3146,7 @@ describe("Ota", () => {
             await expectApplied(local);
         }).timeout(10_000);
 
-        it("answers not available and drops the queued update when the consented version is not stored", async () => {
+        it("answers not available and fails the queued update when the consented version is not stored", async () => {
             const {
                 site,
                 otaProvider,
@@ -3147,7 +3159,7 @@ describe("Ota", () => {
             } = await initSiteWithoutTestImages();
             await using _localSite = site;
 
-            await storeImage(1, "local");
+            await storeImage(1, "prod");
             const otherPeer = PeerAddress({ fabricIndex: peerAddress.fabricIndex, nodeId: NodeId(0xfffe) });
             const announced = await interceptAnnouncements(attempt => (attempt > 1 ? Promise.resolve() : undefined));
             const { promise: failed, resolver: failedResolver } = createPromise<void>();
@@ -3175,13 +3187,19 @@ describe("Ota", () => {
             const { queued, suppressed } = await otaProvider.act(agent => {
                 const { updateQueue, pendingStartUpSuppress } = agent.get(SoftwareUpdateManager).internal;
                 return {
-                    queued: updateQueue.map(({ peerAddress }) => peerAddress.nodeId),
+                    queued: updateQueue.map(({ peerAddress, phase }) => [peerAddress.nodeId, phase.state]),
                     suppressed: pendingStartUpSuppress.has(peerAddress),
                 };
             });
-            expect({ queued, suppressed }).deep.equals({ queued: [otherPeer.nodeId], suppressed: false });
-            expect(await otaProvider.act(agent => agent.get(SoftwareUpdateManager).hasConsent(peerAddress, 2))).false;
-            // The next queued node is started once the dropped update leaves the queue
+            expect({ queued, suppressed }).deep.equals({
+                queued: [
+                    [peerAddress.nodeId, "failed"],
+                    [otherPeer.nodeId, "announced"],
+                ],
+                suppressed: false,
+            });
+            expect(await otaProvider.act(agent => agent.get(SoftwareUpdateManager).hasConsent(peerAddress, 2))).true;
+            // The next queued node is started once the update failed
             expect(announced.map(endpoint => (endpoint === otaProvider ? "other node" : "device"))).deep.equals([
                 "device",
                 "other node",
@@ -3196,9 +3214,9 @@ describe("Ota", () => {
                 await initSiteWithoutTestImages();
             await using _localSite = site;
 
-            const local = await storeImage(1, "local");
+            const image = await storeImage(1, "prod");
             await forceUpdate(1);
-            await expectApplied(local);
+            await expectApplied(image);
 
             const { queued, failed } = await otaProvider.act(agent => {
                 const manager = agent.get(SoftwareUpdateManager);
@@ -3212,27 +3230,27 @@ describe("Ota", () => {
             expect({ queued, failed }).deep.equals({ queued: 1, failed: false });
         }).timeout(10_000);
 
-        it("removes a queued update on not available only while it waits for the query of a device below its target", async () => {
+        it("fails a queued update on not available only while it waits for the query of a device below its target", async () => {
             const { site, otaProvider, peerAddress } = await initSiteWithoutTestImages();
             await using _localSite = site;
 
             const announced = { state: "announced", since: Time.nowMs } as const;
-            const cases: { phase: () => UpdatePhase; reportedSoftwareVersion: number; removed: boolean }[] = [
-                { phase: () => announced, reportedSoftwareVersion: 0, removed: true },
+            const cases: { phase: () => UpdatePhase; reportedSoftwareVersion: number; failed: boolean }[] = [
+                { phase: () => announced, reportedSoftwareVersion: 0, failed: true },
                 // The device may query before the announcement returns
                 {
                     phase: () => ({ state: "announcing" }),
                     reportedSoftwareVersion: 0,
-                    removed: true,
+                    failed: true,
                 },
                 // The device already runs the target, as after a slow restart into it
-                { phase: () => announced, reportedSoftwareVersion: 2, removed: false },
+                { phase: () => announced, reportedSoftwareVersion: 2, failed: false },
                 // Not announced yet, so the query was not an answer to this entry
-                { phase: () => ({ state: "queued", resetAt: Time.nowMs }), reportedSoftwareVersion: 0, removed: false },
+                { phase: () => ({ state: "queued", resetAt: Time.nowMs }), reportedSoftwareVersion: 0, failed: false },
                 {
                     phase: () => ({ state: "progress", status: OtaUpdateStatus.Downloading, since: Time.nowMs }),
                     reportedSoftwareVersion: 0,
-                    removed: false,
+                    failed: false,
                 },
             ];
             const results = await otaProvider.act(agent => {
@@ -3250,10 +3268,341 @@ describe("Ota", () => {
                         },
                     ];
                     manager.dropUndeliverableUpdate(peerAddress, reportedSoftwareVersion);
-                    return manager.internal.updateQueue.length === 0;
+                    return manager.internal.updateQueue[0].phase.state === "failed";
                 });
             });
-            expect(results).deep.equals(cases.map(({ removed }) => removed));
+            expect(results).deep.equals(cases.map(({ failed }) => failed));
+        }).timeout(10_000);
+
+        /** Queues an update to `targetSoftwareVersion` that the device is never announced for, and fails it. */
+        async function failUpdateTo(
+            {
+                otaProvider,
+                peerAddress,
+                interceptAnnouncements,
+                forceUpdate,
+            }: Awaited<ReturnType<typeof initSiteWithoutTestImages>>,
+            targetSoftwareVersion: number,
+        ) {
+            const announced = await interceptAnnouncements(() => Promise.resolve());
+            await forceUpdate(targetSoftwareVersion);
+            await MockTime.advance(Seconds(1));
+            await otaProvider.act(agent => {
+                agent.get(SoftwareUpdateManager).dropUndeliverableUpdate(peerAddress, 0);
+            });
+            return announced;
+        }
+
+        it("lets the device apply a failed update when it queries on its own, without announcing it again", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, controller, otaProvider, otaRequestor, peerAddress, storeImage, expectApplied } = ota;
+            await using _localSite = site;
+
+            const image = await storeImage(1, "prod");
+            const announced = await failUpdateTo(ota, 1);
+            await MockTime.advance(Hours(1));
+            expect(announced).length(1);
+
+            // As the device's own query after a restart, which the device sends without an announcement
+            await MockTime.resolve(
+                otaProvider.act(agent =>
+                    agent
+                        .get(SoftwareUpdateManager)
+                        .internal.announcements!.announceOtaProvider(
+                            controller.peers.get("peer1")!.endpoints.for(otaRequestor.number),
+                            OtaSoftwareUpdateRequestor.AnnouncementReason.UpdateAvailable,
+                        ),
+                ),
+            );
+            await expectApplied(image);
+            expect(
+                await otaProvider.act(agent =>
+                    agent.get(SoftwareUpdateManager).internal.updateQueue.map(({ peerAddress, phase }) => ({
+                        nodeId: peerAddress.nodeId,
+                        state: phase.state,
+                    })),
+                ),
+            ).deep.equals([{ nodeId: peerAddress.nodeId, state: "progress" }]);
+        }).timeout(10_000);
+
+        it("drops a failed update with its consent 24 hours after it failed", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            await failUpdateTo(ota, 1);
+            const stateOf = () =>
+                otaProvider.act(agent => {
+                    const manager = agent.get(SoftwareUpdateManager);
+                    return { consent: manager.hasConsent(peerAddress, 1), queued: manager.internal.updateQueue.length };
+                });
+
+            await MockTime.advance(Hours(23));
+            expect(await stateOf()).deep.equals({ consent: true, queued: 1 });
+            await MockTime.advance(Hours(2));
+            expect(await stateOf()).deep.equals({ consent: false, queued: 0 });
+        }).timeout(10_000);
+
+        it("does not announce a failed update again when the update the node revived is reset", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            const announced = await failUpdateTo(ota, 1);
+            const phases = await otaProvider.act(agent => {
+                const manager = agent.get(SoftwareUpdateManager);
+                const phaseOf = () => manager.internal.updateQueue.map(({ phase }) => phase.state);
+                manager.onOtaStatusChange(peerAddress, OtaUpdateStatus.Querying);
+                const revived = phaseOf();
+                manager.onOtaStatusChange(peerAddress, OtaUpdateStatus.Cancelled);
+                return { revived, reset: phaseOf() };
+            });
+            await MockTime.advance(Hours(1));
+            expect(phases).deep.equals({ revived: ["progress"], reset: ["failed"] });
+            expect(announced).length(1);
+        }).timeout(10_000);
+
+        it("keeps a new consent for a failed update given while the node cannot be updated", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            await failUpdateTo(ota, 1);
+            const { added, queued } = await otaProvider.act(async agent => {
+                const manager = agent.get(SoftwareUpdateManager);
+                const { announcements } = manager.internal;
+                manager.internal.announcements = undefined; // The node is not applicable for updates without it
+                const added = await manager.addUpdateConsent(peerAddress, {
+                    vendorId: VendorId(0xfff1),
+                    productId: 0x8000,
+                    targetSoftwareVersion: 1,
+                });
+                manager.internal.announcements = announcements;
+                return { added, queued: manager.internal.updateQueue.length };
+            });
+            expect({ added, queued }).deep.equals({ added: false, queued: 0 });
+
+            await MockTime.advance(Hours(25));
+            expect(await otaProvider.act(agent => agent.get(SoftwareUpdateManager).hasConsent(peerAddress, 1))).true;
+        }).timeout(10_000);
+
+        it("announces a failed update again for a new consent", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            const announced = await failUpdateTo(ota, 1);
+            await otaProvider.act(agent =>
+                agent.get(SoftwareUpdateManager).addUpdateConsent(peerAddress, {
+                    vendorId: VendorId(0xfff1),
+                    productId: 0x8000,
+                    targetSoftwareVersion: 1,
+                }),
+            );
+            await MockTime.advance(Seconds(1));
+            expect(announced).length(2);
+        }).timeout(10_000);
+
+        it("announces an update the node revived after a failure again once a new consent is given", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            const announced = await failUpdateTo(ota, 1);
+            await otaProvider.act(async agent => {
+                const manager = agent.get(SoftwareUpdateManager);
+                manager.onOtaStatusChange(peerAddress, OtaUpdateStatus.Querying);
+                await manager.addUpdateConsent(peerAddress, {
+                    vendorId: VendorId(0xfff1),
+                    productId: 0x8000,
+                    targetSoftwareVersion: 1,
+                });
+                manager.onOtaStatusChange(peerAddress, OtaUpdateStatus.Cancelled);
+            });
+            await MockTime.advance(Seconds(1));
+            expect(announced).length(2);
+        }).timeout(10_000);
+
+        it("counts the 24 hours of a failed update from its first failure", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            await failUpdateTo(ota, 1);
+            await MockTime.advance(Hours(20));
+            await otaProvider.act(agent => {
+                const manager = agent.get(SoftwareUpdateManager);
+                // A second failure, as during a retry by the node itself
+                manager.internal.updateQueue[0].phase = { state: "announced", since: Time.nowMs };
+                manager.dropUndeliverableUpdate(peerAddress, 0);
+            });
+            await MockTime.advance(Hours(5));
+            expect(await otaProvider.act(agent => agent.get(SoftwareUpdateManager).hasConsent(peerAddress, 1))).false;
+        }).timeout(10_000);
+
+        it("cancels a failed update without reporting it as failed again", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            await failUpdateTo(ota, 1);
+            const { failedEvents, consent, queued } = await otaProvider.act(async agent => {
+                const manager = agent.get(SoftwareUpdateManager);
+                let failedEvents = 0;
+                manager.events.updateFailed.on(() => {
+                    failedEvents++;
+                });
+                await manager.removeConsent(peerAddress, 1);
+                return {
+                    failedEvents,
+                    consent: manager.hasConsent(peerAddress),
+                    queued: manager.internal.updateQueue.length,
+                };
+            });
+            expect({ failedEvents, consent, queued }).deep.equals({ failedEvents: 0, consent: false, queued: 0 });
+        }).timeout(10_000);
+
+        it("reports a failed update once, also when the update the node revived fails again or is cancelled", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            await failUpdateTo(ota, 1);
+            const failedEvents = await otaProvider.act(async agent => {
+                const manager = agent.get(SoftwareUpdateManager);
+                let failedEvents = 0;
+                manager.events.updateFailed.on(() => {
+                    failedEvents++;
+                });
+                manager.internal.updateQueue[0].phase = { state: "announced", since: Time.nowMs };
+                manager.dropUndeliverableUpdate(peerAddress, 0);
+                manager.onOtaStatusChange(peerAddress, OtaUpdateStatus.Querying);
+                await manager.removeConsent(peerAddress);
+                return failedEvents;
+            });
+            expect(failedEvents).equals(0);
+        }).timeout(10_000);
+
+        it("returns a stalled update the node revived after a failure to failed and drops it after 24 hours", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            const announced = await failUpdateTo(ota, 1);
+            await otaProvider.act(agent =>
+                agent.get(SoftwareUpdateManager).onOtaStatusChange(peerAddress, OtaUpdateStatus.Downloading),
+            );
+            const stateOf = () =>
+                otaProvider.act(agent => {
+                    const manager = agent.get(SoftwareUpdateManager);
+                    return {
+                        consent: manager.hasConsent(peerAddress, 1),
+                        phase: manager.internal.updateQueue.map(({ phase }) => phase.state),
+                    };
+                });
+
+            await MockTime.advance(Minutes(25));
+            expect(await stateOf()).deep.equals({ consent: true, phase: ["failed"] });
+            await MockTime.advance(Hours(24));
+            expect(await stateOf()).deep.equals({ consent: false, phase: [] });
+            expect(announced).length(1);
+        }).timeout(10_000);
+
+        it("keeps a failed update when a new consent for it is refused", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            const announced = await failUpdateTo(ota, 1);
+            await expect(
+                otaProvider.act(agent =>
+                    agent.get(SoftwareUpdateManager).addUpdateConsent(peerAddress, {
+                        vendorId: VendorId(0xfff1),
+                        productId: 0x8001,
+                        targetSoftwareVersion: 1,
+                    }),
+                ),
+            ).to.be.rejectedWith(ImplementationError);
+            await MockTime.advance(Hours(1));
+            expect(
+                await otaProvider.act(agent =>
+                    agent.get(SoftwareUpdateManager).internal.updateQueue.map(({ phase }) => phase.state),
+                ),
+            ).deep.equals(["failed"]);
+            expect(announced).length(1);
+        }).timeout(10_000);
+
+        it("forgets the update tokens of an update the node revived after a failure when it is cancelled", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            await failUpdateTo(ota, 1);
+            await otaProvider.act(agent => {
+                agent.get(SoftwareUpdateManager).onOtaStatusChange(peerAddress, OtaUpdateStatus.Downloading);
+                const { fabricIndex, nodeId } = peerAddress;
+                agent
+                    .get(OtaSoftwareUpdateProviderServer)
+                    .internal.inProgressDetails.set(`${nodeId}-${fabricIndex}-${"bb".repeat(32)}`, {
+                        requestorNodeId: nodeId,
+                        fabricIndex,
+                        lastState: OtaUpdateStatus.Downloading,
+                        timestamp: Time.nowMs,
+                        applyAllowed: true,
+                    });
+            });
+            await otaProvider.act(agent => agent.get(SoftwareUpdateManager).removeConsent(peerAddress));
+            await MockTime.advance(Seconds(1));
+            expect(
+                await otaProvider.act(
+                    agent => agent.get(OtaSoftwareUpdateProviderServer).internal.inProgressDetails.size,
+                ),
+            ).equals(0);
+        }).timeout(10_000);
+
+        it("forgets the update tokens of an update the node revived after a failure when it fails again", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            await failUpdateTo(ota, 1);
+            await otaProvider.act(agent => {
+                const manager = agent.get(SoftwareUpdateManager);
+                manager.onOtaStatusChange(peerAddress, OtaUpdateStatus.Downloading);
+                const { fabricIndex, nodeId } = peerAddress;
+                agent
+                    .get(OtaSoftwareUpdateProviderServer)
+                    .internal.inProgressDetails.set(`${nodeId}-${fabricIndex}-${"bb".repeat(32)}`, {
+                        requestorNodeId: nodeId,
+                        fabricIndex,
+                        lastState: OtaUpdateStatus.Downloading,
+                        timestamp: Time.nowMs,
+                        applyAllowed: true,
+                    });
+                manager.internal.updateQueue[0].phase = { state: "announced", since: Time.nowMs };
+                manager.dropUndeliverableUpdate(peerAddress, 0);
+            });
+            await MockTime.advance(Seconds(1));
+            expect(
+                await otaProvider.act(
+                    agent => agent.get(OtaSoftwareUpdateProviderServer).internal.inProgressDetails.size,
+                ),
+            ).equals(0);
+        }).timeout(10_000);
+
+        it("removes the consent of a cancelled update also when another version is named", async () => {
+            const ota = await initSiteWithoutTestImages();
+            const { site, otaProvider, peerAddress } = ota;
+            await using _localSite = site;
+
+            await failUpdateTo(ota, 1);
+            expect(
+                await otaProvider.act(async agent => {
+                    const manager = agent.get(SoftwareUpdateManager);
+                    await manager.removeConsent(peerAddress, 2);
+                    return { consent: manager.hasConsent(peerAddress), queued: manager.internal.updateQueue.length };
+                }),
+            ).deep.equals({ consent: false, queued: 0 });
         }).timeout(10_000);
 
         it("lets a requestor that obtains consent itself apply the newest image it was offered without a consent", async () => {
@@ -3265,9 +3614,9 @@ describe("Ota", () => {
             await using _localSite = site;
 
             await otaRequestor.setStateOf(requestor.TestOtaRequestorServer, { canConsent: true });
-            await storeImage(1, "local");
-            const local = await storeImage(2, "local");
-            expectImage(local);
+            await storeImage(1, "prod");
+            const image = await storeImage(2, "prod");
+            expectImage(image);
             await MockTime.resolve(
                 otaProvider.act(agent =>
                     agent
@@ -3290,7 +3639,7 @@ describe("Ota", () => {
             ).deep.equals([
                 {
                     status: OtaSoftwareUpdateProvider.Status.UpdateAvailable,
-                    softwareVersion: local.updateInfo.softwareVersion,
+                    softwareVersion: image.updateInfo.softwareVersion,
                     userConsentNeeded: true,
                 },
             ]);
@@ -3308,10 +3657,10 @@ describe("Ota", () => {
             await using _localSite = site;
 
             await otaRequestor.setStateOf(requestor.TestOtaRequestorServer, { canConsent: true });
-            const local = await storeImage(1, "local");
+            const image = await storeImage(1, "prod");
 
             await forceUpdate(2);
-            await expectApplied(local);
+            await expectApplied(image);
             expect(provider.queryImageResponses.map(({ userConsentNeeded }) => userConsentNeeded)).deep.equals([true]);
         }).timeout(10_000);
 
@@ -3328,7 +3677,7 @@ describe("Ota", () => {
             await using _localSite = site;
 
             await otaRequestor.setStateOf(requestor.TestOtaRequestorServer, { canConsent: true });
-            await storeImage(1, "local");
+            await storeImage(1, "prod");
             await MockTime.resolve(
                 otaProvider.act(agent =>
                     agent
@@ -3352,7 +3701,7 @@ describe("Ota", () => {
                 await initSiteWithoutTestImages();
             await using _localSite = site;
 
-            const local = await storeImage(1, "local");
+            const image = await storeImage(1, "prod");
             const announced = await interceptAnnouncements(attempt =>
                 attempt === 1 ? Promise.reject(new InternalError("Unexpected announcement failure")) : undefined,
             );
@@ -3364,7 +3713,7 @@ describe("Ota", () => {
             expect(await queueSnapshot()).deep.equals([
                 { targetSoftwareVersion: 1, status: "queued", lastProgressStatus: OtaUpdateStatus.Unknown },
             ]);
-            await expectApplied(local);
+            await expectApplied(image);
             expect(announced).length(2);
         }).timeout(10_000);
 
@@ -3377,13 +3726,13 @@ describe("Ota", () => {
             await otaProvider.act(agent => {
                 agent.get(SoftwareUpdateManager).state.announceAsDefaultProvider = false;
             });
-            const local = await storeImage(1, "local");
+            const image = await storeImage(1, "prod");
             const announced = await interceptAnnouncements(attempt =>
                 attempt === 1 ? new Promise<void>(() => {}) : undefined,
             );
 
             await forceUpdate(1);
-            await expectApplied(local);
+            await expectApplied(image);
             expect(announced).length(2);
         }).timeout(10_000);
 
@@ -3392,7 +3741,7 @@ describe("Ota", () => {
                 await initSiteWithoutTestImages();
             await using _localSite = site;
 
-            await storeImage(1, "local");
+            await storeImage(1, "prod");
             const announced = await interceptAnnouncements();
             await otaProvider.act(agent => {
                 agent.get(SoftwareUpdateManager).internal.suppressUpdates = true;
@@ -3428,7 +3777,7 @@ describe("Ota", () => {
                 await initSiteWithoutTestImages();
             await using _localSite = site;
 
-            const local = await storeImage(1, "local");
+            const image = await storeImage(1, "prod");
             const announced = await interceptAnnouncements(attempt => (attempt === 1 ? Promise.resolve() : undefined));
 
             await forceUpdate(1);
@@ -3439,14 +3788,14 @@ describe("Ota", () => {
             await MockTime.advance(Seconds(1));
             expect(announced).length(2);
 
-            await expectApplied(local);
+            await expectApplied(image);
         }).timeout(10_000);
 
         it("offers a requestor that can consent the newest image without a consent only while delegation is on", async () => {
             const { site, otaProvider, storeImage, offerToRequestorThatCanConsent } = await initSiteWithoutTestImages();
             await using _localSite = site;
 
-            await storeImage(1, "local");
+            await storeImage(1, "prod");
             expect(await offerToRequestorThatCanConsent()).undefined;
 
             await otaProvider.act(agent => {
@@ -3461,7 +3810,7 @@ describe("Ota", () => {
             await using _localSite = site;
 
             await otaRequestor.setStateOf(requestor.TestOtaRequestorServer, { canConsent: true });
-            await storeImage(1, "local");
+            await storeImage(1, "prod");
             // This provider expects no consent request, so its consent hook rejects once it is asked
             const consentRequest = expect(provider.requestUserConsentForUpdatePromise).rejectedWith(
                 /Unexpected call to requestUserConsentForUpdate/,
@@ -3494,7 +3843,7 @@ describe("Ota", () => {
                 await initSiteWithoutTestImages();
             await using _localSite = site;
 
-            await storeImage(1, "local");
+            await storeImage(1, "prod");
             await otaProvider.act(agent => {
                 agent.get(SoftwareUpdateManager).internal.consents.push({
                     peerAddress,
@@ -3545,19 +3894,19 @@ describe("Ota", () => {
             expect(signals.map(signal => signal?.aborted)).deep.equals([true, false]);
         }).timeout(10_000);
 
-        it("refuses the apply of a delegated update token once the update failed", async () => {
+        it("refuses the apply of a delegated update token once the update is stopped without a consent left", async () => {
             const { site, controller, otaProvider, otaRequestor, requestor, provider, peerAddress, storeImage } =
                 await initSiteWithoutTestImages({
                     delegateConsent: true,
                     grantUserConsent: true,
                     beforeApplyUpdateRequest: agent => {
-                        agent.get(SoftwareUpdateManager).events.updateFailed.emit(peerAddress);
+                        agent.get(SoftwareUpdateManager).internal.updateStopped.emit(peerAddress);
                     },
                 });
             await using _localSite = site;
 
             await otaRequestor.setStateOf(requestor.TestOtaRequestorServer, { canConsent: true });
-            await storeImage(1, "local");
+            await storeImage(1, "prod");
             await MockTime.resolve(
                 otaProvider.act(agent =>
                     agent
@@ -3626,7 +3975,7 @@ describe("Ota", () => {
             });
             await using _localSite = site;
 
-            await storeImage(1, "local");
+            await storeImage(1, "prod");
             expect(await offerToRequestorThatCanConsent()).undefined;
         }).timeout(10_000);
 
@@ -3656,7 +4005,7 @@ describe("Ota", () => {
             });
             await using _localSite = site;
 
-            await storeImage(1, "local");
+            await storeImage(1, "prod");
             await forceUpdate(1);
             await MockTime.resolve(provider.queryImagePromise);
             await MockTime.advance(Seconds(1));
@@ -3671,7 +4020,7 @@ describe("Ota", () => {
                 await initSiteWithoutTestImages();
             await using _localSite = site;
 
-            await storeImage(1, "local");
+            await storeImage(1, "prod");
             const signals = new Array<AbortSignal | undefined>();
             await interceptAnnouncements((_attempt, abort) => {
                 signals.push(abort);
@@ -3691,7 +4040,7 @@ describe("Ota", () => {
                 await initSiteWithoutTestImages();
             await using _localSite = site;
 
-            await storeImage(1, "local");
+            await storeImage(1, "prod");
             const signals = new Array<AbortSignal | undefined>();
             await interceptAnnouncements((_attempt, abort) => {
                 signals.push(abort);
@@ -3709,12 +4058,12 @@ describe("Ota", () => {
                 await initSiteWithoutTestImages();
             await using _localSite = site;
 
-            const local = await storeImage(1, "local");
+            const image = await storeImage(1, "prod");
             await otaProvider.act(agent => {
                 const { updateQueue } = agent.get(SoftwareUpdateManager).internal;
                 updateQueue.push({
-                    vendorId: VendorId(local.updateInfo.vendorId),
-                    productId: local.updateInfo.productId,
+                    vendorId: VendorId(image.updateInfo.vendorId),
+                    productId: image.updateInfo.productId,
                     targetSoftwareVersion: 1,
                     peerAddress: PeerAddress({ fabricIndex: peerAddress.fabricIndex, nodeId: NodeId(0xfffe) }),
                     endpoint: agent.endpoint,
@@ -3723,7 +4072,7 @@ describe("Ota", () => {
             });
 
             await forceUpdate(1);
-            await expectApplied(local);
+            await expectApplied(image);
             expect(requestor.announceOtaProviderRequests).length(1);
         }).timeout(10_000);
     });

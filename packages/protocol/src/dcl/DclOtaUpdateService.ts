@@ -289,7 +289,7 @@ export class DclOtaUpdateService {
      * ignoring other newer versions.
      * If isProduction flag is specified, it is exactly used to query the DCL. Leave that flag undefined to find both
      * test and production updates.  Stored images (`includeStoredUpdates`) are selected by {@link findApplicable}:
-     * production and local images always, test-net images unless `isProduction` is `true`.
+     * production images always, test-net and local images unless `isProduction` is `true`.
      * When the service is {@link DclOtaUpdateService.Options.offline} the DCL is not asked, so only stored updates
      * (`includeStoredUpdates`) can be found.
      */
@@ -382,11 +382,11 @@ export class DclOtaUpdateService {
     /**
      * Stored images a device of the product can update to from `currentSoftwareVersion`: newer than that version, with
      * the version inside the image's applicable range.  Highest version first; on equal versions a local image comes
-     * first, then a test-net image, then a production image.  Test-net images are only included with
+     * first, then a test-net image, then a production image.  Test-net and local images are only included with
      * `includeTestImages`.
      *
-     * The update check with stored images and the answer to a device's QueryImage both select through this, so they
-     * choose the same image when no consent names another version.
+     * The update check with stored images and the answer to a device's QueryImage both select through this, so a
+     * consent given for the version the update check found names an image that QueryImage offers.
      */
     async findApplicable(options: DclOtaUpdateService.FindApplicableOptions) {
         const { vendorId, productId, currentSoftwareVersion, includeTestImages } = options;
@@ -394,7 +394,7 @@ export class DclOtaUpdateService {
         return entries
             .filter(
                 ({ softwareVersion, mode }) =>
-                    softwareVersion > currentSoftwareVersion && (includeTestImages || mode !== "test"),
+                    softwareVersion > currentSoftwareVersion && (includeTestImages || mode === "prod"),
             )
             .sort(
                 (a, b) =>
@@ -1340,7 +1340,7 @@ export namespace DclOtaUpdateService {
         productId: number;
         currentSoftwareVersion: number;
 
-        /** Include stored test-net images; production and local images are always included. */
+        /** Include stored test-net and local images; production images are always included. */
         includeTestImages: boolean;
     }
 }
