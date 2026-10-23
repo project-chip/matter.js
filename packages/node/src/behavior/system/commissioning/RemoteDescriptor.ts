@@ -76,7 +76,7 @@ export namespace RemoteDescriptor {
             result.discoveredAt = discoveredAt;
         }
 
-        if (ttl !== undefined) {
+        if (ttl !== undefined && ttl !== null) {
             result.ttl = ttl;
         }
 
@@ -192,7 +192,7 @@ export namespace RemoteDescriptor {
             long.discoveredAt = discoveredAt;
         }
 
-        if (ttl !== undefined) {
+        if (ttl !== undefined && ttl !== null) {
             long.ttl = ttl;
         }
 

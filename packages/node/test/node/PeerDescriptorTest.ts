@@ -267,6 +267,65 @@ describe("Peer descriptor", () => {
         });
     });
 
+    describe("stored state that does not validate", () => {
+        it("a discovery TTL stored as null is dropped on load", async () => {
+            const site = new MockSite();
+            await using _site = site;
+            const { controller } = await commissionedPeer(site);
+            const controllerId = controller.id;
+            await site.close();
+
+            const key = "nodes.peer1.endpoints.0.commissioning";
+            Object.assign(site.storageFor(controllerId)[key], { ttl: null, discoveredAt: null });
+
+            const controllerB = await site.addNode(undefined, { id: controllerId, index: 1 });
+            const peer = controllerB.peers.get("peer1")!;
+
+            expect(peer.construction.status).equals("active");
+            expect(peer.stateOf(CommissioningClient).ttl).undefined;
+            expect(peer.stateOf(CommissioningClient).discoveredAt).a("number");
+
+            await peer.setStateOf(CommissioningClient, { tcpUnsupported: true });
+            expect(site.storageFor(controllerId)[key].ttl).not.equals(null);
+        });
+
+        it("of one peer does not hide the other peers", async () => {
+            const site = new MockSite();
+            await using _site = site;
+            const { controller } = await commissionedPeer(site);
+            const controllerId = controller.id;
+
+            // A second peer, stored after the one we break
+            const device2 = await site.addDevice({});
+            const controllerCrypto = controller.env.get(Crypto) as MockCrypto;
+            const deviceCrypto = device2.env.get(Crypto) as MockCrypto;
+            controllerCrypto.entropic = deviceCrypto.entropic = true;
+            const { passcode, discriminator } = device2.state.commissioning;
+            await MockTime.resolve(controller.peers.commission({ passcode, discriminator, timeout: Seconds(90) }), {
+                macrotasks: true,
+            });
+            controllerCrypto.entropic = deviceCrypto.entropic = false;
+
+            const address1 = controller.peers.get("peer1")!.peerAddress!;
+            const address2 = controller.peers.get("peer2")!.peerAddress!;
+            await site.close();
+
+            // A value no migration repairs, so peer1 fails to load
+            site.storageFor(controllerId)["nodes.peer1.endpoints.0.commissioning"].ttl = "not a duration";
+
+            const controllerB = await site.addNode(undefined, { id: controllerId, index: 1 });
+            const broken = controllerB.peers.get("peer1")!;
+            const healthy = controllerB.peers.get("peer2")!;
+            expect(broken.construction.status).equals("crashed");
+            expect(healthy.construction.status).equals("active");
+
+            // Lookups by address walk every peer; the crashed one keeps its address and does not hide the other
+            expect(controllerB.peers.get(address1)).equals(broken);
+            expect(controllerB.peers.get(address2)).equals(healthy);
+            expect(await controllerB.peers.forAddress(address2)).equals(healthy);
+        });
+    });
+
     it("keeps a peer marked TCP-unsupported across a restart until a session reports TCP support", async () => {
         await using site = new MockSite();
         const { controller, peer } = await commissionedPeer(site);

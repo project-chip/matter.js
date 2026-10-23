@@ -131,6 +131,21 @@ export class CommissioningClient extends Behavior {
     static override migrate(values: Val.Struct) {
         super.migrate(values);
 
+        // Earlier versions could persist `null` for the discovery TTL and timestamp.  Neither field is nullable, so
+        // the stored null failed validation and the peer could not load at all.  An absent TTL means the default
+        // applies until the next discovery; the timestamp gets the value initialize() would assign
+        dropNull(values, "ttl");
+        if (values.discoveredAt === null) {
+            values.discoveredAt = Time.nowMs;
+        }
+        if (Array.isArray(values.addresses)) {
+            for (const address of values.addresses) {
+                if (isObject(address)) {
+                    dropNull(address, "ttl", "discoveredAt");
+                }
+            }
+        }
+
         const { sessionParameters } = values;
         delete values.sessionParameters;
         if (!isObject(sessionParameters)) {
@@ -942,7 +957,7 @@ export namespace CommissioningClient {
             if (address.peripheralAddress !== undefined) {
                 this.peripheralAddress = address.peripheralAddress;
             }
-            if (address.ttl !== undefined) {
+            if (address.ttl !== undefined && address.ttl !== null) {
                 this.ttl = address.ttl;
             }
             if (address.discoveredAt !== undefined) {
@@ -1368,5 +1383,13 @@ export namespace CommissioningClient {
         }
 
         return opts;
+    }
+}
+
+function dropNull(values: Record<string, unknown>, ...keys: string[]) {
+    for (const key of keys) {
+        if (values[key] === null) {
+            delete values[key];
+        }
     }
 }
