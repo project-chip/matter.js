@@ -11,6 +11,14 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+- @matter/general
+    - Enhancement: WAL storage logs at notice level when an open restores entries from its log and when it has saved the restored state, with the time each took
+    - Adjustment: Removed the unused WAL storage history API (`WalStorageDriver.snapshotAtTime()`/`snapshotAtCommit()`, the `headSnapshot` and `cleanInterval` options) and the `WalSnapshot` export
+    - Fix: WAL storage deletes old log segments after each periodic snapshot instead of only on close, and restores from the previous snapshot when the current one is unreadable
+    - Fix: WAL storage loads its data when it opens, so a write during the first reads after opening is no longer lost
+    - Fix: WAL storage starts a new log segment on every open, so a write after a crash that cut off the last log line is no longer lost
+    - Fix: WAL storage snapshots right after an open that replayed its log, and refuses to open when its log is incomplete instead of opening with partial data
+
 - @matter/node
     - Enhancement: Added `SoftwareUpdateManager.dropUndeliverableUpdate()` for `checkUpdateAvailable()` overrides
     - Adjustment: A requestor that can obtain user consent itself is no longer offered an image it may not apply; the new `SoftwareUpdateManager` state `delegateConsentToRequestor` offers it the newest stored image and accepts its apply
@@ -21,6 +29,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: A queued OTA update is removed and reported via `updateFailed` when the announced node finds no image for it
     - Fix: A forced OTA update is announced once
     - Fix: A failed or cancelled OTA update drops its consent and update tokens, so neither a later update check nor an old token installs that version again
+    - Fix: Nested lists and structs in state show the current values after a containing value was null or removed and set again, instead of stale entries or `PhantomReferenceError`
+    - Fix: Access through a held state proxy whose container was removed throws `PhantomReferenceError` (`ExpiredReferenceError` once its context has exited) instead of a `TypeError`, a stale `ExpiredReferenceError` or, for list reads, an empty list
 
 - @matter/protocol
     - Enhancement: Added `DclOtaUpdateService.findApplicable()` to list the stored update images a device can apply, in offer order
@@ -62,9 +72,11 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Model support for device type requirements (conditions, locations, component counts), see [Device Type Validation](docs/DEVICE_TYPE_VALIDATION.md)
     - Feature: Enum members can define manufacturer value ranges (`FieldModel.isEnumRange`)
     - Feature: Conformance `Z` (obsolete) is supported (`Conformance.Flag.Obsolete`, `isObsolete`)
+    - Feature: `ClassSemantics.afterFinalize` runs once a class's model is final; an error it throws repeats on every later resolution
     - Enhancement: Model lookups reuse their index until the model changes, e.g. `Matter.clusters(id)` drops from about 180 µs to under 1 µs
     - Enhancement: Device type and condition documentation carries the specification prose
     - Adjustment: `ValidateModel` reports errors only in its result; `Model.errors`, `Model.valid`, `Model.error()` and `Resource.errors` are deprecated
+    - Fix: The ClusterRevision of a cluster outside the standard model defaults to 1 instead of 0
     - Fix: `percent` and `percent100ths` values are bounded to 0–100 and 0–10000 as the specification defines
     - Fix: Specification constraints are enforced completely, including exact 64-bit bounds, units, computed bounds and bounds referencing other elements (e.g. `OccupancySensing.HoldTime`)
     - Fix: Feature conformance handles disjunctions, choice sets, otherwise lists and provisional choice sets correctly; unconditionally mandatory features are always selected
@@ -148,6 +160,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Adjustment: A node's `ClusterProtocol.readState()` throws `ImplementationError` for a remote session without a transaction
     - Adjustment: `IcdClient` emits `registered`, `unregistered` and `keyRefreshed` after storing the change; `unregister()` keeps the registration when a sleeping peer does not wake
     - Adjustment: Subscription keep-alives request a status response, so a subscription on a session without MRP (TCP, BLE) ends when the controller answers with `INVALID_SUBSCRIPTION`
+    - Adjustment: A behavior whose State or Events is assigned after its schema resolved, a decorated cluster behavior that declares a cluster ID other than its parent's, and an assignment to `cluster`, `features` or `id` after the schema resolved throw an `ImplementationError`
     - Fix: A write to an attribute another exchange is writing in chunks is answered BUSY; group and wildcard writes skip it
     - Fix: A `ClientNode` no longer emits `$Changed` with an outdated value when a report changed an attribute during a transaction
     - Fix: `WebRtcTransportRequestorServer` keeps sessions of different peers with the same session id apart
@@ -230,6 +243,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: The Thermostat User Interface Configuration server keeps a configured or stored `keypadLockout` on startup instead of resetting it to `NoLockout`
     - Fix: Changing a fabric that the armed fail-safe did not add or update no longer logs an error and emits `fabricsChanged`
     - Fix: AdminFabricIndex becomes null when the admin fabric is removed after an UpdateNOC
+    - Fix: A cluster behavior declared with the model decorators gets its namespace, ID, global attributes, ServerList entry and command responses like a generated one, and manufacturer-specific elements added to a standard cluster appear in its namespace and element lists
+    - Fix: An event a decorated Events class declares with a plain `Observable` is recorded and reported; an event without a priority uses INFO
 
 - @matter/nodejs
     - Breaking: `FileStorageDriver`'s constructor no longer accepts a `clear` argument
