@@ -45,8 +45,9 @@ export class MdnsServer {
     #recordVersion = 0;
     readonly #pendingAddressUpdates = new Map<
         string,
-        { removed: DnsRecord[]; current: DnsRecord[]; remaining: number; nextSend: Timestamp }
+        { removed: DnsRecord[]; current: DnsRecord[]; remaining: number; nextSend: Timestamp; announcePeers?: boolean }
     >();
+    readonly #pendingPeerAnnouncements = new Set<string>();
     readonly #updates = new Mutex(this);
     readonly #addressRefresh: Timer;
     readonly #addressRepeat: Timer;
@@ -300,7 +301,7 @@ export class MdnsServer {
                     removed,
                     current: currentAddresses,
                     remaining: 2,
-                    nextSend: Time.nowMs,
+                    nextSend: Time.nowUs,
                 });
             }
             for (const records of previous.byService.values()) {
@@ -315,9 +316,18 @@ export class MdnsServer {
     }
 
     async #publishAddressUpdate(netInterface: string) {
-        const update = this.#pendingAddressUpdates.get(netInterface);
+        let update = this.#pendingAddressUpdates.get(netInterface);
+        if (update === undefined && this.#pendingPeerAnnouncements.has(netInterface)) {
+            const records = this.#records.get(netInterface);
+            const current = records === undefined ? [] : addressRecords(records);
+            this.#pendingPeerAnnouncements.delete(netInterface);
+            if (current.length && this.#recordsGenerator.size) {
+                update = { removed: [], current, remaining: 2, nextSend: Time.nowUs, announcePeers: false };
+                this.#pendingAddressUpdates.set(netInterface, update);
+            }
+        }
         if (update === undefined) return;
-        if (Time.nowMs < update.nextSend) {
+        if (Time.nowUs < update.nextSend) {
             if (!this.#addressRepeat.isRunning) this.#addressRepeat.start();
             return;
         }
@@ -332,13 +342,26 @@ export class MdnsServer {
             if (update.current.length) {
                 await this.#announceRecordsForInterface(netInterface, update.current);
             }
+            this.#assertOpen();
+            this.#pendingPeerAnnouncements.delete(netInterface);
             // Bridged interfaces may share a receiver cache; rescue addresses still valid on another interface.
-            for (const otherInterface of this.#records.keys()) {
-                if (otherInterface === netInterface) continue;
-                const otherRecords = await this.#recordsForInterface(otherInterface, false);
-                const otherAddresses = addressRecords(otherRecords);
-                if (otherAddresses.length) {
-                    await this.#announceRecordsForInterface(otherInterface, otherAddresses);
+            if (update.announcePeers !== false) {
+                for (const otherInterface of this.#records.keys()) {
+                    if (otherInterface === netInterface) continue;
+                    this.#assertOpen();
+                    try {
+                        const otherRecords = await this.#recordsForInterface(otherInterface, false);
+                        const otherAddresses = addressRecords(otherRecords);
+                        if (otherAddresses.length) {
+                            await this.#announceRecordsForInterface(otherInterface, otherAddresses);
+                        }
+                        this.#assertOpen();
+                        this.#pendingPeerAnnouncements.delete(otherInterface);
+                    } catch (error) {
+                        if (this.#lifetime.isClosing) return;
+                        this.#pendingPeerAnnouncements.add(otherInterface);
+                        logger.warn(`Failed to announce mDNS addresses on peer interface ${otherInterface}`, error);
+                    }
                 }
             }
             this.#assertOpen();
@@ -346,10 +369,15 @@ export class MdnsServer {
             if (update.remaining === 0) {
                 this.#pendingAddressUpdates.delete(netInterface);
             } else {
-                update.nextSend = Timestamp(Time.nowMs + Seconds(1));
+                update.nextSend = Timestamp(Time.nowUs + Seconds(1));
                 if (!this.#addressRepeat.isRunning) this.#addressRepeat.start();
             }
         } catch (error) {
+            if (this.#lifetime.isClosing) return;
+            if (update.announcePeers === false) {
+                this.#pendingAddressUpdates.delete(netInterface);
+                this.#pendingPeerAnnouncements.add(netInterface);
+            }
             logger.warn(`Failed to announce changed mDNS addresses on ${netInterface}`, error);
         }
     }
@@ -369,6 +397,7 @@ export class MdnsServer {
             if (!this.#recordsGenerator.size) {
                 this.#addressRepeat.stop();
                 this.#pendingAddressUpdates.clear();
+                this.#pendingPeerAnnouncements.clear();
                 return;
             }
             const interfaces = new Set([
@@ -386,13 +415,17 @@ export class MdnsServer {
                                 removed: [],
                                 current: addresses,
                                 remaining: 2,
-                                nextSend: Time.nowMs,
+                                nextSend: Time.nowUs,
                             });
                             await this.#publishAddressUpdate(netInterface);
                         }
                     }
                 } catch (error) {
                     if (this.#lifetime.isClosing) return;
+                    if (this.#pendingAddressUpdates.get(netInterface)?.announcePeers === false) {
+                        this.#pendingAddressUpdates.delete(netInterface);
+                        this.#pendingPeerAnnouncements.add(netInterface);
+                    }
                     logger.warn(`Failed to refresh mDNS addresses on ${netInterface}`, error);
                 }
             }
@@ -488,6 +521,7 @@ export class MdnsServer {
 
     async #resetServices() {
         await this.#chooseHostname();
+        if (!this.#recordsGenerator.size) this.#pendingPeerAnnouncements.clear();
         this.#recordVersion++;
         this.#recordLastSentAsMulticastAnswer.clear();
         this.#recentlyAnsweredQueries.clear();
@@ -524,6 +558,7 @@ export class MdnsServer {
         this.#addresses.clear();
         this.#recordVersions.clear();
         this.#pendingAddressUpdates.clear();
+        this.#pendingPeerAnnouncements.clear();
         for (const { timer } of this.#truncatedQueryCache.values()) {
             timer.stop();
         }

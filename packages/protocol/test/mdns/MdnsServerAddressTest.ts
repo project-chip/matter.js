@@ -145,7 +145,7 @@ describe("MdnsServer interface addresses", () => {
         socket.send = async (message, netInterface) => {
             const decoded = DnsCodec.decode(DnsCodec.encode(message));
             if (decoded === undefined) throw new NetworkError("Test response did not decode");
-            sent.push({ message: decoded, netInterface, at: Time.nowMs });
+            sent.push({ message: decoded, netInterface, at: Time.nowUs });
         };
         server = new MdnsServer(socket);
         await server.setRecordsGenerator("test", generator);
@@ -234,7 +234,7 @@ describe("MdnsServer interface addresses", () => {
         interfaces.fake0!.ipV6 = [NEW, ULA, LINK_LOCAL];
         await query();
         const first = sent.find(packet => packet.message.answers.some(record => record.ttl === Instant))!.at;
-        const finished = Time.nowMs;
+        const finished = Time.nowUs;
         sent.length = 0;
         await advance(Seconds(1));
         expect(addresses(true)).deep.equal([OLD]);
@@ -261,6 +261,30 @@ describe("MdnsServer interface addresses", () => {
         expect(addresses(true, "fake1")).deep.equal(["2001:db8:3::10"]);
         expect(addresses(false, "fake1")).include("2001:db8:4::10");
     });
+
+    for (const offset of [-60_000, 60_000]) {
+        it(`keeps the repetition interval after a ${offset} ms wall-clock step`, async () => {
+            interfaces.fake0!.ipV6 = [NEW, ULA, LINK_LOCAL];
+            await query();
+            const first = sent.find(packet => packet.message.answers.some(record => record.ttl === Instant))!.at;
+            const finished = Time.nowUs;
+            sent.length = 0;
+            MockTime.stepWallClock(offset);
+            try {
+                await advance(Millis(100));
+                await query();
+                expect(addresses(true)).deep.equal([]);
+                sent.length = 0;
+                await advance(Millis(900));
+                expect(addresses(true)).deep.equal([OLD]);
+                expect(sent[0].at)
+                    .at.least(first + Seconds(1))
+                    .and.at.most(finished + Seconds(2));
+            } finally {
+                MockTime.stepWallClock(-offset);
+            }
+        });
+    }
 
     it("does not read interface addresses for incoming responses", async () => {
         const before = readCount;
@@ -390,6 +414,125 @@ describe("MdnsServer interface addresses", () => {
         await advance(Seconds(30));
         expect(addresses(true)).deep.equal([OLD]);
         expect(addresses()).include(NEW);
+    });
+
+    for (const failure of ["read", "send"]) {
+        it(`continues after a peer ${failure} failure and recovers after both update rounds`, async () => {
+            const peerAddress = "fd00::20";
+            interfaces.fake1 = { mac: "02:00:00:00:00:02", ipV4: [], ipV6: [peerAddress] };
+            interfaces.fake2 = { mac: "02:00:00:00:00:03", ipV4: [], ipV6: [OLD] };
+            await broadcast();
+            sent.length = 0;
+            const read = network.getIpMac.bind(network);
+            const send = socket.send.bind(socket);
+            let failing = true;
+            network.getIpMac = async name => {
+                if (failing && failure === "read" && name === "fake1") {
+                    throw new NetworkError("Test peer read failed");
+                }
+                return read(name);
+            };
+            socket.send = async (message, netInterface, unicastDest) => {
+                if (failing && failure === "send" && netInterface === "fake1") {
+                    throw new NetworkError("Test peer send failed");
+                }
+                await send(message, netInterface, unicastDest);
+            };
+
+            interfaces.fake0!.ipV6 = [NEW, ULA, LINK_LOCAL];
+            await query();
+            expect(addresses(true, "fake0")).deep.equal([OLD]);
+            expect(addresses(false, "fake2")).deep.equal([OLD]);
+            expect(addresses(false, "fake1")).deep.equal([]);
+            sent.length = 0;
+            await advance(Seconds(1));
+            expect(addresses(true, "fake0")).deep.equal([OLD]);
+            expect(addresses(false, "fake2")).deep.equal([OLD]);
+            sent.length = 0;
+            await advance(Seconds(2));
+            expect(sent).deep.equal([]);
+
+            failing = false;
+            await advance(Seconds(30));
+            expect(addresses(false, "fake1")).deep.equal([peerAddress]);
+            expect(addresses(true)).deep.equal([]);
+            expect(sent.every(packet => packet.netInterface === "fake1")).equal(true);
+            await advance(Seconds(1));
+            expect(sent).length(2);
+            expect(sent[1].at - sent[0].at).equal(Seconds(1));
+            sent.length = 0;
+            await advance(Seconds(30));
+            expect(sent).deep.equal([]);
+        });
+    }
+
+    it("stops peer repetition after a failed recovery read and retries on the next poll", async () => {
+        const peerAddress = "fd00::20";
+        interfaces.fake1 = { mac: "02:00:00:00:00:02", ipV4: [], ipV6: [peerAddress] };
+        await broadcast();
+        const read = network.getIpMac.bind(network);
+        let failing = true;
+        network.getIpMac = async name => {
+            if (failing && name === "fake1") throw new NetworkError("Test recovery read failed");
+            return read(name);
+        };
+        interfaces.fake0!.ipV6 = [NEW, ULA, LINK_LOCAL];
+        await query();
+        await advance(Seconds(1));
+        await advance(Seconds(2));
+        sent.length = 0;
+
+        failing = false;
+        await advance(Seconds(30));
+        expect(sent).length(1);
+        expect(addresses(false, "fake1")).deep.equal([peerAddress]);
+        sent.length = 0;
+        failing = true;
+        await advance(Seconds(1));
+        expect(sent).deep.equal([]);
+        expect([...Time.timers].some(timer => timer.name === "MDNS address repeat")).equal(false);
+        const reads = readCount;
+        await advance(Seconds(1));
+        expect(readCount).equal(reads);
+
+        failing = false;
+        await advance(Seconds(30));
+        await advance(Seconds(1));
+        expect(sent).length(2);
+        expect(sent.every(packet => packet.netInterface === "fake1")).equal(true);
+        expect(addresses(true)).deep.equal([]);
+        expect(sent[1].at - sent[0].at).equal(Seconds(1));
+    });
+
+    it("stops later peer reads and repetitions when closing during a failed peer read", async () => {
+        interfaces.fake1 = { mac: "02:00:00:00:00:02", ipV4: [], ipV6: [ULA] };
+        interfaces.fake2 = { mac: "02:00:00:00:00:03", ipV4: [], ipV6: [OLD] };
+        await broadcast();
+        sent.length = 0;
+        const read = network.getIpMac.bind(network);
+        const started = createPromise<void>();
+        const release = createPromise<void>();
+        const reads = new Array<string>();
+        network.getIpMac = async name => {
+            reads.push(name);
+            if (name === "fake1") {
+                started.resolver();
+                await release.promise;
+                throw new NetworkError("Test peer read failed while closing");
+            }
+            return read(name);
+        };
+        interfaces.fake0!.ipV6 = [NEW, ULA, LINK_LOCAL];
+        const querying = query();
+        await started.promise;
+        const closing = server.close();
+        const before = sent.length;
+        release.resolver();
+        await MockTime.resolve(Promise.all([querying, closing]));
+        await advance(Seconds(30));
+        expect(sent).length(before);
+        expect(reads).not.include("fake2");
+        expect([...Time.timers].some(timer => timer.name.startsWith("MDNS address"))).equal(false);
     });
 
     it("rebuilds positive records after a failed service expiration", async () => {
