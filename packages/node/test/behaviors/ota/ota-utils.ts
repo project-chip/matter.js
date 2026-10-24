@@ -402,6 +402,8 @@ export function InstrumentedOtaProviderServer(
     } = {},
 ): {
     queryImagePromise: Promise<void>;
+    /** Resolves once the first QueryImage response is recorded in `queryImageResponses`, rejects if it throws first. */
+    queryImageAnsweredPromise: Promise<void>;
     applyUpdateRequestPromise: Promise<void>;
     notifyUpdateAppliedPromise: Promise<void>;
     requestUserConsentForUpdatePromise: Promise<void>;
@@ -418,6 +420,11 @@ export function InstrumentedOtaProviderServer(
         resolver: queryImageResolver,
         rejecter: queryImageRejecter,
         promise: queryImagePromise,
+    } = createPromise<void>();
+    const {
+        resolver: queryImageAnsweredResolver,
+        rejecter: queryImageAnsweredRejecter,
+        promise: queryImageAnsweredPromise,
     } = createPromise<void>();
     const {
         resolver: applyUpdateRequestResolver,
@@ -451,9 +458,11 @@ export function InstrumentedOtaProviderServer(
                 queryImageResolver();
                 const response = await super.queryImage(request);
                 queryImageResponses.push(response);
+                queryImageAnsweredResolver();
                 return response;
             } catch (error) {
                 queryImageRejecter(error);
+                queryImageAnsweredRejecter(error);
                 throw error;
             }
         }
@@ -526,6 +535,7 @@ export function InstrumentedOtaProviderServer(
 
     return {
         queryImagePromise,
+        queryImageAnsweredPromise,
         applyUpdateRequestPromise,
         notifyUpdateAppliedPromise,
         requestUserConsentForUpdatePromise,

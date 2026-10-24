@@ -435,7 +435,8 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
         const progressInfo = this.#inProgressDetailsForPeer(session.peerAddress, updateToken);
 
         // A known token names the version we offered, so only that version may be applied under it
-        const tokenVersion = progressInfo?.versionToApply;
+        const tokenVersion =
+            progressInfo?.versionToApply ?? this.#stoppedTokenVersion(session.peerAddress, updateToken);
 
         // An offered version is always above the requestor's current one, so 0 names no image we provided
         if (newVersion === 0 && tokenVersion !== undefined) {
@@ -612,10 +613,44 @@ export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBe
 
     /**
      * When the manager stops a peer's update (`updateStopped`), forgets the peer's update tokens and the apply rights
-     * stored with them.  A consent the manager keeps for a failed update still allows its apply.
+     * stored with them.  The version each token names is kept until the token would have expired, see
+     * {@link #stoppedTokenVersion}, so a consent the manager keeps for a failed update still allows its apply, also
+     * with `NewVersion` 0.
      */
-    #forgetUpdateTokens(peerAddress: PeerAddress) {
-        this.#removeInProgressDetails(PeerAddress(peerAddress));
+    #forgetUpdateTokens(peer: PeerAddress) {
+        const peerAddress = PeerAddress(peer);
+        const { fabricIndex, nodeId: requestorNodeId } = peerAddress;
+        const { inProgressDetails, stoppedTokenVersions } = this.internal;
+        const now = Time.nowMs;
+        for (const [key, { timestamp }] of stoppedTokenVersions) {
+            if (timestamp + OTA_PROGRESS_TIMEOUT < now) {
+                stoppedTokenVersions.delete(key);
+            }
+        }
+        for (const [key, details] of inProgressDetails) {
+            if (
+                details.requestorNodeId === requestorNodeId &&
+                details.fabricIndex === fabricIndex &&
+                details.versionToApply !== undefined
+            ) {
+                stoppedTokenVersions.set(key, { version: details.versionToApply, timestamp: details.timestamp });
+            }
+        }
+        this.#removeInProgressDetails(peerAddress);
+    }
+
+    /** The version a token of a stopped update names, while that token would still be valid. */
+    #stoppedTokenVersion({ fabricIndex, nodeId }: PeerAddress, updateToken: Bytes) {
+        const key = `${nodeId}-${fabricIndex}-${Bytes.toHex(updateToken)}`;
+        const stopped = this.internal.stoppedTokenVersions.get(key);
+        if (stopped === undefined) {
+            return undefined;
+        }
+        if (stopped.timestamp + OTA_PROGRESS_TIMEOUT < Time.nowMs) {
+            this.internal.stoppedTokenVersions.delete(key);
+            return undefined;
+        }
+        return stopped.version;
     }
 
     /**
@@ -704,6 +739,12 @@ export namespace OtaSoftwareUpdateProviderServer {
     export class Internal {
         /** Keyed by the requestorNodeId+fabricIndex+updateToken */
         inProgressDetails = new Map<string, OtaUpdateInProgressDetails>();
+
+        /**
+         * The versions the tokens of stopped updates named, keyed like {@link inProgressDetails}, with the token's last
+         * activity, from which it expires like a token in {@link inProgressDetails}.
+         */
+        stoppedTokenVersions = new Map<string, { version: number; timestamp: Timestamp }>();
 
         updateStorage!: ScopedStorage;
     }

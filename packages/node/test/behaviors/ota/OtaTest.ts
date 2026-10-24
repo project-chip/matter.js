@@ -8,7 +8,10 @@ import { NetworkClient } from "#behavior/system/network/NetworkClient.js";
 import { OtaUpdateStatus, SoftwareUpdateManager } from "#behavior/system/software-update/SoftwareUpdateManager.js";
 import { SubscriptionsServer } from "#behavior/system/subscriptions/SubscriptionsServer.js";
 import { BasicInformationClient, BasicInformationServer } from "#behaviors/basic-information";
-import { OtaSoftwareUpdateProviderServer } from "#behaviors/ota-software-update-provider";
+import {
+    OtaSoftwareUpdateConsentState,
+    OtaSoftwareUpdateProviderServer,
+} from "#behaviors/ota-software-update-provider";
 import {
     OtaSoftwareUpdateRequestorClient,
     OtaSoftwareUpdateRequestorServer,
@@ -1500,7 +1503,11 @@ describe("Ota", () => {
         rewrite: (
             request: OtaSoftwareUpdateProvider.ApplyUpdateRequest,
         ) => OtaSoftwareUpdateProvider.ApplyUpdateRequest,
-        { consent = "kept" }: { consent?: "kept" | "withdrawn" | "moved-to-next-version" } = {},
+        {
+            consent = "kept",
+        }: {
+            consent?: "kept" | "withdrawn" | "moved-to-next-version" | "update-failed" | "update-failed-long-ago";
+        } = {},
     ) {
         const data = { expectedOtaImage: Bytes.fromHex("") };
         const { TestOtaRequestorServer } = InstrumentedOtaRequestorServer({ requestUserConsent: false }, data);
@@ -1517,6 +1524,23 @@ describe("Ota", () => {
                             case "withdrawn":
                                 await manager.removeConsent(peerAddress!, target!.targetSoftwareVersion);
                                 break;
+                            case "update-failed":
+                                manager.internal.updateStopped.emit(peerAddress!);
+                                break;
+                            case "update-failed-long-ago": {
+                                // As left by a stop whose token was last active longer ago than a token lives
+                                const { internal } = agent.get(OtaSoftwareUpdateProviderServer);
+                                for (const [key, { versionToApply }] of internal.inProgressDetails) {
+                                    internal.inProgressDetails.delete(key);
+                                    if (versionToApply !== undefined) {
+                                        internal.stoppedTokenVersions.set(key, {
+                                            version: versionToApply,
+                                            timestamp: Timestamp(Time.nowMs - Minutes(16)),
+                                        });
+                                    }
+                                }
+                                break;
+                            }
                             case "moved-to-next-version":
                                 await manager.addUpdateConsent(peerAddress!, {
                                     ...target!,
@@ -1582,6 +1606,26 @@ describe("Ota", () => {
                 updateToken: Bytes.fromHex("0102030405060708"),
                 newVersion: 0,
             })),
+        ).deep.equals([OtaSoftwareUpdateProvider.ApplyUpdateAction.Discontinue]);
+    }).timeout(10_000);
+
+    it("applies the version of a known update token for version 0 after the update failed with its consent kept", async () => {
+        expect(
+            await applyRewritten(request => ({ ...request, newVersion: 0 }), { consent: "update-failed" }),
+        ).deep.equals([OtaSoftwareUpdateProvider.ApplyUpdateAction.Proceed]);
+    }).timeout(10_000);
+
+    it("refuses version 0 for an update token whose update failed longer ago than a token lives", async () => {
+        expect(
+            await applyRewritten(request => ({ ...request, newVersion: 0 }), { consent: "update-failed-long-ago" }),
+        ).deep.equals([OtaSoftwareUpdateProvider.ApplyUpdateAction.Discontinue]);
+    }).timeout(10_000);
+
+    it("refuses a version other than the one its update token named after the update failed", async () => {
+        expect(
+            await applyRewritten(request => ({ ...request, newVersion: request.newVersion + 1 }), {
+                consent: "update-failed",
+            }),
         ).deep.equals([OtaSoftwareUpdateProvider.ApplyUpdateAction.Discontinue]);
     }).timeout(10_000);
 
@@ -2817,6 +2861,7 @@ describe("Ota", () => {
             requireConsent,
             localConfigDisabled,
             delegateConsent,
+            grantConsentAfterStop,
         }: {
             grantUserConsent?: boolean;
             rewriteApplyUpdateRequest?: (
@@ -2830,6 +2875,8 @@ describe("Ota", () => {
             localConfigDisabled?: boolean;
             /** Sets `delegateConsentToRequestor`. */
             delegateConsent?: boolean;
+            /** With `requireConsent`, the consent is granted only after the manager stopped the peer's update. */
+            grantConsentAfterStop?: boolean;
         } = {}) {
             const data = { expectedOtaImage: Bytes.fromHex(""), expectedSoftwareVersion: 1, grantUserConsent };
             const requestor = InstrumentedOtaRequestorServer({ requestUserConsent: grantUserConsent ?? false }, data);
@@ -2851,11 +2898,23 @@ describe("Ota", () => {
                     return details && { ...details, consentRequired: true };
                 }
             }
+            class LateConsentOtaProviderServer extends ConsentRequiringOtaProviderServer {
+                protected override requestUserConsentForUpdate(
+                    _request: OtaSoftwareUpdateProvider.QueryImageRequest,
+                    _updateDetails: unknown,
+                    peerAddress: PeerAddress,
+                ) {
+                    this.agent.get(SoftwareUpdateManager).internal.updateStopped.emit(peerAddress);
+                    return { consentState: OtaSoftwareUpdateConsentState.Granted };
+                }
+            }
             const ota = await initOtaSite(
                 declineUpdates
                     ? DecliningOtaProviderServer
                     : requireConsent
-                      ? ConsentRequiringOtaProviderServer
+                      ? grantConsentAfterStop
+                          ? LateConsentOtaProviderServer
+                          : ConsentRequiringOtaProviderServer
                       : provider.TestOtaProviderServer,
                 requestor.TestOtaRequestorServer,
                 { localConfigDisabled },
@@ -3697,7 +3756,7 @@ describe("Ota", () => {
         }).timeout(10_000);
 
         it("announces again after an announcement failed unexpectedly", async () => {
-            const { site, storeImage, expectApplied, interceptAnnouncements, queueSnapshot, forceUpdate } =
+            const { site, otaProvider, storeImage, expectApplied, interceptAnnouncements, queueSnapshot, forceUpdate } =
                 await initSiteWithoutTestImages();
             await using _localSite = site;
 
@@ -3707,8 +3766,11 @@ describe("Ota", () => {
             );
 
             await forceUpdate(1);
-            await MockTime.advance(Seconds(1));
-            await MockTime.macrotasks;
+            await MockTime.resolve(
+                otaProvider.act(agent =>
+                    Promise.all(agent.get(SoftwareUpdateManager).internal.runningAnnouncements.values()),
+                ),
+            );
             // A failed announcement leaves the entry queued for the next queue check
             expect(await queueSnapshot()).deep.equals([
                 { targetSoftwareVersion: 1, status: "queued", lastProgressStatus: OtaUpdateStatus.Unknown },
@@ -3817,6 +3879,21 @@ describe("Ota", () => {
             );
             await forceUpdate(1);
             await MockTime.resolve(consentRequest);
+        }).timeout(10_000);
+
+        it("answers not available when the update is stopped while its consent is asked for", async () => {
+            const { site, provider, storeImage, forceUpdate } = await initSiteWithoutTestImages({
+                requireConsent: true,
+                grantConsentAfterStop: true,
+            });
+            await using _localSite = site;
+
+            await storeImage(1, "prod");
+            await forceUpdate(1);
+            await MockTime.resolve(provider.queryImageAnsweredPromise);
+            expect(provider.queryImageResponses.map(({ status }) => status)).deep.equals([
+                OtaSoftwareUpdateProvider.Status.NotAvailable,
+            ]);
         }).timeout(10_000);
 
         it("aborts an announcement whose node already reported a status when the controller goes offline", async () => {
