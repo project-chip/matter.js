@@ -809,18 +809,21 @@ export default function commands(theNode: MatterNode) {
 
                                     const localUpdates = await (
                                         await theNode.otaService()
-                                    ).find({
+                                    ).findApplicable({
                                         vendorId: basicInfo.vendorId,
                                         productId: basicInfo.productId,
-                                        currentVersion: basicInfo.softwareVersion,
+                                        currentSoftwareVersion: basicInfo.softwareVersion,
+                                        includeTestImages: theNode.allowTestOtaImages,
                                     });
 
                                     if (local && !localUpdates.length) {
-                                        console.log("No applicable updates available in local storage.");
+                                        console.log(
+                                            `No applicable updates available in local storage.${theNode.allowTestOtaImages ? "" : " Local and test-net images are only offered with config ota-test-images."}`,
+                                        );
                                         return;
                                     }
 
-                                    const updateInfo = await (
+                                    const foundUpdate = await (
                                         await theNode.otaService()
                                     ).checkForUpdate({
                                         vendorId: basicInfo.vendorId,
@@ -829,6 +832,13 @@ export default function commands(theNode: MatterNode) {
                                         includeStoredUpdates: local,
                                         isProduction,
                                     });
+                                    const offered = foundUpdate?.source === "dcl-prod" || theNode.allowTestOtaImages;
+                                    if (foundUpdate && !offered) {
+                                        console.log(
+                                            `Skipping version ${foundUpdate.softwareVersion}, a ${foundUpdate.source === "local" ? "local" : "test-net"} image, which is only offered with config ota-test-images.`,
+                                        );
+                                    }
+                                    const updateInfo = offered ? foundUpdate : undefined;
 
                                     let updateVersion: number;
                                     if (!updateInfo && !local) {

@@ -20,8 +20,23 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: WAL storage snapshots right after an open that replayed its log, and refuses to open when its log is incomplete instead of opening with partial data
 
 - @matter/node
+    - Enhancement: Added `SoftwareUpdateManager.dropUndeliverableUpdate()` for `checkUpdateAvailable()` overrides
+    - Enhancement: Set the new `SoftwareUpdateManager` state `delegateConsentToRequestor` to true to let a requestor that can obtain user consent itself download and apply the newest stored image without a consent from the application
+    - Adjustment: A requestor that can obtain user consent itself is no longer offered an image it may not apply
+    - Adjustment: `SoftwareUpdateManager.forceUpdate()` queues the update and returns at once; the announcement runs in the background, and the outcome is reported via `updateDone` and `updateFailed`
+    - Adjustment: The OTA update check finds stored local images only with `allowTestOtaImages`, as the OTA provider already offered them only then
+    - Adjustment: A failed OTA update keeps its consent for 24 hours and is not announced again until a new consent is given; meanwhile the node may still retry it on its own
+    - Adjustment: A failed OTA update announcement is retried by the next queue check, within 5 minutes, instead of after the 15-minute stall timeout; a hanging one ends after 15 minutes
+    - Fix: The OTA provider offers the same stored image as the update check, and the consented version instead of a lower one
+    - Fix: A consent granted through `requestUserConsentForUpdate()` is no longer lost when the download starts
+    - Fix: A queued OTA update fails and is reported via `updateFailed` when the announced node finds no image for it, instead of being announced again every 15 minutes
+    - Fix: A forced OTA update is announced once
+    - Fix: A cancelled OTA update also ends the apply rights of its update tokens
     - Fix: Nested lists and structs in state show the current values after a containing value was null or removed and set again, instead of stale entries or `PhantomReferenceError`
     - Fix: Access through a held state proxy whose container was removed throws `PhantomReferenceError` (`ExpiredReferenceError` once its context has exited) instead of a `TypeError`, a stale `ExpiredReferenceError` or, for list reads, an empty list
+
+- @matter/protocol
+    - Enhancement: Added `DclOtaUpdateService.findApplicable()` to list the stored update images a device can apply, in offer order
 
 ## 0.18.0 (2026-10-20)
 
