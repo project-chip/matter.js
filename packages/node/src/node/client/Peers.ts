@@ -164,6 +164,11 @@ export class Peers extends EndpointContainer<ClientNode> {
     async #nodeOnline() {
         if (this.owner.stateOf(NetworkServer).autoStartCommissionedPeers) {
             for (const peer of this) {
+                // A peer that failed to load reports why when it loaded; reading its state here would throw and stop
+                // the peers after it from starting
+                if (peer.construction.status === Lifecycle.Status.Crashed) {
+                    continue;
+                }
                 if (!peer.lifecycle.isCommissioned || peer.maybeStateOf("network")?.isDisabled) {
                     continue;
                 }
@@ -426,11 +431,11 @@ export class Peers extends EndpointContainer<ClientNode> {
         if (typeof id !== "string" && typeof id !== "number") {
             const address = PeerAddress(id);
             for (const node of this) {
-                if (node.behaviors.active.some(behavior => behavior.id === "commissioning")) {
-                    const nodeAddress = node.maybeStateOf("commissioning")?.peerAddress as PeerAddress | undefined;
-                    if (nodeAddress !== undefined && PeerAddress.is(nodeAddress, address)) {
-                        return node;
-                    }
+                // ClientNode.peerAddress falls back to storage when the node's state is unavailable, so a peer that
+                // failed to load still answers for its own address and cannot hide the peers after it
+                const nodeAddress = node.peerAddress;
+                if (nodeAddress !== undefined && PeerAddress.is(nodeAddress, address)) {
+                    return node;
                 }
             }
             return undefined;
