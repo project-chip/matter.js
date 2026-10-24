@@ -134,8 +134,9 @@ export class CommissioningClient extends Behavior {
         // Versions 0.15.4 to 0.16.10 multiplied the stored discovery TTL by 1000 on each round trip through
         // storage, so older storage holds TTLs of years up to Infinity, which JSON persists as `null`.  A null TTL,
         // or an inflated one on an address, fails validation and the peer cannot load at all; an inflated TTL on the
-        // state loads but never expires.  Drop a TTL that is null or out of range; an absent TTL means the default
-        // applies until the next discovery.  A null timestamp gets the value initialize() would assign
+        // state loads but never expires.  Drop a TTL that is null or out of range.  Without one the default TTL
+        // applies, as for peers stored by later versions, which do not persist a TTL.  A null timestamp gets the
+        // value initialize() would assign
         dropInvalidTtl(values);
         if (values.discoveredAt === null) {
             values.discoveredAt = Time.nowMs;
