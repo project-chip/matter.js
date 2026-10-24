@@ -289,6 +289,46 @@ describe("Peer descriptor", () => {
             expect(site.storageFor(controllerId)[key].ttl).not.equals(null);
         });
 
+        it("an inflated discovery TTL is dropped on load", async () => {
+            const site = new MockSite();
+            await using _site = site;
+            const { controller } = await commissionedPeer(site);
+            const controllerId = controller.id;
+            await site.close();
+
+            // Values written by 0.15.4 to 0.16.10, which multiplied the TTL by 1000 on each round trip
+            const key = "nodes.peer1.endpoints.0.commissioning";
+            const stored = site.storageFor(controllerId)[key];
+            stored.ttl = 4.5e198;
+            stored.addresses = [{ ...stored.addresses[0], ttl: 7.2e15 }];
+
+            const controllerB = await site.addNode(undefined, { id: controllerId, index: 1 });
+            const peer = controllerB.peers.get("peer1")!;
+
+            expect(peer.construction.status).equals("active");
+            expect(peer.stateOf(CommissioningClient).ttl).undefined;
+            expect(peer.stateOf(CommissioningClient).addresses?.[0].ttl).undefined;
+
+            await peer.setStateOf(CommissioningClient, { tcpUnsupported: true });
+            expect(site.storageFor(controllerId)[key].ttl).undefined;
+        });
+
+        it("a plausible discovery TTL is kept on load", async () => {
+            const site = new MockSite();
+            await using _site = site;
+            const { controller } = await commissionedPeer(site);
+            const controllerId = controller.id;
+            await site.close();
+
+            site.storageFor(controllerId)["nodes.peer1.endpoints.0.commissioning"].ttl = Seconds(120);
+
+            const controllerB = await site.addNode(undefined, { id: controllerId, index: 1 });
+            const peer = controllerB.peers.get("peer1")!;
+
+            expect(peer.construction.status).equals("active");
+            expect(peer.stateOf(CommissioningClient).ttl).equals(Seconds(120));
+        });
+
         it("of one peer does not hide the other peers", async () => {
             const site = new MockSite();
             await using _site = site;

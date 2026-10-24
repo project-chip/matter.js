@@ -131,17 +131,20 @@ export class CommissioningClient extends Behavior {
     static override migrate(values: Val.Struct) {
         super.migrate(values);
 
-        // Earlier versions could persist `null` for the discovery TTL and timestamp.  Neither field is nullable, so
-        // the stored null failed validation and the peer could not load at all.  An absent TTL means the default
-        // applies until the next discovery; the timestamp gets the value initialize() would assign
-        dropNull(values, "ttl");
+        // Versions 0.15.4 to 0.16.10 multiplied the stored discovery TTL by 1000 on each round trip through
+        // storage, so older storage holds TTLs of years up to Infinity, which JSON persists as `null`.  A null TTL,
+        // or an inflated one on an address, fails validation and the peer cannot load at all; an inflated TTL on the
+        // state loads but never expires.  Drop a TTL that is null or out of range; an absent TTL means the default
+        // applies until the next discovery.  A null timestamp gets the value initialize() would assign
+        dropInvalidTtl(values);
         if (values.discoveredAt === null) {
             values.discoveredAt = Time.nowMs;
         }
         if (Array.isArray(values.addresses)) {
             for (const address of values.addresses) {
                 if (isObject(address)) {
-                    dropNull(address, "ttl", "discoveredAt");
+                    dropInvalidTtl(address);
+                    dropNull(address, "discoveredAt");
                 }
             }
         }
@@ -1383,6 +1386,27 @@ export namespace CommissioningClient {
         }
 
         return opts;
+    }
+}
+
+/**
+ * The largest TTL we keep, in milliseconds.  A stored address TTL is a uint32, so anything above fails validation, and
+ * no mDNS record lives anywhere near 49 days.
+ */
+const MAX_TTL_MS = 0xffff_ffff;
+
+function dropInvalidTtl(values: Record<string, unknown>) {
+    const { ttl } = values;
+    if (ttl === null) {
+        delete values.ttl;
+        return;
+    }
+    if (typeof ttl !== "number" && typeof ttl !== "bigint") {
+        return;
+    }
+    const ms = Number(ttl);
+    if (!Number.isFinite(ms) || ms < 0 || ms > MAX_TTL_MS) {
+        delete values.ttl;
     }
 }
 
