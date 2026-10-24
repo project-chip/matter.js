@@ -20,7 +20,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: WAL storage snapshots right after an open that replayed its log, and refuses to open when its log is incomplete instead of opening with partial data
 
 - @matter/node
-    - Fix: A controller subscribes again to a peer that announced a shutdown and did not resume the subscription within 30 seconds, instead of waiting for the subscription timeout
+    - Fix: A controller subscribes again to a peer that announced a shutdown and did not resume the subscription within 30 seconds, and at once to a peer that closed the session, instead of waiting for the subscription timeout
     - Fix: Nested lists and structs in state show the current values after a containing value was null or removed and set again, instead of stale entries or `PhantomReferenceError`
     - Fix: Access through a held state proxy whose container was removed throws `PhantomReferenceError` (`ExpiredReferenceError` once its context has exited) instead of a `TypeError`, a stale `ExpiredReferenceError` or, for list reads, an empty list
 

@@ -83,6 +83,30 @@ describe("Peers#instrumentBasicInformation", () => {
         }
     });
 
+    it("subscribes again at once to a peer that closes the session", async () => {
+        await using site = new MockSite();
+        const { controller } = await site.addCommissionedPair();
+
+        const peer1 = await subscribedPeer(controller, "peer1");
+        const peerAddress = PeerAddress(peer1.peerAddress!);
+
+        const subscriptions = controller.env.get(ClientSubscriptions);
+        const closedFor = new Array<PeerAddress>();
+        const original = subscriptions.closeForPeer.bind(subscriptions);
+        subscriptions.closeForPeer = address => {
+            closedFor.push(PeerAddress(address));
+            return original(address);
+        };
+
+        try {
+            const session = controller.env.get(SessionManager).sessionFor(peerAddress);
+            await MockTime.resolve(session.handlePeerClose());
+            expect(closedFor).deep.equals([peerAddress]);
+        } finally {
+            subscriptions.closeForPeer = original;
+        }
+    });
+
     // Peers evaluates seeding on every lifecycle change of a peer that has not seeded, and delete()
     // emits lifecycle.changed after the behaviors are gone. Reading state from there throws
     // uninitialized-dependency, which would surface as an unhandled handler error.

@@ -43,6 +43,7 @@ import {
     Minutes,
     Mutex,
     Observable,
+    ObserverGroup,
     Seconds,
     Time,
     Timer,
@@ -108,6 +109,7 @@ export class Peers extends EndpointContainer<ClientNode> {
     #bridgedInstrumented = new WeakSet<Endpoint>();
     #shutdownResubscribe = new PeerAddressMap<{ timer?: Timer; reported: boolean }>();
     #onReportStarted?: (session: SecureSession) => void;
+    #sessionObservers = new ObserverGroup();
 
     constructor(owner: ServerNode) {
         super(owner);
@@ -134,6 +136,7 @@ export class Peers extends EndpointContainer<ClientNode> {
 
         const lifecycle = owner.lifecycle;
         lifecycle.online.on(this.#nodeOnline.bind(this));
+        lifecycle.online.on(this.#resubscribeWhenPeerClosesSession.bind(this));
         lifecycle.offline.on(this.#nodeOffline.bind(this));
     }
 
@@ -538,6 +541,7 @@ export class Peers extends EndpointContainer<ClientNode> {
 
     override async close() {
         this.#closed = true;
+        this.#sessionObservers.close();
         for (const state of this.#shutdownResubscribe.values()) {
             state.timer?.stop();
         }
@@ -913,6 +917,28 @@ export class Peers extends EndpointContainer<ClientNode> {
             await this.owner.env.get(SessionManager).handlePeerShutdown(peerAddress);
             this.#resubscribeUnlessResumed(peerAddress);
         }
+    }
+
+    /**
+     * Establish a new subscription to a peer that closes a session we hold a subscription over.
+     *
+     * A peer that sends CloseSession is alive and ends the session on purpose (shutdown, session eviction), and a
+     * subscription dies with its session. Nothing is to be waited for, so the sustained subscription establishes a
+     * new one at once instead of at the subscription timeout.
+     */
+    #resubscribeWhenPeerClosesSession() {
+        const sessions = this.owner.env.get(SessionManager);
+        this.#sessionObservers.on(sessions.sessions.added, session => {
+            if (!session.isInitiator || session.isPase) {
+                return;
+            }
+            this.#sessionObservers.on(session.closedByPeer, () => {
+                if (this.#closed) {
+                    return;
+                }
+                this.owner.env.get(ClientSubscriptions).closeForPeer(session.peerAddress);
+            });
+        });
     }
 
     /**
