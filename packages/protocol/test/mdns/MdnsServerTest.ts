@@ -8,6 +8,7 @@ import { MdnsServer, QUESTION_SUPPRESSION_WINDOW } from "#mdns/MdnsServer.js";
 import {
     ARecord,
     Bytes,
+    createPromise,
     DnsCodec,
     DnsMessage,
     DnsMessageType,
@@ -64,10 +65,22 @@ describe("MdnsServer", () => {
     } as UdpMulticastServer;
 
     let mdnsServer: MdnsServer;
+    let pendingMessages: Promise<void>[];
+
+    async function settleMessages() {
+        await MockTime.resolve(Promise.all(pendingMessages.splice(0)));
+    }
 
     beforeEach(async () => {
         await MockTime.advance(130_000); // More then 2 minutes in the future for the difference calculation vs 120s ttl
         const socket = new MdnsSocket(udpServerSimulator);
+        pendingMessages = new Array<Promise<void>>();
+        const emit = socket.receipt.emit.bind(socket.receipt);
+        socket.receipt.emit = (...args) => {
+            const pending = Promise.resolve(emit(...args));
+            pendingMessages.push(pending);
+            return pending;
+        };
         mdnsServer = new MdnsServer(socket);
 
         await mdnsServer.setRecordsGenerator("foo", () => [
@@ -76,6 +89,11 @@ describe("MdnsServer", () => {
             TxtRecord(DUMMY_QNAME, [`A=1`, `B=2`]),
             ARecord("abcd.local", DUMMY_IP),
         ]);
+    });
+
+    afterEach(async () => {
+        await settleMessages();
+        await mdnsServer.close();
     });
 
     describe("Server responds to standard queries for different types", () => {
@@ -100,7 +118,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -124,8 +142,10 @@ describe("MdnsServer", () => {
 
         it(`server responds to an ANY query with different Query messageTypes (Truncated Query)`, async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
+            const received = createPromise<void>();
             onResponse = async (message: Bytes, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
+                received.resolver();
             };
 
             send(
@@ -143,10 +163,11 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses.length).equals(0); // Not yet there
             await MockTime.advance(500);
+            await MockTime.resolve(received.promise);
 
             expect(responses).deep.equal([
                 {
@@ -189,7 +210,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -232,7 +253,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -271,7 +292,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -315,7 +336,7 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 INTERFACE_NAME,
             );
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses.flatMap(message => message?.answers ?? [])).deep.equals([PtrRecord(DUMMY_QNAME, "abcd")]);
         });
@@ -344,7 +365,7 @@ describe("MdnsServer", () => {
                     DUMMY_IP,
                     INTERFACE_NAME,
                 );
-                await MockTime.yield3();
+                await settleMessages();
 
                 const sentSrv = responses
                     .flatMap(message => message?.answers ?? [])
@@ -373,7 +394,7 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 INTERFACE_NAME,
             );
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses.flatMap(message => message?.additionalRecords ?? [])).deep.equals([second]);
         });
@@ -392,7 +413,7 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 INTERFACE_NAME,
             );
-            await MockTime.yield3();
+            await settleMessages();
             await MockTime.advance(1000);
 
             const responses = collectResponses();
@@ -411,7 +432,7 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 INTERFACE_NAME,
             );
-            await MockTime.yield3();
+            await settleMessages();
 
             const sent = responses.flatMap(message => message?.answers ?? []);
             expect(sent.length).greaterThan(0);
@@ -433,7 +454,7 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 INTERFACE_NAME,
             );
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses.flatMap(message => message?.answers ?? [])).deep.equals([second]);
         });
@@ -452,7 +473,7 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 INTERFACE_NAME,
             );
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses.flatMap(message => message?.answers ?? [])).deep.equals([flushed(first), flushed(second)]);
         });
@@ -481,7 +502,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -524,7 +545,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -620,7 +641,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -682,7 +703,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -764,7 +785,7 @@ describe("MdnsServer", () => {
                 },
             ];
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal(EXPEECTED_RESPONSE);
 
@@ -786,7 +807,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal(EXPEECTED_RESPONSE);
         });
@@ -812,7 +833,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -874,7 +895,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -908,7 +929,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -968,7 +989,7 @@ describe("MdnsServer", () => {
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([{ ...RESPONSE, uniCastTarget: undefined }]); // multicast
         });
@@ -981,12 +1002,12 @@ describe("MdnsServer", () => {
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
-            await MockTime.yield3();
+            await settleMessages();
             await MockTime.advance(29_000); // less than 1/4 of ttl
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 { ...RESPONSE, uniCastTarget: undefined }, // multicast
@@ -1002,12 +1023,12 @@ describe("MdnsServer", () => {
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
-            await MockTime.yield3();
+            await settleMessages();
             await MockTime.advance(31_000); // more than 1/4 of ttl
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 { ...RESPONSE, uniCastTarget: undefined }, // multicast
@@ -1025,19 +1046,19 @@ describe("MdnsServer", () => {
             QUERY.queries[0].uniCastResponse = false;
             send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
-            await MockTime.yield3();
+            await settleMessages();
             await MockTime.advance(20_000); // more than 1/4 of ttl
 
             // Send as unicast
             QUERY.queries[0].uniCastResponse = true;
             send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
-            await MockTime.yield3();
+            await settleMessages();
             await MockTime.advance(11_000); // more than 1/4 of ttl
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 { ...RESPONSE, uniCastTarget: undefined }, // multicast
@@ -1224,7 +1245,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(1);
 
             responses.length = 0;
@@ -1245,7 +1266,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(0); // Suppressed
         });
 
@@ -1271,7 +1292,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(1);
 
             responses.length = 0;
@@ -1295,7 +1316,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(1); // Should respond after window expires
         });
     });
@@ -1327,7 +1348,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(0);
         });
 
@@ -1352,7 +1373,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(1);
         });
 
@@ -1382,7 +1403,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(1);
         });
 
@@ -1407,7 +1428,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(1);
         });
 
@@ -1431,7 +1452,7 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 INTERFACE_NAME,
             );
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(0);
 
             send(
@@ -1443,7 +1464,7 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 INTERFACE_NAME,
             );
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -1491,7 +1512,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(1);
 
             // Old name was truly replaced - no response for the previous qname.
@@ -1510,7 +1531,7 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 INTERFACE_NAME,
             );
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(0);
         });
 
@@ -1537,7 +1558,7 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 INTERFACE_NAME,
             );
-            await MockTime.yield3();
+            await settleMessages();
             expect(responses.length).equals(0);
 
             send(
@@ -1555,7 +1576,7 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 INTERFACE_NAME,
             );
-            await MockTime.yield3();
+            await settleMessages();
 
             expect(responses).deep.equal([
                 {
@@ -1598,7 +1619,7 @@ describe("MdnsServer", () => {
                 INTERFACE_NAME,
             );
 
-            await MockTime.yield3();
+            await settleMessages();
 
             // PTR must still be suppressed despite case-mismatch in the known-answer record.
             expect(responses).deep.equal([
