@@ -45,6 +45,7 @@ import {
     Observable,
     Seconds,
     Time,
+    Timer,
     Timestamp,
     UninitializedDependencyError,
 } from "@matter/general";
@@ -59,8 +60,10 @@ import {
     Invoke,
     Peer,
     PeerAddress,
+    PeerAddressMap,
     PeerLeftError,
     ResultStatus,
+    SecureSession,
     SessionManager,
     SessionParameters,
 } from "@matter/protocol";
@@ -77,6 +80,11 @@ const logger = Logger.get("Peers");
 
 const DEFAULT_TTL = Minutes(15);
 const EXPIRATION_INTERVAL = Minutes.one;
+
+/**
+ * How long a peer that announced a shutdown has to resume its subscription before we establish a new one.
+ */
+const SHUTDOWN_RESUBSCRIBE_GRACE = Seconds(30);
 
 type FabricOperation = "commission" | "decommission";
 
@@ -98,6 +106,8 @@ export class Peers extends EndpointContainer<ClientNode> {
     #fabricOperations = new Map<ClientNode, { operation: FabricOperation; settled: Promise<void> }>();
     #instrumented = new WeakSet<ClientNode>();
     #bridgedInstrumented = new WeakSet<Endpoint>();
+    #shutdownResubscribe = new PeerAddressMap<{ timer?: Timer; reported: boolean }>();
+    #onReportStarted?: (session: SecureSession) => void;
 
     constructor(owner: ServerNode) {
         super(owner);
@@ -528,6 +538,14 @@ export class Peers extends EndpointContainer<ClientNode> {
 
     override async close() {
         this.#closed = true;
+        for (const state of this.#shutdownResubscribe.values()) {
+            state.timer?.stop();
+        }
+        this.#shutdownResubscribe.clear();
+        if (this.#onReportStarted !== undefined) {
+            this.owner.env.maybeGet(ClientSubscriptions)?.reportStarted.off(this.#onReportStarted);
+            this.#onReportStarted = undefined;
+        }
         await MatterAggregateError.settleSeries(
             [
                 () => this.#installedSubscriptionHandler?.close(),
@@ -893,7 +911,43 @@ export class Peers extends EndpointContainer<ClientNode> {
         if (peerAddress !== undefined) {
             // Shutdown event means the device reboots, handle it like a peer loss and remove all sessions
             await this.owner.env.get(SessionManager).handlePeerShutdown(peerAddress);
+            this.#resubscribeUnlessResumed(peerAddress);
         }
+    }
+
+    /**
+     * Establish a new subscription to a peer that announced a shutdown, unless the peer resumes the existing one.
+     *
+     * {@link SessionManager.handlePeerShutdown} keeps the peer's subscriptions registered so a peer that persists
+     * subscriptions can resume them after the reboot. A peer that does not persist them never reports again, and
+     * the subscriber would only notice at the subscription timeout: the maximum report interval plus two response
+     * times, often minutes. Closing a subscription that received no report within the grace makes the sustained
+     * subscription establish a new one; the peer resuming anyway then gets an invalid-subscription status.
+     */
+    #resubscribeUnlessResumed(peerAddress: PeerAddress) {
+        const subscriptions = this.owner.env.get(ClientSubscriptions);
+        if (this.#onReportStarted === undefined) {
+            this.#onReportStarted = session => {
+                const state = this.#shutdownResubscribe.get(session.peerAddress);
+                if (state !== undefined) {
+                    state.reported = true;
+                }
+            };
+            subscriptions.reportStarted.on(this.#onReportStarted);
+        }
+
+        this.#shutdownResubscribe.get(peerAddress)?.timer?.stop();
+        const state: { timer?: Timer; reported: boolean } = { reported: false };
+        state.timer = Time.getTimer("Resubscribe after peer shutdown", SHUTDOWN_RESUBSCRIBE_GRACE, () => {
+            this.#shutdownResubscribe.delete(peerAddress);
+            if (this.#closed || state.reported) {
+                return;
+            }
+            logger.info(peerAddress, "did not resume its subscription after the shutdown; subscribing again");
+            subscriptions.closeForPeer(peerAddress);
+        });
+        this.#shutdownResubscribe.set(peerAddress, state);
+        state.timer.start();
     }
 
     /**

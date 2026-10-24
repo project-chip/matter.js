@@ -8,7 +8,7 @@ import { BasicInformationClient } from "#behaviors/basic-information";
 import { ClientStructureEvents } from "#node/client/ClientStructureEvents.js";
 import { Diagnostic, LogDestination, Logger, LogLevel } from "@matter/general";
 import { MockSite, subscribedPeer } from "@matter/node/testing";
-import { SessionManager } from "@matter/protocol";
+import { ClientSubscriptions, PeerAddress, SessionManager } from "@matter/protocol";
 
 describe("Peers#instrumentBasicInformation", () => {
     before(() => {
@@ -49,6 +49,37 @@ describe("Peers#instrumentBasicInformation", () => {
             expect(startUpSessionHandlingCalls).equals(1);
         } finally {
             sessionManager.handlePeerShutdown = original;
+        }
+    });
+
+    it("subscribes again to a peer that announced a shutdown and did not resume the subscription", async () => {
+        await using site = new MockSite();
+        const { controller } = await site.addCommissionedPair();
+
+        const peer1 = await subscribedPeer(controller, "peer1");
+        const peerAddress = PeerAddress(peer1.peerAddress!);
+
+        const subscriptions = controller.env.get(ClientSubscriptions);
+        const closedFor = new Array<PeerAddress>();
+        const original = subscriptions.closeForPeer.bind(subscriptions);
+        subscriptions.closeForPeer = address => {
+            closedFor.push(PeerAddress(address));
+            return original(address);
+        };
+
+        try {
+            await MockTime.resolve(
+                peer1.act(agent => peer1.eventsOf(BasicInformationClient).shutDown?.emit(undefined, agent.context)),
+            );
+
+            // The peer gets a grace period to resume the subscription itself
+            await MockTime.advance(29_000);
+            expect(closedFor).deep.equals([]);
+
+            await MockTime.advance(1_000);
+            expect(closedFor).deep.equals([peerAddress]);
+        } finally {
+            subscriptions.closeForPeer = original;
         }
     });
 
